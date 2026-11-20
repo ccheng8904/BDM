@@ -1,0 +1,207 @@
+testsequences:
+  MAL_finishWriting:
+    description: MAL_finishWriting
+    function: MAL_finishWriting
+    testcases:
+      '1':
+        delta_time: 0
+        description: flush failed
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Finish_RET:
+            exp: 21930
+            in: 21930
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_crc_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: crc with read error
+        return:
+          return_type:
+            exp: MAL_ST_READ_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Finish_RET:
+            exp: 21930
+            in: 21930
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_RET:
+            exp: MAL_ST_READ_ERROR
+            in: MAL_ST_READ_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_crc_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: crc mismatch
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Finish_RET:
+            exp: 21930
+            in: 21930
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_crc_argument:
+            exp: 4660
+            in: 4660
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: final crc ok
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Finish_RET:
+            exp: 21930
+            in: 21930
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrc_crc_argument:
+            exp: 21930
+            in: 21930
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

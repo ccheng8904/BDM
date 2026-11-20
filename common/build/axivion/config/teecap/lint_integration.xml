@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<teecap>
+  <matchlist formatname="LintFormat">
+    <!-- This section matches Axivion stylecheck diagnostic output from
+      customer-specific rules; replace 'Customer' with your rulegroup name,
+      and name this format as you like (replace 'customer' above) -->
+    <match>
+      <pattern groups="5">lint:\s*([^\s]+)\s+(\d+)\s+(\d+)\s+([^:]+):\s+(.+?)</pattern>
+      <group number="1"><textmatch name="filename"/></group>
+      <group number="2"><textmatch name="line"/></group>
+      <group number="3"><textmatch name="column"/></group>
+      <!--<group number="5"><textmatch name="severity"/></group>-->
+      <group number="5"><textmatch name="message"/></group>
+      <!--<group number="8"><textmatch name="objectname"/></group>-->
+      <group number="4"><textmatch name="errno"/></group>
+      <!--<group number="11"><textmatch name="secondary"/></group>-->
+      <!-- dummy to win over axivion format -->
+      <!--<group number="12"><textmatch name="owner"/></group>-->
+    </match>
+
+    <!-- special match for messages with empty SLoc:
+         - filename is the empty string
+         - line and column have to be both 0
+         - no secondary sloc allowed.
+         Example:
+         :0:0: warning: View Layer Architecture exists already in rfg graph. [routine X in Y] (RFGPreparation)
+    -->
+
+  </matchlist>
+</teecap>

@@ -1,0 +1,493 @@
+testsequences:
+  MAL_CMD_WriteAppend:
+    description: MAL_CMD_WriteAppend
+    function: MAL_CMD_WriteAppend
+    testcases:
+      '1':
+        delta_time: 0
+        description: append without initial start command
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: writing not alloed
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 7
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_ACTION_PROHIBITED_ERROR
+            in: MAL_ST_ACTION_PROHIBITED_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: write error
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 5
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: write block successfully
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 33
+            in: 33
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 33
+            in: 55
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '5':
+        delta_time: 0
+        description: writing finished with error
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 11
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '6':
+        delta_time: 0
+        description: writing finished successfully
+        parameter:
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 11
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

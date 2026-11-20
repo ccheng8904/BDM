@@ -1,0 +1,72 @@
+testsequences:
+  BLSRV_readData:
+    description: 'Hint: 100% test coverage cannot be reached as code not available in this variant. But indirectly tested with test case 1'
+    function: BLSRV_readData
+    testcases:
+      '1':
+        delta_time: 0
+        description: try to read some address form memory
+        parameter:
+          address:
+            in: 17185
+            rep: hex
+            solved_in: None
+          length:
+            in: 3
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 'BLCOM_rxSuccess'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLMAL_isInternalMemory_RET:
+            exp: 'false'
+            in: 'false'
+          BLMAL_readBuffer_RET:
+            exp: 'true'
+            in: 'true'
+          BLCOM_sendBuffer_buffer:
+            exp: BLSRV_dataBuffer.&
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_sendBuffer_length:
+            exp: 3
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_sendByte_data:
+            exp: 160
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_pageAddress:
+            exp: 34661
+            in: 34661
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

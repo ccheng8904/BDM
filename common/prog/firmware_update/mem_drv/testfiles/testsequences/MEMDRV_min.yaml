@@ -1,0 +1,95 @@
+testsequences:
+  MEMDRV_min:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_min
+    testcases:
+      '1':
+        delta_time: 0
+        description: all zero
+        parameter:
+          val1:
+            in: 0
+            rep: ''
+            solved_in: None
+          val2:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+      '2':
+        delta_time: 0
+        description: val1 > val2
+        parameter:
+          val1:
+            in: 42
+            rep: ''
+            solved_in: None
+          val2:
+            in: 34
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 34
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+      '3':
+        delta_time: 0
+        description: val1 < val2
+        parameter:
+          val1:
+            in: 12
+            rep: ''
+            solved_in: None
+          val2:
+            in: 15
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+      '4':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          val1:
+            in: 12345
+            rep: ''
+            solved_in: None
+          val2:
+            in: 12345
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 12345
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null

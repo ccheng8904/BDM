@@ -1,0 +1,1051 @@
+testsequences:
+  RBUF_readAll:
+    description: coverage
+    function: RBUF_readAll
+    testcases:
+      '1':
+        delta_time: 0
+        description: buffer empty, zero bytes read
+        parameter:
+          buff:
+            in: RBUF_outBuffer.&
+            rep: ''
+            solved_in: None
+          maxLen:
+            in: 16
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readAll_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[0]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[1]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[2]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[3]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[4]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.read:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.write:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: successful read, maxlen < len
+        parameter:
+          buff:
+            in: RBUF_outBuffer.&
+            rep: ''
+            solved_in: None
+          maxLen:
+            in: 4
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readAll_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 17
+            in: 17
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 34
+            in: 34
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 51
+            in: 51
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 68
+            in: 68
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[0]:
+            exp: 17
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[1]:
+            exp: 34
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[2]:
+            exp: 51
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[3]:
+            exp: 68
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[4]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.read:
+            exp: 4
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.write:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: successful read, maxlen > len
+        parameter:
+          buff:
+            in: RBUF_outBuffer.&
+            rep: ''
+            solved_in: None
+          maxLen:
+            in: 16
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readAll_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 86
+            in: 86
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 120
+            in: 120
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 18
+            in: 18
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 52
+            in: 52
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[0]:
+            exp: 18
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[1]:
+            exp: 52
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[2]:
+            exp: 86
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[3]:
+            exp: 120
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[4]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.read:
+            exp: 2
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.write:
+            exp: 2
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: incoming receive
+        parameter:
+          buff:
+            in: RBUF_outBuffer.&
+            rep: ''
+            solved_in: None
+          maxLen:
+            in: 16
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readAll_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 86
+            in: 86
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 120
+            in: 120
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 18
+            in: 18
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 52
+            in: 52
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[0]:
+            exp: 18
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[1]:
+            exp: 52
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[2]:
+            exp: 86
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[3]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[4]:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_outBuffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.incoming:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.read:
+            exp: 1
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.reentered:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readAll_rb_argument.write:
+            exp: 2
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

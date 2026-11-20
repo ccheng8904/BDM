@@ -1,0 +1,25 @@
+testsequences:
+  BLSRV_getAdressFromFrame:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_getAdressFromFrame
+    testcases:
+      '1':
+        delta_time: 0
+        description: get the address from frame
+        parameter:
+          buffer:
+            in: BLSRV_TestCmdJumpLoaderData.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 17595
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null

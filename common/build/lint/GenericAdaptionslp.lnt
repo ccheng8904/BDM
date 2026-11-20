@@ -1,0 +1,44 @@
+﻿-wlib(4) -wlib(1)   // report only syntax errors for libraries
+
+
+// BSH PED stuff
+
+-efile(766,MkDefines.h) // include of header file not used in module: deactivated for MkDefines.h
+
+-"esym(793,external identifiers)" // processor includes easily may exceed the allowed number of 4095 symbols
+-"esym(793,significant characters in an external identifier)" // covered by misra message  also, set to 63 instead of 31
+
+// for architectonical deliberations 714, 759, 765 may be OK (all these deal with: s.th. could be made static)
+// for *_bHandleTask this is intended
+-esym(714, *_bHandleTask)
+-esym(759, *_bHandleTask)
+-esym(765, *_bHandleTask)
+
+-e793 // ANSI/ISO limit of 4095 'macros in module' exceeded (not needed for modern compilers)
+
+// do while(0) requested by PED coding rules
+-e717           // Info 717: do ... while(0);
+
+-e641           // implicit conversion from enum to int is not dangerous (not MISRA), It is often used for indexing arrays
+
+/* Turn off static analysis of Third party Software */
++libh(tx_api.h)             //ThreadX API header
++libh(tx_port.h)            //ThreadX Port header
+-efile(967,-cstdint)
+-efile(9052,-AnsiExt.h)
+-efile(829,-LibDefines.h)
+// false positives armclang/gcc headers are protected
+-egrep(451,stdint.h)
+-egrep(451,stddef.h)
+-egrep(451,assert.h)
+-egrep(451,string.h)
+-egrep(451,chrono)
+-egrep(451,cstdint)
+
+
+
+// usually the return value is unused for this interfaces
+-esym(534,memcpy,memmove,memset,strncat,strncpy)
+-esym(534,printf,snprintf,putchar,puts,scanf,sprintf,sscanf,strcat,strcpy)
+-esym(534, close, creat, fclose, fprintf, fputc)
+-esym(534, fputs, fscanf, fseek, fwrite, lseek, unlink, write)

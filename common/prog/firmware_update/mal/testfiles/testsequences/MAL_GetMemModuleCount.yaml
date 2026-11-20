@@ -1,0 +1,14 @@
+testsequences:
+    MAL_GetMemModuleCount:
+        description: MAL_GetMemModuleCount
+        function: MAL_GetMemModuleCount
+        testcases:
+            '1':
+                description: test coverage, function has single tree
+                return:
+                    return_type:
+                        exp: 42
+                variable:
+                    MAL_ModuleCount:
+                        exp: 42
+                        in: 42

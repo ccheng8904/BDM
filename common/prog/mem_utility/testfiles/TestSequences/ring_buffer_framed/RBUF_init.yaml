@@ -1,0 +1,80 @@
+testsequences:
+  RBUF_init:
+    description: coverage
+    function: RBUF_init
+    testcases:
+      '1':
+        delta_time: 0
+        description: Test for correct and complete initialization
+        parameter:
+          buffer:
+            in: RBUF_buffer.&
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_myRingBuf.&
+            rep: ''
+            solved_in: None
+          size:
+            in: 9
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_myRingBuf.buffer:
+            exp: RBUF_buffer.&
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_myRingBuf.incoming:
+            exp: 0
+            in: 7
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_myRingBuf.read:
+            exp: 0
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_myRingBuf.reentered:
+            exp: 0
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_myRingBuf.size:
+            exp: 9
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_myRingBuf.write:
+            exp: 0
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

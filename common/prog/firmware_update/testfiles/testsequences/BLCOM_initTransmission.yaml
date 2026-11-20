@@ -1,0 +1,31 @@
+testsequences:
+  BLCOM_initTransmission:
+    description: Automatically generated Test Sequence.
+    function: BLCOM_initTransmission
+    testcases:
+      '1':
+        delta_time: 0
+        description: test correct assignment
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_Checksum:
+            exp: 0
+            in: 44
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_rxErrorFlag:
+            exp: 'false'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

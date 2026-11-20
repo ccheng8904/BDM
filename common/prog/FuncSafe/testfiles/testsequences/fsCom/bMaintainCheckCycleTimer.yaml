@@ -1,0 +1,107 @@
+testsequences:
+  bMaintainCheckCycleTimer:
+    description: Automatically generated Test Sequence.
+    function: bMaintainCheckCycleTimer
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ui16LastWDTrigger:
+            exp: 10000
+            in: 10000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_RamConBlock.ucCCElapsedCounter:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_RamConBlock.uiErrorCounter:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 12000
+            in: 12000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ui16LastWDTrigger:
+            exp: 10000
+            in: 10000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_RamConBlock.ucCCElapsedCounter:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_RamConBlock.uiErrorCounter:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 12000
+            in: 12000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

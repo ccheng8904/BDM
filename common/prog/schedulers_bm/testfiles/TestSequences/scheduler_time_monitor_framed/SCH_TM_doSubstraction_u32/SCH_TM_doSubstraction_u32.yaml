@@ -1,0 +1,51 @@
+testsequences:
+  SCH_TM_doSubstraction_u32:
+    description: Automatically generated Test Sequence.
+    function: SCH_TM_doSubstraction_u32
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          minuend:
+            in: 10
+            rep: ''
+            solved_in: None
+          subtrahend:
+            in: 5
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          minuend:
+            in: 5
+            rep: ''
+            solved_in: None
+          subtrahend:
+            in: 10
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null

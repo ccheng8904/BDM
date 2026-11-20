@@ -1,0 +1,61 @@
+testsequences:
+  BLSRV_pageErase:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_pageErase
+    testcases:
+      '1':
+        description: Automatically generated Test Case.
+        parameter:
+          address:
+            in: 13124
+            rep: hex
+          length:
+            in: 0
+        return:
+          return_type:
+            exp: 0
+        variable:
+          BLCOM_sendByte_data:
+            exp: 176
+            in: 0
+            rep: hex
+          BLMAL_eraseBlock_RET:
+            exp: 1
+            in: 1
+            rep: hex
+          BLMAL_eraseBlock_addr:
+            exp: 287454020
+            in: 0
+            rep: hex
+          BLSRV_pageAddress:
+            exp: 4386
+            in: 4386
+            rep: hex
+      '2':
+        description: error during erase
+        parameter:
+          address:
+            in: 13124
+            rep: hex
+          length:
+            in: 0
+        return:
+          return_type:
+            exp: 0
+        variable:
+          BLCOM_sendByte_data:
+            exp: 4
+            in: 0
+            rep: hex
+          BLMAL_eraseBlock_RET:
+            exp: 0
+            in: 0
+            rep: hex
+          BLMAL_eraseBlock_addr:
+            exp: 287454020
+            in: 0
+            rep: hex
+          BLSRV_pageAddress:
+            exp: 4386
+            in: 4386
+            rep: hex

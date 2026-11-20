@@ -1,0 +1,29 @@
+testsequences:
+    MAL_isBuildInApplication:
+        description: MAL_isBuildInApplication
+        function: MAL_isBuildInApplication
+        testcases:
+            '1':
+                description: partition is not valid
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'false'
+            '2':
+                description: valid build-in partition
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[0].&
+                return:
+                    return_type:
+                        exp: 'true'
+            '3':
+                description: valid partition
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[1].&
+                return:
+                    return_type:
+                        exp: 'false'

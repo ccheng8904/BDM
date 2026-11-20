@@ -1,0 +1,295 @@
+testsequences:
+  MEMDRV_write:
+    description: MEMDRV_write
+    function: MEMDRV_write
+    testcases:
+      '1':
+        delta_time: 0
+        description: entry check fails
+        parameter:
+          addr:
+            in: 0
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAddr:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getBytesToRead_RET:
+            exp: 90
+            in: 90
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: size is zero
+        parameter:
+          addr:
+            in: 100
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAddr:
+            exp: 10
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getBytesToRead_RET:
+            exp: 90
+            in: 90
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: writing fails
+        parameter:
+          addr:
+            in: 100
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 222
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAddr:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getBytesToRead_RET:
+            exp: 99
+            in: 99
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: writing ok
+        parameter:
+          addr:
+            in: 100
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 222
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAddr:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getBytesToRead_RET:
+            exp: 99
+            in: 99
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

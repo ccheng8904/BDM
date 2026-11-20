@@ -1,0 +1,40 @@
+testsequences:
+  MEMDRV_disableInt:
+    description: MEMDRV_disableInt
+    function: MEMDRV_disableInt
+    testcases:
+      '1':
+        delta_time: 0
+        description: coverage only
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_disableInt_Line[0]:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          XXX_driver.allowInterrupts:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

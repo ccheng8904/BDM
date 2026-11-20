@@ -1,0 +1,65 @@
+testsequences:
+  MAL_processNextIndex:
+    description: MAL_processNextIndex
+    function: MAL_processNextIndex
+    testcases:
+      '1':
+        delta_time: 0
+        description: increment index++
+        parameter:
+          index:
+            in: MAL_processNextIndex_index_argument.&
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          MAL_GetMemModuleCount_RET:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_processNextIndex_index_argument:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: increment, end reached
+        parameter:
+          index:
+            in: MAL_processNextIndex_index_argument.&
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          MAL_GetMemModuleCount_RET:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_processNextIndex_index_argument:
+            exp: 0
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

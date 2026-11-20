@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+        {
+            "name":"STK",
+            "include_file":"stack_monitor/stack_monitor.h",
+            "handle_function":"STK_HandleTask",
+            "priority":"low",
+            "dependency":"DEP_STK"
+        }
+    ]
+}

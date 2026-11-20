@@ -1,0 +1,27 @@
+testsequences:
+    MAL_convertArrayToU32:
+        description: MAL_convertArrayToU32
+        function: MAL_convertArrayToU32
+        testcases:
+            '1':
+                description: null pointer given
+                parameter:
+                    intArray:
+                        in: MDHD_ModuleHeader.sw_version.version.build.&
+                return:
+                    return_type:
+                        exp: 0x11223344
+                        rep: hex
+                variable:
+                    MDHD_ModuleHeader.sw_version.version.build[0]:
+                        in:  0x11
+                        rep: hex
+                    MDHD_ModuleHeader.sw_version.version.build[1]:
+                        in:  0x22
+                        rep: hex
+                    MDHD_ModuleHeader.sw_version.version.build[2]:
+                        in:  0x33
+                        rep: hex
+                    MDHD_ModuleHeader.sw_version.version.build[3]:
+                        in:  0x44
+                        rep: hex

@@ -1,0 +1,186 @@
+testsequences:
+  BLSRV_calcCrc:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_calcCrc
+    testcases:
+      '1':
+        description: crc ok
+        parameter:
+          address:
+            in: 0
+          length:
+            in: 0
+        return:
+          return_type:
+            exp: 0
+        variable:
+          BLCOM_receiveFrame_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+          BLCOM_receiveFrame_buffer:
+            exp: BLSRV_dataBuffer.&
+            in: 0
+          BLCOM_receiveFrame_length:
+            exp: 12
+            in: 0
+          BLCOM_receiveFrame_timeout:
+            exp: 300
+            in: 0
+          BLSRV_dataBuffer[0]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[1]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[2]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[3]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[4]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[5]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[6]:
+            exp: 0xff
+            in:  0xff
+            rep: 'hex'
+          BLSRV_dataBuffer[7]:
+            exp: 0xff
+            in:  0xff
+            rep: 'hex'
+          BLSRV_dataBuffer[8]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[9]:
+            exp: 0x23
+            in:  0x23
+            rep: 'hex'
+          BLSRV_dataBuffer[10]:
+            exp: 0x45
+            in:  0x45
+            rep: 'hex'
+          BLSRV_dataBuffer[11]:
+            exp: 0x67
+            in:  0x67
+            rep: 'hex'
+          BLSRV_isCrcCorrect_RET:
+            exp: 'true'
+            in: 'true'
+          BLSRV_isCrcCorrect_address:
+            exp: 0x10000
+            in: 22
+            rep: 'hex'
+          BLSRV_isCrcCorrect_length:
+            exp: 0x10000
+            in: 33
+            rep: 'hex'
+          BLSRV_isCrcCorrect_crcExpected:
+            exp: 0x01234567
+            in:  0x00
+            rep: 'hex'
+          BLCOM_sendByte_data:
+            exp: 0xc0
+            in: 0
+            rep: 'hex'
+      '2':
+        description: crc wrong
+        parameter:
+          address:
+            in: 0
+          length:
+            in: 0
+        return:
+          return_type:
+            exp: 0
+        variable:
+          BLCOM_receiveFrame_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+          BLCOM_receiveFrame_buffer:
+            exp: BLSRV_dataBuffer.&
+            in: 0
+          BLCOM_receiveFrame_length:
+            exp: 12
+            in: 0
+          BLCOM_receiveFrame_timeout:
+            exp: 300
+            in: 0
+          BLSRV_dataBuffer[0]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[1]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[2]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[3]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[4]:
+            exp: 0x00
+            in:  0x00
+            rep: 'hex'
+          BLSRV_dataBuffer[5]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[6]:
+            exp: 0xff
+            in:  0xff
+            rep: 'hex'
+          BLSRV_dataBuffer[7]:
+            exp: 0xff
+            in:  0xff
+            rep: 'hex'
+          BLSRV_dataBuffer[8]:
+            exp: 0x01
+            in:  0x01
+            rep: 'hex'
+          BLSRV_dataBuffer[9]:
+            exp: 0x23
+            in:  0x23
+            rep: 'hex'
+          BLSRV_dataBuffer[10]:
+            exp: 0x45
+            in:  0x45
+            rep: 'hex'
+          BLSRV_dataBuffer[11]:
+            exp: 0x67
+            in:  0x67
+            rep: 'hex'
+          BLSRV_isCrcCorrect_RET:
+            exp: 'false'
+            in: 'false'
+            rep: 'hex'
+          BLSRV_isCrcCorrect_address:
+            exp: 0x10000
+            in: 22
+            rep: 'hex'
+          BLSRV_isCrcCorrect_length:
+            exp: 0x10000
+            in: 33
+            rep: 'hex'
+          BLSRV_isCrcCorrect_crcExpected:
+            exp: 0x01234567
+            in:  0x00
+            rep: 'hex'
+          BLCOM_sendByte_data:
+            exp: 0x08
+            in: 0
+            rep: 'hex'

@@ -1,0 +1,54 @@
+testsequences:
+  BLCOM_setTimeOut:
+    description: Automatically generated Test Sequence.
+    function: BLCOM_setTimeOut
+    testcases:
+      '1':
+        delta_time: 0
+        description: check assignments
+        parameter:
+          timeOut:
+            in: 55
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_reloadTime:
+            exp: 55
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timeStamp:
+            exp: 333
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 55
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 333
+            in: 333
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

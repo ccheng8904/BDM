@@ -1,0 +1,59 @@
+testsequences:
+    MAL_getModuleSize:
+        description: MAL_getModuleSize
+        function: MAL_getModuleSize
+        testcases:
+            '1':
+                description: null pointer given
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+
+                variable:
+                    MAL_PartitionToHeader_RET:
+                        exp: 0
+                        in:  0
+            '2':
+                description: module size does not fit into partition
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[0].&
+                return:
+                    return_type:
+                        exp: 0x00
+                        rep: hex
+                variable:
+                    MAL_getPartitionSize_RET:
+                        exp: 0x1000
+                        in:  0x1000
+                        rep: hex
+                    MAL_PartitionToHeader_RET:
+                        exp: MDHD_ModuleHeader.&
+                        in:  MDHD_ModuleHeader.&
+                    MDHD_ModuleHeader.size:
+                        exp: 0x2200
+                        in:  0x2200
+                        rep: hex
+            '3':
+                description: standard module
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[1].&
+                return:
+                    return_type:
+                        exp: 0x2000
+                        rep: hex
+                variable:
+                    MAL_getPartitionSize_RET:
+                        exp: 0x2200
+                        in:  0x2200
+                        rep: hex
+                    MAL_PartitionToHeader_RET:
+                        exp: MDHD_ModuleHeader.&
+                        in:  MDHD_ModuleHeader.&
+                    MDHD_ModuleHeader.size:
+                        exp: 0x2000
+                        in:  0x2000

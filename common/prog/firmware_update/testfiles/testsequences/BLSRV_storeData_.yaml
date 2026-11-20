@@ -1,0 +1,161 @@
+testsequences:
+  BLSRV_storeData:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_storeData
+    testcases:
+      '1':
+        delta_time: 0
+        description: data received successfully
+        parameter:
+          address:
+            in: 39030
+            rep: hex
+            solved_in: None
+          length:
+            in: 1234
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_receiveFrame_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_buffer:
+            exp: 305436790
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_length:
+            exp: 1234
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_timeout:
+            exp: 300
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_sendByte_data:
+            exp: 160
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_pageAddress:
+            exp: 4660
+            in: 4660
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: data received with error
+        parameter:
+          address:
+            in: 17767
+            rep: hex
+            solved_in: None
+          length:
+            in: 999
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_receiveFrame_RET:
+            exp: BLCOM_rxError
+            in: BLCOM_rxError
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_buffer:
+            exp: 305415527
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_length:
+            exp: 999
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_receiveFrame_timeout:
+            exp: 300
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_sendByte_data:
+            exp: 160
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_pageAddress:
+            exp: 4660
+            in: 4660
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

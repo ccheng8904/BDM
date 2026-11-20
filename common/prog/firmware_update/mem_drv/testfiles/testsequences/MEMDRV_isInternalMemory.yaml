@@ -1,0 +1,14 @@
+testsequences:
+  MEMDRV_isInternalMemory:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_isInternalMemory
+    testcases:
+      '1':
+        description: coverage
+        return:
+          return_type:
+            exp: 'false'
+        variable:
+          MEMDRV_driver:
+            in: XXX_driver.&
+            out: XXX_driver.&

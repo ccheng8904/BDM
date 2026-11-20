@@ -1,0 +1,39 @@
+testsequences:
+  BLSRV_massErase:
+    description: command currently not supported
+    function: BLSRV_massErase
+    testcases:
+      '1':
+        delta_time: 0
+        description: just check ack
+        parameter:
+          address:
+            in: 0
+            rep: ''
+            solved_in: None
+          length:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_sendByte_data:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

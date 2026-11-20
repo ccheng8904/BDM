@@ -1,0 +1,71 @@
+testsequences:
+  MEMDRV_close:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_close
+    testcases:
+      '1':
+        delta_time: 0
+        description: close with eror
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_driver:
+            exp: 0
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: close without error
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_driver:
+            exp: 0
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_flush_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

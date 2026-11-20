@@ -1,0 +1,44 @@
+testsequences:
+  MAL_getPartition:
+    description: Automatically generated Test Sequence.
+    function: MAL_getPartition
+    testcases:
+      '1':
+        delta_time: 0
+        description: just coverage
+        parameter:
+          index:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_GetMemModuleByIndex_RET:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModuleByIndex_index:
+            exp: 0
+            in: 55
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

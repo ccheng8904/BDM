@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+      {
+        "name": "DBGXTE",
+        "handle_function": "DBGXTE_handleTask",
+        "include_file": "debug_extended/test_app_error/dbgx_test_app_error.h",
+        "priority": "low",
+        "dependency": "DEP_DBGXTE"
+      }
+    ]
+}

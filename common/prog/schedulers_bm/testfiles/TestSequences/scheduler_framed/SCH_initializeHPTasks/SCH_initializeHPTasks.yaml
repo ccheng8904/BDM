@@ -1,0 +1,79 @@
+testsequences:
+  SCH_getTaskID:
+    description: Automatically generated Test Sequence.
+    function: SCH_getTaskID
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          task_index:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null
+  SCH_getTaskID_1:
+    description: Automatically generated Test Sequence.
+    function: SCH_getTaskID
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          task_index:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null
+  SCH_initializeHPTasks:
+    description: Automatically generated Test Sequence.
+    function: SCH_initializeHPTasks
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        start_time: 0
+        validation: null
+        variable:
+          SCH_getTaskID_RET:
+            exp: TOTAL_MODULES
+            in: TOTAL_MODULES
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_getTaskID_task_index:
+            exp: 0
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

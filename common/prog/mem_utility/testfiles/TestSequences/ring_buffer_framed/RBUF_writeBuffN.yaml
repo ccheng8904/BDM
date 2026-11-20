@@ -1,0 +1,520 @@
+testsequences:
+  RBUF_writeBuffN:
+    description: covarage
+    function: RBUF_writeBuffN
+    testcases:
+      '1':
+        delta_time: 0
+        description: nothing to write
+        parameter:
+          data:
+            in: myTextBuf.&
+            rep: ''
+            solved_in: None
+          len:
+            in: 0
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_writeBuffN_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.buffer:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.read:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.size:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.write:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: requested write length smaller than space in buffer
+        parameter:
+          data:
+            in: myTextBuf.&
+            rep: ''
+            solved_in: None
+          len:
+            in: 12
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_writeBuffN_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 72
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 101
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 108
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 108
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 111
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.incoming:
+            exp: 5
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.read:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.size:
+            exp: 6
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.write:
+            exp: 5
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: enough space to write
+        parameter:
+          data:
+            in: myTextBuf.&
+            rep: ''
+            solved_in: None
+          len:
+            in: 4
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_writeBuffN_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 108
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 108
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 72
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 101
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.incoming:
+            exp: 2
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.read:
+            exp: 4
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.size:
+            exp: 6
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_rb_argument.write:
+            exp: 2
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

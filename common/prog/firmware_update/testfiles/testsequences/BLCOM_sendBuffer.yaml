@@ -1,0 +1,74 @@
+testsequences:
+  BLCOM_sendBuffer:
+    description: Automatically generated Test Sequence.
+    function: BLCOM_sendBuffer
+    testcases:
+      '1':
+        description: Automatically generated Test Case.
+        parameter:
+          buffer:
+            in: BLCOM_TestBuffer.&
+          length:
+            in: 11
+        variable:
+          BLCOM_Checksum:
+            exp: 32
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[0]:
+            exp: 72
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[1]:
+            exp: 101
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[2]:
+            exp: 108
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[3]:
+            exp: 108
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[4]:
+            exp: 111
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[5]:
+            exp: 32
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[6]:
+            exp: 87
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[7]:
+            exp: 111
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[8]:
+            exp: 114
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[9]:
+            exp: 108
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[10]:
+            exp: 100
+            in: 0
+            rep: hex
+          BLCOM_setTxData_buffer[11]:
+            exp: 32
+            in: 0
+            rep: hex
+          BLCOM_setTxData_index:
+            exp: 12
+            in: 0
+          BLCOM_isTxOnGoing_RET:
+            exp: 'false'
+            in: 'false'
+          BLCOM_isDataAvailable_RET:
+            exp: 'true'
+            in: 'true'

@@ -1,0 +1,42 @@
+testsequences:
+  BLCOM_sendAck:
+    description: Automatically generated Test Sequence.
+    function: BLCOM_sendAck
+    testcases:
+      '1':
+        description: first frame not received
+        parameter:
+          ack:
+            in: 111
+        start_time: 0
+        variable:
+          BLCOM_firstFrameReceived:
+            exp: 'false'
+            in: 'false'
+          BLCOM_isTxOnGoing_RET:
+            exp: 'false'
+            in: 'false'
+          BLCOM_isDataAvailable_RET:
+            exp: 'true'
+            in: 'true'
+          BLCOM_setTxData_data:
+            exp: 0
+            in: 0
+      '2':
+        description: first frame already received -> send ack
+        parameter:
+          ack:
+            in: 111
+        variable:
+          BLCOM_firstFrameReceived:
+            exp: 'true'
+            in: 'true'
+          BLCOM_isTxOnGoing_RET:
+            exp: 'false'
+            in: 'false'
+          BLCOM_isDataAvailable_RET:
+            exp: 'true'
+            in: 'true'
+          BLCOM_setTxData_data:
+            exp: 111
+            in: 0

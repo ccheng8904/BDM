@@ -1,0 +1,35 @@
+testsequences:
+  BLSRV_getTargetAddress:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_getTargetAddress
+    testcases:
+      '1':
+        delta_time: 0
+        description: create a 32bit address form page and 16bit address
+        parameter:
+          address:
+            in: 21930
+            rep: hex
+            solved_in: None
+        return:
+          return_type:
+            exp: 305419690
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLSRV_pageAddress:
+            exp: 4660
+            in: 4660
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,359 @@
+testsequences:
+  RBUF_readData_u32:
+    description: coverage
+    function: RBUF_readData_u32
+    testcases:
+      '1':
+        delta_time: 0
+        description: not enough data
+        parameter:
+          data:
+            in: RBUF_readData_u32_data_argument.&
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readData_u32_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_data_argument:
+            exp: 85
+            in: 85
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.read:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.write:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: not enough data
+        parameter:
+          data:
+            in: RBUF_readData_u32_data_argument.&
+            rep: ''
+            solved_in: None
+          rb:
+            in: RBUF_readData_u32_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_buffer[0]:
+            exp: 18
+            in: 18
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[1]:
+            exp: 52
+            in: 52
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[2]:
+            exp: 86
+            in: 86
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[3]:
+            exp: 120
+            in: 120
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[4]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[5]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[6]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[7]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[8]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_buffer[9]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_data_argument:
+            exp: 305419896
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.buffer:
+            exp: RBUF_buffer.&
+            in: RBUF_buffer.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.read:
+            exp: 4
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.size:
+            exp: 8
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_readData_u32_rb_argument.write:
+            exp: 4
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

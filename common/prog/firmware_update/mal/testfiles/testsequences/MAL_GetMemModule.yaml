@@ -1,0 +1,101 @@
+testsequences:
+    MAL_GetMemModule:
+        description: MAL_GetMemModule
+        function: MAL_GetMemModule
+        testcases:
+            '1':
+                description: partition not found
+                parameter:
+                    module:
+                        in: MAL_BP2_LOADER_ID
+                return:
+                    return_type:
+                        exp: 0
+                variable:
+                    MAL_flexPatRef:
+                        exp: MAL_partitionFlex.&
+                        in: MAL_partitionFlex.&
+                    MAL_searchMemModule_RET:
+                        exp: 0
+                        in:  0
+                    MAL_searchMemModule_flex_RET:
+                        exp: 0
+                        in:  0
+                    MAL_searchMemModule_maxTableLen_flex:
+                        exp: 4
+                        in:  0
+                    MAL_searchMemModule_maxTableLen:
+                        exp: 4
+                        in:  0
+            '2':
+                description: search for flex partition
+                parameter:
+                    module:
+                        in: MAL_FLEX_PARTITION
+                return:
+                    return_type:
+                        exp: 4711
+                variable:
+                    MAL_flexPatRef:
+                        exp: MAL_partitionFlex.&
+                        in: MAL_partitionFlex.&
+                    MAL_searchMemModule_RET:
+                        exp: 4711
+                        in:  4711
+                    MAL_searchMemModule_flex_RET:
+                        exp: 42
+                        in:  42
+                    MAL_searchMemModule_maxTableLen_flex:
+                        exp: 33
+                        in:  33
+                    MAL_searchMemModule_maxTableLen:
+                        exp: 4
+                        in:  0
+            '3':
+                description: found in flex partition
+                parameter:
+                    module:
+                        in: MAL_PRODUCT_APP1
+                return:
+                    return_type:
+                        exp: 42
+                variable:
+                    MAL_flexPatRef:
+                        exp: MAL_partitionFlex.&
+                        in: MAL_partitionFlex.&
+                    MAL_searchMemModule_RET:
+                        exp: 4711
+                        in:  4711
+                    MAL_searchMemModule_flex_RET:
+                        exp: 42
+                        in:  42
+                    MAL_searchMemModule_maxTableLen_flex:
+                        exp: 4
+                        in:  0
+                    MAL_searchMemModule_maxTableLen:
+                        exp: 22
+                        in:  22
+            '4':
+                description: found in fix partition
+                parameter:
+                    module:
+                        in: MAL_PRODUCT_APP1
+                return:
+                    return_type:
+                        exp: 4711
+                variable:
+                    MAL_flexPatRef:
+                        exp: MAL_partitionFlex.&
+                        in: MAL_partitionFlex.&
+                    MAL_searchMemModule_RET:
+                        exp: 4711
+                        in:  4711
+                    MAL_searchMemModule_flex_RET:
+                        exp: 0
+                        in:  0
+                    MAL_searchMemModule_maxTableLen_flex:
+                        exp: 4
+                        in:  0
+                    MAL_searchMemModule_maxTableLen:
+                        exp: 4
+                        in:  0

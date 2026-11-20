@@ -1,0 +1,331 @@
+testsequences:
+  MEMDRV_writeAtomic:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_writeAtomic
+    testcases:
+      '1':
+        delta_time: 0
+        description: write error (length zero)
+        parameter:
+          addr:
+            in: MEMDRV_writeAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          data:
+            in: MEMDRV_writeAtomic_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_write_Stub_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_addr_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_data_argument_p:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: write error
+        parameter:
+          addr:
+            in: MEMDRV_writeAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          data:
+            in: MEMDRV_writeAtomic_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_isError_Stub_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_write_Stub_RET:
+            exp: 2
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_addr_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_data_argument_p:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_size_argument:
+            exp: 2
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: seccessfull writing
+        parameter:
+          addr:
+            in: MEMDRV_writeAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          data:
+            in: MEMDRV_writeAtomic_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_write_Stub_RET:
+            exp: 4
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_addr_argument:
+            exp: 104
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_data_argument_p:
+            exp: 5
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_size_argument:
+            exp: 4
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: seccessfull writing
+        parameter:
+          addr:
+            in: MEMDRV_writeAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          data:
+            in: MEMDRV_writeAtomic_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_write_Stub_RET:
+            exp: 4
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_addr_argument:
+            exp: 104
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_data_argument_p:
+            exp: 5
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeAtomic_size_argument:
+            exp: 0
+            in: 2
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

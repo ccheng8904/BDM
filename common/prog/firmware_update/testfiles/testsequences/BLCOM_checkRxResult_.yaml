@@ -1,0 +1,145 @@
+testsequences:
+  BLCOM_checkRxResult:
+    description: Automatically generated Test Sequence.
+    function: BLCOM_checkRxResult
+    testcases:
+      '1':
+        delta_time: 0
+        description: success
+        parameter:
+          receivedCheckSum:
+            in: 33
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_Checksum:
+            exp: 33
+            in: 33
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_firstFrameReceived:
+            exp: 'true'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_rxErrorFlag:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: check sum wrong
+        parameter:
+          receivedCheckSum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_Checksum:
+            exp: 33
+            in: 33
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_firstFrameReceived:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_rxErrorFlag:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: receive error
+        parameter:
+          receivedCheckSum:
+            in: 100
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_Checksum:
+            exp: 100
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_firstFrameReceived:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_rxErrorFlag:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

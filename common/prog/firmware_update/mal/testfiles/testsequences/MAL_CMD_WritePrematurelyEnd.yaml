@@ -1,0 +1,347 @@
+testsequences:
+  MAL_CMD_WritePrematurelyEnd:
+    description: Automatically generated Test Sequence.
+    function: MAL_CMD_WritePrematurelyEnd
+    testcases:
+      '1':
+        delta_time: 0
+        description: writing has not been started
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          overallDataWritten:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_dataLen:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: setup module error
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          overallDataWritten:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            in: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_dataLen:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: data length mismatch
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          overallDataWritten:
+            in: 76
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_dataLen:
+            exp: 100
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 25
+            in: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: successfull writing
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          overallDataWritten:
+            in: 100
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_dataLen:
+            exp: 100
+            in: 125
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 25
+            in: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '5':
+        delta_time: 0
+        description: finishing with write error
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          overallDataWritten:
+            in: 100
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_dataLen:
+            exp: 100
+            in: 125
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_finishWriting_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_sizeLeft:
+            exp: 25
+            in: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

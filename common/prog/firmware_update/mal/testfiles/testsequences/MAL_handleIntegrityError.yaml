@@ -1,0 +1,39 @@
+testsequences:
+    MAL_handleIntegrityError:
+        description: MAL_handleIntegrityError
+        function: MAL_handleIntegrityError
+        testcases:
+            '1':
+                description: normal operation
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[0].&
+                    err_flag:
+                        in: BMDAT_ER_CONSISTENCY
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    BMDAT_setErrorFlag_error:
+                        in:  BMDAT_ER_HW_ID
+                        exp: BMDAT_ER_CONSISTENCY
+                    BMDAT_setErrorModule_errorModule:
+                        in:  MAL_NO_MODULE
+                        exp: MAL_BP2_LOADER_ID
+            '2':
+                description: null pointer partition
+                parameter:
+                    partition:
+                        in: 0
+                    err_flag:
+                        in: BMDAT_ER_CONSISTENCY
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    BMDAT_setErrorFlag_error:
+                        in:  BMDAT_ER_HW_ID
+                        exp: BMDAT_ER_CONSISTENCY
+                    BMDAT_setErrorModule_errorModule:
+                        in:  MAL_BP2_LOADER_ID
+                        exp: MAL_NO_MODULE

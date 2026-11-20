@@ -1,0 +1,31 @@
+testsequences:
+  SCH_initializeLPTasks:
+    description: Automatically generated Test Sequence.
+    function: SCH_initializeLPTasks
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        start_time: 0
+        validation: null
+        variable:
+          SCH_getTaskID_RET:
+            exp: TOTAL_MODULES
+            in: TOTAL_MODULES
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_getTaskID_task_index:
+            exp: 0
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

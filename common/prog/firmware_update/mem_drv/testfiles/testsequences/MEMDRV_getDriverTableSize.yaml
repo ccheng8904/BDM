@@ -1,0 +1,21 @@
+testsequences:
+  MEMDRV_getDriverTableSize:
+    description: MEMDRV_getDriverTableSize
+    function: MEMDRV_getDriverTableSize
+    testcases:
+      '1':
+        delta_time: 0
+        description: just for code coverage. There should be at least one entry in
+          table
+        return:
+          return_type:
+            exp: 1
+            op: '>='
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null

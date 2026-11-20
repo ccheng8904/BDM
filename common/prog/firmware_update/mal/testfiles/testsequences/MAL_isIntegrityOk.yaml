@@ -1,0 +1,35 @@
+testsequences:
+    MAL_isIntegrityOk:
+        description: MAL_isIntegrityOk
+        function: MAL_isIntegrityOk
+        testcases:
+            '1':
+                description: null pointer given
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'false'
+            '2':
+                description: CRC check failed
+                parameter:
+                    partition:
+                        in: 1
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_isModuleCrcValid_RET:
+                        in : 'false'
+            '3':
+                description: CRC check passed
+                parameter:
+                    partition:
+                        in: 1
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_isModuleCrcValid_RET:
+                        in : 'true'

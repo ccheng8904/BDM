@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+        {
+            "name":"WDT",
+            "include_file":"watchdogtimer/watchdogtimer.h",
+            "handle_function":"WDT_handleTask",
+            "priority":"low",
+            "dependency":"DEP_WDT"
+        }
+    ]
+}

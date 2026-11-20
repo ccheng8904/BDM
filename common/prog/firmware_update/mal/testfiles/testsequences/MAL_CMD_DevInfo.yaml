@@ -1,0 +1,433 @@
+testsequences:
+  MAL_CMD_DevInfo:
+    description: MAL_CMD_DevInfo
+    function: MAL_CMD_DevInfo
+    testcases:
+      '1':
+        delta_time: 0
+        description: partition is null
+        parameter:
+          index:
+            in: 0
+            rep: ''
+            solved_in: None
+          maxNameLen:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: MAL_CMD_DevInfo_modNum_argument.&
+            rep: ''
+            solved_in: None
+          name:
+            in: MAL_CMD_DevInfo_name_argument.&
+            rep: ''
+            solved_in: None
+          nameLen:
+            in: MAL_CMD_DevInfo_nameLen_argument.&
+            rep: ''
+            solved_in: None
+          newIndex:
+            in: MAL_CMD_DevInfo_newIndex_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MAL_CMD_DevInfo_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 255
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_DevInfo_modNum_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_nameLen_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_name_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_newIndex_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModuleByIndex_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_modNum_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_name_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartitionNameLen_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_processNextIndex_index_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: nameLen > maxNameLen
+        parameter:
+          index:
+            in: 5
+            rep: ''
+            solved_in: None
+          maxNameLen:
+            in: 10
+            rep: ''
+            solved_in: None
+          modNum:
+            in: MAL_CMD_DevInfo_modNum_argument.&
+            rep: ''
+            solved_in: None
+          name:
+            in: MAL_CMD_DevInfo_name_argument.&
+            rep: ''
+            solved_in: None
+          nameLen:
+            in: MAL_CMD_DevInfo_nameLen_argument.&
+            rep: ''
+            solved_in: None
+          newIndex:
+            in: MAL_CMD_DevInfo_newIndex_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MAL_CMD_DevInfo_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 255
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_DevInfo_modNum_argument:
+            exp: 0
+            in: 11
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_nameLen_argument:
+            exp: 0
+            in: 22
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_name_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_newIndex_argument:
+            exp: 5
+            in: 33
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_size_argument:
+            exp: 0
+            in: 44
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModuleByIndex_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_modNum_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_name_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartitionNameLen_RET:
+            exp: 11
+            in: 11
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_processNextIndex_index_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: normal processing
+        parameter:
+          index:
+            in: 3
+            rep: ''
+            solved_in: None
+          maxNameLen:
+            in: 10
+            rep: ''
+            solved_in: None
+          modNum:
+            in: MAL_CMD_DevInfo_modNum_argument.&
+            rep: ''
+            solved_in: None
+          name:
+            in: MAL_CMD_DevInfo_name_argument.&
+            rep: ''
+            solved_in: None
+          nameLen:
+            in: MAL_CMD_DevInfo_nameLen_argument.&
+            rep: ''
+            solved_in: None
+          newIndex:
+            in: MAL_CMD_DevInfo_newIndex_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MAL_CMD_DevInfo_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_DevInfo_modNum_argument:
+            exp: 23
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_nameLen_argument:
+            exp: 10
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_name_argument:
+            exp: 12
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_newIndex_argument:
+            exp: 55
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_CMD_DevInfo_size_argument:
+            exp: 123456
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModuleByIndex_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_modNum_argument:
+            exp: 23
+            in: 23
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_name_argument:
+            exp: 12
+            in: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_size_argument:
+            exp: 123456
+            in: 123456
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartitionNameLen_RET:
+            exp: 10
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_processNextIndex_index_argument:
+            exp: 55
+            in: 55
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

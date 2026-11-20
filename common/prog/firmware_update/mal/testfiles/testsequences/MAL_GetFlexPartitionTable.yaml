@@ -1,0 +1,29 @@
+testsequences:
+    MAL_GetFlexPartitionTable:
+        description: MAL_GetFlexPartitionTable
+        function: MAL_GetFlexPartitionTable
+        testcases:
+            '1':
+                description: integrity not given
+                variable:
+                    MAL_searchMemModule_RET:
+                        exp: 12345
+                        in:  12345
+                    MAL_isIntegrityOk_RET:
+                        exp: 'false'
+                        in : 'false'
+                return:
+                    return_type:
+                        exp: 0
+            '2':
+                description: integrity OK
+                variable:
+                    MAL_searchMemModule_RET:
+                        exp: 12345
+                        in:  12345
+                    MAL_isIntegrityOk_RET:
+                        exp: 'true'
+                        in : 'true'
+                return:
+                    return_type:
+                        exp: 12345

@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+        {
+            "name":"DBGXTA",
+            "handle_function":"DBGXTA_handleTask",
+            "include_file":"debug_extended/test_app/dbgx_test_app.h",
+            "priority":"low",
+            "dependency":"DEP_DBGXTA"
+        }
+    ]
+}

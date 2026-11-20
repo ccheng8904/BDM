@@ -1,0 +1,252 @@
+testsequences:
+  BLSRV_doCommandService:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_doCommandService
+    testcases:
+      '1':
+        description: process store data command
+        parameter:
+          buffer:
+            in: BLSRV_TestCmdStoreData.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_sendByte_data:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_address:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_length:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_address:
+            exp: 21930
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_length:
+            exp: 34
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: process jump loader command
+        parameter:
+          buffer:
+            in: BLSRV_TestCmdJumpLoaderData.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_sendByte_data:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_RET:
+            exp: BLCOM_rxError
+            in: BLCOM_rxError
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_address:
+            exp: 17595
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_length:
+            exp: 256
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_address:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_length:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: process invalid command
+        parameter:
+          buffer:
+            in: BLSRV_TestCmdInvalid.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_sendByte_data:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_address:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_jumpLoader_length:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_RET:
+            exp: BLCOM_rxSuccess
+            in: BLCOM_rxSuccess
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_address:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLSRV_storeData_length:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

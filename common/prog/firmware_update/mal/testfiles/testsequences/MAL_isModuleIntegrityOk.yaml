@@ -1,0 +1,77 @@
+testsequences:
+    MAL_isModuleIntegrityOk:
+        description: MAL_isModuleIntegrityOk
+        function: MAL_isModuleIntegrityOk
+        testcases:
+            '1':
+                description: build-in application, integrity ok
+                parameter:
+                    partitionToStart:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_isBuildInApplication_RET:
+                        exp: 'true'
+                        in : 'true'
+                    MAL_isIntegrityOk_RET:
+                        exp: 'true'
+                        in : 'true'
+                    MAL_isApplicationIntegrityOk_RET:
+                        exp: 'false'
+                        in : 'false'
+            '2':
+                description: build-in application, integrity nok
+                parameter:
+                    partitionToStart:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_isBuildInApplication_RET:
+                        exp: 'true'
+                        in : 'true'
+                    MAL_isIntegrityOk_RET:
+                        exp: 'false'
+                        in : 'false'
+                    MAL_isApplicationIntegrityOk_RET:
+                        exp: 'true'
+                        in : 'true'
+            '3':
+                description: not build-in application, integrity ok
+                parameter:
+                    partitionToStart:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_isBuildInApplication_RET:
+                        exp: 'false'
+                        in : 'false'
+                    MAL_isIntegrityOk_RET:
+                        exp: 'false'
+                        in : 'false'
+                    MAL_isApplicationIntegrityOk_RET:
+                        exp: 'true'
+                        in : 'true'
+            '4':
+                description: not build-in application, integrity nok
+                parameter:
+                    partitionToStart:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_isBuildInApplication_RET:
+                        exp: 'false'
+                        in : 'false'
+                    MAL_isIntegrityOk_RET:
+                        exp: 'true'
+                        in : 'true'
+                    MAL_isApplicationIntegrityOk_RET:
+                        exp: 'false'
+                        in : 'false'

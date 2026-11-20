@@ -1,0 +1,62 @@
+testsequences:
+    MAL_isApplicationIntegrityOk:
+        description: MAL_isApplicationIntegrityOk
+        function: MAL_isApplicationIntegrityOk
+        testcases:
+            '1':
+                description: build in application
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_GetMemModuleCount_RET:
+                        exp: 5
+                        in:  5
+                    MAL_isBuildInApplication_RET:
+                        exp: 'true'
+                        in : 'true'
+            '2':
+                description: build in application
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_GetMemModuleCount_RET:
+                        exp: 5
+                        in:  5
+                    MAL_isBuildInApplication_RET:
+                        in : 'false'
+                    MAL_isIntegrityOk_RET:
+                        in : 'true'
+                    MAL_isConsistencyOk_RET:
+                        in : 'true'
+            '3':
+                description: build in application, not consistent
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_GetMemModuleCount_RET:
+                        exp: 5
+                        in:  5
+                    MAL_isBuildInApplication_RET:
+                        in : 'false'
+                    MAL_isIntegrityOk_RET:
+                        in : 'true'
+                    MAL_isConsistencyOk_RET:
+                        in : 'false'
+            '4':
+                description: build in application, not integer
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_GetMemModuleCount_RET:
+                        exp: 5
+                        in:  5
+                    MAL_isBuildInApplication_RET:
+                        in : 'false'
+                    MAL_isIntegrityOk_RET:
+                        in : 'false'
+                    MAL_isConsistencyOk_RET:
+                        in : 'true'

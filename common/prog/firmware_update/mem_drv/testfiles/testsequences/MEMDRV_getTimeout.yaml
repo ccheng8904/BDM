@@ -1,0 +1,24 @@
+testsequences:
+  MEMDRV_getTimeout:
+    description: MEMDRV_getTimeout
+    function: MEMDRV_getTimeout
+    testcases:
+      '1':
+        delta_time: 0
+        description: test covarage
+        return:
+          return_type:
+            exp: MEMDRV_TMO_32S
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+    unit: null
+    validation: null

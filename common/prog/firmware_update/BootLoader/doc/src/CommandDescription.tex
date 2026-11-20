@@ -1,0 +1,366 @@
+\subsection{Command Description}
+The table \ref{tab:Commands} gives an overview of the supported commands.
+The following chapter introduces these commands in detail. As the resources are limited in embedded systems most plausibility checks must be done in the \fp-Application. 
+ 
+%edsLongtable[x]{headline}{format}{content}{caption}{label}
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\normalfont\small\textbf{Command} & \normalfont\small\textbf{Code} & \small\textbf{Used in} & \small\textbf{Essential} & \small\textbf{Description}}%
+   {>{\footnotesize\ttfamily}p{3.0cm} >{\footnotesize\ttfamily}p{1.0cm} >{\footnotesize}m{2.2cm} >{\footnotesize}p{1.6cm} >{\footnotesize}p{5.8cm}}%
+   {STORE_DATA          & 0x0A  & BRO            & yes & Stores received data block at the specified address in RAM\\
+    JUMP_LOADER         & 0x1A  & BRO            & yes & Does a jump to the specified address, usually to RAM-Loader\\
+    SELF_IDENT          & 0x5B  & BRO,\,BP       & no  & Requests the control to identify itself, a ID-String will be transmitted\\
+    SET_PAGE            & 0x77  & BRO,\,BRA,\,BP & no  &  Sets the upper 16-bit of a long address\\
+    SET_BAUDRATE        & 0x04  & BRO,\,BRA,\,BP & no  &  Change the baud rate\\
+    BREAK               & 0x33  & BRA,\,BP       & no  & Breakes a current erase or prigramming command\\
+    JUMP_APPLICATION    & 0x02  & BRA,\,BP       & no  &  Jump to the main application using a reset\\
+    PAGE_ERASE          & 0x08  & BRA,\,BP       & yes & Erase Flash-ROM page wise\\
+    MASS_ERASE          & 0x09  & BRA,\,BP       & no\footnote{At least one of \texttt{PAGE_ERASE}, \texttt{MASS_ERASE} required}
+      &  Erase complete flash\\ 
+    PROGRAMME_DATA      & 0x18  & BRA,\,BP       & yes &  Programme a block of data in flash memory\\
+    READ_DATA           & 0x38  & BRA,\,BP,\,BRO & no  &  Read data from a memory block\\
+    CALC_CRC            & 0x39  & BRA,\,BP       & no  &  Performs a CRC and compares to a given one\\
+    }
+   {Overview: Boot Loader Commands}%
+   {tab:Commands}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+
+\noindent{}Table \ref{tab:ObsoleteCommands} shows a list of not longer supported commands. These commands should not be used in future \bl{}~Applications. Due to downward compatibility they must be supported by the \fp.
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\normalfont\textbf{Command} & \normalfont\textbf{Code} & \textbf{Used in} & \textbf{Description}}%
+   {>{\small\ttfamily}p{3.2cm} >{\small\ttfamily}m{1.1cm} >{\small}p{3cm} >{\small}p{6.7cm}}%
+    {PROGRAMM_BYTE       & 0x18   & BRA    & Do not use, defined for downward compatibility\\
+     READ_DATA32         & 0x39   & BRA    & Read data from the hole memory for reading using 32-bit addresses\\
+     PROGRAMM_DATA32     & 0x19   & BRA    & Programme date in Flash-ROM pagewise using 32-bit addresses\\
+     STORE_DATA32        & 0x10   & BRO    & Stores received data block at the specified 32-bit address in RAM\\
+    }
+   {Overview: Obsolete Boot Loader Commands}%
+   {tab:ObsoleteCommands}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+\subsubsection{Store Data}
+\label{sec:CmdStoreData}
+This command is provided by the \bro{} to receive the \bra{}~Application, it saves the received data block at the address specified by \emph{ADDH} and \emph{ADDL}. This is an essential command for \bro.\\
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|L|F|D|F|F|L|B}{%
+  0x0A & LEN & ADDH & ADDL & SUM & & ACK & & DAT1 & & DATn & SUM & & ACK}{%
+  \cline{2-6}\cline{8-8}\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{STORE_DATA}
+\label{fig:CmdStoreData}
+\end{center}
+\end{figure}
+
+
+
+\subsubsection{Jump Loader}
+\label{sec:CmdJumpLoader}
+This command is provided by the \bro{} to start the \bra{} after this application it transmitted successfully. The length is unused, although it should be zero \bro{} is not responsible to check this.\\
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B}{%
+  0x1A & 0x00 & ADDH & ADDL & SUM & & ACK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{JUMP_LOADER}
+\label{fig:CmdJumpLoader}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Self Ident}
+\label{sec:CmdSelfIdent}
+This command is a nonessential command provided by \bro{} or \bp. The answer of this read request is an \emph{ID-String} terminated with \texttt{0x55, 0xAA, 0x00}. It returns information about the responsible company, micro controller, protocol revision and optional information about \bl{} variant  and project. Even this command is not essential, it is strongly recommended to implement it. Just for really tiny devices or if an additional flash page can be saved it may be omitted. As the under score is used for separator this symbol may not be used inside any part except the last one (\emph{PN}). The strings should be selected as short as possible. At least 0x20 bytes should be reserved for the ID string including the terminating zero.
+
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|B|B|D|B|B|B|B}{%
+  0x5B & 0x00 & 0x55 & 0xAA & 0x5B & & ACK & Char1 & Char2 & & 0x55 & 0xAA & 0x00 & SUM}{%
+  \cline{2-6}\cline{8-10}\cline{12-15}
+}\caption{SELF_IDENT}
+\label{fig:CmdSelfIdent}
+\end{center}
+\end{figure}
+
+\paragraph{Company (CO)}
+As the \bl{}-Specification is for external use also, CO specifies the responsible company. For BSH the following strings are recommended: \texttt{GED, PCG, PCP, PDC, PLC, PRF}. For external suppliers it may have any other string e.g. \texttt{AKO, EGO, IST}. Under scores are not allowed inside any string.
+
+\paragraph{Processor Manufacturer (PM)}
+This part defines the \uc-Manufacturer. \texttt{`FRE'} for Freescale, \texttt{`REN'} for Renesas, \texttt{`AT'} for Atmel, \texttt{`NEC'} for NEC, \texttt{`ST'} for ST, ...
+
+\paragraph{Processor family and derivative (UC)}
+This part identify the the \uc{} family and derivative. E.g. ``S08AC'' for Freescales HCS08AC derivatives. If required also the memory variant must be identified, never the less target is to create as less as possible variants for the boot loaders. 
+
+\paragraph{Protocol version (PV)}
+The revision of \bl{}-Protocol.
+
+\paragraph{Boot Loader Version(BV)} This defines a special \bl{} variant.
+
+\paragraph{Project name (PN)}If required also a unique project name can be specified.\\
+
+\vspace{1ex}
+\noindent{}So the resulting identification name looks like this:\\
+\texttt{CO_PM_UC_PV_BV_PN}\\[1ex]
+The last two optional parts may be omitted if not required. Any omitted part must be replaced by under score. The termination in under score is not required if the parts BV and PN are not specified in this string. So \mbox{'\texttt{BSH_FRE_S08AC_2.0}'} is an legal identifier. The last part (PN) may also have under scores inside e.g.:\\
+\mbox{'\texttt{BSH_REN_R8C1B_2.0__PH_YL123}'}\\
+The \fp{} may use the ID-String to load a specific configuration file.
+
+\subsubsection{Set Page}
+\label{sec:CmdSetPage}
+The command \texttt{SET_PAGE} is used to set the high word of a long address. This address is used in all following commands as upper part of the address and enable the \bl{} to access also far memory without using 32 bit addresses in the message frame. This is an optional command and just supported for platforms providing far memory. Even when far flash memory is provided, it is not mandatory to support the \texttt{SET_Page} command for \bro{} if only near memory is used.\\
+The \bl{} remembers the selected page until a new \texttt{SET_PAGE} frame is received. The default page is zero after reset. \emph{SET_PAGE} expand the address range to 32 bit (4GByte). 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B}{%
+  0x77 & 0x00 & ADDH & ADDL & SUM & & ACK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{SET_PAGE}}
+\label{fig:CmdSetPage}
+\end{center}
+\end{figure}
+
+
+
+\subsubsection{Set Baud Rate}
+\label{sec:CmdSetBaudRate}
+The command \texttt{SET_BAUDRATE} is an optional command and enables the \fp{} to change the default baud rate. Usually the default baud rate after reset is 9600 baud, but also any other rate is allowed.\\
+The two address bytes are used for the baud rate \emph{BDH}, \emph{BDL}. Usually these two bytes are directly copied to the baud rate register of the \uc{}. Many platforms just need a single byte to copy to the baud rate register. In this case just \emph{BDL} is used and \emph{BDH} can be ignored.\\
+In most cases it should not be required to calculate the correct register values, therefore the values $0$ is reserved. This value switches to the standard high baud rate (usually 125k baud).\\
+As standard baud rates like 115k baud cannot easily reached with simple oscillator frequencies, 125k baud can be used instead. E.~g. a divider of 64 with a bus frequency of 8MHz results in 125k baud. \textbf{The ACK is sent before changing the baud rate!}
+ 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B}{%
+  0x04 & 0x00 & BDH & BDL & SUM & & ACK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{SET_BAUDRATE}}
+\label{fig:CmdSetBaudRate}
+\end{center}
+\end{figure}
+\newpage
+\subsubsection{Break}
+\label{sec:CmdBreak}
+To interrupt an erasing or programming process this command can be used. Especially for production this may be used to implement flexible timeouts. The \bl{} itself does not provide a command timeout. As not all flash types do support a break of processing this command is not supported for all platforms. Also for derivatives with small resources this command may not be implemented.
+ 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B}{%
+  0x33 & 0x00 & 0x55 & 0xAA & 0x33 & & ACK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{BREAK}}
+\label{fig:CmdBreak}
+\end{center}
+\end{figure}
+
+
+
+\subsubsection{Jump Application}
+\label{sec:JmpApplication}
+This command initiates a jump to the application. Usually this is done after flashing is finished, to return to the application. This must be solved using a reset (see also \ref{sec:BootloaderStartupSequence}). As this can also be done using a power on reset, \texttt{JUMP_APPLICATION} is a nonessential command.
+
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B}{%
+  0x02 & 0x00 & 0x55 & 0xAA & 0x02 & & ACK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{JUMP_APPLICATION}}
+\label{fig:CmdJumpApplication}
+\end{center}
+\end{figure}
+
+
+\subsubsection{Page Erase}
+\label{sec:PageErase}
+The command \texttt{PAGE_ERASE} initiates an erase of a single flash page. To interrupt an ongoing flash (after \emph{ACK}, before receiving \emph{FOK}) command the \bl{} provides the optional \texttt{BREAK} command (section \ref{sec:CmdBreak}).\\
+The address specified by \emph{ADDH} and \emph{ADDL} is the start address of the page. Where applicable the upper part of address is set by the \texttt{SET_PAGE} command (section \ref{sec:CmdSetPage}).\\
+After the page erase process was finished successfully the \bl{} sends the special acknowledge \emph{FOK}. If command buffering is not provided this may also be a normal \emph{ACK}. If erasing failed instead of \emph{FOK} the negative acknowledge \emph{FLASH_CMD_FAILED} is sent. In this case the command sequence must be sent again.
+\emph{PAGE_ERASE} is a nonessential command if \emph{MASS_ERASE} is provided. At least one of them is required.\\
+\textbf{Note:} This command may also erase the \bro{}.\\ 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|D|B}{%
+  0x08 & 0x00 & ADDH & ADDL & SUM & & ACK & & FOK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{PAGE_ERASE}}
+\label{fig:CmdPageErase}
+\end{center}
+\end{figure}
+
+\subsubsection{Mass Erase}
+\label{sec:MassErase}
+The command \texttt{MASS_ERASE} initiates the erase of complete flash memory. For acknowledge and break handling verify command \texttt{PAGE_ERASE} (\ref{sec:PageErase}).\\
+\emph{MASS_ERASE} is a nonessential command if \emph{PAGE_ERASE} is provided. At least one of them is required.\\
+\textbf{Note:} This command also erase the \bro{}.\\ 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|D|B}{%
+  0x09 & 0x00 & 0x55 & 0xAA & 0x09 & & ACK & & FOK}{%
+  \cline{2-6}% \cline{8-8}   %\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{MASS_ERASE}}
+\label{fig:CmdMassErase}
+\end{center}
+\end{figure}
+
+\subsubsection{Programme Data}
+\label{sec:ProgrammeData}
+To programme a block of data into flash memory the command \texttt{PROGRAMME_DATA} is provided. This essential command flashes the received block of data starting with the address specified by \emph{ADDH} and \emph{ADDL}. Where applicable the upper part of address is set by the \texttt{SET_PAGE} command (section \ref{sec:CmdSetPage}). 
+For acknowledge and break handling verify command \texttt{PAGE_ERASE} (\ref{sec:PageErase}). In case of non successful programme and also for an interrupted command the according flash memory page must be erased and all blocks inside this block must be programmed again.\\
+\textbf{Note:} Before writing the used memory area must be erased.
+
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|L|F|D|F|F|L|B|D|B}{%
+  0x18 & LEN & ADDH & ADDL & SUM & & ACK & & DAT1 & & DATn & SUM & & ACK & & FOK}{%
+  \cline{2-6}\cline{8-8}\cline{10-10}\cline{12-13} \cline{15-15}
+}
+\caption{\texttt{PROGRAMME_DATA}}
+\label{fig:CmdProgrammeData}
+\end{center}
+\end{figure}
+
+\pagebreak[4]
+\subsubsection{Read Data}
+\label{sec:ReadData}
+Using this command the target memory can be read out. This can be used to perform a verify. Although this is a nonessential command, it is recommended to implement it. For targets with very small RAM this command can also be provided by the \bro{}.\\
+
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|B|D|B|B}{%
+  0x38 & LEN & ADDH & ADDL & SUM & & ACK & DAT1 & & DATn & SUM}{%
+  \cline{2-6}\cline{8-9}\cline{11-12}
+}
+\caption{\texttt{READ_DATA}}
+\label{fig:CmdReadData}
+\end{center}
+\end{figure}
+
+\pagebreak[3]
+\subsubsection{Calculate CRC}
+\label{sec:CalcCRC}
+This command performs a CRC over the specified address and verify the calculated CRC with the transmitted one. If the calculated and given CRC are equal a positive acknowledge (\emph{COK}) is transmitted. In case of an error the \emph{CRC_FAILED} is transmitted by the \bl{}.\\
+Like the \emph{PROGRAMME_DATA} this command starts with a common 5 byte frame, which is followed by the data frame after the \bl{} answers with a positive acknowledge. This is an optional command and the \fp{} must not sent the second part of command in case of \emph(UNKNOWN_COMMAND) acknowledge.
+As it may take some time to calculate a CRC, the timeout of \fp{} should be long enough. Also a huge memory block may be splitted into several smaller ones.\\
+ 
+\begin{figure}[h]
+\begin{center}
+\mkMsgFrame{%
+  F|       F|     F|     F|    F|  L|  B}{%
+  0x39 & 0x0C & 0x55 & 0xAA & SUM & & ACK}{%
+%  \cline{2-6}\cline{8-9}\cline{11-12}
+}
+\mkMsgFrame{%
+   F|    D|  F|      F|    D|   F|     F|   D|   F|    F|   L|  B|  L| B}{%
+  ADDH  & &  ADDL & ENDH  & &  ENDL & CRCH & &  CRCL & SUM & & ACK & & COK}{%
+  \cline{2-2} \cline{4-5} \cline{7-8} \cline{10-11} \cline{13-13} \cline{15-15}% \cline{11-12}
+}
+
+
+\caption{\texttt{CALC_CRC}}
+\label{fig:CmdCalcCrc}
+\end{center}
+\end{figure}
+
+\pagebreak[4]
+
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\normalfont\small\textbf{Parameter}  & \small\textbf{Description}}%
+   {>{\footnotesize\ttfamily}p{3.0cm}  >{\footnotesize}p{8cm}}%
+   {ADD                 &  Start address of CRC calculation, 32Bit big endian\\
+    END                 &  End address of CRC calculation, 32Bit big endian\\
+    CRC                 &  Expected CRC, 32Bit big endian\\
+    COK                 &  Acknowledge for CRC ok
+    }
+   {Overview: Parameter CRC-Command}%
+   {tab:ParamCRC}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+\paragraph{Calculating the expected CRC}
+\label{sec:CalculatingTheExpectedCRC}
+This document does not describe a particular CRC, as there are hundreds of different types documented. Often a \uc{} supports a specific CRC is solved in hardware. In this case this build-in CRC should be used. The \fp{} must not know the used CRC. The recommended way how to inform the \fp{} about CRC, start and end address is documented in chapter \ref{sec:UsageOfMotorolaSRecords}.
+
+
+\section{Usage of Motorola S-Records}
+\label{sec:UsageOfMotorolaSRecords}
+The usage of the Motorola S-Record is not required to use the \bl{} protocol. This section is a proposal for implementation of flash programmers and boot loaders. These proposals are used and implemented by the GED boot loaders and the GED Flash-Programmer.\\
+for further details on Motorola S-Record-Format see \cite{SRec}.\\
+
+\subsection{Using the S0-Record for CRC}
+\label{sec:UsingTheS0Record}
+The S0 record behind the 2 byte address field contains ASCII coded text. Usually a motorola file contains a single S0-Record used for project or variant name and version information. To reduce the length of the S0 record there may be additional S0-Records\footnote{Some tools may have problems with more than one S0-Record}.\\
+Also this record may be used to save redundant information e.g. a CRC. A flash programmer may parse this information out of the programming file.\\
+
+\subsubsection{Saving a CRC inside S0-Record}
+\label{sec:SavingTheCRCInsideS0Record}
+The GED Flash Programmer uses the S0-Record of the programming file to parse control data for the \emph{CALC_CRC}-command.
+Table \ref{tab:CRCtags} lists the tags which are defined for the CRC.\\
+
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\normalfont\small\textbf{Tag}  & \small\textbf{Description}}%
+   {>{\small\ttfamily}p{2.0cm}  >{\small}p{6cm}}%
+   {CRCstartX                 &  Start address for CRC calculation\\
+    CRCendX                   &  End address for CRC calculation\\
+    CRCX                      &  Expected CRC, 32Bit big endian\\
+    CRCtmo                    &  Time-out for CRC calculation in seconds.
+                                 This is an optional parameter if not present a default value of flash programmer is taken.
+    }
+   {Tags for CRC-Command with X=1\dots{}n}%
+   {tab:CRCtags}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+\noindent{}The following text shows an example for a S0-Record content:\\
+\begin{flushleft}
+\texttt{%
+Some text e.g. Project name\\
+CRCstart1=0x3000\\
+CRCend1=0x3FFF\\
+CRC1=0x2433\\
+CRCstart2=0x7000\\
+CRCend2=0x7FFF\\
+CRC2=0x2455\\
+CRCtmo=10\\
+}
+\end{flushleft}
+
+\noindent{}This produces the following S0-Records:
+\begin{flushleft}
+\texttt{%
+S0130000536F6D65207465787420652E672E2050BB\\
+S0130010726F6A656374206E616D650A435243733F\\
+S013002074617274313D3078333030300A43524356\\
+S0130030656E64313D3078334646460A4352433157\\
+S01300403D3078323433330A4352437374617274EB\\
+S0130050323D3078373030300A435243656E643273\\
+S01300603D3078374646460A435243323D30783273\\
+S01000703435350A435243746D6F3D313011\\
+}
+\end{flushleft}
+
+\noindent{}Inside S0-Record tags are separated by the line feed '\bs{}n' (0x0A). Starting a new S0-Record does not produce a line feed.\\
+To make the S0 record flexible for future extensions and also easy to parse, the CRC tags can be found in a block starting with \emph{CRCstart1}.
+The first non CRC tag terminates parsing of S0 record.
+
+\subsection{Start address of RAM-loader}
+The command \emph{JUMP_APPLICATION} needs the start address of the RAM-Loader. This may be a fixed address.\\
+BSH GED uses the S9, S7 or S5 record to specify the start address.

@@ -1,0 +1,118 @@
+testsequences:
+  MAL_checkReadOperation:
+    description: Automatically generated Test Sequence.
+    function: MAL_checkReadOperation
+    testcases:
+      '1':
+        delta_time: 0
+        description: module not opened
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isReadingAllowed_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: reading forbidden
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_ACTION_PROHIBITED_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isReadingAllowed_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: reading allowed
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isReadingAllowed_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,80 @@
+testsequences:
+  RBUF_getCapacity:
+    description: coverage
+    function: RBUF_getCapacity
+    testcases:
+      '1':
+        delta_time: 0
+        description: coverage
+        parameter:
+          rb:
+            in: RBUF_getCapacity_rb_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 55
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          RBUF_getCapacity_rb_argument.buffer:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getCapacity_rb_argument.incoming:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getCapacity_rb_argument.read:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getCapacity_rb_argument.reentered:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getCapacity_rb_argument.size:
+            exp: 56
+            in: 56
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_getCapacity_rb_argument.write:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,118 @@
+testsequences:
+  ucGetChannelState:
+    description: Automatically generated Test Sequence.
+    function: ucGetChannelState
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          ucCheckId:
+            in: 5
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          UTI_bGetBit_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          bIsChannelIdValid_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          ucCheckId:
+            in: 3
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: FSF_CH_STATE_SUCCESS
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          UTI_bGetBit_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          bIsChannelIdValid_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          ucCheckId:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: FSF_CH_STATE_IDLE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          UTI_bGetBit_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          bIsChannelIdValid_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

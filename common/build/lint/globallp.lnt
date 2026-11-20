@@ -1,0 +1,47 @@
+
+
+// verbosity configuration
+// -v // no verbostiy information
+// -voif
+// -vf // anzeigen welcher header eine library ist
+
+
+// message presentation configuration
+//-hb~4 // previous option
+//-hs // previous option
+-hf1 // F: always provide file information; 1: one line per message
+-"format=lint:\s%(%f\t%l\t%c %)\t%t\s%n:\s%m"
+-width(0,4) // width 0: no line breaking
+-e831 // Reference cited in prior message deactivated to inhibit more than one message per cause
+
+// global declaration of symbol: creates a lot of trouble in mixed code C/C++
+-e9141
+
+// deﬁned macro 'xx' is reserved to the compiler: issued for all macros beginning with '_': TODO, we need to clean thin inside framework
+-e9071
+
+//nested includes warning: we allow nested includes!
+-e537
+
+// Warning 2445: cast from 'const uint8_t *' (aka 'const unsigned char *') to 'const uint32_t *' (aka 'const unsigned int *') increases required alignment from 1 to 4;  just an additional message, already covered
+-e2445
+
+// Info 9045: complete definition of symbol is unnecessary in this translation unit; creates huge amount of unwanted messages (e.g. definitions in processor include)
+-e9045
+
+// Note 522: highest operation, string ' name ', lacks side effects; happens quite often, is issued when empty functions are called
+-e522
+
+// Note 523: Warning 523: expression statement involving function 'RBUF_disableIrq' lacks side effects
+-e523
+
+// Warning 2662: pointer arithmetic on pointer that may not refer to an array; no MISRA issue
+-e2662
+
+//Warning 2666: expression with side effects passed to unexpanded parameter 1 of macro 'xx': parameter is not referenced in the expansion; cause lots of not useful messages, not MISRA
+-e2666
+
+//Info 788: enum constant 'xx' not used within default switch: not needed as we have 787
+-e788
+
+--emacro((910),NULL)

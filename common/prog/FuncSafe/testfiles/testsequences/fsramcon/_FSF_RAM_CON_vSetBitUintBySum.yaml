@@ -1,0 +1,117 @@
+testsequences:
+  _FSF_RAM_CON_vSetBitUintBySum:
+    description: Automatically generated Test Sequence.
+    function: _FSF_RAM_CON_vSetBitUintBySum
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucCheckValue:
+            in: _FSF_RAM_CON_vSetBitUintBySum_pucCheckValue_argument.&
+            rep: ''
+            solved_in: None
+          puiBitField:
+            in: _FSF_RAM_CON_vSetBitUintBySum_puiBitField_argument.&
+            rep: ''
+            solved_in: None
+          uiBitMask:
+            in: 512
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          HSUP_ucGetHighByte_Stub_RET:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          HSUP_ucGetLowByte_Stub_RET:
+            exp: 6
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vSetBitUintBySum_pucCheckValue_argument:
+            exp: 20
+            in: 20
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vSetBitUintBySum_puiBitField_argument:
+            exp: 515
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucCheckValue:
+            in: _FSF_RAM_CON_vSetBitUintBySum_pucCheckValue_argument.&
+            rep: ''
+            solved_in: None
+          puiBitField:
+            in: _FSF_RAM_CON_vSetBitUintBySum_puiBitField_argument.&
+            rep: ''
+            solved_in: None
+          uiBitMask:
+            in: 3000
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          HSUP_ucGetHighByte_Stub_RET:
+            exp: 4
+            in: 4
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          HSUP_ucGetLowByte_Stub_RET:
+            exp: 12
+            in: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vSetBitUintBySum_pucCheckValue_argument:
+            exp: 50
+            in: 50
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vSetBitUintBySum_puiBitField_argument:
+            exp: 3006
+            in: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

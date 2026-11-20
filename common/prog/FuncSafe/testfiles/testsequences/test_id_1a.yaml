@@ -1,0 +1,59 @@
+integrationtest:
+    test_id:
+        rep: "hex"
+        cleanup:
+            call_function: 
+                1:
+                    TH_FSFP_ClearOutPar: []
+            set_array: 
+                1:
+                    TH_FSF_OutPar: [2, -1]
+        exe:   
+            1:
+                set_array:
+                    1:
+                        TH_FSF_InPar: [1, 0]
+                call_function:
+                    1:
+                        TH_FSFP_vSetFSCOM_State: []
+                    2:
+                        TH_FSFP_ucGetFSCOM_State: []
+                get_variable:
+                    1:
+                        TH_FSF_OutPar[0]: []
+            2:
+                set_array:
+                    1:
+                        TH_FSF_InPar: [1, 1]
+                call_function:
+                    1:
+                        TH_FSFP_vSetFSCOM_State: []
+                    2:
+                        TH_FSFP_ucGetFSCOM_State: []
+                get_variable:
+                    1:
+                        TH_FSF_OutPar[1]: []
+            3:
+                set_array:
+                    1:
+                        TH_FSF_InPar: [1, 2]
+                call_function:
+                    1:
+                        TH_FSFP_vSetFSCOM_State: []
+                    2:
+                        TH_FSFP_ucGetFSCOM_State: []
+                get_variable:
+                    1:
+                        TH_FSF_OutPar[2]: []
+                    
+        result:
+            expectation: "00 12 36 8A"
+            buffer: 
+                get_array:
+                    TH_FSF_OutPar: [4]
+                len:
+                    TH_FSF_OutSP: []
+            
+                
+                
+    

@@ -1,0 +1,143 @@
+testsequences:
+  _FSF_RAM_CON_vCheckByMirror:
+    description: Automatically generated Test Sequence.
+    function: _FSF_RAM_CON_vCheckByMirror
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucMIrrorStartAddress:
+            in: _FSF_RAM_CON_vCheckByMirror_pucMIrrorStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          pucStartAddress:
+            in: _FSF_RAM_CON_vCheckByMirror_pucStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          ucId:
+            in: 1
+            rep: ''
+            solved_in: None
+          ucSizeInBytes:
+            in: 1
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          _FSF_RAM_CON_vCheckByMirror_pucMIrrorStartAddress_argument:
+            exp: 252
+            in: 252
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckByMirror_pucStartAddress_argument:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucChannelId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucSubCheckId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucUserPar:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucMIrrorStartAddress:
+            in: _FSF_RAM_CON_vCheckByMirror_pucMIrrorStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          pucStartAddress:
+            in: _FSF_RAM_CON_vCheckByMirror_pucStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          ucId:
+            in: 1
+            rep: ''
+            solved_in: None
+          ucSizeInBytes:
+            in: 1
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          _FSF_RAM_CON_vCheckByMirror_pucMIrrorStartAddress_argument:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckByMirror_pucStartAddress_argument:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucChannelId:
+            exp: FSF_RAM_CONSISTENCY_CHECK
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucSubCheckId:
+            exp: FSF_ERR_CHANNEL_ERROR
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucUserPar:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

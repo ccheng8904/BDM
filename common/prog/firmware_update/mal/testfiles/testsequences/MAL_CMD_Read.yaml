@@ -1,0 +1,159 @@
+testsequences:
+  MAL_CMD_Read:
+    description: Automatically generated Test Sequence.
+    function: MAL_CMD_Read
+    testcases:
+      '1':
+        delta_time: 0
+        description: entry check failed
+        parameter:
+          data:
+            in: 123
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 55
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          offset:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkReadOperation_RET:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            in: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPhyAddr_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_addr:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_data:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_size:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: read seccessfully
+        parameter:
+          data:
+            in: 123
+            rep: ''
+            solved_in: None
+          dataLen:
+            in: 55
+            rep: ''
+            solved_in: None
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          offset:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_checkReadOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPhyAddr_RET:
+            exp: 12345
+            in: 12345
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_addr:
+            exp: 12345
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_data:
+            exp: 123
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_read_size:
+            exp: 55
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,25 @@
+testsequences:
+  BLSRV_u16FromBuffer:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_u16FromBuffer
+    testcases:
+      '1':
+        delta_time: 0
+        description: get address form bufffer
+        parameter:
+          buffer:
+            in: BLSRV_TestAddress.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 4386
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+    unit: null
+    validation: null

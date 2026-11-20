@@ -1,0 +1,60 @@
+testsequences:
+    MAL_isInDictionary:
+        description: MAL_isInDictionary
+        function: MAL_isInDictionary
+        testcases:
+            '1':
+                description: empty dictionary
+                parameter:
+                    mod_number:
+                        in: MAL_PROGRAMMER_ID
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  0
+            '2':
+                description: module not in dictionary (not inside moduleCount)
+                parameter:
+                    mod_number:
+                        in: MAL_PROGRAMMER_ID
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_ModuleCount:
+                        exp: 2
+                        in:  2
+                    MAL_moduleDictionary[0]:
+                        exp: MAL_BP2_LOADER_ID
+                        in:  MAL_BP2_LOADER_ID
+                    MAL_moduleDictionary[1]:
+                        exp: MAL_FLEX_PARTITION
+                        in:  MAL_FLEX_PARTITION
+                    MAL_moduleDictionary[2]:
+                        exp: MAL_PROGRAMMER_ID
+                        in:  MAL_PROGRAMMER_ID
+            '2':
+                description: module not in dictionary (not inside moduleCount)
+                parameter:
+                    mod_number:
+                        in: MAL_PROGRAMMER_ID
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_ModuleCount:
+                        exp: 3
+                        in:  3
+                    MAL_moduleDictionary[0]:
+                        exp: MAL_BP2_LOADER_ID
+                        in:  MAL_BP2_LOADER_ID
+                    MAL_moduleDictionary[1]:
+                        exp: MAL_FLEX_PARTITION
+                        in:  MAL_FLEX_PARTITION
+                    MAL_moduleDictionary[2]:
+                        exp: MAL_PROGRAMMER_ID
+                        in:  MAL_PROGRAMMER_ID
+

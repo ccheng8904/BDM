@@ -1,0 +1,490 @@
+<?xml version="1.0" ?>
+	<test_sequences generation_of_variables="true" xmlns="http://www.bshg.com/tsd/v0" xmlns:pstd="http://www.bshg.com/pstd/v0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bshg.com/tsd/v0 tsd.xsd">
+		
+	
+		<test_sequence identifier="MTDIV_div_32_16" xmlns:pstd="http://www.bshg.com/pstd/v0">
+			
+		
+			<description>Automatically generated Test Sequence.</description>
+			
+		
+			<function identifier="MTDIV_div_32_16" linkage="external">
+				
+			
+				<pstd:return_type>
+					
+				
+					<pstd:basic_type ctype="uint16_t" gtype="uint16" is_const="false" is_volatile="false" normalized_ctype="unsigned short"/>
+					
+			
+				</pstd:return_type>
+				
+			
+				<pstd:param identifier="dividend">
+					
+				
+					<pstd:basic_type ctype="uint32_t" gtype="uint32" is_const="false" is_volatile="false" normalized_ctype="unsigned int"/>
+					
+			
+				</pstd:param>
+				
+			
+				<pstd:param identifier="divisor">
+					
+				
+					<pstd:basic_type ctype="uint16_t" gtype="uint16" is_const="false" is_volatile="false" normalized_ctype="unsigned short"/>
+					
+			
+				</pstd:param>
+				
+		
+			</function>
+			
+		
+			<test_cases>
+				
+			
+				<test_case identifier="1" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>123.456.789 / 9876 = 12500,68</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>12501</equal_to>
+							
+					
+							<outcome>12501</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>123456789</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>9876</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="2" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>1.000.000 / 2.000 = 500</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>500</equal_to>
+							
+					
+							<outcome>500</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>1000000</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>2000</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="3" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>saturation</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to specified_in="hex">65535</equal_to>
+							
+					
+							<outcome>65535</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in specified_in="hex">4294967295</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in specified_in="hex">65535</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.015600204467773438</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="4" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>rounding up small value</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>53</equal_to>
+							
+					
+							<outcome>53</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>105</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>2</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="5" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>same result than previous test case</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>53</equal_to>
+							
+					
+							<outcome>53</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>106</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>2</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="6" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>overflow returns biggest uint16 result</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to specified_in="hex">65535</equal_to>
+							
+					
+							<outcome>65535</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in specified_in="hex">4294967295</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>2</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.015599966049194336</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="7" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>another rounding down</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>4</equal_to>
+							
+					
+							<outcome>4</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>11</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>3</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="8" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>round up</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>1199</equal_to>
+							
+					
+							<outcome>1199</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>123456</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>103</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.0</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+			
+				<test_case identifier="9" xmlns:pstd="http://www.bshg.com/pstd/v0">
+					
+				
+					<description>rounding down</description>
+					
+				
+					<test_return identifier="return_type">
+						
+					
+						<out>
+							
+						
+							<equal_to>42099</equal_to>
+							
+					
+							<outcome>42099</outcome>
+							<validation>Passed</validation>
+						</out>
+						
+				
+					</test_return>
+					
+				
+					<test_parameter identifier="dividend">
+						
+					
+						<in>987654200</in>
+						
+				
+					</test_parameter>
+					
+				
+					<test_parameter identifier="divisor">
+						
+					
+						<in>23460</in>
+						
+				
+					</test_parameter>
+					
+			
+					<start_time>17:34:08</start_time>
+					<delta_time>0.015599966049194336</delta_time>
+					<add_info></add_info>
+					<test_case_result>Passed</test_case_result>
+				</test_case>
+				
+		
+			</test_cases>
+			
+	
+			<unitname unit="mathDiv"/>
+		</test_sequence>
+		
+
+		<projectname project="testClient_math_mathDiv"/>
+		<test_sequence_result>Passed</test_sequence_result>
+		<test_timestamp>2018.08.28_17:34:08</test_timestamp>
+		<execution_by>Normal-Function</execution_by>
+	</test_sequences>

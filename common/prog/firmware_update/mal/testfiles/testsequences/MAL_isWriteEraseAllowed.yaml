@@ -1,0 +1,53 @@
+testsequences:
+  MAL_isWriteEraseAllowed:
+    description: MAL_isWriteEraseAllowed
+    function: MAL_isWriteEraseAllowed
+    testcases:
+      '1':
+        delta_time: 0
+        description: write erase not allowed
+        return:
+          return_type:
+            exp: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenPartition:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: write erase allowed
+        return:
+          return_type:
+            exp: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenPartition:
+            exp: MAL_partitionFix[1].&
+            in: MAL_partitionFix[1].&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,17 @@
+testsequences:
+  MEMDRV_waitForOperationComplete:
+    description: MEMDRV_waitForOperationComplete
+    function: MEMDRV_waitForOperationComplete
+    testcases:
+      '1':
+        description: do the test
+        variable:
+          MEMDRV_driver:
+            in: XXX_driver.&
+            out: XXX_driver.&
+          DRVIF_isBusyCounter:
+            exp: 0
+            in: 55
+          MEMDRV_waitForOperationComplete_Line[0]:
+            exp: 54
+            in: 0

@@ -1,0 +1,223 @@
+testsequences:
+  MEMDRV_calcCrcAtomic:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_calcCrcAtomic
+    testcases:
+      '1':
+        delta_time: 0
+        description: read error
+        parameter:
+          addr:
+            in: MEMDRV_calcCrcAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          crc:
+            in: MEMDRV_calcCrcAtomic_crc_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_calcCrcAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_READ_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Update_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_addr_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_crc_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: calc crc for maximum block
+        parameter:
+          addr:
+            in: MEMDRV_calcCrcAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          crc:
+            in: MEMDRV_calcCrcAtomic_crc_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_calcCrcAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Update_RET:
+            exp: 12345
+            in: 12345
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_addr_argument:
+            exp: 128
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_crc_argument:
+            exp: 12345
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_size_argument:
+            exp: 128
+            in: 256
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: calc crc for some bytes
+        parameter:
+          addr:
+            in: MEMDRV_calcCrcAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          crc:
+            in: MEMDRV_calcCrcAtomic_crc_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_calcCrcAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          CRC_Update_RET:
+            exp: 42
+            in: 42
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_addr_argument:
+            exp: 6
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_crc_argument:
+            exp: 42
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_calcCrcAtomic_size_argument:
+            exp: 0
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

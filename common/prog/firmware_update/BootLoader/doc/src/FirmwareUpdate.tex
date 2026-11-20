@@ -1,0 +1,64 @@
+\begin{landscape}
+
+\section{Remote Firmware Update}
+\label{sec:FirmwareUpdate}
+
+If Firmware Update has to be supported the so called Module header has to be added to the ROM-Loader.\\
+The ROM-Loader then can be registered in the partition table and will be treated as loadable application. The loadable ROM-Loader is called LRO.\\
+
+Definition of structure for software module header:
+
+\lstset{language=C}
+
+\begin{lstlisting}[frame=single]
+
+struct BMMOD_ModuleHeader
+{
+    uint32_t       crc_expected;  ///< the crc value of the present module
+    const BMMOD_isrPtr_t *ISRtbl_ptr; ///< pointer to start of vector table
+    uint32_t       size;             ///< memory used by application incl. sw-header
+    uint32_t       executionAddress; /** \brief execution address for the module
+                                         usually the physical start address of the module,
+                                         in all other cases module will be copied to its
+                                         execution address before starting
+                                       */
+    struct FWU_sw_version_s sw_version; ///< present sw-version
+    /** pointer to array of hardware identifiers (for which SW has been build) */
+    const struct hw_id_array_s *hw_id_array;
+};
+
+\end{lstlisting}
+
+\newpage
+
+Example implementation:
+
+\begin{lstlisting}[frame=single]
+
+SYMBOL_USED const struct BMMOD_ModuleHeader MDHD_ModuleHeader =
+{
+     /* here must be the result of CRC over requested code area */
+    .crc_expected = 0x00, 
+     /* start of vector table */
+    .ISRtbl_ptr   = ITBL_coreVectors,
+    /* size of the module */
+    .size         = (size_t)(((FWU_LRO_END_ADDRESS-FWU_LRO_START_ADDRESS)+1u)),
+     /* address where to jump BM /without reset */
+    .executionAddress = FWU_LRO_START_ADDRESS,
+    .sw_version =
+    {
+     .version =
+        {
+            .ID = {0},
+            .major = {0},
+            .minor = {0},
+            .revision = {0},
+            .build = GIT_WC_HEAD_REV_NUMBER
+        }
+    },
+    .hw_id_array = NULL
+};
+
+\end{lstlisting}
+
+\end{landscape}

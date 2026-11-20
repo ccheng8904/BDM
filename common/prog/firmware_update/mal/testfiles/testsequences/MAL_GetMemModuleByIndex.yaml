@@ -1,0 +1,34 @@
+testsequences:
+    MAL_GetMemModuleByIndex:
+        description: MAL_GetMemModuleByIndex
+        function: MAL_GetMemModuleByIndex
+        testcases:
+            '1':
+                description: index out of range
+                parameter:
+                    index:
+                        in: 47
+                return:
+                    return_type:
+                        exp: 0
+                variable:
+                    MAL_ModuleCount:
+                        exp: 11
+                        in:  11
+            '2':
+                description: normal operation
+                parameter:
+                    index:
+                        in: 5
+                return:
+                    return_type:
+                        exp: 4711
+                variable:
+                    MAL_ModuleCount:
+                        exp: 11
+                        in:  11
+                    MAL_GetMemModule_RET:
+                        exp: 4711
+                        in:  4711
+
+

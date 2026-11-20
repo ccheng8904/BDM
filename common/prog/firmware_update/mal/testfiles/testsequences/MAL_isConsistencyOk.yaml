@@ -1,0 +1,91 @@
+testsequences:
+    MAL_isConsistencyOk:
+        description: MAL_isConsistencyOk
+        function: MAL_isConsistencyOk
+        testcases:
+            '1':
+                description: partition is not valid, error handling on
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+            '2':
+                description: partition is not valid, error handling off
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'true'
+            '3':
+                description: consistent, single fragment
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[1].&
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+            '4':
+                description: consistent, dual fragment, consistent buildId
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex[1].&
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+                    MAL_getBuildId_App2_RET:
+                        in: 12345
+                    MAL_getBuildId_RET:
+                        in: 12345
+                    MAL_GetMemModule_RET:
+                        in: MAL_partitionFlex[2].&
+            '5':
+                description: consistent, dual fragment, inconsistent buildId
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex[1].&
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+                    MAL_getBuildId_App2_RET:
+                        in: 12345
+                    MAL_getBuildId_RET:
+                        in: 12346
+                    MAL_GetMemModule_RET:
+                        in: MAL_partitionFlex[2].&
+            '6':
+                description: fragmented flex partition table
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[2].&
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+                    MAL_getBuildId_App2_RET:
+                        in: 12345
+                    MAL_getBuildId_RET:
+                        in: 12345
+                    MAL_GetMemModule_RET:
+                        in: MAL_partitionFlex[2].&
+
+

@@ -1,0 +1,20 @@
+testsequences:
+  BLCOM_sendByte:
+    description: already implicit tested due to BLCOM_sendBuffer
+    function: BLCOM_sendByte
+    testcases:
+      '1':
+        description: just send a byte
+        parameter:
+          data:
+            in: 99
+        variable:
+          BLCOM_isTxOnGoing_RET:
+            exp: 'false'
+            in: 'false'
+          BLCOM_setTxData_data:
+            exp: 99
+            in: 0
+          BLCOM_isDataAvailable_RET:
+            exp: 'true'
+            in:  'true'

@@ -1,0 +1,368 @@
+\documentclass[a4paper,british,oneside,12pt]{scrartcl}
+\usepackage[bshspec]{bshstyle2}
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+%\usepackage{lastpage}
+\usepackage{longtable}
+\usepackage{supertabular}
+\usepackage{isodate}
+%\usepackage{babel}
+\usepackage{tabulary}
+\usepackage{hyperref}
+\usepackage{colortbl}
+\usepackage[strings]{underscore}
+\usepackage{pst-uml}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{pdflscape}
+%Use \us for '_' as original is so ugly
+%\newcommand{\us}{\hspace{0.3em}\_\hspace{-0.8em}\_\hspace{0.2em}}
+\def\us{\kern.08em\vbox{\hrule width.35em height.6pt}\kern.08em}
+
+\definecolor{RuHo}{rgb}{0.5,0,1}
+\definecolor{jele}{rgb}{.6,0.4,.75}
+
+%\remark{JeLe}{my remark}
+%\remark{RuHo}{Runes remark}
+
+
+\newcolumntype{F}{>{\columncolor[gray]{.92}\centering\footnotesize}m{1.05cm}}
+\newcolumntype{B}{>{\color{white}\columncolor[gray]{.38}\centering\footnotesize}m{1.05cm}}
+\newcolumntype{L}{>{\centering}m{1pt}}
+\newcolumntype{X}{>{\centering}m{4pt}}
+\newcolumntype{D}{>{\centering\footnotesize $\cdots$} m{4mm}}
+\newlength{\tabcolsepBak}
+\newlength{\arrayrulewidthBak}
+\setlength{\tabcolsepBak}{\tabcolsep}
+\setlength{\arrayrulewidthBak}{\arrayrulewidth}
+
+
+\newcommand{\mkMsgFrame}[4][]{
+\setlength\tabcolsep{1pt}
+\renewcommand\arraystretch{1.3}
+\setlength\arrayrulewidth{1pt}
+ \vspace{8pt}
+ \noindent
+ \begin{tabular}
+   {X|#2|X}
+  	\hline
+  	& #3 &\tabularnewline
+  	#4
+  	#1
+ \end{tabular}
+ \vspace{8pt}
+ \setlength\tabcolsep{\tabcolsepBak}
+ \renewcommand\arraystretch{1.0}
+ \setlength\arrayrulewidth{\arrayrulewidthBak}
+}
+
+
+\renewcommand\pdmTitle{          Boot Loader Specification}
+\renewcommand\pdmDescr{          This document specifies the BSH~GED Boot Loader}
+\renewcommand\pdmVersion{        1.9}
+\renewcommand\pdmStatus{         Released}
+\renewcommand\pdmIndex{          --}
+\renewcommand\pdmEco{            --}
+\renewcommand\pdmDocNo{          --}
+\renewcommand\pdmAuthor{         Jens Lehmann}
+\renewcommand\pdmEmail{          Jens.Lehmann@bshg.com}
+\renewcommand\pdmCreationDate{   12.11.2009}
+\renewcommand\pdmLastAmendment{  Jens Lehmann}
+\renewcommand\pdmAmendmentDate{  \today}
+\renewcommand\pdmDocType{        Specification}
+\renewcommand\pdmDocAbstact{%
+  This document specifies the rough design of boot loader application and the protocol.}
+
+
+\newcommand{\bl}{\emph{BL}}
+\newcommand{\fp}{\emph{FP}}
+\newcommand{\dbus}{\emph{DBus2}}
+\newcommand{\bra}{\emph{BRA}}
+\newcommand{\bro}{\emph{BRO}}
+\newcommand{\bp}{\emph{BP}} % Boot Programmer, discuss name (all in one loader)
+\newcommand{\uc}{$\mu$C}
+
+
+\begin{document}
+\makePdmTitle
+
+\tableofcontents
+\newpage
+\pagestyle{scrheadings}
+
+
+\section*{Revision history}
+
+\makeRevHistory{%
+1.0 			& Setup new document based on ``Bootloader design and protocol'' (55600000003810).	& Jens Lehmann	& 24.11.2009\\
+1.1       & Rework, all commands specified & Jens Lehmann & 14.12.2009\\
+1.2       & Commands SET_BAUDRATE and BREAK adapted & Jens Lehmann & 09.03.2010\\
+1.3       & Command SET_BAUDRATE adapted, ADL is used instead of ADH if just a single byte is required  & Jens Lehmann & 29.04.2010\\
+1.4       & Chapter Overview added & Jens Lehmann & 28.09.2010\\
+1.5       & Chapter Data Length added (Special meaning of data length zero defined)\\
+          & New empty chapter 'Naming Convention' added & Jens Lehmann & 04.11.2010\\
+1.6       & New chapter 'Communication settings' added\\
+          & Buffered writing extended\\
+          & Differences and new chapter reviewed (Holen/Lehmann)  & Jens Lehmann & 08.04.2011\\
+          & Review and release & Jens Lehmann\\
+					& 									 & Rune Holen & 25.05.2012\\
+1.7       & Command for CRC calculation added & Jens Lehmann & 10.06.2014\\
+1.8       & Firmware Update Chapter added & Alexander Kiefl & 25.06.2019\\
+1.9       & Chapter 'Bootloader Transition State Chart' updated. Chapter 'Buffered Mode' removed & Jens Lehmann & 23.12.2020
+}
+
+
+
+\section{Introduction}
+This document describes the rough Boot Loader (\bl{}) design and the interaction with the application in an embedded system and with the Flash Programmer (\fp{}).
+
+\subsection{Aim}
+Without defining implementation details this document specifies all required details to develop a \bl{}-App\-li\-ca\-tion for any embedded platform.
+
+\subsection{Limitations}
+This document does not define or discuss any implementation details. As it should enable a sub-contractor of BSH also to develop a \bl{} which works together with the GED Flash Programmer \fp{}. The \bl{} has been designed for wired firmware update, never the less the \bl{} may also be included in a system which provides remote firmware update (chapter \ref{sec:FirmwareUpdate}).
+
+\newpage
+\subsection{Coexisting Documents}
+Please note, that some of the following documents are for internal use only, they are not valid for BSH sub-contractor.\\
+
+\makeCoexistingDocs{%
+1 & Software Naming Convention       & NamingConvention.doc & EDS:A915.AAAA-DOCU\\
+2 & Software Coding Rules            & CodingRules.pdf      & EDS:A14.AAAA-GL\\
+3 & Universal Flash Programmer       & ApplicationSpecifications.doc & \\
+4 & BSH General Bus Specification D-Bus-2 & D-BusII.pdf & 5560 0000003459\\
+}
+
+
+\subsection{Terms and Abbreviations}
+
+\makeTerms{%
+BL          & Boot Loader\\
+BRA         & RAM-Loader: This part of \bl{} will be uploaded into RAM of micro controller by the \fp{}.
+              It is an application containing the routines for programming and erasing flash memory.\\
+BRO         & ROM-Loader: The memory resistant part of \bl{}, responsible for handling startup sequence
+              and receiving the RAM-Loader application.\\
+LRO         & Loadable ROM-Loader. This application does the same as the ROM-Loader, but it is not the root application if the \uc{}, it will be started by a Boot Manager.\\
+BP          & Boot-Programmer: This application is a ROM-Loader containing also the flash routines.
+              This is required, if the \uc{}-Platform does not support execution of code inside RAM.\\
+D-Bus-2       & Unified bus system used in BSH household appliances, one-wire and UART based\\
+ECU         & Electronic Control Unit\\
+FP          & Flash~Programmer: A tool communicating with the Boot Loader for programming the $\mu{}C$\\
+ID-String   & String saved in the ROM-\bl{} holds information about the \uc{}-Platform, \bl{} and optional about the project.\\
+CRC         & The Cyclic redundancy check is a mathematical method commonly used in digital networks and storage devices to detect accidental changes to raw data.
+ 
+}
+
+\newpage
+
+\section{Overall View}
+To programme the nonvolatile memory of an embedded system there are different applications required. In order to programme different devices in different systems the hardware of D-Bus-2 is used. This interface is unified and available in nearly every BSH household appliance with electronic controls\footnote{The older standard diagnostic can be used as well, but not for higher baud rates}.\\
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[angle=0,width=16cm]{OverallScheme.eps}
+	\caption{Buildup for programming the nonvolatile memory of an electronic control}
+	\label{fig:OverallScheme}
+\end{figure}
+
+
+Figure \ref{fig:OverallScheme} shows the required build-up for programming an electronic control. As D-Bus-2 is a multi master bus more than one control may be connected to the bus. The \bl{} protocol just supports a point to point connection. 
+To open a point to point connection between the \fp{} and an ECU other communication partners need to ignore the bus messages during update. Therefore a so-called GoOffline message will be sent by the \fp{}.
+This message informs the target ECU to be flashed and the others to be quite for time defined in the GoOffline message. For detailed information about this message please refer document \flqq{}BSH General Bus Specification D-Bus-2\frqq{}.
+After receiving the GoOffline message the target ECU will perform a reset. After this reset the ROM-\bl{} gets control and sends the boot request (0x54) to the serial interface used for D-Bus-2 also.\footnote{The D-Bus-2 SW is not part of the \bl{}.\\
+If no application is present a normal power-on can be used to reset the control. Here as well the \bl{} generates the 0x54 on transmission line.}. For detailed information on startup refer to Chapter \ref{sec:BootloaderStartupSequence}.\\
+
+
+\subsection{The ROM-\bl}
+\label{sec:TheROMBl}
+The ROM-\bl{} (\bro{}) is the memory persistent part of the \bl{}. It gets control after reset and sends the boot request (0x54) to a possibly connected \fp{}. If the ROM-\bl{} application does not receive any valid message frame (chapter \ref{sec:BootLoaderMsgFrame}), the \bro{} enters the client application after the boot timeout has been elapsed. Usually some registers of \uc{}-Platforms cannot be rewritten after initialisation (e.g clock or watch dog registers). That's why \bro{} shall use a reset (\emph{fast boot}) to enter the client application. For detailed timeout and reset information refer to Chapter \ref{sec:Timeout} and figure \ref{fig:StateChart}.\\
+The second important function of the \bro{} is to load the RAM-Loader \bra{} into RAM. Also the \bro{} supports the change of baud rate (\texttt{SET_BAUDRATE}) and a command to identify the control and \uc{} (\texttt{SELF_IDENT}). Finally the command \texttt{JUMP_LOADER} jumps to the downloaded \bra{}.
+
+\subsection{The RAM-\bl}
+\label{sec:TheRAMBl}
+The command \texttt{JUMP_LOADER} gives the \bra{} control over the \uc{}. This application supports the commands for erasing programming and reading the flash memory (\texttt{PAGE_ERASE}, \texttt{MASS_ERASE}, \texttt{PROGRAMME_DATA} and \texttt{READ_DATA} ). To leave the \bl{} and get back to the client application the command \texttt{JUMP_APPLICATION} is supported. 
+To prevent a deadlock when not all bytes of a message have been received, the \bra{} provides an inter byte timeout. If a message could not be received completely the \bra{} sends the time out acknowledge (see chapter \ref{sec:Acknowledge}).
+\footnote{In older versions of \bl -Protocol the \bra{} was responsible to change the baud rate, this is not longer supported as it is handled by the \bro{}.}
+
+
+
+\newpage
+\subsection{Bootloader Transition State Chart}
+The state chart in figure \ref{fig:StateChart} illustrates the interaction between the different applications inside the micro controller including startup and time out.\\
+After reset the ROM-Loader gets control. Depending on a special status variable the application will be started or the \bro{} continues.\\
+\textbf{Note:} \emph{BootState} must not be initialised during startup, as last saved value should be available after reset.
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=16cm]{BootLoaderHandshake.eps}
+	\caption{Transistion State Chart (RAM/ROM-Loader and Application)}
+	\label{fig:StateChart}
+\end{figure}
+
+\subsubsection{Boot State Variable}
+The boot state variable is used to communicate between the application and bootloader. Its content will not be initialized during startup.
+The boot state variable is implemented as member \emph{magicPattern} inside the structure \emph{BMDAT_sharedData}. This structure is placed at a common address specified for each platform.
+For most platforms this is the first available address inside RAM (0x20000000 for CortexMx and 0x04 for Renesas Rx).
+For Cypress/Infineon Psoc4 the structure is placed after the vector table at 0x200000C0.\\
+\newpage
+\hint{Usually for wired firmware-update the placement of \emph{BMDAT_sharedData} is not that important. When the application does not set the boot state to the value \emph{BMDAT_longBootTimeOut},
+there will be the default timeout of romLoader of about 50ms. On extremely slow PCs only this has caused problems in the past.}\\
+The Bootloader implementation does not read or set any other attribute than \emph{magicPattern} of \emph{BMDAT_sharedData}!
+\lstset{language=C}
+\lstset{escapeinside={<@}{@>}}
+\begin{lstlisting}[frame=single, basicstyle=\tiny]
+
+enum BMDAT_magicPatterns
+{
+    BMDAT_startBlAfterReset     = 0x00U,
+    BMDAT_longBootTimeOut       = 0x5A5A7979U,
+    BMDAT_startAppAfterReset    = 0x55AA7799U,
+    BMDAT_magicPattern          = 0x5A714B78U
+};
+
+struct BMDAT_sharedData_s
+{
+    size_t   IsrTableAddress;  // physical address of interrupt vector table
+    uint32_t errorFlags;       // error flags
+    enum MAL_ModuleEnum errorModule; // module-ID caused an error during booting
+    enum MAL_ModuleEnum bootModule;  // identifier of module to boot
+    uint16_t baudRate;         // start baud rate for boot loader
+    uint16_t startAttempts;    // number of start attempts for boot manager
+    uint16_t fatalErrorCounter;// fatal error counter (used in case of functional safety error)
+    <@\textcolor{red}{enum BMDAT_magicPatterns magicPattern;}@> // holds a magic pattern to recognize uninitialized data
+    enum BMDAT_RamCheckState ramCheckState;// flag for SW/HW reset
+};
+
+\end{lstlisting}
+
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\rmfamily\textbf{Definition} & \rmfamily\textbf{Value} & & \textbf{Description}}%
+   {>{\footnotesize\ttfamily}l >{\footnotesize\ttfamily}r r >{\footnotesize}l}%
+   {BMDAT_longBootTimeOut            & 0x5A5A7979   & &  Long handshake timeout requested by application\\
+    BMDAT_startAppAfterReset           & 0x55AA7799   & &  \bro{} jumps to application immediately after reset\\
+                        & any other      & &  \bro {} will use default hand shake timeout of 50ms\\}
+   {Settings for \emph{BMDAT_sharedData.magicPattern}}%
+   {tbl:BootState}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+
+\newpage
+\subsection{Timeout}
+\label{sec:Timeout}
+\bro{} and \bra{} support the same message frame, but the requirements for timeout implementation are different.
+\subsubsection{ROM-Loader Timeout}
+\label{sec:ROMLoaderTimeout}
+\paragraph{Hand Shake}
+\label{sec:HandShake}
+After reset the \bro{} becomes control. Depending on variable \emph{BootState} the client application will be started or different values for timeout are used (figure \ref{fig:StateChart} and Table \ref{tbl:BootState}). The standard hand shake timeout is 50ms. In case of BMDAT_longBootTimeOut this timeout must be at least 1s.\\
+The hand shake timeout is active until the first valid frame was received. A valid frame may be also an unknown command. To get fastest communication this first command should be the \texttt{SET_BAUDRATE} command.\\ \textbf{Note:} The \bro{} must not send a \texttt{WRONG_CHECKSUM} or \texttt{TRANSMISSION_ERROR} acknowledge before receiving the first valid message frame, so the first frame will be acknowledged with \texttt{ACKNOWLEDGE_OK} or \texttt{UNKNOWN_COMMAND} if received valid frame has an unknown command.
+
+\paragraph{Message Timeout}
+\label{sec:MessageTimeout}
+After receiving the first message frame the timer must be loaded with the message timeout which is 250ms. Each received byte reload the timer. If no byte is received during 250ms a reset must be generated to enter the client application.
+ 
+\subsubsection{RAM-Loader Timeout}
+\label{sec:RAMLoaderTimeout}
+The \bra{} supports an inter byte timeout. This means that between two messages no timeout is generated. After any received byte the timer is loaded with 250ms. If the timer elapsed a \texttt{RECEIVER_TIMEOUT} is sent by the \bra{}. When the last byte of a message was received the timeout is switched off until first byte of next message was received.
+
+\include{BootloaderStartupSequence}
+
+
+\newpage
+\section{Boot Loader Protocol}
+\label{sec:BootLoaderProtocol}
+\subsection{Communication Settings}
+The Boot Loader uses the UART based D-Bus-2 interface, but implements a different message stack. To make sure, that the Boot Loader does not accept any D-Bus-2 message from other nodes the Boot Loader protocol uses an even parity. The following table shows the standard communication settings for the UART:\\[0.5cm]
+\noindent{}\sffamily
+\begin{tabular}{ll}
+		\textbf{Baud rate:}   & 9600\\
+	  \textbf{Data length:} & 8\\		
+		\textbf{Parity:}      & Even\\
+		\textbf{Stop bit:}    & 1
+\end{tabular}\\[0.5cm]
+\normalfont
+\textbf{Note:} The Baud rate can be changed using the command \texttt{SET_BAUDRATE}. Also the start baud rate can differ to have e.g. the same baud rate than used for D-Bus-2 protocol.
+\pagebreak[0]
+\normalfont
+
+\subsection{General Message Frame}
+\label{sec:BootLoaderMsgFrame}
+The Boot Loader communicate with the Flash Programmer using a simple message frame. This message frame is designed for the UART-based single wire interface of D-Bus-2. Each message is initiated by the Flash Programmer, starting with a sequence of 5 bytes. This frame must be acknowledged by the Boot Loader. The minimal sequence ends with an acknowledge after a 5 byte message frame.\\
+The sequence below illustrate a command writing data to the Boot Loader. This diagram and all followings show bytes from Flash Programmer light gray and bytes form the Boot Loader in dark gray color. 
+
+\mkMsgFrame{%
+  F|F|F|F|F|L|B|L|F|D|F|F|L|B}{%
+  CMD & LEN & ADDH & ADDL & SUM & & ACK & & DAT1 & & DATn & SUM & & ACK}{%
+  \cline{2-6}\cline{8-8}\cline{10-10}\cline{12-13} \cline{15-15}
+}
+
+\makeTerms{%
+CMD 			& Command number.\\
+LEN       & Length of data following the command frame (here n bytes to transmit).\\
+ADDH/L 	  & High/Low byte of address. Commands which do not need an address with more than 2 data bytes are using this byte for data also (e.g. command \ttfamily{SET_BAUDRATE}).\\
+SUM       & Check sum over command frame or data bytes.\\
+DAT       & Data byte; may be also transmitted from \bl{} to \fp.\\
+}
+
+\subsubsection{Data Length}
+\label{sec:DataLength}
+For some commands (\texttt{STORE_DATA, PROGRAMME_DATA, READ_DATA}) an explicit data length is required. The maximal supported data length is platform specific and depends on implementation and RAM resources of the \uc{}. The message frame supports a maximum data length of 256 bytes, for these commands a \texttt{LEN=0} means 256 bytes. For all other commands \texttt{LEN=0} means 0 bytes.
+
+\subsubsection{Checksum Calculation}
+\label{sec:ChecksumCalculation}
+
+Each command frame or block of data is terminated by the check byte \emph{SUM}. It is an 8-Bit check sum. A possibly overflow (carry) is also added to the sum.\\
+	\[SUM +\!= DATi + Carry;
+\]
+\textbf{Note:} This is the same like performing a sum and then add high- and low-byte. Finally take the low-byte as \emph{SUM}. The check sum never can exceed the 16-bit range.
+
+\subsubsection{Acknowledge}
+\label{sec:Acknowledge}
+Each command and each data block must be acknowledged by the \bl. There are positive and negative acknowledges. The high nibble of positive acknowledge is always 0xA or 0xB, for negative ones always 0x0. The low nibble of positive acknowledge is also used for an identifier in case of buffered mode\footnote{In older \bl~applications the low nibble of positive acknowledge was used to code the $\mu{}C$ platform, this is not longer required as there is the command \ttfamily{SELF_IDENT}}.
+
+%edsLongtable[x]{headline}{format}{content}{caption}{label}
+\setlength\arrayrulewidth{1pt}
+\edsLongtable[]%
+   {\textbf{\rmfamily{Acknowledge}} & \textbf{\rmfamily{Value}} & & \textbf{Description}}%
+   {>{\small\ttfamily}l >{\small\ttfamily}r r >{\small}l}%
+   {ACKNOWLEDGE_OK      & 0xA0   & &  Positive acknowledge\\
+    FLASH_CMD_OK        & 0xB0   & &  Positive acknowledge for erasing and programming flash\\
+    CRC_OK              & 0xC0   & &  Positive acknowledge successful CRC\\
+    UNKNOWN_COMMAND     & 0x01   & &  Received command is not supported\\
+    WRONG_CHECKSUM      & 0x02   & &  Received checksum was wrong\footnote{May also be answered with \ttfamily{TRANSMISSION_ERROR}.}\\
+    SPEED_CH_FAILED     & 0x03   & &  Obsolete, speed check not longer supported\\
+    FLASH_CMD_FAILED    & 0x04   & &  Flash command (erasing or flashing) has failed\\
+    TRANSMISSION_ERROR  & 0x06   & &  Transmission error  (e.g. parity, overflow $\cdots$)\\
+    RECEIVER_TIMEOUT    & 0x07   & &  A timeout happened during receive\\
+    CRC_FAILED          & 0x08   & &  CRC error detected\\}%
+   {List of defined Acknowledges}%
+   {tabAckTbl}
+\setlength\arrayrulewidth{\arrayrulewidthBak}
+
+\pagebreak[4]
+
+
+\include{CommandDescription}
+%\include{BootloaderNaming}
+
+\newpage
+
+\include{FirmwareUpdate}
+
+\newpage
+
+\begin{thebibliography}{widest-label}
+\bibitem[1]{MISRA-C} MISRA-2 2004
+\bibitem[2]{ANSI-C} ANSI/ISO 9899:1999 - Programming Language C (C99)
+\bibitem[3]{PrgC} Programmieren in C, Kernighan/Ritchie
+\bibitem[4]{QAC} \url{http://en.wikipedia.org/wiki/QA-C}
+\bibitem[5]{NamingConvention}BSH EDS Naming Convention
+\bibitem[6]{Doxygen} \url{http://en.wikipedia.org/wiki/Doxygen}
+\bibitem[7]{MISRA} \href{http://en.wikipedia.org/wiki/MISRA_C}{http://en.wikipedia.org/wiki/MISRA\_C} and\\ \href{file://RBGNA001/MDisk/QAC/V7.0/m2cm/doc/M2CM-2.1-QAC-7.0-Coding_Standard_Manual.pdf}{MISRA-C (M2CM-2.1-QAC-7.0-Coding\_Standard\_Manual.pdf)}
+\bibitem[8]{SRec} \url{http://en.wikipedia.org/wiki/SREC_(file_format)}
+\end{thebibliography}
+
+\end{document}
+
+

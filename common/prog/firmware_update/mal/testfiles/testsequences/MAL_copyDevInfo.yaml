@@ -1,0 +1,93 @@
+testsequences:
+  MAL_copyDevInfo:
+    description: MAL_copyDevInfo
+    function: MAL_copyDevInfo
+    testcases:
+      '1':
+        delta_time: 0
+        description: coverage
+        parameter:
+          index:
+            in: 0
+            rep: ''
+            solved_in: None
+          modNum:
+            in: MAL_copyDevInfo_modNum_argument.&
+            rep: ''
+            solved_in: None
+          name:
+            in: MAL_copyDevInfo_name_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MAL_copyDevInfo_size_argument.&
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          MAL_copyDevInfo_modNum_argument:
+            exp: 21792
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_copyDevInfo_size_argument:
+            exp: 123
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartitionNameLen_RET:
+            exp: 10
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartitionSize_RET:
+            exp: 123
+            in: 123
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPartition_RET:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          memcpy_count:
+            exp: 10
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          memcpy_dest:
+            exp: MAL_copyDevInfo_name_argument.&
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

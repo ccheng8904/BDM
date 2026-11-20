@@ -1,0 +1,47 @@
+testsequences:
+  SCH_TM_measureTaskRuntime:
+    description: Automatically generated Test Sequence.
+    function: SCH_TM_measureTaskRuntime
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          task_id:
+            in: MOD_BAL
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          SCH_TimeMonitor[0].sample_counter:
+            exp: 0
+            in: 11
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          task_id:
+            in: MOD_BAL
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          SCH_TimeMonitor[0].sample_counter:
+            exp: 2
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

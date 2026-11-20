@@ -1,0 +1,22 @@
+testsequences:
+    MAL_getPartitionSize:
+        description: MAL_getPartitionSize
+        function: MAL_getPartitionSize
+        testcases:
+            '1':
+                description: partition is not valid
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+            '2':
+                description: valid partition
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[1].&
+                return:
+                    return_type:
+                        exp: 0x1000
+                        rep: 'hex'

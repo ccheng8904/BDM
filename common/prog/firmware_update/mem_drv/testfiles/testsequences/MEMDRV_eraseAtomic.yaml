@@ -1,0 +1,279 @@
+testsequences:
+  MEMDRV_eraseAtomic:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_eraseAtomic
+    testcases:
+      '1':
+        delta_time: 0
+        description: erase error (zero length)
+        parameter:
+          addr:
+            in: MEMDRV_eraseAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_eraseAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_ERASE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_erase_Stub_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_isError_Stub_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_addr_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_size_argument:
+            exp: 512
+            in: 512
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: erase error
+        parameter:
+          addr:
+            in: MEMDRV_eraseAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_eraseAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_ERASE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_erase_Stub_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_addr_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_size_argument:
+            exp: 512
+            in: 512
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: seccessfull erase
+        parameter:
+          addr:
+            in: MEMDRV_eraseAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_eraseAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_erase_Stub_RET:
+            exp: 256
+            in: 256
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_addr_argument:
+            exp: 256
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_size_argument:
+            exp: 256
+            in: 512
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: seccessfull erase (additional bytes)
+        parameter:
+          addr:
+            in: MEMDRV_eraseAtomic_addr_argument.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_eraseAtomic_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          DRVIF_erase_Stub_RET:
+            exp: 256
+            in: 256
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          DRVIF_isError_Stub_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_driver:
+            exp: XXX_driver.&
+            in: XXX_driver.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_addr_argument:
+            exp: 256
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseAtomic_size_argument:
+            exp: 0
+            in: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

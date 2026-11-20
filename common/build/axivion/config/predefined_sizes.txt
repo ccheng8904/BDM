@@ -1,0 +1,211 @@
+; size and alignment of basic data types in bytes
+
+; Email on 26.03.2014 from Axivion, Dr. Stefan Staiger-Stöhr, to Ulrike Brüggemann, concerning type_system for RX111: 
+; "ich denke, es ist am einfachsten, wenn Sie in Ihrer Konfiguration die Größe von long double auf 8 statt 4 setzen; 
+; kleiner als 8 unterstützt das Frontend leider nicht. Das dürfte in der Praxis keine spürbaren Auswirkungen in der Analyse haben."
+; translation:  sizes below 8 for long double are not supported - therefore set size to 8 - that should have not noticeable influence on the analysis
+; UlBr 26.03.2014 : recommendation followed - done for RENESAS_RX -> fatal Axivion error from Cafe disappeared
+
+
+[RENESAS_RX]
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4
+sizeof(long long) = 8 
+sizeof(pointer) = 4 
+sizeof(float) = 4 
+sizeof(double) = 4
+sizeof(long double) = 8
+
+alignof(short) = 2
+alignof(int) = 4
+alignof(long) = 4 
+alignof(long long) = 4
+alignof(pointer) = 4
+alignof(float) = 4
+alignof(double) = 4 
+alignof(long double) = 4
+
+[KEIL_ARM]
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4
+sizeof(long long) = 8 
+sizeof(pointer) = 4
+sizeof(float) = 4 
+sizeof(double) = 8
+sizeof(long double) = 8
+
+alignof(short) = 2
+alignof(int) = 4
+alignof(long) = 4 
+alignof(long long) = 8
+alignof(pointer) = 4
+alignof(float) = 4
+alignof(double) = 8 
+alignof(long double) = 8
+
+
+[STM8]
+sizeof(short) = 2
+sizeof(int) = 2 
+sizeof(long) = 4
+sizeof(long long) = 8 
+sizeof(pointer) = 2
+sizeof(float) = 2 
+sizeof(double) = 4
+sizeof(long double) = 8
+
+alignof(short) = 2
+alignof(int) = 2
+alignof(long) = 4 
+alignof(long long) = 8
+alignof(pointer) = 2
+alignof(float) = 2
+alignof(double) = 4
+alignof(long double) = 8
+
+[Windows32]
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4
+sizeof(long long) = 8 
+sizeof(pointer) = 4 
+sizeof(float) = 4 
+sizeof(double) = 8
+sizeof(long double) = 8
+
+alignof(short) = 2
+alignof(int) = 4
+alignof(long) = 4 
+alignof(long long) = 8
+alignof(pointer) = 4
+alignof(float) = 4
+alignof(double) = 8 
+alignof(long double) = 8
+
+[Windows64]
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4 
+sizeof(long long) = 8
+sizeof(pointer) = 8
+sizeof(float) = 4
+sizeof(double) = 8
+sizeof(long double) = 8
+
+alignof(short) = 2
+alignof(int) = 4 
+alignof(long) = 4
+alignof(long long) = 8 
+alignof(pointer) = 8
+alignof(float) = 4 
+alignof(double) = 8
+alignof(long double) = 8
+
+[Linux32]
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4
+sizeof(long long) = 8
+sizeof(pointer) = 4
+sizeof(float) = 4
+sizeof(double) = 8 
+sizeof(long double) = 12
+
+alignof(short) = 2 
+alignof(int) = 4 
+alignof(long) = 4
+alignof(long long) = 4
+alignof(pointer) = 4
+alignof(float) = 4
+alignof(double) = 4
+alignof(long double) = 4
+
+[Linux64]
+sizeof(short) = 2 
+sizeof(int) = 4 
+sizeof(long) = 8
+sizeof(long long) = 8
+sizeof(pointer) = 8
+sizeof(float) = 4
+sizeof(double) = 8 
+sizeof(long double) = 16
+
+alignof(short) = 2 
+alignof(int) = 4 
+alignof(long) = 8 
+alignof(long long) = 8
+alignof(pointer) = 8
+alignof(float) = 4 
+alignof(double) = 8 
+alignof(long double) = 16
+
+[Solaris32]
+; Solaris32 is on SPARC V8
+; Solaris32 on i386 is same as Linux32
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 4 
+sizeof(long long) = 8
+sizeof(pointer) = 4 
+sizeof(float) = 4 
+sizeof(double) = 8 
+sizeof(long double) = 16
+
+alignof(short) = 2 
+alignof(int) = 4 
+alignof(long) = 4
+alignof(long long) = 8 
+alignof(pointer) = 4
+alignof(float) = 4 
+alignof(double) = 8
+alignof(long double) = 8
+
+[Solaris64]
+; Solaris64 is on SPARC V9
+; Solaris64 on amd64 is same as Linux64
+sizeof(short) = 2
+sizeof(int) = 4 
+sizeof(long) = 8 
+sizeof(long long) = 8
+sizeof(pointer) = 8
+sizeof(float) = 4
+sizeof(double) = 8 
+sizeof(long double) = 16
+
+alignof(short) = 2 
+alignof(int) = 4
+alignof(long) = 8 
+alignof(long long) = 8
+alignof(pointer) = 8
+alignof(float) = 4 
+alignof(double) = 8 
+alignof(long double) = 16
+[gcc]
+sizeof(char)         = 1
+sizeof(short)        = 2
+sizeof(int)          = 4
+sizeof(long)         = 4
+sizeof(long long)    = 8
+sizeof(pointer)      = 4
+sizeof(float)        = 4
+sizeof(double)       = 8
+sizeof(long double)  = 12
+
+alignof(short)       = 2
+alignof(int)         = 4
+alignof(long)        = 4
+alignof(long long)   = 8
+alignof(pointer)     = 4
+alignof(float)       = 4
+alignof(double)      = 8
+alignof(long double) = 4
+
+wchar_t   = short unsigned int
+wint_t    = short unsigned int
+char16_t  = short unsigned int
+char32_t  = unsigned int
+size_t    = unsigned int
+ptrdiff_t = int
+

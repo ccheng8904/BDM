@@ -1,0 +1,57 @@
+testsequences:
+  MAL_eraseModule:
+    description: MAL_eraseModule
+    function: MAL_eraseModule
+    testcases:
+      '1':
+        delta_time: 0
+        description: coverage
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_getPartitionSize_RET:
+            exp: 22
+            in: 22
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_getPhyAddr_RET:
+            exp: 100
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseRange_addr:
+            exp: 100
+            in: 100
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_eraseRange_size:
+            exp: 22
+            in: 22
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

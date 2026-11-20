@@ -1,0 +1,53 @@
+testsequences:
+  ucGetFSCOM_State:
+    description: Automatically generated Test Sequence.
+    function: ucGetFSCOM_State
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ucTaskState:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: FSF_STATE_PRESCHEDULED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ucTaskState:
+            exp: FSF_STATE_PRESCHEDULED
+            in: FSF_STATE_PRESCHEDULED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

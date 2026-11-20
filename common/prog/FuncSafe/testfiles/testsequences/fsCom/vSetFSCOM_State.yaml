@@ -1,0 +1,67 @@
+testsequences:
+  vSetFSCOM_State:
+    description: Automatically generated Test Sequence.
+    function: vSetFSCOM_State
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          newstate:
+            in: FSF_STATE_BOOTED
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ucTaskState:
+            exp: FSF_STATE_BOOTED
+            in: FSF_STATE_BOOTED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          newstate:
+            in: FSF_STATE_PRESCHEDULED
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ucTaskState:
+            exp: FSF_STATE_PRESCHEDULED
+            in: FSF_STATE_PRESCHEDULED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          newstate:
+            in: 3
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ucTaskState:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

@@ -1,0 +1,69 @@
+testsequences:
+    MAL_copyPatToDictionary:
+        description: MAL_copyPatToDictionary
+        function: MAL_copyPatToDictionary
+        testcases:
+            '1':
+                description: partition null pointer given
+                parameter:
+                    pTbl:
+                        in: 0
+                    max_size:
+                        in: 4
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  0
+            '2':
+                description: zero length given
+                parameter:
+                    pTbl:
+                        in: MAL_partitionFlex.&
+                    max_size:
+                        in: 0
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  0
+            '3':
+                description: scan part of table
+                parameter:
+                    pTbl:
+                        in: MAL_partitionFlex.&
+                    max_size:
+                        in: 2
+                variable:
+                    MAL_ModuleCount:
+                        exp: 2
+                        in:  0
+                    MAL_isInDictionary_RET:
+                        exp: 'false'
+                        in:  'false'
+            '4':
+                description: handling duplicates
+                parameter:
+                    pTbl:
+                        in: MAL_partitionFlex.&
+                    max_size:
+                        in: 4
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  0
+                    MAL_isInDictionary_RET:
+                        exp: 'true'
+                        in:  'true'
+            '5':
+                description: end of table reached
+                parameter:
+                    pTbl:
+                        in: MAL_partitionFix.&
+                    max_size:
+                        in: 4
+                variable:
+                    MAL_ModuleCount:
+                        exp: 3
+                        in:  0
+                    MAL_isInDictionary_RET:
+                        exp: 'false'
+                        in:  'false'

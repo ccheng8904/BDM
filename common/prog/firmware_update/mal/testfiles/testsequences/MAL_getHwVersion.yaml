@@ -1,0 +1,10 @@
+testsequences:
+    MAL_getHwVersion:
+        description: MAL_getHwVersion
+        function: MAL_getHwVersion
+        testcases:
+            '1':
+                description: test coverage, function has single tree
+                return:
+                    return_type:
+                        exp: MAL_hw_version.&

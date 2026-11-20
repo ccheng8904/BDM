@@ -1,0 +1,63 @@
+testsequences:
+  MAL_isModuleOpened:
+    description: MAL_isModuleOpened
+    function: MAL_isModuleOpened
+    testcases:
+      '1':
+        delta_time: 0
+        description: module opened
+        parameter:
+          modNum:
+            in: 21760
+            rep: hex
+            solved_in: None
+        return:
+          return_type:
+            exp: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenModule:
+            exp: MAL_PARTITION_TABLE
+            in: MAL_PARTITION_TABLE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: moduel not opend
+        parameter:
+          modNum:
+            in: 21761
+            rep: hex
+            solved_in: None
+        return:
+          return_type:
+            exp: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenModule:
+            exp: MAL_PARTITION_TABLE
+            in: MAL_PARTITION_TABLE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

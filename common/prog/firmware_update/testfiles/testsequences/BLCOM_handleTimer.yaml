@@ -1,0 +1,205 @@
+testsequences:
+  BLCOM_handleTimer:
+    description: complete test sequence
+    function: BLCOM_handleTimer
+    testcases:
+      '1':
+        delta_time: 0
+        description: millisecond not down
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 999
+            in: 999
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: millisecond down
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 1000
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 0
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 1000
+            in: 1000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: millisecond not down, timer overflow
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 65000
+            in: 65000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 463
+            in: 463
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: millisecond down, timer overflow
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 464
+            in: 65000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 0
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 464
+            in: 464
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '5':
+        delta_time: 0
+        description: millisecond down, late call
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 1010
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 98
+            in: 99
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 1200
+            in: 1200
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '6':
+        delta_time: 0
+        description: timer already down
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_timeStamp:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          BLCOM_timer:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 5000
+            in: 5000
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

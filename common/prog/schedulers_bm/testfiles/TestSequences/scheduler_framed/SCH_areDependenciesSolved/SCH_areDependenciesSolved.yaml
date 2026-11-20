@@ -1,0 +1,197 @@
+testsequences:
+  SCH_areDependenciesSolved:
+    description: Automatically generated Test Sequence.
+    function: SCH_areDependenciesSolved
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          task_id:
+            in: 3
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          SCH_ProjectCatalogue:
+            exp: SCH_ProjectCatalogue_argument.&
+            in: SCH_ProjectCatalogue_argument.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.DependenciesList[0]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.DependenciesList[1]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.DependenciesList[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.DependenciesList[3]:
+            exp: SCH_ProjectCatalogue_argument.&
+            in: SCH_ProjectCatalogue_argument.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TaskHandlersList[0]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TaskHandlersList[1]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TaskHandlersList[2]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TaskHandlersList[3]:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[0].Task_ID:
+            exp: MOD_BAL
+            in: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[0].Task_Priority:
+            exp: HIGH_PRIORITY
+            in: HIGH_PRIORITY
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[1].Task_ID:
+            exp: MOD_BAL
+            in: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[1].Task_Priority:
+            exp: HIGH_PRIORITY
+            in: HIGH_PRIORITY
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[2].Task_ID:
+            exp: MOD_BAL
+            in: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[2].Task_Priority:
+            exp: HIGH_PRIORITY
+            in: HIGH_PRIORITY
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[3].Task_ID:
+            exp: MOD_BAL
+            in: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[3].Task_Priority:
+            exp: HIGH_PRIORITY
+            in: HIGH_PRIORITY
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[4].Task_ID:
+            exp: MOD_BAL
+            in: MOD_BAL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          SCH_ProjectCatalogue_argument.TasksList[4].Task_Priority:
+            exp: HIGH_PRIORITY
+            in: HIGH_PRIORITY
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

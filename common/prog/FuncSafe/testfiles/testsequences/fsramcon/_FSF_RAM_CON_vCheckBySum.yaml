@@ -1,0 +1,125 @@
+testsequences:
+  _FSF_RAM_CON_vCheckBySum:
+    description: Automatically generated Test Sequence.
+    function: _FSF_RAM_CON_vCheckBySum
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucStartAddress:
+            in: _FSF_RAM_CON_vCheckBySum_pucStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          ucCheckValue:
+            in: 3
+            rep: ''
+            solved_in: None
+          ucId:
+            in: 5
+            rep: ''
+            solved_in: None
+          ucSizeInBytes:
+            in: 1
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          _FSF_RAM_CON_vCheckBySum_pucStartAddress_argument:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucChannelId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucSubCheckId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucUserPar:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          pucStartAddress:
+            in: _FSF_RAM_CON_vCheckBySum_pucStartAddress_argument.&
+            rep: ''
+            solved_in: None
+          ucCheckValue:
+            in: 5
+            rep: ''
+            solved_in: None
+          ucId:
+            in: 3
+            rep: ''
+            solved_in: None
+          ucSizeInBytes:
+            in: 1
+            rep: ''
+            solved_in: None
+        start_time: 0
+        validation: null
+        variable:
+          _FSF_RAM_CON_vCheckBySum_pucStartAddress_argument:
+            exp: 3
+            in: 3
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucChannelId:
+            exp: FSF_RAM_CONSISTENCY_CHECK
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucSubCheckId:
+            exp: FSF_ERR_CHANNEL_ERROR
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_vApplicationErrorNotify_ucUserPar:
+            exp: 3
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

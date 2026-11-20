@@ -1,0 +1,18 @@
+testsequences:
+    MAL_initPartition:
+        description: MAL_initPartition
+        function: MAL_initPartition
+        testcases:
+            '1':
+                description: test coverage, function has single tree
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  42
+                    MAL_flexPatRef:
+                        exp: 4711
+                        in: 0
+                    MAL_GetFlexPartitionTable_RET:
+                        exp: 4711
+                        in: 4711
+

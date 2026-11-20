@@ -1,0 +1,302 @@
+testsequences:
+  MAL_CMD_WriteStart:
+    description: Automatically generated Test Sequence.
+    function: MAL_CMD_WriteStart
+    testcases:
+      '1':
+        description: write check failed
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 0
+        return:
+          return_type:
+            exp: 7
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_ACTION_PROHIBITED_ERROR
+            in: MAL_ST_ACTION_PROHIBITED_ERROR
+          MAL_eraseModule_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 0
+          MAL_dataLen:
+            exp: 0
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_result:
+            exp: MAL_ST_ACTION_PROHIBITED_ERROR
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_writeStarted:
+            exp: 'false'
+            in: 'false'
+      '2':
+        delta_time: 0
+        description: erase failed
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 0
+        return:
+          return_type:
+            exp: 9
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_eraseModule_RET:
+            exp: MAL_ST_ERASE_ERROR
+            in: MAL_ST_ERASE_ERROR
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 0
+          MAL_dataLen:
+            exp: 0
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_result:
+            exp: MAL_ST_ERASE_ERROR
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_writeStarted:
+            exp: 'false'
+            in: 'false'
+      '3':
+        delta_time: 0
+        description: write data failed
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 155
+        return:
+          return_type:
+            exp: 10
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_eraseModule_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 55
+          MAL_dataLen:
+            exp: 155
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 33
+            in: 33
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+          MAL_result:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 33
+            in: 0
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'false'
+      '4':
+        delta_time: 0
+        description: write data ok
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 155
+        return:
+          return_type:
+            exp: 0
+        start_time: 0
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_eraseModule_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 0
+          MAL_dataLen:
+            exp: 155
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 33
+            in: 33
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_result:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 33
+            in: 0
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'false'
+      '5':
+        delta_time: 0
+        description: finish ok
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 153
+        return:
+          return_type:
+            exp: 0
+        start_time: 0
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_eraseModule_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 0
+          MAL_dataLen:
+            exp: 153
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_result:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'false'
+      '6':
+        delta_time: 0
+        description: finish failed
+        parameter:
+          data:
+            in: 0
+          dataLen:
+            in: 0
+          modNum:
+            in: 0
+          overallDataLen:
+            in: 153
+        return:
+          return_type:
+            exp: 12
+        start_time: 0
+        variable:
+          MAL_checkWriteOperation_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_eraseModule_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_checkAddressRange_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_currentAddr:
+            exp: 0
+            in: 0
+          MAL_dataLen:
+            exp: 153
+            in: 0
+          MAL_finishWriting_RET:
+            exp: MAL_ST_WRITE_DATA_LEN_MISMATCH
+            in: MAL_ST_WRITE_DATA_LEN_MISMATCH
+          MAL_handleWriteBlock_MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_handleWriteBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+          MAL_result:
+            exp: MAL_ST_WRITE_DATA_LEN_MISMATCH
+            in: MAL_ST_OK
+          MAL_sizeLeft:
+            exp: 0
+            in: 0
+          MAL_writeStarted:
+            exp: 'true'
+            in: 'false'
+    unit: null

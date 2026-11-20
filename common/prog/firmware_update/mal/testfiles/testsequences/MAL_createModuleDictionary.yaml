@@ -1,0 +1,29 @@
+testsequences:
+    MAL_createModuleDictionary:
+        description: MAL_createModuleDictionary
+        function: MAL_createModuleDictionary
+        testcases:
+            '1':
+                description: already initialized
+                variable:
+                    MAL_ModuleCount:
+                        exp: 1
+                        in:  1
+                    MAL_copyPatToDictionary_pTbl:
+                        exp: 0
+                        in : 0
+                    MAL_copyPatToDictionary_max_size:
+                        exp: 0
+                        in : 0
+            '2':
+                description: initialization
+                variable:
+                    MAL_ModuleCount:
+                        exp: 0
+                        in:  0
+                    MAL_copyPatToDictionary_pTbl:
+                        exp: MAL_partitionFix.&
+                        in : 0
+                    MAL_copyPatToDictionary_max_size:
+                        exp: 4
+                        in : 0

@@ -1,0 +1,83 @@
+testsequences:
+    MAL_isModuleCrcValid:
+        description: MAL_isModuleCrcValid
+        function: MAL_isModuleCrcValid
+        testcases:
+            '1':
+                description: module to small, error handling on
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex.&
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_getModuleSize_RET:
+                        in : 4
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+            '2':
+                description: module to small, error handling off
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex.&
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_getModuleSize_RET:
+                        in : 4
+                    MAL_handleIntegrityError_RET:
+                        in: 'true'
+            '3':
+                description: CRC check passed
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex[1].&
+                return:
+                    return_type:
+                        exp: 'true'
+                variable:
+                    MAL_getModuleSize_RET:
+                        in : 5
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+                    MAL_PartitionToHeader_RET:
+                        in: MDHD_ModuleHeader.&
+                    MDHD_ModuleHeader.crc_expected:
+                        in: 12345
+                    CRC_Calc_RET:
+                        in: 12345
+                    CRC_Calc_len:
+                        in: 0
+                        exp: 1
+                    CRC_Calc_data:
+                        in: 0
+                        exp: 0x1004
+                        rep: hex
+            '4':
+                description: CRC check failed
+                parameter:
+                    partition:
+                        in: MAL_partitionFlex[1].&
+                return:
+                    return_type:
+                        exp: 'false'
+                variable:
+                    MAL_getModuleSize_RET:
+                        in : 5
+                    MAL_handleIntegrityError_RET:
+                        in: 'false'
+                    MAL_PartitionToHeader_RET:
+                        in: MDHD_ModuleHeader.&
+                    MDHD_ModuleHeader.crc_expected:
+                        in: 12345
+                    CRC_Calc_RET:
+                        in: 12346
+                    CRC_Calc_len:
+                        in: 0
+                        exp: 1
+                    CRC_Calc_data:
+                        in: 0
+                        exp: 0x1004
+                        rep: hex

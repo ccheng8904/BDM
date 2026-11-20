@@ -1,0 +1,142 @@
+testsequences:
+  MEMDRV_read:
+    description: covarage of interface
+    function: MEMDRV_read
+    testcases:
+      '1':
+        delta_time: 0
+        description: entry check fails
+        parameter:
+          addr:
+            in: 0
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OUT_OF_RANGE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OUT_OF_RANGE_ERROR
+            in: MAL_ST_OUT_OF_RANGE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: read success
+        parameter:
+          addr:
+            in: 0
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 10
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: read fails
+        parameter:
+          addr:
+            in: 0
+            rep: ''
+            solved_in: None
+          data:
+            in: 0
+            rep: ''
+            solved_in: None
+          size:
+            in: 10
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_READ_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_entryCheck_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_readBlock_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

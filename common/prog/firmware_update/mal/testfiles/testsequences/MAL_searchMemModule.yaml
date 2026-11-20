@@ -1,0 +1,77 @@
+testsequences:
+    MAL_searchMemModule:
+        description: MAL_searchMemModule
+        function: MAL_searchMemModule
+        testcases:
+            '1':
+                description: null pointer given instead of partition table
+                parameter:
+                    module:
+                        in: MAL_BP2_LOADER_ID
+                    partitionTbl:
+                        in: 0
+                    maxTableLen:
+                        in: 4
+                return:
+                    return_type:
+                        exp: 0
+            '1':
+                description: table length is zero
+                parameter:
+                    module:
+                        in: MAL_BP2_LOADER_ID
+                    partitionTbl:
+                        in: MAL_partitionFix.&
+                    maxTableLen:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+            '2':
+                description: romLader found
+                parameter:
+                    module:
+                        in: MAL_BP2_LOADER_ID
+                    partitionTbl:
+                        in: MAL_partitionFix.&
+                    maxTableLen:
+                        in: 4
+                return:
+                    return_type:
+                        exp: MAL_partitionFix[0].&
+            '3':
+                description: flex partition found
+                parameter:
+                    module:
+                        in: MAL_FLEX_PARTITION
+                    partitionTbl:
+                        in: MAL_partitionFix.&
+                    maxTableLen:
+                        in: 4
+                return:
+                    return_type:
+                        exp: MAL_partitionFix[2].&
+            '4':
+                description: module not found, table length reached
+                parameter:
+                    module:
+                        in: MAL_PRODUCT_APP2
+                    partitionTbl:
+                        in: MAL_partitionFix.&
+                    maxTableLen:
+                        in: 3
+                return:
+                    return_type:
+                        exp: 0
+            '5':
+                description: module not found, table end mark reached
+                parameter:
+                    module:
+                        in: MAL_PRODUCT_APP2
+                    partitionTbl:
+                        in: MAL_partitionFix.&
+                    maxTableLen:
+                        in: 4
+                return:
+                    return_type:
+                        exp: 0

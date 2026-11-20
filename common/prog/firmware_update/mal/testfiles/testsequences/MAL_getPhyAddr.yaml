@@ -1,0 +1,63 @@
+testsequences:
+  MAL_getPhyAddr:
+    description: MAL_getPhyAddr
+    function: MAL_getPhyAddr
+    testcases:
+      '1':
+        delta_time: 0
+        description: values
+        parameter:
+          offset:
+            in: 256
+            rep: hex
+            solved_in: None
+        return:
+          return_type:
+            exp: 256
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenPartition:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: other values
+        parameter:
+          offset:
+            in: 51
+            rep: hex
+            solved_in: None
+        return:
+          return_type:
+            exp: 4147
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_OpenPartition:
+            exp: MAL_partitionFix[1].&
+            in: MAL_partitionFix[1].&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

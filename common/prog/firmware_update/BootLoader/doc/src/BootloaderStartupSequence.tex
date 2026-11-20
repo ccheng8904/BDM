@@ -1,0 +1,96 @@
+\subsection{Bootloader Startup Sequence}
+\label{sec:BootloaderStartupSequence}
+The sequence in figure \ref{fig:NormalPowerOn} shows the behaviour after a normal power on reset.
+After reset the Boot Loader Application becomes the control, as the reset vector points to the \bl-Application. It sends the boot request and sets the fast-boot condition. The fast boot condition will not be cleared during reset (e.g. this can be done by saving it in noninitialised RAM section). When the \fp{} is not present or does not answer (like shown in the figure \ref{fig:NormalPowerOn}), the boot timeout will generate a second reset.\\
+After reset the \bl{} starts again, but as fast-boot condition is set the \bl{} jumps immediately to the main application.\\
+\begin{figure}[hb]
+\resizebox{\linewidth}{!}{%
+	\begin{psmatrix}[colsep=0.2,rowsep=0.5]
+			[name=flashprog]\umlClass{Flash Prog.}{}
+		&	[name=application]\umlClass{Application}{}
+		& [name=bl]\umlClass{Boot Loader}{}
+		& [name=uc]\umlClass{$\mu{}$Controller}{}		
+		\\[0.5cm]
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+ 			[name=flashprogEnd]{}
+		&	[name=applicationEnd]{}
+		& [name=blEnd]{}
+		& [name=ucEnd]{}
+		& \\[-0.5cm]
+		%
+		\ncline[linewidth=0.5pt,linestyle=solid,offset=-1.7,nodesep=0.0]%
+    {->}{client}{clientEnd}
+    \naput[npos=1]{\emph{t}}
+		%
+		\ncline[linestyle=dashed]{flashprog}{flashprogEnd}
+		\ncline[linestyle=dashed]{application}{applicationEnd}
+		\ncline[linestyle=dashed]{bl}{blEnd}
+		\ncline[linestyle=dashed]{uc}{ucEnd}
+    %
+    % Les connexions horisontales ave leur commentaires associés
+    \small\ttfamily
+    \psset{labelsep=1.4mm}
+    %
+    \ncline{<-}{2,3}{2,4}\naput*{PowerOn()}
+    \ncline{<-}{3,1}{3,3}\naput*{SendBootRequest()}
+    \ncline{->}{4,3}{4,4}\naput*{TimeOut()}
+    \ncline{<-}{5,3}{5,4}\naput*{Reset()}
+    \ncline{<-}{5,2}{5,3}\naput*{JumpToApp()}
+  \end{psmatrix}
+}%end resize
+\caption{Normal Power On (\fp{} does not answer)}
+\label{fig:NormalPowerOn}
+\end{figure}
+Figure \ref{fig:BLentry} demonstrate how to initiate the communication between \bl{} and \fp{} using the \dbus{} Go-Offline message. These communication can be started also with a power on reset shown in figure \ref{fig:NormalPowerOn}. As long no timeout happens the \bl{} has the control over the $\mu{}C$. For details of timeout refer chapter \ref{sec:Timeout}.\\
+% ---------------------  Boot Loader Entry -------------------------
+\begin{figure}
+\resizebox{\linewidth}{!}{%
+	\begin{psmatrix}[colsep=0.2,rowsep=0.5]
+			[name=flashprog]\umlClass{Flash Prog.}{}
+		&	[name=application]\umlClass{Application}{}
+		& [name=bl]\umlClass{Boot Loader}{}
+		& [name=uc]\umlClass{$\mu{}$Controller}{}		
+		\\[0.5cm]
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+    {} & {} & {} & {}\\
+ 			[name=flashprogEnd]{}
+		&	[name=applicationEnd]{}
+		& [name=blEnd]{}
+		& [name=ucEnd]{}
+		& \\[-0.5cm]
+		%
+		\ncline[linewidth=0.5pt,linestyle=solid,offset=-1.7,nodesep=0.0]%
+    {->}{client}{clientEnd}
+    \naput[npos=1]{\emph{t}}
+		%
+		\ncline[linestyle=dashed]{flashprog}{flashprogEnd}
+		\ncline[linestyle=dashed]{application}{applicationEnd}
+		\ncline[linestyle=dashed]{bl}{blEnd}
+		\ncline[linestyle=dashed]{uc}{ucEnd}
+    %
+    % Les connexions horisontales ave leur commentaires associés
+    \small\ttfamily
+    \psset{labelsep=1.4mm}
+    %
+    \ncline{->}{2,1}{2,2}\naput*{\dbus::GoOffline()}
+    \ncline{->}{3,2}{3,4}\naput*{GenerateReset()}
+    \ncline{<-}{4,3}{4,4}\naput*{Reset()}
+    \ncline{<-}{5,1}{5,3}\naput*{SendBootRequest()}
+    \ncline{->}{6,1}{6,3}\naput*{SendAnyFrame()}
+    \ncline{<-}{7,1}{7,3}\naput*{SendAckOK()}
+    \ncline{->}{8,1}{8,3}\naput*{SendMoreCommands()}
+ 
+  \end{psmatrix}
+}%end resize
+\caption{Boot Loader Entry (\fp{} connected)}
+\label{fig:BLentry}
+\end{figure}
+				

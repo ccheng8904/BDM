@@ -1,0 +1,118 @@
+testsequences:
+  MAL_checkWriteOperation:
+    description: MAL_checkWriteOperation
+    function: MAL_checkWriteOperation
+    testcases:
+      '1':
+        delta_time: 0
+        description: module not opened
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isWriteEraseAllowed_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: writing not allowed on that module
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_ACTION_PROHIBITED_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isWriteEraseAllowed_RET:
+            exp: 'false'
+            in: 'false'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: writing allowed
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_isModuleOpened_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_isWriteEraseAllowed_RET:
+            exp: 'true'
+            in: 'true'
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

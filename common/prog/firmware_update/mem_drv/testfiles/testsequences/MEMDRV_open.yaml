@@ -1,0 +1,81 @@
+testsequences:
+  MEMDRV_open:
+    description: Automatically generated Test Sequence.
+    function: MEMDRV_open
+    testcases:
+      '1':
+        delta_time: 0
+        description: invalid driver ID
+        parameter:
+          driverId:
+            in: MAL_NoDriver
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_driver:
+            exp: 0
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_getDriverTableSize_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: valid driver ID
+        parameter:
+          driverId:
+            in: MAL_IntFlashDriver
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_driver:
+            exp: DRVIF_driver.&
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_getDriverTableSize_RET:
+            exp: 1
+            in: 1
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

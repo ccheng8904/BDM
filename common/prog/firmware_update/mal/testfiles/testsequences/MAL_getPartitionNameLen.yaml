@@ -1,0 +1,35 @@
+testsequences:
+  MAL_getPartitionNameLen:
+    description: Automatically generated Test Sequence.
+    function: MAL_getPartitionNameLen
+    testcases:
+      '1':
+        delta_time: 0
+        description: coverage
+        parameter:
+          partition:
+            in: MAL_getPartitionNameLen_partition_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          strlen_RET:
+            exp: 25
+            in: 25
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

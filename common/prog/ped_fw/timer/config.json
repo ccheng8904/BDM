@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+        {
+            "name":"TIM",
+            "include_file":"timer/timerlib.h",
+            "handle_function":"TIM_bHandleTask16",
+            "priority":"high",
+            "dependency":"DEP_TIM"
+        }
+    ]
+}

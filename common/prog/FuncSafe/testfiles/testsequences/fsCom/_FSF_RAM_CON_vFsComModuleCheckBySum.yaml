@@ -1,0 +1,76 @@
+testsequences:
+  _FSF_RAM_CON_vFsComModuleCheckBySum:
+    description: Automatically generated Test Sequence.
+    function: _FSF_RAM_CON_vFsComModuleCheckBySum
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        start_time: 0
+        validation: null
+        variable:
+          FS_COM_RamConBlock.ucCCElapsedCounter:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_RamConBlock.uiErrorCounter:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          FS_COM_ucCheckValueRamConBlock:
+            exp: 10
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckBySum_pucStartAddress:
+            exp: FS_COM_RamConBlock.&
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckBySum_ucCheckValue:
+            exp: 10
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckBySum_ucId:
+            exp: FSF_ERR_RAM_CON_IN_FSCOM
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          _FSF_RAM_CON_vCheckBySum_ucSizeInBytes:
+            exp: 4
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

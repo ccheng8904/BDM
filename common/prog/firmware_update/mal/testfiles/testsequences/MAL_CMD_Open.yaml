@@ -1,0 +1,238 @@
+testsequences:
+  MAL_CMD_Open:
+    description: Automatically generated Test Sequence.
+    function: MAL_CMD_Open
+    testcases:
+      '1':
+        delta_time: 0
+        description: invalid module
+        parameter:
+          modNum:
+            in: 0
+            rep: ''
+            solved_in: None
+          timeOutPwr2:
+            in: MAL_CMD_Open_timeOutPwr2_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_Open_timeOutPwr2_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModule_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenModule:
+            exp: MAL_NO_MODULE
+            in: MAL_PARTITION_TABLE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenPartition:
+            exp: 0
+            in: 55
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_getTimeout_RET:
+            exp: MEMDRV_TMO_2S
+            in: MEMDRV_TMO_2S
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_open_RET:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            in: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: open valid module
+        parameter:
+          modNum:
+            in: 8704
+            rep: hex
+            solved_in: None
+          timeOutPwr2:
+            in: MAL_CMD_Open_timeOutPwr2_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_Open_timeOutPwr2_argument:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModule_RET:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenModule:
+            exp: MAL_PRODUCT_APP1
+            in: MAL_NO_MODULE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenPartition:
+            exp: MAL_partitionFix.&
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_getTimeout_RET:
+            exp: MEMDRV_TMO_2S
+            in: MEMDRV_TMO_2S
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_open_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: valid module, error open module
+        parameter:
+          modNum:
+            in: 8704
+            rep: hex
+            solved_in: None
+          timeOutPwr2:
+            in: MAL_CMD_Open_timeOutPwr2_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 6
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MAL_CMD_Open_timeOutPwr2_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_GetMemModule_RET:
+            exp: MAL_partitionFix.&
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenModule:
+            exp: MAL_NO_MODULE
+            in: MAL_PARTITION_TABLE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MAL_OpenPartition:
+            exp: 0
+            in: MAL_partitionFix.&
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_getTimeout_RET:
+            exp: MEMDRV_TMO_2S
+            in: MEMDRV_TMO_2S
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_open_RET:
+            exp: MAL_ST_SETUP_MODULE_ERROR
+            in: MAL_ST_SETUP_MODULE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

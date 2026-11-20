@@ -1,0 +1,40 @@
+testsequences:
+    MAL_getBuildId:
+        description: MAL_getBuildId
+        function: MAL_getBuildId
+        testcases:
+            '1':
+                description: null pointer given
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+                variable:
+                    MAL_PartitionToHeader_RET:
+                        in:  4711
+            '2':
+                description: header is null
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+                variable:
+                    MAL_PartitionToHeader_RET:
+                        in:  0
+            '3':
+                description: normal operation
+                parameter:
+                    partition:
+                        in: 4711
+                return:
+                    return_type:
+                        exp: 12345
+                variable:
+                    MAL_PartitionToHeader_RET:
+                        in:  MDHD_ModuleHeader.&
+                    MAL_convertArrayToU32_RET:
+                        in: 12345

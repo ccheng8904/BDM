@@ -1,0 +1,22 @@
+testsequences:
+    MAL_PartitionToHeader:
+        description: MAL_PartitionToHeader
+        function: MAL_PartitionToHeader
+        testcases:
+            '1':
+                description: partition is not valid
+                parameter:
+                    partition:
+                        in: 0
+                return:
+                    return_type:
+                        exp: 0
+            '2':
+                description: valid partition
+                parameter:
+                    partition:
+                        in: MAL_partitionFix[2].&
+                return:
+                    return_type:
+                        exp: 0x2000
+                        rep: 'hex'

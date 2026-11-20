@@ -1,0 +1,48 @@
+testsequences:
+  BLSRV_jumpApplication:
+    description: Automatically generated Test Sequence.
+    function: BLSRV_jumpApplication
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        parameter:
+          address:
+            in: 0
+            rep: ''
+            solved_in: None
+          length:
+            in: 0
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          BLCOM_sendByte_data:
+            exp: 160
+            in: 0
+            op: ==
+            out: None
+            rep: hex
+            solved_exp: None
+            solved_in: None
+            validation: null
+          HSUP_vGenerateReset_TP:
+            exp: 1
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

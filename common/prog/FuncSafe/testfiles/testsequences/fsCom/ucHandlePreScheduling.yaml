@@ -1,0 +1,211 @@
+testsequences:
+  ucHandlePreScheduling:
+    description: Automatically generated Test Sequence.
+    function: ucHandlePreScheduling
+    testcases:
+      '1':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: FSF_STATE_PRESCHEDULED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ui16LastWDTrigger:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          ucPreSchedulingCtr:
+            exp: 9
+            in: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucChannelId:
+            exp: FSF_NOT_SPECIFIED_CHANNEL
+            in: FSF_NOT_SPECIFIED_CHANNEL
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucSubCheckId:
+            exp: FSF_ERR_BOOT_FAILURE
+            in: FSF_ERR_BOOT_FAILURE
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucUserPar:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: FSF_STATE_PRESCHEDULED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ui16LastWDTrigger:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          ucPreSchedulingCtr:
+            exp: 7
+            in: 8
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucChannelId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucSubCheckId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucUserPar:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: Automatically generated Test Case.
+        return:
+          return_type:
+            exp: FSF_STATE_STARTED
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          FSF_ui16LastWDTrigger:
+            exp: 12
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          TIM_uiGetCircleMicroSeconds_RET:
+            exp: 12
+            in: 12
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          ucPreSchedulingCtr:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucChannelId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucSubCheckId:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          vExtApplicationErrorNotify_ucUserPar:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

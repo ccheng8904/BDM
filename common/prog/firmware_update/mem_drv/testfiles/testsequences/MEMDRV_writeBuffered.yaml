@@ -1,0 +1,243 @@
+testsequences:
+  MEMDRV_writeBuffered:
+    description: MEMDRV_writeBuffered
+    function: MEMDRV_writeBuffered
+    testcases:
+      '1':
+        delta_time: 0
+        description: size zero
+        parameter:
+          data:
+            in: MEMDRV_writeBuffered_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeBuffered_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_writeBlock_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_data_argument_p:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_RET:
+            exp: 0
+            in: 0
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '2':
+        delta_time: 0
+        description: write all to ring buffer
+        parameter:
+          data:
+            in: MEMDRV_writeBuffered_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeBuffered_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_writeBlock_RET:
+            exp: MAL_ST_ERROR
+            in: MAL_ST_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_data_argument_p:
+            exp: 20
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 0
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_RET:
+            exp: 10
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '3':
+        delta_time: 0
+        description: not enough space inside ring buffer
+        parameter:
+          data:
+            in: MEMDRV_writeBuffered_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeBuffered_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_writeBlock_RET:
+            exp: MAL_ST_OK
+            in: MAL_ST_OK
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_data_argument_p:
+            exp: 15
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 5
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_RET:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+      '4':
+        delta_time: 0
+        description: not enough space inside ring buffer, write error
+        parameter:
+          data:
+            in: MEMDRV_writeBuffered_data_argument_p.&
+            rep: ''
+            solved_in: None
+          size:
+            in: MEMDRV_writeBuffered_size_argument.&
+            rep: ''
+            solved_in: None
+        return:
+          return_type:
+            exp: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            validation: null
+        start_time: 0
+        validation: null
+        variable:
+          MEMDRV_writeBlock_RET:
+            exp: MAL_ST_WRITE_ERROR
+            in: MAL_ST_WRITE_ERROR
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_data_argument_p:
+            exp: 15
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          MEMDRV_writeBuffered_size_argument:
+            exp: 5
+            in: 10
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+          RBUF_writeBuffN_RET:
+            exp: 5
+            in: 5
+            op: ==
+            out: None
+            rep: ''
+            solved_exp: None
+            solved_in: None
+            validation: null
+    unit: null
+    validation: null

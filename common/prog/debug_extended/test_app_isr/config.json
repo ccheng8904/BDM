@@ -1,0 +1,11 @@
+{
+    "scheduler_tasks":[
+        {
+            "name":"DBGXTS",
+            "handle_function":"DBGXTS_handleTask",
+            "include_file":"debug_extended/test_app_isr/dbgx_test_app_isr.h",
+            "priority":"low",
+            "dependency":"DEP_DBGXTS"
+        }
+    ]
+}
