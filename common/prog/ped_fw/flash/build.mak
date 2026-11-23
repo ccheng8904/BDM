@@ -18,7 +18,7 @@ flash_variant ?= flash
 
 
 # is_flash_supported_platform contains platform name if platform is supported
-flash_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32g0 mke14z stm32l4 stm32g4 mkv5x gd32e23 ra4 ra2 stm32h7 gd32f33 sh30f gd32e50 gd32f30 mspm0
+flash_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32g0 mke14z stm32l4 stm32g4 mkv5x gd32e23 ra4 ra2 stm32h7 gd32f33 gd32e50 gd32f30 mspm0 cms32m67
 is_flash_supported_platform = $(filter %$(platform),$(flash_supported_platforms))
 
 

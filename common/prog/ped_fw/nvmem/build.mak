@@ -21,7 +21,7 @@ nvmem_variant ?= nvmemveep
 
 
 # is_nvmem_supported_platform contains platform name if platform is supported
-nvmem_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32l4 stm32g0 stm32g4 mkv5x efr32xg21 ra4 ra2 stm32h7 gd32f33 sh30f mspm0 gd32e50 gd32f30
+nvmem_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32l4 stm32g0 stm32g4 mkv5x efr32xg21 ra4 ra2 stm32h7 gd32f33 mspm0 gd32e50 gd32f30 cms32m67
 is_nvmem_supported_platform = $(filter %$(platform),$(nvmem_supported_platforms))
 
 

@@ -23,12 +23,12 @@ mcal_supported_modules_mkv5x     = mpcm mdio muart mexti msup mwdt mtim madc mi2
 mcal_supported_modules_efr32xg21 = mdio muart mexti msup mi2c mspi
 mcal_supported_modules_ra4       = mpcm mdio muart mexti msup mwdt mtim madc mi2c
 mcal_supported_modules_ra2       = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
-mcal_supported_modules_sh30f     = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
 mcal_supported_modules_gd32f33   = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
 mcal_supported_modules_psoc4     = mdio muart mexti msup mwdt mspi
 mcal_supported_modules_gd32f30   = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
 mcal_supported_modules_mspm0     = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi
 mcal_supported_modules_gd32e50   = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
+mcal_supported_modules_cms32m67  = mpcm mdio muart mexti msup mwdt mtim madc mi2c mspi mdma
 
 mcal_modules ?= $(mcal_supported_modules_$(platform))
 ifneq (,$(filter-out $(mcal_supported_modules_$(platform)),$(mcal_modules)))

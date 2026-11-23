@@ -59,7 +59,9 @@ extern "C" {
 #define INT_SIZE         ((uint8_t)0x10U)      //!< Standardised number of bits in an integer (which implicates that a uint32 is not called integer)
 #define LONG_SIZE        ((uint8_t)0x20U)      //!< Standardised number of bits in a uint32_t integer (which BTW is not called integer, see INT_SIZE)
 
+#ifndef WORD_SIZE
 #define WORD_SIZE        ((uint8_t)sizeof(uint32_t)) //!< Number of bytes in a word
+#endif
 
 #define MSB_BYTE         ((uint8_t)0x80U)      //!< Most significant bit of a byte
 #define LSB_BYTE         ((uint8_t)0x01U)      //!< Least significant bit of a byte

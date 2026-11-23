@@ -148,9 +148,3 @@ void MDIO_resetPort(const struct MDIO_Port *port, MDIO_Pins pinMask)
 #endif
 
 
-#if !defined(MDIO_HAS_FEATURE_ATOMIC_TOGGLE)
-void MDIO_togglePort(const struct MDIO_Port *port, MDIO_Pins pinMask)
-{
-    MDIO_writePort(port, MDIO_readPortOutput(port) ^ pinMask);
-}
-#endif

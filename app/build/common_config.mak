@@ -7,7 +7,7 @@
 #  Please contact copyright holder for licensing information.
 #
 #*******************************************************************************
-#  PROJECT          MD370R
+#  PROJECT          BDM
 #*******************************************************************************
 #  Description      Common build settings for all variants
 #*******************************************************************************
@@ -26,7 +26,7 @@ build_type    ?= DEVELOP
 
 
 # list of application variants, first is default
-app_variants   = MD370R
+app_variants   = BDM
 
 
 # compiler selection
@@ -34,11 +34,11 @@ cc_build_path ?= gccArm
 
 
 # microcontroller configuration
-platform      := sh30f
-derivative    := SH30F9071P064PR
-core_clock ?= 48
-pclock ?= 24
-pclock1 ?= 24
+platform      := cms32m67
+derivative    := CMS32M6736EGH48NB
+core_clock ?= 72
+pclock ?= 72
+pclock1 ?= 72
 
 
 # communication configuration
@@ -46,12 +46,12 @@ UDA                  ?= UDA-01
 dbus_uart_channel     = 0
 dbus_node_address     = 2
 dbus_default_baudrate = 96
-dbus_tx_pin           = A15
-dbus_rx_pin           = B0
+dbus_tx_pin           = A1
+dbus_rx_pin           = A0
 TESTMSGSRV_SUBNODE_ADDRESS = 10
 
 
-# firmware update type (FWU1 / FWU3)
+# firmware update type (FWU1 / FW
 FW_update_type = FWU3
 
 # flex partition table settings (ENABLED / DISABLED)

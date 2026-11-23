@@ -1,0 +1,70 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "J-Link Debug BDM (auto GDB server)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/out/BDM/bin/BDM.elf",
+            "loadFiles": [],
+            "servertype": "jlink",
+            "device": "Cortex-M0+",
+            "interface": "swd",
+            "serverArgs": [
+                "-speed",
+                "400"
+            ],
+            "svdFile": "${workspaceFolder}/common/prog/MSP/cms32m67/drv/CMS32M67xx.svd",
+            "runToEntryPoint": "main",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            }
+        },
+        {
+            "name": "J-Link Debug BDM (external GDB server)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/BDM/bin/BDM.elf",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb",
+            "miDebuggerPath": "${workspaceFolder}/Tools/8_2019-q3-update/bin/arm-none-eabi-gdb.exe",
+            "miDebuggerServerAddress": "localhost:2331",
+            "stopAtEntry": false,
+            "externalConsole": false,
+            "setupCommands": [
+                {
+                    "description": "Enable GDB pretty printing",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Clear old breakpoints and reset target",
+                    "text": "monitor clrbp",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Reset and halt the core",
+                    "text": "monitor reset halt",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "J-Link Attach BDM",
+            "type": "cortex-debug",
+            "request": "attach",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/out/BDM/bin/BDM.elf",
+            "servertype": "jlink",
+            "device": "Cortex-M0+",
+            "interface": "swd",
+            "serverArgs": [
+                "-speed",
+                "400"
+            ],
+            "svdFile": "${workspaceFolder}/common/prog/MSP/cms32m67/drv/CMS32M67xx.svd"
+        }
+    ]
+}

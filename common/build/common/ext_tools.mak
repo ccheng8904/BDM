@@ -23,8 +23,8 @@
 #*******************************************************************************
 local_tool_path = common\tools
 
-tooldrive   ?= M:
-ext_tool_path    ?= $(tooldrive)/SwTools
+tooldrive   ?= E:
+ext_tool_path    ?= $(CURDIR)/Tools
 
 #*******************************************************************************
 #  Compilers
@@ -129,7 +129,7 @@ choco_packages      += id=VectorCast;version=$(subst V_20,,$(subst _SP,.,$(vecto
 # Python version 3
 python_version      ?= 3.5.2
 python_trace        ?= Python
-python_path         ?= $(ext_tool_path)/$(python_trace)/V$(python_version)_32bit
+python_path         ?= $(CURDIR)/Tools/Python35-32
 choco_packages      += id=Python;version=$(python_version);forceX86=true;allowMultipleVersions=true;make=python_path
 pip_packages        += PyYAML setuptools openpyxl pyserial jdcal six
 #ToDo: Axivion 7.x need black, but its possibly not compatible with python 3.5.2_32bit
@@ -137,7 +137,7 @@ pip_packages        += PyYAML setuptools openpyxl pyserial jdcal six
 
 # Python version 2
 python2_version     ?= 2.7.3
-python2_path        ?= $(ext_tool_path)/$(python_trace)/V$(python2_version)
+python2_path        ?= $(CURDIR)/Tools/Python35-32
 choco_packages      += id=Python2;version=$(python2_version);allowMultipleVersions=true;make=python2_path
 
 

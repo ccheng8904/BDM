@@ -189,6 +189,7 @@ endif
 copt    += -Wall
 copt    += -Wno-main
 copt    += -Wno-unused-but-set-variable
+copt    += -Wno-builtin-macro-redefined
 # warning for multi line comment
 copt    += -Wno-comment
 copt    +=  -c

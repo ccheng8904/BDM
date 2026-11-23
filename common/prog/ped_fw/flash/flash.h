@@ -325,8 +325,8 @@ typedef enum
    SINGLE_CORRECTION_ERROR          = 46 , // STM32H7XX
    ECC_DOUBLE_DETECTION_ERROR       = 47 , // STM32H7XX
    CRC_READ_ERROR                   = 48 , // STM32H7XX
-   TIME_WINDOW_ERROR                = 49 , // SH30F MSPM0
-   FLASH_STATUS_ERROR               = 50 , // SH30F
+   TIME_WINDOW_ERROR                = 49 , // generic flash controller
+   FLASH_STATUS_ERROR               = 50 , // generic flash controller
    FLASH_BANK_NOT_IN_READ_MODE      = 51 , // MSPM0
    FLASH_MISCELLANEOUS_ERROR        = 52   // MSPM0
 }tStatusCode;

@@ -47,7 +47,7 @@ SYMBOL_USED const struct FWU_sw_version_s SW_version =
 {
     .version =
     { /** \todo please specify id-string for your application */
-        .ID       = STDV_ParseIdentifier(UID),            // ID    defined by build process
+        .ID       = STDV_ParseIdentifier(FW_UID),         // ID    defined by build process
         .major    = STDV_ParseVersion(VERSION_MAJOR),     // major defined by build process
         .minor    = STDV_ParseVersion(VERSION_MINOR),     // minor defined by build process
         .revision = STDV_ParseVersion(VERSION_REVISION),  // revision defined by build process

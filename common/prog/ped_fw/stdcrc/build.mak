@@ -35,7 +35,7 @@ ifeq ($(unit_test_variant), true)
     lib_src     += $(addprefix ped_fw/stdcrc/,CrcCom.c $(stdcrc_folder)StdCrc.c)
 endif
 
-ifneq (,$(filter $(platform),rx100 rx200 efr32xg21 gd32e23 ra4 ra2 gd32f30))
+ifneq (,$(filter $(platform),rx100 rx200 efr32xg21 gd32e23 ra4 ra2 gd32f30 cms32m67))
     # use generic sw crc, as hw unit is not much faster and complicate in case of far memory
     stdcrc_folder = Intel/
 else ifeq ($(platform),psoc4)

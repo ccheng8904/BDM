@@ -48,7 +48,9 @@
 /******************************************************************************/
 #ifndef DOXY_DEVELOPERS_DOC
 static uint8_t FLASH_ucEnableAccess = FLASH_ACCESS_DISABLED;
-tStatusCode FLASH_tFunctionStatus = NO_ERRORS;
+/* the definition of the status variable is done by the platform flash driver
+ * (flashMc.c), only the declaration is provided by this module */
+extern tStatusCode FLASH_tFunctionStatus;
 #endif //DOXY_DEVELOPERS_DOC
 
 /******************************************************************************/

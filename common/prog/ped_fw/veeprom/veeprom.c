@@ -118,7 +118,7 @@ const tDrawerID VEEPROM_tInvalidDrawer = 0xFFFF;
  */
 static uint8_t VEEPROM_ucActivePage;
 #endif
-#if (!defined(STM32_ARM) && !defined(R2_ARM) && !defined(SH30_ARM)) || defined(VEEPROM_LARGE)
+#if defined(VEEPROM_LARGE)
 static eVEEPROMtaskStateType VEEPROM_tTaskState = VEEP_UNINITIALIZED;
 #endif
 /**

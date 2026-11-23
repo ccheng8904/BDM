@@ -237,8 +237,8 @@ void STIM_InterruptHandler(uint16_t interruptPeriod_ms)
 {
     (void)interruptPeriod_ms;
     
-    static uint16_t timeStamp = 0u;
-    uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+    static uint16_t interruptTimeStamp = 0u;
+    uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&interruptTimeStamp);
     
     if(elapsedTime_ms > 0U)
     {
@@ -252,8 +252,8 @@ void STIM_InterruptHandler(uint16_t interruptPeriod_ms)
 
 void STIM_SchedulerHandleTask(void)
 {
-    static uint16_t timeStamp = 0u;
-    uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+    static uint16_t schedulerTimeStamp = 0u;
+    uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&schedulerTimeStamp);
     
     if(elapsedTime_ms > 0U)
     {

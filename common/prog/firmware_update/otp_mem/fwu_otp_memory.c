@@ -120,7 +120,7 @@ SYMBOL_USED const struct OTP_Data_s OTP_Data =
             .CRC = 0xABCDu, // Dummy CRC value - will be overwritten by patchbin
             .entries =
             {
-                {MAL_PRODUCT_APP1, {STDV_ParseIdentifier(UID)}},     // Dummy APP FWID for testing
+                {MAL_PRODUCT_APP1, {STDV_ParseIdentifier(FW_UID)}},     // Dummy APP FWID for testing
                 FWU_FW_ID_EMPTY,
                 FWU_FW_ID_EMPTY,
                 FWU_FW_ID_EMPTY,

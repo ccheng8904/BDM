@@ -233,5 +233,7 @@ endif
 $(fwu_variants):
 	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) variant=$@ -s
 
-all: $(fwu_variants)
-	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) -s
+# Keep the generic single-variant project behavior aligned with the default
+# build target: "make all" should produce the same application artifacts as
+# "make" without recursing into all FWU variants.
+all: DEF_GOAL

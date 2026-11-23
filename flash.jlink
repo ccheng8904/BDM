@@ -1,0 +1,8 @@
+device CMS32M6736
+if SWD
+speed 400
+erase
+loadfile .\out\BDM\bin\BDM.elf
+r
+g
+exit

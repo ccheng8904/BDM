@@ -22,7 +22,7 @@ veeprom_variant ?= veeprom
 
 
 # is_veeprom_supported_platform contains platform name if platform is supported
-veeprom_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32l4 stm32g0 stm32g4 mkv5x ra2 sh30f gd32f33 gd32e50 gd32f30 mspm0
+veeprom_supported_platforms := stm32f0 stm32f1 stm32f3 stm32f4 stm32l4 stm32g0 stm32g4 mkv5x ra2 gd32f33 gd32e50 gd32f30 mspm0 cms32m67
 is_veeprom_supported_platform = $(filter %$(platform),$(veeprom_supported_platforms))
 
 

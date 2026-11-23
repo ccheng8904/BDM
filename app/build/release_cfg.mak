@@ -16,7 +16,7 @@
 # how to cut the binaries out of application file
 
 
-ifeq ($(variant),MD370R)
+ifeq ($(variant),BDM)
 
 ifdef EXAMPLE_PARTITION
 #Example: (creates a file "process_data" in release folder)

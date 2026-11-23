@@ -47,7 +47,7 @@ extern "C" {
 /* PUBLIC DEFINITIONS                                                         */
 /******************************************************************************/
 
-#if defined (PSOC4) || defined (SH30F9X71)
+#if defined (PSOC4) || defined(CMS32M67XX)
     #define OTP_UNFLASHED_BYTE      0x00u
 #else
     #define OTP_UNFLASHED_BYTE      0xFFu

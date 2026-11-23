@@ -17,7 +17,7 @@ version_major    ?= 0
 version_minor    ?= 0
 version_revision ?= 0
 
-defines +=UID=UINT64_C($(call calc,$(uid)))
+defines +=FW_UID=UINT64_C($(call calc,$(uid)))
 defines +=VERSION_MAJOR=UINT16_C($(call calc,$(version_major)))
 defines +=VERSION_MINOR=UINT16_C($(call calc,$(version_minor)))
 defines +=VERSION_REVISION=UINT16_C($(call calc,$(version_revision)))

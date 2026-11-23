@@ -34,6 +34,7 @@ $(sym_file): $(linker_bin)
 	@$(maksym) -PSYD=SIGN $(dwarf_file) > $(maksym_psyd)
 	@$(maksym) -TENG=Release $(dwarf_file) $(test_modules) >$(sym_base).rel
 	@$(maksym) -TENG=Register $(dwarf_file) $(sym_modules) -SIGNVER 2008F >$(sym_base).sym 
+	@$(python) -c "from pathlib import Path; p=Path(r'$(sym_base).sym'); lines=p.read_text(encoding='utf-8', errors='ignore').splitlines(); p.write_text('\n'.join(line for line in lines if '__func__' not in line)+'\n', encoding='utf-8')"
 	@$(maksym) -SYC $(dwarf_file) $(sym_modules) > $(sym_base).syc
 	@echo creating usage report...
 	@$(call mkdir, $(metric_path))

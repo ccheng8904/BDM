@@ -18,7 +18,7 @@ funcsafe_build_mak := 1
 
 implementation ?= $(platform)
 
-fsf_supported_platforms = stm32g0 stm32g4 stm32f0 stm32f3 stm32f4 mkv5x psoc4 mke14z stm32h7 ra2 sh30f gd32f33 mspm0 gd32e50 gd32f30
+fsf_supported_platforms = stm32g0 stm32g4 stm32f0 stm32f3 stm32f4 mkv5x psoc4 mke14z stm32h7 ra2 gd32f33 mspm0 gd32e50 gd32f30
 
 # include fsafe.mak in case target is not init target
 #ifeq (,$(filter $(MAKECMDGOALS), init))

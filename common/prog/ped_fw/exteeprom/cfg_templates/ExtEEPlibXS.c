@@ -72,7 +72,7 @@
 #define CHIPS_COUNT                       4u    ///< number of available chips
 
 /* Select MCAL I2C communication method */
-#if defined(SH30F9X71) || defined(GD32F33) || defined(MSPM0) || defined(GD32E50X) || defined(GD32F30)
+#if defined(CMS32M67XX) || defined(GD32F33) || defined(MSPM0) || defined(GD32E50X) || defined(GD32F30)
 #define MI2C_COMMUNICATION_TYPE_HARDWARE
 #define BUFFERSIZE             64u
 #endif
@@ -321,16 +321,6 @@ const struct MDIO_Channel MDIO_writeEnablePin =
             },
     .pinCM = &IOMUX->SECCFG.PINCM[22]
 };
-#elif defined(SH30F9X71)
-const struct MDIO_Channel MDIO_writeEnablePin =
-{
-    .port = &MDIOD,
-    .pin  = MDIO_PIN5,
-    .scfg = {
-            .altFunc = MDIO_AF1,
-            .speed   = MDIO_SPEED_LOW
-            }
-};
 #elif defined(GD32E50X)
 const struct MDIO_Channel MDIO_writeEnablePin =
 {
@@ -437,20 +427,6 @@ const struct MI2C_Channel MI2C_extEEPChannel =
       .sclPin      = &MDIOA1,
       .scfg        = {.clkSrc = MI2C_CLOCK_SOURCE_BUSCLK}
   };
-#endif
-#elif defined(SH30F9X71)
-#if defined(MI2C_COMMUNICATION_TYPE_HARDWARE)
-/* configuration for MI2C_extEEPCfg.commType   = MI2C_TYPE_HW */
-#define MI2C_extEEPChannel MI2C0_SDA_PD7_SCL_PD6
-#else
-/* configuration for MI2C_extEEPCfg.commType   = MI2C_TYPE_SW */
-const struct MI2C_Channel MI2C_extEEPChannel =
-{
-    .mi2c        = NULL,
-    .sdaPin      = &MDIOD7,
-    .sclPin      = &MDIOD6,
-    .scfg        = {.clkSrc = MI2C_CLOCK_SOURCE_PCLK}
-};
 #endif
 #elif defined(GD32E50X)
 #if defined(MI2C_COMMUNICATION_TYPE_HARDWARE)
@@ -1456,7 +1432,7 @@ bool I2C_bWrite(uint16_t uiAddress, const uint8_t *pucData, uint16_t uiLength, u
 #if defined(MCAL_MI2C_INCLUDED) && defined(I2C_BY_MCAL)
 #if defined(MI2C_COMMUNICATION_TYPE_HARDWARE)
 
-#if defined(SH30F9X71) || defined(MSPM0)
+#if defined(MSPM0)
 bool I2C_bIsReady(uint8_t ucChipAddress)
 {
     bool bRetVal;

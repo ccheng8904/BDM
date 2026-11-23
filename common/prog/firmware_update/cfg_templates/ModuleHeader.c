@@ -56,7 +56,7 @@ static SYMBOL_USED const struct MAL_ModuleHeader_s MDHD_ModuleHeader =
     {
      .version =
         {
-            .ID       = STDV_ParseIdentifier(UID),
+            .ID       = STDV_ParseIdentifier(FW_UID),
             .major    = STDV_ParseVersion(VERSION_MAJOR),
             .minor    = STDV_ParseVersion(VERSION_MINOR),
             .revision = STDV_ParseVersion(VERSION_REVISION),
@@ -81,7 +81,7 @@ static SYMBOL_USED const struct MAL_ModuleHeader_s MDHD_ModuleHeader2 =
     {
      .version =
         {
-            .ID       = STDV_ParseIdentifier(UID),
+            .ID       = STDV_ParseIdentifier(FW_UID),
             .major    = STDV_ParseVersion(VERSION_MAJOR),
             .minor    = STDV_ParseVersion(VERSION_MINOR),
             .revision = STDV_ParseVersion(VERSION_REVISION),
