@@ -1,0 +1,165 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccBkgA0m.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BLmain.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Main,"ax",%progbits
+  18              		.align	1
+  19              		.global	Main
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	Main:
+  25              	.LFB46:
+  26              		.file 1 "common/prog/firmware_update/BootLoader/BLmain.c"
+   1:common/prog/firmware_update/BootLoader/BLmain.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootLoader/BLmain.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootLoader/BLmain.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootLoader/BLmain.c ****  *
+   5:common/prog/firmware_update/BootLoader/BLmain.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootLoader/BLmain.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootLoader/BLmain.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootLoader/BLmain.c ****  *
+   9:common/prog/firmware_update/BootLoader/BLmain.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootLoader/BLmain.c ****  *  PROJECT          Generic SW / Boot-Loader
+  11:common/prog/firmware_update/BootLoader/BLmain.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  13:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  14:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootLoader/BLmain.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootLoader/BLmain.c **** /** \file
+  18:common/prog/firmware_update/BootLoader/BLmain.c ****  *
+  19:common/prog/firmware_update/BootLoader/BLmain.c ****  *  \ingroup  firmware_update
+  20:common/prog/firmware_update/BootLoader/BLmain.c ****  *
+  21:common/prog/firmware_update/BootLoader/BLmain.c ****  *  \brief    Implementation Boot-Loader-Main.
+  22:common/prog/firmware_update/BootLoader/BLmain.c ****  *
+  23:common/prog/firmware_update/BootLoader/BLmain.c ****  *  \details  The Boot-Loader-Main handles the start-up behaviour for
+  24:common/prog/firmware_update/BootLoader/BLmain.c ****  *            the Boot-Loader application.
+  25:common/prog/firmware_update/BootLoader/BLmain.c ****  */
+  26:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  27:common/prog/firmware_update/BootLoader/BLmain.c **** /*lint -esym(9046,?ain) Note 9046: 'main' is typographically ambiguous with
+  28:common/prog/firmware_update/BootLoader/BLmain.c ****     respect to 'Main' when ignoring case [MISRA 2012 Directive 4.5, advisory] */
+  29:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  30:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  31:common/prog/firmware_update/BootLoader/BLmain.c **** /* INCLUDES                                                                   */
+  32:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccBkgA0m.s 			page 2
+
+
+  33:common/prog/firmware_update/BootLoader/BLmain.c **** #include "bsh_stdinc.h"
+  34:common/prog/firmware_update/BootLoader/BLmain.c **** #include <stdint.h>
+  35:common/prog/firmware_update/BootLoader/BLmain.c **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+  36:common/prog/firmware_update/BootLoader/BLmain.c **** #include "firmware_update/BootLoader/BLmessageLoop.h"
+  37:common/prog/firmware_update/BootLoader/BLmain.c **** #include "basic/basic.h"
+  38:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  39:common/prog/firmware_update/BootLoader/BLmain.c **** #ifdef VARIANT_ROMLOADER
+  40:common/prog/firmware_update/BootLoader/BLmain.c **** #include "processor.h"
+  41:common/prog/firmware_update/BootLoader/BLmain.c **** #include "IntTbl.h"
+  42:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  43:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  44:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  45:common/prog/firmware_update/BootLoader/BLmain.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  46:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  47:common/prog/firmware_update/BootLoader/BLmain.c **** static void BLMAIN_startApplication(void);
+  48:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  49:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  50:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  51:common/prog/firmware_update/BootLoader/BLmain.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  52:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  53:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  54:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  55:common/prog/firmware_update/BootLoader/BLmain.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  56:common/prog/firmware_update/BootLoader/BLmain.c **** /******************************************************************************/
+  57:common/prog/firmware_update/BootLoader/BLmain.c **** #if defined(NO_RAM_INIT) && !defined(IARRX)
+  58:common/prog/firmware_update/BootLoader/BLmain.c **** void Main(void)
+  59:common/prog/firmware_update/BootLoader/BLmain.c **** #else
+  60:common/prog/firmware_update/BootLoader/BLmain.c **** int main(void)
+  61:common/prog/firmware_update/BootLoader/BLmain.c **** #endif //defined(NO_RAM_INIT)
+  62:common/prog/firmware_update/BootLoader/BLmain.c **** {
+  63:common/prog/firmware_update/BootLoader/BLmain.c ****     const uint16_t BLMAIN_longBootTimeOut  = 1000u;
+  64:common/prog/firmware_update/BootLoader/BLmain.c ****     const uint16_t BLMAIN_shortBootTimeOut = 60u;
+  65:common/prog/firmware_update/BootLoader/BLmain.c ****     uint16_t bootTmo = BLMAIN_shortBootTimeOut;
+  66:common/prog/firmware_update/BootLoader/BLmain.c ****     
+  67:common/prog/firmware_update/BootLoader/BLmain.c ****     if (!BMDAT_isPowerOnReset())
+  68:common/prog/firmware_update/BootLoader/BLmain.c ****     {
+  69:common/prog/firmware_update/BootLoader/BLmain.c ****         if (BMDAT_getMagicPattern() == BMDAT_startAppAfterReset)
+  70:common/prog/firmware_update/BootLoader/BLmain.c ****         {
+  71:common/prog/firmware_update/BootLoader/BLmain.c ****             BLMAIN_startApplication(); // never come back
+  72:common/prog/firmware_update/BootLoader/BLmain.c ****         }
+  73:common/prog/firmware_update/BootLoader/BLmain.c ****         if (BMDAT_getMagicPattern() == BMDAT_longBootTimeOut)
+  74:common/prog/firmware_update/BootLoader/BLmain.c ****         {
+  75:common/prog/firmware_update/BootLoader/BLmain.c ****             bootTmo = BLMAIN_longBootTimeOut;
+  76:common/prog/firmware_update/BootLoader/BLmain.c ****         }
+  77:common/prog/firmware_update/BootLoader/BLmain.c ****     }
+  78:common/prog/firmware_update/BootLoader/BLmain.c ****     BASIC_vInitPlatform(); // initialise system clock
+  79:common/prog/firmware_update/BootLoader/BLmain.c ****     BMDAT_setMagicPattern(BMDAT_startAppAfterReset);
+  80:common/prog/firmware_update/BootLoader/BLmain.c ****     BLMLP_handleMessageLoop(bootTmo); // never come back
+  81:common/prog/firmware_update/BootLoader/BLmain.c **** #if !defined(NO_RAM_INIT) || defined(IARRX)
+  82:common/prog/firmware_update/BootLoader/BLmain.c ****     return 0;
+  83:common/prog/firmware_update/BootLoader/BLmain.c **** #endif
+  84:common/prog/firmware_update/BootLoader/BLmain.c **** }    
+  85:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  86:common/prog/firmware_update/BootLoader/BLmain.c **** 
+  87:common/prog/firmware_update/BootLoader/BLmain.c **** #else // other build then ROMLOADER
+  88:common/prog/firmware_update/BootLoader/BLmain.c **** #if (defined(NO_RAM_INIT) && !defined(IARRX)) || defined(BTM_FIRMWARE_UPDATE)
+  89:common/prog/firmware_update/BootLoader/BLmain.c **** void Main(void)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccBkgA0m.s 			page 3
+
+
+  90:common/prog/firmware_update/BootLoader/BLmain.c **** #else
+  91:common/prog/firmware_update/BootLoader/BLmain.c **** int main(void)
+  92:common/prog/firmware_update/BootLoader/BLmain.c **** #endif //defined(NO_RAM_INIT)
+  93:common/prog/firmware_update/BootLoader/BLmain.c **** {
+  27              		.loc 1 93 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  94:common/prog/firmware_update/BootLoader/BLmain.c ****     const uint16_t BLMAIN_TimeOut = 500u;
+  31              		.loc 1 94 5 view .LVU1
+  32              	.LVL0:
+  95:common/prog/firmware_update/BootLoader/BLmain.c ****   #if defined (VARIANT_GECKO_BL) || (defined (VARIANT_LROMLOADER) && (defined (RA4) || defined (RA2
+  96:common/prog/firmware_update/BootLoader/BLmain.c ****     BASIC_vInitPlatform(); // initialise system clock
+  97:common/prog/firmware_update/BootLoader/BLmain.c ****   #endif
+  98:common/prog/firmware_update/BootLoader/BLmain.c ****     BLMLP_handleMessageLoop(BLMAIN_TimeOut); // never come back
+  33              		.loc 1 98 5 view .LVU2
+  34 0000 FA20     		movs	r0, #250
+  93:common/prog/firmware_update/BootLoader/BLmain.c ****     const uint16_t BLMAIN_TimeOut = 500u;
+  35              		.loc 1 93 1 is_stmt 0 view .LVU3
+  36 0002 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 98 5 view .LVU4
+  42 0004 4000     		lsls	r0, r0, #1
+  43 0006 FFF7FEFF 		bl	BLMLP_handleMessageLoop
+  44              	.LVL1:
+  99:common/prog/firmware_update/BootLoader/BLmain.c **** #if (!defined(NO_RAM_INIT) || defined(IARRX)) && !defined(BTM_FIRMWARE_UPDATE)
+ 100:common/prog/firmware_update/BootLoader/BLmain.c ****     return 0;
+ 101:common/prog/firmware_update/BootLoader/BLmain.c **** #endif
+ 102:common/prog/firmware_update/BootLoader/BLmain.c **** }
+  45              		.loc 1 102 1 view .LVU5
+  46              		@ sp needed
+  47 000a 10BD     		pop	{r4, pc}
+  48              		.cfi_endproc
+  49              	.LFE46:
+  51              		.text
+  52              	.Letext0:
+  53              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  54              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  55              		.file 4 "common/prog/firmware_update/BootLoader/BLmessageLoop.h"

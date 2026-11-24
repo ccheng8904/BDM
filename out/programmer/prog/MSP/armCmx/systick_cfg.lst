@@ -1,0 +1,26 @@
+
+out/programmer/prog/MSP/armCmx/systick_cfg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.SysTick_Handler:
+
+00000000 <SysTick_Handler>:
+/******************************************************************************/
+/* PUBLIC FUNCTIONS DECLARATIONS                                              */
+/******************************************************************************/
+
+void SysTick_Handler(void)
+{
+   0:	b510      	push	{r4, lr}
+#elif defined(DC_COMPONENT_PRESENT)
+    DC_systickInterrupHandler();
+#else
+    #ifdef SYSTEM_TIMER_SYSTICK
+        /* System timer interrupt handler */
+        STIM_InterruptHandler(SysTick_GetPeriod());
+   2:	f7ff fffe 	bl	0 <SysTick_GetPeriod>
+   6:	f7ff fffe 	bl	0 <STIM_InterruptHandler>
+    #endif
+#endif //!RTOS
+}
+   a:	bd10      	pop	{r4, pc}

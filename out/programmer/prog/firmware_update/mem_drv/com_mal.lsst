@@ -1,0 +1,635 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"com_mal.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.COMA_isAddrRangeValidx,"ax",%progbits
+  18              		.align	1
+  19              		.global	COMA_isAddrRangeValidx
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	COMA_isAddrRangeValidx:
+  25              	.LVL0:
+  26              	.LFB2:
+  27              		.file 1 "common/prog/firmware_update/mem_drv/com_mal.c"
+   1:common/prog/firmware_update/mem_drv/com_mal.c **** /*******************************************************************************
+   2:common/prog/firmware_update/mem_drv/com_mal.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mem_drv/com_mal.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mem_drv/com_mal.c ****  *
+   5:common/prog/firmware_update/mem_drv/com_mal.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mem_drv/com_mal.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mem_drv/com_mal.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mem_drv/com_mal.c ****  *
+   9:common/prog/firmware_update/mem_drv/com_mal.c ****  *******************************************************************************
+  10:common/prog/firmware_update/mem_drv/com_mal.c ****  *  PROJECT          Generic SW
+  11:common/prog/firmware_update/mem_drv/com_mal.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  13:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  14:common/prog/firmware_update/mem_drv/com_mal.c **** /* DOCUMENTATION                                                              */
+  15:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  16:common/prog/firmware_update/mem_drv/com_mal.c **** /** \file
+  17:common/prog/firmware_update/mem_drv/com_mal.c ****  *  \brief Implementation of common flash functions.
+  18:common/prog/firmware_update/mem_drv/com_mal.c ****  */
+  19:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  20:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  21:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  22:common/prog/firmware_update/mem_drv/com_mal.c **** /* INCLUDES                                                                   */
+  23:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  24:common/prog/firmware_update/mem_drv/com_mal.c **** #include "bsh_stdinc.h"
+  25:common/prog/firmware_update/mem_drv/com_mal.c **** #include <stdint.h>
+  26:common/prog/firmware_update/mem_drv/com_mal.c **** #include <stdbool.h>
+  27:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  28:common/prog/firmware_update/mem_drv/com_mal.c **** #define COMA_UNIT // do not parse functions using COMA_wrUnit_t
+  29:common/prog/firmware_update/mem_drv/com_mal.c **** #include "com_mal.h"
+  30:common/prog/firmware_update/mem_drv/com_mal.c **** #include <string.h>
+  31:common/prog/firmware_update/mem_drv/com_mal.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 2
+
+
+  32:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  33:common/prog/firmware_update/mem_drv/com_mal.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  34:common/prog/firmware_update/mem_drv/com_mal.c **** /******************************************************************************/
+  35:common/prog/firmware_update/mem_drv/com_mal.c **** DRVIF_RAMCODE bool COMA_isAddrRangeValidx(
+  36:common/prog/firmware_update/mem_drv/com_mal.c ****         const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr, uint32_t range)
+  37:common/prog/firmware_update/mem_drv/com_mal.c **** {
+  28              		.loc 1 37 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  38:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+  32              		.loc 1 38 5 view .LVU1
+  33              	.LBB5:
+  34              		.loc 1 38 9 view .LVU2
+  35              		.loc 1 38 9 is_stmt 0 view .LVU3
+  36              	.LBE5:
+  37:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+  37              		.loc 1 37 1 view .LVU4
+  38 0000 70B5     		push	{r4, r5, r6, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 16
+  41              		.cfi_offset 4, -16
+  42              		.cfi_offset 5, -12
+  43              		.cfi_offset 6, -8
+  44              		.cfi_offset 14, -4
+  45              	.LBB12:
+  46              	.LBB6:
+  47              	.LBB7:
+  48              		.file 2 "common/prog/firmware_update/mem_drv/com_mal.h"
+   1:common/prog/firmware_update/mem_drv/com_mal.h **** /*******************************************************************************
+   2:common/prog/firmware_update/mem_drv/com_mal.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mem_drv/com_mal.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+   5:common/prog/firmware_update/mem_drv/com_mal.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mem_drv/com_mal.h ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mem_drv/com_mal.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+   9:common/prog/firmware_update/mem_drv/com_mal.h ****  *******************************************************************************
+  10:common/prog/firmware_update/mem_drv/com_mal.h ****  *  PROJECT          Generic SW
+  11:common/prog/firmware_update/mem_drv/com_mal.h ****  ******************************************************************************/
+  12:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  13:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  14:common/prog/firmware_update/mem_drv/com_mal.h **** #ifndef COMFLASH_H
+  15:common/prog/firmware_update/mem_drv/com_mal.h **** #define COMFLASH_H
+  16:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  17:common/prog/firmware_update/mem_drv/com_mal.h **** #ifdef __cplusplus
+  18:common/prog/firmware_update/mem_drv/com_mal.h **** extern "C" {
+  19:common/prog/firmware_update/mem_drv/com_mal.h **** #endif
+  20:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  21:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  22:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  23:common/prog/firmware_update/mem_drv/com_mal.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  25:common/prog/firmware_update/mem_drv/com_mal.h **** /** \file
+  26:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+  27:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \ingroup  mal
+  28:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 3
+
+
+  29:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \brief    Public definitions and declarations for unit common flash interfaces.
+  30:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+  31:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \details  For simple flashes with a single memory segment use the inline functions.
+  32:common/prog/firmware_update/mem_drv/com_mal.h ****  *            For flashes with more than one segment use \sa COMA_isAddrRangeValidx
+  33:common/prog/firmware_update/mem_drv/com_mal.h ****  *            and \sa COMA_isBlockAddrValidx.
+  34:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+  35:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+  36:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  37:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  38:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  39:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  40:common/prog/firmware_update/mem_drv/com_mal.h **** /* INCLUDES                                                                   */
+  41:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  42:common/prog/firmware_update/mem_drv/com_mal.h **** #include <stdint.h>
+  43:common/prog/firmware_update/mem_drv/com_mal.h **** #include <stdbool.h>
+  44:common/prog/firmware_update/mem_drv/com_mal.h **** #include "SegmentDef.h"
+  45:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  46:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  47:common/prog/firmware_update/mem_drv/com_mal.h **** /* PUBLIC DEFINITIONS                                                         */
+  48:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  49:common/prog/firmware_update/mem_drv/com_mal.h **** #ifndef COMA_ERASE_BYTE
+  50:common/prog/firmware_update/mem_drv/com_mal.h ****     #define  COMA_ERASE_BYTE 0xFFu
+  51:common/prog/firmware_update/mem_drv/com_mal.h **** #endif
+  52:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  53:common/prog/firmware_update/mem_drv/com_mal.h **** #if defined(APP_VARIANT) && defined(RX200)
+  54:common/prog/firmware_update/mem_drv/com_mal.h ****     #define DRVIF_RAMCODE   SDEF_SetSegmentRW(RAMCODE)
+  55:common/prog/firmware_update/mem_drv/com_mal.h **** #else
+  56:common/prog/firmware_update/mem_drv/com_mal.h ****     #define DRVIF_RAMCODE
+  57:common/prog/firmware_update/mem_drv/com_mal.h **** #endif
+  58:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  59:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  60:common/prog/firmware_update/mem_drv/com_mal.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+  61:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  62:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  63:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  64:common/prog/firmware_update/mem_drv/com_mal.h **** /** structure for memory segment description */ 
+  65:common/prog/firmware_update/mem_drv/com_mal.h **** struct COMA_memSeg_s
+  66:common/prog/firmware_update/mem_drv/com_mal.h **** {
+  67:common/prog/firmware_update/mem_drv/com_mal.h ****     uint32_t blockSize; ///< block size inside memory segment
+  68:common/prog/firmware_update/mem_drv/com_mal.h ****     uint32_t startAddr; ///< start of memory segment
+  69:common/prog/firmware_update/mem_drv/com_mal.h ****     uint32_t endAddr;   ///< end address of memory segment
+  70:common/prog/firmware_update/mem_drv/com_mal.h **** };
+  71:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  72:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  73:common/prog/firmware_update/mem_drv/com_mal.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  74:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+  75:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  76:common/prog/firmware_update/mem_drv/com_mal.h **** /** \brief    Checks if start address and range is valid.
+  77:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \details This Interface shall be used if 
+  78:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    memSegs: pointer to memory segment description array
+  79:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    segCount: number of memory segments in memSegs
+  80:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    addr:  address to check
+  81:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    range: range to check
+  82:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \return   true if address and range is valid, else false
+  83:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+  84:common/prog/firmware_update/mem_drv/com_mal.h **** bool COMA_isAddrRangeValidx
+  85:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr, uint32_t range);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 4
+
+
+  86:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  87:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  88:common/prog/firmware_update/mem_drv/com_mal.h **** /** \brief    check if address is a valid block start.
+  89:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+  90:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    memSegs: pointer to memory segment description
+  91:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    segCount: number of memory segment in memSegs
+  92:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    addr:  flash address 
+  93:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \return   true if address is block-aligned, else false
+  94:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+  95:common/prog/firmware_update/mem_drv/com_mal.h **** bool COMA_isBlockAddrValidx
+  96:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr);
+  97:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  98:common/prog/firmware_update/mem_drv/com_mal.h **** 
+  99:common/prog/firmware_update/mem_drv/com_mal.h **** /** \brief   delivers the block size of the block containing specified address.
+ 100:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+ 101:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param   memSegs: pointer to memory segment description
+ 102:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param   segCount: number of memory segment in memSegs
+ 103:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param   addr:  flash address 
+ 104:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \return  block size
+ 105:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+ 106:common/prog/firmware_update/mem_drv/com_mal.h **** uint32_t COMA_getBlockSize
+ 107:common/prog/firmware_update/mem_drv/com_mal.h ****         (const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr);
+ 108:common/prog/firmware_update/mem_drv/com_mal.h **** 
+ 109:common/prog/firmware_update/mem_drv/com_mal.h **** 
+ 110:common/prog/firmware_update/mem_drv/com_mal.h **** /** common read interface for internal memory.
+ 111:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \note The upper sw layer is responsible to reserve at least size bytes
+ 112:common/prog/firmware_update/mem_drv/com_mal.h ****  *        inside buffer.
+ 113:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param addr: start address of block to read
+ 114:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param size: length of data to read (unused)
+ 115:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param buffer: buffer to copy the data (unused)
+ 116:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \return true if read successfully, false otherwise
+ 117:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+ 118:common/prog/firmware_update/mem_drv/com_mal.h **** bool COMA_read(uint32_t addr, uint32_t size, uint8_t* buffer);
+ 119:common/prog/firmware_update/mem_drv/com_mal.h **** 
+ 120:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+ 121:common/prog/firmware_update/mem_drv/com_mal.h **** /* PUBLIC INLINE FUNCTION DEFINITIONS                                         */
+ 122:common/prog/firmware_update/mem_drv/com_mal.h **** /******************************************************************************/
+ 123:common/prog/firmware_update/mem_drv/com_mal.h **** 
+ 124:common/prog/firmware_update/mem_drv/com_mal.h **** /** \brief    Checks if start address and range is valid.
+ 125:common/prog/firmware_update/mem_drv/com_mal.h ****  *
+ 126:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    memSeg: pointer to memory segment description
+ 127:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    addr:  address to check
+ 128:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \param    range: range to check
+ 129:common/prog/firmware_update/mem_drv/com_mal.h ****  *  \return   true if address and range is valid, else false
+ 130:common/prog/firmware_update/mem_drv/com_mal.h ****  */
+ 131:common/prog/firmware_update/mem_drv/com_mal.h **** DRVIF_RAMCODE static inline bool COMA_isAddrRangeValid
+ 132:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSeg, uint32_t addr, uint32_t range)
+ 133:common/prog/firmware_update/mem_drv/com_mal.h **** {
+ 134:common/prog/firmware_update/mem_drv/com_mal.h ****     return ((
+ 135:common/prog/firmware_update/mem_drv/com_mal.h ****         (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+ 136:common/prog/firmware_update/mem_drv/com_mal.h ****         (range <=((memSeg->endAddr-addr)+1u))
+  49              		.loc 2 136 41 view .LVU5
+  50 0002 0126     		movs	r6, #1
+  51              	.LBE7:
+  52              	.LBE6:
+  53              		.loc 1 38 18 view .LVU6
+  54 0004 0025     		movs	r5, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 5
+
+
+  55 0006 0430     		adds	r0, r0, #4
+  56              	.LVL1:
+  57              	.LBB10:
+  58              	.LBB8:
+  59              		.loc 2 136 41 view .LVU7
+  60 0008 B61A     		subs	r6, r6, r2
+  61              	.LVL2:
+  62              	.L2:
+  63              		.loc 2 136 41 view .LVU8
+  64              	.LBE8:
+  65              	.LBE10:
+  66              		.loc 1 38 26 is_stmt 1 discriminator 1 view .LVU9
+  67 000a 8D42     		cmp	r5, r1
+  68 000c 01D1     		bne	.L5
+  69              	.LBE12:
+  39:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+  40:common/prog/firmware_update/mem_drv/com_mal.c ****         if(COMA_isAddrRangeValid(&memSegs[i], addr, range))
+  41:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+  42:common/prog/firmware_update/mem_drv/com_mal.c ****             return true;
+  43:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+  44:common/prog/firmware_update/mem_drv/com_mal.c ****     }
+  45:common/prog/firmware_update/mem_drv/com_mal.c ****     return false;
+  70              		.loc 1 45 12 is_stmt 0 view .LVU10
+  71 000e 0020     		movs	r0, #0
+  72              	.L4:
+  46:common/prog/firmware_update/mem_drv/com_mal.c **** }
+  73              		.loc 1 46 1 view .LVU11
+  74              		@ sp needed
+  75              	.LVL3:
+  76              		.loc 1 46 1 view .LVU12
+  77 0010 70BD     		pop	{r4, r5, r6, pc}
+  78              	.LVL4:
+  79              	.L5:
+  80              	.LBB13:
+  40:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+  81              		.loc 1 40 9 is_stmt 1 view .LVU13
+  82              	.LBB11:
+  83              	.LBI6:
+ 131:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSeg, uint32_t addr, uint32_t range)
+  84              		.loc 2 131 34 view .LVU14
+  85              	.LBB9:
+ 134:common/prog/firmware_update/mem_drv/com_mal.h ****         (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+  86              		.loc 2 134 5 view .LVU15
+ 137:common/prog/firmware_update/mem_drv/com_mal.h ****         ) ? true : false);
+  87              		.loc 2 137 18 is_stmt 0 view .LVU16
+  88 0012 0468     		ldr	r4, [r0]
+  89 0014 A242     		cmp	r2, r4
+  90 0016 05D3     		bcc	.L3
+ 135:common/prog/firmware_update/mem_drv/com_mal.h ****         (range <=((memSeg->endAddr-addr)+1u))
+  91              		.loc 2 135 56 view .LVU17
+  92 0018 4468     		ldr	r4, [r0, #4]
+ 135:common/prog/firmware_update/mem_drv/com_mal.h ****         (range <=((memSeg->endAddr-addr)+1u))
+  93              		.loc 2 135 38 view .LVU18
+  94 001a A242     		cmp	r2, r4
+  95 001c 02D8     		bhi	.L3
+ 136:common/prog/firmware_update/mem_drv/com_mal.h ****         ) ? true : false);
+  96              		.loc 2 136 41 view .LVU19
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 6
+
+
+  97 001e 3419     		adds	r4, r6, r4
+  98              		.loc 2 137 18 view .LVU20
+  99 0020 A342     		cmp	r3, r4
+ 100 0022 02D9     		bls	.L6
+ 101              	.L3:
+ 102              	.LVL5:
+ 103              		.loc 2 137 18 view .LVU21
+ 104              	.LBE9:
+ 105              	.LBE11:
+  38:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 106              		.loc 1 38 38 is_stmt 1 view .LVU22
+ 107 0024 0135     		adds	r5, r5, #1
+ 108              	.LVL6:
+  38:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 109              		.loc 1 38 38 is_stmt 0 view .LVU23
+ 110 0026 0C30     		adds	r0, r0, #12
+ 111 0028 EFE7     		b	.L2
+ 112              	.LVL7:
+ 113              	.L6:
+  42:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 114              		.loc 1 42 20 view .LVU24
+ 115 002a 0120     		movs	r0, #1
+ 116              	.LVL8:
+  42:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 117              		.loc 1 42 20 view .LVU25
+ 118 002c F0E7     		b	.L4
+ 119              	.LBE13:
+ 120              		.cfi_endproc
+ 121              	.LFE2:
+ 123              		.section	.text.COMA_isBlockAddrValidx,"ax",%progbits
+ 124              		.align	1
+ 125              		.global	COMA_isBlockAddrValidx
+ 126              		.syntax unified
+ 127              		.code	16
+ 128              		.thumb_func
+ 130              	COMA_isBlockAddrValidx:
+ 131              	.LVL9:
+ 132              	.LFB3:
+  47:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  48:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  49:common/prog/firmware_update/mem_drv/com_mal.c **** DRVIF_RAMCODE bool COMA_isBlockAddrValidx(
+  50:common/prog/firmware_update/mem_drv/com_mal.c ****         const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr)
+  51:common/prog/firmware_update/mem_drv/com_mal.c **** {
+ 133              		.loc 1 51 1 is_stmt 1 view -0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+  52:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+ 137              		.loc 1 52 5 view .LVU27
+ 138              	.LBB18:
+ 139              		.loc 1 52 9 view .LVU28
+ 140              		.loc 1 52 18 is_stmt 0 view .LVU29
+ 141 0000 0023     		movs	r3, #0
+ 142              	.LBE18:
+  51:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+ 143              		.loc 1 51 1 view .LVU30
+ 144 0002 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 7
+
+
+ 145              	.LCFI1:
+ 146              		.cfi_def_cfa_offset 8
+ 147              		.cfi_offset 4, -8
+ 148              		.cfi_offset 14, -4
+ 149              	.LVL10:
+ 150              	.L8:
+ 151              	.LBB22:
+ 152              		.loc 1 52 26 is_stmt 1 discriminator 1 view .LVU31
+ 153 0004 8B42     		cmp	r3, r1
+ 154 0006 01D1     		bne	.L11
+ 155              	.LBE22:
+  53:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+  54:common/prog/firmware_update/mem_drv/com_mal.c ****         if(COMA_isAddrRangeValid(&memSegs[i], addr, 0u))
+  55:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+  56:common/prog/firmware_update/mem_drv/com_mal.c ****             const uint32_t COMA_BlockMask = (uint32_t)(memSegs[i].blockSize-1u);
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****             return (((COMA_BlockMask & addr) == 0u) ? true : false);
+  58:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+  59:common/prog/firmware_update/mem_drv/com_mal.c ****     }
+  60:common/prog/firmware_update/mem_drv/com_mal.c ****     return false;
+ 156              		.loc 1 60 12 is_stmt 0 view .LVU32
+ 157 0008 0020     		movs	r0, #0
+ 158 000a 0BE0     		b	.L10
+ 159              	.L11:
+ 160              	.LBB23:
+  54:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+ 161              		.loc 1 54 9 is_stmt 1 view .LVU33
+ 162              	.LVL11:
+ 163              	.LBB19:
+ 164              	.LBI19:
+ 131:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSeg, uint32_t addr, uint32_t range)
+ 165              		.loc 2 131 34 view .LVU34
+ 166              	.LBB20:
+ 134:common/prog/firmware_update/mem_drv/com_mal.h ****         (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+ 167              		.loc 2 134 5 view .LVU35
+ 168              		.loc 2 137 18 is_stmt 0 view .LVU36
+ 169 000c 4468     		ldr	r4, [r0, #4]
+ 170 000e A242     		cmp	r2, r4
+ 171 0010 09D3     		bcc	.L9
+ 172              	.LVL12:
+ 173              		.loc 2 137 18 view .LVU37
+ 174              	.LBE20:
+ 175              	.LBE19:
+  54:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+ 176              		.loc 1 54 11 view .LVU38
+ 177 0012 8468     		ldr	r4, [r0, #8]
+ 178 0014 A242     		cmp	r2, r4
+ 179 0016 06D8     		bhi	.L9
+ 180              	.LBB21:
+  56:common/prog/firmware_update/mem_drv/com_mal.c ****             return (((COMA_BlockMask & addr) == 0u) ? true : false);
+ 181              		.loc 1 56 13 is_stmt 1 view .LVU39
+ 182              	.LVL13:
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 183              		.loc 1 57 13 view .LVU40
+  56:common/prog/firmware_update/mem_drv/com_mal.c ****             return (((COMA_BlockMask & addr) == 0u) ? true : false);
+ 184              		.loc 1 56 28 is_stmt 0 view .LVU41
+ 185 0018 0368     		ldr	r3, [r0]
+ 186              	.LVL14:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 8
+
+
+  56:common/prog/firmware_update/mem_drv/com_mal.c ****             return (((COMA_BlockMask & addr) == 0u) ? true : false);
+ 187              		.loc 1 56 28 view .LVU42
+ 188 001a 013B     		subs	r3, r3, #1
+ 189              	.LVL15:
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 190              		.loc 1 57 38 view .LVU43
+ 191 001c 1A40     		ands	r2, r3
+ 192              	.LVL16:
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 193              		.loc 1 57 60 view .LVU44
+ 194 001e 5342     		rsbs	r3, r2, #0
+ 195 0020 5A41     		adcs	r2, r2, r3
+ 196              	.LVL17:
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 197              		.loc 1 57 60 view .LVU45
+ 198 0022 D0B2     		uxtb	r0, r2
+ 199              	.LVL18:
+ 200              	.L10:
+  57:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 201              		.loc 1 57 60 view .LVU46
+ 202              	.LBE21:
+ 203              	.LBE23:
+  61:common/prog/firmware_update/mem_drv/com_mal.c **** }
+ 204              		.loc 1 61 1 view .LVU47
+ 205              		@ sp needed
+ 206 0024 10BD     		pop	{r4, pc}
+ 207              	.LVL19:
+ 208              	.L9:
+ 209              	.LBB24:
+  52:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 210              		.loc 1 52 38 is_stmt 1 discriminator 2 view .LVU48
+ 211 0026 0133     		adds	r3, r3, #1
+ 212              	.LVL20:
+  52:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 213              		.loc 1 52 38 is_stmt 0 discriminator 2 view .LVU49
+ 214 0028 0C30     		adds	r0, r0, #12
+ 215 002a EBE7     		b	.L8
+ 216              	.LBE24:
+ 217              		.cfi_endproc
+ 218              	.LFE3:
+ 220              		.section	.text.COMA_getBlockSize,"ax",%progbits
+ 221              		.align	1
+ 222              		.global	COMA_getBlockSize
+ 223              		.syntax unified
+ 224              		.code	16
+ 225              		.thumb_func
+ 227              	COMA_getBlockSize:
+ 228              	.LVL21:
+ 229              	.LFB4:
+  62:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  63:common/prog/firmware_update/mem_drv/com_mal.c **** DRVIF_RAMCODE uint32_t COMA_getBlockSize(
+  64:common/prog/firmware_update/mem_drv/com_mal.c ****         const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr)
+  65:common/prog/firmware_update/mem_drv/com_mal.c **** {
+ 230              		.loc 1 65 1 is_stmt 1 view -0
+ 231              		.cfi_startproc
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 9
+
+
+  66:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+ 234              		.loc 1 66 5 view .LVU51
+ 235              	.LBB28:
+ 236              		.loc 1 66 9 view .LVU52
+ 237              		.loc 1 66 18 is_stmt 0 view .LVU53
+ 238 0000 0023     		movs	r3, #0
+ 239              	.LBE28:
+  65:common/prog/firmware_update/mem_drv/com_mal.c ****     for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+ 240              		.loc 1 65 1 view .LVU54
+ 241 0002 10B5     		push	{r4, lr}
+ 242              	.LCFI2:
+ 243              		.cfi_def_cfa_offset 8
+ 244              		.cfi_offset 4, -8
+ 245              		.cfi_offset 14, -4
+ 246              	.LVL22:
+ 247              	.L13:
+ 248              	.LBB31:
+ 249              		.loc 1 66 26 is_stmt 1 discriminator 1 view .LVU55
+ 250 0004 8B42     		cmp	r3, r1
+ 251 0006 01D1     		bne	.L16
+ 252              	.LBE31:
+  67:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+  68:common/prog/firmware_update/mem_drv/com_mal.c ****         if(COMA_isAddrRangeValid(&memSegs[i], addr, 0u))
+  69:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+  70:common/prog/firmware_update/mem_drv/com_mal.c ****             return memSegs[i].blockSize;
+  71:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+  72:common/prog/firmware_update/mem_drv/com_mal.c ****     }
+  73:common/prog/firmware_update/mem_drv/com_mal.c ****     return 0u; // no valid block address
+ 253              		.loc 1 73 12 is_stmt 0 view .LVU56
+ 254 0008 0020     		movs	r0, #0
+ 255 000a 06E0     		b	.L12
+ 256              	.L16:
+ 257              	.LBB32:
+  68:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+ 258              		.loc 1 68 9 is_stmt 1 view .LVU57
+ 259              	.LVL23:
+ 260              	.LBB29:
+ 261              	.LBI29:
+ 131:common/prog/firmware_update/mem_drv/com_mal.h ****     (const struct COMA_memSeg_s* memSeg, uint32_t addr, uint32_t range)
+ 262              		.loc 2 131 34 view .LVU58
+ 263              	.LBB30:
+ 134:common/prog/firmware_update/mem_drv/com_mal.h ****         (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+ 264              		.loc 2 134 5 view .LVU59
+ 265              		.loc 2 137 18 is_stmt 0 view .LVU60
+ 266 000c 4468     		ldr	r4, [r0, #4]
+ 267 000e A242     		cmp	r2, r4
+ 268 0010 04D3     		bcc	.L14
+ 269              	.LVL24:
+ 270              		.loc 2 137 18 view .LVU61
+ 271              	.LBE30:
+ 272              	.LBE29:
+  68:common/prog/firmware_update/mem_drv/com_mal.c ****         {
+ 273              		.loc 1 68 11 view .LVU62
+ 274 0012 8468     		ldr	r4, [r0, #8]
+ 275 0014 A242     		cmp	r2, r4
+ 276 0016 01D8     		bhi	.L14
+  70:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 10
+
+
+ 277              		.loc 1 70 13 is_stmt 1 view .LVU63
+  70:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 278              		.loc 1 70 30 is_stmt 0 view .LVU64
+ 279 0018 0068     		ldr	r0, [r0]
+ 280              	.L12:
+  70:common/prog/firmware_update/mem_drv/com_mal.c ****         }
+ 281              		.loc 1 70 30 view .LVU65
+ 282              	.LBE32:
+  74:common/prog/firmware_update/mem_drv/com_mal.c **** }
+ 283              		.loc 1 74 1 view .LVU66
+ 284              		@ sp needed
+ 285 001a 10BD     		pop	{r4, pc}
+ 286              	.L14:
+ 287              	.LBB33:
+  66:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 288              		.loc 1 66 38 is_stmt 1 discriminator 2 view .LVU67
+ 289 001c 0133     		adds	r3, r3, #1
+ 290              	.LVL25:
+  66:common/prog/firmware_update/mem_drv/com_mal.c ****     {
+ 291              		.loc 1 66 38 is_stmt 0 discriminator 2 view .LVU68
+ 292 001e 0C30     		adds	r0, r0, #12
+ 293 0020 F0E7     		b	.L13
+ 294              	.LBE33:
+ 295              		.cfi_endproc
+ 296              	.LFE4:
+ 298              		.section	.text.COMA_read,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	COMA_read
+ 301              		.syntax unified
+ 302              		.code	16
+ 303              		.thumb_func
+ 305              	COMA_read:
+ 306              	.LVL26:
+ 307              	.LFB5:
+  75:common/prog/firmware_update/mem_drv/com_mal.c **** 
+  76:common/prog/firmware_update/mem_drv/com_mal.c **** DRVIF_RAMCODE bool COMA_read(uint32_t addr, uint32_t size, uint8_t* buffer)
+  77:common/prog/firmware_update/mem_drv/com_mal.c **** {
+ 308              		.loc 1 77 1 is_stmt 1 view -0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 0
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+  78:common/prog/firmware_update/mem_drv/com_mal.c ****     /*lint -e{923} "cast from unsigned int to pointer [MISRA 2012 Rule 11.1, required]", required
+  79:common/prog/firmware_update/mem_drv/com_mal.c ****            Cast tested to work correctly */
+  80:common/prog/firmware_update/mem_drv/com_mal.c ****     if(memcpy((void*)buffer,(const void*)addr, size)){}
+ 312              		.loc 1 80 5 view .LVU70
+  77:common/prog/firmware_update/mem_drv/com_mal.c ****     /*lint -e{923} "cast from unsigned int to pointer [MISRA 2012 Rule 11.1, required]", required
+ 313              		.loc 1 77 1 is_stmt 0 view .LVU71
+ 314 0000 0300     		movs	r3, r0
+ 315 0002 10B5     		push	{r4, lr}
+ 316              	.LCFI3:
+ 317              		.cfi_def_cfa_offset 8
+ 318              		.cfi_offset 4, -8
+ 319              		.cfi_offset 14, -4
+  77:common/prog/firmware_update/mem_drv/com_mal.c ****     /*lint -e{923} "cast from unsigned int to pointer [MISRA 2012 Rule 11.1, required]", required
+ 320              		.loc 1 77 1 view .LVU72
+ 321 0004 1000     		movs	r0, r2
+ 322              	.LVL27:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGvxiYa.s 			page 11
+
+
+  81:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+  82:common/prog/firmware_update/mem_drv/com_mal.c **** }
+ 323              		.loc 1 82 1 view .LVU73
+ 324              		@ sp needed
+  80:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+ 325              		.loc 1 80 8 view .LVU74
+ 326 0006 0A00     		movs	r2, r1
+ 327              	.LVL28:
+  80:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+ 328              		.loc 1 80 8 view .LVU75
+ 329 0008 1900     		movs	r1, r3
+ 330              	.LVL29:
+  80:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+ 331              		.loc 1 80 8 view .LVU76
+ 332 000a FFF7FEFF 		bl	memcpy
+ 333              	.LVL30:
+  80:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+ 334              		.loc 1 80 55 is_stmt 1 view .LVU77
+  81:common/prog/firmware_update/mem_drv/com_mal.c ****     return true;
+ 335              		.loc 1 81 5 view .LVU78
+ 336              		.loc 1 82 1 is_stmt 0 view .LVU79
+ 337 000e 0120     		movs	r0, #1
+ 338 0010 10BD     		pop	{r4, pc}
+ 339              		.cfi_endproc
+ 340              	.LFE5:
+ 342              		.text
+ 343              	.Letext0:
+ 344              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\lib\\gcc\\arm-none-eabi\\11.3.1\\i
+ 345              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 346              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 347              		.file 6 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\string.h"
+ 348              		.file 7 "<built-in>"

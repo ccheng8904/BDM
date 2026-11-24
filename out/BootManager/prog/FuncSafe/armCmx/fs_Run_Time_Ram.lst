@@ -1,0 +1,225 @@
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Run_Time_Ram.s 			page 1
+
+
+   1              	    .syntax unified
+   2              	    .text
+   3              	    .thumb
+   4              	    .align 2
+   5              	;
+   6              	.set BCKGRND, 0x00000000
+   7              	;
+   8              	;
+   9              	    .global FSF_tRunTimeRamBufferCheckMarchC
+  10              	    .global FSF_tRunTimeRamCheckMarchC
+  11              	    .global FSF_tRunTimeRamCheckMarchX
+  12              	.func FSF_tRunTimeRamCheckMarchX, FSF_tRunTimeRamCheckMarchX
+  13              	.type FSF_tRunTimeRamCheckMarchX, "function"
+  14              	.thumb_func
+  15              	FSF_tRunTimeRamCheckMarchX:
+  16 0000 F0B4     	    PUSH {r4-r7}
+  17 0002 4D4A     	    LDR r2, =BCKGRND
+  18 0004 D343     	    MVNS r3, r2
+  19 0006 0027     	    MOVS r7, #0
+  20 0008 0026     	    MOVS r6, #0x00
+  21              	LoopStep1_X:
+  22 000a 8459     	    LDR r4, [r0,r6]
+  23 000c 8C51     	    STR r4, [r1,r6]
+  24 000e 8251     	    STR r2, [r0,r6]
+  25 0010 0436     	    ADDS r6, r6, #4
+  26 0012 182E     	    CMP r6, #(0x00000006 * 4)
+  27 0014 F9D3     	    BCC LoopStep1_X
+  28 0016 0026     	    MOVS r6, #0x00
+  29              	LoopStep2_X:
+  30 0018 8459     	    LDR r4, [r0,r6]
+  31 001a 9442     	    CMP r4, r2
+  32 001c 00D0     	    BEQ EquStep2_X
+  33 001e 0127     	    MOVS r7, #1
+  34              	EquStep2_X:
+  35 0020 8351     	    STR r3, [r0,r6]
+  36 0022 0436     	    ADDS r6, r6, #4
+  37 0024 182E     	    CMP r6, #(0x00000006 * 4)
+  38 0026 F7D3     	    BCC LoopStep2_X
+  39 0028 1426     	    MOVS r6, #((0x00000006 - 1) * 4)
+  40              	LoopStep3_X:
+  41 002a 8459     	    LDR r4, [r0,r6]
+  42 002c 9C42     	    CMP r4, r3
+  43 002e 00D0     	    BEQ EquStep3_X
+  44 0030 0127     	    MOVS r7, #1
+  45              	EquStep3_X:
+  46 0032 8251     	    STR r2, [r0,r6]
+  47 0034 043E     	    SUBS r6, r6, #4
+  48 0036 182E     	    CMP r6, #(0x00000006 * 4)
+  49 0038 F7D5     	    BPL LoopStep3_X
+  50 003a 0026     	    MOVS r6, #0x00
+  51              	LoopStep4_X:
+  52 003c 8459     	    LDR r4, [r0,r6]
+  53 003e 9442     	    CMP r4, r2
+  54 0040 00D0     	    BEQ EquStep4_X
+  55 0042 0127     	    MOVS r7, #1
+  56              	EquStep4_X:
+  57 0044 8C59     	    LDR r4, [r1,r6]
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Run_Time_Ram.s 			page 2
+
+
+  58 0046 8451     	    STR r4, [r0,r6]
+  59 0048 0436     	    ADDS r6, r6, #4
+  60 004a 182E     	    CMP r6, #(0x00000006 * 4)
+  61 004c F6D3     	    BCC LoopStep4_X
+  62 004e 3846     	    MOV r0,r7
+  63 0050 F0BC     	    POP {r4-r7}
+  64 0052 7047     	    BX lr
+  65 0054 C046     	    NOP
+  66              	    .endfunc
+  67              	.func FSF_tRunTimeRamCheckMarchC, FSF_tRunTimeRamCheckMarchC
+  68              	.type FSF_tRunTimeRamCheckMarchC, "function"
+  69              	.thumb_func
+  70              	FSF_tRunTimeRamCheckMarchC:
+  71 0056 F0B4     	    PUSH {r4-r7}
+  72 0058 0027     	    MOVS r7, #0
+  73 005a 374A     	    LDR r2, =BCKGRND
+  74 005c D343     	    MVNS r3, r2
+  75 005e 0026     	    MOVS r6, #0x00
+  76              	LoopStep1_C:
+  77 0060 8459     	    LDR r4, [r0,r6]
+  78 0062 8C51     	    STR r4, [r1,r6]
+  79 0064 8251     	    STR r2, [r0,r6]
+  80 0066 0436     	    ADDS r6, r6, #4
+  81 0068 182E     	    CMP r6, #(0x00000006 * 4)
+  82 006a F9D3     	    BCC LoopStep1_C
+  83 006c 0026     	    MOVS r6, #0x00
+  84              	LoopStep2_C:
+  85 006e 8459     	    LDR r4, [r0,r6]
+  86 0070 9442     	    CMP r4, r2
+  87 0072 00D0     	    BEQ EquStep2_C
+  88 0074 0127     	    MOVS r7, #1
+  89              	EquStep2_C:
+  90 0076 8351     	    STR r3, [r0,r6]
+  91 0078 0436     	    ADDS r6, r6, #4
+  92 007a 182E     	    CMP r6, #(0x00000006 * 4)
+  93 007c F7D3     	    BCC LoopStep2_C
+  94 007e 0026     	    MOVS r6, #0x00
+  95              	LoopStep3_C:
+  96 0080 8459     	    LDR r4, [r0,r6]
+  97 0082 A342     	    CMP r3, r4
+  98 0084 00D0     	    BEQ EquStep3_C
+  99 0086 0127     	    MOVS r7, #1
+ 100              	EquStep3_C:
+ 101 0088 8251     	    STR r2, [r0,r6]
+ 102 008a 0436     	    ADDS r6, r6, #4
+ 103 008c 182E     	    CMP r6, #(0x00000006 * 4)
+ 104 008e F7D3     	    BCC LoopStep3_C
+ 105 0090 1426     	    MOVS r6, #((0x00000006 - 1) * 4)
+ 106              	LoopStep4_C:
+ 107 0092 8459     	    LDR r4, [r0,r6]
+ 108 0094 9442     	    CMP r4, r2
+ 109 0096 00D0     	    BEQ EquStep4_C
+ 110 0098 0127     	    MOVS r7, #1
+ 111              	EquStep4_C:
+ 112 009a 8351     	    STR r3, [r0,r6]
+ 113 009c 043E     	    SUBS r6, r6, #4
+ 114 009e F8D5     	    BPL LoopStep4_C
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Run_Time_Ram.s 			page 3
+
+
+ 115 00a0 1426     	    MOVS r6, #((0x00000006 - 1) * 4)
+ 116              	LoopStep5_C:
+ 117 00a2 8459     	    LDR r4, [r0,r6]
+ 118 00a4 A342     	    CMP r3, r4
+ 119 00a6 00D0     	    BEQ EquStep5_C
+ 120 00a8 0127     	    MOVS r7, #1
+ 121              	EquStep5_C:
+ 122 00aa 8251     	    STR r2, [r0,r6]
+ 123 00ac 043E     	    SUBS r6, r6, #4
+ 124 00ae F8D5     	    BPL LoopStep5_C
+ 125 00b0 0026     	    MOVS r6, #0x00
+ 126              	LoopStep6_C:
+ 127 00b2 8459     	    LDR r4, [r0,r6]
+ 128 00b4 9442     	    CMP r4, r2
+ 129 00b6 00D0     	    BEQ EquStep6_C
+ 130 00b8 0127     	    MOVS r7, #1
+ 131              	EquStep6_C:
+ 132 00ba 8C59     	    LDR r4, [r1,r6]
+ 133 00bc 8451     	    STR r4, [r0,r6]
+ 134 00be 0436     	    ADDS r6, r6, #4
+ 135 00c0 182E     	    CMP r6, #(0x00000006 * 4)
+ 136 00c2 F6D3     	    BCC LoopStep6_C
+ 137 00c4 3846     	    MOV r0,r7
+ 138 00c6 F0BC     	    POP {r4-r7}
+ 139 00c8 7047     	    BX lr
+ 140 00ca C046     	    NOP
+ 141              	    .endfunc
+ 142              	.func FSF_tRunTimeRamBufferCheckMarchC, FSF_tRunTimeRamBufferCheckMarchC
+ 143              	.type FSF_tRunTimeRamBufferCheckMarchC, "function"
+ 144              	.thumb_func
+ 145              	FSF_tRunTimeRamBufferCheckMarchC:
+ 146 00cc F0B4     	    PUSH {r4-r7}
+ 147 00ce 1A4A     	    LDR r2, =BCKGRND
+ 148 00d0 D343     	    MVNS r3, r2
+ 149 00d2 0027     	    MOVS r7, #0
+ 150 00d4 0026     	    MOVS r6, #0x00
+ 151              	LoopBuffStep1:
+ 152 00d6 8251     	    STR r2, [r0,r6]
+ 153 00d8 0436     	    ADDS r6, r6, #4
+ 154 00da 202E     	    CMP r6, #0x20
+ 155 00dc FBD3     	    BCC LoopBuffStep1
+ 156 00de 0026     	    MOVS r6, #0x00
+ 157              	LoopBuffStep2:
+ 158 00e0 8459     	    LDR r4, [r0,r6]
+ 159 00e2 9442     	    CMP r4, r2
+ 160 00e4 00D0     	    BEQ EquBuffStep2
+ 161 00e6 0127     	    MOVS r7, #1
+ 162              	EquBuffStep2:
+ 163 00e8 8351     	    STR r3, [r0,r6]
+ 164 00ea 0436     	    ADDS r6, r6, #4
+ 165 00ec 202E     	    CMP r6, #0x20
+ 166 00ee F7D3     	    BCC LoopBuffStep2
+ 167 00f0 0026     	    MOVS r6, #0x00
+ 168              	LoopBuffStep3:
+ 169 00f2 8459     	    LDR r4, [r0,r6]
+ 170 00f4 9C42     	    CMP r4, r3
+ 171 00f6 00D0     	    BEQ EquBuffStep3
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Run_Time_Ram.s 			page 4
+
+
+ 172 00f8 0127     	    MOVS r7, #1
+ 173              	EquBuffStep3:
+ 174 00fa 8251     	    STR r2, [r0,r6]
+ 175 00fc 0436     	    ADDS r6, r6, #4
+ 176 00fe 202E     	    CMP r6, #0x20
+ 177 0100 F7D3     	    BCC LoopBuffStep3
+ 178 0102 1C26     	    MOVS r6, #(0x20 - 4)
+ 179              	LoopBuffStep4:
+ 180 0104 8459     	    LDR r4, [r0,r6]
+ 181 0106 9442     	    CMP r4, r2
+ 182 0108 00D0     	    BEQ EquBuffStep4
+ 183 010a 0127     	    MOVS r7, #1
+ 184              	EquBuffStep4:
+ 185 010c 8351     	    STR r3, [r0,r6]
+ 186 010e 043E     	    SUBS r6, r6, #4
+ 187 0110 F8D5     	    BPL LoopBuffStep4
+ 188 0112 1C26     	    MOVS r6, #(0x20 - 4)
+ 189              	LoopBuffStep5:
+ 190 0114 8459     	    LDR r4, [r0,r6]
+ 191 0116 9C42     	    CMP r4, r3
+ 192 0118 00D0     	    BEQ EquBuffStep5
+ 193 011a 0127     	    MOVS r7, #1
+ 194              	EquBuffStep5:
+ 195 011c 8251     	    STR r2, [r0,r6]
+ 196 011e 043E     	    SUBS r6, r6, #4
+ 197 0120 F8D5     	    BPL LoopBuffStep5
+ 198 0122 0026     	    MOVS r6, #0x00
+ 199              	LoopBuffStep6:
+ 200 0124 8459     	    LDR r4, [r0,r6]
+ 201 0126 9442     	    CMP r4, r2
+ 202 0128 00D0     	    BEQ EquBuffStep6
+ 203 012a 0127     	    MOVS r7, #1
+ 204              	EquBuffStep6:
+ 205 012c 0436     	    ADDS r6, r6, #4
+ 206 012e 202E     	    CMP r6, #0x20
+ 207 0130 F8D3     	    BCC LoopBuffStep6
+ 208 0132 3846     	    MOV r0, r7
+ 209 0134 F0BC     	    POP {r4-r7}
+ 210 0136 7047     	    BX lr
+ 211              	    .endfunc
+ 212              	;
+ 213 0138 00000000 	    .end

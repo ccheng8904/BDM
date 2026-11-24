@@ -1,0 +1,191 @@
+
+out/lromLoader/prog/std_lib/std_callback.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.STDCB_InitCallback:
+
+00000000 <STDCB_InitCallback>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+
+int32_t STDCB_InitCallback(struct STDCB_Callback *cbPtr, STDCB_CallbackFunction_t funcPtr, void *objPtr, uint32_t eventMask)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    //assert(cbPtr == NULL);
+    
+    cbPtr->functionPtr = funcPtr;
+   4:	6001      	str	r1, [r0, #0]
+    cbPtr->objectPtr = objPtr;
+   6:	6042      	str	r2, [r0, #4]
+    cbPtr->eventMask = eventMask;
+   8:	6083      	str	r3, [r0, #8]
+    cbPtr->_nextCallback = NULL;
+   a:	2000      	movs	r0, #0
+   c:	60e0      	str	r0, [r4, #12]
+    
+    return 0;
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.STDCB_AttachCallback:
+
+00000000 <STDCB_AttachCallback>:
+
+
+int32_t STDCB_AttachCallback(struct STDCB_Callback **cbList, struct STDCB_Callback *cbPtr)
+{
+   0:	0003      	movs	r3, r0
+            cb->_nextCallback = cbPtr;
+            cbPtr->_nextCallback = NULL;
+        }
+    }
+    
+    return 0;
+   2:	1e08      	subs	r0, r1, #0
+    if(cbPtr != NULL)
+   4:	d006      	beq.n	14 <STDCB_AttachCallback+0x14>
+        if(cbList == NULL)
+   6:	2b00      	cmp	r3, #0
+   8:	d00d      	beq.n	26 <STDCB_AttachCallback+0x26>
+        else if(*cbList == NULL)
+   a:	6818      	ldr	r0, [r3, #0]
+   c:	2800      	cmp	r0, #0
+   e:	d104      	bne.n	1a <STDCB_AttachCallback+0x1a>
+            *cbList = cbPtr;
+  10:	6019      	str	r1, [r3, #0]
+            cbPtr->_nextCallback = NULL;
+  12:	60c8      	str	r0, [r1, #12]
+}
+  14:	4770      	bx	lr
+                if(cb == cbPtr)
+  16:	428b      	cmp	r3, r1
+  18:	d008      	beq.n	2c <STDCB_AttachCallback+0x2c>
+            while(cb->_nextCallback != NULL)
+  1a:	0003      	movs	r3, r0
+  1c:	68c0      	ldr	r0, [r0, #12]
+  1e:	2800      	cmp	r0, #0
+  20:	d1f9      	bne.n	16 <STDCB_AttachCallback+0x16>
+            cb->_nextCallback = cbPtr;
+  22:	60d9      	str	r1, [r3, #12]
+  24:	e7f5      	b.n	12 <STDCB_AttachCallback+0x12>
+            return -1;
+  26:	2001      	movs	r0, #1
+  28:	4240      	negs	r0, r0
+  2a:	e7f3      	b.n	14 <STDCB_AttachCallback+0x14>
+    return 0;
+  2c:	2000      	movs	r0, #0
+  2e:	e7f1      	b.n	14 <STDCB_AttachCallback+0x14>
+
+Disassembly of section .text.STDCB_DetachCallback:
+
+00000000 <STDCB_DetachCallback>:
+
+
+int32_t STDCB_DetachCallback(struct STDCB_Callback **cbList, const struct STDCB_Callback *cbPtr)
+{
+   0:	1e03      	subs	r3, r0, #0
+    
+    struct STDCB_Callback *cb = NULL;
+    struct STDCB_Callback *cbToRm = NULL;
+    
+    // Chceck if cbList is NULL - when asserts are disabled
+    if(cbList == NULL)
+   2:	d010      	beq.n	26 <STDCB_DetachCallback+0x26>
+    {
+        return -1;
+    }
+    // Check first member of array
+    else if(*cbList == cbPtr)
+   4:	6802      	ldr	r2, [r0, #0]
+   6:	428a      	cmp	r2, r1
+   8:	d102      	bne.n	10 <STDCB_DetachCallback+0x10>
+    {
+        *cbList = NULL;
+   a:	2000      	movs	r0, #0
+   c:	6018      	str	r0, [r3, #0]
+            }
+        }
+    }
+    
+    return 0;
+}
+   e:	4770      	bx	lr
+        while(cb->_nextCallback != NULL)
+  10:	68d0      	ldr	r0, [r2, #12]
+  12:	2800      	cmp	r0, #0
+  14:	d0fb      	beq.n	e <STDCB_DetachCallback+0xe>
+            if(cb->_nextCallback == cbPtr)
+  16:	4288      	cmp	r0, r1
+  18:	d1fb      	bne.n	12 <STDCB_DetachCallback+0x12>
+                cb->_nextCallback = cbToRm->_nextCallback;
+  1a:	68c3      	ldr	r3, [r0, #12]
+  1c:	60d3      	str	r3, [r2, #12]
+                cbToRm->_nextCallback = NULL;
+  1e:	2300      	movs	r3, #0
+  20:	60c3      	str	r3, [r0, #12]
+    return 0;
+  22:	0018      	movs	r0, r3
+                break;
+  24:	e7f3      	b.n	e <STDCB_DetachCallback+0xe>
+        return -1;
+  26:	2001      	movs	r0, #1
+  28:	4240      	negs	r0, r0
+  2a:	e7f0      	b.n	e <STDCB_DetachCallback+0xe>
+
+Disassembly of section .text.STDCB_ExecuteCallbacks:
+
+00000000 <STDCB_ExecuteCallbacks>:
+
+
+int32_t STDCB_ExecuteCallbacks(const struct STDCB_Callback *cbPtr, uint32_t eventFlags, int32_t eventData)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+   6:	0017      	movs	r7, r2
+    //assert(cbPtr);
+    
+    int32_t retVal = 0;
+   8:	1e0e      	subs	r6, r1, #0
+    uint32_t ef;
+    
+    if(eventFlags != 0U)
+   a:	d010      	beq.n	2e <STDCB_ExecuteCallbacks+0x2e>
+    int32_t retVal = 0;
+   c:	2600      	movs	r6, #0
+   e:	e00c      	b.n	2a <STDCB_ExecuteCallbacks+0x2a>
+    {
+        while(cbPtr != NULL)
+        {
+            ef = eventFlags & cbPtr->eventMask;
+  10:	68a3      	ldr	r3, [r4, #8]
+  12:	0019      	movs	r1, r3
+  14:	4029      	ands	r1, r5
+            if((ef != 0U) && (cbPtr->functionPtr != NULL))
+  16:	422b      	tst	r3, r5
+  18:	d006      	beq.n	28 <STDCB_ExecuteCallbacks+0x28>
+  1a:	6823      	ldr	r3, [r4, #0]
+  1c:	2b00      	cmp	r3, #0
+  1e:	d003      	beq.n	28 <STDCB_ExecuteCallbacks+0x28>
+            {
+                /*lint -e{9027} Tested to work correctly on Cortex-M devices */
+                retVal |= (int32_t)cbPtr->functionPtr(cbPtr->objectPtr, ef, eventData);
+  20:	003a      	movs	r2, r7
+  22:	6860      	ldr	r0, [r4, #4]
+  24:	4798      	blx	r3
+  26:	4306      	orrs	r6, r0
+            }
+            cbPtr = cbPtr->_nextCallback;
+  28:	68e4      	ldr	r4, [r4, #12]
+        while(cbPtr != NULL)
+  2a:	2c00      	cmp	r4, #0
+  2c:	d1f0      	bne.n	10 <STDCB_ExecuteCallbacks+0x10>
+        }
+    }
+    
+    return retVal;
+}
+  2e:	0030      	movs	r0, r6
+  30:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}

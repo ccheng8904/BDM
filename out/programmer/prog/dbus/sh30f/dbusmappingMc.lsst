@@ -1,0 +1,453 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbusmappingMc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DBM_INT_EnableIrq,"ax",%progbits
+  18              		.align	1
+  19              		.global	DBM_INT_EnableIrq
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	DBM_INT_EnableIrq:
+  25              	.LFB112:
+  26              		.file 1 "app/prog/dbus/sh30f/dbusmappingMc.c"
+   1:app/prog/dbus/sh30f/dbusmappingMc.c **** /*******************************************************************************
+   2:app/prog/dbus/sh30f/dbusmappingMc.c **** *   Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:app/prog/dbus/sh30f/dbusmappingMc.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/dbus/sh30f/dbusmappingMc.c **** *
+   5:app/prog/dbus/sh30f/dbusmappingMc.c **** *   All rights reserved. This program and the accompanying materials
+   6:app/prog/dbus/sh30f/dbusmappingMc.c **** *   are protected by international copyright laws.
+   7:app/prog/dbus/sh30f/dbusmappingMc.c **** *   Please contact copyright holder for licensing information.
+   8:app/prog/dbus/sh30f/dbusmappingMc.c **** *
+   9:app/prog/dbus/sh30f/dbusmappingMc.c **** ********************************************************************************
+  10:app/prog/dbus/sh30f/dbusmappingMc.c **** *   PROJECT          IC Dbus2
+  11:app/prog/dbus/sh30f/dbusmappingMc.c **** *   COMP_ABBREV      DBM
+  12:app/prog/dbus/sh30f/dbusmappingMc.c **** *******************************************************************************/
+  13:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  14:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  15:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  16:app/prog/dbus/sh30f/dbusmappingMc.c **** /* DOCUMENTATION                                                              */
+  17:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  18:app/prog/dbus/sh30f/dbusmappingMc.c **** /** \file      dbusmappingMc.c
+  19:app/prog/dbus/sh30f/dbusmappingMc.c ****  *
+  20:app/prog/dbus/sh30f/dbusmappingMc.c ****  *   \brief    SH30F specific mapping library for D-Bus-2 data link layer using
+  21:app/prog/dbus/sh30f/dbusmappingMc.c ****  *             one specific UART channel.
+  22:app/prog/dbus/sh30f/dbusmappingMc.c ****  *
+  23:app/prog/dbus/sh30f/dbusmappingMc.c ****  *   \details  The mapping layer provides the implementation of the following mapping functions
+  24:app/prog/dbus/sh30f/dbusmappingMc.c ****  *     \li DBM_GPIO_SetBreakPinState(bool)
+  25:app/prog/dbus/sh30f/dbusmappingMc.c ****  *     \li DBM_GPIO_SetBreakPinModeOutput(void)
+  26:app/prog/dbus/sh30f/dbusmappingMc.c ****  *     \li DBM_GPIO_SetBreakPinModeAlternateFunction(void)
+  27:app/prog/dbus/sh30f/dbusmappingMc.c ****  */
+  28:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  29:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  30:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  31:app/prog/dbus/sh30f/dbusmappingMc.c **** /* INCLUDES                                                                   */
+  32:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 2
+
+
+  33:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "bsh_stdinc.h"
+  34:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  35:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  36:app/prog/dbus/sh30f/dbusmappingMc.c **** /* compiler switches:*/
+  37:app/prog/dbus/sh30f/dbusmappingMc.c **** /*  DBUS2_NO_BREAK_FUNCTIONALITY*/
+  38:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  39:app/prog/dbus/sh30f/dbusmappingMc.c **** #ifdef DOXY_DEVELOPERS_DOC
+  40:app/prog/dbus/sh30f/dbusmappingMc.c **** /* Doxygen documentation of compiler switches */
+  41:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  42:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Compiler switch. Definition for switching off functionality that generates
+  43:app/prog/dbus/sh30f/dbusmappingMc.c ****     break signals on line using TX pin as GPIO, e.g. for programmer variant.
+  44:app/prog/dbus/sh30f/dbusmappingMc.c **** */ #define DBUS2_NO_BREAK_FUNCTIONALITY
+  45:app/prog/dbus/sh30f/dbusmappingMc.c **** #endif
+  46:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  47:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  48:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "libtypes.h"
+  49:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "dbusmapping.h"
+  50:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "hsup.h"
+  51:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  52:app/prog/dbus/sh30f/dbusmappingMc.c **** #if defined(MCAL_MEXTI_INCLUDED)
+  53:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "mcal/mexti.h"
+  54:app/prog/dbus/sh30f/dbusmappingMc.c **** #include "mcal_channels.h"
+  55:app/prog/dbus/sh30f/dbusmappingMc.c **** #endif
+  56:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  57:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  58:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  59:app/prog/dbus/sh30f/dbusmappingMc.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  60:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  61:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  62:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  63:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  64:app/prog/dbus/sh30f/dbusmappingMc.c **** /* PRIVATE DEFINITIONS                                                        */
+  65:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  66:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  67:app/prog/dbus/sh30f/dbusmappingMc.c **** #if defined(MCAL_MEXTI_INCLUDED)
+  68:app/prog/dbus/sh30f/dbusmappingMc.c **** static const struct MEXTI_Channel *DBM_MEXTI_IN1 = &DBM_IDLE_MEXTI_CHANNEL;
+  69:app/prog/dbus/sh30f/dbusmappingMc.c **** static struct MEXTI_Handle DBM_MextiHandle1;
+  70:app/prog/dbus/sh30f/dbusmappingMc.c **** static MCAL_Callback_t DBM_MextiCallback1;
+  71:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  72:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  73:app/prog/dbus/sh30f/dbusmappingMc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  74:app/prog/dbus/sh30f/dbusmappingMc.c **** /******************************************************************************/
+  75:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  76:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Enable the used hardware interrupt */
+  77:app/prog/dbus/sh30f/dbusmappingMc.c **** void DBM_INT_EnableIrq(void)
+  78:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+  27              		.loc 1 78 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  79:app/prog/dbus/sh30f/dbusmappingMc.c ****     MEXTI_enableEvent(&DBM_MextiHandle1, &DBM_MextiCallback1);
+  31              		.loc 1 79 5 view .LVU1
+  78:app/prog/dbus/sh30f/dbusmappingMc.c ****     MEXTI_enableEvent(&DBM_MextiHandle1, &DBM_MextiCallback1);
+  32              		.loc 1 78 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 3
+
+
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 79 5 view .LVU3
+  39 0002 0249     		ldr	r1, .L2
+  40 0004 0248     		ldr	r0, .L2+4
+  41 0006 FFF7FEFF 		bl	MEXTI_enableEvent
+  42              	.LVL0:
+  80:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+  43              		.loc 1 80 1 view .LVU4
+  44              		@ sp needed
+  45 000a 10BD     		pop	{r4, pc}
+  46              	.L3:
+  47              		.align	2
+  48              	.L2:
+  49 000c 00000000 		.word	.LANCHOR0
+  50 0010 00000000 		.word	.LANCHOR1
+  51              		.cfi_endproc
+  52              	.LFE112:
+  54              		.section	.text.DBM_INT_DisableIrq,"ax",%progbits
+  55              		.align	1
+  56              		.global	DBM_INT_DisableIrq
+  57              		.syntax unified
+  58              		.code	16
+  59              		.thumb_func
+  61              	DBM_INT_DisableIrq:
+  62              	.LFB113:
+  81:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  82:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Disable the used hardware interrupt */
+  83:app/prog/dbus/sh30f/dbusmappingMc.c **** void DBM_INT_DisableIrq(void)
+  84:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+  63              		.loc 1 84 1 is_stmt 1 view -0
+  64              		.cfi_startproc
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 0, uses_anonymous_args = 0
+  85:app/prog/dbus/sh30f/dbusmappingMc.c ****     if(DBM_MextiHandle1.enabledEvent == true)   // if MEXTI already initialized
+  67              		.loc 1 85 5 view .LVU6
+  84:app/prog/dbus/sh30f/dbusmappingMc.c ****     if(DBM_MextiHandle1.enabledEvent == true)   // if MEXTI already initialized
+  68              		.loc 1 84 1 is_stmt 0 view .LVU7
+  69 0000 10B5     		push	{r4, lr}
+  70              	.LCFI1:
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 4, -8
+  73              		.cfi_offset 14, -4
+  74              		.loc 1 85 24 view .LVU8
+  75 0002 0448     		ldr	r0, .L9
+  76 0004 037A     		ldrb	r3, [r0, #8]
+  77              		.loc 1 85 7 view .LVU9
+  78 0006 002B     		cmp	r3, #0
+  79 0008 02D0     		beq	.L4
+  80              	.LBB4:
+  81              	.LBI4:
+  83:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+  82              		.loc 1 83 6 is_stmt 1 view .LVU10
+  83              	.LBB5:
+  86:app/prog/dbus/sh30f/dbusmappingMc.c ****     {
+  87:app/prog/dbus/sh30f/dbusmappingMc.c ****         MEXTI_disableEvent(&DBM_MextiHandle1, &DBM_MextiCallback1);
+  84              		.loc 1 87 9 view .LVU11
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 4
+
+
+  85 000a 0349     		ldr	r1, .L9+4
+  86 000c FFF7FEFF 		bl	MEXTI_disableEvent
+  87              	.LVL1:
+  88              	.L4:
+  89              	.LBE5:
+  90              	.LBE4:
+  88:app/prog/dbus/sh30f/dbusmappingMc.c ****     }
+  89:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+  91              		.loc 1 89 1 is_stmt 0 view .LVU12
+  92              		@ sp needed
+  93 0010 10BD     		pop	{r4, pc}
+  94              	.L10:
+  95 0012 C046     		.align	2
+  96              	.L9:
+  97 0014 00000000 		.word	.LANCHOR1
+  98 0018 00000000 		.word	.LANCHOR0
+  99              		.cfi_endproc
+ 100              	.LFE113:
+ 102              		.section	.text.DBM_INT_ClearIrq,"ax",%progbits
+ 103              		.align	1
+ 104              		.global	DBM_INT_ClearIrq
+ 105              		.syntax unified
+ 106              		.code	16
+ 107              		.thumb_func
+ 109              	DBM_INT_ClearIrq:
+ 110              	.LFB114:
+  90:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  91:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Clear interrupt pending flag. */
+  92:app/prog/dbus/sh30f/dbusmappingMc.c **** void DBM_INT_ClearIrq(void)
+  93:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+ 111              		.loc 1 93 1 is_stmt 1 view -0
+ 112              		.cfi_startproc
+ 113              		@ args = 0, pretend = 0, frame = 0
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+  94:app/prog/dbus/sh30f/dbusmappingMc.c ****     MEXTI_clearEventReg(DBM_MextiHandle1.channel);
+ 115              		.loc 1 94 5 view .LVU14
+  93:app/prog/dbus/sh30f/dbusmappingMc.c ****     MEXTI_clearEventReg(DBM_MextiHandle1.channel);
+ 116              		.loc 1 93 1 is_stmt 0 view .LVU15
+ 117 0000 10B5     		push	{r4, lr}
+ 118              	.LCFI2:
+ 119              		.cfi_def_cfa_offset 8
+ 120              		.cfi_offset 4, -8
+ 121              		.cfi_offset 14, -4
+ 122              		.loc 1 94 5 view .LVU16
+ 123 0002 024B     		ldr	r3, .L12
+  95:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+ 124              		.loc 1 95 1 view .LVU17
+ 125              		@ sp needed
+  94:app/prog/dbus/sh30f/dbusmappingMc.c ****     MEXTI_clearEventReg(DBM_MextiHandle1.channel);
+ 126              		.loc 1 94 5 view .LVU18
+ 127 0004 1868     		ldr	r0, [r3]
+ 128 0006 FFF7FEFF 		bl	MEXTI_clearEventReg
+ 129              	.LVL2:
+ 130              		.loc 1 95 1 view .LVU19
+ 131 000a 10BD     		pop	{r4, pc}
+ 132              	.L13:
+ 133              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 5
+
+
+ 134              	.L12:
+ 135 000c 00000000 		.word	.LANCHOR1
+ 136              		.cfi_endproc
+ 137              	.LFE114:
+ 139              		.section	.text.DBM_INT_Init,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	DBM_INT_Init
+ 142              		.syntax unified
+ 143              		.code	16
+ 144              		.thumb_func
+ 146              	DBM_INT_Init:
+ 147              	.LVL3:
+ 148              	.LFB115:
+  96:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+  97:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Enable the used hardware interrupt */
+  98:app/prog/dbus/sh30f/dbusmappingMc.c **** void DBM_INT_Init(uint8_t ucIndex)
+  99:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+ 149              		.loc 1 99 1 is_stmt 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100:app/prog/dbus/sh30f/dbusmappingMc.c ****     static const struct MEXTI_Config mextiCfg = {.trigger = MEXTI_TRIGGER_FALLING};
+ 153              		.loc 1 100 5 view .LVU21
+ 101:app/prog/dbus/sh30f/dbusmappingMc.c ****     (void)ucIndex;
+ 154              		.loc 1 101 5 view .LVU22
+ 102:app/prog/dbus/sh30f/dbusmappingMc.c ****     (void)MEXTI_init(&DBM_MextiHandle1, DBM_MEXTI_IN1, &mextiCfg);
+ 155              		.loc 1 102 5 view .LVU23
+  99:app/prog/dbus/sh30f/dbusmappingMc.c ****     static const struct MEXTI_Config mextiCfg = {.trigger = MEXTI_TRIGGER_FALLING};
+ 156              		.loc 1 99 1 is_stmt 0 view .LVU24
+ 157 0000 10B5     		push	{r4, lr}
+ 158              	.LCFI3:
+ 159              		.cfi_def_cfa_offset 8
+ 160              		.cfi_offset 4, -8
+ 161              		.cfi_offset 14, -4
+ 162              		.loc 1 102 11 view .LVU25
+ 163 0002 044A     		ldr	r2, .L15
+ 164 0004 0449     		ldr	r1, .L15+4
+ 165 0006 0548     		ldr	r0, .L15+8
+ 166              	.LVL4:
+ 167              		.loc 1 102 11 view .LVU26
+ 168 0008 FFF7FEFF 		bl	MEXTI_init
+ 169              	.LVL5:
+ 103:app/prog/dbus/sh30f/dbusmappingMc.c ****     DBM_INT_DisableIrq();
+ 170              		.loc 1 103 5 is_stmt 1 view .LVU27
+ 104:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+ 171              		.loc 1 104 1 is_stmt 0 view .LVU28
+ 172              		@ sp needed
+ 103:app/prog/dbus/sh30f/dbusmappingMc.c ****     DBM_INT_DisableIrq();
+ 173              		.loc 1 103 5 view .LVU29
+ 174 000c FFF7FEFF 		bl	DBM_INT_DisableIrq
+ 175              	.LVL6:
+ 176              		.loc 1 104 1 view .LVU30
+ 177 0010 10BD     		pop	{r4, pc}
+ 178              	.L16:
+ 179 0012 C046     		.align	2
+ 180              	.L15:
+ 181 0014 00000000 		.word	.LANCHOR2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 6
+
+
+ 182 0018 00000000 		.word	MEXTIB0
+ 183 001c 00000000 		.word	.LANCHOR1
+ 184              		.cfi_endproc
+ 185              	.LFE115:
+ 187              		.section	.text.DBM_INT_IsIrqEvent,"ax",%progbits
+ 188              		.align	1
+ 189              		.global	DBM_INT_IsIrqEvent
+ 190              		.syntax unified
+ 191              		.code	16
+ 192              		.thumb_func
+ 194              	DBM_INT_IsIrqEvent:
+ 195              	.LFB116:
+ 105:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+ 106:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Is interrupt pending? */
+ 107:app/prog/dbus/sh30f/dbusmappingMc.c **** bool DBM_INT_IsIrqEvent(void)
+ 108:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+ 196              		.loc 1 108 1 is_stmt 1 view -0
+ 197              		.cfi_startproc
+ 198              		@ args = 0, pretend = 0, frame = 0
+ 199              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109:app/prog/dbus/sh30f/dbusmappingMc.c ****     return MEXTI_isEvent(DBM_MEXTI_IN1);
+ 200              		.loc 1 109 5 view .LVU32
+ 108:app/prog/dbus/sh30f/dbusmappingMc.c ****     return MEXTI_isEvent(DBM_MEXTI_IN1);
+ 201              		.loc 1 108 1 is_stmt 0 view .LVU33
+ 202 0000 10B5     		push	{r4, lr}
+ 203              	.LCFI4:
+ 204              		.cfi_def_cfa_offset 8
+ 205              		.cfi_offset 4, -8
+ 206              		.cfi_offset 14, -4
+ 207              		.loc 1 109 12 view .LVU34
+ 208 0002 0248     		ldr	r0, .L18
+ 209 0004 FFF7FEFF 		bl	MEXTI_isEvent
+ 210              	.LVL7:
+ 110:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+ 211              		.loc 1 110 1 view .LVU35
+ 212              		@ sp needed
+ 213 0008 10BD     		pop	{r4, pc}
+ 214              	.L19:
+ 215 000a C046     		.align	2
+ 216              	.L18:
+ 217 000c 00000000 		.word	MEXTIB0
+ 218              		.cfi_endproc
+ 219              	.LFE116:
+ 221              		.section	.text.DBM_INT_SetIrqModeFalling,"ax",%progbits
+ 222              		.align	1
+ 223              		.global	DBM_INT_SetIrqModeFalling
+ 224              		.syntax unified
+ 225              		.code	16
+ 226              		.thumb_func
+ 228              	DBM_INT_SetIrqModeFalling:
+ 229              	.LFB117:
+ 111:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+ 112:app/prog/dbus/sh30f/dbusmappingMc.c **** /** Interrupt pending only on falling edge */
+ 113:app/prog/dbus/sh30f/dbusmappingMc.c **** void DBM_INT_SetIrqModeFalling(void)
+ 114:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+ 230              		.loc 1 114 1 is_stmt 1 view -0
+ 231              		.cfi_startproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 7
+
+
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+ 234              		@ link register save eliminated.
+ 115:app/prog/dbus/sh30f/dbusmappingMc.c ****     // nothing to do here, edge trigger was already set in DBM_INT_Init
+ 116:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+ 235              		.loc 1 116 1 view .LVU37
+ 236              		@ sp needed
+ 237 0000 7047     		bx	lr
+ 238              		.cfi_endproc
+ 239              	.LFE117:
+ 241              		.section	.text.DBM_INT_bGetPin,"ax",%progbits
+ 242              		.align	1
+ 243              		.global	DBM_INT_bGetPin
+ 244              		.syntax unified
+ 245              		.code	16
+ 246              		.thumb_func
+ 248              	DBM_INT_bGetPin:
+ 249              	.LFB118:
+ 117:app/prog/dbus/sh30f/dbusmappingMc.c **** 
+ 118:app/prog/dbus/sh30f/dbusmappingMc.c **** bool DBM_INT_bGetPin(void)
+ 119:app/prog/dbus/sh30f/dbusmappingMc.c **** {
+ 250              		.loc 1 119 1 view -0
+ 251              		.cfi_startproc
+ 252              		@ args = 0, pretend = 0, frame = 0
+ 253              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120:app/prog/dbus/sh30f/dbusmappingMc.c ****     return(MDIO_read(DBM_MEXTI_IN1->mextiPin));
+ 254              		.loc 1 120 5 view .LVU39
+ 119:app/prog/dbus/sh30f/dbusmappingMc.c ****     return(MDIO_read(DBM_MEXTI_IN1->mextiPin));
+ 255              		.loc 1 119 1 is_stmt 0 view .LVU40
+ 256 0000 10B5     		push	{r4, lr}
+ 257              	.LCFI5:
+ 258              		.cfi_def_cfa_offset 8
+ 259              		.cfi_offset 4, -8
+ 260              		.cfi_offset 14, -4
+ 261              		.loc 1 120 35 view .LVU41
+ 262 0002 024B     		ldr	r3, .L22
+ 121:app/prog/dbus/sh30f/dbusmappingMc.c **** }
+ 263              		.loc 1 121 1 view .LVU42
+ 264              		@ sp needed
+ 120:app/prog/dbus/sh30f/dbusmappingMc.c ****     return(MDIO_read(DBM_MEXTI_IN1->mextiPin));
+ 265              		.loc 1 120 12 view .LVU43
+ 266 0004 1868     		ldr	r0, [r3]
+ 267 0006 FFF7FEFF 		bl	MDIO_read
+ 268              	.LVL8:
+ 269              		.loc 1 121 1 view .LVU44
+ 270 000a 10BD     		pop	{r4, pc}
+ 271              	.L23:
+ 272              		.align	2
+ 273              	.L22:
+ 274 000c 00000000 		.word	MEXTIB0
+ 275              		.cfi_endproc
+ 276              	.LFE118:
+ 278              		.section	.bss.DBM_MextiCallback1,"aw",%nobits
+ 279              		.align	2
+ 280              		.set	.LANCHOR0,. + 0
+ 283              	DBM_MextiCallback1:
+ 284 0000 00000000 		.space	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSgTCaj.s 			page 8
+
+
+ 284      00000000 
+ 284      00000000 
+ 284      00000000 
+ 285              		.section	.bss.DBM_MextiHandle1,"aw",%nobits
+ 286              		.align	2
+ 287              		.set	.LANCHOR1,. + 0
+ 290              	DBM_MextiHandle1:
+ 291 0000 00000000 		.space	16
+ 291      00000000 
+ 291      00000000 
+ 291      00000000 
+ 292              		.section	.rodata.mextiCfg.0,"a"
+ 293              		.set	.LANCHOR2,. + 0
+ 296              	mextiCfg.0:
+ 297 0000 02       		.byte	2
+ 298              		.text
+ 299              	.Letext0:
+ 300              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 301              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 302              		.file 4 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 303              		.file 5 "common/prog/std_lib/std_callback.h"
+ 304              		.file 6 "common/prog/MSP/mcal/mcal_types.h"
+ 305              		.file 7 "common/prog/MSP/mcal/mdio_types.h"
+ 306              		.file 8 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 307              		.file 9 "common/prog/MSP/mcal/mexti_types.h"
+ 308              		.file 10 "common/prog/MSP/mcal/sh30f/mexti_mc.h"
+ 309              		.file 11 "common/prog/MSP/mcal/mexti.h"
+ 310              		.file 12 "common/prog/MSP/mcal/mdio.h"
+ 311              		.file 13 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 312              		.file 14 "app/prog/MSP/mcal/sh30f/mcal_channels.h"

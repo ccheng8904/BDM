@@ -1,0 +1,37 @@
+
+out/programmer/prog/firmware_update/map/SRC/config/ped_framework/map_mem_access_interface_XS.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MAP_MemAccess_Init:
+
+00000000 <MAP_MemAccess_Init>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+void MAP_MemAccess_Init(void)
+{
+    MAP_MemAccess.devInfo=MAL_CMD_DevInfo;
+   0:	4b07      	ldr	r3, [pc, #28]	; (20 <MAP_MemAccess_Init+0x20>)
+   2:	4a08      	ldr	r2, [pc, #32]	; (24 <MAP_MemAccess_Init+0x24>)
+   4:	601a      	str	r2, [r3, #0]
+    MAP_MemAccess.open=MAL_CMD_Open;
+   6:	4a08      	ldr	r2, [pc, #32]	; (28 <MAP_MemAccess_Init+0x28>)
+   8:	605a      	str	r2, [r3, #4]
+    MAP_MemAccess.close=MAL_CMD_Close;
+   a:	4a08      	ldr	r2, [pc, #32]	; (2c <MAP_MemAccess_Init+0x2c>)
+   c:	609a      	str	r2, [r3, #8]
+    MAP_MemAccess.read=MAL_CMD_Read;
+   e:	4a08      	ldr	r2, [pc, #32]	; (30 <MAP_MemAccess_Init+0x30>)
+  10:	60da      	str	r2, [r3, #12]
+    MAP_MemAccess.writeStart=MAL_CMD_WriteStart;
+  12:	4a08      	ldr	r2, [pc, #32]	; (34 <MAP_MemAccess_Init+0x34>)
+  14:	611a      	str	r2, [r3, #16]
+    MAP_MemAccess.writeAppend=MAL_CMD_WriteAppend;
+  16:	4a08      	ldr	r2, [pc, #32]	; (38 <MAP_MemAccess_Init+0x38>)
+  18:	615a      	str	r2, [r3, #20]
+    MAP_MemAccess.writePrematurelyEnd = MAL_CMD_WritePrematurelyEnd;
+  1a:	4a08      	ldr	r2, [pc, #32]	; (3c <MAP_MemAccess_Init+0x3c>)
+  1c:	619a      	str	r2, [r3, #24]
+}
+  1e:	4770      	bx	lr
+	...

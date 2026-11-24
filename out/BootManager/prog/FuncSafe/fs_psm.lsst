@@ -1,0 +1,320 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fs_psm.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.FSF_setProgramCounterMonitoringVal,"ax",%progbits
+  18              		.align	1
+  19              		.global	FSF_setProgramCounterMonitoringVal
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	FSF_setProgramCounterMonitoringVal:
+  25              	.LVL0:
+  26              	.LFB7:
+  27              		.file 1 "common/prog/FuncSafe/fs_psm.c"
+   1:common/prog/FuncSafe/fs_psm.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/fs_psm.c ****  *  Copyright (c) 2019 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/fs_psm.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/fs_psm.c ****  *
+   5:common/prog/FuncSafe/fs_psm.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/fs_psm.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/fs_psm.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/fs_psm.c ****  *
+   9:common/prog/FuncSafe/fs_psm.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/fs_psm.c ****  *  PROJECT          Functional Safety
+  11:common/prog/FuncSafe/fs_psm.c ****  ******************************************************************************/
+  12:common/prog/FuncSafe/fs_psm.c **** 
+  13:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  14:common/prog/FuncSafe/fs_psm.c **** /* DOCUMENTATION                                                              */
+  15:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  16:common/prog/FuncSafe/fs_psm.c **** /** \file fs_psm.c
+  17:common/prog/FuncSafe/fs_psm.c ****  *
+  18:common/prog/FuncSafe/fs_psm.c ****  *  \ingroup  FunctionalSafety
+  19:common/prog/FuncSafe/fs_psm.c ****  *
+  20:common/prog/FuncSafe/fs_psm.c ****  *  \brief    Application specific implementation and configuration
+  21:common/prog/FuncSafe/fs_psm.c ****  *            for library functional safety.
+  22:common/prog/FuncSafe/fs_psm.c ****  *
+  23:common/prog/FuncSafe/fs_psm.c ****  */
+  24:common/prog/FuncSafe/fs_psm.c **** 
+  25:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  26:common/prog/FuncSafe/fs_psm.c **** /* INCLUDES                                                                   */
+  27:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  28:common/prog/FuncSafe/fs_psm.c **** #include "bsh_stdinc.h"
+  29:common/prog/FuncSafe/fs_psm.c **** #include "LibTypes.h"
+  30:common/prog/FuncSafe/fs_psm.c **** 
+  31:common/prog/FuncSafe/fs_psm.c **** #include "fs_psm.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 2
+
+
+  32:common/prog/FuncSafe/fs_psm.c **** #include "fSafe.h"
+  33:common/prog/FuncSafe/fs_psm.c **** 
+  34:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  35:common/prog/FuncSafe/fs_psm.c **** /* RAM/ROM VARIABLE PROTOTYPES                                                */
+  36:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  37:common/prog/FuncSafe/fs_psm.c **** #ifdef VARIANT_BOOTMANAGER
+  38:common/prog/FuncSafe/fs_psm.c **** /** \brief    Static variables used for Program Counter Monitoring when
+  39:common/prog/FuncSafe/fs_psm.c ****  *            BootManager is active
+  40:common/prog/FuncSafe/fs_psm.c ****  *
+  41:common/prog/FuncSafe/fs_psm.c ****  *  \details  Two variables (normal and inverted) are used for Program Counter
+  42:common/prog/FuncSafe/fs_psm.c ****  *            Monitoring and has values from enum <FSF_PrgSeqMonitorPatterns>.
+  43:common/prog/FuncSafe/fs_psm.c ****  */
+  44:common/prog/FuncSafe/fs_psm.c **** static uint32_t FSF_ui32BMPrgSeqMonVal;
+  45:common/prog/FuncSafe/fs_psm.c **** static uint32_t FSF_ui32BMPrgSeqMonValInv;
+  46:common/prog/FuncSafe/fs_psm.c **** #else
+  47:common/prog/FuncSafe/fs_psm.c **** /** \brief    Static variables used for Program Counter Monitoring when
+  48:common/prog/FuncSafe/fs_psm.c ****  *            Application is active
+  49:common/prog/FuncSafe/fs_psm.c ****  *
+  50:common/prog/FuncSafe/fs_psm.c ****  *  \details  Two variables (normal and inverted) are used for Program Counter
+  51:common/prog/FuncSafe/fs_psm.c ****  *            Monitoring and has values from application specific enum.
+  52:common/prog/FuncSafe/fs_psm.c ****  */
+  53:common/prog/FuncSafe/fs_psm.c **** static uint32_t FSF_ui32AppPrgSeqMonVal;
+  54:common/prog/FuncSafe/fs_psm.c **** static uint32_t FSF_ui32AppPrgSeqMonValInv;
+  55:common/prog/FuncSafe/fs_psm.c **** #endif
+  56:common/prog/FuncSafe/fs_psm.c **** 
+  57:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  58:common/prog/FuncSafe/fs_psm.c **** /* FUNCTION PROTOTYPES                                                        */
+  59:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  60:common/prog/FuncSafe/fs_psm.c **** 
+  61:common/prog/FuncSafe/fs_psm.c **** /** \brief    Function for checking of consistency valuse used for Program
+  62:common/prog/FuncSafe/fs_psm.c ****  *            Counter Monitoring.
+  63:common/prog/FuncSafe/fs_psm.c ****  *
+  64:common/prog/FuncSafe/fs_psm.c ****  *  \details  For Program Counter Monitoring are used two variables (normal
+  65:common/prog/FuncSafe/fs_psm.c ****  *             and inverted). In this function is checked if this static
+  66:common/prog/FuncSafe/fs_psm.c ****  *             variable are consinstent
+  67:common/prog/FuncSafe/fs_psm.c ****  *
+  68:common/prog/FuncSafe/fs_psm.c ****  *  \param    none: void
+  69:common/prog/FuncSafe/fs_psm.c ****  *
+  70:common/prog/FuncSafe/fs_psm.c ****  *  \return   bool: true, false
+  71:common/prog/FuncSafe/fs_psm.c ****  */
+  72:common/prog/FuncSafe/fs_psm.c **** static bool FSF_isPrgSeqMonitorValuesConsistent(void);
+  73:common/prog/FuncSafe/fs_psm.c **** 
+  74:common/prog/FuncSafe/fs_psm.c **** /** \brief    Function returns Program Counter Monitoring value.
+  75:common/prog/FuncSafe/fs_psm.c ****  *
+  76:common/prog/FuncSafe/fs_psm.c ****  *  \details  Returns only normal (not inverted) value of variable used
+  77:common/prog/FuncSafe/fs_psm.c ****  *            for checking.
+  78:common/prog/FuncSafe/fs_psm.c ****  *
+  79:common/prog/FuncSafe/fs_psm.c ****  *  \param    none:      void
+  80:common/prog/FuncSafe/fs_psm.c ****  *
+  81:common/prog/FuncSafe/fs_psm.c ****  *  \return   <FSF_PrgSeqMonitorPatterns>
+  82:common/prog/FuncSafe/fs_psm.c ****  */
+  83:common/prog/FuncSafe/fs_psm.c **** static enum FSF_PrgSeqMonitorPatterns FSF_getPrgSeqMonitorValues(void);
+  84:common/prog/FuncSafe/fs_psm.c **** 
+  85:common/prog/FuncSafe/fs_psm.c **** 
+  86:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+  87:common/prog/FuncSafe/fs_psm.c **** /* STATIC FUNCTION DEFINITIONS                                                */
+  88:common/prog/FuncSafe/fs_psm.c **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 3
+
+
+  89:common/prog/FuncSafe/fs_psm.c **** static bool FSF_isPrgSeqMonitorValuesConsistent(void)
+  90:common/prog/FuncSafe/fs_psm.c **** {
+  91:common/prog/FuncSafe/fs_psm.c **** #ifdef VARIANT_BOOTMANAGER
+  92:common/prog/FuncSafe/fs_psm.c ****   return (((FSF_ui32BMPrgSeqMonVal ^ FSF_ui32BMPrgSeqMonValInv) == UINT32_MAX) ? true : false);
+  93:common/prog/FuncSafe/fs_psm.c **** #else
+  94:common/prog/FuncSafe/fs_psm.c ****   return (((FSF_ui32AppPrgSeqMonVal ^ FSF_ui32AppPrgSeqMonValInv) == UINT32_MAX) ? true : false);
+  95:common/prog/FuncSafe/fs_psm.c **** #endif
+  96:common/prog/FuncSafe/fs_psm.c **** }
+  97:common/prog/FuncSafe/fs_psm.c **** 
+  98:common/prog/FuncSafe/fs_psm.c **** static enum FSF_PrgSeqMonitorPatterns FSF_getPrgSeqMonitorValues(void)
+  99:common/prog/FuncSafe/fs_psm.c **** {
+ 100:common/prog/FuncSafe/fs_psm.c **** /* Note 9034: Expression assigned to a narrower or different essential type
+ 101:common/prog/FuncSafe/fs_psm.c ****  * Note 9030: Note 9030: cannot cast an unsigned value to an enum type [MISRA 2012 Rule 10.5, advis
+ 102:common/prog/FuncSafe/fs_psm.c **** 
+ 103:common/prog/FuncSafe/fs_psm.c **** #ifdef VARIANT_BOOTMANAGER
+ 104:common/prog/FuncSafe/fs_psm.c ****   return ((enum FSF_PrgSeqMonitorPatterns) FSF_ui32BMPrgSeqMonVal);  /*lint !e9034 !e9030 */
+ 105:common/prog/FuncSafe/fs_psm.c **** #else
+ 106:common/prog/FuncSafe/fs_psm.c ****   return ((enum FSF_PrgSeqMonitorPatterns) FSF_ui32AppPrgSeqMonVal); /*lint !e9034 !e9030 */
+ 107:common/prog/FuncSafe/fs_psm.c **** #endif
+ 108:common/prog/FuncSafe/fs_psm.c **** }
+ 109:common/prog/FuncSafe/fs_psm.c **** 
+ 110:common/prog/FuncSafe/fs_psm.c **** 
+ 111:common/prog/FuncSafe/fs_psm.c **** 
+ 112:common/prog/FuncSafe/fs_psm.c **** void FSF_DoProgramCounterMonitoring(enum FSF_PrgSeqMonitorPatterns CheckPattern,
+ 113:common/prog/FuncSafe/fs_psm.c ****                                     enum FSF_PrgSeqMonitorPatterns NewPattern)
+ 114:common/prog/FuncSafe/fs_psm.c **** {
+ 115:common/prog/FuncSafe/fs_psm.c ****     /* Verify 1st PrgSequCnt integrity */
+ 116:common/prog/FuncSafe/fs_psm.c ****     if ((FSF_isPrgSeqMonitorValuesConsistent() == true) && (FSF_getPrgSeqMonitorValues() == CheckPa
+ 117:common/prog/FuncSafe/fs_psm.c ****     {
+ 118:common/prog/FuncSafe/fs_psm.c ****         FSF_setProgramCounterMonitoringVal(NewPattern);
+ 119:common/prog/FuncSafe/fs_psm.c ****     }
+ 120:common/prog/FuncSafe/fs_psm.c ****     else
+ 121:common/prog/FuncSafe/fs_psm.c ****     {
+ 122:common/prog/FuncSafe/fs_psm.c ****         FSF_vReportFatal();
+ 123:common/prog/FuncSafe/fs_psm.c ****     }
+ 124:common/prog/FuncSafe/fs_psm.c **** }
+ 125:common/prog/FuncSafe/fs_psm.c **** 
+ 126:common/prog/FuncSafe/fs_psm.c **** void FSF_setProgramCounterMonitoringVal(enum FSF_PrgSeqMonitorPatterns SetPattern)
+ 127:common/prog/FuncSafe/fs_psm.c **** {
+  28              		.loc 1 127 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 128:common/prog/FuncSafe/fs_psm.c **** #ifdef VARIANT_BOOTMANAGER
+ 129:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonVal = (uint32_t)SetPattern;
+  33              		.loc 1 129 5 view .LVU1
+  34              		.loc 1 129 28 is_stmt 0 view .LVU2
+  35 0000 024B     		ldr	r3, .L2
+ 130:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+ 131:common/prog/FuncSafe/fs_psm.c **** #else
+ 132:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32AppPrgSeqMonVal = (uint32_t)SetPattern;
+ 133:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32AppPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+ 134:common/prog/FuncSafe/fs_psm.c **** #endif
+ 135:common/prog/FuncSafe/fs_psm.c **** }
+  36              		.loc 1 135 1 view .LVU3
+  37              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 4
+
+
+ 129:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+  38              		.loc 1 129 28 view .LVU4
+  39 0002 1860     		str	r0, [r3]
+ 130:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+  40              		.loc 1 130 5 is_stmt 1 view .LVU5
+ 130:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+  41              		.loc 1 130 55 is_stmt 0 view .LVU6
+  42 0004 C043     		mvns	r0, r0
+  43              	.LVL1:
+ 130:common/prog/FuncSafe/fs_psm.c ****     FSF_ui32BMPrgSeqMonValInv = ((uint32_t)SetPattern ^ UINT32_MAX);
+  44              		.loc 1 130 31 view .LVU7
+  45 0006 024B     		ldr	r3, .L2+4
+  46 0008 1860     		str	r0, [r3]
+  47              		.loc 1 135 1 view .LVU8
+  48 000a 7047     		bx	lr
+  49              	.L3:
+  50              		.align	2
+  51              	.L2:
+  52 000c 00000000 		.word	.LANCHOR0
+  53 0010 00000000 		.word	.LANCHOR1
+  54              		.cfi_endproc
+  55              	.LFE7:
+  57              		.section	.text.FSF_DoProgramCounterMonitoring,"ax",%progbits
+  58              		.align	1
+  59              		.global	FSF_DoProgramCounterMonitoring
+  60              		.syntax unified
+  61              		.code	16
+  62              		.thumb_func
+  64              	FSF_DoProgramCounterMonitoring:
+  65              	.LVL2:
+  66              	.LFB6:
+ 114:common/prog/FuncSafe/fs_psm.c ****     /* Verify 1st PrgSequCnt integrity */
+  67              		.loc 1 114 1 is_stmt 1 view -0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116:common/prog/FuncSafe/fs_psm.c ****     {
+  71              		.loc 1 116 5 view .LVU10
+  72              	.LBB8:
+  73              	.LBI8:
+  89:common/prog/FuncSafe/fs_psm.c **** {
+  74              		.loc 1 89 13 view .LVU11
+  75              	.LBB9:
+  92:common/prog/FuncSafe/fs_psm.c **** #else
+  76              		.loc 1 92 3 view .LVU12
+  92:common/prog/FuncSafe/fs_psm.c **** #else
+  77              		.loc 1 92 36 is_stmt 0 view .LVU13
+  78 0000 094B     		ldr	r3, .L8
+  79 0002 0A4A     		ldr	r2, .L8+4
+  80 0004 1B68     		ldr	r3, [r3]
+  81 0006 1268     		ldr	r2, [r2]
+  82              	.LBE9:
+  83              	.LBE8:
+ 114:common/prog/FuncSafe/fs_psm.c ****     /* Verify 1st PrgSequCnt integrity */
+  84              		.loc 1 114 1 view .LVU14
+  85 0008 10B5     		push	{r4, lr}
+  86              	.LCFI0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 5
+
+
+  87              		.cfi_def_cfa_offset 8
+  88              		.cfi_offset 4, -8
+  89              		.cfi_offset 14, -4
+  90              	.LBB11:
+  91              	.LBB10:
+  92:common/prog/FuncSafe/fs_psm.c **** #else
+  92              		.loc 1 92 36 view .LVU15
+  93 000a 5A40     		eors	r2, r3
+  94              	.LBE10:
+  95              	.LBE11:
+ 114:common/prog/FuncSafe/fs_psm.c ****     /* Verify 1st PrgSequCnt integrity */
+  96              		.loc 1 114 1 view .LVU16
+  97 000c 0400     		movs	r4, r0
+  98 000e 0800     		movs	r0, r1
+  99              	.LVL3:
+ 116:common/prog/FuncSafe/fs_psm.c ****     {
+ 100              		.loc 1 116 8 view .LVU17
+ 101 0010 0132     		adds	r2, r2, #1
+ 102 0012 05D1     		bne	.L5
+ 103              	.LBB12:
+ 104              	.LBI12:
+  98:common/prog/FuncSafe/fs_psm.c **** {
+ 105              		.loc 1 98 39 is_stmt 1 view .LVU18
+ 106              	.LBB13:
+ 104:common/prog/FuncSafe/fs_psm.c **** #else
+ 107              		.loc 1 104 3 view .LVU19
+ 108              	.LBE13:
+ 109              	.LBE12:
+ 116:common/prog/FuncSafe/fs_psm.c ****     {
+ 110              		.loc 1 116 57 is_stmt 0 view .LVU20
+ 111 0014 9BB2     		uxth	r3, r3
+ 112 0016 A342     		cmp	r3, r4
+ 113 0018 02D1     		bne	.L5
+ 118:common/prog/FuncSafe/fs_psm.c ****     }
+ 114              		.loc 1 118 9 is_stmt 1 view .LVU21
+ 115 001a FFF7FEFF 		bl	FSF_setProgramCounterMonitoringVal
+ 116              	.LVL4:
+ 117              	.L4:
+ 124:common/prog/FuncSafe/fs_psm.c **** 
+ 118              		.loc 1 124 1 is_stmt 0 view .LVU22
+ 119              		@ sp needed
+ 120 001e 10BD     		pop	{r4, pc}
+ 121              	.LVL5:
+ 122              	.L5:
+ 122:common/prog/FuncSafe/fs_psm.c ****     }
+ 123              		.loc 1 122 9 is_stmt 1 view .LVU23
+ 124 0020 FFF7FEFF 		bl	FSF_vReportFatal
+ 125              	.LVL6:
+ 124:common/prog/FuncSafe/fs_psm.c **** 
+ 126              		.loc 1 124 1 is_stmt 0 view .LVU24
+ 127 0024 FBE7     		b	.L4
+ 128              	.L9:
+ 129 0026 C046     		.align	2
+ 130              	.L8:
+ 131 0028 00000000 		.word	.LANCHOR0
+ 132 002c 00000000 		.word	.LANCHOR1
+ 133              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc2znheK.s 			page 6
+
+
+ 134              	.LFE6:
+ 136              		.section	.bss.FSF_ui32BMPrgSeqMonVal,"aw",%nobits
+ 137              		.align	2
+ 138              		.set	.LANCHOR0,. + 0
+ 141              	FSF_ui32BMPrgSeqMonVal:
+ 142 0000 00000000 		.space	4
+ 143              		.section	.bss.FSF_ui32BMPrgSeqMonValInv,"aw",%nobits
+ 144              		.align	2
+ 145              		.set	.LANCHOR1,. + 0
+ 148              	FSF_ui32BMPrgSeqMonValInv:
+ 149 0000 00000000 		.space	4
+ 150              		.text
+ 151              	.Letext0:
+ 152              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 153              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 154              		.file 4 "common/prog/FuncSafe/fs_psm.h"
+ 155              		.file 5 "common/prog/FuncSafe/fSafe.h"

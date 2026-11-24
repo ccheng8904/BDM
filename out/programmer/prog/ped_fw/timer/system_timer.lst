@@ -1,0 +1,323 @@
+
+out/programmer/prog/ped_fw/timer/system_timer.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.STIM_ProcessTimers.part.0:
+
+00000000 <STIM_ProcessTimers.part.0>:
+
+/******************************************************************************/
+/* PRIVATE FUNCTION DEFINITIONS                                               */
+/******************************************************************************/
+
+static void STIM_ProcessTimers(struct STIM_Timer *timerPtr, uint16_t timeDiff_ms)
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+            if(STIM_IsTargetTimeSet(timerPtr))
+            {
+                // Check if timer is triggered
+                if(STIM_IsTimerTriggered(timerPtr))
+                {
+                    timerStatus |= STIM_STATUS_TRIGGERED;
+   6:	2601      	movs	r6, #1
+                        timerPtr->currentTime_ms -= timerPtr->targetTime_ms;
+                        
+                        // Check again for for missed trigger
+                        if(STIM_IsTimerTriggered(timerPtr))
+                        {
+                            timerStatus |= STIM_STATUS_MISSED;
+   8:	2703      	movs	r7, #3
+    while(timerPtr != NULL)
+   a:	2c00      	cmp	r4, #0
+   c:	d100      	bne.n	10 <STIM_ProcessTimers.part.0+0x10>
+        }
+        
+        // set pointer to next timer instance
+        timerPtr = timerPtr->nextTimer;
+    }
+}
+   e:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        if(timerPtr->enabled == true)
+  10:	7a63      	ldrb	r3, [r4, #9]
+  12:	2b00      	cmp	r3, #0
+  14:	d028      	beq.n	68 <STIM_ProcessTimers.part.0+0x68>
+            timerTime = timerPtr->currentTime_ms + timeDiff_ms;
+  16:	6822      	ldr	r2, [r4, #0]
+            if(timerPtr->currentTime_ms > timerTime)
+  18:	6821      	ldr	r1, [r4, #0]
+            timerTime = timerPtr->currentTime_ms + timeDiff_ms;
+  1a:	18aa      	adds	r2, r5, r2
+            if(timerPtr->currentTime_ms > timerTime)
+  1c:	2300      	movs	r3, #0
+  1e:	428a      	cmp	r2, r1
+  20:	d201      	bcs.n	26 <STIM_ProcessTimers.part.0+0x26>
+ *
+ *  \param    timer: pointer to timer instance
+ */
+static inline void STIM_DisableTimer(struct STIM_Timer *timer)
+{
+    timer->enabled = false;
+  22:	7263      	strb	r3, [r4, #9]
+                timerStatus |= STIM_STATUS_OVERFLOW;
+  24:	3304      	adds	r3, #4
+            timerPtr->currentTime_ms = timerTime;
+  26:	6022      	str	r2, [r4, #0]
+    return timer->targetTime_ms != 0U;
+  28:	6862      	ldr	r2, [r4, #4]
+            if(STIM_IsTargetTimeSet(timerPtr))
+  2a:	2a00      	cmp	r2, #0
+  2c:	d01a      	beq.n	64 <STIM_ProcessTimers.part.0+0x64>
+    return timer->currentTime_ms >= timer->targetTime_ms;
+  2e:	6821      	ldr	r1, [r4, #0]
+                if(STIM_IsTimerTriggered(timerPtr))
+  30:	428a      	cmp	r2, r1
+  32:	d817      	bhi.n	64 <STIM_ProcessTimers.part.0+0x64>
+                    timerStatus |= STIM_STATUS_TRIGGERED;
+  34:	0031      	movs	r1, r6
+                    if(timerPtr->mode == STIM_MODE_SINGLE)
+  36:	7aa0      	ldrb	r0, [r4, #10]
+                    timerStatus |= STIM_STATUS_TRIGGERED;
+  38:	4319      	orrs	r1, r3
+                    if(timerPtr->mode == STIM_MODE_SINGLE)
+  3a:	2800      	cmp	r0, #0
+  3c:	d109      	bne.n	52 <STIM_ProcessTimers.part.0+0x52>
+  3e:	7260      	strb	r0, [r4, #9]
+                timerPtr->status |= timerStatus;
+  40:	7a23      	ldrb	r3, [r4, #8]
+   (void) STDCB_ExecuteCallbacks(timer->cbList, (uint32_t)status, 0);
+  42:	2200      	movs	r2, #0
+                timerPtr->status |= timerStatus;
+  44:	430b      	orrs	r3, r1
+  46:	b2db      	uxtb	r3, r3
+   (void) STDCB_ExecuteCallbacks(timer->cbList, (uint32_t)status, 0);
+  48:	68e0      	ldr	r0, [r4, #12]
+                timerPtr->status |= timerStatus;
+  4a:	7223      	strb	r3, [r4, #8]
+   (void) STDCB_ExecuteCallbacks(timer->cbList, (uint32_t)status, 0);
+  4c:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+}
+  50:	e00a      	b.n	68 <STIM_ProcessTimers.part.0+0x68>
+                        timerPtr->currentTime_ms -= timerPtr->targetTime_ms;
+  52:	6820      	ldr	r0, [r4, #0]
+                            timerStatus |= STIM_STATUS_MISSED;
+  54:	433b      	orrs	r3, r7
+                        timerPtr->currentTime_ms -= timerPtr->targetTime_ms;
+  56:	1a80      	subs	r0, r0, r2
+  58:	6020      	str	r0, [r4, #0]
+    return timer->currentTime_ms >= timer->targetTime_ms;
+  5a:	6820      	ldr	r0, [r4, #0]
+                        if(STIM_IsTimerTriggered(timerPtr))
+  5c:	4282      	cmp	r2, r0
+  5e:	d8ef      	bhi.n	40 <STIM_ProcessTimers.part.0+0x40>
+  60:	0019      	movs	r1, r3
+  62:	e7ed      	b.n	40 <STIM_ProcessTimers.part.0+0x40>
+            if(timerStatus != 0U)
+  64:	2b00      	cmp	r3, #0
+  66:	d1fb      	bne.n	60 <STIM_ProcessTimers.part.0+0x60>
+        timerPtr = timerPtr->nextTimer;
+  68:	6924      	ldr	r4, [r4, #16]
+  6a:	e7ce      	b.n	a <STIM_ProcessTimers.part.0+0xa>
+
+Disassembly of section .text.STIM_InitModule:
+
+00000000 <STIM_InitModule>:
+{
+   0:	b510      	push	{r4, lr}
+    return SysTick_Configure(coreClock_Hz, SYSTEM_TIMER_PERIOD);
+   2:	2101      	movs	r1, #1
+   4:	4801      	ldr	r0, [pc, #4]	; (c <STIM_InitModule+0xc>)
+   6:	f7ff fffe 	bl	0 <SysTick_Configure>
+}
+   a:	bd10      	pop	{r4, pc}
+   c:	02dc6c00 	.word	0x02dc6c00
+
+Disassembly of section .text.HAL_GetTick:
+
+00000000 <HAL_GetTick>:
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <HAL_GetTick+0x8>)
+   2:	6818      	ldr	r0, [r3, #0]
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.STIM_GetTick:
+
+00000000 <STIM_GetTick>:
+    return STIM_tick;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <STIM_GetTick+0x8>)
+   2:	6818      	ldr	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.STIM_InterruptHandler:
+
+00000000 <STIM_InterruptHandler>:
+{
+   0:	b510      	push	{r4, lr}
+    uint16_t elapsedTime_us = TIM_uiGetCircleMicroSeconds() - *timeStamp;
+   2:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   6:	4a0b      	ldr	r2, [pc, #44]	; (34 <STIM_InterruptHandler+0x34>)
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+   8:	490b      	ldr	r1, [pc, #44]	; (38 <STIM_InterruptHandler+0x38>)
+    uint16_t elapsedTime_us = TIM_uiGetCircleMicroSeconds() - *timeStamp;
+   a:	8813      	ldrh	r3, [r2, #0]
+   c:	1ac0      	subs	r0, r0, r3
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+   e:	b280      	uxth	r0, r0
+  10:	4341      	muls	r1, r0
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  12:	20fa      	movs	r0, #250	; 0xfa
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+  14:	0e4c      	lsrs	r4, r1, #25
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  16:	0080      	lsls	r0, r0, #2
+  18:	4360      	muls	r0, r4
+  1a:	181b      	adds	r3, r3, r0
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+  1c:	1e21      	subs	r1, r4, #0
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  1e:	8013      	strh	r3, [r2, #0]
+    if(elapsedTime_ms > 0U)
+  20:	d007      	beq.n	32 <STIM_InterruptHandler+0x32>
+        STIM_tick += elapsedTime_ms;
+  22:	4a06      	ldr	r2, [pc, #24]	; (3c <STIM_InterruptHandler+0x3c>)
+  24:	6813      	ldr	r3, [r2, #0]
+  26:	191b      	adds	r3, r3, r4
+  28:	6013      	str	r3, [r2, #0]
+        STIM_ProcessTimers(STIM_interruptTimerList, elapsedTime_ms);
+  2a:	4b05      	ldr	r3, [pc, #20]	; (40 <STIM_InterruptHandler+0x40>)
+  2c:	6818      	ldr	r0, [r3, #0]
+  2e:	f7ff fffe 	bl	0 <STIM_InterruptHandler>
+}
+  32:	bd10      	pop	{r4, pc}
+  34:	00000000 	.word	0x00000000
+  38:	00008313 	.word	0x00008313
+	...
+
+Disassembly of section .text.STIM_SchedulerHandleTask:
+
+00000000 <STIM_SchedulerHandleTask>:
+{
+   0:	b510      	push	{r4, lr}
+    uint16_t elapsedTime_us = TIM_uiGetCircleMicroSeconds() - *timeStamp;
+   2:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   6:	4a09      	ldr	r2, [pc, #36]	; (2c <STIM_SchedulerHandleTask+0x2c>)
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+   8:	4909      	ldr	r1, [pc, #36]	; (30 <STIM_SchedulerHandleTask+0x30>)
+    uint16_t elapsedTime_us = TIM_uiGetCircleMicroSeconds() - *timeStamp;
+   a:	8813      	ldrh	r3, [r2, #0]
+   c:	1ac0      	subs	r0, r0, r3
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+   e:	b280      	uxth	r0, r0
+  10:	4341      	muls	r1, r0
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  12:	20fa      	movs	r0, #250	; 0xfa
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+  14:	0e4c      	lsrs	r4, r1, #25
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  16:	0080      	lsls	r0, r0, #2
+  18:	4360      	muls	r0, r4
+  1a:	181b      	adds	r3, r3, r0
+    uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+  1c:	1e21      	subs	r1, r4, #0
+    *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+  1e:	8013      	strh	r3, [r2, #0]
+    if(elapsedTime_ms > 0U)
+  20:	d003      	beq.n	2a <STIM_SchedulerHandleTask+0x2a>
+        STIM_ProcessTimers(STIM_schedulerTimerList, elapsedTime_ms);
+  22:	4b04      	ldr	r3, [pc, #16]	; (34 <STIM_SchedulerHandleTask+0x34>)
+  24:	6818      	ldr	r0, [r3, #0]
+  26:	f7ff fffe 	bl	0 <STIM_SchedulerHandleTask>
+}
+  2a:	bd10      	pop	{r4, pc}
+  2c:	00000000 	.word	0x00000000
+  30:	00008313 	.word	0x00008313
+  34:	00000000 	.word	0x00000000
+
+Disassembly of section .text.STIM_InitTimer:
+
+00000000 <STIM_InitTimer>:
+{
+   0:	b530      	push	{r4, r5, lr}
+   2:	0004      	movs	r4, r0
+   4:	a803      	add	r0, sp, #12
+   6:	7805      	ldrb	r5, [r0, #0]
+    if(timer != NULL)
+   8:	2c00      	cmp	r4, #0
+   a:	d01b      	beq.n	44 <STIM_InitTimer+0x44>
+static int32_t STIM_RegisterTimer(struct STIM_Timer *timer, enum STIM_Processing processingType)
+{
+    struct STIM_Timer **timerList;
+    struct STIM_Timer *timerPtr;
+    
+    timerList = (processingType == STIM_PROCESSING_INTERRUPT) ? &STIM_interruptTimerList : &STIM_schedulerTimerList;
+   c:	2900      	cmp	r1, #0
+   e:	d10f      	bne.n	30 <STIM_InitTimer+0x30>
+  10:	490e      	ldr	r1, [pc, #56]	; (4c <STIM_InitTimer+0x4c>)
+  12:	6808      	ldr	r0, [r1, #0]
+    
+    if(*timerList == NULL)
+  14:	2800      	cmp	r0, #0
+  16:	d10e      	bne.n	36 <STIM_InitTimer+0x36>
+    {
+        *timerList = timer;
+  18:	600c      	str	r4, [r1, #0]
+            }
+        }
+        
+        // Add timer instance to the end of list
+        timerPtr->nextTimer = timer;
+        timer->nextTimer = NULL;
+  1a:	2000      	movs	r0, #0
+ *  \param    timer: pointer to timer instance
+ *  \param    mode:  enumeration type of timer mode - single or periodic
+ */
+static inline void STIM_SetTimerMode(struct STIM_Timer *timer, enum STIM_Mode mode)
+{
+    timer->mode = mode;
+  1c:	72a3      	strb	r3, [r4, #10]
+            timer->cbList = callback;
+  1e:	9b04      	ldr	r3, [sp, #16]
+        timer->nextTimer = NULL;
+  20:	6120      	str	r0, [r4, #16]
+ *  \param    timer:    pointer to timer instance
+ *  \param    time_ms:  desired time to be set
+ */
+static inline void STIM_SetTargetTime(struct STIM_Timer *timer, STIM_Time_t time_ms)
+{
+    timer->targetTime_ms = time_ms;
+  22:	6062      	str	r2, [r4, #4]
+            timer->cbList = callback;
+  24:	60e3      	str	r3, [r4, #12]
+            if(immediateStart)
+  26:	4285      	cmp	r5, r0
+  28:	d001      	beq.n	2e <STIM_InitTimer+0x2e>
+    timer->enabled = true;
+  2a:	2301      	movs	r3, #1
+  2c:	7263      	strb	r3, [r4, #9]
+}
+  2e:	bd30      	pop	{r4, r5, pc}
+    timerList = (processingType == STIM_PROCESSING_INTERRUPT) ? &STIM_interruptTimerList : &STIM_schedulerTimerList;
+  30:	4907      	ldr	r1, [pc, #28]	; (50 <STIM_InitTimer+0x50>)
+  32:	e7ee      	b.n	12 <STIM_InitTimer+0x12>
+  34:	0008      	movs	r0, r1
+            if(timerPtr == timer)
+  36:	4284      	cmp	r4, r0
+  38:	d004      	beq.n	44 <STIM_InitTimer+0x44>
+            if(timerPtr->nextTimer == NULL)
+  3a:	6901      	ldr	r1, [r0, #16]
+  3c:	2900      	cmp	r1, #0
+  3e:	d1f9      	bne.n	34 <STIM_InitTimer+0x34>
+        timerPtr->nextTimer = timer;
+  40:	6104      	str	r4, [r0, #16]
+        if(retVal >= 0)
+  42:	e7ea      	b.n	1a <STIM_InitTimer+0x1a>
+    int32_t retVal = -1;
+  44:	2001      	movs	r0, #1
+  46:	4240      	negs	r0, r0
+  48:	e7f1      	b.n	2e <STIM_InitTimer+0x2e>
+  4a:	46c0      	nop			; (mov r8, r8)
+	...

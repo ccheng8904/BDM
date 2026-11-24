@@ -1,0 +1,1056 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mdio_mc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MDIO_enablePort,"ax",%progbits
+  18              		.align	1
+  19              		.global	MDIO_enablePort
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MDIO_enablePort:
+  25              	.LVL0:
+  26              	.LFB67:
+  27              		.file 1 "common/prog/MSP/mcal/sh30f/mdio_mc.c"
+   1:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *
+   5:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *
+   9:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  COMP_ABBREV      MDIO
+  12:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  PROCESSOR        SH30F9X71
+  13:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  ******************************************************************************/
+  14:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  
+  15:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  16:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  17:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* DOCUMENTATION                                                              */
+  18:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  19:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /** \file     mdio_mc.c
+  20:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *
+  21:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  \ingroup  MCAL
+  22:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *
+  23:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *  \brief    Implementation of MDIO.
+  24:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  *
+  25:common/prog/MSP/mcal/sh30f/mdio_mc.c ****  */
+  26:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  27:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  28:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* INCLUDES                                                                   */
+  30:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  31:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 2
+
+
+  32:common/prog/MSP/mcal/sh30f/mdio_mc.c **** #include "mdio.h"
+  33:common/prog/MSP/mcal/sh30f/mdio_mc.c **** #include "mdio_mc.h"
+  34:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  35:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  36:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* PRIVATE DEFINITIONS                                                        */
+  37:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  38:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  39:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  40:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  41:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  42:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  43:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  44:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  45:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  46:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  47:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  48:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  49:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  50:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  51:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* PUBLIC DATA DEFINITIONS                                                    */
+  52:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  53:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  54:common/prog/MSP/mcal/sh30f/mdio_mc.c **** const struct MDIO_Port MDIOA = {GPIOA, MDIO_PORTA_INDEX};
+  55:common/prog/MSP/mcal/sh30f/mdio_mc.c **** const struct MDIO_Port MDIOB = {GPIOB, MDIO_PORTB_INDEX};
+  56:common/prog/MSP/mcal/sh30f/mdio_mc.c **** const struct MDIO_Port MDIOC = {GPIOC, MDIO_PORTC_INDEX};
+  57:common/prog/MSP/mcal/sh30f/mdio_mc.c **** const struct MDIO_Port MDIOD = {GPIOD, MDIO_PORTD_INDEX};
+  58:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  59:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  60:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  61:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  62:common/prog/MSP/mcal/sh30f/mdio_mc.c **** /******************************************************************************/
+  63:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  64:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_enablePort(const struct MDIO_Port *port)
+  65:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+  28              		.loc 1 65 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  66:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     (void)*port;
+  33              		.loc 1 66 5 view .LVU1
+  67:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+  34              		.loc 1 67 1 is_stmt 0 view .LVU2
+  35              		@ sp needed
+  36 0000 7047     		bx	lr
+  37              		.cfi_endproc
+  38              	.LFE67:
+  40              		.section	.text.MDIO_getPort,"ax",%progbits
+  41              		.align	1
+  42              		.global	MDIO_getPort
+  43              		.syntax unified
+  44              		.code	16
+  45              		.thumb_func
+  47              	MDIO_getPort:
+  48              	.LVL1:
+  49              	.LFB68:
+  68:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 3
+
+
+  69:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  70:common/prog/MSP/mcal/sh30f/mdio_mc.c **** const struct MDIO_Port *MDIO_getPort(const struct MDIO_Channel *channel)
+  71:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+  50              		.loc 1 71 1 is_stmt 1 view -0
+  51              		.cfi_startproc
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+  54              		@ link register save eliminated.
+  72:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return channel->port;
+  55              		.loc 1 72 5 view .LVU4
+  56              		.loc 1 72 19 is_stmt 0 view .LVU5
+  57 0000 0068     		ldr	r0, [r0]
+  58              	.LVL2:
+  73:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+  59              		.loc 1 73 1 view .LVU6
+  60              		@ sp needed
+  61 0002 7047     		bx	lr
+  62              		.cfi_endproc
+  63              	.LFE68:
+  65              		.section	.text.MDIO_getPin,"ax",%progbits
+  66              		.align	1
+  67              		.global	MDIO_getPin
+  68              		.syntax unified
+  69              		.code	16
+  70              		.thumb_func
+  72              	MDIO_getPin:
+  73              	.LVL3:
+  74              	.LFB69:
+  74:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  75:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  76:common/prog/MSP/mcal/sh30f/mdio_mc.c **** enum MDIO_Pin MDIO_getPin(const struct MDIO_Channel *channel)
+  77:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+  75              		.loc 1 77 1 is_stmt 1 view -0
+  76              		.cfi_startproc
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  78:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return channel->pin;
+  80              		.loc 1 78 5 view .LVU8
+  81              		.loc 1 78 19 is_stmt 0 view .LVU9
+  82 0000 0079     		ldrb	r0, [r0, #4]
+  83              	.LVL4:
+  79:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+  84              		.loc 1 79 1 view .LVU10
+  85              		@ sp needed
+  86 0002 7047     		bx	lr
+  87              		.cfi_endproc
+  88              	.LFE69:
+  90              		.section	.text.MDIO_configureOutputType,"ax",%progbits
+  91              		.align	1
+  92              		.global	MDIO_configureOutputType
+  93              		.syntax unified
+  94              		.code	16
+  95              		.thumb_func
+  97              	MDIO_configureOutputType:
+  98              	.LVL5:
+  99              	.LFB70:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 4
+
+
+  80:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  81:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  82:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_configureOutputType(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_OutputType
+  83:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 100              		.loc 1 83 1 is_stmt 1 view -0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+  84:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO output type */
+  85:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     GPIOOType_TypeDef outPutT;
+ 104              		.loc 1 85 5 view .LVU12
+  86:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if (outputType == MDIO_OUTPUT_TYPE_PUSH_PULL )
+ 105              		.loc 1 86 5 view .LVU13
+  83:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO output type */
+ 106              		.loc 1 83 1 is_stmt 0 view .LVU14
+ 107 0000 70B5     		push	{r4, r5, r6, lr}
+ 108              	.LCFI0:
+ 109              		.cfi_def_cfa_offset 16
+ 110              		.cfi_offset 4, -16
+ 111              		.cfi_offset 5, -12
+ 112              		.cfi_offset 6, -8
+ 113              		.cfi_offset 14, -4
+ 114              		.loc 1 86 8 view .LVU15
+ 115 0002 002A     		cmp	r2, #0
+ 116 0004 01D0     		beq	.L5
+  87:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+  88:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         outPutT = GPIO_OType_PP;
+  89:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+  90:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else if (outputType == MDIO_OUTPUT_TYPE_OPEN_DRAIN)
+ 117              		.loc 1 90 10 is_stmt 1 view .LVU16
+ 118              		.loc 1 90 13 is_stmt 0 view .LVU17
+ 119 0006 012A     		cmp	r2, #1
+ 120 0008 12D1     		bne	.L4
+ 121              	.L5:
+ 122              	.LVL6:
+  91:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+  92:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         outPutT = GPIO_OType_OD;
+  93:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+  94:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else
+  95:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+  96:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         return;
+  97:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+  98:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+  99:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* Output driver configuration, Set to default configuration, weak driver */
+ 100:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+ 123              		.loc 1 100 5 is_stmt 1 view .LVU18
+ 124              		.loc 1 100 9 is_stmt 0 view .LVU19
+ 125 000a 0368     		ldr	r3, [r0]
+ 126              		.loc 1 100 69 view .LVU20
+ 127 000c 0120     		movs	r0, #1
+ 128              	.LVL7:
+ 129              		.loc 1 100 69 view .LVU21
+ 130 000e 0600     		movs	r6, r0
+ 131              		.loc 1 100 87 view .LVU22
+ 132 0010 4D00     		lsls	r5, r1, #1
+ 133              		.loc 1 100 69 view .LVU23
+ 134 0012 AE40     		lsls	r6, r6, r5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 5
+
+
+ 101:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+ 102:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 103:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* Output type configuration */
+ 104:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->OTYPER.V32 &= ~((uint32_t)GPIO_OTYPER_OT_Msk << (uint8_t)pin);
+ 135              		.loc 1 104 63 view .LVU24
+ 136 0014 8840     		lsls	r0, r0, r1
+ 105:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+ 137              		.loc 1 105 63 view .LVU25
+ 138 0016 8A40     		lsls	r2, r2, r1
+ 139              	.LVL8:
+ 100:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+ 140              		.loc 1 100 28 view .LVU26
+ 141 0018 DC69     		ldr	r4, [r3, #28]
+ 142              		.loc 1 105 32 view .LVU27
+ 143 001a 92B2     		uxth	r2, r2
+ 100:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+ 144              		.loc 1 100 28 view .LVU28
+ 145 001c B443     		bics	r4, r6
+ 146 001e DC61     		str	r4, [r3, #28]
+ 101:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+ 147              		.loc 1 101 5 is_stmt 1 view .LVU29
+ 101:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+ 148              		.loc 1 101 28 is_stmt 0 view .LVU30
+ 149 0020 DC69     		ldr	r4, [r3, #28]
+ 150 0022 DC61     		str	r4, [r3, #28]
+ 104:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+ 151              		.loc 1 104 5 is_stmt 1 view .LVU31
+ 104:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+ 152              		.loc 1 104 29 is_stmt 0 view .LVU32
+ 153 0024 9C69     		ldr	r4, [r3, #24]
+ 154 0026 8443     		bics	r4, r0
+ 155 0028 9C61     		str	r4, [r3, #24]
+ 156              		.loc 1 105 5 is_stmt 1 view .LVU33
+ 157              		.loc 1 105 29 is_stmt 0 view .LVU34
+ 158 002a 9869     		ldr	r0, [r3, #24]
+ 159 002c 0243     		orrs	r2, r0
+ 160 002e 9A61     		str	r2, [r3, #24]
+ 161              	.LVL9:
+ 162              	.L4:
+ 106:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 163              		.loc 1 106 1 view .LVU35
+ 164              		@ sp needed
+ 165 0030 70BD     		pop	{r4, r5, r6, pc}
+ 166              		.cfi_endproc
+ 167              	.LFE70:
+ 169              		.section	.text.MDIO_configurePullType,"ax",%progbits
+ 170              		.align	1
+ 171              		.global	MDIO_configurePullType
+ 172              		.syntax unified
+ 173              		.code	16
+ 174              		.thumb_func
+ 176              	MDIO_configurePullType:
+ 177              	.LVL10:
+ 178              	.LFB71:
+ 107:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 108:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 109:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_configurePullType(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_PullType pul
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 6
+
+
+ 110:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 179              		.loc 1 110 1 is_stmt 1 view -0
+ 180              		.cfi_startproc
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 111:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO configuration pullup pulldown */
+ 112:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     GPIOPuPd_TypeDef pupd;
+ 183              		.loc 1 112 5 view .LVU37
+ 113:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if (pullType == MDIO_PULL_UP)
+ 184              		.loc 1 113 5 view .LVU38
+ 114:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 115:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         pupd = GPIO_PuPd_UP;
+ 116:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 117:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else
+ 118:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 119:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         pupd = GPIO_PuPd_NOPULL;
+ 120:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 121:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 122:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* Pull-up Pull-down configuration   GPIO_CFG_PUPDR_PHDR0_Msk */
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 &= ~((uint32_t)GPIO_PUPDR_PHDR0_Msk << ((uint16_t)pin * 2U));
+ 185              		.loc 1 123 5 view .LVU39
+ 110:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO configuration pullup pulldown */
+ 186              		.loc 1 110 1 is_stmt 0 view .LVU40
+ 187 0000 10B5     		push	{r4, lr}
+ 188              	.LCFI1:
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 4, -8
+ 191              		.cfi_offset 14, -4
+ 192              		.loc 1 123 64 view .LVU41
+ 193 0002 0124     		movs	r4, #1
+ 124:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 125:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 194              		.loc 1 125 1 view .LVU42
+ 195              		@ sp needed
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 196              		.loc 1 123 82 view .LVU43
+ 197 0004 4900     		lsls	r1, r1, #1
+ 198              	.LVL11:
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 199              		.loc 1 123 64 view .LVU44
+ 200 0006 8C40     		lsls	r4, r4, r1
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 201              		.loc 1 123 9 view .LVU45
+ 202 0008 0368     		ldr	r3, [r0]
+ 113:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 203              		.loc 1 113 8 view .LVU46
+ 204 000a 013A     		subs	r2, r2, #1
+ 205              	.LVL12:
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 206              		.loc 1 123 28 view .LVU47
+ 207 000c 186A     		ldr	r0, [r3, #32]
+ 208              	.LVL13:
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 209              		.loc 1 123 28 view .LVU48
+ 210 000e A043     		bics	r0, r4
+ 113:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 211              		.loc 1 113 8 view .LVU49
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 7
+
+
+ 212 0010 5442     		rsbs	r4, r2, #0
+ 213 0012 6241     		adcs	r2, r2, r4
+ 124:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 214              		.loc 1 124 49 view .LVU50
+ 215 0014 8A40     		lsls	r2, r2, r1
+ 123:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 216              		.loc 1 123 28 view .LVU51
+ 217 0016 1862     		str	r0, [r3, #32]
+ 124:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 218              		.loc 1 124 5 is_stmt 1 view .LVU52
+ 124:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+ 219              		.loc 1 124 28 is_stmt 0 view .LVU53
+ 220 0018 186A     		ldr	r0, [r3, #32]
+ 221 001a 0243     		orrs	r2, r0
+ 222 001c 1A62     		str	r2, [r3, #32]
+ 223              		.loc 1 125 1 view .LVU54
+ 224 001e 10BD     		pop	{r4, pc}
+ 225              		.cfi_endproc
+ 226              	.LFE71:
+ 228              		.section	.text.MDIO_configureMode,"ax",%progbits
+ 229              		.align	1
+ 230              		.global	MDIO_configureMode
+ 231              		.syntax unified
+ 232              		.code	16
+ 233              		.thumb_func
+ 235              	MDIO_configureMode:
+ 236              	.LVL14:
+ 237              	.LFB72:
+ 126:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 127:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 128:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_configureMode(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_Mode mode)
+ 129:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 238              		.loc 1 129 1 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     GPIOMode_TypeDef gpioMode;
+ 242              		.loc 1 130 5 view .LVU56
+ 131:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if (mode == MDIO_MODE_DIGITAL_INPUT)
+ 243              		.loc 1 131 5 view .LVU57
+ 129:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     GPIOMode_TypeDef gpioMode;
+ 244              		.loc 1 129 1 is_stmt 0 view .LVU58
+ 245 0000 10B5     		push	{r4, lr}
+ 246              	.LCFI2:
+ 247              		.cfi_def_cfa_offset 8
+ 248              		.cfi_offset 4, -8
+ 249              		.cfi_offset 14, -4
+ 250              		.loc 1 131 8 view .LVU59
+ 251 0002 002A     		cmp	r2, #0
+ 252 0004 01D0     		beq	.L12
+ 132:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 133:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         gpioMode = GPIO_Mode_IN;
+ 134:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 135:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else if (mode == MDIO_MODE_DIGITAL_OUTPUT)
+ 253              		.loc 1 135 10 is_stmt 1 view .LVU60
+ 254              		.loc 1 135 13 is_stmt 0 view .LVU61
+ 255 0006 012A     		cmp	r2, #1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 8
+
+
+ 256 0008 09D1     		bne	.L11
+ 257              	.L12:
+ 258              	.LVL15:
+ 136:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 137:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         gpioMode = GPIO_Mode_OUT;
+ 138:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 139:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else
+ 140:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 141:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         return;
+ 142:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 143:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     
+ 144:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->MODER.V32 &= ~((uint32_t)GPIO_MODER_MODER0_Msk << ((uint8_t)pin));
+ 259              		.loc 1 144 5 is_stmt 1 view .LVU62
+ 260              		.loc 1 144 65 is_stmt 0 view .LVU63
+ 261 000a 0124     		movs	r4, #1
+ 262 000c 8C40     		lsls	r4, r4, r1
+ 145:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+ 263              		.loc 1 145 51 view .LVU64
+ 264 000e 8A40     		lsls	r2, r2, r1
+ 265              	.LVL16:
+ 144:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+ 266              		.loc 1 144 9 view .LVU65
+ 267 0010 0368     		ldr	r3, [r0]
+ 144:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+ 268              		.loc 1 144 28 view .LVU66
+ 269 0012 1868     		ldr	r0, [r3]
+ 270              	.LVL17:
+ 144:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+ 271              		.loc 1 144 28 view .LVU67
+ 272 0014 A043     		bics	r0, r4
+ 273 0016 1860     		str	r0, [r3]
+ 274              		.loc 1 145 5 is_stmt 1 view .LVU68
+ 275              		.loc 1 145 28 is_stmt 0 view .LVU69
+ 276 0018 1868     		ldr	r0, [r3]
+ 277 001a 0243     		orrs	r2, r0
+ 278 001c 1A60     		str	r2, [r3]
+ 279              	.LVL18:
+ 280              	.L11:
+ 146:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 281              		.loc 1 146 1 view .LVU70
+ 282              		@ sp needed
+ 283 001e 10BD     		pop	{r4, pc}
+ 284              		.cfi_endproc
+ 285              	.LFE72:
+ 287              		.section	.text.MDIO_configureSpeed,"ax",%progbits
+ 288              		.align	1
+ 289              		.global	MDIO_configureSpeed
+ 290              		.syntax unified
+ 291              		.code	16
+ 292              		.thumb_func
+ 294              	MDIO_configureSpeed:
+ 295              	.LVL19:
+ 296              	.LFB73:
+ 147:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 148:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 149:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_configureSpeed(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_Speed speed)
+ 150:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 9
+
+
+ 297              		.loc 1 150 1 is_stmt 1 view -0
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 0
+ 300              		@ frame_needed = 0, uses_anonymous_args = 0
+ 151:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO configuration mode */
+ 152:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     uint32_t mode = (port->GPIOx->MODER.V32 & ((uint32_t)GPIO_MODER_MODER0_Msk << ((uint8_t)pin))) 
+ 301              		.loc 1 152 5 view .LVU72
+ 150:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* get GPIO configuration mode */
+ 302              		.loc 1 150 1 is_stmt 0 view .LVU73
+ 303 0000 10B5     		push	{r4, lr}
+ 304              	.LCFI3:
+ 305              		.cfi_def_cfa_offset 8
+ 306              		.cfi_offset 4, -8
+ 307              		.cfi_offset 14, -4
+ 308              		.loc 1 152 80 view .LVU74
+ 309 0002 0124     		movs	r4, #1
+ 310 0004 8C40     		lsls	r4, r4, r1
+ 311              		.loc 1 152 26 view .LVU75
+ 312 0006 0068     		ldr	r0, [r0]
+ 313              	.LVL20:
+ 314              		.loc 1 152 40 view .LVU76
+ 315 0008 0368     		ldr	r3, [r0]
+ 316              	.LVL21:
+ 153:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 154:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* set GPIO output type */
+ 155:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if (mode == (uint32_t)GPIO_Mode_OUT)
+ 317              		.loc 1 155 5 is_stmt 1 view .LVU77
+ 152:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 318              		.loc 1 152 45 is_stmt 0 view .LVU78
+ 319 000a 2340     		ands	r3, r4
+ 320              	.LVL22:
+ 152:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 321              		.loc 1 152 14 view .LVU79
+ 322 000c CB40     		lsrs	r3, r3, r1
+ 323              	.LVL23:
+ 324              		.loc 1 155 8 view .LVU80
+ 325 000e 012B     		cmp	r3, #1
+ 326 0010 08D1     		bne	.L17
+ 156:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 157:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         /* Output driver configuration, Set to default configuration, weak driver */
+ 158:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+ 327              		.loc 1 158 9 is_stmt 1 view .LVU81
+ 328              		.loc 1 158 91 is_stmt 0 view .LVU82
+ 329 0012 4900     		lsls	r1, r1, #1
+ 330              	.LVL24:
+ 331              		.loc 1 158 73 view .LVU83
+ 332 0014 8B40     		lsls	r3, r3, r1
+ 333              	.LVL25:
+ 159:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->ODRVR.V32 |= ((uint32_t)speed << ((uint16_t)pin * 2U));
+ 334              		.loc 1 159 52 view .LVU84
+ 335 0016 8A40     		lsls	r2, r2, r1
+ 336              	.LVL26:
+ 158:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->ODRVR.V32 |= ((uint32_t)speed << ((uint16_t)pin * 2U));
+ 337              		.loc 1 158 32 view .LVU85
+ 338 0018 C469     		ldr	r4, [r0, #28]
+ 339 001a 9C43     		bics	r4, r3
+ 340 001c C461     		str	r4, [r0, #28]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 10
+
+
+ 341              		.loc 1 159 9 is_stmt 1 view .LVU86
+ 342              		.loc 1 159 32 is_stmt 0 view .LVU87
+ 343 001e C369     		ldr	r3, [r0, #28]
+ 344 0020 1A43     		orrs	r2, r3
+ 345 0022 C261     		str	r2, [r0, #28]
+ 346              	.L17:
+ 160:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 161:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 347              		.loc 1 161 1 view .LVU88
+ 348              		@ sp needed
+ 349 0024 10BD     		pop	{r4, pc}
+ 350              		.cfi_endproc
+ 351              	.LFE73:
+ 353              		.section	.text.MDIO_configureAlternateFunction,"ax",%progbits
+ 354              		.align	1
+ 355              		.global	MDIO_configureAlternateFunction
+ 356              		.syntax unified
+ 357              		.code	16
+ 358              		.thumb_func
+ 360              	MDIO_configureAlternateFunction:
+ 361              	.LVL27:
+ 362              	.LFB74:
+ 162:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 163:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 164:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_configureAlternateFunction(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_Alt
+ 165:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 363              		.loc 1 165 1 is_stmt 1 view -0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if ((uint16_t)pin > 0x07U)
+ 367              		.loc 1 166 5 view .LVU90
+ 165:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     if ((uint16_t)pin > 0x07U)
+ 368              		.loc 1 165 1 is_stmt 0 view .LVU91
+ 369 0000 10B5     		push	{r4, lr}
+ 370              	.LCFI4:
+ 371              		.cfi_def_cfa_offset 8
+ 372              		.cfi_offset 4, -8
+ 373              		.cfi_offset 14, -4
+ 374 0002 0368     		ldr	r3, [r0]
+ 375              		.loc 1 166 8 view .LVU92
+ 376 0004 0729     		cmp	r1, #7
+ 377 0006 0CD9     		bls	.L20
+ 378              	.LVL28:
+ 379              	.LBB8:
+ 380              	.LBI8:
+ 164:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 381              		.loc 1 164 6 is_stmt 1 view .LVU93
+ 382              	.LBB9:
+ 167:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 168:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRH.V32 &= (~((uint32_t)0x0F << (((uint16_t)pin & 0x07U) * 4U)));
+ 383              		.loc 1 168 9 view .LVU94
+ 384              		.loc 1 168 71 is_stmt 0 view .LVU95
+ 385 0008 0724     		movs	r4, #7
+ 386 000a 2140     		ands	r1, r4
+ 387              	.LVL29:
+ 388              		.loc 1 168 80 view .LVU96
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 11
+
+
+ 389 000c 8900     		lsls	r1, r1, #2
+ 390              		.loc 1 168 52 view .LVU97
+ 391 000e 0834     		adds	r4, r4, #8
+ 392 0010 8C40     		lsls	r4, r4, r1
+ 169:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRH.V32 |= ((uint32_t)altFunc << (((uint16_t)pin & 0x07U) * 4U));
+ 393              		.loc 1 169 53 view .LVU98
+ 394 0012 8A40     		lsls	r2, r2, r1
+ 395              	.LVL30:
+ 168:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRH.V32 |= ((uint32_t)altFunc << (((uint16_t)pin & 0x07U) * 4U));
+ 396              		.loc 1 168 31 view .LVU99
+ 397 0014 D86A     		ldr	r0, [r3, #44]
+ 398              	.LVL31:
+ 168:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRH.V32 |= ((uint32_t)altFunc << (((uint16_t)pin & 0x07U) * 4U));
+ 399              		.loc 1 168 31 view .LVU100
+ 400 0016 A043     		bics	r0, r4
+ 401 0018 D862     		str	r0, [r3, #44]
+ 402              		.loc 1 169 9 is_stmt 1 view .LVU101
+ 403              		.loc 1 169 31 is_stmt 0 view .LVU102
+ 404 001a D86A     		ldr	r0, [r3, #44]
+ 405 001c 0243     		orrs	r2, r0
+ 406 001e DA62     		str	r2, [r3, #44]
+ 407              	.LVL32:
+ 408              	.L19:
+ 409              		.loc 1 169 31 view .LVU103
+ 410              	.LBE9:
+ 411              	.LBE8:
+ 170:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 171:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     else
+ 172:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     {
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 &= (~((uint32_t)0x0F << ((uint16_t)pin * 4U)));
+ 174:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 175:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 176:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 412              		.loc 1 176 1 view .LVU104
+ 413              		@ sp needed
+ 414 0020 10BD     		pop	{r4, pc}
+ 415              	.LVL33:
+ 416              	.L20:
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 417              		.loc 1 173 9 is_stmt 1 view .LVU105
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 418              		.loc 1 173 52 is_stmt 0 view .LVU106
+ 419 0022 0F24     		movs	r4, #15
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 420              		.loc 1 173 70 view .LVU107
+ 421 0024 8900     		lsls	r1, r1, #2
+ 422              	.LVL34:
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 423              		.loc 1 173 52 view .LVU108
+ 424 0026 8C40     		lsls	r4, r4, r1
+ 174:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 425              		.loc 1 174 53 view .LVU109
+ 426 0028 8A40     		lsls	r2, r2, r1
+ 427              	.LVL35:
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 428              		.loc 1 173 31 view .LVU110
+ 429 002a 986A     		ldr	r0, [r3, #40]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 12
+
+
+ 430              	.LVL36:
+ 173:common/prog/MSP/mcal/sh30f/mdio_mc.c ****         port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+ 431              		.loc 1 173 31 view .LVU111
+ 432 002c A043     		bics	r0, r4
+ 433 002e 9862     		str	r0, [r3, #40]
+ 174:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 434              		.loc 1 174 9 is_stmt 1 view .LVU112
+ 174:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     }
+ 435              		.loc 1 174 31 is_stmt 0 view .LVU113
+ 436 0030 986A     		ldr	r0, [r3, #40]
+ 437 0032 0243     		orrs	r2, r0
+ 438 0034 9A62     		str	r2, [r3, #40]
+ 439              		.loc 1 176 1 view .LVU114
+ 440 0036 F3E7     		b	.L19
+ 441              		.cfi_endproc
+ 442              	.LFE74:
+ 444              		.section	.text.MDIO_configure,"ax",%progbits
+ 445              		.align	1
+ 446              		.global	MDIO_configure
+ 447              		.syntax unified
+ 448              		.code	16
+ 449              		.thumb_func
+ 451              	MDIO_configure:
+ 452              	.LVL37:
+ 453              	.LFB75:
+ 177:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 178:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 179:common/prog/MSP/mcal/sh30f/mdio_mc.c **** enum MCAL_Error MDIO_configure(const struct MDIO_Channel *channel, const struct MDIO_Config *cfg)
+ 180:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 454              		.loc 1 180 1 is_stmt 1 view -0
+ 455              		.cfi_startproc
+ 456              		@ args = 0, pretend = 0, frame = 0
+ 457              		@ frame_needed = 0, uses_anonymous_args = 0
+ 181:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const struct MDIO_Port* port = MDIO_getPort(channel);
+ 458              		.loc 1 181 5 view .LVU116
+ 459              	.LBB10:
+ 460              	.LBI10:
+  70:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 461              		.loc 1 70 25 view .LVU117
+ 462              	.LBB11:
+  72:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 463              		.loc 1 72 5 view .LVU118
+ 464              	.LBE11:
+ 465              	.LBE10:
+ 180:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const struct MDIO_Port* port = MDIO_getPort(channel);
+ 466              		.loc 1 180 1 is_stmt 0 view .LVU119
+ 467 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 468              	.LCFI5:
+ 469              		.cfi_def_cfa_offset 24
+ 470              		.cfi_offset 3, -24
+ 471              		.cfi_offset 4, -20
+ 472              		.cfi_offset 5, -16
+ 473              		.cfi_offset 6, -12
+ 474              		.cfi_offset 7, -8
+ 475              		.cfi_offset 14, -4
+ 180:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const struct MDIO_Port* port = MDIO_getPort(channel);
+ 476              		.loc 1 180 1 view .LVU120
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 13
+
+
+ 477 0002 0F00     		movs	r7, r1
+ 182:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const enum MDIO_Pin pin = MDIO_getPin(channel);
+ 183:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 184:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* GPIO init */
+ 185:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureSpeed(port, pin, channel->scfg.speed);
+ 186:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputState(port, pin, cfg->outputState);
+ 187:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputType(port, pin, cfg->outputType);
+ 188:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configurePullType(port, pin, cfg->pullType);
+ 189:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureMode(port, pin, cfg->mode);
+ 190:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 191:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     /* GPIO Alternate function */
+ 192:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureAlternateFunction(port, pin, channel->scfg.altFunc);
+ 193:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 194:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return MCAL_OK;
+ 195:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 478              		.loc 1 195 1 view .LVU121
+ 479              		@ sp needed
+ 180:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const struct MDIO_Port* port = MDIO_getPort(channel);
+ 480              		.loc 1 180 1 view .LVU122
+ 481 0004 0600     		movs	r6, r0
+ 482              	.LBB13:
+ 483              	.LBB14:
+  78:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 484              		.loc 1 78 19 view .LVU123
+ 485 0006 0579     		ldrb	r5, [r0, #4]
+ 486              	.LBE14:
+ 487              	.LBE13:
+ 488              	.LBB16:
+ 489              	.LBB12:
+  72:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 490              		.loc 1 72 19 view .LVU124
+ 491 0008 0468     		ldr	r4, [r0]
+ 492              	.LVL38:
+  72:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 493              		.loc 1 72 19 view .LVU125
+ 494              	.LBE12:
+ 495              	.LBE16:
+ 182:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     const enum MDIO_Pin pin = MDIO_getPin(channel);
+ 496              		.loc 1 182 5 is_stmt 1 view .LVU126
+ 497              	.LBB17:
+ 498              	.LBI13:
+  76:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 499              		.loc 1 76 15 view .LVU127
+ 500              	.LBB15:
+  78:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 501              		.loc 1 78 5 view .LVU128
+  78:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 502              		.loc 1 78 5 is_stmt 0 view .LVU129
+ 503              	.LBE15:
+ 504              	.LBE17:
+ 185:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputState(port, pin, cfg->outputState);
+ 505              		.loc 1 185 5 is_stmt 1 view .LVU130
+ 506 000a 2900     		movs	r1, r5
+ 507              	.LVL39:
+ 185:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputState(port, pin, cfg->outputState);
+ 508              		.loc 1 185 5 is_stmt 0 view .LVU131
+ 509 000c 8279     		ldrb	r2, [r0, #6]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 14
+
+
+ 510 000e 2000     		movs	r0, r4
+ 511              	.LVL40:
+ 185:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputState(port, pin, cfg->outputState);
+ 512              		.loc 1 185 5 view .LVU132
+ 513 0010 FFF7FEFF 		bl	MDIO_configureSpeed
+ 514              	.LVL41:
+ 186:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureOutputType(port, pin, cfg->outputType);
+ 515              		.loc 1 186 5 is_stmt 1 view .LVU133
+ 516 0014 2900     		movs	r1, r5
+ 517 0016 FA78     		ldrb	r2, [r7, #3]
+ 518 0018 2000     		movs	r0, r4
+ 519 001a FFF7FEFF 		bl	MDIO_configureOutputState
+ 520              	.LVL42:
+ 187:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configurePullType(port, pin, cfg->pullType);
+ 521              		.loc 1 187 5 view .LVU134
+ 522 001e 2900     		movs	r1, r5
+ 523 0020 BA78     		ldrb	r2, [r7, #2]
+ 524 0022 2000     		movs	r0, r4
+ 525 0024 FFF7FEFF 		bl	MDIO_configureOutputType
+ 526              	.LVL43:
+ 188:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     MDIO_configureMode(port, pin, cfg->mode);
+ 527              		.loc 1 188 5 view .LVU135
+ 528 0028 2900     		movs	r1, r5
+ 529 002a 7A78     		ldrb	r2, [r7, #1]
+ 530 002c 2000     		movs	r0, r4
+ 531 002e FFF7FEFF 		bl	MDIO_configurePullType
+ 532              	.LVL44:
+ 189:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 533              		.loc 1 189 5 view .LVU136
+ 534 0032 2900     		movs	r1, r5
+ 535 0034 3A78     		ldrb	r2, [r7]
+ 536 0036 2000     		movs	r0, r4
+ 537 0038 FFF7FEFF 		bl	MDIO_configureMode
+ 538              	.LVL45:
+ 192:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 539              		.loc 1 192 5 view .LVU137
+ 540 003c 2900     		movs	r1, r5
+ 541 003e 2000     		movs	r0, r4
+ 542 0040 7279     		ldrb	r2, [r6, #5]
+ 543 0042 FFF7FEFF 		bl	MDIO_configureAlternateFunction
+ 544              	.LVL46:
+ 194:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 545              		.loc 1 194 5 view .LVU138
+ 546              		.loc 1 195 1 is_stmt 0 view .LVU139
+ 547 0046 0020     		movs	r0, #0
+ 548              	.LVL47:
+ 549              	.LVL48:
+ 550              	.LVL49:
+ 551              	.LVL50:
+ 552              		.loc 1 195 1 view .LVU140
+ 553 0048 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 554              		.cfi_endproc
+ 555              	.LFE75:
+ 557              		.section	.text.MDIO_readPort,"ax",%progbits
+ 558              		.align	1
+ 559              		.global	MDIO_readPort
+ 560              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 15
+
+
+ 561              		.code	16
+ 562              		.thumb_func
+ 564              	MDIO_readPort:
+ 565              	.LVL51:
+ 566              	.LFB76:
+ 196:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 197:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 198:common/prog/MSP/mcal/sh30f/mdio_mc.c **** MDIO_Pins MDIO_readPort(const struct MDIO_Port *port)
+ 199:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 567              		.loc 1 199 1 is_stmt 1 view -0
+ 568              		.cfi_startproc
+ 569              		@ args = 0, pretend = 0, frame = 0
+ 570              		@ frame_needed = 0, uses_anonymous_args = 0
+ 571              		@ link register save eliminated.
+ 200:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->IDR);
+ 572              		.loc 1 200 5 view .LVU142
+ 573              		.loc 1 200 28 is_stmt 0 view .LVU143
+ 574 0000 0368     		ldr	r3, [r0]
+ 201:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 575              		.loc 1 201 1 view .LVU144
+ 576              		@ sp needed
+ 200:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->IDR);
+ 577              		.loc 1 200 35 view .LVU145
+ 578 0002 5868     		ldr	r0, [r3, #4]
+ 579              	.LVL52:
+ 200:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->IDR);
+ 580              		.loc 1 200 12 view .LVU146
+ 581 0004 80B2     		uxth	r0, r0
+ 582              		.loc 1 201 1 view .LVU147
+ 583 0006 7047     		bx	lr
+ 584              		.cfi_endproc
+ 585              	.LFE76:
+ 587              		.section	.text.MDIO_readPortOutput,"ax",%progbits
+ 588              		.align	1
+ 589              		.global	MDIO_readPortOutput
+ 590              		.syntax unified
+ 591              		.code	16
+ 592              		.thumb_func
+ 594              	MDIO_readPortOutput:
+ 595              	.LVL53:
+ 596              	.LFB77:
+ 202:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 203:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 204:common/prog/MSP/mcal/sh30f/mdio_mc.c **** MDIO_Pins MDIO_readPortOutput(const struct MDIO_Port *port)
+ 205:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 597              		.loc 1 205 1 is_stmt 1 view -0
+ 598              		.cfi_startproc
+ 599              		@ args = 0, pretend = 0, frame = 0
+ 600              		@ frame_needed = 0, uses_anonymous_args = 0
+ 601              		@ link register save eliminated.
+ 206:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->ODR);
+ 602              		.loc 1 206 5 view .LVU149
+ 603              		.loc 1 206 28 is_stmt 0 view .LVU150
+ 604 0000 0368     		ldr	r3, [r0]
+ 207:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 605              		.loc 1 207 1 view .LVU151
+ 606              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 16
+
+
+ 206:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->ODR);
+ 607              		.loc 1 206 35 view .LVU152
+ 608 0002 9868     		ldr	r0, [r3, #8]
+ 609              	.LVL54:
+ 206:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     return (MDIO_Pins)(port->GPIOx->ODR);
+ 610              		.loc 1 206 12 view .LVU153
+ 611 0004 80B2     		uxth	r0, r0
+ 612              		.loc 1 207 1 view .LVU154
+ 613 0006 7047     		bx	lr
+ 614              		.cfi_endproc
+ 615              	.LFE77:
+ 617              		.section	.text.MDIO_writePort,"ax",%progbits
+ 618              		.align	1
+ 619              		.global	MDIO_writePort
+ 620              		.syntax unified
+ 621              		.code	16
+ 622              		.thumb_func
+ 624              	MDIO_writePort:
+ 625              	.LVL55:
+ 626              	.LFB78:
+ 208:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 209:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 210:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_writePort(const struct MDIO_Port *port, MDIO_Pins pinStates)
+ 211:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 627              		.loc 1 211 1 is_stmt 1 view -0
+ 628              		.cfi_startproc
+ 629              		@ args = 0, pretend = 0, frame = 0
+ 630              		@ frame_needed = 0, uses_anonymous_args = 0
+ 631              		@ link register save eliminated.
+ 212:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODR = pinStates;
+ 632              		.loc 1 212 5 view .LVU156
+ 633              		.loc 1 212 9 is_stmt 0 view .LVU157
+ 634 0000 0368     		ldr	r3, [r0]
+ 213:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 635              		.loc 1 213 1 view .LVU158
+ 636              		@ sp needed
+ 212:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->ODR = pinStates;
+ 637              		.loc 1 212 22 view .LVU159
+ 638 0002 9960     		str	r1, [r3, #8]
+ 639              		.loc 1 213 1 view .LVU160
+ 640 0004 7047     		bx	lr
+ 641              		.cfi_endproc
+ 642              	.LFE78:
+ 644              		.section	.text.MDIO_setPort,"ax",%progbits
+ 645              		.align	1
+ 646              		.global	MDIO_setPort
+ 647              		.syntax unified
+ 648              		.code	16
+ 649              		.thumb_func
+ 651              	MDIO_setPort:
+ 652              	.LVL56:
+ 653              	.LFB79:
+ 214:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 215:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 216:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_setPort(const struct MDIO_Port *port, MDIO_Pins pinMask)
+ 217:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 654              		.loc 1 217 1 is_stmt 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 17
+
+
+ 655              		.cfi_startproc
+ 656              		@ args = 0, pretend = 0, frame = 0
+ 657              		@ frame_needed = 0, uses_anonymous_args = 0
+ 658              		@ link register save eliminated.
+ 218:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->BSRR.V32 = pinMask;
+ 659              		.loc 1 218 5 view .LVU162
+ 660              		.loc 1 218 9 is_stmt 0 view .LVU163
+ 661 0000 0368     		ldr	r3, [r0]
+ 219:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 662              		.loc 1 219 1 view .LVU164
+ 663              		@ sp needed
+ 218:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->BSRR.V32 = pinMask;
+ 664              		.loc 1 218 27 view .LVU165
+ 665 0002 D960     		str	r1, [r3, #12]
+ 666              		.loc 1 219 1 view .LVU166
+ 667 0004 7047     		bx	lr
+ 668              		.cfi_endproc
+ 669              	.LFE79:
+ 671              		.section	.text.MDIO_resetPort,"ax",%progbits
+ 672              		.align	1
+ 673              		.global	MDIO_resetPort
+ 674              		.syntax unified
+ 675              		.code	16
+ 676              		.thumb_func
+ 678              	MDIO_resetPort:
+ 679              	.LVL57:
+ 680              	.LFB80:
+ 220:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 221:common/prog/MSP/mcal/sh30f/mdio_mc.c **** 
+ 222:common/prog/MSP/mcal/sh30f/mdio_mc.c **** void MDIO_resetPort(const struct MDIO_Port *port, MDIO_Pins pinMask)
+ 223:common/prog/MSP/mcal/sh30f/mdio_mc.c **** {
+ 681              		.loc 1 223 1 is_stmt 1 view -0
+ 682              		.cfi_startproc
+ 683              		@ args = 0, pretend = 0, frame = 0
+ 684              		@ frame_needed = 0, uses_anonymous_args = 0
+ 685              		@ link register save eliminated.
+ 224:common/prog/MSP/mcal/sh30f/mdio_mc.c ****     port->GPIOx->BSRR.V32 = (uint32_t)pinMask << 16;
+ 686              		.loc 1 224 5 view .LVU168
+ 687              		.loc 1 224 9 is_stmt 0 view .LVU169
+ 688 0000 0368     		ldr	r3, [r0]
+ 689              		.loc 1 224 47 view .LVU170
+ 690 0002 0904     		lsls	r1, r1, #16
+ 691              	.LVL58:
+ 692              		.loc 1 224 27 view .LVU171
+ 693 0004 D960     		str	r1, [r3, #12]
+ 225:common/prog/MSP/mcal/sh30f/mdio_mc.c **** }
+ 694              		.loc 1 225 1 view .LVU172
+ 695              		@ sp needed
+ 696 0006 7047     		bx	lr
+ 697              		.cfi_endproc
+ 698              	.LFE80:
+ 700              		.global	MDIOD
+ 701              		.global	MDIOC
+ 702              		.global	MDIOB
+ 703              		.global	MDIOA
+ 704              		.section	.rodata.MDIOA,"a"
+ 705              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUU7zzo.s 			page 18
+
+
+ 708              	MDIOA:
+ 709 0000 00000440 		.word	1074003968
+ 710 0004 00       		.byte	0
+ 711 0005 000000   		.space	3
+ 712              		.section	.rodata.MDIOB,"a"
+ 713              		.align	2
+ 716              	MDIOB:
+ 717 0000 80000440 		.word	1074004096
+ 718 0004 01       		.byte	1
+ 719 0005 000000   		.space	3
+ 720              		.section	.rodata.MDIOC,"a"
+ 721              		.align	2
+ 724              	MDIOC:
+ 725 0000 00010440 		.word	1074004224
+ 726 0004 02       		.byte	2
+ 727 0005 000000   		.space	3
+ 728              		.section	.rodata.MDIOD,"a"
+ 729              		.align	2
+ 732              	MDIOD:
+ 733 0000 80010440 		.word	1074004352
+ 734 0004 03       		.byte	3
+ 735 0005 000000   		.space	3
+ 736              		.text
+ 737              	.Letext0:
+ 738              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 739              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 740              		.file 4 "common/prog/MSP/mcal/mcal_types.h"
+ 741              		.file 5 "common/prog/MSP/mcal/mdio_types.h"
+ 742              		.file 6 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 743              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_gpio.h"
+ 744              		.file 8 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 745              		.file 9 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 746              		.file 10 "common/prog/MSP/mcal/mdio.h"

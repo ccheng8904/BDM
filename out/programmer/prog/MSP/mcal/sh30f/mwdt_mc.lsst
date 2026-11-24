@@ -1,0 +1,1405 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mwdt_mc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_uidiv
+  18              		.global	__aeabi_idiv
+  19              		.section	.text.MWDT_initWDT,"ax",%progbits
+  20              		.align	1
+  21              		.global	MWDT_initWDT
+  22              		.syntax unified
+  23              		.code	16
+  24              		.thumb_func
+  26              	MWDT_initWDT:
+  27              	.LVL0:
+  28              	.LFB70:
+  29              		.file 1 "common/prog/MSP/mcal/sh30f/mwdt_mc.c"
+   1:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *
+   5:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *
+   9:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  COMP_ABBREV      MWDT
+  12:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  PROCESSOR        SH30F9X71
+  13:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  ******************************************************************************/
+  14:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  
+  15:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  16:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  17:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* DOCUMENTATION                                                              */
+  18:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  19:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /** \file     mwdt_mc.c
+  20:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *
+  21:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  \ingroup  MCAL
+  22:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *
+  23:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *  \brief    Implementation of MWDT.
+  24:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  *
+  25:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****  */
+  26:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  27:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* INCLUDES                                                                   */
+  28:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #include "mwdt.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 2
+
+
+  30:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #include "mwdt_mc.h"
+  31:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #include "mwdt_priv.h"
+  32:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #include "math/mathDiv.h"
+  33:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  34:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  35:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #ifdef MCAL_MPCM_INCLUDED
+  36:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     #include "mpcm.h"
+  37:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #endif
+  38:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  39:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  40:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* PRIVATE DEFINITIONS                                                        */
+  41:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  42:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  43:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Predefined macros for IWDG prescaler 
+  44:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_IWDT_PRESCALER_512         7U
+  45:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Predefined macros for WWDG prescaler 
+  46:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_WWDG_PRESCALER_128         7U
+  47:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Convert seconds to milliseconds
+  48:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_SEC_TO_MS                  1000U
+  49:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Convert milliseconds to microseconds
+  50:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_MS_TO_US                   1000U
+  51:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // The minimum prescaler value for IWDG
+  52:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_IWDT_MIN_PRESCALER         4u
+  53:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // The minimum prescaler value for WWDG
+  54:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDG_MIN_PRESCALER_WWDG         1u
+  55:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // LSI frequency in kHz
+  56:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_IWDT_LSI_IN_KHZ            128u
+  57:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Max ticks in independent watch dog
+  58:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_IWDT_MAX_TICKS             0xFFFU
+  59:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Max ticks in window watch dog
+  60:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_WWDG_MAX_TICKS             0xFFU
+  61:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Key to trigger the iwdt
+  62:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_IWDT_KEY_TO_TRIGGER        0xAAAAU
+  63:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** // Key to trigger the wwdt
+  64:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** #define MWDT_WWDT_KEY_TO_TRIGGER        0x5555U
+  65:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  66:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  67:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  68:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  69:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  70:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  71:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static const struct MWDT_Config *MWDT_LocalMwdtCfg;
+  72:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  73:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  74:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  75:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  76:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  77:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** //Configures Independent Watchdog
+  78:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static enum MCAL_Error MWDT_initIWDG(const struct MWDT_Config *config);
+  79:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  80:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** //Configures Window Watchdog
+  81:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static enum MCAL_Error MWDT_initWWDG(const struct MWDT_Config *config);
+  82:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  83:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** //Returns calculated time in us for Independent Watchdog from virtual registers
+  84:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static uint32_t MWDT_getActualTimeUsIWDG(uint32_t reloadValue, uint32_t prescaler);
+  85:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** //Returns calculated time in us for Window Watchdog from virtual registers
+  86:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static uint32_t MWDT_getActualTimeUsWWDG(uint32_t reloadValue, uint32_t prescaler);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 3
+
+
+  87:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  88:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  89:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  90:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+  91:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  92:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+  93:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** enum MCAL_Error MWDT_initWDT(const struct MWDT_Config *config)
+  94:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+  30              		.loc 1 94 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 24
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  95:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     MWDT_LocalMwdtCfg = config;
+  34              		.loc 1 95 5 view .LVU1
+  94:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     MWDT_LocalMwdtCfg = config;
+  35              		.loc 1 94 1 is_stmt 0 view .LVU2
+  36 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 20
+  39              		.cfi_offset 4, -20
+  40              		.cfi_offset 5, -16
+  41              		.cfi_offset 6, -12
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44              		.loc 1 95 23 view .LVU3
+  45 0002 554B     		ldr	r3, .L21
+  96:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (MWDT_LocalMwdtCfg->mode == MWDT_NORMAL_MODE)
+  46              		.loc 1 96 26 view .LVU4
+  47 0004 0578     		ldrb	r5, [r0]
+  94:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     MWDT_LocalMwdtCfg = config;
+  48              		.loc 1 94 1 view .LVU5
+  49 0006 0400     		movs	r4, r0
+  50 0008 87B0     		sub	sp, sp, #28
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 48
+  95:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     MWDT_LocalMwdtCfg = config;
+  53              		.loc 1 95 23 view .LVU6
+  54 000a 1860     		str	r0, [r3]
+  55              		.loc 1 96 5 is_stmt 1 view .LVU7
+  56              		.loc 1 96 8 is_stmt 0 view .LVU8
+  57 000c 002D     		cmp	r5, #0
+  58 000e 43D1     		bne	.L2
+  97:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+  98:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         //activate independent watchdog mode IWDG
+  99:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return(MWDT_initIWDG(MWDT_LocalMwdtCfg));
+  59              		.loc 1 99 9 is_stmt 1 view .LVU9
+  60              	.LVL1:
+  61              	.LBB14:
+  62              	.LBI14:
+ 100:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 101:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     else if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+ 102:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 103:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         //activate window watchdog mode WWDG
+ 104:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return(MWDT_initWWDG(MWDT_LocalMwdtCfg));
+ 105:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 106:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     else
+ 107:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 4
+
+
+ 108:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return MCAL_ERROR_PARAM;
+ 109:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 110:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 111:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 112:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 113:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** void MWDT_triggerWDT(void)
+ 114:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 115:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Trigger independent Watchdog IWDG
+ 116:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+ 117:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+ 118:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 119:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         // Reload window watchdog value
+ 120:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         WWDT->CLR = MWDT_WWDT_KEY_TO_TRIGGER;
+ 121:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 122:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 123:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 124:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** enum MCAL_Error MWDT_unlock(void)
+ 125:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 126:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // feature not available for SH30F9X71
+ 127:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     return MCAL_OK;
+ 128:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 129:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 130:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** void MWDT_initConfigStructMWDT(void)
+ 131:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 132:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* If MWDT_init() is not called, variable "MWDT_LocalMwdtCfg" is pointer which is not initializ
+ 133:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****        and it causes HardFault because it points out of memory.
+ 134:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****        Therefore "mwdtCfg" is created as default configuration. */
+ 135:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     static const struct MWDT_Config mwdtCfg =
+ 136:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 137:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         MWDT_NORMAL_MODE,
+ 138:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         MWDT_100MS_UPPER_TIMELIMIT,
+ 139:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         MWDT_100MS_LOWER_TIMELIMIT,
+ 140:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         MWDT_DEBUG_STOPPED
+ 141:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     };
+ 142:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 143:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     MWDT_LocalMwdtCfg = &mwdtCfg;
+ 144:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 145:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 146:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+ 147:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 148:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** /******************************************************************************/
+ 149:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 150:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static enum MCAL_Error MWDT_initIWDG(const struct MWDT_Config *config)
+  63              		.loc 1 150 24 view .LVU10
+  64              	.LBB15:
+ 151:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 152:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t max_timeout_ms;         // maximum achievable timeout with current clock
+  65              		.loc 1 152 5 view .LVU11
+ 153:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t min_timeout_ms;         // minimum achievable timeout with current clock
+  66              		.loc 1 153 5 view .LVU12
+ 154:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint8_t prescalerCorrection = 0U;
+  67              		.loc 1 154 5 view .LVU13
+ 155:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint16_t percent;
+  68              		.loc 1 155 5 view .LVU14
+ 156:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t prescaler;
+  69              		.loc 1 156 5 view .LVU15
+ 157:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t reloadValue;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 5
+
+
+  70              		.loc 1 157 5 view .LVU16
+ 158:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t actualTimeUs;
+  71              		.loc 1 158 5 view .LVU17
+ 159:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****      /* Calculate maximum IWDG timeout achievable at current clock */
+ 160:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     max_timeout_ms = (((MWDT_IWDT_MIN_PRESCALER << MWDT_IWDT_PRESCALER_512) * MWDT_IWDT_MAX_TICKS )
+  72              		.loc 1 160 5 view .LVU18
+ 161:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate minimum IWDG tick (step) achievable at current clock */
+ 162:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     min_timeout_ms = (max_timeout_ms >> MWDT_IWDT_PRESCALER_512) / MWDT_IWDT_MAX_TICKS;
+  73              		.loc 1 162 5 view .LVU19
+ 163:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     min_timeout_ms = (min_timeout_ms < 1u) ? 1u : min_timeout_ms;
+  74              		.loc 1 163 5 view .LVU20
+ 164:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 165:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+  75              		.loc 1 165 5 view .LVU21
+  76              		.loc 1 165 16 is_stmt 0 view .LVU22
+  77 0010 4388     		ldrh	r3, [r0, #2]
+  78              		.loc 1 165 51 view .LVU23
+  79 0012 5249     		ldr	r1, .L21+4
+  80 0014 5A1E     		subs	r2, r3, #1
+  81 0016 92B2     		uxth	r2, r2
+ 166:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 167:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Required watchdog timeout is not achievable with current PCLOCK */
+ 168:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return MCAL_ERROR_PARAM;
+  82              		.loc 1 168 16 view .LVU24
+  83 0018 0320     		movs	r0, #3
+  84              	.LVL2:
+ 165:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+  85              		.loc 1 165 51 view .LVU25
+  86 001a 8A42     		cmp	r2, r1
+  87 001c 1FD8     		bhi	.L3
+ 160:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate minimum IWDG tick (step) achievable at current clock */
+  88              		.loc 1 160 20 view .LVU26
+  89 001e 5049     		ldr	r1, .L21+8
+  90              	.LVL3:
+  91              	.L4:
+ 169:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 170:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Get the most precise (lowest) prescaler settings
+ 171:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     while ((config->upperTimeLimit <= (max_timeout_ms >> 1)) && (prescalerCorrection < MWDT_IWDT_PR
+  92              		.loc 1 171 62 is_stmt 1 view .LVU27
+  93              		.loc 1 171 55 is_stmt 0 view .LVU28
+  94 0020 4A08     		lsrs	r2, r1, #1
+  95              		.loc 1 171 62 view .LVU29
+  96 0022 9342     		cmp	r3, r2
+  97 0024 01D8     		bhi	.L5
+  98 0026 072D     		cmp	r5, #7
+  99 0028 1BD1     		bne	.L6
+ 100              	.L5:
+ 172:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 173:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         prescalerCorrection++;                 // decreasing prescaler
+ 174:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 175:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 176:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 177:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG_reload_value according required IWDG timeout */
+ 178:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_IWDT_MAX_TICKS) / max_timeout
+ 101              		.loc 1 178 5 is_stmt 1 view .LVU30
+ 102              		.loc 1 178 64 is_stmt 0 view .LVU31
+ 103 002a 1803     		lsls	r0, r3, #12
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 6
+
+
+ 104 002c C01A     		subs	r0, r0, r3
+ 105              		.loc 1 178 17 view .LVU32
+ 106 002e FFF7FEFF 		bl	__aeabi_uidiv
+ 107              	.LVL4:
+ 179:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 180:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     prescaler   = (uint32_t)MWDT_IWDT_PRESCALER_512 - prescalerCorrection; 
+ 108              		.loc 1 180 17 view .LVU33
+ 109 0032 0723     		movs	r3, #7
+ 178:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 110              		.loc 1 178 17 view .LVU34
+ 111 0034 0700     		movs	r7, r0
+ 112              	.LVL5:
+ 113              		.loc 1 180 5 is_stmt 1 view .LVU35
+ 114              	.LBB16:
+ 115              	.LBB17:
+ 181:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 182:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     actualTimeUs = MWDT_getActualTimeUsIWDG(reloadValue, prescaler);
+ 183:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+ 184:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 185:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 186:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return MCAL_ERROR_PRECISION;
+ 187:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 188:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Write the IWDG prescaler and reload register*/
+ 189:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+ 190:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (prescaler << IWDT_CR_IWDTPR_Pos) \
+ 191:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (reloadValue << IWDT_CR_IWDTRLR_Pos));
+ 192:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 193:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* reload the watch dog cnt register */
+ 194:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+ 195:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 196:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 197:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop IWDG counter clock if core is halted */
+ 198:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_IWDT;
+ 199:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 200:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     return MCAL_OK;
+ 201:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 202:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 203:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static enum MCAL_Error MWDT_initWWDG(const struct MWDT_Config *config)
+ 204:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 205:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t Periph_Clock_Hz;
+ 206:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t max_timeout_ms;         // maximum achievable timeout with current clock
+ 207:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t min_timeout_ms;         // minimum achievable timeout with current clock
+ 208:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t windowValue;            // reload value for WWDG
+ 209:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint16_t percent;
+ 210:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t prescaler;
+ 211:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t actualTimeUs;
+ 212:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t reloadValue;
+ 213:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint8_t prescalerCorrection = 0U;
+ 214:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 215:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Get WWDG clock, WWDG clock = PCLK /256 */
+ 216:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 217:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     Periph_Clock_Hz = (uint32_t)(MPCM_getClockFreq(MPCM_CLOCK_PCLK0)) >> 8;
+ 218:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #else
+ 219:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     Periph_Clock_Hz = (PCLOCK * 1000000u) >> 8;
+ 220:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #endif
+ 221:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate maximum WWDG timeout achievable at current clock */
+ 222:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     max_timeout_ms = (((1U << MWDT_WWDG_PRESCALER_128) * MWDT_WWDG_MAX_TICKS * MWDT_SEC_TO_MS) / Pe
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 7
+
+
+ 223:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate minimum WWDG tick (step) achievable at current clock */
+ 224:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     min_timeout_ms = (max_timeout_ms >> MWDT_WWDG_PRESCALER_128) / MWDT_WWDG_MAX_TICKS;
+ 225:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     min_timeout_ms = (min_timeout_ms < 1u) ? 1u : min_timeout_ms;
+ 226:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 227:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+ 228:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 229:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Required watchdog timeout is not achievable with current PCLOCK */
+ 230:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return MCAL_ERROR_PARAM;
+ 231:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 232:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 233:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Get the most precise (lowest) prescaler settings
+ 234:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     while ((config->upperTimeLimit <= (max_timeout_ms >> 1)) && (prescalerCorrection < MWDT_WWDG_PR
+ 235:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 236:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         prescalerCorrection++;                 // decreasing prescaler
+ 237:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 238:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 239:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 240:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG_reload_value according required IWDG timeout */
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout
+ 242:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 243:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     prescaler   = (uint32_t)MWDT_WWDG_PRESCALER_128 - prescalerCorrection; 
+ 244:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate windowValue according required WWDG window timeout */
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     windowValue = reloadValue - (((uint32_t)config->lowerTimeLimit * MWDT_WWDG_MAX_TICKS) / max_tim
+ 246:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 247:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     actualTimeUs = MWDT_getActualTimeUsWWDG(reloadValue,prescaler);
+ 248:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+ 249:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 250:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 251:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         return MCAL_ERROR_PRECISION;
+ 252:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 253:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Write the IWDG prescaler and reload register to the max value*/
+ 254:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+ 255:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | ((uint32_t)MWDT_IWDT_PRESCALER_512 << IWDT_CR_IWDTPR_Pos) \
+ 256:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | ((uint32_t)MWDT_IWDT_MAX_TICKS << IWDT_CR_IWDTRLR_Pos));
+ 257:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* reload the watch dog cnt register */
+ 258:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+ 259:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* enable clock */
+ 260:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Unlock RCC registers */
+ 261:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     RCC_REGS_UNLOCK();
+ 262:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     RCC->APB0ENR.V32 |= (uint32_t)RCC_APB0_WWDT;
+ 263:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Lock RCC registers */
+ 264:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     RCC_REGS_LOCK();
+ 265:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     WWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_CR_LOCK_Pos) \
+ 266:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | ((uint32_t)0x0U << WWDT_CR_WWDTIE_Pos) \
+ 267:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | ((uint32_t)0x1U << WWDT_CR_WWDTON_Pos) \
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+ 269:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 270:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Set WWDTWTR[7:0] bits according to WindowValue value */
+ 271:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     WWDT->WTR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_WTR_LOCK_Pos) | windowValue);
+ 272:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 273:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 274:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop WWDG counter clock if core is halted */
+ 275:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_WWDT;
+ 276:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop IWDG counter clock if core is halted */
+ 277:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_IWDT;
+ 278:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 279:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     return MCAL_OK;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 8
+
+
+ 280:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 281:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 282:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 283:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static uint32_t MWDT_getActualTimeUsIWDG(uint32_t reloadValue, uint32_t prescaler)
+ 284:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 285:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint8_t  iwdgPrescalerReg;
+ 286:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t iwdgPrescaler;
+ 287:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t iwdgTimeMs;
+ 288:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Possible setting for IWDG prescaler: 4, 8, 16, 32, 64, 128, 256 and 512
+ 289:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgPrescalerReg = (uint8_t)prescaler;
+ 290:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgPrescaler = MWDT_IWDT_MIN_PRESCALER;    // 4u
+ 116              		.loc 1 290 19 is_stmt 0 view .LVU36
+ 117 0036 0421     		movs	r1, #4
+ 118              	.LBE17:
+ 119              	.LBE16:
+ 180:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 120              		.loc 1 180 17 view .LVU37
+ 121 0038 5D1B     		subs	r5, r3, r5
+ 122              	.LVL6:
+ 182:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+ 123              		.loc 1 182 5 is_stmt 1 view .LVU38
+ 124              	.LBB25:
+ 125              	.LBI16:
+ 283:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 126              		.loc 1 283 17 view .LVU39
+ 127              	.LBB22:
+ 285:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t iwdgPrescaler;
+ 128              		.loc 1 285 5 view .LVU40
+ 286:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t iwdgTimeMs;
+ 129              		.loc 1 286 5 view .LVU41
+ 287:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Possible setting for IWDG prescaler: 4, 8, 16, 32, 64, 128, 256 and 512
+ 130              		.loc 1 287 5 view .LVU42
+ 289:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgPrescaler = MWDT_IWDT_MIN_PRESCALER;    // 4u
+ 131              		.loc 1 289 5 view .LVU43
+ 289:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgPrescaler = MWDT_IWDT_MIN_PRESCALER;    // 4u
+ 132              		.loc 1 289 22 is_stmt 0 view .LVU44
+ 133 003a EEB2     		uxtb	r6, r5
+ 134              	.LVL7:
+ 135              		.loc 1 290 5 is_stmt 1 view .LVU45
+ 291:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     while(iwdgPrescalerReg)
+ 136              		.loc 1 291 5 view .LVU46
+ 137              	.L7:
+ 138              		.loc 1 291 11 view .LVU47
+ 139 003c 002E     		cmp	r6, #0
+ 140 003e 14D1     		bne	.L8
+ 292:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 293:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         iwdgPrescaler <<= 1u;
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         iwdgPrescalerReg--;
+ 295:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 296:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgPrescaler *= reloadValue;
+ 141              		.loc 1 296 5 view .LVU48
+ 142              	.LVL8:
+ 297:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgTimeMs = MTDIV_div_32_32(iwdgPrescaler, MWDT_IWDT_LSI_IN_KHZ);
+ 143              		.loc 1 297 5 view .LVU49
+ 144              	.LBB18:
+ 145              	.LBI18:
+ 146              		.file 2 "common/prog/math/mathDiv.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 9
+
+
+   1:common/prog/math/mathDiv.h **** /*******************************************************************************
+   2:common/prog/math/mathDiv.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/math/mathDiv.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/math/mathDiv.h ****  *
+   5:common/prog/math/mathDiv.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/math/mathDiv.h ****  *  are protected by international copyright laws.
+   7:common/prog/math/mathDiv.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/math/mathDiv.h ****  *
+   9:common/prog/math/mathDiv.h ****  *******************************************************************************
+  10:common/prog/math/mathDiv.h ****  *  PROJECT          Generic SW
+  11:common/prog/math/mathDiv.h ****  ******************************************************************************/
+  12:common/prog/math/mathDiv.h **** 
+  13:common/prog/math/mathDiv.h **** 
+  14:common/prog/math/mathDiv.h **** #ifndef MATHDIV_H
+  15:common/prog/math/mathDiv.h **** #define MATHDIV_H
+  16:common/prog/math/mathDiv.h **** 
+  17:common/prog/math/mathDiv.h **** #ifdef __cplusplus
+  18:common/prog/math/mathDiv.h **** extern "C" {
+  19:common/prog/math/mathDiv.h **** #endif
+  20:common/prog/math/mathDiv.h **** 
+  21:common/prog/math/mathDiv.h **** 
+  22:common/prog/math/mathDiv.h **** /******************************************************************************/
+  23:common/prog/math/mathDiv.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/math/mathDiv.h **** /******************************************************************************/
+  25:common/prog/math/mathDiv.h **** /** \file
+  26:common/prog/math/mathDiv.h ****  *
+  27:common/prog/math/mathDiv.h ****  *  \ingroup  mathematics
+  28:common/prog/math/mathDiv.h ****  *
+  29:common/prog/math/mathDiv.h ****  *  \brief    Public definitions and declarations for unit math_div.
+  30:common/prog/math/mathDiv.h ****  *
+  31:common/prog/math/mathDiv.h ****  *  \details  soft divisions, if not provided by core.
+  32:common/prog/math/mathDiv.h ****  */
+  33:common/prog/math/mathDiv.h **** 
+  34:common/prog/math/mathDiv.h **** 
+  35:common/prog/math/mathDiv.h **** 
+  36:common/prog/math/mathDiv.h **** /******************************************************************************/
+  37:common/prog/math/mathDiv.h **** /* INCLUDES                                                                   */
+  38:common/prog/math/mathDiv.h **** /******************************************************************************/
+  39:common/prog/math/mathDiv.h **** #include "bsh_stdinc.h"
+  40:common/prog/math/mathDiv.h **** #include <stdint.h>
+  41:common/prog/math/mathDiv.h **** #include <stdbool.h>
+  42:common/prog/math/mathDiv.h **** 
+  43:common/prog/math/mathDiv.h **** 
+  44:common/prog/math/mathDiv.h **** /******************************************************************************/
+  45:common/prog/math/mathDiv.h **** /* PUBLIC DEFINITIONS                                                         */
+  46:common/prog/math/mathDiv.h **** /******************************************************************************/
+  47:common/prog/math/mathDiv.h **** 
+  48:common/prog/math/mathDiv.h **** /** \brief    Selection of MTDIV max divisor and result width.
+  49:common/prog/math/mathDiv.h ****  *
+  50:common/prog/math/mathDiv.h ****  *  \note     By default the MTDIV width is 32-bit, but can be reduced to 
+  51:common/prog/math/mathDiv.h ****  *            16-bit to save memory by defining MTDIV_WIDTH_16 if 32-bit
+  52:common/prog/math/mathDiv.h ****  *            division is not used.
+  53:common/prog/math/mathDiv.h ****  */
+  54:common/prog/math/mathDiv.h **** #ifndef MTDIV_WIDTH_16
+  55:common/prog/math/mathDiv.h **** #define MTDIV_WIDTH_32
+  56:common/prog/math/mathDiv.h **** #endif // MTDIV_WIDTH_16
+  57:common/prog/math/mathDiv.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 10
+
+
+  58:common/prog/math/mathDiv.h **** /******************************************************************************/
+  59:common/prog/math/mathDiv.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+  60:common/prog/math/mathDiv.h **** /******************************************************************************/
+  61:common/prog/math/mathDiv.h **** 
+  62:common/prog/math/mathDiv.h **** /** \brief    Divisor and result type.
+  63:common/prog/math/mathDiv.h ****  *
+  64:common/prog/math/mathDiv.h ****  *  \note     Divisor and result type is dependent on MTDIV_WIDTH_xx setting.
+  65:common/prog/math/mathDiv.h ****  */
+  66:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_16
+  67:common/prog/math/mathDiv.h **** typedef uint16_t    MTDIV_width_t;
+  68:common/prog/math/mathDiv.h **** #else
+  69:common/prog/math/mathDiv.h **** typedef uint32_t    MTDIV_width_t;
+  70:common/prog/math/mathDiv.h **** #endif
+  71:common/prog/math/mathDiv.h **** 
+  72:common/prog/math/mathDiv.h **** 
+  73:common/prog/math/mathDiv.h **** /** \brief    Return structure from generic division function.
+  74:common/prog/math/mathDiv.h ****  */
+  75:common/prog/math/mathDiv.h **** struct MTDIV_Result
+  76:common/prog/math/mathDiv.h **** {
+  77:common/prog/math/mathDiv.h ****     MTDIV_width_t quotient;
+  78:common/prog/math/mathDiv.h ****     MTDIV_width_t remainder;
+  79:common/prog/math/mathDiv.h **** };
+  80:common/prog/math/mathDiv.h **** 
+  81:common/prog/math/mathDiv.h **** 
+  82:common/prog/math/mathDiv.h **** /******************************************************************************/
+  83:common/prog/math/mathDiv.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  84:common/prog/math/mathDiv.h **** /******************************************************************************/
+  85:common/prog/math/mathDiv.h **** 
+  86:common/prog/math/mathDiv.h **** /** \brief    Main division and modulo function.
+  87:common/prog/math/mathDiv.h ****  *
+  88:common/prog/math/mathDiv.h ****  *  \note     This function performs division and modulo calculation and is
+  89:common/prog/math/mathDiv.h ****  *            intended mainly for internal use. Be careful when using this 
+  90:common/prog/math/mathDiv.h ****  *            function, as divisor and result width are dependent
+  91:common/prog/math/mathDiv.h ****  *            on MTDIV_WIDTH_xx setting. By calling this function you get
+  92:common/prog/math/mathDiv.h ****  *            either quotient or modulo, depending on div parameter.
+  93:common/prog/math/mathDiv.h ****  *
+  94:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+  95:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+  96:common/prog/math/mathDiv.h ****  *
+  97:common/prog/math/mathDiv.h ****  *  \return   struct MTDIV_Result containing both quotient and remainder.
+  98:common/prog/math/mathDiv.h ****  */
+  99:common/prog/math/mathDiv.h **** extern struct MTDIV_Result MTDIV_div_mod(uint32_t dividend, MTDIV_width_t divisor);
+ 100:common/prog/math/mathDiv.h **** 
+ 101:common/prog/math/mathDiv.h **** 
+ 102:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 16bit, result fits into 16bit
+ 103:common/prog/math/mathDiv.h ****  *
+ 104:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 105:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 106:common/prog/math/mathDiv.h ****  *
+ 107:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 108:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 109:common/prog/math/mathDiv.h ****  *
+ 110:common/prog/math/mathDiv.h ****  *  \return   result of division
+ 111:common/prog/math/mathDiv.h ****  */
+ 112:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_div_32_16(uint32_t dividend, uint16_t divisor)
+ 113:common/prog/math/mathDiv.h **** {
+ 114:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 11
+
+
+ 115:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, (MTDIV_width_t)divisor).quotient;
+ 116:common/prog/math/mathDiv.h ****   #else
+ 117:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend / (uint32_t)divisor);
+ 118:common/prog/math/mathDiv.h ****   #endif
+ 119:common/prog/math/mathDiv.h **** }
+ 120:common/prog/math/mathDiv.h **** 
+ 121:common/prog/math/mathDiv.h **** 
+ 122:common/prog/math/mathDiv.h **** /** \brief    Modulo 32bit by 16bit, result fits into 16bit
+ 123:common/prog/math/mathDiv.h ****  *
+ 124:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 125:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 126:common/prog/math/mathDiv.h ****  *
+ 127:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 128:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 129:common/prog/math/mathDiv.h ****  *
+ 130:common/prog/math/mathDiv.h ****  *  \return   modulo of division
+ 131:common/prog/math/mathDiv.h ****  */
+ 132:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_mod_32_16(uint32_t dividend, uint16_t divisor)
+ 133:common/prog/math/mathDiv.h **** {
+ 134:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 135:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, divisor).remainder;
+ 136:common/prog/math/mathDiv.h ****   #else
+ 137:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend % (uint32_t)divisor);
+ 138:common/prog/math/mathDiv.h ****   #endif
+ 139:common/prog/math/mathDiv.h **** }
+ 140:common/prog/math/mathDiv.h **** 
+ 141:common/prog/math/mathDiv.h **** 
+ 142:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_32
+ 143:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 32bit, result is 32bit
+ 144:common/prog/math/mathDiv.h ****  *
+ 145:common/prog/math/mathDiv.h ****  *  \note     This function is optimized for 32bit microcontrollers.
+ 146:common/prog/math/mathDiv.h ****  *            Division by 0 returns 0xFFFFFFFF.
+ 147:common/prog/math/mathDiv.h ****  *
+ 148:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 149:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 150:common/prog/math/mathDiv.h ****  *
+ 151:common/prog/math/mathDiv.h ****  *  \return   result of division
+ 152:common/prog/math/mathDiv.h ****  */
+ 153:common/prog/math/mathDiv.h **** static inline uint32_t MTDIV_div_32_32(uint32_t dividend, uint32_t divisor)
+ 147              		.loc 2 153 24 view .LVU50
+ 148              	.LBB19:
+ 154:common/prog/math/mathDiv.h **** {
+ 155:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 156:common/prog/math/mathDiv.h ****     return MTDIV_div_mod(dividend, divisor).quotient;
+ 149              		.loc 2 156 5 view .LVU51
+ 150              	.LBE19:
+ 151              	.LBE18:
+ 296:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     iwdgTimeMs = MTDIV_div_32_32(iwdgPrescaler, MWDT_IWDT_LSI_IN_KHZ);
+ 152              		.loc 1 296 19 is_stmt 0 view .LVU52
+ 153 0040 7943     		muls	r1, r7
+ 154              	.LVL9:
+ 155              	.LBB21:
+ 156              	.LBB20:
+ 157              		.loc 2 156 12 view .LVU53
+ 158 0042 02A8     		add	r0, sp, #8
+ 159              	.LVL10:
+ 160              		.loc 2 156 12 view .LVU54
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 12
+
+
+ 161 0044 8022     		movs	r2, #128
+ 162 0046 FFF7FEFF 		bl	MTDIV_div_mod
+ 163              	.LVL11:
+ 164              		.loc 2 156 12 view .LVU55
+ 165              	.LBE20:
+ 166              	.LBE21:
+ 298:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     return iwdgTimeMs * MWDT_MS_TO_US;
+ 167              		.loc 1 298 5 is_stmt 1 view .LVU56
+ 168              		.loc 1 298 5 is_stmt 0 view .LVU57
+ 169              	.LBE22:
+ 170              	.LBE25:
+ 183:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 171              		.loc 1 183 5 is_stmt 1 view .LVU58
+ 172              	.LBB26:
+ 173              	.LBB23:
+ 174              		.loc 1 298 23 is_stmt 0 view .LVU59
+ 175 004a FA20     		movs	r0, #250
+ 176 004c 029B     		ldr	r3, [sp, #8]
+ 177 004e 8000     		lsls	r0, r0, #2
+ 178 0050 5843     		muls	r0, r3
+ 179              	.LBE23:
+ 180              	.LBE26:
+ 183:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 181              		.loc 1 183 15 view .LVU60
+ 182 0052 6188     		ldrh	r1, [r4, #2]
+ 183 0054 FFF7FEFF 		bl	MWDT_getPrecisionInPercent
+ 184              	.LVL12:
+ 184:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 185              		.loc 1 184 5 is_stmt 1 view .LVU61
+ 184:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 186              		.loc 1 184 7 is_stmt 0 view .LVU62
+ 187 0058 0528     		cmp	r0, #5
+ 188 005a 0AD9     		bls	.L9
+ 189              	.LVL13:
+ 190              	.L16:
+ 186:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 191              		.loc 1 186 16 view .LVU63
+ 192 005c 0520     		movs	r0, #5
+ 193              	.L3:
+ 194              	.LBE15:
+ 195              	.LBE14:
+ 110:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 196              		.loc 1 110 1 view .LVU64
+ 197 005e 07B0     		add	sp, sp, #28
+ 198              		@ sp needed
+ 199              	.LVL14:
+ 110:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 200              		.loc 1 110 1 view .LVU65
+ 201 0060 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 202              	.LVL15:
+ 203              	.L6:
+ 204              	.LBB30:
+ 205              	.LBB28:
+ 173:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 206              		.loc 1 173 9 is_stmt 1 view .LVU66
+ 173:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 207              		.loc 1 173 28 is_stmt 0 view .LVU67
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 13
+
+
+ 208 0062 0135     		adds	r5, r5, #1
+ 209              	.LVL16:
+ 173:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 210              		.loc 1 173 28 view .LVU68
+ 211 0064 1100     		movs	r1, r2
+ 212              	.LVL17:
+ 173:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 213              		.loc 1 173 28 view .LVU69
+ 214 0066 EDB2     		uxtb	r5, r5
+ 215              	.LVL18:
+ 174:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 216              		.loc 1 174 9 is_stmt 1 view .LVU70
+ 174:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 217              		.loc 1 174 9 is_stmt 0 view .LVU71
+ 218 0068 DAE7     		b	.L4
+ 219              	.LVL19:
+ 220              	.L8:
+ 221              	.LBB27:
+ 222              	.LBB24:
+ 293:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         iwdgPrescalerReg--;
+ 223              		.loc 1 293 9 is_stmt 1 view .LVU72
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 224              		.loc 1 294 25 is_stmt 0 view .LVU73
+ 225 006a 013E     		subs	r6, r6, #1
+ 226              	.LVL20:
+ 293:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         iwdgPrescalerReg--;
+ 227              		.loc 1 293 23 view .LVU74
+ 228 006c 4900     		lsls	r1, r1, #1
+ 229              	.LVL21:
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 230              		.loc 1 294 9 is_stmt 1 view .LVU75
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 231              		.loc 1 294 25 is_stmt 0 view .LVU76
+ 232 006e F6B2     		uxtb	r6, r6
+ 233              	.LVL22:
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 234              		.loc 1 294 25 view .LVU77
+ 235 0070 E4E7     		b	.L7
+ 236              	.LVL23:
+ 237              	.L9:
+ 294:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 238              		.loc 1 294 25 view .LVU78
+ 239              	.LBE24:
+ 240              	.LBE27:
+ 189:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (prescaler << IWDT_CR_IWDTPR_Pos) \
+ 241              		.loc 1 189 5 is_stmt 1 view .LVU79
+ 191:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 242              		.loc 1 191 17 is_stmt 0 view .LVU80
+ 243 0072 3C4B     		ldr	r3, .L21+12
+ 190:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (reloadValue << IWDT_CR_IWDTRLR_Pos));
+ 244              		.loc 1 190 30 view .LVU81
+ 245 0074 2D03     		lsls	r5, r5, #12
+ 246              	.LVL24:
+ 189:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (prescaler << IWDT_CR_IWDTPR_Pos) \
+ 247              		.loc 1 189 18 view .LVU82
+ 248 0076 3C4A     		ldr	r2, .L21+16
+ 191:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 14
+
+
+ 249              		.loc 1 191 17 view .LVU83
+ 250 0078 3D43     		orrs	r5, r7
+ 251 007a 2B43     		orrs	r3, r5
+ 189:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | (prescaler << IWDT_CR_IWDTPR_Pos) \
+ 252              		.loc 1 189 18 view .LVU84
+ 253 007c 1360     		str	r3, [r2]
+ 254              	.LVL25:
+ 194:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 255              		.loc 1 194 5 is_stmt 1 view .LVU85
+ 194:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 256              		.loc 1 194 15 is_stmt 0 view .LVU86
+ 257 007e 3B4B     		ldr	r3, .L21+20
+ 258 0080 5360     		str	r3, [r2, #4]
+ 195:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 259              		.loc 1 195 5 is_stmt 1 view .LVU87
+ 195:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 260              		.loc 1 195 8 is_stmt 0 view .LVU88
+ 261 0082 A379     		ldrb	r3, [r4, #6]
+ 262 0084 012B     		cmp	r3, #1
+ 263 0086 01D0     		beq	.L10
+ 264              	.LVL26:
+ 265              	.L17:
+ 200:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 266              		.loc 1 200 12 view .LVU89
+ 267 0088 0020     		movs	r0, #0
+ 268 008a E8E7     		b	.L3
+ 269              	.LVL27:
+ 270              	.L10:
+ 198:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 271              		.loc 1 198 9 is_stmt 1 view .LVU90
+ 198:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 272              		.loc 1 198 27 is_stmt 0 view .LVU91
+ 273 008c 384A     		ldr	r2, .L21+24
+ 274 008e 394B     		ldr	r3, .L21+28
+ 275 0090 1169     		ldr	r1, [r2, #16]
+ 276 0092 0B43     		orrs	r3, r1
+ 277 0094 1361     		str	r3, [r2, #16]
+ 278 0096 F7E7     		b	.L17
+ 279              	.LVL28:
+ 280              	.L2:
+ 198:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 281              		.loc 1 198 27 view .LVU92
+ 282              	.LBE28:
+ 283              	.LBE30:
+ 101:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 284              		.loc 1 101 10 is_stmt 1 view .LVU93
+ 285              	.LBB31:
+ 286              	.LBB29:
+ 168:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 287              		.loc 1 168 16 is_stmt 0 view .LVU94
+ 288 0098 0320     		movs	r0, #3
+ 289              	.LVL29:
+ 168:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 290              		.loc 1 168 16 view .LVU95
+ 291              	.LBE29:
+ 292              	.LBE31:
+ 101:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 15
+
+
+ 293              		.loc 1 101 13 view .LVU96
+ 294 009a 012D     		cmp	r5, #1
+ 295 009c DFD1     		bne	.L3
+ 104:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 296              		.loc 1 104 9 is_stmt 1 view .LVU97
+ 297              	.LVL30:
+ 298              	.LBB32:
+ 299              	.LBI32:
+ 203:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 300              		.loc 1 203 24 view .LVU98
+ 301              	.LBB33:
+ 205:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t max_timeout_ms;         // maximum achievable timeout with current clock
+ 302              		.loc 1 205 5 view .LVU99
+ 206:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t min_timeout_ms;         // minimum achievable timeout with current clock
+ 303              		.loc 1 206 5 view .LVU100
+ 207:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t windowValue;            // reload value for WWDG
+ 304              		.loc 1 207 5 view .LVU101
+ 208:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint16_t percent;
+ 305              		.loc 1 208 5 view .LVU102
+ 209:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t prescaler;
+ 306              		.loc 1 209 5 view .LVU103
+ 210:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t actualTimeUs;
+ 307              		.loc 1 210 5 view .LVU104
+ 211:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t reloadValue;
+ 308              		.loc 1 211 5 view .LVU105
+ 212:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint8_t prescalerCorrection = 0U;
+ 309              		.loc 1 212 5 view .LVU106
+ 213:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 310              		.loc 1 213 5 view .LVU107
+ 219:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #endif
+ 311              		.loc 1 219 5 view .LVU108
+ 222:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate minimum WWDG tick (step) achievable at current clock */
+ 312              		.loc 1 222 5 view .LVU109
+ 224:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     min_timeout_ms = (min_timeout_ms < 1u) ? 1u : min_timeout_ms;
+ 313              		.loc 1 224 5 view .LVU110
+ 225:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 314              		.loc 1 225 5 view .LVU111
+ 227:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 315              		.loc 1 227 5 view .LVU112
+ 227:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 316              		.loc 1 227 51 is_stmt 0 view .LVU113
+ 317 009e AE26     		movs	r6, #174
+ 227:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 318              		.loc 1 227 16 view .LVU114
+ 319 00a0 6388     		ldrh	r3, [r4, #2]
+ 213:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 320              		.loc 1 213 13 view .LVU115
+ 321 00a2 0027     		movs	r7, #0
+ 227:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 322              		.loc 1 227 51 view .LVU116
+ 323 00a4 5A1E     		subs	r2, r3, #1
+ 324 00a6 92B2     		uxth	r2, r2
+ 325 00a8 7600     		lsls	r6, r6, #1
+ 326 00aa B242     		cmp	r2, r6
+ 327 00ac D7D2     		bcs	.L3
+ 328              	.LVL31:
+ 329              	.L11:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 16
+
+
+ 234:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 330              		.loc 1 234 62 is_stmt 1 view .LVU117
+ 234:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 331              		.loc 1 234 55 is_stmt 0 view .LVU118
+ 332 00ae 7208     		lsrs	r2, r6, #1
+ 234:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 333              		.loc 1 234 62 view .LVU119
+ 334 00b0 9342     		cmp	r3, r2
+ 335 00b2 01D8     		bhi	.L12
+ 336 00b4 072F     		cmp	r7, #7
+ 337 00b6 46D1     		bne	.L13
+ 338              	.L12:
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 339              		.loc 1 241 5 is_stmt 1 view .LVU120
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 340              		.loc 1 241 64 is_stmt 0 view .LVU121
+ 341 00b8 FF20     		movs	r0, #255
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 342              		.loc 1 241 17 view .LVU122
+ 343 00ba 3100     		movs	r1, r6
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 344              		.loc 1 241 64 view .LVU123
+ 345 00bc 5843     		muls	r0, r3
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 346              		.loc 1 241 17 view .LVU124
+ 347 00be FFF7FEFF 		bl	__aeabi_uidiv
+ 348              	.LVL32:
+ 243:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate windowValue according required WWDG window timeout */
+ 349              		.loc 1 243 17 view .LVU125
+ 350 00c2 0723     		movs	r3, #7
+ 241:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate IWDG counter prescaler */
+ 351              		.loc 1 241 17 view .LVU126
+ 352 00c4 0500     		movs	r5, r0
+ 353              	.LVL33:
+ 243:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate windowValue according required WWDG window timeout */
+ 354              		.loc 1 243 5 is_stmt 1 view .LVU127
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 355              		.loc 1 245 35 is_stmt 0 view .LVU128
+ 356 00c6 A088     		ldrh	r0, [r4, #4]
+ 357              	.LVL34:
+ 243:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Calculate windowValue according required WWDG window timeout */
+ 358              		.loc 1 243 17 view .LVU129
+ 359 00c8 DF1B     		subs	r7, r3, r7
+ 360              	.LVL35:
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 361              		.loc 1 245 5 is_stmt 1 view .LVU130
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 362              		.loc 1 245 68 is_stmt 0 view .LVU131
+ 363 00ca F833     		adds	r3, r3, #248
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 364              		.loc 1 245 91 view .LVU132
+ 365 00cc 3100     		movs	r1, r6
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 366              		.loc 1 245 68 view .LVU133
+ 367 00ce 5843     		muls	r0, r3
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 368              		.loc 1 245 91 view .LVU134
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 17
+
+
+ 369 00d0 FFF7FEFF 		bl	__aeabi_uidiv
+ 370              	.LVL36:
+ 371              	.LBB34:
+ 372              	.LBB35:
+ 299:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 300:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 301:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** static uint32_t MWDT_getActualTimeUsWWDG(uint32_t reloadValue, uint32_t prescaler)
+ 302:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 303:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint8_t  wwdgTimerBase;
+ 304:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgPrescaler;
+ 305:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgTimeUs;
+ 306:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 307:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgClockMHz = MTDIV_div_32_32(MPCM_getClockFreq(MPCM_CLOCK_PCLK0), 1000000u);
+ 308:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #else
+ 309:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgClockMHz = PCLOCK;
+ 310:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #endif
+ 311:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 312:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgTimerBase = (uint8_t)prescaler;
+ 313:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Possible setting for WWDG prescaler: 1, 2, 4, 8, 16, 32, 64 and 128
+ 314:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgPrescaler = MWDG_MIN_PRESCALER_WWDG;
+ 373              		.loc 1 314 19 view .LVU135
+ 374 00d4 0121     		movs	r1, #1
+ 375              	.LBE35:
+ 376              	.LBE34:
+ 245:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 377              		.loc 1 245 17 view .LVU136
+ 378 00d6 2B1A     		subs	r3, r5, r0
+ 379 00d8 0193     		str	r3, [sp, #4]
+ 380              	.LVL37:
+ 247:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+ 381              		.loc 1 247 5 is_stmt 1 view .LVU137
+ 382              	.LBB42:
+ 383              	.LBI34:
+ 301:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** {
+ 384              		.loc 1 301 17 view .LVU138
+ 385              	.LBB40:
+ 303:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgPrescaler;
+ 386              		.loc 1 303 5 view .LVU139
+ 304:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     uint32_t wwdgTimeUs;
+ 387              		.loc 1 304 5 view .LVU140
+ 305:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 388              		.loc 1 305 5 view .LVU141
+ 309:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****   #endif
+ 389              		.loc 1 309 5 view .LVU142
+ 312:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Possible setting for WWDG prescaler: 1, 2, 4, 8, 16, 32, 64 and 128
+ 390              		.loc 1 312 5 view .LVU143
+ 312:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Possible setting for WWDG prescaler: 1, 2, 4, 8, 16, 32, 64 and 128
+ 391              		.loc 1 312 19 is_stmt 0 view .LVU144
+ 392 00da FEB2     		uxtb	r6, r7
+ 393              	.LVL38:
+ 394              		.loc 1 314 5 is_stmt 1 view .LVU145
+ 315:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     while(wwdgTimerBase)
+ 395              		.loc 1 315 5 view .LVU146
+ 396              	.L14:
+ 397              		.loc 1 315 11 view .LVU147
+ 398 00dc 002E     		cmp	r6, #0
+ 399 00de 36D1     		bne	.L15
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 18
+
+
+ 316:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 317:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         wwdgPrescaler <<= 1u;
+ 318:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         wwdgTimerBase--;
+ 319:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 320:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgPrescaler <<= 8u;    // wwdgPrescaler * 256
+ 400              		.loc 1 320 5 view .LVU148
+ 401              		.loc 1 320 19 is_stmt 0 view .LVU149
+ 402 00e0 0902     		lsls	r1, r1, #8
+ 403              	.LVL39:
+ 321:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgPrescaler *= reloadValue;
+ 404              		.loc 1 321 5 is_stmt 1 view .LVU150
+ 322:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgTimeUs     = MTDIV_div_32_32(wwdgPrescaler, wwdgClockMHz);
+ 405              		.loc 1 322 5 view .LVU151
+ 406              	.LBB36:
+ 407              	.LBI36:
+ 153:common/prog/math/mathDiv.h **** {
+ 408              		.loc 2 153 24 view .LVU152
+ 409              	.LBB37:
+ 410              		.loc 2 156 5 view .LVU153
+ 411              	.LBE37:
+ 412              	.LBE36:
+ 321:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     wwdgPrescaler *= reloadValue;
+ 413              		.loc 1 321 19 is_stmt 0 view .LVU154
+ 414 00e2 6943     		muls	r1, r5
+ 415              	.LVL40:
+ 416              	.LBB39:
+ 417              	.LBB38:
+ 418              		.loc 2 156 12 view .LVU155
+ 419 00e4 04A8     		add	r0, sp, #16
+ 420 00e6 1822     		movs	r2, #24
+ 421 00e8 FFF7FEFF 		bl	MTDIV_div_mod
+ 422              	.LVL41:
+ 423              		.loc 2 156 12 view .LVU156
+ 424              	.LBE38:
+ 425              	.LBE39:
+ 323:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     return wwdgTimeUs;
+ 426              		.loc 1 323 5 is_stmt 1 view .LVU157
+ 427              		.loc 1 323 5 is_stmt 0 view .LVU158
+ 428              	.LBE40:
+ 429              	.LBE42:
+ 248:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 430              		.loc 1 248 5 is_stmt 1 view .LVU159
+ 248:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if(MWDT_PRECISION_LIMIT_CHECK < percent)
+ 431              		.loc 1 248 15 is_stmt 0 view .LVU160
+ 432 00ec 6188     		ldrh	r1, [r4, #2]
+ 433 00ee 0498     		ldr	r0, [sp, #16]
+ 434 00f0 FFF7FEFF 		bl	MWDT_getPrecisionInPercent
+ 435              	.LVL42:
+ 249:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 436              		.loc 1 249 5 is_stmt 1 view .LVU161
+ 249:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 437              		.loc 1 249 7 is_stmt 0 view .LVU162
+ 438 00f4 0528     		cmp	r0, #5
+ 439 00f6 B1D8     		bhi	.L16
+ 254:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | ((uint32_t)MWDT_IWDT_PRESCALER_512 << IWDT_CR_IWDTPR_Pos) \
+ 440              		.loc 1 254 5 is_stmt 1 view .LVU163
+ 254:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | ((uint32_t)MWDT_IWDT_PRESCALER_512 << IWDT_CR_IWDTPR_Pos) \
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 19
+
+
+ 441              		.loc 1 254 18 is_stmt 0 view .LVU164
+ 442 00f8 1B4B     		ldr	r3, .L21+16
+ 443 00fa 1F4A     		ldr	r2, .L21+32
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 444              		.loc 1 268 33 view .LVU165
+ 445 00fc 3F02     		lsls	r7, r7, #8
+ 446              	.LVL43:
+ 254:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                 | ((uint32_t)MWDT_IWDT_PRESCALER_512 << IWDT_CR_IWDTPR_Pos) \
+ 447              		.loc 1 254 18 view .LVU166
+ 448 00fe 1A60     		str	r2, [r3]
+ 449              	.LVL44:
+ 258:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* enable clock */
+ 450              		.loc 1 258 5 is_stmt 1 view .LVU167
+ 258:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* enable clock */
+ 451              		.loc 1 258 15 is_stmt 0 view .LVU168
+ 452 0100 1A4A     		ldr	r2, .L21+20
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 453              		.loc 1 268 71 view .LVU169
+ 454 0102 EDB2     		uxtb	r5, r5
+ 455              	.LVL45:
+ 258:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* enable clock */
+ 456              		.loc 1 258 15 view .LVU170
+ 457 0104 5A60     		str	r2, [r3, #4]
+ 261:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     RCC->APB0ENR.V32 |= (uint32_t)RCC_APB0_WWDT;
+ 458              		.loc 1 261 5 is_stmt 1 view .LVU171
+ 459 0106 1D4B     		ldr	r3, .L21+36
+ 460 0108 1D4A     		ldr	r2, .L21+40
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 461              		.loc 1 268 56 is_stmt 0 view .LVU172
+ 462 010a 2F43     		orrs	r7, r5
+ 261:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     RCC->APB0ENR.V32 |= (uint32_t)RCC_APB0_WWDT;
+ 463              		.loc 1 261 5 view .LVU173
+ 464 010c 5A63     		str	r2, [r3, #52]
+ 262:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Lock RCC registers */
+ 465              		.loc 1 262 5 is_stmt 1 view .LVU174
+ 262:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* Lock RCC registers */
+ 466              		.loc 1 262 22 is_stmt 0 view .LVU175
+ 467 010e 8022     		movs	r2, #128
+ 468 0110 996A     		ldr	r1, [r3, #40]
+ 469 0112 9201     		lsls	r2, r2, #6
+ 470 0114 0A43     		orrs	r2, r1
+ 471 0116 9A62     		str	r2, [r3, #40]
+ 264:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     WWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_CR_LOCK_Pos) \
+ 472              		.loc 1 264 5 is_stmt 1 view .LVU176
+ 473 0118 5E63     		str	r6, [r3, #52]
+ 265:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | ((uint32_t)0x0U << WWDT_CR_WWDTIE_Pos) \
+ 474              		.loc 1 265 5 view .LVU177
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 475              		.loc 1 268 56 is_stmt 0 view .LVU178
+ 476 011a 1A4B     		ldr	r3, .L21+44
+ 265:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | ((uint32_t)0x0U << WWDT_CR_WWDTIE_Pos) \
+ 477              		.loc 1 265 18 view .LVU179
+ 478 011c 1A4A     		ldr	r2, .L21+48
+ 268:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 479              		.loc 1 268 56 view .LVU180
+ 480 011e 3B43     		orrs	r3, r7
+ 265:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****                    | ((uint32_t)0x0U << WWDT_CR_WWDTIE_Pos) \
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 20
+
+
+ 481              		.loc 1 265 18 view .LVU181
+ 482 0120 1360     		str	r3, [r2]
+ 271:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 483              		.loc 1 271 5 is_stmt 1 view .LVU182
+ 271:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 484              		.loc 1 271 79 is_stmt 0 view .LVU183
+ 485 0122 0199     		ldr	r1, [sp, #4]
+ 486 0124 0F4B     		ldr	r3, .L21+12
+ 487 0126 0B43     		orrs	r3, r1
+ 271:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 488              		.loc 1 271 19 view .LVU184
+ 489 0128 D360     		str	r3, [r2, #12]
+ 272:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 490              		.loc 1 272 5 is_stmt 1 view .LVU185
+ 272:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 491              		.loc 1 272 8 is_stmt 0 view .LVU186
+ 492 012a A379     		ldrb	r3, [r4, #6]
+ 493 012c 012B     		cmp	r3, #1
+ 494 012e ABD1     		bne	.L17
+ 275:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop IWDG counter clock if core is halted */
+ 495              		.loc 1 275 9 is_stmt 1 view .LVU187
+ 275:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop IWDG counter clock if core is halted */
+ 496              		.loc 1 275 27 is_stmt 0 view .LVU188
+ 497 0130 0F4B     		ldr	r3, .L21+24
+ 498 0132 164A     		ldr	r2, .L21+52
+ 499 0134 1969     		ldr	r1, [r3, #16]
+ 279:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 500              		.loc 1 279 12 view .LVU189
+ 501 0136 3000     		movs	r0, r6
+ 502              	.LVL46:
+ 275:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         /* Stop IWDG counter clock if core is halted */
+ 503              		.loc 1 275 27 view .LVU190
+ 504 0138 0A43     		orrs	r2, r1
+ 505 013a 1A61     		str	r2, [r3, #16]
+ 277:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 506              		.loc 1 277 9 is_stmt 1 view .LVU191
+ 277:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 507              		.loc 1 277 27 is_stmt 0 view .LVU192
+ 508 013c 1969     		ldr	r1, [r3, #16]
+ 509 013e 0D4A     		ldr	r2, .L21+28
+ 510 0140 0A43     		orrs	r2, r1
+ 511 0142 1A61     		str	r2, [r3, #16]
+ 512 0144 8BE7     		b	.L3
+ 513              	.LVL47:
+ 514              	.L13:
+ 236:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 515              		.loc 1 236 9 is_stmt 1 view .LVU193
+ 236:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 516              		.loc 1 236 28 is_stmt 0 view .LVU194
+ 517 0146 0137     		adds	r7, r7, #1
+ 518              	.LVL48:
+ 236:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 519              		.loc 1 236 28 view .LVU195
+ 520 0148 1600     		movs	r6, r2
+ 521              	.LVL49:
+ 236:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 522              		.loc 1 236 28 view .LVU196
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 21
+
+
+ 523 014a FFB2     		uxtb	r7, r7
+ 524              	.LVL50:
+ 237:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 525              		.loc 1 237 9 is_stmt 1 view .LVU197
+ 237:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 526              		.loc 1 237 9 is_stmt 0 view .LVU198
+ 527 014c AFE7     		b	.L11
+ 528              	.LVL51:
+ 529              	.L15:
+ 530              	.LBB43:
+ 531              	.LBB41:
+ 317:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         wwdgTimerBase--;
+ 532              		.loc 1 317 9 is_stmt 1 view .LVU199
+ 318:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 533              		.loc 1 318 22 is_stmt 0 view .LVU200
+ 534 014e 013E     		subs	r6, r6, #1
+ 535              	.LVL52:
+ 317:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****         wwdgTimerBase--;
+ 536              		.loc 1 317 23 view .LVU201
+ 537 0150 4900     		lsls	r1, r1, #1
+ 538              	.LVL53:
+ 318:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 539              		.loc 1 318 9 is_stmt 1 view .LVU202
+ 318:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 540              		.loc 1 318 22 is_stmt 0 view .LVU203
+ 541 0152 F6B2     		uxtb	r6, r6
+ 542              	.LVL54:
+ 318:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 543              		.loc 1 318 22 view .LVU204
+ 544 0154 C2E7     		b	.L14
+ 545              	.L22:
+ 546 0156 C046     		.align	2
+ 547              	.L21:
+ 548 0158 00000000 		.word	.LANCHOR0
+ 549 015c FB3F0000 		.word	16379
+ 550 0160 FC3F0000 		.word	16380
+ 551 0164 0000A55A 		.word	1520762880
+ 552 0168 00380040 		.word	1073756160
+ 553 016c AAAA0000 		.word	43690
+ 554 0170 00040440 		.word	1074004992
+ 555 0174 4000A55A 		.word	1520762944
+ 556 0178 FF7FA55A 		.word	1520795647
+ 557 017c 00080440 		.word	1074006016
+ 558 0180 CC330000 		.word	13260
+ 559 0184 0080A55A 		.word	1520795648
+ 560 0188 003C0040 		.word	1073757184
+ 561 018c 8000A55A 		.word	1520763008
+ 562              	.LBE41:
+ 563              	.LBE43:
+ 564              	.LBE33:
+ 565              	.LBE32:
+ 566              		.cfi_endproc
+ 567              	.LFE70:
+ 569              		.section	.text.MWDT_triggerWDT,"ax",%progbits
+ 570              		.align	1
+ 571              		.global	MWDT_triggerWDT
+ 572              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 22
+
+
+ 573              		.code	16
+ 574              		.thumb_func
+ 576              	MWDT_triggerWDT:
+ 577              	.LFB71:
+ 114:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // Trigger independent Watchdog IWDG
+ 578              		.loc 1 114 1 is_stmt 1 view -0
+ 579              		.cfi_startproc
+ 580              		@ args = 0, pretend = 0, frame = 0
+ 581              		@ frame_needed = 0, uses_anonymous_args = 0
+ 582              		@ link register save eliminated.
+ 116:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+ 583              		.loc 1 116 5 view .LVU206
+ 116:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+ 584              		.loc 1 116 15 is_stmt 0 view .LVU207
+ 585 0000 054B     		ldr	r3, .L25
+ 586 0002 064A     		ldr	r2, .L25+4
+ 587 0004 5A60     		str	r2, [r3, #4]
+ 117:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 588              		.loc 1 117 5 is_stmt 1 view .LVU208
+ 117:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 589              		.loc 1 117 26 is_stmt 0 view .LVU209
+ 590 0006 064B     		ldr	r3, .L25+8
+ 591 0008 1B68     		ldr	r3, [r3]
+ 117:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 592              		.loc 1 117 8 view .LVU210
+ 593 000a 1B78     		ldrb	r3, [r3]
+ 594 000c 012B     		cmp	r3, #1
+ 595 000e 02D1     		bne	.L23
+ 120:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 596              		.loc 1 120 9 is_stmt 1 view .LVU211
+ 120:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     }
+ 597              		.loc 1 120 19 is_stmt 0 view .LVU212
+ 598 0010 044B     		ldr	r3, .L25+12
+ 599 0012 054A     		ldr	r2, .L25+16
+ 600 0014 9A60     		str	r2, [r3, #8]
+ 601              	.L23:
+ 122:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 602              		.loc 1 122 1 view .LVU213
+ 603              		@ sp needed
+ 604 0016 7047     		bx	lr
+ 605              	.L26:
+ 606              		.align	2
+ 607              	.L25:
+ 608 0018 00380040 		.word	1073756160
+ 609 001c AAAA0000 		.word	43690
+ 610 0020 00000000 		.word	.LANCHOR0
+ 611 0024 003C0040 		.word	1073757184
+ 612 0028 55550000 		.word	21845
+ 613              		.cfi_endproc
+ 614              	.LFE71:
+ 616              		.section	.text.MWDT_unlock,"ax",%progbits
+ 617              		.align	1
+ 618              		.global	MWDT_unlock
+ 619              		.syntax unified
+ 620              		.code	16
+ 621              		.thumb_func
+ 623              	MWDT_unlock:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 23
+
+
+ 624              	.LFB72:
+ 125:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     // feature not available for SH30F9X71
+ 625              		.loc 1 125 1 is_stmt 1 view -0
+ 626              		.cfi_startproc
+ 627              		@ args = 0, pretend = 0, frame = 0
+ 628              		@ frame_needed = 0, uses_anonymous_args = 0
+ 629              		@ link register save eliminated.
+ 127:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 630              		.loc 1 127 5 view .LVU215
+ 128:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 631              		.loc 1 128 1 is_stmt 0 view .LVU216
+ 632 0000 0020     		movs	r0, #0
+ 633              		@ sp needed
+ 634 0002 7047     		bx	lr
+ 635              		.cfi_endproc
+ 636              	.LFE72:
+ 638              		.section	.text.MWDT_initConfigStructMWDT,"ax",%progbits
+ 639              		.align	1
+ 640              		.global	MWDT_initConfigStructMWDT
+ 641              		.syntax unified
+ 642              		.code	16
+ 643              		.thumb_func
+ 645              	MWDT_initConfigStructMWDT:
+ 646              	.LFB73:
+ 131:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     /* If MWDT_init() is not called, variable "MWDT_LocalMwdtCfg" is pointer which is not initializ
+ 647              		.loc 1 131 1 is_stmt 1 view -0
+ 648              		.cfi_startproc
+ 649              		@ args = 0, pretend = 0, frame = 0
+ 650              		@ frame_needed = 0, uses_anonymous_args = 0
+ 651              		@ link register save eliminated.
+ 135:common/prog/MSP/mcal/sh30f/mwdt_mc.c ****     {
+ 652              		.loc 1 135 5 view .LVU218
+ 143:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 653              		.loc 1 143 5 view .LVU219
+ 143:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 654              		.loc 1 143 23 is_stmt 0 view .LVU220
+ 655 0000 014B     		ldr	r3, .L29
+ 656 0002 024A     		ldr	r2, .L29+4
+ 144:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 657              		.loc 1 144 1 view .LVU221
+ 658              		@ sp needed
+ 143:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** }
+ 659              		.loc 1 143 23 view .LVU222
+ 660 0004 1A60     		str	r2, [r3]
+ 144:common/prog/MSP/mcal/sh30f/mwdt_mc.c **** 
+ 661              		.loc 1 144 1 view .LVU223
+ 662 0006 7047     		bx	lr
+ 663              	.L30:
+ 664              		.align	2
+ 665              	.L29:
+ 666 0008 00000000 		.word	.LANCHOR0
+ 667 000c 00000000 		.word	.LANCHOR1
+ 668              		.cfi_endproc
+ 669              	.LFE73:
+ 671              		.section	.bss.MWDT_LocalMwdtCfg,"aw",%nobits
+ 672              		.align	2
+ 673              		.set	.LANCHOR0,. + 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8d96he.s 			page 24
+
+
+ 676              	MWDT_LocalMwdtCfg:
+ 677 0000 00000000 		.space	4
+ 678              		.section	.rodata.mwdtCfg.0,"a"
+ 679              		.align	1
+ 680              		.set	.LANCHOR1,. + 0
+ 683              	mwdtCfg.0:
+ 684 0000 00       		.byte	0
+ 685 0001 00       		.space	1
+ 686 0002 6400     		.short	100
+ 687 0004 6400     		.short	100
+ 688 0006 01       		.byte	1
+ 689 0007 00       		.space	1
+ 690              		.text
+ 691              	.Letext0:
+ 692              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 693              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 694              		.file 5 "common/prog/MSP/mcal/mcal_types.h"
+ 695              		.file 6 "common/prog/MSP/mcal/mwdt_types.h"
+ 696              		.file 7 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 697              		.file 8 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.h"
+ 698              		.file 9 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 699              		.file 10 "common/prog/MSP/mcal/mwdt_priv.h"

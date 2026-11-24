@@ -1,0 +1,141 @@
+
+out/programmer/prog/MSP/mcal/mcom.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MCOM_pushByte:
+
+00000000 <MCOM_pushByte>:
+void MCOM_pushByte(struct MCOM_Transfer *transfer, uint8_t data)
+{
+    MCAL_assert(transfer);
+    struct MCOM_BufferHandle *bufferHandle = &transfer->readBufferHandle;
+
+    if(bufferHandle->index < bufferHandle->length)
+   0:	8943      	ldrh	r3, [r0, #10]
+   2:	8902      	ldrh	r2, [r0, #8]
+   4:	429a      	cmp	r2, r3
+   6:	d906      	bls.n	16 <MCOM_pushByte+0x16>
+    {
+        bufferHandle->buffer.readBuffer[bufferHandle->index] = data;
+   8:	8943      	ldrh	r3, [r0, #10]
+   a:	6842      	ldr	r2, [r0, #4]
+   c:	54d1      	strb	r1, [r2, r3]
+        bufferHandle->index +=1u; /* ++ creates axivion issue due to volatile declaration */
+   e:	8943      	ldrh	r3, [r0, #10]
+  10:	3301      	adds	r3, #1
+  12:	b29b      	uxth	r3, r3
+  14:	8143      	strh	r3, [r0, #10]
+    }
+    if(bufferHandle->index >= bufferHandle->length)
+  16:	8943      	ldrh	r3, [r0, #10]
+  18:	8902      	ldrh	r2, [r0, #8]
+  1a:	429a      	cmp	r2, r3
+  1c:	d801      	bhi.n	22 <MCOM_pushByte+0x22>
+    {
+        bufferHandle->status = MCOM_STATUS_COMPLETE;
+  1e:	2302      	movs	r3, #2
+  20:	7003      	strb	r3, [r0, #0]
+    }
+}
+  22:	4770      	bx	lr
+
+Disassembly of section .text.MCOM_popByte:
+
+00000000 <MCOM_popByte>:
+{
+    MCAL_assert(transfer);
+    struct MCOM_BufferHandle *bufferHandle = &transfer->writeBufferHandle;
+    uint8_t data = 0;
+
+    if(bufferHandle->index < bufferHandle->length)
+   0:	8ac2      	ldrh	r2, [r0, #22]
+   2:	8a81      	ldrh	r1, [r0, #20]
+{
+   4:	0003      	movs	r3, r0
+    uint8_t data = 0;
+   6:	2000      	movs	r0, #0
+    if(bufferHandle->index < bufferHandle->length)
+   8:	428a      	cmp	r2, r1
+   a:	d206      	bcs.n	1a <MCOM_popByte+0x1a>
+    {
+        data = bufferHandle->buffer.writeBuffer[bufferHandle->index];
+   c:	8ada      	ldrh	r2, [r3, #22]
+   e:	6918      	ldr	r0, [r3, #16]
+  10:	5c80      	ldrb	r0, [r0, r2]
+        bufferHandle->index +=1u; /* ++ creates axivion issue due to volatile declaration */
+  12:	8ada      	ldrh	r2, [r3, #22]
+  14:	3201      	adds	r2, #1
+  16:	b292      	uxth	r2, r2
+  18:	82da      	strh	r2, [r3, #22]
+    }
+    if(bufferHandle->index >= bufferHandle->length)
+  1a:	8ada      	ldrh	r2, [r3, #22]
+  1c:	4291      	cmp	r1, r2
+  1e:	d801      	bhi.n	24 <MCOM_popByte+0x24>
+    {
+        bufferHandle->status = MCOM_STATUS_COMPLETE;
+  20:	2202      	movs	r2, #2
+  22:	731a      	strb	r2, [r3, #12]
+    }
+    
+    return data;
+}
+  24:	4770      	bx	lr
+
+Disassembly of section .text.MCOM_setWriteBuffer:
+
+00000000 <MCOM_setWriteBuffer>:
+                         const uint8_t *buffer, uint16_t length)
+{
+    MCAL_assert(transfer != NULL);
+    MCAL_assert(buffer != NULL);
+    
+    if(transfer != NULL)
+   0:	2800      	cmp	r0, #0
+   2:	d005      	beq.n	10 <MCOM_setWriteBuffer+0x10>
+    {
+        transfer->writeBufferHandle.status = MCOM_STATUS_BUSY;
+   4:	2301      	movs	r3, #1
+   6:	7303      	strb	r3, [r0, #12]
+        transfer->writeBufferHandle.buffer.writeBuffer = buffer;
+        transfer->writeBufferHandle.length = length;
+        transfer->writeBufferHandle.index = 0u;
+   8:	2300      	movs	r3, #0
+        transfer->writeBufferHandle.buffer.writeBuffer = buffer;
+   a:	6101      	str	r1, [r0, #16]
+        transfer->writeBufferHandle.length = length;
+   c:	8282      	strh	r2, [r0, #20]
+        transfer->writeBufferHandle.index = 0u;
+   e:	82c3      	strh	r3, [r0, #22]
+    }
+}
+  10:	4770      	bx	lr
+
+Disassembly of section .text.MCOM_setReadBuffer:
+
+00000000 <MCOM_setReadBuffer>:
+                        uint8_t *buffer, uint16_t length)
+{
+    MCAL_assert(transfer != NULL);
+    MCAL_assert(buffer != NULL);
+    
+    if(transfer != NULL)
+   0:	2800      	cmp	r0, #0
+   2:	d005      	beq.n	10 <MCOM_setReadBuffer+0x10>
+    {
+        transfer->readBufferHandle.status = MCOM_STATUS_BUSY;
+   4:	2301      	movs	r3, #1
+   6:	7003      	strb	r3, [r0, #0]
+        transfer->readBufferHandle.buffer.readBuffer = buffer;
+        transfer->readBufferHandle.length = length;
+        transfer->readBufferHandle.index = 0u;
+   8:	2300      	movs	r3, #0
+        transfer->readBufferHandle.buffer.readBuffer = buffer;
+   a:	6041      	str	r1, [r0, #4]
+        transfer->readBufferHandle.length = length;
+   c:	8102      	strh	r2, [r0, #8]
+        transfer->readBufferHandle.index = 0u;
+   e:	8143      	strh	r3, [r0, #10]
+    }
+}
+  10:	4770      	bx	lr

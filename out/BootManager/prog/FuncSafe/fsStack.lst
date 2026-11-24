@@ -1,0 +1,133 @@
+
+out/BootManager/prog/FuncSafe/fsStack.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FSF_bStackPrecondition:
+
+00000000 <FSF_bStackPrecondition>:
+    This precondition returns true, if the current stack location lies within its predefined
+    area and the magic entries at the beginning and the end of the stack remain untouched.
+    \return bool
+*/
+bool    FSF_bStackPrecondition(void)
+{
+   0:	b510      	push	{r4, lr}
+   return  _FSF_pucGetStackPointer();
+   2:	f7ff fffe 	bl	0 <_FSF_pucGetStackPointer>
+   const uint16_t * pucP     = (uint16_t *)((uint32_t)pucGetStackPointer(ucActualStack)); /*lint !e923 cast from pointer to unsigned int16_t */
+   const uint16_t * pStBegin = _FSF_Stack[ucActualStack].pui16FirstEntry;
+   6:	4a0a      	ldr	r2, [pc, #40]	; (30 <FSF_bStackPrecondition+0x30>)
+   return  _FSF_pucGetStackPointer();
+   8:	0003      	movs	r3, r0
+   const uint16_t * pStEnd   = _FSF_Stack[ucActualStack].pui16LastEntry;
+   a:	ca06      	ldmia	r2, {r1, r2}
+#endif
+   /*lint -save -e946 Relational or subtract operator applied to pointers */
+   return (bool)   ((pStBegin            != pStEnd)                &&      // Begin/End position must differ
+                   ((pucP > pStBegin)   && (pucP < pStEnd))        &&      // Is stack pointer location correct?
+                   (*pStBegin           == _FSF_ui16StackMagic)    &&      // no underflow before?
+                   (*pStEnd             == _FSF_ui16StackMagic)    &&      // no overflow before?
+   c:	2000      	movs	r0, #0
+   e:	4291      	cmp	r1, r2
+  10:	d00c      	beq.n	2c <FSF_bStackPrecondition+0x2c>
+   return (bool)   ((pStBegin            != pStEnd)                &&      // Begin/End position must differ
+  12:	4299      	cmp	r1, r3
+  14:	d20a      	bcs.n	2c <FSF_bStackPrecondition+0x2c>
+                   ((pucP > pStBegin)   && (pucP < pStEnd))        &&      // Is stack pointer location correct?
+  16:	429a      	cmp	r2, r3
+  18:	d908      	bls.n	2c <FSF_bStackPrecondition+0x2c>
+                   (*pStBegin           == _FSF_ui16StackMagic)    &&      // no underflow before?
+  1a:	4b06      	ldr	r3, [pc, #24]	; (34 <FSF_bStackPrecondition+0x34>)
+  1c:	881c      	ldrh	r4, [r3, #0]
+                   ((pucP > pStBegin)   && (pucP < pStEnd))        &&      // Is stack pointer location correct?
+  1e:	880b      	ldrh	r3, [r1, #0]
+  20:	42a3      	cmp	r3, r4
+  22:	d103      	bne.n	2c <FSF_bStackPrecondition+0x2c>
+                   (*pStBegin           == _FSF_ui16StackMagic)    &&      // no underflow before?
+  24:	8810      	ldrh	r0, [r2, #0]
+  26:	1ac0      	subs	r0, r0, r3
+                   (*pStEnd             == _FSF_ui16StackMagic)    &&      // no overflow before?
+  28:	4243      	negs	r3, r0
+  2a:	4158      	adcs	r0, r3
+   //  Msg(4:3415) The right hand operand of '&&' or '||' has side effects.
+   //  MISRA-C:2004 Rule 12.4
+   //  PCA comment: If this expression evaluates to false, control is transferred immediately to the safe
+   //  state and other values do not make sense. Thus, this piece of code is tested and reviewed to work
+   //  correctly. Thus, left unchanged.
+}
+  2c:	bd10      	pop	{r4, pc}
+  2e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.FSF_ucStackHandleTask:
+
+00000000 <FSF_ucStackHandleTask>:
+
+    \pre    None
+    \post   Conditions for the stack are fulfilled
+*/
+uint8_t FSF_ucStackHandleTask(void)
+{
+   0:	b510      	push	{r4, lr}
+   switch (ucStackChannelState)
+   2:	4c14      	ldr	r4, [pc, #80]	; (54 <FSF_ucStackHandleTask+0x54>)
+   4:	7823      	ldrb	r3, [r4, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d007      	beq.n	1a <FSF_ucStackHandleTask+0x1a>
+   a:	2b01      	cmp	r3, #1
+   c:	d01e      	beq.n	4c <FSF_ucStackHandleTask+0x4c>
+         break;
+      }
+      default:
+      {
+         //  State variable of task handler accidently overwriten
+         FSF_vReportError((uint8_t)FSF_STACK_TEST,(uint8_t)FSF_ERR_INVALID_STATE,(uint8_t)0);
+   e:	2200      	movs	r2, #0
+  10:	2107      	movs	r1, #7
+  12:	2003      	movs	r0, #3
+  14:	f7ff fffe 	bl	0 <FSF_vReportError>
+         break;
+  18:	e010      	b.n	3c <FSF_ucStackHandleTask+0x3c>
+   return  _FSF_pucGetStackPointer();
+  1a:	f7ff fffe 	bl	0 <_FSF_pucGetStackPointer>
+   uint16_t * pStBegin   = _FSF_Stack[ucActualStack].pui16FirstEntry;
+  1e:	4b0e      	ldr	r3, [pc, #56]	; (58 <FSF_ucStackHandleTask+0x58>)
+   uint16_t * pStEnd     = _FSF_Stack[ucActualStack].pui16LastEntry;
+  20:	cb0a      	ldmia	r3, {r1, r3}
+   if ((pucP > pStBegin) && (pucP < pStEnd)) /*lint !e946 Relational or subtract operator applied to pointers */
+  22:	4288      	cmp	r0, r1
+  24:	d90c      	bls.n	40 <FSF_ucStackHandleTask+0x40>
+  26:	4298      	cmp	r0, r3
+  28:	d20a      	bcs.n	40 <FSF_ucStackHandleTask+0x40>
+      *pStBegin = _FSF_ui16StackMagic;
+  2a:	4a0c      	ldr	r2, [pc, #48]	; (5c <FSF_ucStackHandleTask+0x5c>)
+      FSF_vReportOnGoing((uint8_t)FSF_STACK_TEST);
+  2c:	2003      	movs	r0, #3
+      *pStBegin = _FSF_ui16StackMagic;
+  2e:	8812      	ldrh	r2, [r2, #0]
+  30:	800a      	strh	r2, [r1, #0]
+      *pStEnd = _FSF_ui16StackMagic;
+  32:	801a      	strh	r2, [r3, #0]
+      FSF_vReportOnGoing((uint8_t)FSF_STACK_TEST);
+  34:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+            ucStackChannelState = (uint8_t)FSF_STACK_READY;
+  38:	2301      	movs	r3, #1
+  3a:	7023      	strb	r3, [r4, #0]
+      }
+   }
+   return (uint8_t)TASK_INITIALISED;
+}
+  3c:	2001      	movs	r0, #1
+  3e:	bd10      	pop	{r4, pc}
+      FSF_vReportError((uint8_t)FSF_STACK_TEST,(uint8_t)FSF_ERR_CHANNEL_ERROR,(uint8_t)0);
+  40:	2200      	movs	r2, #0
+  42:	2109      	movs	r1, #9
+  44:	2003      	movs	r0, #3
+  46:	f7ff fffe 	bl	0 <FSF_vReportError>
+  4a:	e7f5      	b.n	38 <FSF_ucStackHandleTask+0x38>
+         FSF_vReportOnGoing((uint8_t)FSF_STACK_TEST);
+  4c:	2003      	movs	r0, #3
+  4e:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+         if (ucGetStackCount() > (uint8_t)1)
+  52:	e7f3      	b.n	3c <FSF_ucStackHandleTask+0x3c>
+	...

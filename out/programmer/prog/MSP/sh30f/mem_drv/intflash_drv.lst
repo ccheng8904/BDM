@@ -1,0 +1,400 @@
+
+out/programmer/prog/MSP/sh30f/mem_drv/intflash_drv.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DRVIF_isBusy:
+
+00000000 <DRVIF_isBusy>:
+    return DRVIF_flashSegment.blockSize;
+}
+
+bool DRVIF_isBusy(void)
+{
+    return ((FLASH->SR.V32 & FLASH_FLAG_BSY) != 0U) ? true : false ;
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <DRVIF_isBusy+0xc>)
+   2:	68d8      	ldr	r0, [r3, #12]
+   4:	0400      	lsls	r0, r0, #16
+   6:	0fc0      	lsrs	r0, r0, #31
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.DRVIF_isError:
+
+00000000 <DRVIF_isError>:
+
+
+bool DRVIF_isError(void)
+{
+    uint32_t ERROR_FLAG = FLASH_FLAG_WRPERR | FLASH_FLAG_FLSERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGWERR | FLASH_FLAG_STAERR | FLASH_FLAG_OPERR;
+    return ((FLASH->SR.V32 & ERROR_FLAG) != 0U) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DRVIF_isError+0x10>)
+   2:	68d8      	ldr	r0, [r3, #12]
+   4:	23fa      	movs	r3, #250	; 0xfa
+   6:	4018      	ands	r0, r3
+   8:	1e43      	subs	r3, r0, #1
+   a:	4198      	sbcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.DRVIF_resetFlash:
+
+00000000 <DRVIF_resetFlash>:
+
+
+void DRVIF_resetFlash(void)
+{
+    /* Clear pending flags (if any) */
+    FLASH->SR.V32 |= ((uint32_t)(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   0:	22fb      	movs	r2, #251	; 0xfb
+   2:	4b04      	ldr	r3, [pc, #16]	; (14 <DRVIF_resetFlash+0x14>)
+   4:	0412      	lsls	r2, r2, #16
+   6:	68d9      	ldr	r1, [r3, #12]
+   8:	430a      	orrs	r2, r1
+   a:	60da      	str	r2, [r3, #12]
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR) << 16);
+    /* all control register are set to 0 */
+    FLASH->CR.V32 = 0U;
+   c:	2200      	movs	r2, #0
+   e:	611a      	str	r2, [r3, #16]
+}
+  10:	4770      	bx	lr
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.DRVIF_deinitFlash:
+
+00000000 <DRVIF_deinitFlash>:
+{
+   0:	b510      	push	{r4, lr}
+    DRVIF_resetFlash();
+   2:	f7ff fffe 	bl	0 <DRVIF_deinitFlash>
+
+/** lock the flash memory */
+static void DRVIF_lockFlash(void)
+{
+    /* Set the LOCK Bit to lock the FLASH Registers access */
+    FLASH->CR.BIT.MNLCK = 0x01U;
+   6:	2380      	movs	r3, #128	; 0x80
+   8:	4a08      	ldr	r2, [pc, #32]	; (2c <DRVIF_deinitFlash+0x2c>)
+   a:	021b      	lsls	r3, r3, #8
+   c:	6911      	ldr	r1, [r2, #16]
+   e:	430b      	orrs	r3, r1
+  10:	6113      	str	r3, [r2, #16]
+    if (DRV_LVRState == 0x01u)
+  12:	4b07      	ldr	r3, [pc, #28]	; (30 <DRVIF_deinitFlash+0x30>)
+  14:	781b      	ldrb	r3, [r3, #0]
+  16:	2b01      	cmp	r3, #1
+  18:	d105      	bne.n	26 <DRVIF_deinitFlash+0x26>
+        SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_LVREN_Msk;
+  1a:	2380      	movs	r3, #128	; 0x80
+  1c:	4a05      	ldr	r2, [pc, #20]	; (34 <DRVIF_deinitFlash+0x34>)
+  1e:	011b      	lsls	r3, r3, #4
+  20:	6811      	ldr	r1, [r2, #0]
+  22:	430b      	orrs	r3, r1
+  24:	6013      	str	r3, [r2, #0]
+  \details Enables IRQ interrupts by clearing special-purpose register PRIMASK.
+           Can only be executed in Privileged modes.
+ */
+__STATIC_FORCEINLINE void __enable_irq(void)
+{
+  __ASM volatile ("cpsie i" : : : "memory");
+  26:	b662      	cpsie	i
+}
+  28:	bd10      	pop	{r4, pc}
+  2a:	46c0      	nop			; (mov r8, r8)
+  2c:	40040c00 	.word	0x40040c00
+  30:	00000000 	.word	0x00000000
+  34:	40040400 	.word	0x40040400
+
+Disassembly of section .text.DRVIF_checkErase:
+
+00000000 <DRVIF_checkErase>:
+{
+   0:	0003      	movs	r3, r0
+   2:	0008      	movs	r0, r1
+    for (uint32_t i=0u; i< (size/sizeof(COMA_wrUnit_t)); i++)
+   4:	088a      	lsrs	r2, r1, #2
+   6:	0092      	lsls	r2, r2, #2
+   8:	18d2      	adds	r2, r2, r3
+   a:	4293      	cmp	r3, r2
+   c:	d100      	bne.n	10 <DRVIF_checkErase+0x10>
+}
+   e:	4770      	bx	lr
+        if (ptr[i] != eraseValue){return 0;}
+  10:	cb02      	ldmia	r3!, {r1}
+  12:	2900      	cmp	r1, #0
+  14:	d0f9      	beq.n	a <DRVIF_checkErase+0xa>
+  16:	2000      	movs	r0, #0
+  18:	e7f9      	b.n	e <DRVIF_checkErase+0xe>
+
+Disassembly of section .text.DRVIF_cacheReset:
+
+00000000 <DRVIF_cacheReset>:
+    uint32_t tmpreg = FLASH->ACR.V32;
+   0:	4b04      	ldr	r3, [pc, #16]	; (14 <DRVIF_cacheReset+0x14>)
+    FLASH->ACR.V32 |= ((FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos) | ((uint32_t)0x01U << FLASH_ACR_CRST_Pos));
+   2:	4a05      	ldr	r2, [pc, #20]	; (18 <DRVIF_cacheReset+0x18>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	6819      	ldr	r1, [r3, #0]
+    FLASH->ACR.V32 |= ((FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos) | ((uint32_t)0x01U << FLASH_ACR_CRST_Pos));
+   6:	6818      	ldr	r0, [r3, #0]
+   8:	4302      	orrs	r2, r0
+   a:	601a      	str	r2, [r3, #0]
+    FLASH->ACR.V32 = (tmpreg | (FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos));
+   c:	4a03      	ldr	r2, [pc, #12]	; (1c <DRVIF_cacheReset+0x1c>)
+   e:	430a      	orrs	r2, r1
+  10:	601a      	str	r2, [r3, #0]
+}
+  12:	4770      	bx	lr
+  14:	40040c00 	.word	0x40040c00
+  18:	5aa50800 	.word	0x5aa50800
+  1c:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.DRVIF_initFlash:
+
+00000000 <DRVIF_initFlash>:
+{
+   0:	b510      	push	{r4, lr}
+  \details Disables IRQ interrupts by setting special-purpose register PRIMASK.
+           Can only be executed in Privileged modes.
+ */
+__STATIC_FORCEINLINE void __disable_irq(void)
+{
+  __ASM volatile ("cpsid i" : : : "memory");
+   2:	b672      	cpsid	i
+    DRV_LVRState = (uint8_t)SYSCFG->PWRCR.BIT.LVREN;
+   4:	4a0a      	ldr	r2, [pc, #40]	; (30 <DRVIF_initFlash+0x30>)
+   6:	490b      	ldr	r1, [pc, #44]	; (34 <DRVIF_initFlash+0x34>)
+   8:	6813      	ldr	r3, [r2, #0]
+   a:	051b      	lsls	r3, r3, #20
+   c:	0fdb      	lsrs	r3, r3, #31
+   e:	700b      	strb	r3, [r1, #0]
+    SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_LVREN_Msk;
+  10:	6813      	ldr	r3, [r2, #0]
+  12:	4909      	ldr	r1, [pc, #36]	; (38 <DRVIF_initFlash+0x38>)
+  14:	400b      	ands	r3, r1
+  16:	6013      	str	r3, [r2, #0]
+    if (FLASH->CR.BIT.MNLCK)
+  18:	4b08      	ldr	r3, [pc, #32]	; (3c <DRVIF_initFlash+0x3c>)
+  1a:	691a      	ldr	r2, [r3, #16]
+  1c:	0412      	lsls	r2, r2, #16
+  1e:	d503      	bpl.n	28 <DRVIF_initFlash+0x28>
+        FLASH->MKYR = FLASH_MAIN_KEY;
+  20:	4a07      	ldr	r2, [pc, #28]	; (40 <DRVIF_initFlash+0x40>)
+  22:	605a      	str	r2, [r3, #4]
+        FLASH->MKYR = FLASH_MULTI_OP_KEY;
+  24:	4a07      	ldr	r2, [pc, #28]	; (44 <DRVIF_initFlash+0x44>)
+  26:	605a      	str	r2, [r3, #4]
+    DRVIF_resetFlash();
+  28:	f7ff fffe 	bl	0 <DRVIF_initFlash>
+}
+  2c:	bd10      	pop	{r4, pc}
+  2e:	46c0      	nop			; (mov r8, r8)
+  30:	40040400 	.word	0x40040400
+  34:	00000000 	.word	0x00000000
+  38:	fffff7ff 	.word	0xfffff7ff
+  3c:	40040c00 	.word	0x40040c00
+  40:	8ace0246 	.word	0x8ace0246
+  44:	b4b4b4b4 	.word	0xb4b4b4b4
+
+Disassembly of section .text.DRVIF_write:
+
+00000000 <DRVIF_write>:
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+ *  \return   true if address is aligned, else false
+ */
+DRVIF_RAMCODE static inline bool COMA_isAligned(uint32_t addr)
+{
+    const uint32_t WrBlockMask = (uint32_t)(sizeof(COMA_wrUnit_t)-1u);
+    return ((WrBlockMask & addr) == 0u) ? true : false;//lint !e587 evaluates always true: false positive
+   2:	2503      	movs	r5, #3
+   4:	0004      	movs	r4, r0
+   6:	b085      	sub	sp, #20
+   8:	9201      	str	r2, [sp, #4]
+   a:	402c      	ands	r4, r5
+    if(!COMA_isAligned(addr)){return 0U;}
+   c:	4228      	tst	r0, r5
+   e:	d131      	bne.n	74 <DRVIF_write+0x74>
+    if((addr > ROM1_PHY_END)){return 0U;}
+  10:	2380      	movs	r3, #128	; 0x80
+  12:	02db      	lsls	r3, r3, #11
+  14:	4298      	cmp	r0, r3
+  16:	d22a      	bcs.n	6e <DRVIF_write+0x6e>
+    uint32_t tmpreg = FLASH->ACR.V32;
+  18:	4b17      	ldr	r3, [pc, #92]	; (78 <DRVIF_write+0x78>)
+    FLASH->ACR.V32 = ((FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  1a:	4f18      	ldr	r7, [pc, #96]	; (7c <DRVIF_write+0x7c>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+  1c:	681e      	ldr	r6, [r3, #0]
+    FLASH->ACR.V32 = ((FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  1e:	4035      	ands	r5, r6
+  20:	433d      	orrs	r5, r7
+  22:	601d      	str	r5, [r3, #0]
+    FLASH->CNTR = CounterInitValue;
+  24:	2501      	movs	r5, #1
+  26:	426d      	negs	r5, r5
+  28:	629d      	str	r5, [r3, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  2a:	62dd      	str	r5, [r3, #44]	; 0x2c
+    FLASH->CNTCR = 0x01U;
+  2c:	3502      	adds	r5, #2
+  2e:	631d      	str	r5, [r3, #48]	; 0x30
+    FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  30:	4d13      	ldr	r5, [pc, #76]	; (80 <DRVIF_write+0x80>)
+  32:	611d      	str	r5, [r3, #16]
+DRVIF_RAMCODE static inline COMA_wrUnit_t COMA_charToWrUnit(uint32_t size, const uint8_t* const inputData)
+{
+    union COMA_wrUnit_u wrResult;
+    for(uint32_t i=0; i<sizeof(COMA_wrUnit_t); i++)
+    {
+        wrResult.wrArray[i] = ((i < size) ? inputData[i] : (uint8_t)(COMA_ERASE_BYTE));
+  34:	ad03      	add	r5, sp, #12
+  36:	46ac      	mov	ip, r5
+  38:	2500      	movs	r5, #0
+  3a:	42a1      	cmp	r1, r4
+  3c:	d901      	bls.n	42 <DRVIF_write+0x42>
+  3e:	9a01      	ldr	r2, [sp, #4]
+  40:	5d15      	ldrb	r5, [r2, r4]
+  42:	4662      	mov	r2, ip
+  44:	54a5      	strb	r5, [r4, r2]
+    for(uint32_t i=0; i<sizeof(COMA_wrUnit_t); i++)
+  46:	3401      	adds	r4, #1
+  48:	2c04      	cmp	r4, #4
+  4a:	d1f5      	bne.n	38 <DRVIF_write+0x38>
+    while ((FLASH->SR.V32 & FLASH_FLAG_BSY) != 0U){}
+  4c:	2180      	movs	r1, #128	; 0x80
+    }
+    return wrResult.wrUnit;
+  4e:	9a03      	ldr	r2, [sp, #12]
+  50:	0209      	lsls	r1, r1, #8
+ *  \param    inputData: pointer to input buffer
+ *  \param    addr:  flash address 
+ */
+DRVIF_RAMCODE static inline void COMA_copyToWrUnit(uint32_t size, const uint8_t* const inputData, uint32_t addr)
+{
+    *(COMA_wrUnit_t *)addr = COMA_charToWrUnit(size, inputData); /*lint !e923 upper layer responsible  for alignment */
+  52:	6002      	str	r2, [r0, #0]
+  54:	68d8      	ldr	r0, [r3, #12]
+  56:	0002      	movs	r2, r0
+  58:	400a      	ands	r2, r1
+  5a:	4208      	tst	r0, r1
+  5c:	d1fa      	bne.n	54 <DRVIF_write+0x54>
+    tmpreg = ((FLASH_ACR_UNLOCK_KEY << FLASH_ACR_LOCK_Pos) | tmpreg);
+  5e:	4337      	orrs	r7, r6
+    FLASH->CR.V32 = 0U;
+  60:	611a      	str	r2, [r3, #16]
+    FLASH->CNTR = 0x0U;
+  62:	629a      	str	r2, [r3, #40]	; 0x28
+    FLASH->UPCNTR = 0x0U;
+  64:	62da      	str	r2, [r3, #44]	; 0x2c
+    FLASH->CNTCR = 0x0U;
+  66:	631a      	str	r2, [r3, #48]	; 0x30
+    FLASH->ACR.V32 = tmpreg;
+  68:	601f      	str	r7, [r3, #0]
+    DRVIF_cacheReset();
+  6a:	f7ff fffe 	bl	0 <DRVIF_write>
+}
+  6e:	0020      	movs	r0, r4
+  70:	b005      	add	sp, #20
+  72:	bdf0      	pop	{r4, r5, r6, r7, pc}
+    if(!COMA_isAligned(addr)){return 0U;}
+  74:	2400      	movs	r4, #0
+  76:	e7fa      	b.n	6e <DRVIF_write+0x6e>
+  78:	40040c00 	.word	0x40040c00
+  7c:	5aa50000 	.word	0x5aa50000
+  80:	6e910100 	.word	0x6e910100
+
+Disassembly of section .text.DRVIF_isAddrRangeValid:
+
+00000000 <DRVIF_isAddrRangeValid>:
+        (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+   0:	2280      	movs	r2, #128	; 0x80
+   2:	2300      	movs	r3, #0
+   4:	02d2      	lsls	r2, r2, #11
+   6:	4290      	cmp	r0, r2
+   8:	d202      	bcs.n	10 <DRVIF_isAddrRangeValid+0x10>
+        (range <=((memSeg->endAddr-addr)+1u))
+   a:	1a12      	subs	r2, r2, r0
+        ) ? true : false);
+   c:	428a      	cmp	r2, r1
+   e:	415b      	adcs	r3, r3
+    return COMA_isAddrRangeValid(&DRVIF_flashSegment, addr, range);
+  10:	0018      	movs	r0, r3
+}
+  12:	4770      	bx	lr
+
+Disassembly of section .text.DRVIF_erase:
+
+00000000 <DRVIF_erase>:
+        ((blockMask & addr) == 0u)   && /* check block alignment */
+   0:	0583      	lsls	r3, r0, #22
+{
+   2:	0002      	movs	r2, r0
+   4:	b510      	push	{r4, lr}
+   6:	0d98      	lsrs	r0, r3, #22
+         ) ? true : false);
+   8:	2b00      	cmp	r3, #0
+   a:	d11e      	bne.n	4a <DRVIF_erase+0x4a>
+    if(!COMA_isBlockAddrValid(&DRVIF_flashSegment, addr)){return 0u;}
+   c:	2380      	movs	r3, #128	; 0x80
+   e:	02db      	lsls	r3, r3, #11
+  10:	429a      	cmp	r2, r3
+  12:	d219      	bcs.n	48 <DRVIF_erase+0x48>
+    FLASH->CNTR = CounterInitValue;
+  14:	2101      	movs	r1, #1
+  16:	4b0e      	ldr	r3, [pc, #56]	; (50 <DRVIF_erase+0x50>)
+  18:	4249      	negs	r1, r1
+  1a:	6299      	str	r1, [r3, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  1c:	62d9      	str	r1, [r3, #44]	; 0x2c
+    FLASH->CNTCR = 0x01U;
+  1e:	3102      	adds	r1, #2
+  20:	6319      	str	r1, [r3, #48]	; 0x30
+    while ((FLASH->SR.V32 & FLASH_FLAG_BSY) != 0U){}
+  22:	2180      	movs	r1, #128	; 0x80
+ *  \param addr: physical address
+ *  \return related page number for input address
+ */
+static void DRVIF_setPageNumber(uint32_t addr)
+{
+    FLASH->CR1 = (uint16_t)((addr-DRVIF_flashSegment.startAddr)/PAGE_SIZE);
+  24:	0a92      	lsrs	r2, r2, #10
+  26:	615a      	str	r2, [r3, #20]
+    FLASH->CR.V32 = (FLASH_CR_CMD_MSE << FLASH_CR_CMD_Pos) | ((uint32_t)0x01U << FLASH_CR_STRT_Pos);
+  28:	4a0a      	ldr	r2, [pc, #40]	; (54 <DRVIF_erase+0x54>)
+    while ((FLASH->SR.V32 & FLASH_FLAG_BSY) != 0U){}
+  2a:	0209      	lsls	r1, r1, #8
+    FLASH->CR.V32 = (FLASH_CR_CMD_MSE << FLASH_CR_CMD_Pos) | ((uint32_t)0x01U << FLASH_CR_STRT_Pos);
+  2c:	611a      	str	r2, [r3, #16]
+    while ((FLASH->SR.V32 & FLASH_FLAG_BSY) != 0U){}
+  2e:	68d8      	ldr	r0, [r3, #12]
+  30:	0002      	movs	r2, r0
+  32:	400a      	ands	r2, r1
+  34:	4208      	tst	r0, r1
+  36:	d1fa      	bne.n	2e <DRVIF_erase+0x2e>
+    FLASH->CR.V32 = 0U;
+  38:	611a      	str	r2, [r3, #16]
+    FLASH->CNTR = 0x0U;
+  3a:	629a      	str	r2, [r3, #40]	; 0x28
+    FLASH->UPCNTR = 0x0U;
+  3c:	62da      	str	r2, [r3, #44]	; 0x2c
+    FLASH->CNTCR = 0x0U;
+  3e:	631a      	str	r2, [r3, #48]	; 0x30
+    DRVIF_cacheReset();
+  40:	f7ff fffe 	bl	0 <DRVIF_erase>
+  44:	2080      	movs	r0, #128	; 0x80
+  46:	00c0      	lsls	r0, r0, #3
+}
+  48:	bd10      	pop	{r4, pc}
+    if(!COMA_isBlockAddrValid(&DRVIF_flashSegment, addr)){return 0u;}
+  4a:	2000      	movs	r0, #0
+  4c:	e7fc      	b.n	48 <DRVIF_erase+0x48>
+  4e:	46c0      	nop			; (mov r8, r8)
+  50:	40040c00 	.word	0x40040c00
+  54:	e6190100 	.word	0xe6190100

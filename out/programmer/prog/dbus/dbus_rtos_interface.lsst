@@ -1,0 +1,373 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbus_rtos_interface.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DBR_Handle_BAL,"ax",%progbits
+  18              		.align	1
+  19              		.global	DBR_Handle_BAL
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	DBR_Handle_BAL:
+  25              	.LFB59:
+  26              		.file 1 "common/prog/dbus/dbus_rtos_interface.c"
+   1:common/prog/dbus/dbus_rtos_interface.c **** /*******************************************************************************
+   2:common/prog/dbus/dbus_rtos_interface.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/dbus/dbus_rtos_interface.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/dbus/dbus_rtos_interface.c ****  *
+   5:common/prog/dbus/dbus_rtos_interface.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/dbus/dbus_rtos_interface.c ****  *  are protected by international copyright laws.
+   7:common/prog/dbus/dbus_rtos_interface.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/dbus/dbus_rtos_interface.c ****  *
+   9:common/prog/dbus/dbus_rtos_interface.c ****  *******************************************************************************
+  10:common/prog/dbus/dbus_rtos_interface.c ****  *  PROJECT          IC Dbus2
+  11:common/prog/dbus/dbus_rtos_interface.c ****  ******************************************************************************/
+  12:common/prog/dbus/dbus_rtos_interface.c **** 
+  13:common/prog/dbus/dbus_rtos_interface.c **** 
+  14:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  15:common/prog/dbus/dbus_rtos_interface.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  17:common/prog/dbus/dbus_rtos_interface.c **** /** \file
+  18:common/prog/dbus/dbus_rtos_interface.c ****  *
+  19:common/prog/dbus/dbus_rtos_interface.c ****  *
+  20:common/prog/dbus/dbus_rtos_interface.c ****  *  \brief    Implementation of interface to scheduling
+  21:common/prog/dbus/dbus_rtos_interface.c ****  *
+  22:common/prog/dbus/dbus_rtos_interface.c ****  *  \details  This layer handles the interface to RTOS
+  23:common/prog/dbus/dbus_rtos_interface.c ****  *
+  24:common/prog/dbus/dbus_rtos_interface.c ****  */
+  25:common/prog/dbus/dbus_rtos_interface.c **** 
+  26:common/prog/dbus/dbus_rtos_interface.c **** 
+  27:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  28:common/prog/dbus/dbus_rtos_interface.c **** /* INCLUDES                                                                   */
+  29:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  30:common/prog/dbus/dbus_rtos_interface.c **** #include "bsh_stdinc.h"
+  31:common/prog/dbus/dbus_rtos_interface.c **** #include <stdint.h>
+  32:common/prog/dbus/dbus_rtos_interface.c **** #include "dbus_rtos_interface.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 2
+
+
+  33:common/prog/dbus/dbus_rtos_interface.c **** #include "hsup.h"
+  34:common/prog/dbus/dbus_rtos_interface.c **** 
+  35:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  36:common/prog/dbus/dbus_rtos_interface.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  37:common/prog/dbus/dbus_rtos_interface.c **** /******************************************************************************/
+  38:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_Handle_BAL( void )
+  39:common/prog/dbus/dbus_rtos_interface.c **** {
+  27              		.loc 1 39 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  40:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+  41:common/prog/dbus/dbus_rtos_interface.c ****     return (BAL_SendMessage() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+  42:common/prog/dbus/dbus_rtos_interface.c **** #else
+  43:common/prog/dbus/dbus_rtos_interface.c ****     return( BAL_HandleTask() );
+  31              		.loc 1 43 5 view .LVU1
+  39:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+  32              		.loc 1 39 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 43 13 view .LVU3
+  39 0002 FFF7FEFF 		bl	BAL_HandleTask
+  40              	.LVL0:
+  44:common/prog/dbus/dbus_rtos_interface.c **** #endif
+  45:common/prog/dbus/dbus_rtos_interface.c **** }
+  41              		.loc 1 45 1 view .LVU4
+  42              		@ sp needed
+  43 0006 10BD     		pop	{r4, pc}
+  44              		.cfi_endproc
+  45              	.LFE59:
+  47              		.section	.text.DBR_Handle_DBPL,"ax",%progbits
+  48              		.align	1
+  49              		.global	DBR_Handle_DBPL
+  50              		.syntax unified
+  51              		.code	16
+  52              		.thumb_func
+  54              	DBR_Handle_DBPL:
+  55              	.LFB60:
+  46:common/prog/dbus/dbus_rtos_interface.c **** 
+  47:common/prog/dbus/dbus_rtos_interface.c **** 
+  48:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_Handle_DBPL( void )
+  49:common/prog/dbus/dbus_rtos_interface.c **** {
+  56              		.loc 1 49 1 is_stmt 1 view -0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  50:common/prog/dbus/dbus_rtos_interface.c ****     uint8_t RetVal;
+  60              		.loc 1 50 5 view .LVU6
+  51:common/prog/dbus/dbus_rtos_interface.c **** 
+  52:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+  53:common/prog/dbus/dbus_rtos_interface.c ****     static bool WasInit = false;
+  54:common/prog/dbus/dbus_rtos_interface.c **** 
+  55:common/prog/dbus/dbus_rtos_interface.c ****     //Ensure TASK_INITIALISED was returned once
+  56:common/prog/dbus/dbus_rtos_interface.c ****     //Return TASK_TERMINATE in the following function-call
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 3
+
+
+  57:common/prog/dbus/dbus_rtos_interface.c ****     if( WasInit == false )
+  58:common/prog/dbus/dbus_rtos_interface.c ****     {
+  59:common/prog/dbus/dbus_rtos_interface.c ****         DBPL_ModuleInit();
+  60:common/prog/dbus/dbus_rtos_interface.c **** 
+  61:common/prog/dbus/dbus_rtos_interface.c ****         //Terminate tasks for now. Will be reactivated if required
+  62:common/prog/dbus/dbus_rtos_interface.c ****         /*lint -save -e9034 tested to work correctly */
+  63:common/prog/dbus/dbus_rtos_interface.c ****         RTOS_terminateTask( DBR_ED_TASK_DBPL_RX );
+  64:common/prog/dbus/dbus_rtos_interface.c ****         RTOS_terminateTask( DBR_ED_TASK_DBPL_TX );
+  65:common/prog/dbus/dbus_rtos_interface.c ****         RTOS_terminateTask( DBR_ED_TASK_DBPL_PWR );
+  66:common/prog/dbus/dbus_rtos_interface.c ****         /*lint -restore -e9034 */
+  67:common/prog/dbus/dbus_rtos_interface.c **** 
+  68:common/prog/dbus/dbus_rtos_interface.c ****         WasInit = true;
+  69:common/prog/dbus/dbus_rtos_interface.c ****         RetVal = TASK_INITIALISED;
+  70:common/prog/dbus/dbus_rtos_interface.c ****     }
+  71:common/prog/dbus/dbus_rtos_interface.c ****     else
+  72:common/prog/dbus/dbus_rtos_interface.c ****     {
+  73:common/prog/dbus/dbus_rtos_interface.c ****         RetVal = TASK_TERMINATE;
+  74:common/prog/dbus/dbus_rtos_interface.c ****     }
+  75:common/prog/dbus/dbus_rtos_interface.c **** #else
+  76:common/prog/dbus/dbus_rtos_interface.c ****     RetVal = DBPL_HandleTask();
+  61              		.loc 1 76 5 view .LVU7
+  49:common/prog/dbus/dbus_rtos_interface.c ****     uint8_t RetVal;
+  62              		.loc 1 49 1 is_stmt 0 view .LVU8
+  63 0000 10B5     		push	{r4, lr}
+  64              	.LCFI1:
+  65              		.cfi_def_cfa_offset 8
+  66              		.cfi_offset 4, -8
+  67              		.cfi_offset 14, -4
+  68              		.loc 1 76 14 view .LVU9
+  69 0002 FFF7FEFF 		bl	DBPL_HandleTask
+  70              	.LVL1:
+  77:common/prog/dbus/dbus_rtos_interface.c **** #endif //RTOS_DBUS_EVENTDRIVEN
+  78:common/prog/dbus/dbus_rtos_interface.c **** 
+  79:common/prog/dbus/dbus_rtos_interface.c ****     return RetVal;
+  71              		.loc 1 79 5 is_stmt 1 view .LVU10
+  80:common/prog/dbus/dbus_rtos_interface.c **** }
+  72              		.loc 1 80 1 is_stmt 0 view .LVU11
+  73              		@ sp needed
+  74 0006 10BD     		pop	{r4, pc}
+  75              		.cfi_endproc
+  76              	.LFE60:
+  78              		.section	.text.DBR_Handle_DLL,"ax",%progbits
+  79              		.align	1
+  80              		.global	DBR_Handle_DLL
+  81              		.syntax unified
+  82              		.code	16
+  83              		.thumb_func
+  85              	DBR_Handle_DLL:
+  86              	.LFB61:
+  81:common/prog/dbus/dbus_rtos_interface.c **** 
+  82:common/prog/dbus/dbus_rtos_interface.c **** 
+  83:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_Handle_DLL( void )
+  84:common/prog/dbus/dbus_rtos_interface.c **** {
+  87              		.loc 1 84 1 is_stmt 1 view -0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 4
+
+
+  85:common/prog/dbus/dbus_rtos_interface.c ****     uint8_t RetVal;
+  91              		.loc 1 85 5 view .LVU13
+  86:common/prog/dbus/dbus_rtos_interface.c **** 
+  87:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+  88:common/prog/dbus/dbus_rtos_interface.c ****     static bool WasInit = false;
+  89:common/prog/dbus/dbus_rtos_interface.c **** 
+  90:common/prog/dbus/dbus_rtos_interface.c ****     //Ensure TASK_INITIALISED was returned once
+  91:common/prog/dbus/dbus_rtos_interface.c ****     //Return TASK_TERMINATE in the following function-call
+  92:common/prog/dbus/dbus_rtos_interface.c ****     if( WasInit == false )
+  93:common/prog/dbus/dbus_rtos_interface.c ****     {
+  94:common/prog/dbus/dbus_rtos_interface.c ****         //Terminate task for now. Will be reactivated if required
+  95:common/prog/dbus/dbus_rtos_interface.c ****         /*lint -save -e9034 tested to work correctly */
+  96:common/prog/dbus/dbus_rtos_interface.c ****         RTOS_terminateTask( DBR_ED_TASK_DLL_TX_INIT );
+  97:common/prog/dbus/dbus_rtos_interface.c ****         RTOS_terminateTask( DBR_ED_TASK_DLL_ISR );
+  98:common/prog/dbus/dbus_rtos_interface.c ****         /*lint -restore -e9034 */
+  99:common/prog/dbus/dbus_rtos_interface.c **** 
+ 100:common/prog/dbus/dbus_rtos_interface.c ****         if( DLL_moduleInit() == false )
+ 101:common/prog/dbus/dbus_rtos_interface.c ****         {
+ 102:common/prog/dbus/dbus_rtos_interface.c ****             RetVal = TASK_NOT_INITIALISED;
+ 103:common/prog/dbus/dbus_rtos_interface.c ****         }
+ 104:common/prog/dbus/dbus_rtos_interface.c ****         else
+ 105:common/prog/dbus/dbus_rtos_interface.c ****         {
+ 106:common/prog/dbus/dbus_rtos_interface.c ****             WasInit = true;
+ 107:common/prog/dbus/dbus_rtos_interface.c ****             RetVal = TASK_INITIALISED;
+ 108:common/prog/dbus/dbus_rtos_interface.c ****         }
+ 109:common/prog/dbus/dbus_rtos_interface.c ****     }
+ 110:common/prog/dbus/dbus_rtos_interface.c ****     else
+ 111:common/prog/dbus/dbus_rtos_interface.c ****     {
+ 112:common/prog/dbus/dbus_rtos_interface.c ****         WasInit = false; //Prepare for a later reinit
+ 113:common/prog/dbus/dbus_rtos_interface.c ****         RetVal = TASK_TERMINATE;
+ 114:common/prog/dbus/dbus_rtos_interface.c ****     }
+ 115:common/prog/dbus/dbus_rtos_interface.c **** #else
+ 116:common/prog/dbus/dbus_rtos_interface.c ****     RetVal = DLL_HandleTask();
+  92              		.loc 1 116 5 view .LVU14
+  84:common/prog/dbus/dbus_rtos_interface.c ****     uint8_t RetVal;
+  93              		.loc 1 84 1 is_stmt 0 view .LVU15
+  94 0000 10B5     		push	{r4, lr}
+  95              	.LCFI2:
+  96              		.cfi_def_cfa_offset 8
+  97              		.cfi_offset 4, -8
+  98              		.cfi_offset 14, -4
+  99              		.loc 1 116 14 view .LVU16
+ 100 0002 FFF7FEFF 		bl	DLL_HandleTask
+ 101              	.LVL2:
+ 117:common/prog/dbus/dbus_rtos_interface.c **** #endif //RTOS_DBUS_EVENTDRIVEN
+ 118:common/prog/dbus/dbus_rtos_interface.c **** 
+ 119:common/prog/dbus/dbus_rtos_interface.c ****     return RetVal;
+ 102              		.loc 1 119 5 is_stmt 1 view .LVU17
+ 120:common/prog/dbus/dbus_rtos_interface.c **** }
+ 103              		.loc 1 120 1 is_stmt 0 view .LVU18
+ 104              		@ sp needed
+ 105 0006 10BD     		pop	{r4, pc}
+ 106              		.cfi_endproc
+ 107              	.LFE61:
+ 109              		.section	.text.DBR_SetEventflag,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	DBR_SetEventflag
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 5
+
+
+ 112              		.syntax unified
+ 113              		.code	16
+ 114              		.thumb_func
+ 116              	DBR_SetEventflag:
+ 117              	.LVL3:
+ 118              	.LFB62:
+ 121:common/prog/dbus/dbus_rtos_interface.c **** 
+ 122:common/prog/dbus/dbus_rtos_interface.c **** 
+ 123:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+ 124:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_ReceiveMessage( void )
+ 125:common/prog/dbus/dbus_rtos_interface.c **** {
+ 126:common/prog/dbus/dbus_rtos_interface.c ****     return (DBPL_ReceiveMessage() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+ 127:common/prog/dbus/dbus_rtos_interface.c **** }
+ 128:common/prog/dbus/dbus_rtos_interface.c **** 
+ 129:common/prog/dbus/dbus_rtos_interface.c **** 
+ 130:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_SendServiceMessage( void )
+ 131:common/prog/dbus/dbus_rtos_interface.c **** {
+ 132:common/prog/dbus/dbus_rtos_interface.c ****     return (DBPL_SendServiceMessage() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+ 133:common/prog/dbus/dbus_rtos_interface.c **** }
+ 134:common/prog/dbus/dbus_rtos_interface.c **** 
+ 135:common/prog/dbus/dbus_rtos_interface.c **** 
+ 136:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_SendPowerMessage( void )
+ 137:common/prog/dbus/dbus_rtos_interface.c **** {
+ 138:common/prog/dbus/dbus_rtos_interface.c ****     return (DBPL_SendPowerMessage() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+ 139:common/prog/dbus/dbus_rtos_interface.c **** }
+ 140:common/prog/dbus/dbus_rtos_interface.c **** 
+ 141:common/prog/dbus/dbus_rtos_interface.c **** 
+ 142:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_TransmitFrameInit( void )
+ 143:common/prog/dbus/dbus_rtos_interface.c **** {
+ 144:common/prog/dbus/dbus_rtos_interface.c ****     return (DLL_sendingInit() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+ 145:common/prog/dbus/dbus_rtos_interface.c **** }
+ 146:common/prog/dbus/dbus_rtos_interface.c **** 
+ 147:common/prog/dbus/dbus_rtos_interface.c **** 
+ 148:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_TransmitFrameDone( void )
+ 149:common/prog/dbus/dbus_rtos_interface.c **** {
+ 150:common/prog/dbus/dbus_rtos_interface.c ****     DLL_sendingDone();
+ 151:common/prog/dbus/dbus_rtos_interface.c ****     return TASK_INITIALISED;
+ 152:common/prog/dbus/dbus_rtos_interface.c **** }
+ 153:common/prog/dbus/dbus_rtos_interface.c **** 
+ 154:common/prog/dbus/dbus_rtos_interface.c **** 
+ 155:common/prog/dbus/dbus_rtos_interface.c **** uint8_t DBR_HandleInterrupt( void )
+ 156:common/prog/dbus/dbus_rtos_interface.c **** {
+ 157:common/prog/dbus/dbus_rtos_interface.c ****     return (DLL_handleInterrupt() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+ 158:common/prog/dbus/dbus_rtos_interface.c **** }
+ 159:common/prog/dbus/dbus_rtos_interface.c **** #endif //RTOS_DBUS_EVENTDRIVEN
+ 160:common/prog/dbus/dbus_rtos_interface.c **** 
+ 161:common/prog/dbus/dbus_rtos_interface.c **** 
+ 162:common/prog/dbus/dbus_rtos_interface.c **** void DBR_SetEventflag( uint32_t task_flag )
+ 163:common/prog/dbus/dbus_rtos_interface.c **** {
+ 119              		.loc 1 163 1 is_stmt 1 view -0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123              		@ link register save eliminated.
+ 164:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+ 165:common/prog/dbus/dbus_rtos_interface.c ****     //A possible error would be set on lower layer
+ 166:common/prog/dbus/dbus_rtos_interface.c ****     (void)RTOS_runEventDrivenTask( task_flag, RTOS_THREAD_ID_DBUS );
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 6
+
+
+ 167:common/prog/dbus/dbus_rtos_interface.c **** #else
+ 168:common/prog/dbus/dbus_rtos_interface.c ****     (void)task_flag;
+ 124              		.loc 1 168 5 view .LVU20
+ 169:common/prog/dbus/dbus_rtos_interface.c ****     HSUP_vNop();
+ 125              		.loc 1 169 5 view .LVU21
+ 126              		.loc 1 169 5 view .LVU22
+ 127              		.syntax divided
+ 128              	@ 169 "common/prog/dbus/dbus_rtos_interface.c" 1
+ 129 0000 C046     		NOP
+ 130              	@ 0 "" 2
+ 131              		.loc 1 169 5 view .LVU23
+ 170:common/prog/dbus/dbus_rtos_interface.c **** #endif
+ 171:common/prog/dbus/dbus_rtos_interface.c **** }
+ 132              		.loc 1 171 1 is_stmt 0 view .LVU24
+ 133              		.thumb
+ 134              		.syntax unified
+ 135              		@ sp needed
+ 136 0002 7047     		bx	lr
+ 137              		.cfi_endproc
+ 138              	.LFE62:
+ 140              		.section	.text.DBR_RunEventdrivenDbusTask,"ax",%progbits
+ 141              		.align	1
+ 142              		.global	DBR_RunEventdrivenDbusTask
+ 143              		.syntax unified
+ 144              		.code	16
+ 145              		.thumb_func
+ 147              	DBR_RunEventdrivenDbusTask:
+ 148              	.LVL4:
+ 149              	.LFB63:
+ 172:common/prog/dbus/dbus_rtos_interface.c **** 
+ 173:common/prog/dbus/dbus_rtos_interface.c **** 
+ 174:common/prog/dbus/dbus_rtos_interface.c **** void DBR_RunEventdrivenDbusTask( uint8_t task_id )
+ 175:common/prog/dbus/dbus_rtos_interface.c **** {
+ 150              		.loc 1 175 1 is_stmt 1 view -0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 0
+ 153              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154              		@ link register save eliminated.
+ 176:common/prog/dbus/dbus_rtos_interface.c **** #ifdef RTOS_DBUS_EVENTDRIVEN
+ 177:common/prog/dbus/dbus_rtos_interface.c ****     RTOS_reactivateTask( task_id ); /*lint -e9034 tested to work correctly */
+ 178:common/prog/dbus/dbus_rtos_interface.c **** #else
+ 179:common/prog/dbus/dbus_rtos_interface.c ****     (void)task_id;
+ 155              		.loc 1 179 5 view .LVU26
+ 180:common/prog/dbus/dbus_rtos_interface.c ****     HSUP_vNop();
+ 156              		.loc 1 180 5 view .LVU27
+ 157              		.loc 1 180 5 view .LVU28
+ 158              		.syntax divided
+ 159              	@ 180 "common/prog/dbus/dbus_rtos_interface.c" 1
+ 160 0000 C046     		NOP
+ 161              	@ 0 "" 2
+ 162              		.loc 1 180 5 view .LVU29
+ 181:common/prog/dbus/dbus_rtos_interface.c **** #endif
+ 182:common/prog/dbus/dbus_rtos_interface.c **** }
+ 163              		.loc 1 182 1 is_stmt 0 view .LVU30
+ 164              		.thumb
+ 165              		.syntax unified
+ 166              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQvdUGi.s 			page 7
+
+
+ 167 0002 7047     		bx	lr
+ 168              		.cfi_endproc
+ 169              	.LFE63:
+ 171              		.text
+ 172              	.Letext0:
+ 173              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 174              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 175              		.file 4 "common/prog/dbus/dbusdll.h"
+ 176              		.file 5 "common/prog/dbus/dbuspresentation.h"
+ 177              		.file 6 "common/prog/dbus/bal.h"

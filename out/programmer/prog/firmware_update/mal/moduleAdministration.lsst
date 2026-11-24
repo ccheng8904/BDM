@@ -1,0 +1,1205 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"moduleAdministration.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MAL_copyPatToDictionary.constprop.0,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  23              	MAL_copyPatToDictionary.constprop.0:
+  24              	.LVL0:
+  25              	.LFB80:
+  26              		.file 1 "common/prog/firmware_update/mal/moduleAdministration.c"
+   1:common/prog/firmware_update/mal/moduleAdministration.c **** /*******************************************************************************
+   2:common/prog/firmware_update/mal/moduleAdministration.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mal/moduleAdministration.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+   5:common/prog/firmware_update/mal/moduleAdministration.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mal/moduleAdministration.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mal/moduleAdministration.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+   9:common/prog/firmware_update/mal/moduleAdministration.c ****  *******************************************************************************
+  10:common/prog/firmware_update/mal/moduleAdministration.c ****  *  PROJECT          Firmware Update Memory Abstraction Layer
+  11:common/prog/firmware_update/mal/moduleAdministration.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  13:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  14:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  15:common/prog/firmware_update/mal/moduleAdministration.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  17:common/prog/firmware_update/mal/moduleAdministration.c **** /** \file
+  18:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+  19:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \ingroup  firmware_update
+  20:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+  21:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \brief    Implementation of unit moduleAdministration.
+  22:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+  23:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+  24:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  25:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  26:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  27:common/prog/firmware_update/mal/moduleAdministration.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  29:common/prog/firmware_update/mal/moduleAdministration.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/mal/moduleAdministration.c **** #include <stdint.h>
+  31:common/prog/firmware_update/mal/moduleAdministration.c **** #include "moduleAdministration.h"
+  32:common/prog/firmware_update/mal/moduleAdministration.c **** #include "stdcrc/StdCrc.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 2
+
+
+  33:common/prog/firmware_update/mal/moduleAdministration.c **** #include "utility/utility.h"
+  34:common/prog/firmware_update/mal/moduleAdministration.c **** #include "mal_driver.h"
+  35:common/prog/firmware_update/mal/moduleAdministration.c **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+  36:common/prog/firmware_update/mal/moduleAdministration.c **** #include "fwu_opt_bytes.h"
+  37:common/prog/firmware_update/mal/moduleAdministration.c **** #include "firmware_update/mem_drv/mem_drv.h"
+  38:common/prog/firmware_update/mal/moduleAdministration.c **** #include "otp_mem/fwu_otp_memory.h"
+  39:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  40:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  41:common/prog/firmware_update/mal/moduleAdministration.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  42:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  43:common/prog/firmware_update/mal/moduleAdministration.c **** static const struct MAL_partition_s * MAL_searchMemModule
+  44:common/prog/firmware_update/mal/moduleAdministration.c **** (
+  45:common/prog/firmware_update/mal/moduleAdministration.c ****     enum MAL_ModuleEnum          module,
+  46:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s *partitionTbl,
+  47:common/prog/firmware_update/mal/moduleAdministration.c ****     uint8_t                      maxTableLen
+  48:common/prog/firmware_update/mal/moduleAdministration.c **** );
+  49:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  50:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  51:common/prog/firmware_update/mal/moduleAdministration.c **** static void MAL_createModuleDictionary(void);
+  52:common/prog/firmware_update/mal/moduleAdministration.c **** static void MAL_copyPatToDictionary(const struct MAL_partition_s * pTbl, uint8_t max_size);
+  53:common/prog/firmware_update/mal/moduleAdministration.c **** static bool MAL_copyModuleHeaderToRAM(const struct MAL_partition_s * partition,
+  54:common/prog/firmware_update/mal/moduleAdministration.c ****                                       struct MAL_ModuleHeader_s * moduleHeaderInRam);
+  55:common/prog/firmware_update/mal/moduleAdministration.c **** static bool MAL_isInDictionary(enum  MAL_ModuleEnum mod_number);
+  56:common/prog/firmware_update/mal/moduleAdministration.c **** #if defined(VARIANT_BOOTMANAGER)
+  57:common/prog/firmware_update/mal/moduleAdministration.c ****     static uint32_t MAL_getModuleSize(const struct MAL_partition_s * partition);
+  58:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_isModuleCrcValid(const struct MAL_partition_s * partition);
+  59:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_isConsistencyOk(const struct MAL_partition_s * partition);
+  60:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_isApplicationIntegrityOk(void);
+  61:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_isIntegrityOk(const struct MAL_partition_s * partition);
+  62:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_isExludedFromIntegrityCheck(const struct MAL_partition_s * partition);
+  63:common/prog/firmware_update/mal/moduleAdministration.c ****     static uint32_t MAL_getBuildId(const struct MAL_partition_s * partition);
+  64:common/prog/firmware_update/mal/moduleAdministration.c ****     static bool MAL_handleIntegrityError(const struct MAL_partition_s * partition,
+  65:common/prog/firmware_update/mal/moduleAdministration.c ****                                          enum BMDAT_errorFlags err_flag);
+  66:common/prog/firmware_update/mal/moduleAdministration.c ****     static uint32_t MAL_convertArrayToU32(const uint8_t* intArray);
+  67:common/prog/firmware_update/mal/moduleAdministration.c **** #endif
+  68:common/prog/firmware_update/mal/moduleAdministration.c **** #ifdef FWU_FLEX_PARTITION_USED
+  69:common/prog/firmware_update/mal/moduleAdministration.c ****     static const struct MAL_partition_s * MAL_GetFlexPartitionTable(void);
+  70:common/prog/firmware_update/mal/moduleAdministration.c **** #endif //FWU_FLEX_PARTITION_USED
+  71:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  72:common/prog/firmware_update/mal/moduleAdministration.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  73:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  74:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  75:common/prog/firmware_update/mal/moduleAdministration.c **** /** dictionary saving all available memory modules */
+  76:common/prog/firmware_update/mal/moduleAdministration.c **** #ifdef FWU_FLEX_PARTITION_USED
+  77:common/prog/firmware_update/mal/moduleAdministration.c **** static enum    MAL_ModuleEnum  MAL_moduleDictionary[MAL_FLEX_PARTITION_ENTRIES + MAL_FIX_PARTITION_
+  78:common/prog/firmware_update/mal/moduleAdministration.c **** #else // only FIX partition used
+  79:common/prog/firmware_update/mal/moduleAdministration.c **** static enum    MAL_ModuleEnum  MAL_moduleDictionary[MAL_FIX_PARTITION_ENTRIES];
+  80:common/prog/firmware_update/mal/moduleAdministration.c **** #endif //FWU_FLEX_PARTITION_USED
+  81:common/prog/firmware_update/mal/moduleAdministration.c **** static uint8_t MAL_ModuleCount; ///< number of available modules
+  82:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  83:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  84:common/prog/firmware_update/mal/moduleAdministration.c **** #ifdef FWU_FLEX_PARTITION_USED
+  85:common/prog/firmware_update/mal/moduleAdministration.c ****     static const struct  MAL_partition_s * MAL_flexPatRef;
+  86:common/prog/firmware_update/mal/moduleAdministration.c **** #endif //FWU_FLEX_PARTITION_USED
+  87:common/prog/firmware_update/mal/moduleAdministration.c **** 
+  88:common/prog/firmware_update/mal/moduleAdministration.c **** #if defined(VARIANT_BOOTMANAGER)
+  89:common/prog/firmware_update/mal/moduleAdministration.c **** /*lint -esym(9003,MAL_maxFragments) could define variable at block scope
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 3
+
+
+  90:common/prog/firmware_update/mal/moduleAdministration.c ****  *                 [MISRA 2012 Rule 8.9, advisory]
+  91:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+  92:common/prog/firmware_update/mal/moduleAdministration.c ****     #ifdef FWU_FLEX_PARTITION_USED
+  93:common/prog/firmware_update/mal/moduleAdministration.c ****         static const uint8_t MAL_maxFragments = MAL_FLEX_PARTITION_ENTRIES;
+  94:common/prog/firmware_update/mal/moduleAdministration.c ****     #else
+  95:common/prog/firmware_update/mal/moduleAdministration.c ****         static const uint8_t MAL_maxFragments = MAL_FIX_PARTITION_ENTRIES;
+  96:common/prog/firmware_update/mal/moduleAdministration.c ****     #endif
+  97:common/prog/firmware_update/mal/moduleAdministration.c **** #endif
+  98:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+  99:common/prog/firmware_update/mal/moduleAdministration.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 100:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+ 101:common/prog/firmware_update/mal/moduleAdministration.c **** void MAL_initPartition(void)
+ 102:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 103:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_ModuleCount = 0u;
+ 104:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 105:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_flexPatRef = MAL_GetFlexPartitionTable();
+ 106:common/prog/firmware_update/mal/moduleAdministration.c ****   #endif
+ 107:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 108:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 109:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 110:common/prog/firmware_update/mal/moduleAdministration.c **** const struct MAL_partition_s * MAL_GetMemModule(enum MAL_ModuleEnum module)
+ 111:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 112:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s *partition;
+ 113:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 114:common/prog/firmware_update/mal/moduleAdministration.c ****     partition = NULL;
+ 115:common/prog/firmware_update/mal/moduleAdministration.c ****     if (module != MAL_FLEX_PARTITION) // no flex table entry in flex table allowed!
+ 116:common/prog/firmware_update/mal/moduleAdministration.c ****     {   /* try flex partition */
+ 117:common/prog/firmware_update/mal/moduleAdministration.c ****         partition = MAL_searchMemModule( module, MAL_flexPatRef,
+ 118:common/prog/firmware_update/mal/moduleAdministration.c ****                                         (uint8_t)MAL_FLEX_PARTITION_ENTRIES );
+ 119:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 120:common/prog/firmware_update/mal/moduleAdministration.c ****     if ( partition == NULL )
+ 121:common/prog/firmware_update/mal/moduleAdministration.c ****   #endif
+ 122:common/prog/firmware_update/mal/moduleAdministration.c ****     {   /* no result, so try fixed table */
+ 123:common/prog/firmware_update/mal/moduleAdministration.c ****         partition = MAL_searchMemModule( module, MAL_DataAnchor.partitionTblFix,
+ 124:common/prog/firmware_update/mal/moduleAdministration.c ****                                         (uint8_t)MAL_FIX_PARTITION_ENTRIES );
+ 125:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 126:common/prog/firmware_update/mal/moduleAdministration.c ****     return partition;
+ 127:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 128:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 129:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 130:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 131:common/prog/firmware_update/mal/moduleAdministration.c **** uint8_t MAL_GetMemModuleCount(void)
+ 132:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 133:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 134:common/prog/firmware_update/mal/moduleAdministration.c ****     return MAL_ModuleCount;
+ 135:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 136:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 137:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 138:common/prog/firmware_update/mal/moduleAdministration.c **** const struct MAL_partition_s * MAL_GetMemModuleByIndex(uint8_t index)
+ 139:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 140:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 141:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 142:common/prog/firmware_update/mal/moduleAdministration.c ****     if (index < MAL_ModuleCount)
+ 143:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 144:common/prog/firmware_update/mal/moduleAdministration.c ****         return MAL_GetMemModule(MAL_moduleDictionary[index]);
+ 145:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 146:common/prog/firmware_update/mal/moduleAdministration.c ****     else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 4
+
+
+ 147:common/prog/firmware_update/mal/moduleAdministration.c ****     {   /* index out of range */
+ 148:common/prog/firmware_update/mal/moduleAdministration.c ****         return NULL;
+ 149:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 150:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 151:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 152:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 153:common/prog/firmware_update/mal/moduleAdministration.c **** uint32_t MAL_getPartitionSize(const struct MAL_partition_s * partition)
+ 154:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 155:common/prog/firmware_update/mal/moduleAdministration.c ****     uint32_t partitionSize = 0u;
+ 156:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition != NULL)
+ 157:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 158:common/prog/firmware_update/mal/moduleAdministration.c ****         partitionSize = (uint32_t)((partition->physical_end.addr - partition->physical_start.addr) 
+ 159:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 160:common/prog/firmware_update/mal/moduleAdministration.c ****     return partitionSize;
+ 161:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 162:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 163:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 164:common/prog/firmware_update/mal/moduleAdministration.c **** const struct MAL_ModuleHeader_s * MAL_PartitionToHeader( const struct MAL_partition_s *partition )
+ 165:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 166:common/prog/firmware_update/mal/moduleAdministration.c ****     static struct MAL_ModuleHeader_s moduleHeaderInRam;
+ 167:common/prog/firmware_update/mal/moduleAdministration.c ****     static const struct MAL_partition_s *actualPartition = NULL;
+ 168:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition == NULL)
+ 169:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 170:common/prog/firmware_update/mal/moduleAdministration.c ****         return NULL;
+ 171:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 172:common/prog/firmware_update/mal/moduleAdministration.c ****     if(actualPartition != partition)
+ 173:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 174:common/prog/firmware_update/mal/moduleAdministration.c ****         if(MAL_copyModuleHeaderToRAM(partition, &moduleHeaderInRam) != true)
+ 175:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 176:common/prog/firmware_update/mal/moduleAdministration.c ****             return NULL;
+ 177:common/prog/firmware_update/mal/moduleAdministration.c ****         }
+ 178:common/prog/firmware_update/mal/moduleAdministration.c ****         actualPartition = partition;
+ 179:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 180:common/prog/firmware_update/mal/moduleAdministration.c ****     return &moduleHeaderInRam;
+ 181:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 182:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 183:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 184:common/prog/firmware_update/mal/moduleAdministration.c **** bool MAL_isBuildInApplication(const struct MAL_partition_s * partition)
+ 185:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 186:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition != NULL)
+ 187:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 188:common/prog/firmware_update/mal/moduleAdministration.c ****         enum MAL_ModuleEnum moduleId = partition->mod_number;
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****         return ((moduleId == MAL_PROGRAMMER_ID) || (moduleId == MAL_BP2_LOADER_ID));
+ 190:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 191:common/prog/firmware_update/mal/moduleAdministration.c ****     else
+ 192:common/prog/firmware_update/mal/moduleAdministration.c ****     {   // no valid partition given
+ 193:common/prog/firmware_update/mal/moduleAdministration.c ****         return false;
+ 194:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 195:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 196:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 197:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 198:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 199:common/prog/firmware_update/mal/moduleAdministration.c **** #if defined(VARIANT_BOOTMANAGER)
+ 200:common/prog/firmware_update/mal/moduleAdministration.c **** bool MAL_isModuleIntegrityOk(const struct MAL_partition_s * partitionToStart)
+ 201:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 202:common/prog/firmware_update/mal/moduleAdministration.c ****     if(MAL_isBuildInApplication(partitionToStart))
+ 203:common/prog/firmware_update/mal/moduleAdministration.c ****     {   // check integrity of build-in application
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 5
+
+
+ 204:common/prog/firmware_update/mal/moduleAdministration.c ****         return MAL_isIntegrityOk(partitionToStart);
+ 205:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 206:common/prog/firmware_update/mal/moduleAdministration.c ****     else
+ 207:common/prog/firmware_update/mal/moduleAdministration.c ****     {   // check the integrity of product application
+ 208:common/prog/firmware_update/mal/moduleAdministration.c ****         return MAL_isApplicationIntegrityOk();
+ 209:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 210:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 211:common/prog/firmware_update/mal/moduleAdministration.c **** #endif
+ 212:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 213:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 214:common/prog/firmware_update/mal/moduleAdministration.c **** #if defined(APP_VARIANT)
+ 215:common/prog/firmware_update/mal/moduleAdministration.c **** bool MAL_writeFirmwareIDs(void)
+ 216:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 217:common/prog/firmware_update/mal/moduleAdministration.c ****     /*lint -save -e934 Taking address of near auto variable [MISRA 2012 Rule 1.3, required], not a 
+ 218:common/prog/firmware_update/mal/moduleAdministration.c ****     struct MAL_fw_id_array firmwareIdTable;
+ 219:common/prog/firmware_update/mal/moduleAdministration.c ****     uint8_t fwidToWrite = 0;
+ 220:common/prog/firmware_update/mal/moduleAdministration.c ****     uint8_t moduleCount = MAL_GetMemModuleCount();
+ 221:common/prog/firmware_update/mal/moduleAdministration.c ****     uint32_t CrcLength = (sizeof(struct MAL_fw_id_entry) * FWU_FW_ID_MAX_COUNT);
+ 222:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 223:common/prog/firmware_update/mal/moduleAdministration.c ****     /* Initialize firmwareIdTable with empty entries */
+ 224:common/prog/firmware_update/mal/moduleAdministration.c ****     OTP_initializeFirmwareIDArray(&firmwareIdTable);
+ 225:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 226:common/prog/firmware_update/mal/moduleAdministration.c ****     /* Go trough each partition/module header and append FW ID */
+ 227:common/prog/firmware_update/mal/moduleAdministration.c ****     for(uint8_t moduleIndex = 0; moduleIndex < moduleCount; moduleIndex++)
+ 228:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 229:common/prog/firmware_update/mal/moduleAdministration.c ****         const struct MAL_partition_s *partition = MAL_GetMemModuleByIndex(moduleIndex);
+ 230:common/prog/firmware_update/mal/moduleAdministration.c ****         const struct MAL_ModuleHeader_s * header = MAL_PartitionToHeader(partition);
+ 231:common/prog/firmware_update/mal/moduleAdministration.c ****         
+ 232:common/prog/firmware_update/mal/moduleAdministration.c ****         /* Built in applications does not require FWID to be written */
+ 233:common/prog/firmware_update/mal/moduleAdministration.c ****         if(!MAL_isBuildInApplication(partition))
+ 234:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 235:common/prog/firmware_update/mal/moduleAdministration.c ****             /* Problem with partition/module header should be caught by BM */
+ 236:common/prog/firmware_update/mal/moduleAdministration.c ****             if((partition != NULL) && (header != NULL))
+ 237:common/prog/firmware_update/mal/moduleAdministration.c ****             {
+ 238:common/prog/firmware_update/mal/moduleAdministration.c ****                 if((partition->mod_attributes & MAL_CTX_MF_NO_COMPATIBILITY_CHECK) == 0u)
+ 239:common/prog/firmware_update/mal/moduleAdministration.c ****                 {
+ 240:common/prog/firmware_update/mal/moduleAdministration.c ****                     /* mod_attributes does not contain module flag bit MAL_CTX_MF_NO_COMPATIBILITY_
+ 241:common/prog/firmware_update/mal/moduleAdministration.c ****                      * module's sw_version ID will be part of FWID table */
+ 242:common/prog/firmware_update/mal/moduleAdministration.c ****                     firmwareIdTable.entries[fwidToWrite].mod_number = partition->mod_number;
+ 243:common/prog/firmware_update/mal/moduleAdministration.c ****                     UTI_vMemCopy(header->sw_version.version.ID, firmwareIdTable.entries[fwidToWrite
+ 244:common/prog/firmware_update/mal/moduleAdministration.c ****                     fwidToWrite++;
+ 245:common/prog/firmware_update/mal/moduleAdministration.c ****                 }
+ 246:common/prog/firmware_update/mal/moduleAdministration.c ****             }
+ 247:common/prog/firmware_update/mal/moduleAdministration.c ****         }
+ 248:common/prog/firmware_update/mal/moduleAdministration.c ****         
+ 249:common/prog/firmware_update/mal/moduleAdministration.c ****         /* Stop if it is reached a maximum number of FW ID that has to be written */
+ 250:common/prog/firmware_update/mal/moduleAdministration.c ****         if(fwidToWrite == FWU_FW_ID_MAX_COUNT)
+ 251:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 252:common/prog/firmware_update/mal/moduleAdministration.c ****             // while(1); // Should this be error?
+ 253:common/prog/firmware_update/mal/moduleAdministration.c ****             break;
+ 254:common/prog/firmware_update/mal/moduleAdministration.c ****         }
+ 255:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 256:common/prog/firmware_update/mal/moduleAdministration.c ****     /* calculate the CRC over all FW ID table which has to be written to the OTP area */
+ 257:common/prog/firmware_update/mal/moduleAdministration.c ****     /*lint -e928 cast from pointer to pointer [MISRA 2012 Rule 11.3, required], [MISRA 2012 Rule 11
+ 258:common/prog/firmware_update/mal/moduleAdministration.c ****     firmwareIdTable.CRC = CRC_Calc(CrcLength, (const uint8_t*)firmwareIdTable.entries);
+ 259:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 260:common/prog/firmware_update/mal/moduleAdministration.c ****     return OTP_writeFirmwareIDs(&firmwareIdTable);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 6
+
+
+ 261:common/prog/firmware_update/mal/moduleAdministration.c ****     /*lint -restore -e934 */
+ 262:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 263:common/prog/firmware_update/mal/moduleAdministration.c **** #endif
+ 264:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 265:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+ 266:common/prog/firmware_update/mal/moduleAdministration.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 267:common/prog/firmware_update/mal/moduleAdministration.c **** /******************************************************************************/
+ 268:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 269:common/prog/firmware_update/mal/moduleAdministration.c **** /** \brief    This interface returns the pointer the the requested partition
+ 270:common/prog/firmware_update/mal/moduleAdministration.c ****  *            entry.
+ 271:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 272:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param    module:   enumerator of requested module
+ 273:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 274:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \return   pointer to requested partition in case of success, else null
+ 275:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+ 276:common/prog/firmware_update/mal/moduleAdministration.c **** static const struct MAL_partition_s * MAL_searchMemModule
+ 277:common/prog/firmware_update/mal/moduleAdministration.c **** (
+ 278:common/prog/firmware_update/mal/moduleAdministration.c ****     enum MAL_ModuleEnum          module,
+ 279:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s * partitionTbl,
+ 280:common/prog/firmware_update/mal/moduleAdministration.c ****     uint8_t                      maxTableLen
+ 281:common/prog/firmware_update/mal/moduleAdministration.c **** )
+ 282:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 283:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partitionTbl == NULL){return NULL;} // no valid partition table
+ 284:common/prog/firmware_update/mal/moduleAdministration.c ****     for (uint8_t index = 0u; index < maxTableLen; index++)
+ 285:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 286:common/prog/firmware_update/mal/moduleAdministration.c ****         if (partitionTbl[index].mod_number == MAL_NO_MODULE)
+ 287:common/prog/firmware_update/mal/moduleAdministration.c ****         {   // end of table reached --> nothing found
+ 288:common/prog/firmware_update/mal/moduleAdministration.c ****             return NULL;
+ 289:common/prog/firmware_update/mal/moduleAdministration.c ****         }
+ 290:common/prog/firmware_update/mal/moduleAdministration.c ****         if ( partitionTbl[index].mod_number == module )
+ 291:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 292:common/prog/firmware_update/mal/moduleAdministration.c ****             return &partitionTbl[index];
+ 293:common/prog/firmware_update/mal/moduleAdministration.c ****         }
+ 294:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 295:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 296:common/prog/firmware_update/mal/moduleAdministration.c ****     return NULL;
+ 297:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 298:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 299:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 300:common/prog/firmware_update/mal/moduleAdministration.c **** /** Creates a dictionary with all modules (Fix- and Flex-Table) */
+ 301:common/prog/firmware_update/mal/moduleAdministration.c **** static void MAL_createModuleDictionary(void)
+ 302:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     if(MAL_ModuleCount == 0u) // dictionary already initialized?
+ 304:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 305:common/prog/firmware_update/mal/moduleAdministration.c ****       #ifdef FWU_FLEX_PARTITION_USED
+ 306:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_copyPatToDictionary(MAL_flexPatRef, MAL_FLEX_PARTITION_ENTRIES);
+ 307:common/prog/firmware_update/mal/moduleAdministration.c ****       #endif
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_copyPatToDictionary(MAL_DataAnchor.partitionTblFix,  MAL_FIX_PARTITION_ENTRIES);
+ 309:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 310:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 311:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 312:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 313:common/prog/firmware_update/mal/moduleAdministration.c **** /** Copies a partition table to the dictionary
+ 314:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \details Duplicated entries will be filtered
+ 315:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 316:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param pTbl: pointer to a partition table to copyright
+ 317:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 7
+
+
+ 318:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param max_size: maximum entries in table
+ 319:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+ 320:common/prog/firmware_update/mal/moduleAdministration.c **** static void MAL_copyPatToDictionary(const struct MAL_partition_s * pTbl, uint8_t max_size)
+  27              		.loc 1 320 13 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 321:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 322:common/prog/firmware_update/mal/moduleAdministration.c ****     if(pTbl == NULL){return;} // no valid partition table
+  31              		.loc 1 322 5 view .LVU1
+ 320:common/prog/firmware_update/mal/moduleAdministration.c **** {
+  32              		.loc 1 320 13 is_stmt 0 view .LVU2
+  33 0000 F7B5     		push	{r0, r1, r2, r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 32
+  36              		.cfi_offset 0, -32
+  37              		.cfi_offset 1, -28
+  38              		.cfi_offset 2, -24
+  39              		.cfi_offset 4, -20
+  40              		.cfi_offset 5, -16
+  41              		.cfi_offset 6, -12
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44              		.loc 1 322 7 view .LVU3
+  45 0002 0028     		cmp	r0, #0
+  46 0004 1BD0     		beq	.L1
+  47 0006 0100     		movs	r1, r0
+  48 0008 0024     		movs	r4, #0
+  49 000a 114E     		ldr	r6, .L21
+  50 000c 6830     		adds	r0, r0, #104
+  51              	.LVL1:
+  52              		.loc 1 322 7 view .LVU4
+  53 000e 3378     		ldrb	r3, [r6]
+  54 0010 0831     		adds	r1, r1, #8
+  55              	.LVL2:
+  56              		.loc 1 322 7 view .LVU5
+  57 0012 0190     		str	r0, [sp, #4]
+  58              	.LVL3:
+  59              	.L10:
+  60              	.LBB7:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     for(uint8_t i =0u; i < max_size; i++)
+ 324:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 325:common/prog/firmware_update/mal/moduleAdministration.c ****         if (pTbl[i].mod_number == MAL_NO_MODULE) {break;} // end has been found
+  61              		.loc 1 325 9 is_stmt 1 view .LVU6
+  62              		.loc 1 325 20 is_stmt 0 view .LVU7
+  63 0014 0D88     		ldrh	r5, [r1]
+  64              		.loc 1 325 12 view .LVU8
+  65 0016 0F4A     		ldr	r2, .L21+4
+  66 0018 9542     		cmp	r5, r2
+  67 001a 0DD0     		beq	.L20
+  68              	.LBB8:
+  69              	.LBB9:
+ 326:common/prog/firmware_update/mal/moduleAdministration.c ****         if (MAL_isInDictionary(pTbl[i].mod_number)){continue;} // module already in dictionary
+ 327:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_moduleDictionary[MAL_ModuleCount] = pTbl[i].mod_number;
+ 328:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_ModuleCount++;
+ 329:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 330:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 8
+
+
+ 331:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 332:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 333:common/prog/firmware_update/mal/moduleAdministration.c **** /** \brief   Copies a module header to the RAM
+ 334:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 335:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \details Creates a duplicate of SW module header in RAM
+ 336:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 337:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param partition:           pointer to a partition table item
+ 338:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param moduleHeaderInRam:   pointer to a SW module header in RAM
+ 339:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 340:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \return bool: true if memory read function proceed without any errors
+ 341:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+ 342:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 343:common/prog/firmware_update/mal/moduleAdministration.c **** static bool MAL_copyModuleHeaderToRAM(const struct MAL_partition_s * partition, struct MAL_ModuleHe
+ 344:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 345:common/prog/firmware_update/mal/moduleAdministration.c ****     enum MAL_Status status = MAL_ST_ERROR;
+ 346:common/prog/firmware_update/mal/moduleAdministration.c ****     if(MEMDRV_open(partition->driver_id) == MAL_ST_OK)
+ 347:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 348:common/prog/firmware_update/mal/moduleAdministration.c ****         /* cast is OK as alignment of word is stricter than pointer of byte */
+ 349:common/prog/firmware_update/mal/moduleAdministration.c ****         status = MEMDRV_read(partition->physical_start.addr, sizeof(struct MAL_ModuleHeader_s), (ui
+ 350:common/prog/firmware_update/mal/moduleAdministration.c ****         enum MAL_Status closeStatus = MEMDRV_close();
+ 351:common/prog/firmware_update/mal/moduleAdministration.c ****         status = (status == MAL_ST_OK) ? closeStatus : status;
+ 352:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 353:common/prog/firmware_update/mal/moduleAdministration.c ****     return ((status == MAL_ST_OK) ? true : false);
+ 354:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 355:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 356:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 357:common/prog/firmware_update/mal/moduleAdministration.c **** /** Checks if an entry already is present in dictionary
+ 358:common/prog/firmware_update/mal/moduleAdministration.c ****  *
+ 359:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \param mod_number: module number to check
+ 360:common/prog/firmware_update/mal/moduleAdministration.c ****  *  \return true if module is already in dictionary, otherwise false
+ 361:common/prog/firmware_update/mal/moduleAdministration.c ****  */
+ 362:common/prog/firmware_update/mal/moduleAdministration.c **** static bool MAL_isInDictionary(enum  MAL_ModuleEnum mod_number)
+ 363:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 364:common/prog/firmware_update/mal/moduleAdministration.c ****     for(uint8_t i = 0u; i< (uint8_t)(MAL_ModuleCount); i++)
+  70              		.loc 1 364 17 view .LVU9
+  71 001c 0022     		movs	r2, #0
+  72 001e 0E48     		ldr	r0, .L21+8
+  73              	.L5:
+  74              	.LVL4:
+  75              		.loc 1 364 26 is_stmt 1 view .LVU10
+  76 0020 9A42     		cmp	r2, r3
+  77 0022 0DD1     		bne	.L8
+  78              	.LVL5:
+  79              		.loc 1 364 26 is_stmt 0 view .LVU11
+  80              	.LBE9:
+  81              	.LBE8:
+ 327:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_ModuleCount++;
+  82              		.loc 1 327 9 is_stmt 1 view .LVU12
+ 328:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+  83              		.loc 1 328 24 is_stmt 0 view .LVU13
+  84 0024 0124     		movs	r4, #1
+ 327:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_ModuleCount++;
+  85              		.loc 1 327 47 view .LVU14
+  86 0026 0C48     		ldr	r0, .L21+8
+  87 0028 5A00     		lsls	r2, r3, #1
+ 328:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+  88              		.loc 1 328 24 view .LVU15
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 9
+
+
+  89 002a 0133     		adds	r3, r3, #1
+ 327:common/prog/firmware_update/mal/moduleAdministration.c ****         MAL_ModuleCount++;
+  90              		.loc 1 327 47 view .LVU16
+  91 002c 8552     		strh	r5, [r0, r2]
+ 328:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+  92              		.loc 1 328 9 is_stmt 1 view .LVU17
+ 328:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+  93              		.loc 1 328 24 is_stmt 0 view .LVU18
+  94 002e DBB2     		uxtb	r3, r3
+  95              	.L7:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+  96              		.loc 1 323 39 is_stmt 1 view .LVU19
+  97              	.LVL6:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+  98              		.loc 1 323 26 view .LVU20
+  99 0030 019A     		ldr	r2, [sp, #4]
+ 100 0032 2031     		adds	r1, r1, #32
+ 101              	.LVL7:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 102              		.loc 1 323 26 is_stmt 0 view .LVU21
+ 103 0034 9142     		cmp	r1, r2
+ 104 0036 EDD1     		bne	.L10
+ 105              	.LVL8:
+ 106              	.L20:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 107              		.loc 1 323 26 view .LVU22
+ 108 0038 002C     		cmp	r4, #0
+ 109 003a 00D0     		beq	.L1
+ 110 003c 3370     		strb	r3, [r6]
+ 111              	.LVL9:
+ 112              	.L1:
+ 323:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 113              		.loc 1 323 26 view .LVU23
+ 114              	.LBE7:
+ 330:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 115              		.loc 1 330 1 view .LVU24
+ 116              		@ sp needed
+ 117 003e F7BD     		pop	{r0, r1, r2, r4, r5, r6, r7, pc}
+ 118              	.LVL10:
+ 119              	.L8:
+ 120              	.LBB12:
+ 121              	.LBB11:
+ 122              	.LBB10:
+ 365:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 366:common/prog/firmware_update/mal/moduleAdministration.c ****         if(MAL_moduleDictionary[i] == mod_number){return true;}
+ 123              		.loc 1 366 9 is_stmt 1 view .LVU25
+ 124              		.loc 1 366 11 is_stmt 0 view .LVU26
+ 125 0040 0230     		adds	r0, r0, #2
+ 126              		.loc 1 366 32 view .LVU27
+ 127 0042 871E     		subs	r7, r0, #2
+ 128              		.loc 1 366 11 view .LVU28
+ 129 0044 3F88     		ldrh	r7, [r7]
+ 130 0046 AF42     		cmp	r7, r5
+ 131 0048 F2D0     		beq	.L7
+ 364:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 132              		.loc 1 364 57 is_stmt 1 view .LVU29
+ 133 004a 0132     		adds	r2, r2, #1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 10
+
+
+ 134              	.LVL11:
+ 364:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 135              		.loc 1 364 57 is_stmt 0 view .LVU30
+ 136 004c D2B2     		uxtb	r2, r2
+ 137              	.LVL12:
+ 364:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 138              		.loc 1 364 57 view .LVU31
+ 139 004e E7E7     		b	.L5
+ 140              	.L22:
+ 141              		.align	2
+ 142              	.L21:
+ 143 0050 00000000 		.word	.LANCHOR0
+ 144 0054 FFFF0000 		.word	65535
+ 145 0058 00000000 		.word	.LANCHOR1
+ 146              	.LBE10:
+ 147              	.LBE11:
+ 148              	.LBE12:
+ 149              		.cfi_endproc
+ 150              	.LFE80:
+ 152              		.section	.text.MAL_initPartition,"ax",%progbits
+ 153              		.align	1
+ 154              		.global	MAL_initPartition
+ 155              		.syntax unified
+ 156              		.code	16
+ 157              		.thumb_func
+ 159              	MAL_initPartition:
+ 160              	.LFB67:
+ 102:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_ModuleCount = 0u;
+ 161              		.loc 1 102 1 is_stmt 1 view -0
+ 162              		.cfi_startproc
+ 163              		@ args = 0, pretend = 0, frame = 0
+ 164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165              		@ link register save eliminated.
+ 103:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 166              		.loc 1 103 5 view .LVU33
+ 103:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 167              		.loc 1 103 21 is_stmt 0 view .LVU34
+ 168 0000 0022     		movs	r2, #0
+ 107:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 169              		.loc 1 107 1 view .LVU35
+ 170              		@ sp needed
+ 103:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 171              		.loc 1 103 21 view .LVU36
+ 172 0002 014B     		ldr	r3, .L24
+ 173 0004 1A70     		strb	r2, [r3]
+ 107:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 174              		.loc 1 107 1 view .LVU37
+ 175 0006 7047     		bx	lr
+ 176              	.L25:
+ 177              		.align	2
+ 178              	.L24:
+ 179 0008 00000000 		.word	.LANCHOR0
+ 180              		.cfi_endproc
+ 181              	.LFE67:
+ 183              		.section	.text.MAL_GetMemModule,"ax",%progbits
+ 184              		.align	1
+ 185              		.global	MAL_GetMemModule
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 11
+
+
+ 186              		.syntax unified
+ 187              		.code	16
+ 188              		.thumb_func
+ 190              	MAL_GetMemModule:
+ 191              	.LVL13:
+ 192              	.LFB68:
+ 111:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s *partition;
+ 193              		.loc 1 111 1 is_stmt 1 view -0
+ 194              		.cfi_startproc
+ 195              		@ args = 0, pretend = 0, frame = 0
+ 196              		@ frame_needed = 0, uses_anonymous_args = 0
+ 112:common/prog/firmware_update/mal/moduleAdministration.c ****   #ifdef FWU_FLEX_PARTITION_USED
+ 197              		.loc 1 112 5 view .LVU39
+ 123:common/prog/firmware_update/mal/moduleAdministration.c ****                                         (uint8_t)MAL_FIX_PARTITION_ENTRIES );
+ 198              		.loc 1 123 9 view .LVU40
+ 123:common/prog/firmware_update/mal/moduleAdministration.c ****                                         (uint8_t)MAL_FIX_PARTITION_ENTRIES );
+ 199              		.loc 1 123 64 is_stmt 0 view .LVU41
+ 200 0000 094A     		ldr	r2, .L34
+ 111:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s *partition;
+ 201              		.loc 1 111 1 view .LVU42
+ 202 0002 0300     		movs	r3, r0
+ 123:common/prog/firmware_update/mal/moduleAdministration.c ****                                         (uint8_t)MAL_FIX_PARTITION_ENTRIES );
+ 203              		.loc 1 123 64 view .LVU43
+ 204 0004 1068     		ldr	r0, [r2]
+ 205              	.LVL14:
+ 206              	.LBB17:
+ 207              	.LBI17:
+ 276:common/prog/firmware_update/mal/moduleAdministration.c **** (
+ 208              		.loc 1 276 39 is_stmt 1 view .LVU44
+ 209              	.LBB18:
+ 283:common/prog/firmware_update/mal/moduleAdministration.c ****     for (uint8_t index = 0u; index < maxTableLen; index++)
+ 210              		.loc 1 283 5 view .LVU45
+ 211              	.LBE18:
+ 212              	.LBE17:
+ 111:common/prog/firmware_update/mal/moduleAdministration.c ****     const struct MAL_partition_s *partition;
+ 213              		.loc 1 111 1 is_stmt 0 view .LVU46
+ 214 0006 10B5     		push	{r4, lr}
+ 215              	.LCFI1:
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 4, -8
+ 218              		.cfi_offset 14, -4
+ 219              	.LBB21:
+ 220              	.LBB20:
+ 283:common/prog/firmware_update/mal/moduleAdministration.c ****     for (uint8_t index = 0u; index < maxTableLen; index++)
+ 221              		.loc 1 283 7 view .LVU47
+ 222 0008 0028     		cmp	r0, #0
+ 223 000a 0BD0     		beq	.L26
+ 224 000c 0100     		movs	r1, r0
+ 225              	.LBB19:
+ 286:common/prog/firmware_update/mal/moduleAdministration.c ****         {   // end of table reached --> nothing found
+ 226              		.loc 1 286 12 view .LVU48
+ 227 000e 074C     		ldr	r4, .L34+4
+ 228 0010 6031     		adds	r1, r1, #96
+ 229              	.LVL15:
+ 230              	.L28:
+ 286:common/prog/firmware_update/mal/moduleAdministration.c ****         {   // end of table reached --> nothing found
+ 231              		.loc 1 286 9 is_stmt 1 view .LVU49
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 12
+
+
+ 286:common/prog/firmware_update/mal/moduleAdministration.c ****         {   // end of table reached --> nothing found
+ 232              		.loc 1 286 32 is_stmt 0 view .LVU50
+ 233 0012 0289     		ldrh	r2, [r0, #8]
+ 286:common/prog/firmware_update/mal/moduleAdministration.c ****         {   // end of table reached --> nothing found
+ 234              		.loc 1 286 12 view .LVU51
+ 235 0014 A242     		cmp	r2, r4
+ 236 0016 04D0     		beq	.L29
+ 290:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 237              		.loc 1 290 9 is_stmt 1 view .LVU52
+ 290:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 238              		.loc 1 290 12 is_stmt 0 view .LVU53
+ 239 0018 9342     		cmp	r3, r2
+ 240 001a 03D0     		beq	.L26
+ 284:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 241              		.loc 1 284 56 is_stmt 1 view .LVU54
+ 242              	.LVL16:
+ 284:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 243              		.loc 1 284 36 view .LVU55
+ 244 001c 2030     		adds	r0, r0, #32
+ 245              	.LVL17:
+ 284:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 246              		.loc 1 284 36 is_stmt 0 view .LVU56
+ 247 001e 8842     		cmp	r0, r1
+ 248 0020 F7D1     		bne	.L28
+ 249              	.LVL18:
+ 250              	.L29:
+ 284:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 251              		.loc 1 284 36 view .LVU57
+ 252              	.LBE19:
+ 283:common/prog/firmware_update/mal/moduleAdministration.c ****     for (uint8_t index = 0u; index < maxTableLen; index++)
+ 253              		.loc 1 283 37 view .LVU58
+ 254 0022 0020     		movs	r0, #0
+ 255              	.LVL19:
+ 283:common/prog/firmware_update/mal/moduleAdministration.c ****     for (uint8_t index = 0u; index < maxTableLen; index++)
+ 256              		.loc 1 283 37 view .LVU59
+ 257              	.LBE20:
+ 258              	.LBE21:
+ 126:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 259              		.loc 1 126 5 is_stmt 1 view .LVU60
+ 260              	.L26:
+ 127:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 261              		.loc 1 127 1 is_stmt 0 view .LVU61
+ 262              		@ sp needed
+ 263 0024 10BD     		pop	{r4, pc}
+ 264              	.L35:
+ 265 0026 C046     		.align	2
+ 266              	.L34:
+ 267 0028 00000000 		.word	MAL_DataAnchor
+ 268 002c FFFF0000 		.word	65535
+ 269              		.cfi_endproc
+ 270              	.LFE68:
+ 272              		.section	.text.MAL_GetMemModuleCount,"ax",%progbits
+ 273              		.align	1
+ 274              		.global	MAL_GetMemModuleCount
+ 275              		.syntax unified
+ 276              		.code	16
+ 277              		.thumb_func
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 13
+
+
+ 279              	MAL_GetMemModuleCount:
+ 280              	.LFB69:
+ 132:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 281              		.loc 1 132 1 is_stmt 1 view -0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 0
+ 284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133:common/prog/firmware_update/mal/moduleAdministration.c ****     return MAL_ModuleCount;
+ 285              		.loc 1 133 5 view .LVU63
+ 286              	.LBB26:
+ 287              	.LBI26:
+ 301:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 288              		.loc 1 301 13 view .LVU64
+ 289              	.LBB27:
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 290              		.loc 1 303 5 view .LVU65
+ 291              	.LBE27:
+ 292              	.LBE26:
+ 132:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 293              		.loc 1 132 1 is_stmt 0 view .LVU66
+ 294 0000 10B5     		push	{r4, lr}
+ 295              	.LCFI2:
+ 296              		.cfi_def_cfa_offset 8
+ 297              		.cfi_offset 4, -8
+ 298              		.cfi_offset 14, -4
+ 299              	.LBB31:
+ 300              	.LBB30:
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 301              		.loc 1 303 24 view .LVU67
+ 302 0002 054C     		ldr	r4, .L38
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 303              		.loc 1 303 7 view .LVU68
+ 304 0004 2378     		ldrb	r3, [r4]
+ 305 0006 002B     		cmp	r3, #0
+ 306 0008 03D1     		bne	.L37
+ 307              	.LBB28:
+ 308              	.LBI28:
+ 301:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 309              		.loc 1 301 13 is_stmt 1 view .LVU69
+ 310              	.LBB29:
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 311              		.loc 1 308 9 view .LVU70
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 312              		.loc 1 308 47 is_stmt 0 view .LVU71
+ 313 000a 044B     		ldr	r3, .L38+4
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 314              		.loc 1 308 9 view .LVU72
+ 315 000c 1868     		ldr	r0, [r3]
+ 316 000e FFF7FEFF 		bl	MAL_copyPatToDictionary.constprop.0
+ 317              	.LVL20:
+ 318              	.L37:
+ 319              	.LBE29:
+ 320              	.LBE28:
+ 321              	.LBE30:
+ 322              	.LBE31:
+ 134:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 323              		.loc 1 134 5 is_stmt 1 view .LVU73
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 14
+
+
+ 135:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 324              		.loc 1 135 1 is_stmt 0 view .LVU74
+ 325              		@ sp needed
+ 134:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 326              		.loc 1 134 12 view .LVU75
+ 327 0012 2078     		ldrb	r0, [r4]
+ 135:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 328              		.loc 1 135 1 view .LVU76
+ 329 0014 10BD     		pop	{r4, pc}
+ 330              	.L39:
+ 331 0016 C046     		.align	2
+ 332              	.L38:
+ 333 0018 00000000 		.word	.LANCHOR0
+ 334 001c 00000000 		.word	MAL_DataAnchor
+ 335              		.cfi_endproc
+ 336              	.LFE69:
+ 338              		.section	.text.MAL_GetMemModuleByIndex,"ax",%progbits
+ 339              		.align	1
+ 340              		.global	MAL_GetMemModuleByIndex
+ 341              		.syntax unified
+ 342              		.code	16
+ 343              		.thumb_func
+ 345              	MAL_GetMemModuleByIndex:
+ 346              	.LVL21:
+ 347              	.LFB70:
+ 139:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 348              		.loc 1 139 1 is_stmt 1 view -0
+ 349              		.cfi_startproc
+ 350              		@ args = 0, pretend = 0, frame = 0
+ 351              		@ frame_needed = 0, uses_anonymous_args = 0
+ 140:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 352              		.loc 1 140 5 view .LVU78
+ 353              	.LBB36:
+ 354              	.LBI36:
+ 301:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 355              		.loc 1 301 13 view .LVU79
+ 356              	.LBB37:
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 357              		.loc 1 303 5 view .LVU80
+ 358              	.LBE37:
+ 359              	.LBE36:
+ 139:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 360              		.loc 1 139 1 is_stmt 0 view .LVU81
+ 361 0000 70B5     		push	{r4, r5, r6, lr}
+ 362              	.LCFI3:
+ 363              		.cfi_def_cfa_offset 16
+ 364              		.cfi_offset 4, -16
+ 365              		.cfi_offset 5, -12
+ 366              		.cfi_offset 6, -8
+ 367              		.cfi_offset 14, -4
+ 368              	.LBB42:
+ 369              	.LBB40:
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 370              		.loc 1 303 24 view .LVU82
+ 371 0002 094D     		ldr	r5, .L44
+ 372              	.LBE40:
+ 373              	.LBE42:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 15
+
+
+ 139:common/prog/firmware_update/mal/moduleAdministration.c ****     MAL_createModuleDictionary();
+ 374              		.loc 1 139 1 view .LVU83
+ 375 0004 0400     		movs	r4, r0
+ 376              	.LBB43:
+ 377              	.LBB41:
+ 303:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 378              		.loc 1 303 7 view .LVU84
+ 379 0006 2B78     		ldrb	r3, [r5]
+ 380 0008 002B     		cmp	r3, #0
+ 381 000a 03D1     		bne	.L41
+ 382              	.LBB38:
+ 383              	.LBI38:
+ 301:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 384              		.loc 1 301 13 is_stmt 1 view .LVU85
+ 385              	.LBB39:
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 386              		.loc 1 308 9 view .LVU86
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 387              		.loc 1 308 47 is_stmt 0 view .LVU87
+ 388 000c 074B     		ldr	r3, .L44+4
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 389              		.loc 1 308 9 view .LVU88
+ 390 000e 1868     		ldr	r0, [r3]
+ 391              	.LVL22:
+ 308:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 392              		.loc 1 308 9 view .LVU89
+ 393 0010 FFF7FEFF 		bl	MAL_copyPatToDictionary.constprop.0
+ 394              	.LVL23:
+ 395              	.L41:
+ 396              	.LBE39:
+ 397              	.LBE38:
+ 398              	.LBE41:
+ 399              	.LBE43:
+ 142:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 400              		.loc 1 142 5 is_stmt 1 view .LVU90
+ 142:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 401              		.loc 1 142 8 is_stmt 0 view .LVU91
+ 402 0014 2B78     		ldrb	r3, [r5]
+ 148:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 403              		.loc 1 148 16 view .LVU92
+ 404 0016 0020     		movs	r0, #0
+ 142:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 405              		.loc 1 142 8 view .LVU93
+ 406 0018 A342     		cmp	r3, r4
+ 407 001a 04D9     		bls	.L40
+ 144:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 408              		.loc 1 144 9 is_stmt 1 view .LVU94
+ 144:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 409              		.loc 1 144 16 is_stmt 0 view .LVU95
+ 410 001c 044B     		ldr	r3, .L44+8
+ 411 001e 6400     		lsls	r4, r4, #1
+ 412 0020 E05A     		ldrh	r0, [r4, r3]
+ 413 0022 FFF7FEFF 		bl	MAL_GetMemModule
+ 414              	.LVL24:
+ 415              	.L40:
+ 150:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 416              		.loc 1 150 1 view .LVU96
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 16
+
+
+ 417              		@ sp needed
+ 418 0026 70BD     		pop	{r4, r5, r6, pc}
+ 419              	.L45:
+ 420              		.align	2
+ 421              	.L44:
+ 422 0028 00000000 		.word	.LANCHOR0
+ 423 002c 00000000 		.word	MAL_DataAnchor
+ 424 0030 00000000 		.word	.LANCHOR1
+ 425              		.cfi_endproc
+ 426              	.LFE70:
+ 428              		.section	.text.MAL_getPartitionSize,"ax",%progbits
+ 429              		.align	1
+ 430              		.global	MAL_getPartitionSize
+ 431              		.syntax unified
+ 432              		.code	16
+ 433              		.thumb_func
+ 435              	MAL_getPartitionSize:
+ 436              	.LVL25:
+ 437              	.LFB71:
+ 154:common/prog/firmware_update/mal/moduleAdministration.c ****     uint32_t partitionSize = 0u;
+ 438              		.loc 1 154 1 is_stmt 1 view -0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442              		@ link register save eliminated.
+ 155:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition != NULL)
+ 443              		.loc 1 155 5 view .LVU98
+ 156:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 444              		.loc 1 156 5 view .LVU99
+ 156:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 445              		.loc 1 156 7 is_stmt 0 view .LVU100
+ 446 0000 0028     		cmp	r0, #0
+ 447 0002 03D0     		beq	.L46
+ 158:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 448              		.loc 1 158 9 is_stmt 1 view .LVU101
+ 158:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 449              		.loc 1 158 23 is_stmt 0 view .LVU102
+ 450 0004 4368     		ldr	r3, [r0, #4]
+ 451 0006 0068     		ldr	r0, [r0]
+ 452              	.LVL26:
+ 158:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 453              		.loc 1 158 23 view .LVU103
+ 454 0008 0133     		adds	r3, r3, #1
+ 455 000a 181A     		subs	r0, r3, r0
+ 456              	.LVL27:
+ 457              	.L46:
+ 161:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 458              		.loc 1 161 1 view .LVU104
+ 459              		@ sp needed
+ 460 000c 7047     		bx	lr
+ 461              		.cfi_endproc
+ 462              	.LFE71:
+ 464              		.section	.text.MAL_PartitionToHeader,"ax",%progbits
+ 465              		.align	1
+ 466              		.global	MAL_PartitionToHeader
+ 467              		.syntax unified
+ 468              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 17
+
+
+ 469              		.thumb_func
+ 471              	MAL_PartitionToHeader:
+ 472              	.LVL28:
+ 473              	.LFB72:
+ 165:common/prog/firmware_update/mal/moduleAdministration.c ****     static struct MAL_ModuleHeader_s moduleHeaderInRam;
+ 474              		.loc 1 165 1 is_stmt 1 view -0
+ 475              		.cfi_startproc
+ 476              		@ args = 0, pretend = 0, frame = 0
+ 477              		@ frame_needed = 0, uses_anonymous_args = 0
+ 166:common/prog/firmware_update/mal/moduleAdministration.c ****     static const struct MAL_partition_s *actualPartition = NULL;
+ 478              		.loc 1 166 5 view .LVU106
+ 167:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition == NULL)
+ 479              		.loc 1 167 5 view .LVU107
+ 168:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 480              		.loc 1 168 5 view .LVU108
+ 165:common/prog/firmware_update/mal/moduleAdministration.c ****     static struct MAL_ModuleHeader_s moduleHeaderInRam;
+ 481              		.loc 1 165 1 is_stmt 0 view .LVU109
+ 482 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 483              	.LCFI4:
+ 484              		.cfi_def_cfa_offset 24
+ 485              		.cfi_offset 3, -24
+ 486              		.cfi_offset 4, -20
+ 487              		.cfi_offset 5, -16
+ 488              		.cfi_offset 6, -12
+ 489              		.cfi_offset 7, -8
+ 490              		.cfi_offset 14, -4
+ 165:common/prog/firmware_update/mal/moduleAdministration.c ****     static struct MAL_ModuleHeader_s moduleHeaderInRam;
+ 491              		.loc 1 165 1 view .LVU110
+ 492 0002 041E     		subs	r4, r0, #0
+ 168:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 493              		.loc 1 168 7 view .LVU111
+ 494 0004 02D1     		bne	.L50
+ 495              	.LVL29:
+ 496              	.L52:
+ 170:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 497              		.loc 1 170 16 view .LVU112
+ 498 0006 0026     		movs	r6, #0
+ 499              	.L49:
+ 181:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 500              		.loc 1 181 1 view .LVU113
+ 501              		@ sp needed
+ 502 0008 3000     		movs	r0, r6
+ 503              	.LVL30:
+ 181:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 504              		.loc 1 181 1 view .LVU114
+ 505 000a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 506              	.LVL31:
+ 507              	.L50:
+ 172:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 508              		.loc 1 172 5 is_stmt 1 view .LVU115
+ 172:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 509              		.loc 1 172 24 is_stmt 0 view .LVU116
+ 510 000c 0B4F     		ldr	r7, .L54
+ 180:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 511              		.loc 1 180 12 view .LVU117
+ 512 000e 0C4E     		ldr	r6, .L54+4
+ 172:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 18
+
+
+ 513              		.loc 1 172 7 view .LVU118
+ 514 0010 3B68     		ldr	r3, [r7]
+ 515 0012 8342     		cmp	r3, r0
+ 516 0014 F8D0     		beq	.L49
+ 174:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 517              		.loc 1 174 9 is_stmt 1 view .LVU119
+ 518              	.LVL32:
+ 519              	.LBB48:
+ 520              	.LBI48:
+ 343:common/prog/firmware_update/mal/moduleAdministration.c **** {
+ 521              		.loc 1 343 13 view .LVU120
+ 522              	.LBB49:
+ 345:common/prog/firmware_update/mal/moduleAdministration.c ****     if(MEMDRV_open(partition->driver_id) == MAL_ST_OK)
+ 523              		.loc 1 345 5 view .LVU121
+ 346:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 524              		.loc 1 346 5 view .LVU122
+ 346:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 525              		.loc 1 346 8 is_stmt 0 view .LVU123
+ 526 0016 807A     		ldrb	r0, [r0, #10]
+ 527              	.LVL33:
+ 346:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 528              		.loc 1 346 8 view .LVU124
+ 529 0018 FFF7FEFF 		bl	MEMDRV_open
+ 530              	.LVL34:
+ 346:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 531              		.loc 1 346 7 view .LVU125
+ 532 001c 0028     		cmp	r0, #0
+ 533 001e F2D1     		bne	.L52
+ 534              	.LBB50:
+ 349:common/prog/firmware_update/mal/moduleAdministration.c ****         enum MAL_Status closeStatus = MEMDRV_close();
+ 535              		.loc 1 349 9 is_stmt 1 view .LVU126
+ 349:common/prog/firmware_update/mal/moduleAdministration.c ****         enum MAL_Status closeStatus = MEMDRV_close();
+ 536              		.loc 1 349 18 is_stmt 0 view .LVU127
+ 537 0020 3200     		movs	r2, r6
+ 538 0022 2821     		movs	r1, #40
+ 539 0024 2068     		ldr	r0, [r4]
+ 540 0026 FFF7FEFF 		bl	MEMDRV_read
+ 541              	.LVL35:
+ 542 002a 0500     		movs	r5, r0
+ 543              	.LVL36:
+ 350:common/prog/firmware_update/mal/moduleAdministration.c ****         status = (status == MAL_ST_OK) ? closeStatus : status;
+ 544              		.loc 1 350 9 is_stmt 1 view .LVU128
+ 350:common/prog/firmware_update/mal/moduleAdministration.c ****         status = (status == MAL_ST_OK) ? closeStatus : status;
+ 545              		.loc 1 350 39 is_stmt 0 view .LVU129
+ 546 002c FFF7FEFF 		bl	MEMDRV_close
+ 547              	.LVL37:
+ 351:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 548              		.loc 1 351 9 is_stmt 1 view .LVU130
+ 351:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 549              		.loc 1 351 9 is_stmt 0 view .LVU131
+ 550              	.LBE50:
+ 353:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 551              		.loc 1 353 5 is_stmt 1 view .LVU132
+ 353:common/prog/firmware_update/mal/moduleAdministration.c **** }
+ 552              		.loc 1 353 5 is_stmt 0 view .LVU133
+ 553              	.LBE49:
+ 554              	.LBE48:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 19
+
+
+ 174:common/prog/firmware_update/mal/moduleAdministration.c ****         {
+ 555              		.loc 1 174 11 view .LVU134
+ 556 0030 0543     		orrs	r5, r0
+ 557 0032 EDB2     		uxtb	r5, r5
+ 558 0034 002D     		cmp	r5, #0
+ 559 0036 E6D1     		bne	.L52
+ 178:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 560              		.loc 1 178 9 is_stmt 1 view .LVU135
+ 178:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 561              		.loc 1 178 25 is_stmt 0 view .LVU136
+ 562 0038 3C60     		str	r4, [r7]
+ 563 003a E5E7     		b	.L49
+ 564              	.L55:
+ 565              		.align	2
+ 566              	.L54:
+ 567 003c 00000000 		.word	.LANCHOR3
+ 568 0040 00000000 		.word	.LANCHOR2
+ 569              		.cfi_endproc
+ 570              	.LFE72:
+ 572              		.section	.text.MAL_isBuildInApplication,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	MAL_isBuildInApplication
+ 575              		.syntax unified
+ 576              		.code	16
+ 577              		.thumb_func
+ 579              	MAL_isBuildInApplication:
+ 580              	.LVL38:
+ 581              	.LFB73:
+ 185:common/prog/firmware_update/mal/moduleAdministration.c ****     if(partition != NULL)
+ 582              		.loc 1 185 1 is_stmt 1 view -0
+ 583              		.cfi_startproc
+ 584              		@ args = 0, pretend = 0, frame = 0
+ 585              		@ frame_needed = 0, uses_anonymous_args = 0
+ 586              		@ link register save eliminated.
+ 186:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 587              		.loc 1 186 5 view .LVU138
+ 186:common/prog/firmware_update/mal/moduleAdministration.c ****     {
+ 588              		.loc 1 186 7 is_stmt 0 view .LVU139
+ 589 0000 0028     		cmp	r0, #0
+ 590 0002 08D0     		beq	.L57
+ 591              	.LBB51:
+ 188:common/prog/firmware_update/mal/moduleAdministration.c ****         return ((moduleId == MAL_PROGRAMMER_ID) || (moduleId == MAL_BP2_LOADER_ID));
+ 592              		.loc 1 188 9 is_stmt 1 view .LVU140
+ 593              	.LVL39:
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 594              		.loc 1 189 9 view .LVU141
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 595              		.loc 1 189 49 is_stmt 0 view .LVU142
+ 596 0004 044B     		ldr	r3, .L59
+ 597 0006 0089     		ldrh	r0, [r0, #8]
+ 598              	.LVL40:
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 599              		.loc 1 189 49 view .LVU143
+ 600 0008 C018     		adds	r0, r0, r3
+ 601              	.LVL41:
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 602              		.loc 1 189 49 view .LVU144
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 20
+
+
+ 603 000a 1023     		movs	r3, #16
+ 604 000c 9843     		bics	r0, r3
+ 605              	.LVL42:
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 606              		.loc 1 189 49 view .LVU145
+ 607 000e 80B2     		uxth	r0, r0
+ 608 0010 4342     		rsbs	r3, r0, #0
+ 609 0012 5841     		adcs	r0, r0, r3
+ 610 0014 C0B2     		uxtb	r0, r0
+ 611              	.LVL43:
+ 612              	.L57:
+ 189:common/prog/firmware_update/mal/moduleAdministration.c ****     }
+ 613              		.loc 1 189 49 view .LVU146
+ 614              	.LBE51:
+ 196:common/prog/firmware_update/mal/moduleAdministration.c **** 
+ 615              		.loc 1 196 1 view .LVU147
+ 616              		@ sp needed
+ 617 0016 7047     		bx	lr
+ 618              	.L60:
+ 619              		.align	2
+ 620              	.L59:
+ 621 0018 F0AAFFFF 		.word	-21776
+ 622              		.cfi_endproc
+ 623              	.LFE73:
+ 625              		.section	.bss.MAL_ModuleCount,"aw",%nobits
+ 626              		.set	.LANCHOR0,. + 0
+ 629              	MAL_ModuleCount:
+ 630 0000 00       		.space	1
+ 631              		.section	.bss.MAL_moduleDictionary,"aw",%nobits
+ 632              		.align	1
+ 633              		.set	.LANCHOR1,. + 0
+ 636              	MAL_moduleDictionary:
+ 637 0000 00000000 		.space	6
+ 637      0000
+ 638              		.section	.bss.actualPartition.1,"aw",%nobits
+ 639              		.align	2
+ 640              		.set	.LANCHOR3,. + 0
+ 643              	actualPartition.1:
+ 644 0000 00000000 		.space	4
+ 645              		.section	.bss.moduleHeaderInRam.0,"aw",%nobits
+ 646              		.align	2
+ 647              		.set	.LANCHOR2,. + 0
+ 650              	moduleHeaderInRam.0:
+ 651 0000 00000000 		.space	40
+ 651      00000000 
+ 651      00000000 
+ 651      00000000 
+ 651      00000000 
+ 652              		.text
+ 653              	.Letext0:
+ 654              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 655              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 656              		.file 4 "common/prog/std_lib/std_version.h"
+ 657              		.file 5 "common/prog/firmware_update/version/fwu_version.h"
+ 658              		.file 6 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 659              		.file 7 "common/prog/firmware_update/mal/moduleAdministration.h"
+ 660              		.file 8 "common/prog/firmware_update/mal/mal_statuses.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUQgLlf.s 			page 21
+
+
+ 661              		.file 9 "common/prog/firmware_update/mem_drv/mem_drv.h"
+ 662              		.file 10 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

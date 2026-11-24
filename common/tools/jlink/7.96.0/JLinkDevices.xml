@@ -1,0 +1,26 @@
+<DataBase>
+  <!--            -->
+  <!-- Sinowealth -->
+  <!--            -->
+  <!--            -->
+  <!-- SH30F9071   -->
+  <!--            -->
+ <Device>
+    <ChipInfo Vendor="Sinowealth" Name="SH30F9071" WorkRAMAddr="0x20000000" WorkRAMSize="0x00004000" Core="JLINK_CORE_CORTEX_M0" />
+    <FlashBankInfo Name="SH30F9071 Code Flash" BaseAddr="0x00000000" AlwaysPresent="1" MaxSize="0x40000" Loader="SH30F9X71/SH30F9071_Main.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+    <FlashBankInfo Name="SH30F9071 DATA Flash" BaseAddr="0x0FFC0000" AlwaysPresent="1" MaxSize="0x1000" Loader="SH30F9X71/SH30F9071_E2PROM.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+    <FlashBankInfo Name="SH30F9071 Opt Flash" BaseAddr="0x0FFFA000" AlwaysPresent="1" MaxSize="0x400" Loader="SH30F9X71/SH30F9071_Opt.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+ </Device> 
+  <!--            -->
+  <!-- Sinowealth -->
+  <!--            -->
+  <!--            -->
+  <!-- SH30F9871   -->
+  <!--            -->
+ <Device>
+    <ChipInfo Vendor="Sinowealth" Name="SH30F9871" WorkRAMAddr="0x20000000" WorkRAMSize="0x00004000" Core="JLINK_CORE_CORTEX_M0" />
+    <FlashBankInfo Name="SH30F9871 Code Flash" BaseAddr="0x00000000" AlwaysPresent="1" MaxSize="0x20000" Loader="SH30F9X71/SH30F9871_Main.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+    <FlashBankInfo Name="SH30F9871 DATA Flash" BaseAddr="0x0FFC0000" AlwaysPresent="1" MaxSize="0x1000" Loader="SH30F9X71/SH30F9871_E2PROM.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+    <FlashBankInfo Name="SH30F9871 Opt Flash" BaseAddr="0x0FFFA000" AlwaysPresent="1" MaxSize="0x400" Loader="SH30F9X71/SH30F9871_Opt.FLM" LoaderType="FLASH_ALGO_TYPE_OPEN" />
+ </Device> 
+</DataBase>

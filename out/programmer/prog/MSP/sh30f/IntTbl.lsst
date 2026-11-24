@@ -1,0 +1,236 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdBBwp5.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"IntTbl.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ITBL_setCustomInterruptPriority,"ax",%progbits
+  18              		.align	1
+  19              		.global	ITBL_setCustomInterruptPriority
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	ITBL_setCustomInterruptPriority:
+  25              	.LFB45:
+  26              		.file 1 "app/prog/MSP/sh30f/IntTbl.c"
+   1:app/prog/MSP/sh30f/IntTbl.c **** /*******************************************************************************
+   2:app/prog/MSP/sh30f/IntTbl.c **** *   Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:app/prog/MSP/sh30f/IntTbl.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/MSP/sh30f/IntTbl.c **** *
+   5:app/prog/MSP/sh30f/IntTbl.c **** *   All rights reserved. This program and the accompanying materials
+   6:app/prog/MSP/sh30f/IntTbl.c **** *   are protected by international copyright laws.
+   7:app/prog/MSP/sh30f/IntTbl.c **** *   Please contact copyright holder for licensing information.
+   8:app/prog/MSP/sh30f/IntTbl.c **** *
+   9:app/prog/MSP/sh30f/IntTbl.c **** ********************************************************************************
+  10:app/prog/MSP/sh30f/IntTbl.c **** *   PROJECT          Generic SW
+  11:app/prog/MSP/sh30f/IntTbl.c **** *   PROCESSOR        SH30F9X71
+  12:app/prog/MSP/sh30f/IntTbl.c **** *******************************************************************************/
+  13:app/prog/MSP/sh30f/IntTbl.c **** 
+  14:app/prog/MSP/sh30f/IntTbl.c **** /**************************************************************************************************
+  15:app/prog/MSP/sh30f/IntTbl.c **** /* DOCUMENTATION                                                                                  *
+  16:app/prog/MSP/sh30f/IntTbl.c **** /**************************************************************************************************
+  17:app/prog/MSP/sh30f/IntTbl.c **** /** \file    IntTbl.c
+  18:app/prog/MSP/sh30f/IntTbl.c **** *
+  19:app/prog/MSP/sh30f/IntTbl.c **** *   \brief    This file defines the interrupt table that contains the ISR addresses.
+  20:app/prog/MSP/sh30f/IntTbl.c **** *
+  21:app/prog/MSP/sh30f/IntTbl.c **** *   \details  This file was created automatically, no manual changes should be done in this file.
+  22:app/prog/MSP/sh30f/IntTbl.c **** *             If required database or code generator must be adapted
+  23:app/prog/MSP/sh30f/IntTbl.c **** *
+  24:app/prog/MSP/sh30f/IntTbl.c **** */
+  25:app/prog/MSP/sh30f/IntTbl.c **** /******************************************************************************/
+  26:app/prog/MSP/sh30f/IntTbl.c **** /* INCLUDES                                                                   */
+  27:app/prog/MSP/sh30f/IntTbl.c **** /******************************************************************************/
+  28:app/prog/MSP/sh30f/IntTbl.c **** #include "bsh_stdinc.h"
+  29:app/prog/MSP/sh30f/IntTbl.c **** #include <stdint.h>
+  30:app/prog/MSP/sh30f/IntTbl.c **** #include "processor.h"
+  31:app/prog/MSP/sh30f/IntTbl.c **** #include "IntTbl.h"
+  32:app/prog/MSP/sh30f/IntTbl.c **** #include "SegmentDef.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdBBwp5.s 			page 2
+
+
+  33:app/prog/MSP/sh30f/IntTbl.c **** 
+  34:app/prog/MSP/sh30f/IntTbl.c **** /*
+  35:app/prog/MSP/sh30f/IntTbl.c **** Memory mapping of the interrupt vector table that is partioned
+  36:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |\
+  37:app/prog/MSP/sh30f/IntTbl.c ****     |         __VectorsFixed[4]          | \
+  38:app/prog/MSP/sh30f/IntTbl.c ****     |                                    |  >  Fixed Vectors (16 Bytes)
+  39:app/prog/MSP/sh30f/IntTbl.c ****     |       0x0000000 - 0x000000F        | /   in file IntTblArmCM.c
+  40:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |/
+  41:app/prog/MSP/sh30f/IntTbl.c ****     |             Reserved               |
+  42:app/prog/MSP/sh30f/IntTbl.c ****     |         for ROM Bootloader         |
+  43:app/prog/MSP/sh30f/IntTbl.c ****     |        0x0000000 - 0x00007FF       |
+  44:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |
+  45:app/prog/MSP/sh30f/IntTbl.c **** 
+  46:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |
+  47:app/prog/MSP/sh30f/IntTbl.c ****     |        ITBL_coreVectors[16]        |
+  48:app/prog/MSP/sh30f/IntTbl.c ****     |         moved Vector Table         |
+  49:app/prog/MSP/sh30f/IntTbl.c ****     |  (0x0000000 - 0x000003F) + Offset  |
+  50:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |
+  51:app/prog/MSP/sh30f/IntTbl.c **** 
+  52:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |
+  53:app/prog/MSP/sh30f/IntTbl.c ****     |     ITBL_peripheralVectors[n]      |
+  54:app/prog/MSP/sh30f/IntTbl.c ****     |         moved Vector Table         |
+  55:app/prog/MSP/sh30f/IntTbl.c ****     |  (0x0000040 - 0x00000C0) + Offset  |
+  56:app/prog/MSP/sh30f/IntTbl.c ****     | ---------------------------------- |
+  57:app/prog/MSP/sh30f/IntTbl.c **** */
+  58:app/prog/MSP/sh30f/IntTbl.c **** 
+  59:app/prog/MSP/sh30f/IntTbl.c **** /* Interrupt Vector table for SH30F9X71 */
+  60:app/prog/MSP/sh30f/IntTbl.c **** 
+  61:app/prog/MSP/sh30f/IntTbl.c **** /* Axivion Disable Style MisraC2012-8.4 : Missing declaration for function definition */
+  62:app/prog/MSP/sh30f/IntTbl.c **** SDEF_SetSegmentConst(vectors)
+  63:app/prog/MSP/sh30f/IntTbl.c **** const ITBL_fptr SYMBOL_USED ITBL_peripheralVectors[]   =
+  64:app/prog/MSP/sh30f/IntTbl.c **** {
+  65:app/prog/MSP/sh30f/IntTbl.c **** /* Axivion Enable Style MisraC2012-8.4 */ 
+  66:app/prog/MSP/sh30f/IntTbl.c **** 
+  67:app/prog/MSP/sh30f/IntTbl.c **** // ||Handler function name||           ||POSITION||     ||Priority||     ||Address offset||
+  68:app/prog/MSP/sh30f/IntTbl.c ****    /*lint -e{923}  cast tested to work correctly for ARM CortexMx */
+  69:app/prog/MSP/sh30f/IntTbl.c **** #if defined(SH30F9X71)
+  70:app/prog/MSP/sh30f/IntTbl.c ****    WWDT_IRQHandler              ,     //  0               7                 0x0040
+  71:app/prog/MSP/sh30f/IntTbl.c ****    BOD_IRQHandler               ,     //  1               8                 0x0044
+  72:app/prog/MSP/sh30f/IntTbl.c ****    RCC_IRQHandler               ,     //  2               9                 0x0048
+  73:app/prog/MSP/sh30f/IntTbl.c ****    EXTI0_IRQHandler             ,     //  3              10                 0x004C
+  74:app/prog/MSP/sh30f/IntTbl.c ****    EXTI1_IRQHandler             ,     //  4              11                 0x0050
+  75:app/prog/MSP/sh30f/IntTbl.c ****    EXTI2_IRQHandler             ,     //  5              12                 0x0054
+  76:app/prog/MSP/sh30f/IntTbl.c ****    EXTI3_IRQHandler             ,     //  6              13                 0x0058
+  77:app/prog/MSP/sh30f/IntTbl.c ****    DMA_CH0_1_IRQHandler         ,     //  7              14                 0x005C
+  78:app/prog/MSP/sh30f/IntTbl.c ****    DMA_CH2_3_IRQHandler         ,     //  8              15                 0x0060
+  79:app/prog/MSP/sh30f/IntTbl.c ****    ADC_IRQHandler               ,     //  9              16                 0x0064
+  80:app/prog/MSP/sh30f/IntTbl.c ****    PWM0_IRQHandler              ,     // 10              17                 0x0068
+  81:app/prog/MSP/sh30f/IntTbl.c ****    PWM1_IRQHandler              ,     // 11              18                 0x006C
+  82:app/prog/MSP/sh30f/IntTbl.c ****    PWM2_IRQHandler              ,     // 12              19                 0x0070
+  83:app/prog/MSP/sh30f/IntTbl.c ****    PWM3_IRQHandler              ,     // 13              20                 0x0074
+  84:app/prog/MSP/sh30f/IntTbl.c ****    PCA0_IRQHandler              ,     // 14              21                 0x0078
+  85:app/prog/MSP/sh30f/IntTbl.c ****    PCA1_IRQHandler              ,     // 15              22                 0x007C
+  86:app/prog/MSP/sh30f/IntTbl.c ****    PCA2_IRQHandler              ,     // 16              23                 0x0080
+  87:app/prog/MSP/sh30f/IntTbl.c ****    PCA3_IRQHandler              ,     // 17              24                 0x0084
+  88:app/prog/MSP/sh30f/IntTbl.c ****    EXTI9_4_IRQHandler           ,     // 18              25                 0x0088
+  89:app/prog/MSP/sh30f/IntTbl.c ****    UART0_IRQHandler             ,     // 19              26                 0x008C
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdBBwp5.s 			page 3
+
+
+  90:app/prog/MSP/sh30f/IntTbl.c ****    TWI0_IRQHandler              ,     // 20              27                 0x0090
+  91:app/prog/MSP/sh30f/IntTbl.c ****    SPI0_IRQHandler              ,     // 21              28                 0x0094
+  92:app/prog/MSP/sh30f/IntTbl.c ****    SPI1_LED_IRQHandler          ,     // 22              29                 0x0098
+  93:app/prog/MSP/sh30f/IntTbl.c ****    UART1_IRQHandler             ,     // 23              30                 0x009C
+  94:app/prog/MSP/sh30f/IntTbl.c ****    UART2_IRQHandler             ,     // 24              31                 0x00A0
+  95:app/prog/MSP/sh30f/IntTbl.c ****    UART3_IRQHandler             ,     // 25              32                 0x00A4
+  96:app/prog/MSP/sh30f/IntTbl.c ****    EXTI15_10_IRQHandler         ,     // 26              33                 0x00A8
+  97:app/prog/MSP/sh30f/IntTbl.c ****    TIM0_IRQHandler              ,     // 27              34                 0x00AC
+  98:app/prog/MSP/sh30f/IntTbl.c ****    TIM1_IRQHandler              ,     // 28              35                 0x00B0
+  99:app/prog/MSP/sh30f/IntTbl.c ****    TIM2_IRQHandler              ,     // 29              36                 0x00B4
+ 100:app/prog/MSP/sh30f/IntTbl.c ****    TIM3_IRQHandler              ,     // 30              37                 0x00B8
+ 101:app/prog/MSP/sh30f/IntTbl.c ****    TOUCH_KEY_IRQHandler         ,     // 31              38                 0x00BC 
+ 102:app/prog/MSP/sh30f/IntTbl.c **** #endif
+ 103:app/prog/MSP/sh30f/IntTbl.c **** };
+ 104:app/prog/MSP/sh30f/IntTbl.c **** SDEF_SetSegmentConst_Default()
+ 105:app/prog/MSP/sh30f/IntTbl.c **** 
+ 106:app/prog/MSP/sh30f/IntTbl.c **** /* Function's task is to set the interrupt priorities according to the user's needs, different from
+ 107:app/prog/MSP/sh30f/IntTbl.c ****  * If necessary, uncomment the relevant lines and set the required interrupt priorities
+ 108:app/prog/MSP/sh30f/IntTbl.c ****  */
+ 109:app/prog/MSP/sh30f/IntTbl.c **** void ITBL_setCustomInterruptPriority(void)
+ 110:app/prog/MSP/sh30f/IntTbl.c **** {
+  27              		.loc 1 110 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ 111:app/prog/MSP/sh30f/IntTbl.c ****     /* Cortex-M0+ settable interrupts */
+ 112:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(SVC_IRQn, PRIORITY_HIGH);
+ 113:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PendSV_IRQn, PRIORITY_HIGH);
+ 114:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(SysTick_IRQn, PRIORITY_HIGH);
+ 115:app/prog/MSP/sh30f/IntTbl.c ****     /* Peripheral interrupts */
+ 116:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(WWDT_IRQn, PRIORITY_MEDIUM);
+ 117:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(BOD_IRQn, PRIORITY_MEDIUM);
+ 118:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(RCC_IRQn, PRIORITY_MEDIUM);
+ 119:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI0_IRQn, PRIORITY_MEDIUM);
+ 120:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI1_IRQn, PRIORITY_MEDIUM);
+ 121:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI2_IRQn, PRIORITY_MEDIUM);
+ 122:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI3_IRQn, PRIORITY_MEDIUM);
+ 123:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(DMA_CH0_1_IRQn, PRIORITY_MEDIUM);
+ 124:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(DMA_CH2_3_IRQn, PRIORITY_MEDIUM);
+ 125:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(ADC_IRQn, PRIORITY_MEDIUM);
+ 126:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PWM0_IRQn, PRIORITY_MEDIUM);
+ 127:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PWM1_IRQn, PRIORITY_MEDIUM);
+ 128:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PWM2_IRQn, PRIORITY_MEDIUM);
+ 129:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PWM3_IRQn, PRIORITY_MEDIUM);
+ 130:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PCA0_IRQn, PRIORITY_MEDIUM);
+ 131:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PCA1_IRQn, PRIORITY_MEDIUM);
+ 132:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PCA2_IRQn, PRIORITY_MEDIUM);
+ 133:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(PCA3_IRQn, PRIORITY_MEDIUM);
+ 134:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI9_4_IRQn, PRIORITY_MEDIUM);
+ 135:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(UART0_IRQn, PRIORITY_MEDIUM);
+ 136:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TWI0_IRQn, PRIORITY_MEDIUM);
+ 137:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(SPI0_IRQn, PRIORITY_MEDIUM);
+ 138:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(SPI1_LED_IRQn, PRIORITY_MEDIUM);
+ 139:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(UART1_IRQn, PRIORITY_MEDIUM);
+ 140:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(UART2_IRQn, PRIORITY_MEDIUM);
+ 141:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(UART3_IRQn, PRIORITY_MEDIUM);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdBBwp5.s 			page 4
+
+
+ 142:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(EXTI15_10_IRQn, PRIORITY_MEDIUM);
+ 143:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TIM0_IRQn, PRIORITY_MEDIUM);
+ 144:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TIM1_IRQn, PRIORITY_LOW);
+ 145:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TIM2_IRQn, PRIORITY_LOW);
+ 146:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TIM3_IRQn, PRIORITY_LOW);
+ 147:app/prog/MSP/sh30f/IntTbl.c ****     // NVIC_SetPriority(TouchKey_IRQn, PRIORITY_LOW);
+ 148:app/prog/MSP/sh30f/IntTbl.c **** }
+  32              		.loc 1 148 1 view .LVU1
+  33              		@ sp needed
+  34 0000 7047     		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE45:
+  38              		.global	ITBL_peripheralVectors
+  39              		.section	.vectors,"a"
+  40              		.align	2
+  43              	ITBL_peripheralVectors:
+  44 0000 00000000 		.word	WWDT_IRQHandler
+  45 0004 00000000 		.word	BOD_IRQHandler
+  46 0008 00000000 		.word	RCC_IRQHandler
+  47 000c 00000000 		.word	EXTI0_IRQHandler
+  48 0010 00000000 		.word	EXTI1_IRQHandler
+  49 0014 00000000 		.word	EXTI2_IRQHandler
+  50 0018 00000000 		.word	EXTI3_IRQHandler
+  51 001c 00000000 		.word	DMA_CH0_1_IRQHandler
+  52 0020 00000000 		.word	DMA_CH2_3_IRQHandler
+  53 0024 00000000 		.word	ADC_IRQHandler
+  54 0028 00000000 		.word	PWM0_IRQHandler
+  55 002c 00000000 		.word	PWM1_IRQHandler
+  56 0030 00000000 		.word	PWM2_IRQHandler
+  57 0034 00000000 		.word	PWM3_IRQHandler
+  58 0038 00000000 		.word	PCA0_IRQHandler
+  59 003c 00000000 		.word	PCA1_IRQHandler
+  60 0040 00000000 		.word	PCA2_IRQHandler
+  61 0044 00000000 		.word	PCA3_IRQHandler
+  62 0048 00000000 		.word	EXTI9_4_IRQHandler
+  63 004c 00000000 		.word	UART0_IRQHandler
+  64 0050 00000000 		.word	TWI0_IRQHandler
+  65 0054 00000000 		.word	SPI0_IRQHandler
+  66 0058 00000000 		.word	SPI1_LED_IRQHandler
+  67 005c 00000000 		.word	UART1_IRQHandler
+  68 0060 00000000 		.word	UART2_IRQHandler
+  69 0064 00000000 		.word	UART3_IRQHandler
+  70 0068 00000000 		.word	EXTI15_10_IRQHandler
+  71 006c 00000000 		.word	TIM0_IRQHandler
+  72 0070 00000000 		.word	TIM1_IRQHandler
+  73 0074 00000000 		.word	TIM2_IRQHandler
+  74 0078 00000000 		.word	TIM3_IRQHandler
+  75 007c 00000000 		.word	TOUCH_KEY_IRQHandler
+  76              		.text
+  77              	.Letext0:
+  78              		.file 2 "app/prog/MSP/sh30f/IntTbl.h"
+  79              		.file 3 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+  80              		.file 4 "common/prog/MSP/armCmx/IntTblArmCM.h"

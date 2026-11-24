@@ -1,0 +1,1672 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"sh30f9xx_sa0_rcc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_uidiv
+  18              		.global	__aeabi_idiv
+  19              		.section	.text.RCC_GetClocksFreq,"ax",%progbits
+  20              		.align	1
+  21              		.global	RCC_GetClocksFreq
+  22              		.syntax unified
+  23              		.code	16
+  24              		.thumb_func
+  26              	RCC_GetClocksFreq:
+  27              	.LVL0:
+  28              	.LFB45:
+  29              		.file 1 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c"
+   1:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+   2:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   ******************************************************************************
+   3:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @file    sh30f9xx_sa0_rcc.c
+   4:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @author  sinowealth
+   5:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @version V1.1.0
+   6:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @date    2020-11-25  
+   7:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief   This file provides reset and clock module's APIs
+   8:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *         
+   9:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *  @verbatim
+  10:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  11:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *          ===================================================================
+  12:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *                                   How to use this driver
+  13:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *          ===================================================================
+  14:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *          
+  15:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  16:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *  @endverbatim
+  17:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  18:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   ******************************************************************************
+  19:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @attention
+  20:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  21:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * SINOWEALTH IS SUPPLYING THIS SOFTWARE FOR USE EXCLUSIVELY SH_ON SINOWEALTH'S 
+  22:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * MICROCONTROLLER PRODUCTS. IT IS PROTECTED UNDER APPLICABLE COPYRIGHT LAWS. 
+  23:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * THIS SOFTWARE IS FOR GUIDANCE IN ORDER TO SAVE TIME. AS A RESULT, SINOWEALTH 
+  24:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES 
+  25:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT OF SUCH FIRMWARE AND/OR
+  26:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION CONTAINED HEREIN IN 
+  27:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * CONNECTION WITH THEIR PRODUCTS.
+  28:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  29:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * <h2><center>&copy; COPYRIGHT 2020 Sinowealth</center></h2>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 2
+
+
+  30:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *
+  31:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   ******************************************************************************
+  32:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+  33:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  34:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /* Includes ------------------------------------------------------------------*/
+  35:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** #include "sh30f9xx_sa0_rcc.h"
+  36:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** #include "system_sh30f9xx_sa0.h"
+  37:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  38:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /** @addtogroup SH30F9xx_sa0_libcfg_StdLib_Driver
+  39:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @{
+  40:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+  41:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  42:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /** @addtogroup RCC_MODULE RCC
+  43:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *  RCC driver Mode
+  44:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @{
+  45:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+  46:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  47:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /** @defgroup RCC_Group_Pub_Funcs  Public Functions
+  48:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief   RCC Public Functions
+  49:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @{
+  50:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+  51:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  52:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+  53:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   ******************************************************************************
+  54:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @function  RCC_GetClocksFreq
+  55:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief     Returns the frequencies of different on chip clocks.
+  56:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @version   V1.1.0
+  57:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @date      25-November-2020
+  58:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param     Clocks: pointer to a RCC_Clocks_TypeDef structure which will hold
+  59:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *            the clocks frequencies.
+  60:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval    None
+  61:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   ******************************************************************************
+  62:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+  63:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_GetClocksFreq(RCC_Clocks_TypeDef *Clocks)
+  64:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+  30              		.loc 1 64 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  65:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t tmp = 0;
+  34              		.loc 1 65 5 view .LVU1
+  66:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t pllmul_k = 0;
+  35              		.loc 1 66 5 view .LVU2
+  67:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t pllmul_f = 0;
+  36              		.loc 1 67 5 view .LVU3
+  68:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t pllxtpre = 0;
+  37              		.loc 1 68 5 view .LVU4
+  69:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t pllsrc = 0;
+  38              		.loc 1 69 5 view .LVU5
+  70:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t hpre_div = 0;
+  39              		.loc 1 70 5 view .LVU6
+  71:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint32_t sysClk = 0;
+  40              		.loc 1 71 5 view .LVU7
+  72:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  73:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Get SYSCLK source -------------------------------------------------------*/
+  74:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     tmp = RCC->CR.BIT.SWS;
+  41              		.loc 1 74 5 view .LVU8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 3
+
+
+  64:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t tmp = 0;
+  42              		.loc 1 64 1 is_stmt 0 view .LVU9
+  43 0000 F7B5     		push	{r0, r1, r2, r4, r5, r6, r7, lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 32
+  46              		.cfi_offset 0, -32
+  47              		.cfi_offset 1, -28
+  48              		.cfi_offset 2, -24
+  49              		.cfi_offset 4, -20
+  50              		.cfi_offset 5, -16
+  51              		.cfi_offset 6, -12
+  52              		.cfi_offset 7, -8
+  53              		.cfi_offset 14, -4
+  54              		.loc 1 74 22 view .LVU10
+  55 0002 394C     		ldr	r4, .L29
+  64:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     uint8_t tmp = 0;
+  56              		.loc 1 64 1 view .LVU11
+  57 0004 0600     		movs	r6, r0
+  58              		.loc 1 74 22 view .LVU12
+  59 0006 2068     		ldr	r0, [r4]
+  60              	.LVL1:
+  75:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     hpre_div = RCC->CFGR.BIT.HPRE;
+  61              		.loc 1 75 29 view .LVU13
+  62 0008 6768     		ldr	r7, [r4, #4]
+  74:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     hpre_div = RCC->CFGR.BIT.HPRE;
+  63              		.loc 1 74 22 view .LVU14
+  64 000a 8006     		lsls	r0, r0, #26
+  65 000c 400F     		lsrs	r0, r0, #29
+  66              	.LVL2:
+  67              		.loc 1 75 5 is_stmt 1 view .LVU15
+  68              		.loc 1 75 29 is_stmt 0 view .LVU16
+  69 000e 7F07     		lsls	r7, r7, #29
+  76:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  77:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     switch (tmp)
+  70              		.loc 1 77 5 view .LVU17
+  71 0010 0138     		subs	r0, r0, #1
+  75:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+  72              		.loc 1 75 29 view .LVU18
+  73 0012 7F0F     		lsrs	r7, r7, #29
+  74              	.LVL3:
+  75              		.loc 1 77 5 is_stmt 1 view .LVU19
+  76 0014 0428     		cmp	r0, #4
+  77 0016 2CD8     		bhi	.L21
+  78 0018 FFF7FEFF 		bl	__gnu_thumb1_case_uqi
+  79              	.L4:
+  80 001c 0E       		.byte	(.L8-.L4)/2
+  81 001d 2F       		.byte	(.L7-.L4)/2
+  82 001e 38       		.byte	(.L6-.L4)/2
+  83 001f 03       		.byte	(.L5-.L4)/2
+  84 0020 3F       		.byte	(.L3-.L4)/2
+  85 0021 00       		.p2align 1
+  86              	.L5:
+  87 0022 FA23     		movs	r3, #250
+  88 0024 5B02     		lsls	r3, r3, #9
+  89              	.LVL4:
+  90              	.L2:
+  78:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 4
+
+
+  79:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_HSI: /* HSI used as system clock */
+  80:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         sysClk = HSI_VALUE;
+  81:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+  82:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_PLL: /* PLL used as system clock */
+  83:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllsrc = RCC->CFGR.BIT.PLLSRC;
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_f = RCC->CFGR.BIT.PLLF + 15;
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_k = RCC->CFGR.BIT.PLLK + 1;
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+  88:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+  89:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = HSE_VALUE / pllxtpre * pllmul_f / pllmul_k / 4;
+  90:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+  91:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         else //HSI as PLL Clock input
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = HSI_VALUE / pllxtpre * pllmul_f / pllmul_k / 4;
+  94:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (RCC->CISTR.BIT.PLLCSMF)
+  96:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+  97:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = HSI_VALUE;
+  98:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+  99:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 100:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_LSE: /* LSE used as system clock */
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (RCC->CISTR.BIT.LSECSMF)
+ 102:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 103:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = LSI_VALUE_DIV4;
+ 104:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 105:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         else
+ 106:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 107:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = LSE_VALUE;
+ 108:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 109:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 110:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_HSE: /* HSE used as system clock */
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (RCC->CISTR.BIT.HSECSMF)
+ 112:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 113:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = HSI_VALUE;
+ 114:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 115:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         else
+ 116:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****             sysClk = HSE_VALUE;
+ 118:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 119:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 120:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_LSI: /* LSI used as system clock */
+ 121:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         sysClk = LSI_VALUE;
+ 122:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 123:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case RCC_SYS_SRC_LSI_DIV4: /* LSI DIV4 used as system clock */
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         sysClk = LSI_VALUE_DIV4;
+ 125:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 126:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     default: /* HSI used as system clock */
+ 127:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         sysClk = HSI_VALUE;
+ 128:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 129:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 130:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     Clocks->sysFreq = sysClk;
+  91              		.loc 1 131 5 view .LVU20
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 133:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     //Calculate HCLK
+ 134:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     switch (hpre_div)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 5
+
+
+  92              		.loc 1 134 5 view .LVU21
+ 135:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 136:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 0:
+ 137:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk;
+ 138:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 139:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 1:
+ 140:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 2;
+ 141:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 142:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 2:
+ 143:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 4;
+ 144:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 145:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 3:
+ 146:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 8;
+ 147:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 148:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 4:
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 16;
+ 150:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 151:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 5:
+ 152:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 32;
+ 153:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 154:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     default:
+ 155:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         Clocks->hclkFreq = sysClk / 32;
+  93              		.loc 1 155 35 is_stmt 0 view .LVU22
+  94 0026 5A09     		lsrs	r2, r3, #5
+ 134:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+  95              		.loc 1 134 5 view .LVU23
+  96 0028 042F     		cmp	r7, #4
+  97 002a 3AD8     		bhi	.L17
+  98 002c 3800     		movs	r0, r7
+  99 002e FFF7FEFF 		bl	__gnu_thumb1_case_uqi
+ 100              	.L13:
+ 101 0032 58       		.byte	(.L24-.L13)/2
+ 102 0033 37       		.byte	(.L16-.L13)/2
+ 103 0034 52       		.byte	(.L15-.L13)/2
+ 104 0035 54       		.byte	(.L14-.L13)/2
+ 105 0036 56       		.byte	(.L12-.L13)/2
+ 106              	.LVL5:
+ 107 0037 00       		.p2align 1
+ 108              	.L8:
+  83:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_f = RCC->CFGR.BIT.PLLF + 15;
+ 109              		.loc 1 83 9 is_stmt 1 view .LVU24
+  83:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_f = RCC->CFGR.BIT.PLLF + 15;
+ 110              		.loc 1 83 31 is_stmt 0 view .LVU25
+ 111 0038 6368     		ldr	r3, [r4, #4]
+ 112              	.LVL6:
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_k = RCC->CFGR.BIT.PLLK + 1;
+ 113              		.loc 1 84 9 is_stmt 1 view .LVU26
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_k = RCC->CFGR.BIT.PLLK + 1;
+ 114              		.loc 1 84 33 is_stmt 0 view .LVU27
+ 115 003a 6268     		ldr	r2, [r4, #4]
+ 116 003c 9203     		lsls	r2, r2, #14
+ 117 003e D20E     		lsrs	r2, r2, #27
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllmul_k = RCC->CFGR.BIT.PLLK + 1;
+ 118              		.loc 1 84 18 view .LVU28
+ 119 0040 0F32     		adds	r2, r2, #15
+ 120 0042 0192     		str	r2, [sp, #4]
+ 121              	.LVL7:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 6
+
+
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+ 122              		.loc 1 85 9 is_stmt 1 view .LVU29
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+ 123              		.loc 1 85 33 is_stmt 0 view .LVU30
+ 124 0044 6568     		ldr	r5, [r4, #4]
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+ 125              		.loc 1 86 33 view .LVU31
+ 126 0046 6168     		ldr	r1, [r4, #4]
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+ 127              		.loc 1 85 33 view .LVU32
+ 128 0048 ED04     		lsls	r5, r5, #19
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+ 129              		.loc 1 86 33 view .LVU33
+ 130 004a 8902     		lsls	r1, r1, #10
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+ 131              		.loc 1 85 33 view .LVU34
+ 132 004c 6D0F     		lsrs	r5, r5, #29
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+ 133              		.loc 1 86 33 view .LVU35
+ 134 004e 890F     		lsrs	r1, r1, #30
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         pllxtpre = RCC->CFGR.BIT.PLLXTPRE + 1;
+ 135              		.loc 1 85 18 view .LVU36
+ 136 0050 0135     		adds	r5, r5, #1
+ 137              	.LVL8:
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+ 138              		.loc 1 86 9 is_stmt 1 view .LVU37
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         if (pllsrc) //HSE as PLL Clock input
+ 139              		.loc 1 86 18 is_stmt 0 view .LVU38
+ 140 0052 0131     		adds	r1, r1, #1
+ 141              	.LVL9:
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 142              		.loc 1 87 9 is_stmt 1 view .LVU39
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 143              		.loc 1 87 12 is_stmt 0 view .LVU40
+ 144 0054 1B03     		lsls	r3, r3, #12
+ 145 0056 0ED5     		bpl	.L9
+ 146              	.LVL10:
+  89:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 147              		.loc 1 89 13 is_stmt 1 view .LVU41
+  89:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 148              		.loc 1 89 32 is_stmt 0 view .LVU42
+ 149 0058 2448     		ldr	r0, .L29+4
+ 150              	.L27:
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 151              		.loc 1 93 32 view .LVU43
+ 152 005a FFF7FEFF 		bl	__aeabi_uidiv
+ 153              	.LVL11:
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 154              		.loc 1 93 43 view .LVU44
+ 155 005e 019B     		ldr	r3, [sp, #4]
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 156              		.loc 1 93 54 view .LVU45
+ 157 0060 2900     		movs	r1, r5
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 158              		.loc 1 93 43 view .LVU46
+ 159 0062 4343     		muls	r3, r0
+ 160 0064 1800     		movs	r0, r3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 7
+
+
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 161              		.loc 1 93 54 view .LVU47
+ 162 0066 FFF7FEFF 		bl	__aeabi_uidiv
+ 163              	.LVL12:
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 164              		.loc 1 95 27 view .LVU48
+ 165 006a E268     		ldr	r2, [r4, #12]
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 166              		.loc 1 93 20 view .LVU49
+ 167 006c 8308     		lsrs	r3, r0, #2
+ 168              	.LVL13:
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 169              		.loc 1 95 9 is_stmt 1 view .LVU50
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 170              		.loc 1 95 12 is_stmt 0 view .LVU51
+ 171 006e 1206     		lsls	r2, r2, #24
+ 172 0070 D9D5     		bpl	.L2
+ 173              	.LVL14:
+ 174              	.L21:
+  97:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 175              		.loc 1 97 20 view .LVU52
+ 176 0072 1F4B     		ldr	r3, .L29+8
+ 177 0074 D7E7     		b	.L2
+ 178              	.LVL15:
+ 179              	.L9:
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 180              		.loc 1 93 13 is_stmt 1 view .LVU53
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 181              		.loc 1 93 32 is_stmt 0 view .LVU54
+ 182 0076 1E48     		ldr	r0, .L29+8
+ 183 0078 EFE7     		b	.L27
+ 184              	.LVL16:
+ 185              	.L7:
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 186              		.loc 1 101 9 is_stmt 1 view .LVU55
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 187              		.loc 1 101 27 is_stmt 0 view .LVU56
+ 188 007a E368     		ldr	r3, [r4, #12]
+ 107:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 189              		.loc 1 107 20 view .LVU57
+ 190 007c 1D4A     		ldr	r2, .L29+12
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 191              		.loc 1 101 27 view .LVU58
+ 192 007e 9B06     		lsls	r3, r3, #26
+ 107:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 193              		.loc 1 107 20 view .LVU59
+ 194 0080 DB17     		asrs	r3, r3, #31
+ 195 0082 1340     		ands	r3, r2
+ 196 0084 8022     		movs	r2, #128
+ 197 0086 1202     		lsls	r2, r2, #8
+ 198              	.L28:
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 199              		.loc 1 117 20 view .LVU60
+ 200 0088 9B18     		adds	r3, r3, r2
+ 201 008a CCE7     		b	.L2
+ 202              	.L6:
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 8
+
+
+ 203              		.loc 1 111 9 is_stmt 1 view .LVU61
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 204              		.loc 1 111 27 is_stmt 0 view .LVU62
+ 205 008c E368     		ldr	r3, [r4, #12]
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 206              		.loc 1 117 20 view .LVU63
+ 207 008e 1A4A     		ldr	r2, .L29+16
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         {
+ 208              		.loc 1 111 27 view .LVU64
+ 209 0090 5B06     		lsls	r3, r3, #25
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         }
+ 210              		.loc 1 117 20 view .LVU65
+ 211 0092 DB17     		asrs	r3, r3, #31
+ 212 0094 1340     		ands	r3, r2
+ 213 0096 154A     		ldr	r2, .L29+4
+ 214 0098 F6E7     		b	.L28
+ 215              	.L3:
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 216              		.loc 1 124 9 is_stmt 1 view .LVU66
+ 217              	.LVL17:
+ 125:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     default: /* HSI used as system clock */
+ 218              		.loc 1 125 9 view .LVU67
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 219              		.loc 1 124 16 is_stmt 0 view .LVU68
+ 220 009a FA23     		movs	r3, #250
+ 221 009c DB01     		lsls	r3, r3, #7
+ 125:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     default: /* HSI used as system clock */
+ 222              		.loc 1 125 9 view .LVU69
+ 223 009e C2E7     		b	.L2
+ 224              	.LVL18:
+ 225              	.L16:
+ 140:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 226              		.loc 1 140 9 is_stmt 1 view .LVU70
+ 140:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 227              		.loc 1 140 35 is_stmt 0 view .LVU71
+ 228 00a0 5A08     		lsrs	r2, r3, #1
+ 141:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 2:
+ 229              		.loc 1 141 9 is_stmt 1 view .LVU72
+ 230              	.L17:
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 231              		.loc 1 131 21 is_stmt 0 view .LVU73
+ 232 00a2 3360     		str	r3, [r6]
+ 156:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 157:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 158:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 159:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /*Calculate PCLK0 PCLK1*/
+ 160:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     Clocks->pclk0Freq = Clocks->hclkFreq >> (RCC->CFGR.BIT.PPRE0 > 4 ? 4 : (RCC->CFGR.BIT.PPRE0));
+ 233              		.loc 1 160 74 view .LVU74
+ 234 00a4 0423     		movs	r3, #4
+ 235              	.LVL19:
+ 137:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 236              		.loc 1 137 26 view .LVU75
+ 237 00a6 7260     		str	r2, [r6, #4]
+ 238              		.loc 1 160 5 is_stmt 1 view .LVU76
+ 239              		.loc 1 160 59 is_stmt 0 view .LVU77
+ 240 00a8 6168     		ldr	r1, [r4, #4]
+ 241 00aa 8906     		lsls	r1, r1, #26
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 9
+
+
+ 242 00ac 490F     		lsrs	r1, r1, #29
+ 243              		.loc 1 160 74 view .LVU78
+ 244 00ae 9942     		cmp	r1, r3
+ 245 00b0 02D8     		bhi	.L18
+ 246              		.loc 1 160 90 discriminator 1 view .LVU79
+ 247 00b2 6368     		ldr	r3, [r4, #4]
+ 248 00b4 9B06     		lsls	r3, r3, #26
+ 249 00b6 5B0F     		lsrs	r3, r3, #29
+ 250              	.L18:
+ 251              		.loc 1 160 42 discriminator 4 view .LVU80
+ 252 00b8 1100     		movs	r1, r2
+ 253 00ba D940     		lsrs	r1, r1, r3
+ 161:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     Clocks->pclk1Freq = Clocks->hclkFreq >> (RCC->CFGR.BIT.PPRE1 > 4 ? 4 : (RCC->CFGR.BIT.PPRE1));
+ 254              		.loc 1 161 74 discriminator 4 view .LVU81
+ 255 00bc 0423     		movs	r3, #4
+ 160:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     Clocks->pclk1Freq = Clocks->hclkFreq >> (RCC->CFGR.BIT.PPRE1 > 4 ? 4 : (RCC->CFGR.BIT.PPRE1));
+ 256              		.loc 1 160 23 discriminator 4 view .LVU82
+ 257 00be B160     		str	r1, [r6, #8]
+ 258              		.loc 1 161 5 is_stmt 1 discriminator 4 view .LVU83
+ 259              		.loc 1 161 59 is_stmt 0 discriminator 4 view .LVU84
+ 260 00c0 6168     		ldr	r1, [r4, #4]
+ 261 00c2 C905     		lsls	r1, r1, #23
+ 262 00c4 490F     		lsrs	r1, r1, #29
+ 263              		.loc 1 161 74 discriminator 4 view .LVU85
+ 264 00c6 9942     		cmp	r1, r3
+ 265 00c8 02D8     		bhi	.L19
+ 266              		.loc 1 161 90 discriminator 1 view .LVU86
+ 267 00ca 6368     		ldr	r3, [r4, #4]
+ 268 00cc DB05     		lsls	r3, r3, #23
+ 269 00ce 5B0F     		lsrs	r3, r3, #29
+ 270              	.L19:
+ 271              		.loc 1 161 42 discriminator 4 view .LVU87
+ 272 00d0 DA40     		lsrs	r2, r2, r3
+ 162:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 273              		.loc 1 162 1 discriminator 4 view .LVU88
+ 274              		@ sp needed
+ 161:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     Clocks->pclk1Freq = Clocks->hclkFreq >> (RCC->CFGR.BIT.PPRE1 > 4 ? 4 : (RCC->CFGR.BIT.PPRE1));
+ 275              		.loc 1 161 23 discriminator 4 view .LVU89
+ 276 00d2 F260     		str	r2, [r6, #12]
+ 277              	.LVL20:
+ 278              		.loc 1 162 1 discriminator 4 view .LVU90
+ 279 00d4 F7BD     		pop	{r0, r1, r2, r4, r5, r6, r7, pc}
+ 280              	.LVL21:
+ 281              	.L15:
+ 143:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 282              		.loc 1 143 9 is_stmt 1 view .LVU91
+ 143:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 283              		.loc 1 143 35 is_stmt 0 view .LVU92
+ 284 00d6 9A08     		lsrs	r2, r3, #2
+ 144:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 3:
+ 285              		.loc 1 144 9 is_stmt 1 view .LVU93
+ 286 00d8 E3E7     		b	.L17
+ 287              	.L14:
+ 146:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 288              		.loc 1 146 9 view .LVU94
+ 146:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 289              		.loc 1 146 35 is_stmt 0 view .LVU95
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 10
+
+
+ 290 00da DA08     		lsrs	r2, r3, #3
+ 147:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 4:
+ 291              		.loc 1 147 9 is_stmt 1 view .LVU96
+ 292 00dc E1E7     		b	.L17
+ 293              	.L12:
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 294              		.loc 1 149 9 view .LVU97
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         break;
+ 295              		.loc 1 149 35 is_stmt 0 view .LVU98
+ 296 00de 1A09     		lsrs	r2, r3, #4
+ 150:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     case 5:
+ 297              		.loc 1 150 9 is_stmt 1 view .LVU99
+ 298 00e0 DFE7     		b	.L17
+ 299              	.L24:
+ 134:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 300              		.loc 1 134 5 is_stmt 0 view .LVU100
+ 301 00e2 1A00     		movs	r2, r3
+ 302 00e4 DDE7     		b	.L17
+ 303              	.L30:
+ 304 00e6 C046     		.align	2
+ 305              	.L29:
+ 306 00e8 00080440 		.word	1074006016
+ 307 00ec 00127A00 		.word	8000000
+ 308 00f0 00366E01 		.word	24000000
+ 309 00f4 00FDFFFF 		.word	-768
+ 310 00f8 0024F400 		.word	16000000
+ 311              		.cfi_endproc
+ 312              	.LFE45:
+ 314              		.section	.text.RCC_AHBPeriphClockOnOff,"ax",%progbits
+ 315              		.align	1
+ 316              		.global	RCC_AHBPeriphClockOnOff
+ 317              		.syntax unified
+ 318              		.code	16
+ 319              		.thumb_func
+ 321              	RCC_AHBPeriphClockOnOff:
+ 322              	.LVL22:
+ 323              	.LFB46:
+ 163:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 164:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 165:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief     open or close AHB modules' clock gate
+ 166:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  AHBModules:  AHB module bits @ref RCC_AHB_Type
+ 167:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     This parameter can be any combination of following values:
+ 168:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_SYSCFG:  for SYSCFG Module
+ 169:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_CRC   :  for CRC Module
+ 170:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_DMA   :  for DMA Config Module
+ 171:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *@param OnOffState  open or close related clock gate
+ 172:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ON  open related clock gate
+ 173:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_OFF  close related clock gate
+ 174:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval   None
+ 175:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****    */
+ 176:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_AHBPeriphClockOnOff(RCC_AHB_Type AHBModules, CmdState OnOffState)
+ 177:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 324              		.loc 1 177 1 is_stmt 1 view -0
+ 325              		.cfi_startproc
+ 326              		@ args = 0, pretend = 0, frame = 0
+ 327              		@ frame_needed = 0, uses_anonymous_args = 0
+ 328              		@ link register save eliminated.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 11
+
+
+ 178:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_AHB_MODULES(AHBModules));
+ 329              		.loc 1 178 5 view .LVU102
+ 179:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 330              		.loc 1 179 5 view .LVU103
+ 180:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 181:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 182:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 331              		.loc 1 182 5 view .LVU104
+ 332 0000 064B     		ldr	r3, .L34
+ 333 0002 074A     		ldr	r2, .L34+4
+ 334 0004 5A63     		str	r2, [r3, #52]
+ 183:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 184:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (OnOffState == SH_ON)
+ 335              		.loc 1 184 5 view .LVU105
+ 185:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 186:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->AHBENR.V32 |= AHBModules;
+ 336              		.loc 1 186 25 is_stmt 0 view .LVU106
+ 337 0006 1A6A     		ldr	r2, [r3, #32]
+ 184:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 338              		.loc 1 184 8 view .LVU107
+ 339 0008 0129     		cmp	r1, #1
+ 340 000a 04D1     		bne	.L32
+ 341              		.loc 1 186 9 is_stmt 1 view .LVU108
+ 342              		.loc 1 186 25 is_stmt 0 view .LVU109
+ 343 000c 1043     		orrs	r0, r2
+ 344              	.LVL23:
+ 345              		.loc 1 186 25 view .LVU110
+ 346 000e 1862     		str	r0, [r3, #32]
+ 347              	.L33:
+ 187:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 188:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else
+ 189:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 190:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->AHBENR.V32 &= ~AHBModules;
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 192:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 193:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 194:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 348              		.loc 1 194 5 is_stmt 1 view .LVU111
+ 349 0010 0022     		movs	r2, #0
+ 195:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 350              		.loc 1 195 1 is_stmt 0 view .LVU112
+ 351              		@ sp needed
+ 194:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 352              		.loc 1 194 5 view .LVU113
+ 353 0012 5A63     		str	r2, [r3, #52]
+ 354              		.loc 1 195 1 view .LVU114
+ 355 0014 7047     		bx	lr
+ 356              	.LVL24:
+ 357              	.L32:
+ 190:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 358              		.loc 1 190 9 is_stmt 1 view .LVU115
+ 190:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 359              		.loc 1 190 25 is_stmt 0 view .LVU116
+ 360 0016 8243     		bics	r2, r0
+ 361 0018 1A62     		str	r2, [r3, #32]
+ 362 001a F9E7     		b	.L33
+ 363              	.L35:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 12
+
+
+ 364              		.align	2
+ 365              	.L34:
+ 366 001c 00080440 		.word	1074006016
+ 367 0020 CC330000 		.word	13260
+ 368              		.cfi_endproc
+ 369              	.LFE46:
+ 371              		.section	.text.RCC_APB1PeriphClockOnOff,"ax",%progbits
+ 372              		.align	1
+ 373              		.global	RCC_APB1PeriphClockOnOff
+ 374              		.syntax unified
+ 375              		.code	16
+ 376              		.thumb_func
+ 378              	RCC_APB1PeriphClockOnOff:
+ 379              	.LVL25:
+ 380              	.LFB47:
+ 196:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 197:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 198:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief  open or close APB1 modules' clock gate
+ 199:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  APB1Modules:  APB1 module bits @ref RCC_APB1_Type
+ 200:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *   This parameter can be any combination of following values:
+ 201:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART0:    for UART0 Module
+ 202:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART1:    for UART1 Module 
+ 203:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART2:    for UART2 Module 
+ 204:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART3:    for UART3 Module
+ 205:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_SPI0 :    for SPI0  Module
+ 206:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_SPI1 :    for SPI1  Module
+ 207:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_TWI0 :    for TWI0  Module
+ 208:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_LED  :    for LED   Module
+ 209:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_LCD  :    for LCD   Module
+ 210:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_TK   :    for TK    Module
+ 211:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_HLV  :    for HLV   Module
+ 212:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_NTEST:    for NTEST Module
+ 213:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *@param OnOffState  open or close related clock gate
+ 214:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ON  open related clock gate
+ 215:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_OFF  close related clock gate
+ 216:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval  None
+ 217:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 218:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_APB1PeriphClockOnOff(RCC_APB1_Type APB1Modules, CmdState OnOffState)
+ 219:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 381              		.loc 1 219 1 is_stmt 1 view -0
+ 382              		.cfi_startproc
+ 383              		@ args = 0, pretend = 0, frame = 0
+ 384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 385              		@ link register save eliminated.
+ 220:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_APB1_MODULES(APB1Modules));
+ 386              		.loc 1 220 5 view .LVU118
+ 221:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 387              		.loc 1 221 5 view .LVU119
+ 222:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 223:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 224:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 388              		.loc 1 224 5 view .LVU120
+ 389 0000 064B     		ldr	r3, .L39
+ 390 0002 074A     		ldr	r2, .L39+4
+ 391 0004 5A63     		str	r2, [r3, #52]
+ 225:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 226:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (OnOffState == SH_ON)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 13
+
+
+ 392              		.loc 1 226 5 view .LVU121
+ 227:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 228:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->APB1ENR.V32 |= APB1Modules;
+ 393              		.loc 1 228 26 is_stmt 0 view .LVU122
+ 394 0006 5A6A     		ldr	r2, [r3, #36]
+ 226:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 395              		.loc 1 226 8 view .LVU123
+ 396 0008 0129     		cmp	r1, #1
+ 397 000a 04D1     		bne	.L37
+ 398              		.loc 1 228 9 is_stmt 1 view .LVU124
+ 399              		.loc 1 228 26 is_stmt 0 view .LVU125
+ 400 000c 1043     		orrs	r0, r2
+ 401              	.LVL26:
+ 402              		.loc 1 228 26 view .LVU126
+ 403 000e 5862     		str	r0, [r3, #36]
+ 404              	.L38:
+ 229:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 230:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else
+ 231:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->APB1ENR.V32 &= ~APB1Modules;
+ 233:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 234:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 235:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 236:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 405              		.loc 1 236 5 is_stmt 1 view .LVU127
+ 406 0010 0022     		movs	r2, #0
+ 237:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 407              		.loc 1 237 1 is_stmt 0 view .LVU128
+ 408              		@ sp needed
+ 236:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 409              		.loc 1 236 5 view .LVU129
+ 410 0012 5A63     		str	r2, [r3, #52]
+ 411              		.loc 1 237 1 view .LVU130
+ 412 0014 7047     		bx	lr
+ 413              	.LVL27:
+ 414              	.L37:
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 415              		.loc 1 232 9 is_stmt 1 view .LVU131
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 416              		.loc 1 232 26 is_stmt 0 view .LVU132
+ 417 0016 8243     		bics	r2, r0
+ 418 0018 5A62     		str	r2, [r3, #36]
+ 419 001a F9E7     		b	.L38
+ 420              	.L40:
+ 421              		.align	2
+ 422              	.L39:
+ 423 001c 00080440 		.word	1074006016
+ 424 0020 CC330000 		.word	13260
+ 425              		.cfi_endproc
+ 426              	.LFE47:
+ 428              		.section	.text.RCC_APB0PeriphClockOnOff,"ax",%progbits
+ 429              		.align	1
+ 430              		.global	RCC_APB0PeriphClockOnOff
+ 431              		.syntax unified
+ 432              		.code	16
+ 433              		.thumb_func
+ 435              	RCC_APB0PeriphClockOnOff:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 14
+
+
+ 436              	.LVL28:
+ 437              	.LFB48:
+ 238:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 239:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 240:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief      open or close APB0 modules' clock gate
+ 241:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  APB0Modules:  APB0 module bits @ref RCC_APB0_Type
+ 242:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *   This parameter can be any combination of following values:
+ 243:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_TIM0: for TIM0 Module
+ 244:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_TIM1: for TIM1 Module
+ 245:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_TIM2: for TIM2 Module
+ 246:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_TIM3: for TIM3 Module
+ 247:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PWM0: for PWM0 Module
+ 248:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PWM1: for PWM1 Module
+ 249:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PWM2: for PWM2 Module
+ 250:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PWM3: for PWM3 Module
+ 251:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PCA0: for PCA0 Module
+ 252:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PCA1: for PCA1 Module
+ 253:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PCA2: for PCA2 Module
+ 254:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_PCA3: for PCA3 Module
+ 255:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_EXTI: for EXTI Module
+ 256:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_WWDT: for WWDT Module
+ 257:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b    RCC_APB0_ADC : for ADC  Module
+ 258:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *@param OnOffState  open or close related clock gate
+ 259:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ON  open related clock gate
+ 260:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_OFF  close related clock gate
+ 261:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval None
+ 262:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 263:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_APB0PeriphClockOnOff(RCC_APB0_Type APB0Modules, CmdState OnOffState)
+ 264:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 438              		.loc 1 264 1 is_stmt 1 view -0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442              		@ link register save eliminated.
+ 265:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_APB0_MODULES(APB0Modules));
+ 443              		.loc 1 265 5 view .LVU134
+ 266:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 444              		.loc 1 266 5 view .LVU135
+ 267:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 268:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 269:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 445              		.loc 1 269 5 view .LVU136
+ 446 0000 064B     		ldr	r3, .L44
+ 447 0002 074A     		ldr	r2, .L44+4
+ 448 0004 5A63     		str	r2, [r3, #52]
+ 270:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 271:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (OnOffState == SH_ON)
+ 449              		.loc 1 271 5 view .LVU137
+ 272:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 273:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->APB0ENR.V32 |= APB0Modules;
+ 450              		.loc 1 273 26 is_stmt 0 view .LVU138
+ 451 0006 9A6A     		ldr	r2, [r3, #40]
+ 271:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 452              		.loc 1 271 8 view .LVU139
+ 453 0008 0129     		cmp	r1, #1
+ 454 000a 04D1     		bne	.L42
+ 455              		.loc 1 273 9 is_stmt 1 view .LVU140
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 15
+
+
+ 456              		.loc 1 273 26 is_stmt 0 view .LVU141
+ 457 000c 1043     		orrs	r0, r2
+ 458              	.LVL29:
+ 459              		.loc 1 273 26 view .LVU142
+ 460 000e 9862     		str	r0, [r3, #40]
+ 461              	.L43:
+ 274:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 275:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else
+ 276:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 277:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->APB0ENR.V32 &= ~APB0Modules;
+ 278:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 279:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 280:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 281:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 462              		.loc 1 281 5 is_stmt 1 view .LVU143
+ 463 0010 0022     		movs	r2, #0
+ 282:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 464              		.loc 1 282 1 is_stmt 0 view .LVU144
+ 465              		@ sp needed
+ 281:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 466              		.loc 1 281 5 view .LVU145
+ 467 0012 5A63     		str	r2, [r3, #52]
+ 468              		.loc 1 282 1 view .LVU146
+ 469 0014 7047     		bx	lr
+ 470              	.LVL30:
+ 471              	.L42:
+ 277:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 472              		.loc 1 277 9 is_stmt 1 view .LVU147
+ 277:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 473              		.loc 1 277 26 is_stmt 0 view .LVU148
+ 474 0016 8243     		bics	r2, r0
+ 475 0018 9A62     		str	r2, [r3, #40]
+ 476 001a F9E7     		b	.L43
+ 477              	.L45:
+ 478              		.align	2
+ 479              	.L44:
+ 480 001c 00080440 		.word	1074006016
+ 481 0020 CC330000 		.word	13260
+ 482              		.cfi_endproc
+ 483              	.LFE48:
+ 485              		.section	.text.RCC_AHBPeriphReset,"ax",%progbits
+ 486              		.align	1
+ 487              		.global	RCC_AHBPeriphReset
+ 488              		.syntax unified
+ 489              		.code	16
+ 490              		.thumb_func
+ 492              	RCC_AHBPeriphReset:
+ 493              	.LVL31:
+ 494              	.LFB49:
+ 283:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 284:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 285:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief     reset AHB modules
+ 286:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  AHBModules: AHB module bits @ref RCC_AHB_Type
+ 287:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *   This parameter can be any combination of following values:
+ 288:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_SYSCFG:  for SYSCFG Module
+ 289:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_CRC   :  for CRC Module
+ 290:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_AHB_DMA   :  for DMA Config Module
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 16
+
+
+ 291:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval   None
+ 292:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 293:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_AHBPeriphReset(uint32_t AHBModules)
+ 294:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 495              		.loc 1 294 1 is_stmt 1 view -0
+ 496              		.cfi_startproc
+ 497              		@ args = 0, pretend = 0, frame = 0
+ 498              		@ frame_needed = 0, uses_anonymous_args = 0
+ 499              		@ link register save eliminated.
+ 295:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_AHB_MODULES(AHBModules));
+ 500              		.loc 1 295 5 view .LVU150
+ 296:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 297:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 298:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 501              		.loc 1 298 5 view .LVU151
+ 502 0000 034B     		ldr	r3, .L47
+ 503 0002 044A     		ldr	r2, .L47+4
+ 299:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 300:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->AHBRSTR.V32 = AHBModules;
+ 301:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 302:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 303:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 304:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 504              		.loc 1 304 1 is_stmt 0 view .LVU152
+ 505              		@ sp needed
+ 298:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 506              		.loc 1 298 5 view .LVU153
+ 507 0004 5A63     		str	r2, [r3, #52]
+ 300:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 508              		.loc 1 300 5 is_stmt 1 view .LVU154
+ 303:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 509              		.loc 1 303 5 is_stmt 0 view .LVU155
+ 510 0006 0022     		movs	r2, #0
+ 300:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 511              		.loc 1 300 22 view .LVU156
+ 512 0008 5861     		str	r0, [r3, #20]
+ 303:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 513              		.loc 1 303 5 is_stmt 1 view .LVU157
+ 514 000a 5A63     		str	r2, [r3, #52]
+ 515              		.loc 1 304 1 is_stmt 0 view .LVU158
+ 516 000c 7047     		bx	lr
+ 517              	.L48:
+ 518 000e C046     		.align	2
+ 519              	.L47:
+ 520 0010 00080440 		.word	1074006016
+ 521 0014 CC330000 		.word	13260
+ 522              		.cfi_endproc
+ 523              	.LFE49:
+ 525              		.section	.text.RCC_APB0PeriphReset,"ax",%progbits
+ 526              		.align	1
+ 527              		.global	RCC_APB0PeriphReset
+ 528              		.syntax unified
+ 529              		.code	16
+ 530              		.thumb_func
+ 532              	RCC_APB0PeriphReset:
+ 533              	.LVL32:
+ 534              	.LFB50:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 17
+
+
+ 305:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 306:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 307:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief    reset APB0 modules
+ 308:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  APB0Modules:  APB0 module bits @ref RCC_APB0_Type
+ 309:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *   This parameter can be any combination of following values:
+ 310:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_TIM0: for TIM0 Module
+ 311:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_TIM1: for TIM1 Module
+ 312:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_TIM2: for TIM2 Module
+ 313:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_TIM3: for TIM3 Module
+ 314:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PWM0: for PWM0 Module
+ 315:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PWM1: for PWM1 Module
+ 316:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PWM2: for PWM2 Module
+ 317:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PWM3: for PWM3 Module
+ 318:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PCA0: for PCA0 Module
+ 319:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PCA1: for PCA1 Module
+ 320:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PCA2: for PCA2 Module
+ 321:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_PCA3: for PCA3 Module
+ 322:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_EXTI: for EXTI Module
+ 323:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_WWDT: for WWDT Module
+ 324:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_APB0_ADC : for ADC  Module
+ 325:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval  None
+ 326:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 327:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_APB0PeriphReset(uint32_t APB0Modules)
+ 328:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 535              		.loc 1 328 1 is_stmt 1 view -0
+ 536              		.cfi_startproc
+ 537              		@ args = 0, pretend = 0, frame = 0
+ 538              		@ frame_needed = 0, uses_anonymous_args = 0
+ 539              		@ link register save eliminated.
+ 329:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_APB0_MODULES(APB0Modules));
+ 540              		.loc 1 329 5 view .LVU160
+ 330:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 331:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 332:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 541              		.loc 1 332 5 view .LVU161
+ 542 0000 034B     		ldr	r3, .L50
+ 543 0002 044A     		ldr	r2, .L50+4
+ 333:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 334:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->APB0RSTR.V32 = APB0Modules;
+ 335:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 336:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 337:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 338:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 544              		.loc 1 338 1 is_stmt 0 view .LVU162
+ 545              		@ sp needed
+ 332:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 546              		.loc 1 332 5 view .LVU163
+ 547 0004 5A63     		str	r2, [r3, #52]
+ 334:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 548              		.loc 1 334 5 is_stmt 1 view .LVU164
+ 337:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 549              		.loc 1 337 5 is_stmt 0 view .LVU165
+ 550 0006 0022     		movs	r2, #0
+ 334:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 551              		.loc 1 334 23 view .LVU166
+ 552 0008 D861     		str	r0, [r3, #28]
+ 337:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 18
+
+
+ 553              		.loc 1 337 5 is_stmt 1 view .LVU167
+ 554 000a 5A63     		str	r2, [r3, #52]
+ 555              		.loc 1 338 1 is_stmt 0 view .LVU168
+ 556 000c 7047     		bx	lr
+ 557              	.L51:
+ 558 000e C046     		.align	2
+ 559              	.L50:
+ 560 0010 00080440 		.word	1074006016
+ 561 0014 CC330000 		.word	13260
+ 562              		.cfi_endproc
+ 563              	.LFE50:
+ 565              		.section	.text.RCC_APB1PeriphReset,"ax",%progbits
+ 566              		.align	1
+ 567              		.global	RCC_APB1PeriphReset
+ 568              		.syntax unified
+ 569              		.code	16
+ 570              		.thumb_func
+ 572              	RCC_APB1PeriphReset:
+ 573              	.LVL33:
+ 574              	.LFB51:
+ 339:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 340:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 341:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief  reset APB1 modules
+ 342:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  APB1Modules:  APB1 module bits @ref RCC_APB1_Type
+ 343:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *   This parameter can be any combination of following values:
+ 344:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART0:    for UART0 Module
+ 345:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART1:    for UART1 Module 
+ 346:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART2:    for UART2 Module 
+ 347:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_UART3:    for UART3 Module
+ 348:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_SPI0 :    for SPI0  Module
+ 349:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_SPI1 :    for SPI1  Module
+ 350:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_TWI0 :    for TWI0  Module
+ 351:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_LED  :    for LED   Module
+ 352:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_LCD  :    for LCD   Module
+ 353:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_TK   :    for TK    Module
+ 354:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_HLV  :    for HLV   Module
+ 355:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b RCC_APB1_NTEST:    for NTEST Module
+ 356:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval None
+ 357:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 358:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_APB1PeriphReset(uint32_t APB1Modules)
+ 359:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 575              		.loc 1 359 1 is_stmt 1 view -0
+ 576              		.cfi_startproc
+ 577              		@ args = 0, pretend = 0, frame = 0
+ 578              		@ frame_needed = 0, uses_anonymous_args = 0
+ 579              		@ link register save eliminated.
+ 360:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_APB1_MODULES(APB1Modules));
+ 580              		.loc 1 360 5 view .LVU170
+ 361:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 363:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 581              		.loc 1 363 5 view .LVU171
+ 582 0000 034B     		ldr	r3, .L53
+ 583 0002 044A     		ldr	r2, .L53+4
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->APB1RSTR.V32 = APB1Modules;
+ 366:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 19
+
+
+ 367:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 368:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 369:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 584              		.loc 1 369 1 is_stmt 0 view .LVU172
+ 585              		@ sp needed
+ 363:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 586              		.loc 1 363 5 view .LVU173
+ 587 0004 5A63     		str	r2, [r3, #52]
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 588              		.loc 1 365 5 is_stmt 1 view .LVU174
+ 368:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 589              		.loc 1 368 5 is_stmt 0 view .LVU175
+ 590 0006 0022     		movs	r2, #0
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 591              		.loc 1 365 23 view .LVU176
+ 592 0008 9861     		str	r0, [r3, #24]
+ 368:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 593              		.loc 1 368 5 is_stmt 1 view .LVU177
+ 594 000a 5A63     		str	r2, [r3, #52]
+ 595              		.loc 1 369 1 is_stmt 0 view .LVU178
+ 596 000c 7047     		bx	lr
+ 597              	.L54:
+ 598 000e C046     		.align	2
+ 599              	.L53:
+ 600 0010 00080440 		.word	1074006016
+ 601 0014 CC330000 		.word	13260
+ 602              		.cfi_endproc
+ 603              	.LFE51:
+ 605              		.section	.text.RCC_GetResetFlag,"ax",%progbits
+ 606              		.align	1
+ 607              		.global	RCC_GetResetFlag
+ 608              		.syntax unified
+ 609              		.code	16
+ 610              		.thumb_func
+ 612              	RCC_GetResetFlag:
+ 613              	.LVL34:
+ 614              	.LFB52:
+ 370:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 371:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 372:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief     Get RCC reset flag
+ 373:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  ResetFlag:   RCC reset flag mask
+ 374:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_PIN
+ 375:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_LVR
+ 376:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_POWERON
+ 377:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_SOFTWARE
+ 378:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_IWDT
+ 379:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_WWDT
+ 380:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval  FlagStatus RCC reset flag
+ 381:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_SET    the flag is setted
+ 382:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RESET  the flag is cleared
+ 383:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 384:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** FlagStatus RCC_GetResetFlag(RCC_RESET_Type ResetFlag)
+ 385:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 615              		.loc 1 385 1 is_stmt 1 view -0
+ 616              		.cfi_startproc
+ 617              		@ args = 0, pretend = 0, frame = 0
+ 618              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 20
+
+
+ 619              		@ link register save eliminated.
+ 386:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_RST_MODULES(ResetFlag));
+ 620              		.loc 1 386 5 view .LVU180
+ 387:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     return ((RCC->RSTSTR.V32 & ResetFlag) ? SH_SET : SH_RESET);
+ 621              		.loc 1 388 5 view .LVU181
+ 622              		.loc 1 388 25 is_stmt 0 view .LVU182
+ 623 0000 034B     		ldr	r3, .L56
+ 389:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 624              		.loc 1 389 1 view .LVU183
+ 625              		@ sp needed
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 626              		.loc 1 388 25 view .LVU184
+ 627 0002 DB6A     		ldr	r3, [r3, #44]
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 628              		.loc 1 388 30 view .LVU185
+ 629 0004 0340     		ands	r3, r0
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 630              		.loc 1 388 52 view .LVU186
+ 631 0006 5A1E     		subs	r2, r3, #1
+ 632 0008 9341     		sbcs	r3, r3, r2
+ 633 000a D8B2     		uxtb	r0, r3
+ 634              	.LVL35:
+ 635              		.loc 1 389 1 view .LVU187
+ 636 000c 7047     		bx	lr
+ 637              	.L57:
+ 638 000e C046     		.align	2
+ 639              	.L56:
+ 640 0010 00080440 		.word	1074006016
+ 641              		.cfi_endproc
+ 642              	.LFE52:
+ 644              		.section	.text.RCC_ClearResetFlag,"ax",%progbits
+ 645              		.align	1
+ 646              		.global	RCC_ClearResetFlag
+ 647              		.syntax unified
+ 648              		.code	16
+ 649              		.thumb_func
+ 651              	RCC_ClearResetFlag:
+ 652              	.LVL36:
+ 653              	.LFB53:
+ 390:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 391:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 392:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief      clear RCC reset flags
+ 393:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  ResetFlags:   RCC reset flag clear bits
+ 394:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_PIN
+ 395:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_LVR
+ 396:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_POWERON
+ 397:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_SOFTWARE
+ 398:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_IWDT
+ 399:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_RST_WWDT
+ 400:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****    * @retval None
+ 401:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 402:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_ClearResetFlag(RCC_RESET_Type ResetFlags)
+ 403:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 654              		.loc 1 403 1 is_stmt 1 view -0
+ 655              		.cfi_startproc
+ 656              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 21
+
+
+ 657              		@ frame_needed = 0, uses_anonymous_args = 0
+ 658              		@ link register save eliminated.
+ 404:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_RST_MODULES(ResetFlags));
+ 659              		.loc 1 404 5 view .LVU189
+ 405:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 406:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 407:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 660              		.loc 1 407 5 view .LVU190
+ 661 0000 034B     		ldr	r3, .L59
+ 662 0002 044A     		ldr	r2, .L59+4
+ 408:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 409:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->RSTCLR.V32 = ResetFlags;
+ 410:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 411:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 412:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 413:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 663              		.loc 1 413 1 is_stmt 0 view .LVU191
+ 664              		@ sp needed
+ 407:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 665              		.loc 1 407 5 view .LVU192
+ 666 0004 5A63     		str	r2, [r3, #52]
+ 409:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 667              		.loc 1 409 5 is_stmt 1 view .LVU193
+ 412:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 668              		.loc 1 412 5 is_stmt 0 view .LVU194
+ 669 0006 0022     		movs	r2, #0
+ 409:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 670              		.loc 1 409 21 view .LVU195
+ 671 0008 1863     		str	r0, [r3, #48]
+ 412:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 672              		.loc 1 412 5 is_stmt 1 view .LVU196
+ 673 000a 5A63     		str	r2, [r3, #52]
+ 674              		.loc 1 413 1 is_stmt 0 view .LVU197
+ 675 000c 7047     		bx	lr
+ 676              	.L60:
+ 677 000e C046     		.align	2
+ 678              	.L59:
+ 679 0010 00080440 		.word	1074006016
+ 680 0014 CC330000 		.word	13260
+ 681              		.cfi_endproc
+ 682              	.LFE53:
+ 684              		.section	.text.RCC_CSMModuleOnOff,"ax",%progbits
+ 685              		.align	1
+ 686              		.global	RCC_CSMModuleOnOff
+ 687              		.syntax unified
+ 688              		.code	16
+ 689              		.thumb_func
+ 691              	RCC_CSMModuleOnOff:
+ 692              	.LVL37:
+ 693              	.LFB54:
+ 414:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 415:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 416:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief open or close CSM modules
+ 417:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param OnOffState   open or close related clock gate
+ 418:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ON  open related clock gate
+ 419:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_OFF close related clock gate
+ 420:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval   None
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 22
+
+
+ 421:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 422:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_CSMModuleOnOff(CmdState OnOffState)
+ 423:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 694              		.loc 1 423 1 is_stmt 1 view -0
+ 695              		.cfi_startproc
+ 696              		@ args = 0, pretend = 0, frame = 0
+ 697              		@ frame_needed = 0, uses_anonymous_args = 0
+ 698              		@ link register save eliminated.
+ 424:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 699              		.loc 1 424 5 view .LVU199
+ 425:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 426:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 427:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 700              		.loc 1 427 5 view .LVU200
+ 428:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 429:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->CR.BIT.CSMON = OnOffState;
+ 701              		.loc 1 429 23 is_stmt 0 view .LVU201
+ 702 0000 0121     		movs	r1, #1
+ 430:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 431:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 432:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 433:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 703              		.loc 1 433 1 view .LVU202
+ 704              		@ sp needed
+ 427:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 705              		.loc 1 427 5 view .LVU203
+ 706 0002 064A     		ldr	r2, .L62
+ 707 0004 064B     		ldr	r3, .L62+4
+ 429:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 708              		.loc 1 429 23 view .LVU204
+ 709 0006 0840     		ands	r0, r1
+ 710              	.LVL38:
+ 427:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 711              		.loc 1 427 5 view .LVU205
+ 712 0008 5363     		str	r3, [r2, #52]
+ 429:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 713              		.loc 1 429 5 is_stmt 1 view .LVU206
+ 429:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 714              		.loc 1 429 23 is_stmt 0 view .LVU207
+ 715 000a 1368     		ldr	r3, [r2]
+ 716 000c 3F31     		adds	r1, r1, #63
+ 717 000e 8001     		lsls	r0, r0, #6
+ 718 0010 8B43     		bics	r3, r1
+ 719 0012 0343     		orrs	r3, r0
+ 720 0014 1360     		str	r3, [r2]
+ 432:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 721              		.loc 1 432 5 is_stmt 1 view .LVU208
+ 722 0016 0023     		movs	r3, #0
+ 723 0018 5363     		str	r3, [r2, #52]
+ 724              		.loc 1 433 1 is_stmt 0 view .LVU209
+ 725 001a 7047     		bx	lr
+ 726              	.L63:
+ 727              		.align	2
+ 728              	.L62:
+ 729 001c 00080440 		.word	1074006016
+ 730 0020 CC330000 		.word	13260
+ 731              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 23
+
+
+ 732              	.LFE54:
+ 734              		.section	.text.RCC_GetCsmFStatus,"ax",%progbits
+ 735              		.align	1
+ 736              		.global	RCC_GetCsmFStatus
+ 737              		.syntax unified
+ 738              		.code	16
+ 739              		.thumb_func
+ 741              	RCC_GetCsmFStatus:
+ 742              	.LVL39:
+ 743              	.LFB55:
+ 434:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 435:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 436:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief     Get RCC CSM flag
+ 437:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  CSMFlag:   RCC CSM flag mask
+ 438:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_LSE_RF
+ 439:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_HSE_RF
+ 440:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_PLL_RF
+ 441:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_LSE_IF
+ 442:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_HSE_IF
+ 443:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_PLL_IF
+ 444:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval  FlagStatus RCC CSM flag
+ 445:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_SET    the flag is setted
+ 446:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_RESET  the flag is cleared
+ 447:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 448:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** FlagStatus RCC_GetCsmFStatus(RCC_CSMF_Type CSMFlag)
+ 449:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 744              		.loc 1 449 1 is_stmt 1 view -0
+ 745              		.cfi_startproc
+ 746              		@ args = 0, pretend = 0, frame = 0
+ 747              		@ frame_needed = 0, uses_anonymous_args = 0
+ 748              		@ link register save eliminated.
+ 450:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CSM_FLAG(CSMFlag));
+ 749              		.loc 1 450 5 view .LVU211
+ 451:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 452:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     return ((RCC->CISTR.V32 & CSMFlag) ? SH_SET : SH_RESET);
+ 750              		.loc 1 452 5 view .LVU212
+ 751              		.loc 1 452 24 is_stmt 0 view .LVU213
+ 752 0000 034B     		ldr	r3, .L65
+ 453:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 753              		.loc 1 453 1 view .LVU214
+ 754              		@ sp needed
+ 452:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 755              		.loc 1 452 24 view .LVU215
+ 756 0002 DB68     		ldr	r3, [r3, #12]
+ 452:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 757              		.loc 1 452 29 view .LVU216
+ 758 0004 0340     		ands	r3, r0
+ 452:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 759              		.loc 1 452 49 view .LVU217
+ 760 0006 5A1E     		subs	r2, r3, #1
+ 761 0008 9341     		sbcs	r3, r3, r2
+ 762 000a D8B2     		uxtb	r0, r3
+ 763              	.LVL40:
+ 764              		.loc 1 453 1 view .LVU218
+ 765 000c 7047     		bx	lr
+ 766              	.L66:
+ 767 000e C046     		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 24
+
+
+ 768              	.L65:
+ 769 0010 00080440 		.word	1074006016
+ 770              		.cfi_endproc
+ 771              	.LFE55:
+ 773              		.section	.text.RCC_ClearITPendingBit,"ax",%progbits
+ 774              		.align	1
+ 775              		.global	RCC_ClearITPendingBit
+ 776              		.syntax unified
+ 777              		.code	16
+ 778              		.thumb_func
+ 780              	RCC_ClearITPendingBit:
+ 781              	.LVL41:
+ 782              	.LFB56:
+ 454:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 455:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 456:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief  Clear RCC clock interrupt flag
+ 457:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param  CLK_INTFLG_CLR: CICCLR Flag
+ 458:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_CICCLR_CSMC   
+ 459:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_CICCLR_PLLRDYC
+ 460:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_CICCLR_HSERDYC
+ 461:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CSM_CICCLR_LSERDYC
+ 462:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval null
+ 463:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 464:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_ClearITPendingBit(RCC_CICCLR_Type CLK_INTFLG_CLR)
+ 465:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 783              		.loc 1 465 1 is_stmt 1 view -0
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 0
+ 786              		@ frame_needed = 0, uses_anonymous_args = 0
+ 787              		@ link register save eliminated.
+ 466:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CICCLR_FLAG(CLK_INTFLG_CLR));
+ 788              		.loc 1 466 5 view .LVU220
+ 467:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 468:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 789              		.loc 1 468 5 view .LVU221
+ 790 0000 094B     		ldr	r3, .L74
+ 791 0002 0A4A     		ldr	r2, .L74+4
+ 792 0004 5A63     		str	r2, [r3, #52]
+ 469:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (CLK_INTFLG_CLR == RCC_CSM_CICCLR_CSMC)
+ 793              		.loc 1 469 5 view .LVU222
+ 794              		.loc 1 469 8 is_stmt 0 view .LVU223
+ 795 0006 8028     		cmp	r0, #128
+ 796 0008 05D1     		bne	.L68
+ 797              	.L73:
+ 470:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 471:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CICLR.BIT.CSMC = 1;
+ 472:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 473:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else if (CLK_INTFLG_CLR == RCC_CSM_CICCLR_PLLRDYC)
+ 474:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 475:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CICLR.BIT.PLLRDYC = 1;
+ 476:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 477:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else if (CLK_INTFLG_CLR == RCC_CSM_CICCLR_HSERDYC)
+ 478:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 479:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CICLR.BIT.HSERDYC = 1;
+ 798              		.loc 1 479 9 is_stmt 1 view .LVU224
+ 799              		.loc 1 479 32 is_stmt 0 view .LVU225
+ 800 000a 1A69     		ldr	r2, [r3, #16]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 25
+
+
+ 801 000c 1043     		orrs	r0, r2
+ 802              	.LVL42:
+ 803              		.loc 1 479 32 view .LVU226
+ 804 000e 1861     		str	r0, [r3, #16]
+ 805              	.L69:
+ 480:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 481:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else
+ 482:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 483:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CICLR.BIT.LSERDYC = 1;
+ 484:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 485:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 486:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 806              		.loc 1 486 5 is_stmt 1 view .LVU227
+ 807 0010 0022     		movs	r2, #0
+ 487:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 808              		.loc 1 487 1 is_stmt 0 view .LVU228
+ 809              		@ sp needed
+ 486:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 810              		.loc 1 486 5 view .LVU229
+ 811 0012 5A63     		str	r2, [r3, #52]
+ 812              		.loc 1 487 1 view .LVU230
+ 813 0014 7047     		bx	lr
+ 814              	.LVL43:
+ 815              	.L68:
+ 473:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 816              		.loc 1 473 10 is_stmt 1 view .LVU231
+ 473:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 817              		.loc 1 473 13 is_stmt 0 view .LVU232
+ 818 0016 1028     		cmp	r0, #16
+ 819 0018 F7D0     		beq	.L73
+ 477:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 820              		.loc 1 477 10 is_stmt 1 view .LVU233
+ 477:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 821              		.loc 1 477 13 is_stmt 0 view .LVU234
+ 822 001a 0828     		cmp	r0, #8
+ 823 001c F5D0     		beq	.L73
+ 483:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 824              		.loc 1 483 9 is_stmt 1 view .LVU235
+ 483:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 825              		.loc 1 483 32 is_stmt 0 view .LVU236
+ 826 001e 0422     		movs	r2, #4
+ 827 0020 1969     		ldr	r1, [r3, #16]
+ 828 0022 0A43     		orrs	r2, r1
+ 829 0024 1A61     		str	r2, [r3, #16]
+ 830 0026 F3E7     		b	.L69
+ 831              	.L75:
+ 832              		.align	2
+ 833              	.L74:
+ 834 0028 00080440 		.word	1074006016
+ 835 002c CC330000 		.word	13260
+ 836              		.cfi_endproc
+ 837              	.LFE56:
+ 839              		.section	.text.RCC_INTConfig,"ax",%progbits
+ 840              		.align	1
+ 841              		.global	RCC_INTConfig
+ 842              		.syntax unified
+ 843              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 26
+
+
+ 844              		.thumb_func
+ 846              	RCC_INTConfig:
+ 847              	.LVL44:
+ 848              	.LFB57:
+ 488:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 489:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 490:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief RCC interrupt enable configure
+ 491:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param RDYINTIE
+ 492:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CIENR_LSERDYIE  
+ 493:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CIENR_HSERDYIE 
+ 494:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  RCC_CIENR_PLLRDYIE
+ 495:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param NewState
+ 496:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_DISABLE  
+ 497:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ENABLE 
+ 498:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval  null
+ 499:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 500:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_INTConfig(RCC_CIENR_Type RDYINTIE, FunctionalState NewState)
+ 501:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 849              		.loc 1 501 1 is_stmt 1 view -0
+ 850              		.cfi_startproc
+ 851              		@ args = 0, pretend = 0, frame = 0
+ 852              		@ frame_needed = 0, uses_anonymous_args = 0
+ 853              		@ link register save eliminated.
+ 502:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CIENR_REGISTER(RDYINTIE));
+ 854              		.loc 1 502 5 view .LVU238
+ 503:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 855              		.loc 1 503 5 view .LVU239
+ 504:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 505:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 856              		.loc 1 505 5 view .LVU240
+ 857 0000 064B     		ldr	r3, .L79
+ 858 0002 074A     		ldr	r2, .L79+4
+ 859 0004 5A63     		str	r2, [r3, #52]
+ 506:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (NewState != SH_DISABLE)
+ 860              		.loc 1 506 5 view .LVU241
+ 507:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 508:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CIENR.V32 |= RDYINTIE;
+ 861              		.loc 1 508 24 is_stmt 0 view .LVU242
+ 862 0006 9A68     		ldr	r2, [r3, #8]
+ 506:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     if (NewState != SH_DISABLE)
+ 863              		.loc 1 506 8 view .LVU243
+ 864 0008 0029     		cmp	r1, #0
+ 865 000a 04D0     		beq	.L77
+ 866              		.loc 1 508 9 is_stmt 1 view .LVU244
+ 867              		.loc 1 508 24 is_stmt 0 view .LVU245
+ 868 000c 1043     		orrs	r0, r2
+ 869              	.LVL45:
+ 870              		.loc 1 508 24 view .LVU246
+ 871 000e 9860     		str	r0, [r3, #8]
+ 872              	.L78:
+ 509:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 510:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     else
+ 511:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     {
+ 512:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****         RCC->CIENR.V32 &= (~RDYINTIE);
+ 513:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 514:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 873              		.loc 1 514 5 is_stmt 1 view .LVU247
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 27
+
+
+ 874 0010 0022     		movs	r2, #0
+ 515:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 875              		.loc 1 515 1 is_stmt 0 view .LVU248
+ 876              		@ sp needed
+ 514:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 877              		.loc 1 514 5 view .LVU249
+ 878 0012 5A63     		str	r2, [r3, #52]
+ 879              		.loc 1 515 1 view .LVU250
+ 880 0014 7047     		bx	lr
+ 881              	.LVL46:
+ 882              	.L77:
+ 512:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 883              		.loc 1 512 9 is_stmt 1 view .LVU251
+ 512:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     }
+ 884              		.loc 1 512 24 is_stmt 0 view .LVU252
+ 885 0016 8243     		bics	r2, r0
+ 886 0018 9A60     		str	r2, [r3, #8]
+ 887 001a F9E7     		b	.L78
+ 888              	.L80:
+ 889              		.align	2
+ 890              	.L79:
+ 891 001c 00080440 		.word	1074006016
+ 892 0020 CC330000 		.word	13260
+ 893              		.cfi_endproc
+ 894              	.LFE57:
+ 896              		.section	.text.RCC_PLLONorOFF,"ax",%progbits
+ 897              		.align	1
+ 898              		.global	RCC_PLLONorOFF
+ 899              		.syntax unified
+ 900              		.code	16
+ 901              		.thumb_func
+ 903              	RCC_PLLONorOFF:
+ 904              	.LVL47:
+ 905              	.LFB58:
+ 516:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 517:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** /**
+ 518:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @brief Configure PLL on or off
+ 519:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @param OnOffState   open or close related clock gate
+ 520:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_ON  open related clock gate
+ 521:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   *     @arg @b  SH_OFF close related clock gate
+ 522:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   * @retval   None
+ 523:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****   */
+ 524:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** void RCC_PLLONorOFF(CmdState OnOffState)
+ 525:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** {
+ 906              		.loc 1 525 1 is_stmt 1 view -0
+ 907              		.cfi_startproc
+ 908              		@ args = 0, pretend = 0, frame = 0
+ 909              		@ frame_needed = 0, uses_anonymous_args = 0
+ 910              		@ link register save eliminated.
+ 526:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 911              		.loc 1 526 5 view .LVU254
+ 527:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 528:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Unlock RCC registers */
+ 529:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_UNLOCK();
+ 912              		.loc 1 529 5 view .LVU255
+ 530:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 531:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC->CR.BIT.PLLON = OnOffState;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNCVdjf.s 			page 28
+
+
+ 913              		.loc 1 531 23 is_stmt 0 view .LVU256
+ 914 0000 0121     		movs	r1, #1
+ 532:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 533:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     /* Lock RCC registers */
+ 534:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c ****     RCC_REGS_LOCK();
+ 535:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 915              		.loc 1 535 1 view .LVU257
+ 916              		@ sp needed
+ 529:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 917              		.loc 1 529 5 view .LVU258
+ 918 0002 064A     		ldr	r2, .L82
+ 919 0004 064B     		ldr	r3, .L82+4
+ 531:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 920              		.loc 1 531 23 view .LVU259
+ 921 0006 0840     		ands	r0, r1
+ 922              	.LVL48:
+ 529:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 923              		.loc 1 529 5 view .LVU260
+ 924 0008 5363     		str	r3, [r2, #52]
+ 531:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 925              		.loc 1 531 5 is_stmt 1 view .LVU261
+ 531:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** 
+ 926              		.loc 1 531 23 is_stmt 0 view .LVU262
+ 927 000a 1368     		ldr	r3, [r2]
+ 928 000c 7F31     		adds	r1, r1, #127
+ 929 000e C001     		lsls	r0, r0, #7
+ 930 0010 8B43     		bics	r3, r1
+ 931 0012 0343     		orrs	r3, r0
+ 932 0014 1360     		str	r3, [r2]
+ 534:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.c **** }
+ 933              		.loc 1 534 5 is_stmt 1 view .LVU263
+ 934 0016 0023     		movs	r3, #0
+ 935 0018 5363     		str	r3, [r2, #52]
+ 936              		.loc 1 535 1 is_stmt 0 view .LVU264
+ 937 001a 7047     		bx	lr
+ 938              	.L83:
+ 939              		.align	2
+ 940              	.L82:
+ 941 001c 00080440 		.word	1074006016
+ 942 0020 CC330000 		.word	13260
+ 943              		.cfi_endproc
+ 944              	.LFE58:
+ 946              		.text
+ 947              	.Letext0:
+ 948              		.file 2 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_libcfg.h"
+ 949              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 950              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 951              		.file 5 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 952              		.file 6 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.h"

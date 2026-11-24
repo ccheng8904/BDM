@@ -1,0 +1,23 @@
+
+out/programmer/prog/firmware_update/BootManager/BootManagerModule.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BMMOD_GetMemModuleHeader:
+
+00000000 <BMMOD_GetMemModuleHeader>:
+
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+const struct MAL_ModuleHeader_s * BMMOD_GetMemModuleHeader(enum MAL_ModuleEnum module)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MAL_initPartition();
+   4:	f7ff fffe 	bl	0 <MAL_initPartition>
+    return MAL_PartitionToHeader(MAL_GetMemModule(module));
+   8:	0020      	movs	r0, r4
+   a:	f7ff fffe 	bl	0 <MAL_GetMemModule>
+   e:	f7ff fffe 	bl	0 <MAL_PartitionToHeader>
+}
+  12:	bd10      	pop	{r4, pc}

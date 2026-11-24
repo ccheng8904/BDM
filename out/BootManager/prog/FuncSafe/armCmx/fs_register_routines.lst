@@ -1,0 +1,265 @@
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_register_routines.s 			page 1
+
+
+   1              	    .syntax unified
+   2              	    .text
+   3              	    .thumb
+   4              	    .align 2
+   5              	;
+   6              	.set con80, 0x80000000
+   7              	.set conAA, 0xAAAAAAAA
+   8              	.set con55, 0x55555555
+   9              	.set conA8, 0xAAAAAAA8
+  10              	.set con54, 0x55555554
+  11              	;
+  12              	    .extern FSF_vReg_FatalException
+  13              	;
+  14              	    .global FSF_do_xPSRandR14LinkRegisterCheck
+  15              	    .global FSF_doGeneralPurposeR0_R12RegisterCheck
+  16              	    .global FSF_doStackPointerR13RegisterCheck
+  17              	;
+  18              	.func FSF_do_xPSRandR14LinkRegisterCheck, FSF_do_xPSRandR14LinkRegisterCheck
+  19              	.type FSF_do_xPSRandR14LinkRegisterCheck, "function"
+  20              	.thumb_func
+  21              	FSF_do_xPSRandR14LinkRegisterCheck:
+  22 0000 0020     	    movs r0, #0x00
+  23 0002 C0B2     	    uxtb r0,r0
+  24 0004 0030     	    adds r0,#0
+  25 0006 14D1     	    bne CPUTestFail
+  26 0008 13D4     	    bmi CPUTestFail
+  27 000a 0138     	    subs r0,#1
+  28 000c 11D5     	    bpl CPUTestFail
+  29 000e 0230     	    adds r0,#2
+  30 0010 0FD3     	    bcc CPUTestFail
+  31 0012 0ED0     	    beq CPUTestFail
+  32 0014 0DD4     	    bmi CPUTestFail
+  33 0016 6848     	    ldr r0,=con80
+  34 0018 0018     	    adds r0, r0, r0
+  35 001a 0AD7     	    bvc CPUTestFail
+  36 001c 7146     	    mov r1, r14
+  37 001e 6748     	    ldr r0, =conAA
+  38 0020 8646     	    mov r14,r0
+  39 0022 7045     	    cmp r0,r14
+  40 0024 05D1     	    bne CPUTestFail
+  41 0026 6648     	    ldr r0, =con55
+  42 0028 8646     	    mov r14,r0
+  43 002a 7045     	    cmp r0,r14
+  44 002c 01D1     	    bne CPUTestFail
+  45 002e 8E46     	    mov r14, r1
+  46 0030 01E0     	    bal CPUTstCont
+  47              	CPUTestFail:
+  48 0032 FFF7FEFF 	    blal FSF_vReg_FatalException
+  49              	CPUTstCont:
+  50 0036 7047     	    bx lr
+  51              	    .endfunc
+  52              	;
+  53              	.func FSF_doGeneralPurposeR0_R12RegisterCheck, FSF_doGeneralPurposeR0_R12RegisterCheck
+  54              	.type FSF_doGeneralPurposeR0_R12RegisterCheck, "function"
+  55              	.thumb_func
+  56              	FSF_doGeneralPurposeR0_R12RegisterCheck:
+  57 0038 F0B4     	    push {r4-r7}
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_register_routines.s 			page 2
+
+
+  58 003a 6048     	    ldr r0,=conAA
+  59 003c 5F49     	    ldr r1,=conAA
+  60 003e 8842     	    cmp r0,r1
+  61 0040 45D1     	    bne CPUTestFailGeneralReg
+  62 0042 5F48     	    ldr r0, =con55
+  63 0044 5E49     	    ldr r1, =con55
+  64 0046 8842     	    cmp r0,r1
+  65 0048 41D1     	    bne CPUTestFailGeneralReg
+  66 004a 0121     	    movs r1, #0x1
+  67 004c 5B48     	    ldr r0, =conAA
+  68 004e 5B4A     	    ldr r2, =conAA
+  69 0050 9042     	    cmp r0,r2
+  70 0052 3CD1     	    bne CPUTestFailGeneralReg
+  71 0054 5A48     	    ldr r0, =con55
+  72 0056 5A4A     	    ldr r2, =con55
+  73 0058 9042     	    cmp r0,r2
+  74 005a 38D1     	    bne CPUTestFailGeneralReg
+  75 005c 0222     	    movs r2, #0x2
+  76 005e 5748     	    ldr r0, =conAA
+  77 0060 564B     	    ldr r3, =conAA
+  78 0062 9842     	    cmp r0,r3
+  79 0064 33D1     	    bne CPUTestFailGeneralReg
+  80 0066 5648     	    ldr r0, =con55
+  81 0068 554B     	    ldr r3, =con55
+  82 006a 9842     	    cmp r0,r3
+  83 006c 2FD1     	    bne CPUTestFailGeneralReg
+  84 006e 0323     	    movs r3, #0x3
+  85 0070 5248     	    ldr r0, =conAA
+  86 0072 524C     	    ldr r4, =conAA
+  87 0074 A042     	    cmp r0,r4
+  88 0076 2AD1     	    bne CPUTestFailGeneralReg
+  89 0078 5148     	    ldr r0, =con55
+  90 007a 514C     	    ldr r4, =con55
+  91 007c A042     	    cmp r0,r4
+  92 007e 26D1     	    bne CPUTestFailGeneralReg
+  93 0080 0424     	    movs r4, #0x4
+  94 0082 4E48     	    ldr r0, =conAA
+  95 0084 4D4D     	    ldr r5, =conAA
+  96 0086 A842     	    cmp r0,r5
+  97 0088 21D1     	    bne CPUTestFailGeneralReg
+  98 008a 4D48     	    ldr r0, =con55
+  99 008c 4C4D     	    ldr r5, =con55
+ 100 008e A842     	    cmp r0,r5
+ 101 0090 1DD1     	    bne CPUTestFailGeneralReg
+ 102 0092 0525     	    movs r5, #0x5
+ 103 0094 4948     	    ldr r0, =conAA
+ 104 0096 494E     	    ldr r6,=conAA
+ 105 0098 B042     	    cmp r0,r6
+ 106 009a 18D1     	    bne CPUTestFailGeneralReg
+ 107 009c 4848     	    ldr r0, =con55
+ 108 009e 484E     	    ldr r6, =con55
+ 109 00a0 B042     	    cmp r0,r6
+ 110 00a2 14D1     	    bne CPUTestFailGeneralReg
+ 111 00a4 0626     	    movs r6, #0x6
+ 112 00a6 4548     	    ldr r0, =conAA
+ 113 00a8 444F     	    ldr r7, =conAA
+ 114 00aa B842     	    cmp r0,r7
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_register_routines.s 			page 3
+
+
+ 115 00ac 0FD1     	    bne CPUTestFailGeneralReg
+ 116 00ae 4448     	    ldr r0, =con55
+ 117 00b0 434F     	    ldr r7, =con55
+ 118 00b2 B842     	    cmp r0,r7
+ 119 00b4 0BD1     	    bne CPUTestFailGeneralReg
+ 120 00b6 0727     	    movs r7, #0x7
+ 121 00b8 4048     	    ldr r0, =conAA
+ 122 00ba 8046     	    mov r8,r0
+ 123 00bc 4045     	    cmp r0,r8
+ 124 00be 06D1     	    bne CPUTestFailGeneralReg
+ 125 00c0 3F48     	    ldr r0, =con55
+ 126 00c2 8046     	    mov r8,r0
+ 127 00c4 4045     	    cmp r0,r8
+ 128 00c6 02D1     	    bne CPUTestFailGeneralReg
+ 129 00c8 0820     	    movs r0, #0x08
+ 130 00ca 8046     	    mov r8,r0
+ 131 00cc 01E0     	    bal CPUTstContGeneralReg
+ 132              	CPUTestFailGeneralReg:
+ 133 00ce FFF7FEFF 	    blal FSF_vReg_FatalException
+ 134              	CPUTstContGeneralReg:
+ 135 00d2 3A48     	    ldr r0, =conAA
+ 136 00d4 8146     	    mov r9,r0
+ 137 00d6 4845     	    cmp r0,r9
+ 138 00d8 F9D1     	    bne CPUTestFailGeneralReg
+ 139 00da 3948     	    ldr r0, =con55
+ 140 00dc 8146     	    mov r9,r0
+ 141 00de 4845     	    cmp r0,r9
+ 142 00e0 F5D1     	    bne CPUTestFailGeneralReg
+ 143 00e2 0920     	    movs r0, #0x09
+ 144 00e4 8146     	    mov r9,r0
+ 145 00e6 3548     	    ldr r0, =conAA
+ 146 00e8 8246     	    mov r10,r0
+ 147 00ea 5045     	    cmp r0,r10
+ 148 00ec EFD1     	    bne CPUTestFailGeneralReg
+ 149 00ee 3448     	    ldr r0, =con55
+ 150 00f0 8246     	    mov r10,r0
+ 151 00f2 5045     	    cmp r0,r10
+ 152 00f4 EBD1     	    bne CPUTestFailGeneralReg
+ 153 00f6 0A20     	    movs r0, #0x0A
+ 154 00f8 8246     	    mov r10,r0
+ 155 00fa 3048     	    ldr r0, =conAA
+ 156 00fc 8346     	    mov r11,r0
+ 157 00fe 5845     	    cmp r0,r11
+ 158 0100 E5D1     	    bne CPUTestFailGeneralReg
+ 159 0102 2F48     	    ldr r0, =con55
+ 160 0104 8346     	    mov r11,r0
+ 161 0106 5845     	    cmp r0,r11
+ 162 0108 E1D1     	    bne CPUTestFailGeneralReg
+ 163 010a 0B20     	    movs r0, #0x0B
+ 164 010c 8346     	    mov r11,r0
+ 165 010e 2B48     	    ldr r0, =conAA
+ 166 0110 8446     	    mov r12,r0
+ 167 0112 6045     	    cmp r0,r12
+ 168 0114 DBD1     	    bne CPUTestFailGeneralReg
+ 169 0116 2A48     	    ldr r0, =con55
+ 170 0118 8446     	    mov r12,r0
+ 171 011a 6045     	    cmp r0,r12
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_register_routines.s 			page 4
+
+
+ 172 011c D7D1     	    bne CPUTestFailGeneralReg
+ 173 011e 0C20     	    movs r0, #0x0C
+ 174 0120 8446     	    mov r12,r0
+ 175 0122 0020     	    movs r0, #0x0
+ 176 0124 0028     	    cmp r0, #0x00
+ 177 0126 D2D1     	    bne CPUTestFailGeneralReg
+ 178 0128 0129     	    cmp r1, #0x01
+ 179 012a D0D1     	    bne CPUTestFailGeneralReg
+ 180 012c 022A     	    cmp r2, #0x02
+ 181 012e CED1     	    bne CPUTestFailGeneralReg
+ 182 0130 032B     	    cmp r3, #0x03
+ 183 0132 CCD1     	    bne CPUTestFailGeneralReg
+ 184 0134 042C     	    cmp r4, #0x04
+ 185 0136 CAD1     	    bne CPUTestFailGeneralReg
+ 186 0138 052D     	    cmp r5, #0x05
+ 187 013a C8D1     	    bne CPUTestFailGeneralReg
+ 188 013c 062E     	    cmp r6, #0x06
+ 189 013e C6D1     	    bne CPUTestFailGeneralReg
+ 190 0140 072F     	    cmp r7, #0x07
+ 191 0142 C4D1     	    bne CPUTestFailGeneralReg
+ 192 0144 0820     	    movs r0, #0x08
+ 193 0146 4045     	    cmp r0,r8
+ 194 0148 C1D1     	    bne CPUTestFailGeneralReg
+ 195 014a 0920     	    movs r0, #0x09
+ 196 014c 4845     	    cmp r0,r9
+ 197 014e BED1     	    bne CPUTestFailGeneralReg
+ 198 0150 0A20     	    movs r0, #0x0A
+ 199 0152 5045     	    cmp r0,r10
+ 200 0154 BBD1     	    bne CPUTestFailGeneralReg
+ 201 0156 0B20     	    movs r0, #0x0B
+ 202 0158 5845     	    cmp r0,r11
+ 203 015a B8D1     	    bne CPUTestFailGeneralReg
+ 204 015c 0C20     	    movs r0, #0x0C
+ 205 015e 6045     	    cmp r0,r12
+ 206 0160 B5D1     	    bne CPUTestFailGeneralReg
+ 207 0162 F0BC     	    pop {r4-r7}
+ 208 0164 7047     	    bx lr
+ 209              	    .endfunc
+ 210              	;
+ 211              	.func FSF_doStackPointerR13RegisterCheck, FSF_doStackPointerR13RegisterCheck
+ 212              	.type FSF_doStackPointerR13RegisterCheck, "function"
+ 213              	.thumb_func
+ 214              	FSF_doStackPointerR13RegisterCheck:
+ 215 0166 EFF30980 	    mrs r0,psp
+ 216 016a 1649     	    ldr r1, =conA8
+ 217 016c 81F30988 	    msr psp,r1
+ 218 0170 EFF30982 	    mrs r2,psp
+ 219 0174 8A42     	    cmp r2,r1
+ 220 0176 1BD1     	    bne CPUTestFailStackReg
+ 221 0178 1349     	    ldr r1, =con54
+ 222 017a 81F30988 	    msr psp,r1
+ 223 017e EFF30982 	    mrs r2,psp
+ 224 0182 8A42     	    cmp r2,r1
+ 225 0184 14D1     	    bne CPUTestFailStackReg
+ 226 0186 80F30988 	    msr psp, r0
+ 227 018a EFF30880 	    mrs r0,msp
+ 228 018e 0D49     	    ldr r1, =conA8
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_register_routines.s 			page 5
+
+
+ 229 0190 81F30888 	    msr msp,r1
+ 230 0194 EFF30882 	    mrs r2,msp
+ 231 0198 8A42     	    cmp r2,r1
+ 232 019a 09D1     	    bne CPUTestFailStackReg
+ 233 019c 0A49     	    ldr r1, =con54
+ 234 019e 81F30888 	    msr msp,r1
+ 235 01a2 EFF30882 	    mrs r2,msp
+ 236 01a6 8A42     	    cmp r2,r1
+ 237 01a8 02D1     	    bne CPUTestFailStackReg
+ 238 01aa 80F30888 	    msr msp,r0
+ 239 01ae 01E0     	    BAL CPUTestStackRegOK
+ 240              	CPUTestFailStackReg:
+ 241 01b0 FFF7FEFF 	    BLAL FSF_vReg_FatalException
+ 242              	CPUTestStackRegOK:
+ 243 01b4 7047     	    bx lr
+ 244              	    .endfunc
+ 245 01b6 C046     	    nop
+ 246 01b8 00000080 	    .end
+ 246      AAAAAAAA 
+ 246      55555555 
+ 246      A8AAAAAA 
+ 246      54555555 

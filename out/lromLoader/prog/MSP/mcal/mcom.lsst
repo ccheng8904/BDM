@@ -1,0 +1,353 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mcom.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MCOM_pushByte,"ax",%progbits
+  18              		.align	1
+  19              		.global	MCOM_pushByte
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MCOM_pushByte:
+  25              	.LVL0:
+  26              	.LFB13:
+  27              		.file 1 "common/prog/MSP/mcal/mcom.c"
+   1:common/prog/MSP/mcal/mcom.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/mcom.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/mcom.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/mcom.c ****  *
+   5:common/prog/MSP/mcal/mcom.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/mcom.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/mcom.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/mcom.c ****  *
+   9:common/prog/MSP/mcal/mcom.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/mcom.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/mcom.c ****  *  COMP_ABBREV      MCOM
+  12:common/prog/MSP/mcal/mcom.c ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/mcom.c **** 
+  14:common/prog/MSP/mcal/mcom.c **** 
+  15:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  16:common/prog/MSP/mcal/mcom.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  18:common/prog/MSP/mcal/mcom.c **** /** \file
+  19:common/prog/MSP/mcal/mcom.c ****  *
+  20:common/prog/MSP/mcal/mcom.c ****  *  \ingroup  MCAL
+  21:common/prog/MSP/mcal/mcom.c ****  *
+  22:common/prog/MSP/mcal/mcom.c ****  *  \brief    Implementation of MCOM
+  23:common/prog/MSP/mcal/mcom.c ****  */
+  24:common/prog/MSP/mcal/mcom.c **** 
+  25:common/prog/MSP/mcal/mcom.c **** 
+  26:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  27:common/prog/MSP/mcal/mcom.c **** /* INCLUDES                                                                   */
+  28:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/mcom.c **** #include "BSH_stdinc.h"
+  30:common/prog/MSP/mcal/mcom.c **** #include "mcom.h"
+  31:common/prog/MSP/mcal/mcom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 2
+
+
+  32:common/prog/MSP/mcal/mcom.c **** #ifdef MCAL_MCOM_NDEBUG
+  33:common/prog/MSP/mcal/mcom.c ****     #define NDEBUG
+  34:common/prog/MSP/mcal/mcom.c **** #endif
+  35:common/prog/MSP/mcal/mcom.c **** #include "mcal_assert.h"
+  36:common/prog/MSP/mcal/mcom.c **** 
+  37:common/prog/MSP/mcal/mcom.c **** 
+  38:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  39:common/prog/MSP/mcal/mcom.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  40:common/prog/MSP/mcal/mcom.c **** /******************************************************************************/
+  41:common/prog/MSP/mcal/mcom.c **** 
+  42:common/prog/MSP/mcal/mcom.c **** void MCOM_pushByte(struct MCOM_Transfer *transfer, uint8_t data)
+  43:common/prog/MSP/mcal/mcom.c **** {
+  28              		.loc 1 43 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  44:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(transfer);
+  33              		.loc 1 44 5 view .LVU1
+  45:common/prog/MSP/mcal/mcom.c ****     struct MCOM_BufferHandle *bufferHandle = &transfer->readBufferHandle;
+  34              		.loc 1 45 5 view .LVU2
+  46:common/prog/MSP/mcal/mcom.c **** 
+  47:common/prog/MSP/mcal/mcom.c ****     if(bufferHandle->index < bufferHandle->length)
+  35              		.loc 1 47 5 view .LVU3
+  36              		.loc 1 47 20 is_stmt 0 view .LVU4
+  37 0000 4389     		ldrh	r3, [r0, #10]
+  38              		.loc 1 47 7 view .LVU5
+  39 0002 0289     		ldrh	r2, [r0, #8]
+  40 0004 9A42     		cmp	r2, r3
+  41 0006 06D9     		bls	.L2
+  48:common/prog/MSP/mcal/mcom.c ****     {
+  49:common/prog/MSP/mcal/mcom.c ****         bufferHandle->buffer.readBuffer[bufferHandle->index] = data;
+  42              		.loc 1 49 9 is_stmt 1 view .LVU6
+  43              		.loc 1 49 53 is_stmt 0 view .LVU7
+  44 0008 4389     		ldrh	r3, [r0, #10]
+  45              		.loc 1 49 62 view .LVU8
+  46 000a 4268     		ldr	r2, [r0, #4]
+  47 000c D154     		strb	r1, [r2, r3]
+  50:common/prog/MSP/mcal/mcom.c ****         bufferHandle->index +=1u; /* ++ creates axivion issue due to volatile declaration */
+  48              		.loc 1 50 9 is_stmt 1 view .LVU9
+  49              		.loc 1 50 29 is_stmt 0 view .LVU10
+  50 000e 4389     		ldrh	r3, [r0, #10]
+  51 0010 0133     		adds	r3, r3, #1
+  52 0012 9BB2     		uxth	r3, r3
+  53 0014 4381     		strh	r3, [r0, #10]
+  54              	.L2:
+  51:common/prog/MSP/mcal/mcom.c ****     }
+  52:common/prog/MSP/mcal/mcom.c ****     if(bufferHandle->index >= bufferHandle->length)
+  55              		.loc 1 52 5 is_stmt 1 view .LVU11
+  56              		.loc 1 52 20 is_stmt 0 view .LVU12
+  57 0016 4389     		ldrh	r3, [r0, #10]
+  58              		.loc 1 52 7 view .LVU13
+  59 0018 0289     		ldrh	r2, [r0, #8]
+  60 001a 9A42     		cmp	r2, r3
+  61 001c 01D8     		bhi	.L1
+  53:common/prog/MSP/mcal/mcom.c ****     {
+  54:common/prog/MSP/mcal/mcom.c ****         bufferHandle->status = MCOM_STATUS_COMPLETE;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 3
+
+
+  62              		.loc 1 54 9 is_stmt 1 view .LVU14
+  63              		.loc 1 54 30 is_stmt 0 view .LVU15
+  64 001e 0223     		movs	r3, #2
+  65 0020 0370     		strb	r3, [r0]
+  66              	.L1:
+  55:common/prog/MSP/mcal/mcom.c ****     }
+  56:common/prog/MSP/mcal/mcom.c **** }
+  67              		.loc 1 56 1 view .LVU16
+  68              		@ sp needed
+  69 0022 7047     		bx	lr
+  70              		.cfi_endproc
+  71              	.LFE13:
+  73              		.section	.text.MCOM_popByte,"ax",%progbits
+  74              		.align	1
+  75              		.global	MCOM_popByte
+  76              		.syntax unified
+  77              		.code	16
+  78              		.thumb_func
+  80              	MCOM_popByte:
+  81              	.LVL1:
+  82              	.LFB14:
+  57:common/prog/MSP/mcal/mcom.c **** 
+  58:common/prog/MSP/mcal/mcom.c **** 
+  59:common/prog/MSP/mcal/mcom.c **** uint8_t MCOM_popByte(struct MCOM_Transfer *transfer)
+  60:common/prog/MSP/mcal/mcom.c **** {
+  83              		.loc 1 60 1 is_stmt 1 view -0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  87              		@ link register save eliminated.
+  61:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(transfer);
+  88              		.loc 1 61 5 view .LVU18
+  62:common/prog/MSP/mcal/mcom.c ****     struct MCOM_BufferHandle *bufferHandle = &transfer->writeBufferHandle;
+  89              		.loc 1 62 5 view .LVU19
+  63:common/prog/MSP/mcal/mcom.c ****     uint8_t data = 0;
+  90              		.loc 1 63 5 view .LVU20
+  64:common/prog/MSP/mcal/mcom.c **** 
+  65:common/prog/MSP/mcal/mcom.c ****     if(bufferHandle->index < bufferHandle->length)
+  91              		.loc 1 65 5 view .LVU21
+  92              		.loc 1 65 20 is_stmt 0 view .LVU22
+  93 0000 C28A     		ldrh	r2, [r0, #22]
+  94              		.loc 1 65 42 view .LVU23
+  95 0002 818A     		ldrh	r1, [r0, #20]
+  60:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(transfer);
+  96              		.loc 1 60 1 view .LVU24
+  97 0004 0300     		movs	r3, r0
+  63:common/prog/MSP/mcal/mcom.c ****     uint8_t data = 0;
+  98              		.loc 1 63 13 view .LVU25
+  99 0006 0020     		movs	r0, #0
+ 100              	.LVL2:
+ 101              		.loc 1 65 7 view .LVU26
+ 102 0008 8A42     		cmp	r2, r1
+ 103 000a 06D2     		bcs	.L5
+  66:common/prog/MSP/mcal/mcom.c ****     {
+  67:common/prog/MSP/mcal/mcom.c ****         data = bufferHandle->buffer.writeBuffer[bufferHandle->index];
+ 104              		.loc 1 67 9 is_stmt 1 view .LVU27
+ 105              		.loc 1 67 61 is_stmt 0 view .LVU28
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 4
+
+
+ 106 000c DA8A     		ldrh	r2, [r3, #22]
+ 107              		.loc 1 67 14 view .LVU29
+ 108 000e 1869     		ldr	r0, [r3, #16]
+ 109 0010 805C     		ldrb	r0, [r0, r2]
+ 110              	.LVL3:
+  68:common/prog/MSP/mcal/mcom.c ****         bufferHandle->index +=1u; /* ++ creates axivion issue due to volatile declaration */
+ 111              		.loc 1 68 9 is_stmt 1 view .LVU30
+ 112              		.loc 1 68 29 is_stmt 0 view .LVU31
+ 113 0012 DA8A     		ldrh	r2, [r3, #22]
+ 114 0014 0132     		adds	r2, r2, #1
+ 115 0016 92B2     		uxth	r2, r2
+ 116 0018 DA82     		strh	r2, [r3, #22]
+ 117              	.LVL4:
+ 118              	.L5:
+  69:common/prog/MSP/mcal/mcom.c ****     }
+  70:common/prog/MSP/mcal/mcom.c ****     if(bufferHandle->index >= bufferHandle->length)
+ 119              		.loc 1 70 5 is_stmt 1 view .LVU32
+ 120              		.loc 1 70 20 is_stmt 0 view .LVU33
+ 121 001a DA8A     		ldrh	r2, [r3, #22]
+ 122              		.loc 1 70 7 view .LVU34
+ 123 001c 9142     		cmp	r1, r2
+ 124 001e 01D8     		bhi	.L6
+  71:common/prog/MSP/mcal/mcom.c ****     {
+  72:common/prog/MSP/mcal/mcom.c ****         bufferHandle->status = MCOM_STATUS_COMPLETE;
+ 125              		.loc 1 72 9 is_stmt 1 view .LVU35
+ 126              		.loc 1 72 30 is_stmt 0 view .LVU36
+ 127 0020 0222     		movs	r2, #2
+ 128 0022 1A73     		strb	r2, [r3, #12]
+ 129              	.L6:
+  73:common/prog/MSP/mcal/mcom.c ****     }
+  74:common/prog/MSP/mcal/mcom.c ****     
+  75:common/prog/MSP/mcal/mcom.c ****     return data;
+ 130              		.loc 1 75 5 is_stmt 1 view .LVU37
+  76:common/prog/MSP/mcal/mcom.c **** }
+ 131              		.loc 1 76 1 is_stmt 0 view .LVU38
+ 132              		@ sp needed
+ 133 0024 7047     		bx	lr
+ 134              		.cfi_endproc
+ 135              	.LFE14:
+ 137              		.section	.text.MCOM_setWriteBuffer,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	MCOM_setWriteBuffer
+ 140              		.syntax unified
+ 141              		.code	16
+ 142              		.thumb_func
+ 144              	MCOM_setWriteBuffer:
+ 145              	.LVL5:
+ 146              	.LFB15:
+  77:common/prog/MSP/mcal/mcom.c **** 
+  78:common/prog/MSP/mcal/mcom.c **** 
+  79:common/prog/MSP/mcal/mcom.c **** void MCOM_setWriteBuffer(struct MCOM_Transfer *transfer,
+  80:common/prog/MSP/mcal/mcom.c ****                          const uint8_t *buffer, uint16_t length)
+  81:common/prog/MSP/mcal/mcom.c **** {
+ 147              		.loc 1 81 1 is_stmt 1 view -0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 0
+ 150              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 5
+
+
+ 151              		@ link register save eliminated.
+  82:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(transfer != NULL);
+ 152              		.loc 1 82 5 view .LVU40
+  83:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(buffer != NULL);
+ 153              		.loc 1 83 5 view .LVU41
+  84:common/prog/MSP/mcal/mcom.c ****     
+  85:common/prog/MSP/mcal/mcom.c ****     if(transfer != NULL)
+ 154              		.loc 1 85 5 view .LVU42
+ 155              		.loc 1 85 7 is_stmt 0 view .LVU43
+ 156 0000 0028     		cmp	r0, #0
+ 157 0002 05D0     		beq	.L8
+  86:common/prog/MSP/mcal/mcom.c ****     {
+  87:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.status = MCOM_STATUS_BUSY;
+ 158              		.loc 1 87 9 is_stmt 1 view .LVU44
+ 159              		.loc 1 87 44 is_stmt 0 view .LVU45
+ 160 0004 0123     		movs	r3, #1
+ 161 0006 0373     		strb	r3, [r0, #12]
+  88:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.buffer.writeBuffer = buffer;
+ 162              		.loc 1 88 9 is_stmt 1 view .LVU46
+  89:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.length = length;
+  90:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.index = 0u;
+ 163              		.loc 1 90 43 is_stmt 0 view .LVU47
+ 164 0008 0023     		movs	r3, #0
+  88:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.buffer.writeBuffer = buffer;
+ 165              		.loc 1 88 56 view .LVU48
+ 166 000a 0161     		str	r1, [r0, #16]
+  89:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.length = length;
+ 167              		.loc 1 89 9 is_stmt 1 view .LVU49
+  89:common/prog/MSP/mcal/mcom.c ****         transfer->writeBufferHandle.length = length;
+ 168              		.loc 1 89 44 is_stmt 0 view .LVU50
+ 169 000c 8282     		strh	r2, [r0, #20]
+ 170              		.loc 1 90 9 is_stmt 1 view .LVU51
+ 171              		.loc 1 90 43 is_stmt 0 view .LVU52
+ 172 000e C382     		strh	r3, [r0, #22]
+ 173              	.L8:
+  91:common/prog/MSP/mcal/mcom.c ****     }
+  92:common/prog/MSP/mcal/mcom.c **** }
+ 174              		.loc 1 92 1 view .LVU53
+ 175              		@ sp needed
+ 176 0010 7047     		bx	lr
+ 177              		.cfi_endproc
+ 178              	.LFE15:
+ 180              		.section	.text.MCOM_setReadBuffer,"ax",%progbits
+ 181              		.align	1
+ 182              		.global	MCOM_setReadBuffer
+ 183              		.syntax unified
+ 184              		.code	16
+ 185              		.thumb_func
+ 187              	MCOM_setReadBuffer:
+ 188              	.LVL6:
+ 189              	.LFB16:
+  93:common/prog/MSP/mcal/mcom.c **** 
+  94:common/prog/MSP/mcal/mcom.c **** 
+  95:common/prog/MSP/mcal/mcom.c **** void MCOM_setReadBuffer(struct MCOM_Transfer *transfer,
+  96:common/prog/MSP/mcal/mcom.c ****                         uint8_t *buffer, uint16_t length)
+  97:common/prog/MSP/mcal/mcom.c **** {
+ 190              		.loc 1 97 1 is_stmt 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUt0APp.s 			page 6
+
+
+ 191              		.cfi_startproc
+ 192              		@ args = 0, pretend = 0, frame = 0
+ 193              		@ frame_needed = 0, uses_anonymous_args = 0
+ 194              		@ link register save eliminated.
+  98:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(transfer != NULL);
+ 195              		.loc 1 98 5 view .LVU55
+  99:common/prog/MSP/mcal/mcom.c ****     MCAL_assert(buffer != NULL);
+ 196              		.loc 1 99 5 view .LVU56
+ 100:common/prog/MSP/mcal/mcom.c ****     
+ 101:common/prog/MSP/mcal/mcom.c ****     if(transfer != NULL)
+ 197              		.loc 1 101 5 view .LVU57
+ 198              		.loc 1 101 7 is_stmt 0 view .LVU58
+ 199 0000 0028     		cmp	r0, #0
+ 200 0002 05D0     		beq	.L13
+ 102:common/prog/MSP/mcal/mcom.c ****     {
+ 103:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.status = MCOM_STATUS_BUSY;
+ 201              		.loc 1 103 9 is_stmt 1 view .LVU59
+ 202              		.loc 1 103 43 is_stmt 0 view .LVU60
+ 203 0004 0123     		movs	r3, #1
+ 204 0006 0370     		strb	r3, [r0]
+ 104:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.buffer.readBuffer = buffer;
+ 205              		.loc 1 104 9 is_stmt 1 view .LVU61
+ 105:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.length = length;
+ 106:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.index = 0u;
+ 206              		.loc 1 106 42 is_stmt 0 view .LVU62
+ 207 0008 0023     		movs	r3, #0
+ 104:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.buffer.readBuffer = buffer;
+ 208              		.loc 1 104 54 view .LVU63
+ 209 000a 4160     		str	r1, [r0, #4]
+ 105:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.length = length;
+ 210              		.loc 1 105 9 is_stmt 1 view .LVU64
+ 105:common/prog/MSP/mcal/mcom.c ****         transfer->readBufferHandle.length = length;
+ 211              		.loc 1 105 43 is_stmt 0 view .LVU65
+ 212 000c 0281     		strh	r2, [r0, #8]
+ 213              		.loc 1 106 9 is_stmt 1 view .LVU66
+ 214              		.loc 1 106 42 is_stmt 0 view .LVU67
+ 215 000e 4381     		strh	r3, [r0, #10]
+ 216              	.L13:
+ 107:common/prog/MSP/mcal/mcom.c ****     }
+ 108:common/prog/MSP/mcal/mcom.c **** }
+ 217              		.loc 1 108 1 view .LVU68
+ 218              		@ sp needed
+ 219 0010 7047     		bx	lr
+ 220              		.cfi_endproc
+ 221              	.LFE16:
+ 223              		.text
+ 224              	.Letext0:
+ 225              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 226              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 227              		.file 4 "common/prog/MSP/mcal/mcom.h"

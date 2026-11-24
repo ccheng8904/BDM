@@ -1,0 +1,164 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB3H3Ic.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"intflash_abs.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ABSIF_write,"ax",%progbits
+  18              		.align	1
+  19              		.global	ABSIF_write
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	ABSIF_write:
+  25              	.LVL0:
+  26              	.LFB60:
+  27              		.file 1 "common/prog/firmware_update/mem_drv/intflash_abs.c"
+   1:common/prog/firmware_update/mem_drv/intflash_abs.c **** /*******************************************************************************
+   2:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *
+   5:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *
+   9:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *******************************************************************************
+  10:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  PROJECT          Generic SW
+  11:common/prog/firmware_update/mem_drv/intflash_abs.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/mem_drv/intflash_abs.c **** 
+  13:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  14:common/prog/firmware_update/mem_drv/intflash_abs.c **** /* DOCUMENTATION                                                              */
+  15:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  16:common/prog/firmware_update/mem_drv/intflash_abs.c **** /** \file
+  17:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *
+  18:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  \ingroup  firmware_update
+  19:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *
+  20:common/prog/firmware_update/mem_drv/intflash_abs.c ****  *  \brief    implementation for internal flash memory abstraction.
+  21:common/prog/firmware_update/mem_drv/intflash_abs.c ****  */
+  22:common/prog/firmware_update/mem_drv/intflash_abs.c **** 
+  23:common/prog/firmware_update/mem_drv/intflash_abs.c **** 
+  24:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  25:common/prog/firmware_update/mem_drv/intflash_abs.c **** /* INCLUDES                                                                   */
+  26:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  27:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include "bsh_stdinc.h"
+  28:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include <stdint.h>
+  29:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include <stdbool.h>
+  30:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include "intflash_drv.h"
+  31:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include "intflash_abs.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB3H3Ic.s 			page 2
+
+
+  32:common/prog/firmware_update/mem_drv/intflash_abs.c **** #include "hsup.h"
+  33:common/prog/firmware_update/mem_drv/intflash_abs.c **** 
+  34:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  35:common/prog/firmware_update/mem_drv/intflash_abs.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  36:common/prog/firmware_update/mem_drv/intflash_abs.c **** /******************************************************************************/
+  37:common/prog/firmware_update/mem_drv/intflash_abs.c **** uint32_t ABSIF_write(uint32_t addr, uint32_t size, const uint8_t* buffer)
+  38:common/prog/firmware_update/mem_drv/intflash_abs.c **** {
+  28              		.loc 1 38 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  39:common/prog/firmware_update/mem_drv/intflash_abs.c ****     uint32_t writtenSize;
+  32              		.loc 1 39 5 view .LVU1
+  40:common/prog/firmware_update/mem_drv/intflash_abs.c ****     HSUP_vDisableInt();
+  33              		.loc 1 40 5 view .LVU2
+  38:common/prog/firmware_update/mem_drv/intflash_abs.c ****     uint32_t writtenSize;
+  34              		.loc 1 38 1 is_stmt 0 view .LVU3
+  35 0000 70B5     		push	{r4, r5, r6, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 4, -16
+  39              		.cfi_offset 5, -12
+  40              		.cfi_offset 6, -8
+  41              		.cfi_offset 14, -4
+  38:common/prog/firmware_update/mem_drv/intflash_abs.c ****     uint32_t writtenSize;
+  42              		.loc 1 38 1 view .LVU4
+  43 0002 0400     		movs	r4, r0
+  44 0004 0D00     		movs	r5, r1
+  45 0006 1600     		movs	r6, r2
+  46              		.loc 1 40 5 view .LVU5
+  47 0008 FFF7FEFF 		bl	HSUP_vDisableInt
+  48              	.LVL1:
+  41:common/prog/firmware_update/mem_drv/intflash_abs.c ****     writtenSize = DRVIF_write(addr, size, buffer);/* write to flash           */
+  49              		.loc 1 41 5 is_stmt 1 view .LVU6
+  50              		.loc 1 41 19 is_stmt 0 view .LVU7
+  51 000c 2000     		movs	r0, r4
+  52 000e 3200     		movs	r2, r6
+  53 0010 2900     		movs	r1, r5
+  54 0012 FFF7FEFF 		bl	DRVIF_write
+  55              	.LVL2:
+  56 0016 0400     		movs	r4, r0
+  57              	.LVL3:
+  42:common/prog/firmware_update/mem_drv/intflash_abs.c ****     while(DRVIF_isBusy()){}                       /* wait for operation finish*/
+  58              		.loc 1 42 5 is_stmt 1 view .LVU8
+  59              	.L2:
+  60              		.loc 1 42 27 discriminator 1 view .LVU9
+  61              		.loc 1 42 11 discriminator 1 view .LVU10
+  62 0018 FFF7FEFF 		bl	DRVIF_isBusy
+  63              	.LVL4:
+  64 001c 0028     		cmp	r0, #0
+  65 001e FBD1     		bne	.L2
+  43:common/prog/firmware_update/mem_drv/intflash_abs.c ****     if(DRVIF_isError())
+  66              		.loc 1 43 5 view .LVU11
+  44:common/prog/firmware_update/mem_drv/intflash_abs.c ****     {   /* set written size to zero in case of error */
+  45:common/prog/firmware_update/mem_drv/intflash_abs.c ****         writtenSize = 0;
+  46:common/prog/firmware_update/mem_drv/intflash_abs.c ****     }
+  47:common/prog/firmware_update/mem_drv/intflash_abs.c ****     DRVIF_resetFlash();
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB3H3Ic.s 			page 3
+
+
+  48:common/prog/firmware_update/mem_drv/intflash_abs.c ****     HSUP_vEnableInt();
+  49:common/prog/firmware_update/mem_drv/intflash_abs.c ****     return writtenSize;
+  50:common/prog/firmware_update/mem_drv/intflash_abs.c **** }
+  67              		.loc 1 50 1 is_stmt 0 view .LVU12
+  68              		@ sp needed
+  43:common/prog/firmware_update/mem_drv/intflash_abs.c ****     if(DRVIF_isError())
+  69              		.loc 1 43 8 view .LVU13
+  70 0020 FFF7FEFF 		bl	DRVIF_isError
+  71              	.LVL5:
+  45:common/prog/firmware_update/mem_drv/intflash_abs.c ****     }
+  72              		.loc 1 45 21 view .LVU14
+  73 0024 4342     		rsbs	r3, r0, #0
+  74 0026 5841     		adcs	r0, r0, r3
+  75 0028 4042     		rsbs	r0, r0, #0
+  76 002a 0440     		ands	r4, r0
+  77              	.LVL6:
+  47:common/prog/firmware_update/mem_drv/intflash_abs.c ****     HSUP_vEnableInt();
+  78              		.loc 1 47 5 is_stmt 1 view .LVU15
+  79 002c FFF7FEFF 		bl	DRVIF_resetFlash
+  80              	.LVL7:
+  48:common/prog/firmware_update/mem_drv/intflash_abs.c ****     return writtenSize;
+  81              		.loc 1 48 5 view .LVU16
+  82 0030 FFF7FEFF 		bl	HSUP_vEnableInt
+  83              	.LVL8:
+  49:common/prog/firmware_update/mem_drv/intflash_abs.c **** }
+  84              		.loc 1 49 5 view .LVU17
+  85              		.loc 1 50 1 is_stmt 0 view .LVU18
+  86 0034 2000     		movs	r0, r4
+  87              	.LVL9:
+  88              	.LVL10:
+  89              	.LVL11:
+  90              		.loc 1 50 1 view .LVU19
+  91 0036 70BD     		pop	{r4, r5, r6, pc}
+  92              		.cfi_endproc
+  93              	.LFE60:
+  95              		.text
+  96              	.Letext0:
+  97              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  98              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  99              		.file 4 "common/prog/MSP/hsup.h"
+ 100              		.file 5 "common/prog/firmware_update/mem_drv/intflash_drv.h"

@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "CMS32M67",
+            "intelliSenseMode": "gcc-arm",
+            "compilerPath": "${workspaceFolder}/Tools/8_2019-q3-update/arm-none-eabi/bin/arm-none-eabi-gcc.exe",
+            "includePath": [
+                "${workspaceFolder}/app/**",
+                "${workspaceFolder}/common/**",
+                "${workspaceFolder}/Tools/8_2019-q3-update/arm-none-eabi/include/**"
+            ],
+            "defines": [
+                "__GNUC__",
+                "CMS32M67",
+                "CMS32M6736EGH48NB"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

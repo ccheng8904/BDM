@@ -1,0 +1,923 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"timerlib.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.TIM_bHandleTask,"ax",%progbits
+  18              		.align	1
+  19              		.global	TIM_bHandleTask
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	TIM_bHandleTask:
+  25              	.LFB2:
+  26              		.file 1 "common/prog/ped_fw/timer/timerlib.c"
+   1:common/prog/ped_fw/timer/timerlib.c **** /*******************************************************************************
+   2:common/prog/ped_fw/timer/timerlib.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/timer/timerlib.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/timer/timerlib.c ****  *
+   5:common/prog/ped_fw/timer/timerlib.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/timer/timerlib.c ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/timer/timerlib.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/timer/timerlib.c ****  *
+   9:common/prog/ped_fw/timer/timerlib.c ****  *******************************************************************************
+  10:common/prog/ped_fw/timer/timerlib.c ****  *  PROJECT          Generic SW
+  11:common/prog/ped_fw/timer/timerlib.c ****  *  COMP_ABBREV      TIM
+  12:common/prog/ped_fw/timer/timerlib.c ****  ******************************************************************************/
+  13:common/prog/ped_fw/timer/timerlib.c **** 
+  14:common/prog/ped_fw/timer/timerlib.c **** 
+  15:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  16:common/prog/ped_fw/timer/timerlib.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  18:common/prog/ped_fw/timer/timerlib.c **** /** \file
+  19:common/prog/ped_fw/timer/timerlib.c ****  *
+  20:common/prog/ped_fw/timer/timerlib.c ****  *  \brief    Implementation of timer library.
+  21:common/prog/ped_fw/timer/timerlib.c ****  *
+  22:common/prog/ped_fw/timer/timerlib.c ****  */
+  23:common/prog/ped_fw/timer/timerlib.c **** 
+  24:common/prog/ped_fw/timer/timerlib.c **** 
+  25:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  26:common/prog/ped_fw/timer/timerlib.c **** /* INCLUDES                                                                   */
+  27:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  28:common/prog/ped_fw/timer/timerlib.c **** #include "bsh_stdinc.h"
+  29:common/prog/ped_fw/timer/timerlib.c **** #include "timerlib.h"
+  30:common/prog/ped_fw/timer/timerlib.c **** 
+  31:common/prog/ped_fw/timer/timerlib.c **** #ifdef SYSTEM_TIMER_ENABLED
+  32:common/prog/ped_fw/timer/timerlib.c ****     #include "system_timer.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 2
+
+
+  33:common/prog/ped_fw/timer/timerlib.c **** #endif
+  34:common/prog/ped_fw/timer/timerlib.c **** 
+  35:common/prog/ped_fw/timer/timerlib.c **** #ifdef MCAL_MPCM_INCLUDED
+  36:common/prog/ped_fw/timer/timerlib.c ****     #include "mcal/mpcm.h"
+  37:common/prog/ped_fw/timer/timerlib.c **** #endif
+  38:common/prog/ped_fw/timer/timerlib.c **** /**************************************************************************************************
+  39:common/prog/ped_fw/timer/timerlib.c **** /* LOCAL DEFINITIONS                                                                              *
+  40:common/prog/ped_fw/timer/timerlib.c **** /**************************************************************************************************
+  41:common/prog/ped_fw/timer/timerlib.c **** #define TIM_8BIT  0x00u ///< 8 bit timer types
+  42:common/prog/ped_fw/timer/timerlib.c **** #define TIM_16BIT 0x01u ///< 16 bit timer types
+  43:common/prog/ped_fw/timer/timerlib.c **** 
+  44:common/prog/ped_fw/timer/timerlib.c **** /* ALIGNMENT shall be defined to 1,2 or 4! */
+  45:common/prog/ped_fw/timer/timerlib.c **** #ifndef ALIGNMENT
+  46:common/prog/ped_fw/timer/timerlib.c ****     #error "Define 'ALIGNMENT' to either 1,2,4"
+  47:common/prog/ped_fw/timer/timerlib.c **** #else
+  48:common/prog/ped_fw/timer/timerlib.c ****     #if (ALIGNMENT != 1) && (ALIGNMENT != 2) && (ALIGNMENT != 4)
+  49:common/prog/ped_fw/timer/timerlib.c ****         #error "Define 'ALIGNMENT' to either 1,2,4"
+  50:common/prog/ped_fw/timer/timerlib.c ****     #endif
+  51:common/prog/ped_fw/timer/timerlib.c **** #endif
+  52:common/prog/ped_fw/timer/timerlib.c **** 
+  53:common/prog/ped_fw/timer/timerlib.c **** 
+  54:common/prog/ped_fw/timer/timerlib.c **** /**************************************************************************************************
+  55:common/prog/ped_fw/timer/timerlib.c **** /* LOCAL TYPE DEFINITIONS                                                                         *
+  56:common/prog/ped_fw/timer/timerlib.c **** /**************************************************************************************************
+  57:common/prog/ped_fw/timer/timerlib.c **** 
+  58:common/prog/ped_fw/timer/timerlib.c **** typedef enum _T_TIMstateEnum{
+  59:common/prog/ped_fw/timer/timerlib.c ****     TIM_INIT, ///< Init task state
+  60:common/prog/ped_fw/timer/timerlib.c ****     TIM_WORK  ///< Working task state
+  61:common/prog/ped_fw/timer/timerlib.c **** } T_TIMstateEnum;///< task state enumeration type
+  62:common/prog/ped_fw/timer/timerlib.c **** 
+  63:common/prog/ped_fw/timer/timerlib.c **** 
+  64:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  65:common/prog/ped_fw/timer/timerlib.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  66:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  67:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vHandleTimer(void);     ///< Handles all 8-Bit timers
+  68:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vHandleTimer16(void);   ///< Handles all 8 and 16-Bit timers
+  69:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vInitTimer(void);       ///< Initialises 8-Bit timers
+  70:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vInitTimer16(void);     ///< Initialises 8 and 16-Bit timers
+  71:common/prog/ped_fw/timer/timerlib.c **** /* Warning 522: highest operation, function 'TIM_vHandleTimer16', lacks side effects [MISRA 2012 Ru
+  72:common/prog/ped_fw/timer/timerlib.c **** /*lint -esym(522,TIM_vHandleTimer16) false positive! */
+  73:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  74:common/prog/ped_fw/timer/timerlib.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  75:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  76:common/prog/ped_fw/timer/timerlib.c **** static T_TIMstateEnum TIM_tTaskState = TIM_INIT; ///< timer task state variable
+  77:common/prog/ped_fw/timer/timerlib.c **** 
+  78:common/prog/ped_fw/timer/timerlib.c **** #ifdef MCAL_MPCM_INCLUDED
+  79:common/prog/ped_fw/timer/timerlib.c **** /** MPCM clock change Callback instance */
+  80:common/prog/ped_fw/timer/timerlib.c **** static MCAL_Callback_t TimerMpcmCb;
+  81:common/prog/ped_fw/timer/timerlib.c **** #endif
+  82:common/prog/ped_fw/timer/timerlib.c **** 
+  83:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  84:common/prog/ped_fw/timer/timerlib.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  85:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+  86:common/prog/ped_fw/timer/timerlib.c **** 
+  87:common/prog/ped_fw/timer/timerlib.c **** BOOL TIM_bHandleTask(void)
+  88:common/prog/ped_fw/timer/timerlib.c **** {
+  27              		.loc 1 88 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 3
+
+
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  89:common/prog/ped_fw/timer/timerlib.c ****     if (TIM_tTaskState == TIM_WORK)
+  31              		.loc 1 89 5 view .LVU1
+  88:common/prog/ped_fw/timer/timerlib.c ****     if (TIM_tTaskState == TIM_WORK)
+  32              		.loc 1 88 1 is_stmt 0 view .LVU2
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 89 24 view .LVU3
+  41 0002 1A4D     		ldr	r5, .L21
+  42 0004 2C78     		ldrb	r4, [r5]
+  43              		.loc 1 89 8 view .LVU4
+  44 0006 012C     		cmp	r4, #1
+  45 0008 1FD1     		bne	.L2
+  90:common/prog/ped_fw/timer/timerlib.c ****     {
+  91:common/prog/ped_fw/timer/timerlib.c ****         if (_TIM_bIsBaseTimerDown())
+  46              		.loc 1 91 9 is_stmt 1 view .LVU5
+  47              		.loc 1 91 13 is_stmt 0 view .LVU6
+  48 000a FFF7FEFF 		bl	_TIM_bIsBaseTimerDown
+  49              	.LVL0:
+  50              		.loc 1 91 12 view .LVU7
+  51 000e 0028     		cmp	r0, #0
+  52 0010 27D0     		beq	.L4
+  92:common/prog/ped_fw/timer/timerlib.c ****         {
+  93:common/prog/ped_fw/timer/timerlib.c ****             TIM_vHandleTimer();  //handles all timers
+  53              		.loc 1 93 13 is_stmt 1 view .LVU8
+  54              	.LBB6:
+  55              	.LBI6:
+  94:common/prog/ped_fw/timer/timerlib.c ****         }
+  95:common/prog/ped_fw/timer/timerlib.c **** #ifdef SYSTEM_TIMER_ENABLED
+  96:common/prog/ped_fw/timer/timerlib.c ****         STIM_SchedulerHandleTask();
+  97:common/prog/ped_fw/timer/timerlib.c **** #endif
+  98:common/prog/ped_fw/timer/timerlib.c **** 
+  99:common/prog/ped_fw/timer/timerlib.c ****     }
+ 100:common/prog/ped_fw/timer/timerlib.c ****     else
+ 101:common/prog/ped_fw/timer/timerlib.c ****     {
+ 102:common/prog/ped_fw/timer/timerlib.c ****         if (_TIM_bGetInitConfig())
+ 103:common/prog/ped_fw/timer/timerlib.c ****         {
+ 104:common/prog/ped_fw/timer/timerlib.c ****             TIM_vInitTimer();
+ 105:common/prog/ped_fw/timer/timerlib.c **** #ifdef SYSTEM_TIMER_ENABLED
+ 106:common/prog/ped_fw/timer/timerlib.c ****             (void)STIM_InitModule();
+ 107:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 108:common/prog/ped_fw/timer/timerlib.c **** 
+ 109:common/prog/ped_fw/timer/timerlib.c **** #ifdef MCAL_MPCM_INCLUDED
+ 110:common/prog/ped_fw/timer/timerlib.c ****             MCAL_initCallback(&TimerMpcmCb, TIM_MpcmEventCallback, NULL);
+ 111:common/prog/ped_fw/timer/timerlib.c ****             (void)MPCM_enableEvent(&TimerMpcmCb, MCAL_EVENT_CLOCK_CHANGE_ANY);
+ 112:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 113:common/prog/ped_fw/timer/timerlib.c ****             TIM_tTaskState = TIM_WORK;
+ 114:common/prog/ped_fw/timer/timerlib.c ****         }
+ 115:common/prog/ped_fw/timer/timerlib.c ****         else
+ 116:common/prog/ped_fw/timer/timerlib.c ****         {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 4
+
+
+ 117:common/prog/ped_fw/timer/timerlib.c ****             return TASK_NOT_INITIALISED;
+ 118:common/prog/ped_fw/timer/timerlib.c ****         }
+ 119:common/prog/ped_fw/timer/timerlib.c ****     }
+ 120:common/prog/ped_fw/timer/timerlib.c ****     return TASK_INITIALISED;//allways true
+ 121:common/prog/ped_fw/timer/timerlib.c **** }
+ 122:common/prog/ped_fw/timer/timerlib.c **** 
+ 123:common/prog/ped_fw/timer/timerlib.c **** 
+ 124:common/prog/ped_fw/timer/timerlib.c **** BOOL TIM_bHandleTask16(void)
+ 125:common/prog/ped_fw/timer/timerlib.c **** {
+ 126:common/prog/ped_fw/timer/timerlib.c ****     if (TIM_tTaskState == TIM_WORK)
+ 127:common/prog/ped_fw/timer/timerlib.c ****     {
+ 128:common/prog/ped_fw/timer/timerlib.c ****         if (_TIM_bIsBaseTimerDown())
+ 129:common/prog/ped_fw/timer/timerlib.c ****         {
+ 130:common/prog/ped_fw/timer/timerlib.c ****             TIM_vHandleTimer16();  //handles all timers
+ 131:common/prog/ped_fw/timer/timerlib.c ****         }
+ 132:common/prog/ped_fw/timer/timerlib.c **** #ifdef SYSTEM_TIMER_ENABLED
+ 133:common/prog/ped_fw/timer/timerlib.c ****         STIM_SchedulerHandleTask();
+ 134:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 135:common/prog/ped_fw/timer/timerlib.c ****     }
+ 136:common/prog/ped_fw/timer/timerlib.c ****     else
+ 137:common/prog/ped_fw/timer/timerlib.c ****     {
+ 138:common/prog/ped_fw/timer/timerlib.c ****         if (_TIM_bGetInitConfig())
+ 139:common/prog/ped_fw/timer/timerlib.c ****         {
+ 140:common/prog/ped_fw/timer/timerlib.c ****             TIM_vInitTimer16();
+ 141:common/prog/ped_fw/timer/timerlib.c **** #ifdef SYSTEM_TIMER_ENABLED
+ 142:common/prog/ped_fw/timer/timerlib.c ****             (void)STIM_InitModule();
+ 143:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 144:common/prog/ped_fw/timer/timerlib.c **** 
+ 145:common/prog/ped_fw/timer/timerlib.c **** #ifdef MCAL_MPCM_INCLUDED
+ 146:common/prog/ped_fw/timer/timerlib.c ****             MCAL_initCallback(&TimerMpcmCb, TIM_MpcmEventCallback, NULL);
+ 147:common/prog/ped_fw/timer/timerlib.c ****             (void)MPCM_enableEvent(&TimerMpcmCb, MCAL_EVENT_CLOCK_CHANGE_ANY);
+ 148:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 149:common/prog/ped_fw/timer/timerlib.c ****             TIM_tTaskState = TIM_WORK;
+ 150:common/prog/ped_fw/timer/timerlib.c ****         }
+ 151:common/prog/ped_fw/timer/timerlib.c ****         else
+ 152:common/prog/ped_fw/timer/timerlib.c ****         {
+ 153:common/prog/ped_fw/timer/timerlib.c ****             return TASK_NOT_INITIALISED;
+ 154:common/prog/ped_fw/timer/timerlib.c ****         }
+ 155:common/prog/ped_fw/timer/timerlib.c ****     }
+ 156:common/prog/ped_fw/timer/timerlib.c ****     return TASK_INITIALISED;//allways true
+ 157:common/prog/ped_fw/timer/timerlib.c **** }
+ 158:common/prog/ped_fw/timer/timerlib.c **** 
+ 159:common/prog/ped_fw/timer/timerlib.c **** 
+ 160:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+ 161:common/prog/ped_fw/timer/timerlib.c **** /* PRIVATE FUNCTION DEFINITIONS                                                */
+ 162:common/prog/ped_fw/timer/timerlib.c **** /******************************************************************************/
+ 163:common/prog/ped_fw/timer/timerlib.c **** /* Axivion Disable Style MisraC2012-13.3 : Axivion consider decrement of volatile object to have si
+ 164:common/prog/ped_fw/timer/timerlib.c **** //lint -save -e661 -e662   "access to out-of-bounds pointer" warning deactivated, tested to work co
+ 165:common/prog/ped_fw/timer/timerlib.c **** //lint -save -e946         "Relational or subtract operator applied to pointers", tested to work co
+ 166:common/prog/ped_fw/timer/timerlib.c **** //lint -save -e923 -e926   "cast from pointer to unsigned int", tested to work correctly
+ 167:common/prog/ped_fw/timer/timerlib.c **** 
+ 168:common/prog/ped_fw/timer/timerlib.c **** /* Handles all 8-Bit timers */
+ 169:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vHandleTimer(void)
+  56              		.loc 1 169 13 view .LVU9
+  57              	.LBB7:
+ 170:common/prog/ped_fw/timer/timerlib.c **** {
+ 171:common/prog/ped_fw/timer/timerlib.c ****     Ttimer8 *pucTimerPtr;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 5
+
+
+  58              		.loc 1 171 5 view .LVU10
+ 172:common/prog/ped_fw/timer/timerlib.c ****     TtimerConfig const * ptTimerConfig;
+  59              		.loc 1 172 5 view .LVU11
+ 173:common/prog/ped_fw/timer/timerlib.c ****     uint8_t ucPrescaler;
+  60              		.loc 1 173 5 view .LVU12
+ 174:common/prog/ped_fw/timer/timerlib.c **** 
+ 175:common/prog/ped_fw/timer/timerlib.c ****     ptTimerConfig = TIM_ptTimer8Config; //sets pointer to config of first 8 bit segment
+  61              		.loc 1 175 5 view .LVU13
+  62              	.LVL1:
+ 176:common/prog/ped_fw/timer/timerlib.c ****     pucTimerPtr   = TIM_ptTimer8Config[0].pucPrescalerPtr; // point to first prescaler (TIM_uc8Star
+  63              		.loc 1 176 5 view .LVU14
+ 177:common/prog/ped_fw/timer/timerlib.c **** 
+ 178:common/prog/ped_fw/timer/timerlib.c ****     for (;;)
+ 179:common/prog/ped_fw/timer/timerlib.c ****     {
+ 180:common/prog/ped_fw/timer/timerlib.c ****         ptTimerConfig++;
+ 181:common/prog/ped_fw/timer/timerlib.c ****         (pucTimerPtr)++;
+ 182:common/prog/ped_fw/timer/timerlib.c ****         while ( pucTimerPtr < ptTimerConfig->pucPrescalerPtr )//do for all timers in segment
+ 183:common/prog/ped_fw/timer/timerlib.c ****         {
+ 184:common/prog/ped_fw/timer/timerlib.c ****             if ( *pucTimerPtr != 0u ) // if not timer down
+ 185:common/prog/ped_fw/timer/timerlib.c ****             {
+ 186:common/prog/ped_fw/timer/timerlib.c ****                 (*pucTimerPtr)--;     // decrement timer
+ 187:common/prog/ped_fw/timer/timerlib.c ****             }
+ 188:common/prog/ped_fw/timer/timerlib.c ****             pucTimerPtr++; // next timer in segment
+ 189:common/prog/ped_fw/timer/timerlib.c ****         }
+ 190:common/prog/ped_fw/timer/timerlib.c ****         ucPrescaler = ptTimerConfig->ucPrescaler;
+ 191:common/prog/ped_fw/timer/timerlib.c **** 
+ 192:common/prog/ped_fw/timer/timerlib.c ****         if ( ucPrescaler != TIM_END_MARK )//terminate loop if prescaler is zero -->end mark
+ 193:common/prog/ped_fw/timer/timerlib.c ****         {
+ 194:common/prog/ped_fw/timer/timerlib.c ****             (*pucTimerPtr)++;     //increment prescaler
+ 195:common/prog/ped_fw/timer/timerlib.c ****             if (*pucTimerPtr == ucPrescaler)//prescaler down?
+ 196:common/prog/ped_fw/timer/timerlib.c ****             {
+ 197:common/prog/ped_fw/timer/timerlib.c ****                 //reset prescaler
+ 198:common/prog/ped_fw/timer/timerlib.c ****                 *pucTimerPtr = 0;
+  64              		.loc 1 198 30 is_stmt 0 view .LVU15
+  65 0012 0020     		movs	r0, #0
+ 176:common/prog/ped_fw/timer/timerlib.c ****     pucTimerPtr   = TIM_ptTimer8Config[0].pucPrescalerPtr; // point to first prescaler (TIM_uc8Star
+  66              		.loc 1 176 19 view .LVU16
+  67 0014 164A     		ldr	r2, .L21+4
+  68 0016 1368     		ldr	r3, [r2]
+  69              	.LVL2:
+  70              	.L9:
+ 178:common/prog/ped_fw/timer/timerlib.c ****     {
+  71              		.loc 1 178 5 is_stmt 1 view .LVU17
+ 180:common/prog/ped_fw/timer/timerlib.c ****         (pucTimerPtr)++;
+  72              		.loc 1 180 9 view .LVU18
+ 180:common/prog/ped_fw/timer/timerlib.c ****         (pucTimerPtr)++;
+  73              		.loc 1 180 22 is_stmt 0 view .LVU19
+  74 0018 0832     		adds	r2, r2, #8
+  75              	.LVL3:
+ 181:common/prog/ped_fw/timer/timerlib.c ****         while ( pucTimerPtr < ptTimerConfig->pucPrescalerPtr )//do for all timers in segment
+  76              		.loc 1 181 9 is_stmt 1 view .LVU20
+  77              	.L6:
+ 188:common/prog/ped_fw/timer/timerlib.c ****         }
+  78              		.loc 1 188 13 view .LVU21
+ 182:common/prog/ped_fw/timer/timerlib.c ****         {
+  79              		.loc 1 182 29 is_stmt 0 view .LVU22
+  80 001a 1168     		ldr	r1, [r2]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 6
+
+
+ 188:common/prog/ped_fw/timer/timerlib.c ****         }
+  81              		.loc 1 188 24 view .LVU23
+  82 001c 0133     		adds	r3, r3, #1
+  83              	.LVL4:
+ 182:common/prog/ped_fw/timer/timerlib.c ****         {
+  84              		.loc 1 182 29 is_stmt 1 view .LVU24
+  85 001e 8B42     		cmp	r3, r1
+  86 0020 0BD3     		bcc	.L7
+ 190:common/prog/ped_fw/timer/timerlib.c **** 
+  87              		.loc 1 190 9 view .LVU25
+ 190:common/prog/ped_fw/timer/timerlib.c **** 
+  88              		.loc 1 190 21 is_stmt 0 view .LVU26
+  89 0022 1579     		ldrb	r5, [r2, #4]
+  90              	.LVL5:
+ 192:common/prog/ped_fw/timer/timerlib.c ****         {
+  91              		.loc 1 192 9 is_stmt 1 view .LVU27
+ 192:common/prog/ped_fw/timer/timerlib.c ****         {
+  92              		.loc 1 192 12 is_stmt 0 view .LVU28
+  93 0024 002D     		cmp	r5, #0
+  94 0026 1CD0     		beq	.L4
+ 194:common/prog/ped_fw/timer/timerlib.c ****             if (*pucTimerPtr == ucPrescaler)//prescaler down?
+  95              		.loc 1 194 13 is_stmt 1 view .LVU29
+ 194:common/prog/ped_fw/timer/timerlib.c ****             if (*pucTimerPtr == ucPrescaler)//prescaler down?
+  96              		.loc 1 194 14 is_stmt 0 view .LVU30
+  97 0028 1978     		ldrb	r1, [r3]
+ 194:common/prog/ped_fw/timer/timerlib.c ****             if (*pucTimerPtr == ucPrescaler)//prescaler down?
+  98              		.loc 1 194 27 view .LVU31
+  99 002a 0131     		adds	r1, r1, #1
+ 100 002c C9B2     		uxtb	r1, r1
+ 101 002e 1970     		strb	r1, [r3]
+ 195:common/prog/ped_fw/timer/timerlib.c ****             {
+ 102              		.loc 1 195 13 is_stmt 1 view .LVU32
+ 195:common/prog/ped_fw/timer/timerlib.c ****             {
+ 103              		.loc 1 195 17 is_stmt 0 view .LVU33
+ 104 0030 1978     		ldrb	r1, [r3]
+ 195:common/prog/ped_fw/timer/timerlib.c ****             {
+ 105              		.loc 1 195 16 view .LVU34
+ 106 0032 8D42     		cmp	r5, r1
+ 107 0034 15D1     		bne	.L4
+ 108              		.loc 1 198 17 is_stmt 1 view .LVU35
+ 109              		.loc 1 198 30 is_stmt 0 view .LVU36
+ 110 0036 1870     		strb	r0, [r3]
+ 178:common/prog/ped_fw/timer/timerlib.c ****     {
+ 111              		.loc 1 178 5 is_stmt 1 view .LVU37
+ 180:common/prog/ped_fw/timer/timerlib.c ****         (pucTimerPtr)++;
+ 112              		.loc 1 180 22 is_stmt 0 view .LVU38
+ 113 0038 EEE7     		b	.L9
+ 114              	.LVL6:
+ 115              	.L7:
+ 184:common/prog/ped_fw/timer/timerlib.c ****             {
+ 116              		.loc 1 184 13 is_stmt 1 view .LVU39
+ 184:common/prog/ped_fw/timer/timerlib.c ****             {
+ 117              		.loc 1 184 18 is_stmt 0 view .LVU40
+ 118 003a 1978     		ldrb	r1, [r3]
+ 184:common/prog/ped_fw/timer/timerlib.c ****             {
+ 119              		.loc 1 184 16 view .LVU41
+ 120 003c 0029     		cmp	r1, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 7
+
+
+ 121 003e ECD0     		beq	.L6
+ 186:common/prog/ped_fw/timer/timerlib.c ****             }
+ 122              		.loc 1 186 17 is_stmt 1 view .LVU42
+ 186:common/prog/ped_fw/timer/timerlib.c ****             }
+ 123              		.loc 1 186 18 is_stmt 0 view .LVU43
+ 124 0040 1978     		ldrb	r1, [r3]
+ 186:common/prog/ped_fw/timer/timerlib.c ****             }
+ 125              		.loc 1 186 31 view .LVU44
+ 126 0042 0139     		subs	r1, r1, #1
+ 127 0044 C9B2     		uxtb	r1, r1
+ 128 0046 1970     		strb	r1, [r3]
+ 129 0048 E7E7     		b	.L6
+ 130              	.LVL7:
+ 131              	.L2:
+ 186:common/prog/ped_fw/timer/timerlib.c ****             }
+ 132              		.loc 1 186 31 view .LVU45
+ 133              	.LBE7:
+ 134              	.LBE6:
+ 102:common/prog/ped_fw/timer/timerlib.c ****         {
+ 135              		.loc 1 102 9 is_stmt 1 view .LVU46
+ 102:common/prog/ped_fw/timer/timerlib.c ****         {
+ 136              		.loc 1 102 13 is_stmt 0 view .LVU47
+ 137 004a FFF7FEFF 		bl	_TIM_bGetInitConfig
+ 138              	.LVL8:
+ 139 004e 041E     		subs	r4, r0, #0
+ 102:common/prog/ped_fw/timer/timerlib.c ****         {
+ 140              		.loc 1 102 12 view .LVU48
+ 141 0050 07D0     		beq	.L4
+ 142              	.LBB8:
+ 143              	.LBB9:
+ 199:common/prog/ped_fw/timer/timerlib.c ****             }
+ 200:common/prog/ped_fw/timer/timerlib.c ****             else
+ 201:common/prog/ped_fw/timer/timerlib.c ****             {
+ 202:common/prog/ped_fw/timer/timerlib.c ****                 // done, current prescaler not down
+ 203:common/prog/ped_fw/timer/timerlib.c ****                 break;
+ 204:common/prog/ped_fw/timer/timerlib.c ****             }
+ 205:common/prog/ped_fw/timer/timerlib.c ****         }
+ 206:common/prog/ped_fw/timer/timerlib.c ****         else
+ 207:common/prog/ped_fw/timer/timerlib.c ****         {
+ 208:common/prog/ped_fw/timer/timerlib.c ****             //end mark reached --> last timer segment done
+ 209:common/prog/ped_fw/timer/timerlib.c ****             break;
+ 210:common/prog/ped_fw/timer/timerlib.c ****         }
+ 211:common/prog/ped_fw/timer/timerlib.c ****     }
+ 212:common/prog/ped_fw/timer/timerlib.c **** }
+ 213:common/prog/ped_fw/timer/timerlib.c **** 
+ 214:common/prog/ped_fw/timer/timerlib.c **** 
+ 215:common/prog/ped_fw/timer/timerlib.c **** /* Handles both 8 and 16-Bit timers */
+ 216:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vHandleTimer16(void)
+ 217:common/prog/ped_fw/timer/timerlib.c **** {
+ 218:common/prog/ped_fw/timer/timerlib.c ****     Ttimer8            *pucTimerPtr;  ///< timer pointer
+ 219:common/prog/ped_fw/timer/timerlib.c ****     TtimerConfig const *ptTimerConfig;///< pointer to entry in config table
+ 220:common/prog/ped_fw/timer/timerlib.c ****     uint8_t               ucPrescaler;  ///< current prescaler value
+ 221:common/prog/ped_fw/timer/timerlib.c ****     uint8_t               ucTimerType = TIM_8BIT; ///< internal state variable
+ 222:common/prog/ped_fw/timer/timerlib.c **** 
+ 223:common/prog/ped_fw/timer/timerlib.c ****     ptTimerConfig = TIM_ptTimer8Config;//init config pointer
+ 224:common/prog/ped_fw/timer/timerlib.c **** 
+ 225:common/prog/ped_fw/timer/timerlib.c ****     while (ucTimerType <= TIM_16BIT)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 8
+
+
+ 226:common/prog/ped_fw/timer/timerlib.c ****     {
+ 227:common/prog/ped_fw/timer/timerlib.c ****         if (ucTimerType == TIM_16BIT)
+ 228:common/prog/ped_fw/timer/timerlib.c ****         {
+ 229:common/prog/ped_fw/timer/timerlib.c ****             ptTimerConfig = TIM_ptTimer16Config;//init config pointer
+ 230:common/prog/ped_fw/timer/timerlib.c ****         }
+ 231:common/prog/ped_fw/timer/timerlib.c **** 
+ 232:common/prog/ped_fw/timer/timerlib.c ****         pucTimerPtr = ptTimerConfig->pucPrescalerPtr; // point to first prescaler (TIM_uc8Start1/TI
+ 233:common/prog/ped_fw/timer/timerlib.c **** 
+ 234:common/prog/ped_fw/timer/timerlib.c ****         for (;;)
+ 235:common/prog/ped_fw/timer/timerlib.c ****         {
+ 236:common/prog/ped_fw/timer/timerlib.c ****             ptTimerConfig++;
+ 237:common/prog/ped_fw/timer/timerlib.c ****             pucTimerPtr++;
+ 238:common/prog/ped_fw/timer/timerlib.c **** #if ALIGNMENT > 1
+ 239:common/prog/ped_fw/timer/timerlib.c ****             if ((ucTimerType != TIM_8BIT) && (pucTimerPtr < (ptTimerConfig->pucPrescalerPtr)))
+ 240:common/prog/ped_fw/timer/timerlib.c ****             {
+ 241:common/prog/ped_fw/timer/timerlib.c ****                 //following cast is ok, just lowest 2 bits important
+ 242:common/prog/ped_fw/timer/timerlib.c ****                 //code works for all width of addresses
+ 243:common/prog/ped_fw/timer/timerlib.c ****   #if (ALIGNMENT == 4)
+ 244:common/prog/ped_fw/timer/timerlib.c ****                 while ( (((uint32_t)((uint32_t)pucTimerPtr)) & 3u) != 0u )
+ 245:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 246:common/prog/ped_fw/timer/timerlib.c ****                     pucTimerPtr++;
+ 247:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 248:common/prog/ped_fw/timer/timerlib.c ****   #else
+ 249:common/prog/ped_fw/timer/timerlib.c ****                 //Alignment is 2
+ 250:common/prog/ped_fw/timer/timerlib.c ****                 //cast is ok, just LSB important
+ 251:common/prog/ped_fw/timer/timerlib.c ****                 if ( (((uint8_t)((uint32_t)pucTimerPtr) & 1u)) != 0u )
+ 252:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 253:common/prog/ped_fw/timer/timerlib.c ****                     pucTimerPtr++;
+ 254:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 255:common/prog/ped_fw/timer/timerlib.c ****   #endif
+ 256:common/prog/ped_fw/timer/timerlib.c ****             }
+ 257:common/prog/ped_fw/timer/timerlib.c **** #endif
+ 258:common/prog/ped_fw/timer/timerlib.c ****             while (pucTimerPtr < (ptTimerConfig->pucPrescalerPtr))//do for all timers in segment
+ 259:common/prog/ped_fw/timer/timerlib.c ****             {
+ 260:common/prog/ped_fw/timer/timerlib.c ****                 if (ucTimerType == TIM_16BIT)
+ 261:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 262:common/prog/ped_fw/timer/timerlib.c ****                     if (*((Ttimer16*)(volatile void*)pucTimerPtr) != 0u)   // if not 16-Bit timer d
+ 263:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 264:common/prog/ped_fw/timer/timerlib.c ****                         (*((Ttimer16*)(volatile void*)pucTimerPtr))--;   //decrement timer
+ 265:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 266:common/prog/ped_fw/timer/timerlib.c ****                     pucTimerPtr+=sizeof(uint16_t);//lint !e9016 "pointer arithmetic [MISRA 2012 Rul
+ 267:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 268:common/prog/ped_fw/timer/timerlib.c ****                 else
+ 269:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 270:common/prog/ped_fw/timer/timerlib.c ****                     if (*pucTimerPtr != 0u)   //if not 8-Bit timer down
+ 271:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 272:common/prog/ped_fw/timer/timerlib.c ****                         (*pucTimerPtr)--;   //decrement timer
+ 273:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 274:common/prog/ped_fw/timer/timerlib.c ****                     pucTimerPtr++;
+ 275:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 276:common/prog/ped_fw/timer/timerlib.c ****             }
+ 277:common/prog/ped_fw/timer/timerlib.c ****             ucPrescaler = ptTimerConfig->ucPrescaler;
+ 278:common/prog/ped_fw/timer/timerlib.c **** 
+ 279:common/prog/ped_fw/timer/timerlib.c ****             if ( ucPrescaler != TIM_END_MARK )//terminate loop if prescaler is zero -->end mark
+ 280:common/prog/ped_fw/timer/timerlib.c ****             {
+ 281:common/prog/ped_fw/timer/timerlib.c ****                 (*pucTimerPtr)++;     //decrement prescaler
+ 282:common/prog/ped_fw/timer/timerlib.c ****                 if (*pucTimerPtr == ucPrescaler)//prescaler down?
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 9
+
+
+ 283:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 284:common/prog/ped_fw/timer/timerlib.c ****                     //load prescaler
+ 285:common/prog/ped_fw/timer/timerlib.c ****                     *pucTimerPtr = 0;
+ 286:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 287:common/prog/ped_fw/timer/timerlib.c ****                 else
+ 288:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 289:common/prog/ped_fw/timer/timerlib.c ****                     ucTimerType++;
+ 290:common/prog/ped_fw/timer/timerlib.c ****                     break;
+ 291:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 292:common/prog/ped_fw/timer/timerlib.c ****             }
+ 293:common/prog/ped_fw/timer/timerlib.c ****             else
+ 294:common/prog/ped_fw/timer/timerlib.c ****             {
+ 295:common/prog/ped_fw/timer/timerlib.c ****                 ucTimerType++;
+ 296:common/prog/ped_fw/timer/timerlib.c ****                 break;
+ 297:common/prog/ped_fw/timer/timerlib.c ****             }
+ 298:common/prog/ped_fw/timer/timerlib.c ****         }
+ 299:common/prog/ped_fw/timer/timerlib.c ****     }
+ 300:common/prog/ped_fw/timer/timerlib.c **** }
+ 301:common/prog/ped_fw/timer/timerlib.c **** 
+ 302:common/prog/ped_fw/timer/timerlib.c **** 
+ 303:common/prog/ped_fw/timer/timerlib.c **** // Initializes 8 and 16-Bit timers
+ 304:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vInitTimer16(void)
+ 305:common/prog/ped_fw/timer/timerlib.c **** {
+ 306:common/prog/ped_fw/timer/timerlib.c ****     Ttimer8 *pucPtr = &TIM_uc16End;
+ 307:common/prog/ped_fw/timer/timerlib.c **** 
+ 308:common/prog/ped_fw/timer/timerlib.c ****     while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all (8 and 16-Bit) timers
+ 309:common/prog/ped_fw/timer/timerlib.c ****     {
+ 310:common/prog/ped_fw/timer/timerlib.c ****         *pucPtr = 0;
+ 311:common/prog/ped_fw/timer/timerlib.c ****         pucPtr--;
+ 312:common/prog/ped_fw/timer/timerlib.c ****     }
+ 313:common/prog/ped_fw/timer/timerlib.c **** }
+ 314:common/prog/ped_fw/timer/timerlib.c **** 
+ 315:common/prog/ped_fw/timer/timerlib.c **** // Initializes 8-Bit timers
+ 316:common/prog/ped_fw/timer/timerlib.c **** static void TIM_vInitTimer(void)
+ 317:common/prog/ped_fw/timer/timerlib.c **** {
+ 318:common/prog/ped_fw/timer/timerlib.c ****     Ttimer8 *pucPtr = &TIM_uc8End;
+ 319:common/prog/ped_fw/timer/timerlib.c **** 
+ 320:common/prog/ped_fw/timer/timerlib.c ****     while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all 8-Bit timers
+ 321:common/prog/ped_fw/timer/timerlib.c ****     {
+ 322:common/prog/ped_fw/timer/timerlib.c ****         *pucPtr = 0;
+ 144              		.loc 1 322 17 view .LVU49
+ 145 0052 0021     		movs	r1, #0
+ 320:common/prog/ped_fw/timer/timerlib.c ****     {
+ 146              		.loc 1 320 43 view .LVU50
+ 147 0054 064B     		ldr	r3, .L21+4
+ 148 0056 1A68     		ldr	r2, [r3]
+ 318:common/prog/ped_fw/timer/timerlib.c **** 
+ 149              		.loc 1 318 14 view .LVU51
+ 150 0058 064B     		ldr	r3, .L21+8
+ 151              	.L10:
+ 152              	.LVL9:
+ 320:common/prog/ped_fw/timer/timerlib.c ****     {
+ 153              		.loc 1 320 19 is_stmt 1 view .LVU52
+ 154 005a 9342     		cmp	r3, r2
+ 155 005c 03D2     		bcs	.L11
+ 156              	.LVL10:
+ 320:common/prog/ped_fw/timer/timerlib.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 10
+
+
+ 157              		.loc 1 320 19 is_stmt 0 view .LVU53
+ 158              	.LBE9:
+ 159              	.LBE8:
+ 113:common/prog/ped_fw/timer/timerlib.c ****         }
+ 160              		.loc 1 113 13 is_stmt 1 view .LVU54
+ 113:common/prog/ped_fw/timer/timerlib.c ****         }
+ 161              		.loc 1 113 28 is_stmt 0 view .LVU55
+ 162 005e 0124     		movs	r4, #1
+ 163 0060 2C70     		strb	r4, [r5]
+ 164              	.L4:
+ 121:common/prog/ped_fw/timer/timerlib.c **** 
+ 165              		.loc 1 121 1 view .LVU56
+ 166 0062 2000     		movs	r0, r4
+ 167              		@ sp needed
+ 168 0064 70BD     		pop	{r4, r5, r6, pc}
+ 169              	.LVL11:
+ 170              	.L11:
+ 171              	.LBB11:
+ 172              	.LBB10:
+ 173              		.loc 1 322 9 is_stmt 1 view .LVU57
+ 174              		.loc 1 322 17 is_stmt 0 view .LVU58
+ 175 0066 1970     		strb	r1, [r3]
+ 323:common/prog/ped_fw/timer/timerlib.c ****         pucPtr--;
+ 176              		.loc 1 323 9 is_stmt 1 view .LVU59
+ 177              		.loc 1 323 15 is_stmt 0 view .LVU60
+ 178 0068 013B     		subs	r3, r3, #1
+ 179              	.LVL12:
+ 180              		.loc 1 323 15 view .LVU61
+ 181 006a F6E7     		b	.L10
+ 182              	.L22:
+ 183              		.align	2
+ 184              	.L21:
+ 185 006c 00000000 		.word	.LANCHOR0
+ 186 0070 00000000 		.word	TIM_ptTimer8Config
+ 187 0074 00000000 		.word	TIM_uc8End
+ 188              	.LBE10:
+ 189              	.LBE11:
+ 190              		.cfi_endproc
+ 191              	.LFE2:
+ 193              		.section	.text.TIM_bHandleTask16,"ax",%progbits
+ 194              		.align	1
+ 195              		.global	TIM_bHandleTask16
+ 196              		.syntax unified
+ 197              		.code	16
+ 198              		.thumb_func
+ 200              	TIM_bHandleTask16:
+ 201              	.LFB3:
+ 125:common/prog/ped_fw/timer/timerlib.c ****     if (TIM_tTaskState == TIM_WORK)
+ 202              		.loc 1 125 1 is_stmt 1 view -0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126:common/prog/ped_fw/timer/timerlib.c ****     {
+ 206              		.loc 1 126 5 view .LVU63
+ 125:common/prog/ped_fw/timer/timerlib.c ****     if (TIM_tTaskState == TIM_WORK)
+ 207              		.loc 1 125 1 is_stmt 0 view .LVU64
+ 208 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 11
+
+
+ 209              	.LCFI1:
+ 210              		.cfi_def_cfa_offset 24
+ 211              		.cfi_offset 3, -24
+ 212              		.cfi_offset 4, -20
+ 213              		.cfi_offset 5, -16
+ 214              		.cfi_offset 6, -12
+ 215              		.cfi_offset 7, -8
+ 216              		.cfi_offset 14, -4
+ 126:common/prog/ped_fw/timer/timerlib.c ****     {
+ 217              		.loc 1 126 24 view .LVU65
+ 218 0002 294D     		ldr	r5, .L59
+ 219 0004 2C78     		ldrb	r4, [r5]
+ 126:common/prog/ped_fw/timer/timerlib.c ****     {
+ 220              		.loc 1 126 8 view .LVU66
+ 221 0006 012C     		cmp	r4, #1
+ 222 0008 3DD1     		bne	.L24
+ 128:common/prog/ped_fw/timer/timerlib.c ****         {
+ 223              		.loc 1 128 9 is_stmt 1 view .LVU67
+ 128:common/prog/ped_fw/timer/timerlib.c ****         {
+ 224              		.loc 1 128 13 is_stmt 0 view .LVU68
+ 225 000a FFF7FEFF 		bl	_TIM_bIsBaseTimerDown
+ 226              	.LVL13:
+ 128:common/prog/ped_fw/timer/timerlib.c ****         {
+ 227              		.loc 1 128 12 view .LVU69
+ 228 000e 0028     		cmp	r0, #0
+ 229 0010 37D0     		beq	.L26
+ 230 0012 0021     		movs	r1, #0
+ 231              	.LBB16:
+ 232              	.LBB17:
+ 244:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 233              		.loc 1 244 62 view .LVU70
+ 234 0014 0326     		movs	r6, #3
+ 285:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 235              		.loc 1 285 34 view .LVU71
+ 236 0016 0F00     		movs	r7, r1
+ 237              	.LVL14:
+ 227:common/prog/ped_fw/timer/timerlib.c ****         {
+ 238              		.loc 1 227 9 is_stmt 1 view .LVU72
+ 223:common/prog/ped_fw/timer/timerlib.c **** 
+ 239              		.loc 1 223 19 is_stmt 0 view .LVU73
+ 240 0018 244A     		ldr	r2, .L59+4
+ 241              	.LVL15:
+ 242              	.L27:
+ 232:common/prog/ped_fw/timer/timerlib.c **** 
+ 243              		.loc 1 232 9 is_stmt 1 view .LVU74
+ 232:common/prog/ped_fw/timer/timerlib.c **** 
+ 244              		.loc 1 232 21 is_stmt 0 view .LVU75
+ 245 001a 1368     		ldr	r3, [r2]
+ 246              	.LVL16:
+ 247              	.L40:
+ 234:common/prog/ped_fw/timer/timerlib.c ****         {
+ 248              		.loc 1 234 9 is_stmt 1 view .LVU76
+ 236:common/prog/ped_fw/timer/timerlib.c ****             pucTimerPtr++;
+ 249              		.loc 1 236 13 view .LVU77
+ 236:common/prog/ped_fw/timer/timerlib.c ****             pucTimerPtr++;
+ 250              		.loc 1 236 26 is_stmt 0 view .LVU78
+ 251 001c 0832     		adds	r2, r2, #8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 12
+
+
+ 252              	.LVL17:
+ 237:common/prog/ped_fw/timer/timerlib.c **** #if ALIGNMENT > 1
+ 253              		.loc 1 237 13 is_stmt 1 view .LVU79
+ 237:common/prog/ped_fw/timer/timerlib.c **** #if ALIGNMENT > 1
+ 254              		.loc 1 237 24 is_stmt 0 view .LVU80
+ 255 001e 0133     		adds	r3, r3, #1
+ 256              	.LVL18:
+ 239:common/prog/ped_fw/timer/timerlib.c ****             {
+ 257              		.loc 1 239 13 is_stmt 1 view .LVU81
+ 239:common/prog/ped_fw/timer/timerlib.c ****             {
+ 258              		.loc 1 239 16 is_stmt 0 view .LVU82
+ 259 0020 0029     		cmp	r1, #0
+ 260 0022 04D0     		beq	.L29
+ 239:common/prog/ped_fw/timer/timerlib.c ****             {
+ 261              		.loc 1 239 43 view .LVU83
+ 262 0024 1068     		ldr	r0, [r2]
+ 263 0026 8342     		cmp	r3, r0
+ 264 0028 04D2     		bcs	.L31
+ 265              	.L30:
+ 244:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 266              		.loc 1 244 68 is_stmt 1 view .LVU84
+ 267 002a 3342     		tst	r3, r6
+ 268 002c 11D1     		bne	.L32
+ 269              	.L29:
+ 258:common/prog/ped_fw/timer/timerlib.c ****             {
+ 270              		.loc 1 258 32 view .LVU85
+ 271 002e 1068     		ldr	r0, [r2]
+ 272 0030 8342     		cmp	r3, r0
+ 273 0032 10D3     		bcc	.L38
+ 274              	.L31:
+ 277:common/prog/ped_fw/timer/timerlib.c **** 
+ 275              		.loc 1 277 13 view .LVU86
+ 277:common/prog/ped_fw/timer/timerlib.c **** 
+ 276              		.loc 1 277 25 is_stmt 0 view .LVU87
+ 277 0034 1579     		ldrb	r5, [r2, #4]
+ 278              	.LVL19:
+ 279:common/prog/ped_fw/timer/timerlib.c ****             {
+ 279              		.loc 1 279 13 is_stmt 1 view .LVU88
+ 279:common/prog/ped_fw/timer/timerlib.c ****             {
+ 280              		.loc 1 279 16 is_stmt 0 view .LVU89
+ 281 0036 002D     		cmp	r5, #0
+ 282 0038 21D0     		beq	.L39
+ 281:common/prog/ped_fw/timer/timerlib.c ****                 if (*pucTimerPtr == ucPrescaler)//prescaler down?
+ 283              		.loc 1 281 17 is_stmt 1 view .LVU90
+ 281:common/prog/ped_fw/timer/timerlib.c ****                 if (*pucTimerPtr == ucPrescaler)//prescaler down?
+ 284              		.loc 1 281 18 is_stmt 0 view .LVU91
+ 285 003a 1878     		ldrb	r0, [r3]
+ 281:common/prog/ped_fw/timer/timerlib.c ****                 if (*pucTimerPtr == ucPrescaler)//prescaler down?
+ 286              		.loc 1 281 31 view .LVU92
+ 287 003c 0130     		adds	r0, r0, #1
+ 288 003e C0B2     		uxtb	r0, r0
+ 289 0040 1870     		strb	r0, [r3]
+ 282:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 290              		.loc 1 282 17 is_stmt 1 view .LVU93
+ 282:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 291              		.loc 1 282 21 is_stmt 0 view .LVU94
+ 292 0042 1878     		ldrb	r0, [r3]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 13
+
+
+ 282:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 293              		.loc 1 282 20 view .LVU95
+ 294 0044 8542     		cmp	r5, r0
+ 295 0046 1AD1     		bne	.L39
+ 285:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 296              		.loc 1 285 21 is_stmt 1 view .LVU96
+ 285:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 297              		.loc 1 285 34 is_stmt 0 view .LVU97
+ 298 0048 1F70     		strb	r7, [r3]
+ 299 004a E7E7     		b	.L40
+ 300              	.L45:
+ 301 004c 0121     		movs	r1, #1
+ 302              	.LVL20:
+ 229:common/prog/ped_fw/timer/timerlib.c ****         }
+ 303              		.loc 1 229 27 view .LVU98
+ 304 004e 184A     		ldr	r2, .L59+8
+ 305 0050 E3E7     		b	.L27
+ 306              	.LVL21:
+ 307              	.L32:
+ 246:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 308              		.loc 1 246 21 is_stmt 1 view .LVU99
+ 246:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 309              		.loc 1 246 32 is_stmt 0 view .LVU100
+ 310 0052 0133     		adds	r3, r3, #1
+ 311              	.LVL22:
+ 246:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 312              		.loc 1 246 32 view .LVU101
+ 313 0054 E9E7     		b	.L30
+ 314              	.L38:
+ 260:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 315              		.loc 1 260 17 is_stmt 1 view .LVU102
+ 260:common/prog/ped_fw/timer/timerlib.c ****                 {
+ 316              		.loc 1 260 20 is_stmt 0 view .LVU103
+ 317 0056 0129     		cmp	r1, #1
+ 318 0058 08D1     		bne	.L34
+ 262:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 319              		.loc 1 262 21 is_stmt 1 view .LVU104
+ 262:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 320              		.loc 1 262 25 is_stmt 0 view .LVU105
+ 321 005a 1888     		ldrh	r0, [r3]
+ 262:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 322              		.loc 1 262 24 view .LVU106
+ 323 005c 0028     		cmp	r0, #0
+ 324 005e 03D0     		beq	.L35
+ 264:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 325              		.loc 1 264 25 is_stmt 1 view .LVU107
+ 264:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 326              		.loc 1 264 26 is_stmt 0 view .LVU108
+ 327 0060 1888     		ldrh	r0, [r3]
+ 264:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 328              		.loc 1 264 68 view .LVU109
+ 329 0062 0138     		subs	r0, r0, #1
+ 330 0064 80B2     		uxth	r0, r0
+ 331 0066 1880     		strh	r0, [r3]
+ 332              	.L35:
+ 266:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 333              		.loc 1 266 21 is_stmt 1 view .LVU110
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 14
+
+
+ 266:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 334              		.loc 1 266 32 is_stmt 0 view .LVU111
+ 335 0068 0233     		adds	r3, r3, #2
+ 336              	.LVL23:
+ 266:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 337              		.loc 1 266 32 view .LVU112
+ 338 006a E0E7     		b	.L29
+ 339              	.L34:
+ 270:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 340              		.loc 1 270 21 is_stmt 1 view .LVU113
+ 270:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 341              		.loc 1 270 25 is_stmt 0 view .LVU114
+ 342 006c 1878     		ldrb	r0, [r3]
+ 270:common/prog/ped_fw/timer/timerlib.c ****                     {
+ 343              		.loc 1 270 24 view .LVU115
+ 344 006e 0028     		cmp	r0, #0
+ 345 0070 03D0     		beq	.L37
+ 272:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 346              		.loc 1 272 25 is_stmt 1 view .LVU116
+ 272:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 347              		.loc 1 272 26 is_stmt 0 view .LVU117
+ 348 0072 1878     		ldrb	r0, [r3]
+ 272:common/prog/ped_fw/timer/timerlib.c ****                     }
+ 349              		.loc 1 272 39 view .LVU118
+ 350 0074 0138     		subs	r0, r0, #1
+ 351 0076 C0B2     		uxtb	r0, r0
+ 352 0078 1870     		strb	r0, [r3]
+ 353              	.L37:
+ 274:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 354              		.loc 1 274 21 is_stmt 1 view .LVU119
+ 274:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 355              		.loc 1 274 32 is_stmt 0 view .LVU120
+ 356 007a 0133     		adds	r3, r3, #1
+ 357              	.LVL24:
+ 274:common/prog/ped_fw/timer/timerlib.c ****                 }
+ 358              		.loc 1 274 32 view .LVU121
+ 359 007c D7E7     		b	.L29
+ 360              	.LVL25:
+ 361              	.L39:
+ 225:common/prog/ped_fw/timer/timerlib.c ****     {
+ 362              		.loc 1 225 24 is_stmt 1 view .LVU122
+ 363 007e 0129     		cmp	r1, #1
+ 364 0080 E4D1     		bne	.L45
+ 365              	.LVL26:
+ 366              	.L26:
+ 225:common/prog/ped_fw/timer/timerlib.c ****     {
+ 367              		.loc 1 225 24 is_stmt 0 view .LVU123
+ 368              	.LBE17:
+ 369              	.LBE16:
+ 157:common/prog/ped_fw/timer/timerlib.c **** 
+ 370              		.loc 1 157 1 view .LVU124
+ 371              		@ sp needed
+ 372 0082 2000     		movs	r0, r4
+ 373 0084 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 374              	.L24:
+ 138:common/prog/ped_fw/timer/timerlib.c ****         {
+ 375              		.loc 1 138 9 is_stmt 1 view .LVU125
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 15
+
+
+ 138:common/prog/ped_fw/timer/timerlib.c ****         {
+ 376              		.loc 1 138 13 is_stmt 0 view .LVU126
+ 377 0086 FFF7FEFF 		bl	_TIM_bGetInitConfig
+ 378              	.LVL27:
+ 379 008a 041E     		subs	r4, r0, #0
+ 138:common/prog/ped_fw/timer/timerlib.c ****         {
+ 380              		.loc 1 138 12 view .LVU127
+ 381 008c F9D0     		beq	.L26
+ 382              	.LBB18:
+ 383              	.LBB19:
+ 310:common/prog/ped_fw/timer/timerlib.c ****         pucPtr--;
+ 384              		.loc 1 310 17 view .LVU128
+ 385 008e 0021     		movs	r1, #0
+ 308:common/prog/ped_fw/timer/timerlib.c ****     {
+ 386              		.loc 1 308 43 view .LVU129
+ 387 0090 064B     		ldr	r3, .L59+4
+ 388 0092 1A68     		ldr	r2, [r3]
+ 306:common/prog/ped_fw/timer/timerlib.c **** 
+ 389              		.loc 1 306 14 view .LVU130
+ 390 0094 074B     		ldr	r3, .L59+12
+ 391              	.L42:
+ 392              	.LVL28:
+ 308:common/prog/ped_fw/timer/timerlib.c ****     {
+ 393              		.loc 1 308 19 is_stmt 1 view .LVU131
+ 394 0096 9342     		cmp	r3, r2
+ 395 0098 02D2     		bcs	.L43
+ 396              	.LVL29:
+ 308:common/prog/ped_fw/timer/timerlib.c ****     {
+ 397              		.loc 1 308 19 is_stmt 0 view .LVU132
+ 398              	.LBE19:
+ 399              	.LBE18:
+ 149:common/prog/ped_fw/timer/timerlib.c ****         }
+ 400              		.loc 1 149 13 is_stmt 1 view .LVU133
+ 149:common/prog/ped_fw/timer/timerlib.c ****         }
+ 401              		.loc 1 149 28 is_stmt 0 view .LVU134
+ 402 009a 0124     		movs	r4, #1
+ 403 009c 2C70     		strb	r4, [r5]
+ 404 009e F0E7     		b	.L26
+ 405              	.LVL30:
+ 406              	.L43:
+ 407              	.LBB21:
+ 408              	.LBB20:
+ 310:common/prog/ped_fw/timer/timerlib.c ****         pucPtr--;
+ 409              		.loc 1 310 9 is_stmt 1 view .LVU135
+ 310:common/prog/ped_fw/timer/timerlib.c ****         pucPtr--;
+ 410              		.loc 1 310 17 is_stmt 0 view .LVU136
+ 411 00a0 1970     		strb	r1, [r3]
+ 311:common/prog/ped_fw/timer/timerlib.c ****     }
+ 412              		.loc 1 311 9 is_stmt 1 view .LVU137
+ 311:common/prog/ped_fw/timer/timerlib.c ****     }
+ 413              		.loc 1 311 15 is_stmt 0 view .LVU138
+ 414 00a2 013B     		subs	r3, r3, #1
+ 415              	.LVL31:
+ 311:common/prog/ped_fw/timer/timerlib.c ****     }
+ 416              		.loc 1 311 15 view .LVU139
+ 417 00a4 F7E7     		b	.L42
+ 418              	.L60:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccMpJ97R.s 			page 16
+
+
+ 419 00a6 C046     		.align	2
+ 420              	.L59:
+ 421 00a8 00000000 		.word	.LANCHOR0
+ 422 00ac 00000000 		.word	TIM_ptTimer8Config
+ 423 00b0 00000000 		.word	TIM_ptTimer16Config
+ 424 00b4 00000000 		.word	TIM_uc16End
+ 425              	.LBE20:
+ 426              	.LBE21:
+ 427              		.cfi_endproc
+ 428              	.LFE3:
+ 430              		.section	.bss.TIM_tTaskState,"aw",%nobits
+ 431              		.set	.LANCHOR0,. + 0
+ 434              	TIM_tTaskState:
+ 435 0000 00       		.space	1
+ 436              		.text
+ 437              	.Letext0:
+ 438              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 439              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 440              		.file 4 "common/prog/ped_fw/LibTypes.h"
+ 441              		.file 5 "common/prog/ped_fw/timer/timerlib.h"

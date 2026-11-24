@@ -1,0 +1,323 @@
+ 		----------------------------
+		 Release Notes for patchbin 
+		----------------------------
+		
+Common requirements:
+--------------------
+   * Operating System Windows XP
+   * .NET Framework 2.0
+   * Automated testing tool with defined test cases (just for system testing)
+   
+v1.60 - 24.03.2020
+------------------
+   * Fixed address range lookup in list of used and unused memory ranges when start address equals zero.
+
+v1.59 - 23.02.2018
+------------------
+   * Fixed importing a Start Linear Address record (05) for Intel Hex Record format.
+   * Added exporting a Start Linear Address record (05) for Intel Hex Record format (option SLA for -oh).
+
+v1.58 - 15.02.2018
+------------------
+   * Added new keywords for date format types (LDATE, DMY, LDMY, YMD, LYMD, MDY, LMDY).
+   
+v1.57 - 06.10.2016
+------------------
+   * Added calculation of the 8-bit CRC consistent with the Volatile EEPROM library. E.g.: -crc8(0x0:B2)():VEEPROM. 
+   
+v1.56 - 09.06.2016
+------------------
+   * Added the file name into an error message of the importing.
+   
+v1.55 - 30.03.2016
+------------------
+   * Fixed the updating of the internal unused memory metadata for the combinations of the following address ranges:
+     1. start address is inside, end address is outside
+     2. start address is outside, end address in inside
+     Example: -i() -I() -f()
+   
+v1.54 - 25.02.2016
+------------------
+   * Fixed the line feed in a generated comment of an EEP Data file. If the input comment (e.g from a S0 record) ends by a line break the incorrect sequence (LFCRLF) was generated.
+   
+v1.53 - 03.11.2015
+------------------
+   * Fixed the symbol dumping (option -DS()). If a symbol contained the members the member processing loops endlessly if no symbol was found at the next address.
+   
+v1.52 - 07.09.2015
+------------------
+   * Fixed the importing when an address range and the moving to an absolute address are specified.   
+   
+v1.51 - 20.07.2015
+------------------
+   * Fixed the generating exit code 1 if no input was specified, options {-i|I} or {-f|F}. No exit code was generated.
+   * Added the possibility to generate error (exit code 2) if the memory dump to stdout is empty, option -D. Example: -DEE(0x100)
+   
+v1.50 - 13.04.2015
+------------------
+   * Fixed the processing the UL TEng type size (4 Bytes). It was IntegerSize * 2.   
+   
+v1.49 - 24.11.2014
+------------------
+   * Added the new command line option -CRC to calculate 1..64-bit CRC compliant with the Rocksoft^tm Model CRC Algorithm (a parameterized model for CRC algorithms).
+   * Fixed the start value of right-shift 32-bit CRC (option -crc32) only. Before the right-shift 32-bit CRC calculation was performed by the logical negation 
+     (bitwise complement) of the start value (the negation of start value was not done for left-shift 32-bit CRC). 
+     Now the default start value for right-shift CRC-32 (option -crc32) is 0xFFFFFFFF according to the standard (it was 0x00 in the previous versions of PatchBin). 
+     The default start value remains 0x00 for left-shift 32-bit CRC (option -crc32()():L) for backward compatibility.   
+   
+v1.48 - 04.08.2014
+------------------
+   * Added the possibility to specify the address which is unknown and will be considered the first defined (not empty) or/and the last defined address (unsolved addresses) 
+     for -crc8, -crc16, -crc32, -fnv32 and -fnv64. Up to now, it was allowed only for -f and -F. E.g. (?0x00,?0x0F)
+   * Added the possibility to specify variable for unsolved start/end addresses for -crc8, -crc16, -crc32, -fnv32, -fnv64, -f and -F. E.g.: (?0x00:v=s1;?0xFF:v=e1)
+   
+v1.47 - 31.07.2014
+------------------
+   * Added the possibility to specify target as variable for calculating crc8, crc16 and crc32.   
+ 
+v1.46 - 30.05.2013
+------------------
+   * Added the calculating 32-, 64-bit FNV-1 hash and 32-, 64-bit FNV-1a hash.
+   
+v1.45 - 16.05.2013
+------------------
+   * Added the processing escape sequence for ASCII fill pattern.
+   * Added the processing UNC path.
+   * Added test cases 801, 802.
+   
+v1.44 - 14.02.2013:
+-------------------
+   * Added the new variant of crc16 calculation. Fast-CRC over data organized in 32-bit words. Checksums 32 bits in every iteration.
+   * Added the new command line option -ELF.
+   * Fixed the dumping symbols operation.
+
+v1.43 - 19.11.2012:
+-------------------
+   * Changed the behaviour of patching operation '-F'. If fill pattern doesn't fit into address range, error is thrown instead of warning, 
+   * Added the new fill pattern type 'List'. Byte wise access processing, e.g. 0xa,0x0b,0x0c. Endianness is not considered.
+   * Changed the inner representation of virtual memory. Used virtual segment is array of bytes not list of virtual memory cells.
+   
+v1.42:
+------
+   * Added the reversing bit order to calculate crc. Effected options -crc/-crc16/-crc8. E.g. –crc(0x0:B20):RBits
+   
+V1.41:
+------
+   * Fixed the excluding specified address ranges from the input, if the address ranges are not linear increasing. Option '!'. E.g. -im!(0x10,0x1F;0x01,0x0F)
+   
+V1.40:
+------   
+   * Fixed problem an empty line occurs in Motorola S-Record formatted file.// - Check to minimal length 10 characters of an Motorola S-Record.
+   * Added the checking structure of Motorola S-Record.
+   * Added the checking structure of Intel Hex Record.
+   * Changed the recognition input data format. Binary format must be specified.   
+   
+V1.39:
+------
+   * Added the new option 'bitSet' and 'bitClr' to set or clear bits. E.g. -F(0x0100):0x01:bitSet
+   * Added test cases 776-790.
+	
+V1.38:
+------
+   * Added the new option '!' to exclude specified address ranges from the input. E.g. -i!(0x100,0x1FF;0xFFF0:B4)file.mot
+   * Added the possibility to read one digit data in EEPROM data formatted file.
+   * Added test cases 771-775.
+   
+V1.37:
+------
+   * Added the filling by random value. The new fill pattern ‘0x??’.
+   * Fixed the line counting in DeserializeEEPROMDataNode class.
+
+V1.36:
+------
+   * Added the possiblity to specify absolute offset for options -i, -I, -o. E.g. -i()(abs=0x100)file.mot
+   * Fixed the exporting memory to EEPROM data formatted file if option -a (add ASCII comment to each line) is specified.
+     ASCII comment may be added only for data type record not comment type record.
+   * Added errorlevel 3 for fatal error. Application domain unhandled exception.
+   * Removed OnProgress operation description from DataExporting.VisitSearchFoldersDecorator.
+
+V1.35:
+------
+   * Added the possibility to generate the comment to each line as real data converted to ASCII if printable else '.' for option –oe (EEPROM output). E.g. –oea()file.eep
+   * Added the possibility to deactivate the alignment of starting address of line to data length for option -o[e|m|h] and -D. E.g. -oe!DL3()file.eep or -D!DL3()
+   * Added the setting near/far pointer size from symbolic file (if it is specified) but only if option -p is not specified (option -p has higher priority).
+   * Fixed the error message if specified near/far pointer size is less like pattern value length.   
+	
+V1.34:
+------
+   * Fixed the calculating symbolic address +/- offset. The end address was calculated with sign '+' also for '-'.
+   * Added OnProgress operation description to DataExporting.VisitSearchFoldersDecorator.
+   * Fixed DumpSymbols operation. The start address had to be specified the same like start symbol for fragment of symbols.
+	
+V1.33:
+------	
+    * Changed the processing comment in EEPROM Data file during import. Comment only before data is stored.
+	
+V1.32:
+------
+    * Added 32-bit left-shift crc calculation. Option -crc32 was enhanced by R (default) or L option.
+    * Added errorlevel 1 for command line option parsing error.
+    * Added errorlevel 2 for processing error.
+    * Fixed the parsing symbolic address and offset if only start value is specified. E.g. -DH(LABEL_2+1).
+    * Fixed the processing mixed address range specified with address and symbolic address. E.g. -i(0x0,LABEL_2)file.eep.
+	
+V1.31:
+------
+   * Changed the data exporting operation. Each line starts with the address which is divided by <DL> (bytes per line).
+   * Added the warning message when crc is calculated before merging, filling, moving or copying.
+   * Fixed the parsing an operating system file path to validate the blank spaces.
+   * Fixed the parsing an end symbolic address (e.g. -i(MEM_VARIANT_CODING_START,MEM_VARIANT_CODING_END)file.mot).
+   * Fixed the entering an offset as symbolic address.
+	
+V1.30:
+------
+   * Fixed the parsing eep file with the end empty lines (EEPROMDataService.dll).
+	
+V1.29:
+------
+   * Changed the type of the address to UInt32 and the size to UInt64 in IVMemoryElement interface. The processing whole 4-byte address range.
+   * Added the calculation an 32-bit crc. Command line option -crc32.
+   * Added copying data from one memory area to another. Command line option options –c and –C. Option –c copy to undefined content, option –C copy to defined content.
+   * Added the possibility to specify end address by symbolic address.
+   * Added positive/negative shifting for symbolic addresses.
+   * Added symbol dumping.
+   * Added the moving and copying whole content a virtual memory without specifying an address range, -m()(destination).
+   * Added multiline comment for EEPROM data file.
+   * Changed the generation binary file up to last used memory address. Not whole memory address range.
+   * Added the possibility to generate EEPROM data file without comment by using null character '\0'.
+
+V1.28:
+------
+   * Fixed the calculating an 16-bit crc with a specified start value. User defined start value was ignored (value 0x00 was always used).
+	
+V1.27:
+------
+   * Fixed the logging command line options to log file.
+	
+V1.26:
+------
+   * Changed command line option –o. The start address for Motorola S-Record format is optional. E.g. –omS28()file.mot is allowed. If no start address is available in the input data, 0x0000 is taken by default, other the address from the input data.
+   * Added the generating warning if an extended address record following other extended address record for Intel Hex Records format.
+   * Fixed the parsing symbol file. Problem was if bitmask in bit field value was higher 0x7FFFFFFF. All bit fields are ignored. Other symbols with address higher 0x7FFFFFFF are ignored but warning is generated.
+   * Added test cases 343, 684 – 687.
+			
+V1.25:
+------
+   * Fixed the filling by using ASCII pattern (text) for little-endian byte storage format. Added test cases 682-683.
+	
+V1.24:
+------
+   * Fixed the importing an EEPROM data file with 4-byte addresses. Added test cases 676-681.
+
+V1.23:
+------
+   * Added the possibility to select the type of Intel Hex Extended Address record (Extended Segment Address (XSA) or Extended Linear Address (XLA)).
+
+V1.22:
+------
+   * Fixed the importing an Intel Hex file with the Extended Segment Address record.
+
+V1.21:
+------
+   * Added the new possibility how specify address range by using mark ‘?’, which means the address is unknown and will be considered the last defined (not empty) address. Using only for the filling operation.
+   * Fixed exporting extended linear address records in the Intel Hex Records format.
+	
+V1.20:
+------
+   * Updated –iminfoS0 command line option. Information “… S0 record:” is not displayed if option –silent is present, only content of S0 record.
+
+V1.19:
+------
+   * Added command line option to repeat for character pattern.
+   * Added command line option to specify the data length in the record.
+   * Added command line option to specify symbolic and indirect address for start execution address in the end Motorola S-record.
+   * Added command line option -info.
+   * Added replacing escape characters in the content of comment command line option.
+   * Added test cases 633-660.
+	
+V1.18:
+------
+   * Fixed unhandled error if too long record is occurred in Motorola S-Records formatted input.
+   * Fixed handling S5 and S7, S8, S9 record in Motorola S-Records formatted input.
+   * Added command line options S0strict and S0multi.
+   * Added test case 341, 342, 624-632.
+			
+V1.17:
+------
+   * Added BCD command line option for filling operation.
+   * Updated calculation crc and crc8. Crc and crc8 are calculated over memory with gaps (undefined areas). The value of standard fill pattern is used. 
+   * Added test cases 187-189, 601-623
+   * Updated libraries: PatchBinCommandLineParser 1.7, VMemoryDoc 1.13
+	
+V1.16:
+------
+   * Updated -o option with parameters S19, S28 and S37. Now only S1, S2 and S3 records are generated regardless of input addresses.
+
+V1.15:
+------
+   * Added the filling step of pattern option for filling operation (e.g. :^B5). Added test cases 590-600.
+   * Fixed EEPROMDataService library for working with 3 and 4-byte addresses. Added test case 589.
+
+V1.14:
+------
+   * Fixed calculation crc for more discontinuous address ranges. Added test case 587-588.
+
+V1.13:
+------
+   * Added the new keyword $USER for fill pattern. Added test case 583-586.
+
+V1.12:
+------
+   * Fixed filling and patching operation if the symbolic addressing with symbolic offset is used. The new warning #0004. Added test case 577-582.
+
+V1.11:
+------
+   * Fixed processing 4-byte addresses. Added test case 574, 576.
+   * Export is executed by using used memory area only. Fixed creation used/unused memory areas. Added test case 575.
+   * The symbolic offset was implemented. Added test cases 177, 178, 569-573.
+   * The increased speed of writing data on the network drive. The calling Writer.Flush() method was removed.
+
+V1.10:
+------
+   * The increased speed of calculation crc, crc8. Added test case 568.
+
+V1.9:
+-----
+   * Address separator ‚:’ from EEPROM data format was removed.
+
+V1.8:
+-----
+   * Result of crc8 and crc is written to stdout, the possibility to omit target address in the command line options. Added test cases 563-567.
+
+V1.7:
+-----
+   * Fixed error if the file name contains „-“ character. Added test cases 301 and 562.
+
+V1.6:
+-----
+   * Fixed the overwrite importing operation for EEPROM, Intel Hex Records and Binary data format. Added test case 561.
+
+V1.5:
+-----
+   * Fixed the moving operation from/to 0x0 address. Added test case 560.
+
+V1.4:
+-----
+   * Fixed filling operation – check unused address range list if its count was changed.
+
+V1.3:
+-----
+   * Created automated testing tool, test cases, error messages and warning messages.
+
+V1.2:
+-----
+   * Added the new option –sf for set the search folder where input files will be searched.
+
+V1.1:
+-----
+   * Added option -o for Motorola S-Records (S19, S28, S37).
+   * Added option –crc, pattern was changed from 0x8408 to 0x1021.
+
+V1.0:
+-----
+   * Initial.

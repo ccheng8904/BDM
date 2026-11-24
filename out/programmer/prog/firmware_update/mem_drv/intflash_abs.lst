@@ -1,0 +1,47 @@
+
+out/programmer/prog/firmware_update/mem_drv/intflash_abs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.ABSIF_write:
+
+00000000 <ABSIF_write>:
+
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+uint32_t ABSIF_write(uint32_t addr, uint32_t size, const uint8_t* buffer)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+   6:	0016      	movs	r6, r2
+    uint32_t writtenSize;
+    HSUP_vDisableInt();
+   8:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+    writtenSize = DRVIF_write(addr, size, buffer);/* write to flash           */
+   c:	0020      	movs	r0, r4
+   e:	0032      	movs	r2, r6
+  10:	0029      	movs	r1, r5
+  12:	f7ff fffe 	bl	0 <DRVIF_write>
+  16:	0004      	movs	r4, r0
+    while(DRVIF_isBusy()){}                       /* wait for operation finish*/
+  18:	f7ff fffe 	bl	0 <DRVIF_isBusy>
+  1c:	2800      	cmp	r0, #0
+  1e:	d1fb      	bne.n	18 <ABSIF_write+0x18>
+    if(DRVIF_isError())
+  20:	f7ff fffe 	bl	0 <DRVIF_isError>
+    {   /* set written size to zero in case of error */
+        writtenSize = 0;
+  24:	4243      	negs	r3, r0
+  26:	4158      	adcs	r0, r3
+  28:	4240      	negs	r0, r0
+  2a:	4004      	ands	r4, r0
+    }
+    DRVIF_resetFlash();
+  2c:	f7ff fffe 	bl	0 <DRVIF_resetFlash>
+    HSUP_vEnableInt();
+  30:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+    return writtenSize;
+}
+  34:	0020      	movs	r0, r4
+  36:	bd70      	pop	{r4, r5, r6, pc}

@@ -1,0 +1,196 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cclJVAQY.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fs_registers_checks_arm_cmx.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.FSF_vRegistercheck,"ax",%progbits
+  18              		.align	1
+  19              		.global	FSF_vRegistercheck
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	FSF_vRegistercheck:
+  25              	.LFB69:
+  26              		.file 1 "common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c"
+   1:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+   5:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+   9:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  PROJECT          GED-Framework NG
+  11:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  PROCESSOR        ARM CortexMx
+  12:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  COMP_ABBREV      FSF
+  13:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  14:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  ******************************************************************************/
+  15:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  16:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  17:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  18:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* DOCUMENTATION                                                              */
+  19:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  20:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /** \file
+  21:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  22:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  \brief    Implementation of CortexMx specific register check functions.
+  23:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  24:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *  \details  This file contains the Cortex-Mx CPU test to be done
+  25:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *            at start-up and during run time.
+  26:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  */
+  27:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  28:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  29:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  30:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* INCLUDES                                                                   */
+  31:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  32:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** #include "bsh_stdinc.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cclJVAQY.s 			page 2
+
+
+  33:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** #include <stdint.h>
+  34:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** #include "FuncSafe/fSafeXS.h"
+  35:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  36:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* functions implemented in assembler */
+  37:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** extern void FSF_do_xPSRandR14LinkRegisterCheck(void);
+  38:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** extern void FSF_doGeneralPurposeR0_R12RegisterCheck(void);
+  39:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** extern void FSF_doStackPointerR13RegisterCheck(void);
+  40:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  41:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  42:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  43:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* PRIVATE DEFINITIONS                                                        */
+  44:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  45:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  46:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  47:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  48:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  49:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  50:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  51:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  52:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  53:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  54:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  55:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  56:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  57:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  58:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  59:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  60:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  61:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  62:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  63:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  64:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  65:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  66:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  67:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  68:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /******************************************************************************/
+  69:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /** \brief Implementation of StartUp Register check
+  70:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  71:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * This implementation is based on Self Test Library from STMicroelectronics
+  72:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * stm32f0xx_STLcpustartKEIL.s file V1.0.0 from February 2012
+  73:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  74:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * \param none
+  75:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * \return none
+  76:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  77:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  */
+  78:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** void FSF_vRegistercheck(void)
+  79:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** {
+  27              		.loc 1 79 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  80:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_do_xPSRandR14LinkRegisterCheck();
+  31              		.loc 1 80 5 view .LVU1
+  79:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_do_xPSRandR14LinkRegisterCheck();
+  32              		.loc 1 79 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cclJVAQY.s 			page 3
+
+
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 80 5 view .LVU3
+  39 0002 FFF7FEFF 		bl	FSF_do_xPSRandR14LinkRegisterCheck
+  40              	.LVL0:
+  81:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  82:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_doGeneralPurposeR0_R12RegisterCheck();
+  41              		.loc 1 82 5 is_stmt 1 view .LVU4
+  83:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  84:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_doStackPointerR13RegisterCheck();
+  85:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** }
+  42              		.loc 1 85 1 is_stmt 0 view .LVU5
+  43              		@ sp needed
+  82:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  44              		.loc 1 82 5 view .LVU6
+  45 0006 FFF7FEFF 		bl	FSF_doGeneralPurposeR0_R12RegisterCheck
+  46              	.LVL1:
+  84:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** }
+  47              		.loc 1 84 5 is_stmt 1 view .LVU7
+  48 000a FFF7FEFF 		bl	FSF_doStackPointerR13RegisterCheck
+  49              	.LVL2:
+  50              		.loc 1 85 1 is_stmt 0 view .LVU8
+  51 000e 10BD     		pop	{r4, pc}
+  52              		.cfi_endproc
+  53              	.LFE69:
+  55              		.section	.text.FSF_vRegOpercheck,"ax",%progbits
+  56              		.align	1
+  57              		.global	FSF_vRegOpercheck
+  58              		.syntax unified
+  59              		.code	16
+  60              		.thumb_func
+  62              	FSF_vRegOpercheck:
+  63              	.LFB70:
+  86:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** 
+  87:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** /** \brief Implementation of RunTime Register check
+  88:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  89:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * This implementation is based on Self Test Library from STMicroelectronics
+  90:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * stm32f0xx_STLcpurunKEIL.s file V1.0.0 from February 2012
+  91:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  92:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * \param none
+  93:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  * \return none
+  94:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  *
+  95:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****  */
+  96:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** void FSF_vRegOpercheck(void)
+  97:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** {
+  64              		.loc 1 97 1 is_stmt 1 view -0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  98:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_doGeneralPurposeR0_R12RegisterCheck();
+  68              		.loc 1 98 5 view .LVU10
+  97:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c ****     FSF_doGeneralPurposeR0_R12RegisterCheck();
+  69              		.loc 1 97 1 is_stmt 0 view .LVU11
+  70 0000 10B5     		push	{r4, lr}
+  71              	.LCFI1:
+  72              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cclJVAQY.s 			page 4
+
+
+  73              		.cfi_offset 4, -8
+  74              		.cfi_offset 14, -4
+  75              		.loc 1 98 5 view .LVU12
+  76 0002 FFF7FEFF 		bl	FSF_doGeneralPurposeR0_R12RegisterCheck
+  77              	.LVL3:
+  99:common/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.c **** }
+  78              		.loc 1 99 1 view .LVU13
+  79              		@ sp needed
+  80 0006 10BD     		pop	{r4, pc}
+  81              		.cfi_endproc
+  82              	.LFE70:
+  84              		.text
+  85              	.Letext0:

@@ -1,0 +1,112 @@
+
+out/programmer/prog/firmware_update/hsi/hsi_basic.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.HSI_DataIndication:
+
+00000000 <HSI_DataIndication>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+
+void HSI_DataIndication(void* const data, uint32_t data_length)
+{
+   0:	b530      	push	{r4, r5, lr}
+/******************************************************************************/
+/* PRIVATE FUNCTION DEFINITIONS                                               */
+/******************************************************************************/
+static inline uint32_t LITE_ToLong(const struct LITE_Long *const bytes)
+{
+    return (((uint32_t)bytes->hh<<24U)|((uint32_t)bytes->hl<<16U)|((uint32_t)bytes->lh<<8U)|(uint32_t)bytes->ll);
+   2:	7843      	ldrb	r3, [r0, #1]
+   4:	7802      	ldrb	r2, [r0, #0]
+   6:	021b      	lsls	r3, r3, #8
+   8:	4313      	orrs	r3, r2
+   a:	7882      	ldrb	r2, [r0, #2]
+{
+   c:	b0a5      	sub	sp, #148	; 0x94
+    return (((uint32_t)bytes->hh<<24U)|((uint32_t)bytes->hl<<16U)|((uint32_t)bytes->lh<<8U)|(uint32_t)bytes->ll);
+   e:	0412      	lsls	r2, r2, #16
+  10:	431a      	orrs	r2, r3
+  12:	78c3      	ldrb	r3, [r0, #3]
+  14:	061b      	lsls	r3, r3, #24
+  16:	4313      	orrs	r3, r2
+    if((data_length>=sizeof(*receiveMessage.msgPtr))&&(data_length==totalLenStatedInHsiMsg))
+  18:	2907      	cmp	r1, #7
+  1a:	d92b      	bls.n	74 <HSI_DataIndication+0x74>
+  1c:	4299      	cmp	r1, r3
+  1e:	d129      	bne.n	74 <HSI_DataIndication+0x74>
+        if(receiveMessage.msgPtr->hsi_prot_ver_mj!=HSI_PROT_VERSION_MJ)
+  20:	7903      	ldrb	r3, [r0, #4]
+  22:	2b02      	cmp	r3, #2
+  24:	d006      	beq.n	34 <HSI_DataIndication+0x34>
+            receiveMessage.msgPtr->status_code=HSI_STATUS_CODE_PROTOCOL_VERSION_ERROR;
+  26:	2304      	movs	r3, #4
+            receiveMessage.msgPtr->status_code=HSI_STATUS_CODE_PROTOCOL_UNKNOWN;
+  28:	7183      	strb	r3, [r0, #6]
+            DBPL_vSendHsiProtocolResponse(receiveMessage.voidPtr, (uint8_t)data_length);
+  2a:	b2c9      	uxtb	r1, r1
+    transmitMessage.msgPtr->hsi_prot_ver_mj=HSI_PROT_VERSION_MJ;
+    transmitMessage.msgPtr->protocol_id=HSI_PROTOCOL_ID_MAP_2_0;
+    transmitMessage.msgPtr->status_code=HSI_STATUS_CODE_SUCCESS;
+    transmitMessage.msgPtr->reserved = 0U;
+
+    DBPL_vSendHsiProtocolResponse(transmitMessage.voidPtr, (uint8_t)totalHsiLength);
+  2c:	f7ff fffe 	bl	0 <DBPL_vSendHsiProtocolResponse>
+}
+  30:	b025      	add	sp, #148	; 0x94
+  32:	bd30      	pop	{r4, r5, pc}
+        else if(receiveMessage.msgPtr->protocol_id!=HSI_PROTOCOL_ID_MAP_2_0)
+  34:	7943      	ldrb	r3, [r0, #5]
+  36:	2b11      	cmp	r3, #17
+  38:	d001      	beq.n	3e <HSI_DataIndication+0x3e>
+            receiveMessage.msgPtr->status_code=HSI_STATUS_CODE_PROTOCOL_UNKNOWN;
+  3a:	2311      	movs	r3, #17
+  3c:	e7f4      	b.n	28 <HSI_DataIndication+0x28>
+    dataLengthRxMap=LITE_ToLong(&receiveMessage.msgPtr->total_length)-sizeof(*receiveMessage.msgPtr);
+  3e:	000a      	movs	r2, r1
+    dataLengthTxMap=(uint16_t)(sizeof(transmitBuffer)-sizeof(*transmitMessage.msgPtr));
+  40:	250a      	movs	r5, #10
+  42:	237b      	movs	r3, #123	; 0x7b
+  44:	446d      	add	r5, sp
+    dataLengthRxMap=LITE_ToLong(&receiveMessage.msgPtr->total_length)-sizeof(*receiveMessage.msgPtr);
+  46:	3a08      	subs	r2, #8
+    dataLengthTxMap=(uint16_t)(sizeof(transmitBuffer)-sizeof(*transmitMessage.msgPtr));
+  48:	802b      	strh	r3, [r5, #0]
+    MAP_ProcessMessage(receiveMessage.msgPtr->data, (uint16_t)HSI_MAX_RECEIVE_PAYLOAD_SIZE, (uint16_t)dataLengthRxMap,transmitMessage.msgPtr->data, (uint16_t)HSI_MAX_TRANSMIT_PAYLOAD_SIZE, &(dataLengthTxMap));
+  4a:	21b0      	movs	r1, #176	; 0xb0
+  4c:	3008      	adds	r0, #8
+  4e:	9300      	str	r3, [sp, #0]
+  50:	b292      	uxth	r2, r2
+  52:	ab05      	add	r3, sp, #20
+  54:	9501      	str	r5, [sp, #4]
+  56:	f7ff fffe 	bl	0 <MAP_ProcessMessage>
+    totalHsiLength=(uint32_t)((uint32_t)dataLengthTxMap+(uint32_t)sizeof(*transmitMessage.msgPtr));
+  5a:	8829      	ldrh	r1, [r5, #0]
+    MAP_ProcessMessage(receiveMessage.msgPtr->data, (uint16_t)HSI_MAX_RECEIVE_PAYLOAD_SIZE, (uint16_t)dataLengthRxMap,transmitMessage.msgPtr->data, (uint16_t)HSI_MAX_TRANSMIT_PAYLOAD_SIZE, &(dataLengthTxMap));
+  5c:	ac03      	add	r4, sp, #12
+    totalHsiLength=(uint32_t)((uint32_t)dataLengthTxMap+(uint32_t)sizeof(*transmitMessage.msgPtr));
+  5e:	3108      	adds	r1, #8
+    bytes->hl=(uint8_t)(value>>16U);
+  60:	0c0b      	lsrs	r3, r1, #16
+  62:	70a3      	strb	r3, [r4, #2]
+    bytes->hh=(uint8_t)(value>>24U);
+  64:	2300      	movs	r3, #0
+  66:	70e3      	strb	r3, [r4, #3]
+    transmitMessage.msgPtr->hsi_prot_ver_mj=HSI_PROT_VERSION_MJ;
+  68:	4b04      	ldr	r3, [pc, #16]	; (7c <HSI_DataIndication+0x7c>)
+    bytes->ll=(uint8_t)value;
+  6a:	8021      	strh	r1, [r4, #0]
+    DBPL_vSendHsiProtocolResponse(transmitMessage.voidPtr, (uint8_t)totalHsiLength);
+  6c:	0020      	movs	r0, r4
+    transmitMessage.msgPtr->hsi_prot_ver_mj=HSI_PROT_VERSION_MJ;
+  6e:	9304      	str	r3, [sp, #16]
+    DBPL_vSendHsiProtocolResponse(transmitMessage.voidPtr, (uint8_t)totalHsiLength);
+  70:	b2c9      	uxtb	r1, r1
+  72:	e7db      	b.n	2c <HSI_DataIndication+0x2c>
+        DLL_vReleaseDataFromReceivedMessage();
+  74:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  78:	e7da      	b.n	30 <HSI_DataIndication+0x30>
+  7a:	46c0      	nop			; (mov r8, r8)
+  7c:	00001102 	.word	0x00001102

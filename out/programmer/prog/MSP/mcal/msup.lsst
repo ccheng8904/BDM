@@ -1,0 +1,2437 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"msup.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MSUP_handleTimerExt,"ax",%progbits
+  18              		.align	1
+  19              		.global	MSUP_handleTimerExt
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MSUP_handleTimerExt:
+  25              	.LVL0:
+  26              	.LFB93:
+  27              		.file 1 "common/prog/MSP/mcal/msup.c"
+   1:common/prog/MSP/mcal/msup.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/msup.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/msup.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/msup.c ****  *
+   5:common/prog/MSP/mcal/msup.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/msup.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/msup.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/msup.c ****  *
+   9:common/prog/MSP/mcal/msup.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/msup.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/msup.c ****  *  COMP_ABBREV      MSUP
+  12:common/prog/MSP/mcal/msup.c ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/msup.c **** 
+  14:common/prog/MSP/mcal/msup.c **** 
+  15:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  16:common/prog/MSP/mcal/msup.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  18:common/prog/MSP/mcal/msup.c **** /** \file
+  19:common/prog/MSP/mcal/msup.c ****  *
+  20:common/prog/MSP/mcal/msup.c ****  *  \ingroup  MCAL
+  21:common/prog/MSP/mcal/msup.c ****  *
+  22:common/prog/MSP/mcal/msup.c ****  *  \brief    Implementation of MSUP
+  23:common/prog/MSP/mcal/msup.c ****  */
+  24:common/prog/MSP/mcal/msup.c **** 
+  25:common/prog/MSP/mcal/msup.c **** 
+  26:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  27:common/prog/MSP/mcal/msup.c **** /* INCLUDES                                                                   */
+  28:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/msup.c **** 
+  30:common/prog/MSP/mcal/msup.c **** #include "msup.h"
+  31:common/prog/MSP/mcal/msup.c **** #include "timerlib.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 2
+
+
+  32:common/prog/MSP/mcal/msup.c **** #include "std_lib/std_symbol.h"
+  33:common/prog/MSP/mcal/msup.c **** 
+  34:common/prog/MSP/mcal/msup.c **** 
+  35:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  36:common/prog/MSP/mcal/msup.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  37:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  38:common/prog/MSP/mcal/msup.c **** static struct MSUP_TimeoutHandle MSUP_LocalTimeoutHandle;
+  39:common/prog/MSP/mcal/msup.c **** 
+  40:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  41:common/prog/MSP/mcal/msup.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  42:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  43:common/prog/MSP/mcal/msup.c **** #ifndef HIGH_ADR_OFFSET
+  44:common/prog/MSP/mcal/msup.c ****     #ifdef __BIG_ENDIAN_ADAPTATION
+  45:common/prog/MSP/mcal/msup.c ****         #define HIGH_ADR_OFFSET  0 ///< Address offset for high byte/word (big endian)
+  46:common/prog/MSP/mcal/msup.c ****         #define LOW_ADR_OFFSET   1 ///< Address offset for low byte/word (big endian)
+  47:common/prog/MSP/mcal/msup.c ****     #elif defined(__LITTLE_ENDIAN_ADAPTATION)
+  48:common/prog/MSP/mcal/msup.c ****         #define HIGH_ADR_OFFSET  1 ///< Address offset for high byte/word (little endian)
+  49:common/prog/MSP/mcal/msup.c ****         #define LOW_ADR_OFFSET   0 ///< Address offset for low byte/word (little endian)
+  50:common/prog/MSP/mcal/msup.c ****     #else
+  51:common/prog/MSP/mcal/msup.c ****         #error "Either '__LITTLE_ENDIAN_ADAPTATION' or '__BIG_ENDIAN_ADAPTATION' must be defined in
+  52:common/prog/MSP/mcal/msup.c ****     #endif
+  53:common/prog/MSP/mcal/msup.c **** #endif
+  54:common/prog/MSP/mcal/msup.c **** 
+  55:common/prog/MSP/mcal/msup.c **** static uint8_t* MSUP_getBytePtr(uint16_t *value, uint32_t offset);
+  56:common/prog/MSP/mcal/msup.c **** static uint16_t* MSUP_getWordPtr(uint32_t *value, uint32_t offset);
+  57:common/prog/MSP/mcal/msup.c **** 
+  58:common/prog/MSP/mcal/msup.c **** 
+  59:common/prog/MSP/mcal/msup.c **** /** Accesses high byte of parameter word.
+  60:common/prog/MSP/mcal/msup.c ****  *  \brief This function accesses the  high byte of parameter word.
+  61:common/prog/MSP/mcal/msup.c ****  *  \param word: high byte of word will be accessed, type of word shall be int16_t or uint16_t
+  62:common/prog/MSP/mcal/msup.c ****  *  \return none
+  63:common/prog/MSP/mcal/msup.c ****  */
+  64:common/prog/MSP/mcal/msup.c **** #define MSUP_HighByte(word) (*MSUP_getBytePtr(word,HIGH_ADR_OFFSET))
+  65:common/prog/MSP/mcal/msup.c **** 
+  66:common/prog/MSP/mcal/msup.c **** /** Accesses high word of parameter ms_long.
+  67:common/prog/MSP/mcal/msup.c ****  * \brief This function accesses the high word of parameter ms_long
+  68:common/prog/MSP/mcal/msup.c ****  * \param ms_long: high word of word will be accessed, type of word shall be int32_t or uint32_t
+  69:common/prog/MSP/mcal/msup.c ****  * \return none
+  70:common/prog/MSP/mcal/msup.c ****  */
+  71:common/prog/MSP/mcal/msup.c **** #define MSUP_HighWord(ms_long) (*MSUP_getWordPtr(ms_long,HIGH_ADR_OFFSET))
+  72:common/prog/MSP/mcal/msup.c **** 
+  73:common/prog/MSP/mcal/msup.c **** /** Accesses low byte of parameter word.
+  74:common/prog/MSP/mcal/msup.c ****  *  \brief This function accesses the  low byte of parameter word.
+  75:common/prog/MSP/mcal/msup.c ****  *  \param word: low byte of word will be accessed, type of word shall be int16_t or uint16_t
+  76:common/prog/MSP/mcal/msup.c ****  *  \return none
+  77:common/prog/MSP/mcal/msup.c ****  */
+  78:common/prog/MSP/mcal/msup.c **** #define MSUP_LowByte(word) (*MSUP_getBytePtr(word,LOW_ADR_OFFSET))
+  79:common/prog/MSP/mcal/msup.c ****  
+  80:common/prog/MSP/mcal/msup.c **** /** Accesses low word of parameter ms_long.
+  81:common/prog/MSP/mcal/msup.c ****  * \brief This function accesses the low word of parameter ms_long
+  82:common/prog/MSP/mcal/msup.c ****  * \param ms_long: low word of word will be accessed, type of word shall be int32_t or uint32_t
+  83:common/prog/MSP/mcal/msup.c ****  * \return none
+  84:common/prog/MSP/mcal/msup.c ****  */
+  85:common/prog/MSP/mcal/msup.c **** #define MSUP_LowWord(ms_long) (*MSUP_getWordPtr(ms_long,LOW_ADR_OFFSET))
+  86:common/prog/MSP/mcal/msup.c **** 
+  87:common/prog/MSP/mcal/msup.c **** 
+  88:common/prog/MSP/mcal/msup.c **** #if (!defined(__cplusplus) && !defined(MOCK_IT)) || (defined(__cplusplus) && defined(MOCK_IT))
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 3
+
+
+  89:common/prog/MSP/mcal/msup.c **** // compiled if no unit test active or if included for unit test
+  90:common/prog/MSP/mcal/msup.c **** 
+  91:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  92:common/prog/MSP/mcal/msup.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  93:common/prog/MSP/mcal/msup.c **** /******************************************************************************/
+  94:common/prog/MSP/mcal/msup.c **** 
+  95:common/prog/MSP/mcal/msup.c **** void MSUP_handleTimerExt(struct MSUP_TimeoutHandle *handle)
+  96:common/prog/MSP/mcal/msup.c **** {
+  28              		.loc 1 96 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  97:common/prog/MSP/mcal/msup.c ****     uint16_t actualTime = TIM_uiGetCircleMicroSeconds();
+  32              		.loc 1 97 5 view .LVU1
+  96:common/prog/MSP/mcal/msup.c ****     uint16_t actualTime = TIM_uiGetCircleMicroSeconds();
+  33              		.loc 1 96 1 is_stmt 0 view .LVU2
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  96:common/prog/MSP/mcal/msup.c ****     uint16_t actualTime = TIM_uiGetCircleMicroSeconds();
+  39              		.loc 1 96 1 view .LVU3
+  40 0002 0400     		movs	r4, r0
+  98:common/prog/MSP/mcal/msup.c ****     uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+  99:common/prog/MSP/mcal/msup.c ****     handle->timeStamp = actualTime;
+ 100:common/prog/MSP/mcal/msup.c ****     handle->timer += deltaTime;
+ 101:common/prog/MSP/mcal/msup.c **** }
+  41              		.loc 1 101 1 view .LVU4
+  42              		@ sp needed
+  97:common/prog/MSP/mcal/msup.c ****     uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+  43              		.loc 1 97 27 view .LVU5
+  44 0004 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  45              	.LVL1:
+  98:common/prog/MSP/mcal/msup.c ****     uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+  46              		.loc 1 98 5 is_stmt 1 view .LVU6
+  98:common/prog/MSP/mcal/msup.c ****     uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+  47              		.loc 1 98 14 is_stmt 0 view .LVU7
+  48 0008 2389     		ldrh	r3, [r4, #8]
+ 100:common/prog/MSP/mcal/msup.c **** }
+  49              		.loc 1 100 19 view .LVU8
+  50 000a 2268     		ldr	r2, [r4]
+  98:common/prog/MSP/mcal/msup.c ****     uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+  51              		.loc 1 98 14 view .LVU9
+  52 000c C31A     		subs	r3, r0, r3
+  53 000e 9BB2     		uxth	r3, r3
+  54              	.LVL2:
+  99:common/prog/MSP/mcal/msup.c ****     handle->timer += deltaTime;
+  55              		.loc 1 99 5 is_stmt 1 view .LVU10
+ 100:common/prog/MSP/mcal/msup.c **** }
+  56              		.loc 1 100 19 is_stmt 0 view .LVU11
+  57 0010 D318     		adds	r3, r2, r3
+  58              	.LVL3:
+  99:common/prog/MSP/mcal/msup.c ****     handle->timer += deltaTime;
+  59              		.loc 1 99 23 view .LVU12
+  60 0012 2081     		strh	r0, [r4, #8]
+  61              	.LVL4:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 4
+
+
+ 100:common/prog/MSP/mcal/msup.c **** }
+  62              		.loc 1 100 5 is_stmt 1 view .LVU13
+ 100:common/prog/MSP/mcal/msup.c **** }
+  63              		.loc 1 100 19 is_stmt 0 view .LVU14
+  64 0014 2360     		str	r3, [r4]
+  65              	.LVL5:
+  66              		.loc 1 101 1 view .LVU15
+  67 0016 10BD     		pop	{r4, pc}
+  68              		.cfi_endproc
+  69              	.LFE93:
+  71              		.section	.text.MSUP_startTimeMeasureExt,"ax",%progbits
+  72              		.align	1
+  73              		.global	MSUP_startTimeMeasureExt
+  74              		.syntax unified
+  75              		.code	16
+  76              		.thumb_func
+  78              	MSUP_startTimeMeasureExt:
+  79              	.LVL6:
+  80              	.LFB94:
+ 102:common/prog/MSP/mcal/msup.c **** 
+ 103:common/prog/MSP/mcal/msup.c **** 
+ 104:common/prog/MSP/mcal/msup.c **** void MSUP_startTimeMeasureExt(struct MSUP_TimeoutHandle *handle)
+ 105:common/prog/MSP/mcal/msup.c **** {
+  81              		.loc 1 105 1 is_stmt 1 view -0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106:common/prog/MSP/mcal/msup.c ****     handle->timeStamp = TIM_uiGetCircleMicroSeconds();
+  85              		.loc 1 106 5 view .LVU17
+ 105:common/prog/MSP/mcal/msup.c ****     handle->timeStamp = TIM_uiGetCircleMicroSeconds();
+  86              		.loc 1 105 1 is_stmt 0 view .LVU18
+  87 0000 10B5     		push	{r4, lr}
+  88              	.LCFI1:
+  89              		.cfi_def_cfa_offset 8
+  90              		.cfi_offset 4, -8
+  91              		.cfi_offset 14, -4
+ 105:common/prog/MSP/mcal/msup.c ****     handle->timeStamp = TIM_uiGetCircleMicroSeconds();
+  92              		.loc 1 105 1 view .LVU19
+  93 0002 0400     		movs	r4, r0
+ 107:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+ 108:common/prog/MSP/mcal/msup.c **** }
+  94              		.loc 1 108 1 view .LVU20
+  95              		@ sp needed
+ 106:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+  96              		.loc 1 106 25 view .LVU21
+  97 0004 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  98              	.LVL7:
+ 107:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+  99              		.loc 1 107 19 view .LVU22
+ 100 0008 0023     		movs	r3, #0
+ 106:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+ 101              		.loc 1 106 23 view .LVU23
+ 102 000a 2081     		strh	r0, [r4, #8]
+ 107:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+ 103              		.loc 1 107 5 is_stmt 1 view .LVU24
+ 107:common/prog/MSP/mcal/msup.c ****     handle->timer = 0uL;
+ 104              		.loc 1 107 19 is_stmt 0 view .LVU25
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 5
+
+
+ 105 000c 2360     		str	r3, [r4]
+ 106              	.LVL8:
+ 107              		.loc 1 108 1 view .LVU26
+ 108 000e 10BD     		pop	{r4, pc}
+ 109              		.cfi_endproc
+ 110              	.LFE94:
+ 112              		.section	.text.MSUP_getMeasuredTimeExt,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	MSUP_getMeasuredTimeExt
+ 115              		.syntax unified
+ 116              		.code	16
+ 117              		.thumb_func
+ 119              	MSUP_getMeasuredTimeExt:
+ 120              	.LVL9:
+ 121              	.LFB95:
+ 109:common/prog/MSP/mcal/msup.c **** 
+ 110:common/prog/MSP/mcal/msup.c **** 
+ 111:common/prog/MSP/mcal/msup.c **** uint32_t MSUP_getMeasuredTimeExt(struct MSUP_TimeoutHandle *handle)
+ 112:common/prog/MSP/mcal/msup.c **** {
+ 122              		.loc 1 112 1 is_stmt 1 view -0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 0
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 126              		.loc 1 113 5 view .LVU28
+ 112:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 127              		.loc 1 112 1 is_stmt 0 view .LVU29
+ 128 0000 10B5     		push	{r4, lr}
+ 129              	.LCFI2:
+ 130              		.cfi_def_cfa_offset 8
+ 131              		.cfi_offset 4, -8
+ 132              		.cfi_offset 14, -4
+ 112:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 133              		.loc 1 112 1 view .LVU30
+ 134 0002 0400     		movs	r4, r0
+ 114:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 115:common/prog/MSP/mcal/msup.c **** }
+ 135              		.loc 1 115 1 view .LVU31
+ 136              		@ sp needed
+ 113:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 137              		.loc 1 113 5 view .LVU32
+ 138 0004 FFF7FEFF 		bl	MSUP_handleTimerExt
+ 139              	.LVL10:
+ 114:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 140              		.loc 1 114 5 is_stmt 1 view .LVU33
+ 114:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 141              		.loc 1 114 18 is_stmt 0 view .LVU34
+ 142 0008 2068     		ldr	r0, [r4]
+ 143              	.LVL11:
+ 144              		.loc 1 115 1 view .LVU35
+ 145 000a 10BD     		pop	{r4, pc}
+ 146              		.cfi_endproc
+ 147              	.LFE95:
+ 149              		.section	.text.MSUP_setTimeOutExt,"ax",%progbits
+ 150              		.align	1
+ 151              		.global	MSUP_setTimeOutExt
+ 152              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 6
+
+
+ 153              		.code	16
+ 154              		.thumb_func
+ 156              	MSUP_setTimeOutExt:
+ 157              	.LVL12:
+ 158              	.LFB96:
+ 116:common/prog/MSP/mcal/msup.c **** 
+ 117:common/prog/MSP/mcal/msup.c **** 
+ 118:common/prog/MSP/mcal/msup.c **** void MSUP_setTimeOutExt(struct MSUP_TimeoutHandle *handle, uint32_t timeout)
+ 119:common/prog/MSP/mcal/msup.c **** {
+ 159              		.loc 1 119 1 is_stmt 1 view -0
+ 160              		.cfi_startproc
+ 161              		@ args = 0, pretend = 0, frame = 0
+ 162              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120:common/prog/MSP/mcal/msup.c ****     handle->timeout = timeout;
+ 163              		.loc 1 120 5 view .LVU37
+ 119:common/prog/MSP/mcal/msup.c ****     handle->timeout = timeout;
+ 164              		.loc 1 119 1 is_stmt 0 view .LVU38
+ 165 0000 10B5     		push	{r4, lr}
+ 166              	.LCFI3:
+ 167              		.cfi_def_cfa_offset 8
+ 168              		.cfi_offset 4, -8
+ 169              		.cfi_offset 14, -4
+ 170              		.loc 1 120 21 view .LVU39
+ 171 0002 4160     		str	r1, [r0, #4]
+ 121:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(handle);
+ 172              		.loc 1 121 5 is_stmt 1 view .LVU40
+ 173 0004 FFF7FEFF 		bl	MSUP_startTimeMeasureExt
+ 174              	.LVL13:
+ 122:common/prog/MSP/mcal/msup.c **** }
+ 175              		.loc 1 122 1 is_stmt 0 view .LVU41
+ 176              		@ sp needed
+ 177 0008 10BD     		pop	{r4, pc}
+ 178              		.cfi_endproc
+ 179              	.LFE96:
+ 181              		.section	.text.MSUP_isTimeOutExt,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	MSUP_isTimeOutExt
+ 184              		.syntax unified
+ 185              		.code	16
+ 186              		.thumb_func
+ 188              	MSUP_isTimeOutExt:
+ 189              	.LVL14:
+ 190              	.LFB97:
+ 123:common/prog/MSP/mcal/msup.c **** 
+ 124:common/prog/MSP/mcal/msup.c **** 
+ 125:common/prog/MSP/mcal/msup.c **** bool MSUP_isTimeOutExt(struct MSUP_TimeoutHandle *handle)
+ 126:common/prog/MSP/mcal/msup.c **** {
+ 191              		.loc 1 126 1 is_stmt 1 view -0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 195              		.loc 1 127 5 view .LVU43
+ 126:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 196              		.loc 1 126 1 is_stmt 0 view .LVU44
+ 197 0000 10B5     		push	{r4, lr}
+ 198              	.LCFI4:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 7
+
+
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 4, -8
+ 201              		.cfi_offset 14, -4
+ 126:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(handle);
+ 202              		.loc 1 126 1 view .LVU45
+ 203 0002 0400     		movs	r4, r0
+ 128:common/prog/MSP/mcal/msup.c ****     return (handle->timer >= handle->timeout) ? true : false;
+ 129:common/prog/MSP/mcal/msup.c **** }
+ 204              		.loc 1 129 1 view .LVU46
+ 205              		@ sp needed
+ 127:common/prog/MSP/mcal/msup.c ****     return (handle->timer >= handle->timeout) ? true : false;
+ 206              		.loc 1 127 5 view .LVU47
+ 207 0004 FFF7FEFF 		bl	MSUP_handleTimerExt
+ 208              	.LVL15:
+ 128:common/prog/MSP/mcal/msup.c ****     return (handle->timer >= handle->timeout) ? true : false;
+ 209              		.loc 1 128 5 is_stmt 1 view .LVU48
+ 128:common/prog/MSP/mcal/msup.c ****     return (handle->timer >= handle->timeout) ? true : false;
+ 210              		.loc 1 128 54 is_stmt 0 view .LVU49
+ 211 0008 0CCC     		ldmia	r4!, {r2, r3}
+ 212              	.LVL16:
+ 128:common/prog/MSP/mcal/msup.c ****     return (handle->timer >= handle->timeout) ? true : false;
+ 213              		.loc 1 128 54 view .LVU50
+ 214 000a 0020     		movs	r0, #0
+ 215 000c 9A42     		cmp	r2, r3
+ 216 000e 4041     		adcs	r0, r0, r0
+ 217 0010 C0B2     		uxtb	r0, r0
+ 218              	.LVL17:
+ 219              		.loc 1 129 1 view .LVU51
+ 220 0012 10BD     		pop	{r4, pc}
+ 221              		.cfi_endproc
+ 222              	.LFE97:
+ 224              		.section	.text.MSUP_handleTimer,"ax",%progbits
+ 225              		.align	1
+ 226              		.global	MSUP_handleTimer
+ 227              		.syntax unified
+ 228              		.code	16
+ 229              		.thumb_func
+ 231              	MSUP_handleTimer:
+ 232              	.LFB98:
+ 130:common/prog/MSP/mcal/msup.c **** 
+ 131:common/prog/MSP/mcal/msup.c **** 
+ 132:common/prog/MSP/mcal/msup.c **** void MSUP_handleTimer(void)
+ 133:common/prog/MSP/mcal/msup.c **** {
+ 233              		.loc 1 133 1 is_stmt 1 view -0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 0
+ 236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 134:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(&MSUP_LocalTimeoutHandle);
+ 237              		.loc 1 134 5 view .LVU53
+ 133:common/prog/MSP/mcal/msup.c ****     MSUP_handleTimerExt(&MSUP_LocalTimeoutHandle);
+ 238              		.loc 1 133 1 is_stmt 0 view .LVU54
+ 239 0000 10B5     		push	{r4, lr}
+ 240              	.LCFI5:
+ 241              		.cfi_def_cfa_offset 8
+ 242              		.cfi_offset 4, -8
+ 243              		.cfi_offset 14, -4
+ 244              		.loc 1 134 5 view .LVU55
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 8
+
+
+ 245 0002 0248     		ldr	r0, .L7
+ 246 0004 FFF7FEFF 		bl	MSUP_handleTimerExt
+ 247              	.LVL18:
+ 135:common/prog/MSP/mcal/msup.c **** }
+ 248              		.loc 1 135 1 view .LVU56
+ 249              		@ sp needed
+ 250 0008 10BD     		pop	{r4, pc}
+ 251              	.L8:
+ 252 000a C046     		.align	2
+ 253              	.L7:
+ 254 000c 00000000 		.word	.LANCHOR0
+ 255              		.cfi_endproc
+ 256              	.LFE98:
+ 258              		.section	.text.MSUP_startTimeMeasure,"ax",%progbits
+ 259              		.align	1
+ 260              		.global	MSUP_startTimeMeasure
+ 261              		.syntax unified
+ 262              		.code	16
+ 263              		.thumb_func
+ 265              	MSUP_startTimeMeasure:
+ 266              	.LFB99:
+ 136:common/prog/MSP/mcal/msup.c **** 
+ 137:common/prog/MSP/mcal/msup.c **** 
+ 138:common/prog/MSP/mcal/msup.c **** void MSUP_startTimeMeasure(void)
+ 139:common/prog/MSP/mcal/msup.c **** {
+ 267              		.loc 1 139 1 is_stmt 1 view -0
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 0
+ 270              		@ frame_needed = 0, uses_anonymous_args = 0
+ 140:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(&MSUP_LocalTimeoutHandle);
+ 271              		.loc 1 140 5 view .LVU58
+ 139:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(&MSUP_LocalTimeoutHandle);
+ 272              		.loc 1 139 1 is_stmt 0 view .LVU59
+ 273 0000 10B5     		push	{r4, lr}
+ 274              	.LCFI6:
+ 275              		.cfi_def_cfa_offset 8
+ 276              		.cfi_offset 4, -8
+ 277              		.cfi_offset 14, -4
+ 278              		.loc 1 140 5 view .LVU60
+ 279 0002 0248     		ldr	r0, .L10
+ 280 0004 FFF7FEFF 		bl	MSUP_startTimeMeasureExt
+ 281              	.LVL19:
+ 141:common/prog/MSP/mcal/msup.c **** }
+ 282              		.loc 1 141 1 view .LVU61
+ 283              		@ sp needed
+ 284 0008 10BD     		pop	{r4, pc}
+ 285              	.L11:
+ 286 000a C046     		.align	2
+ 287              	.L10:
+ 288 000c 00000000 		.word	.LANCHOR0
+ 289              		.cfi_endproc
+ 290              	.LFE99:
+ 292              		.section	.text.MSUP_getMeasuredTime,"ax",%progbits
+ 293              		.align	1
+ 294              		.global	MSUP_getMeasuredTime
+ 295              		.syntax unified
+ 296              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 9
+
+
+ 297              		.thumb_func
+ 299              	MSUP_getMeasuredTime:
+ 300              	.LFB100:
+ 142:common/prog/MSP/mcal/msup.c **** 
+ 143:common/prog/MSP/mcal/msup.c **** 
+ 144:common/prog/MSP/mcal/msup.c **** uint32_t MSUP_getMeasuredTime(void)
+ 145:common/prog/MSP/mcal/msup.c **** {
+ 301              		.loc 1 145 1 is_stmt 1 view -0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 0
+ 304              		@ frame_needed = 0, uses_anonymous_args = 0
+ 146:common/prog/MSP/mcal/msup.c ****     return MSUP_getMeasuredTimeExt(&MSUP_LocalTimeoutHandle);
+ 305              		.loc 1 146 5 view .LVU63
+ 306              	.LVL20:
+ 307              	.LBB18:
+ 308              	.LBI18:
+ 111:common/prog/MSP/mcal/msup.c **** {
+ 309              		.loc 1 111 10 view .LVU64
+ 310              	.LBB19:
+ 113:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 311              		.loc 1 113 5 view .LVU65
+ 312              	.LBE19:
+ 313              	.LBE18:
+ 145:common/prog/MSP/mcal/msup.c ****     return MSUP_getMeasuredTimeExt(&MSUP_LocalTimeoutHandle);
+ 314              		.loc 1 145 1 is_stmt 0 view .LVU66
+ 315 0000 10B5     		push	{r4, lr}
+ 316              	.LCFI7:
+ 317              		.cfi_def_cfa_offset 8
+ 318              		.cfi_offset 4, -8
+ 319              		.cfi_offset 14, -4
+ 320              	.LBB22:
+ 321              	.LBB20:
+ 113:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 322              		.loc 1 113 5 view .LVU67
+ 323 0002 034C     		ldr	r4, .L13
+ 324              	.LBE20:
+ 325              	.LBE22:
+ 147:common/prog/MSP/mcal/msup.c **** }
+ 326              		.loc 1 147 1 view .LVU68
+ 327              		@ sp needed
+ 328              	.LBB23:
+ 329              	.LBB21:
+ 113:common/prog/MSP/mcal/msup.c ****     return handle->timer;
+ 330              		.loc 1 113 5 view .LVU69
+ 331 0004 2000     		movs	r0, r4
+ 332 0006 FFF7FEFF 		bl	MSUP_handleTimerExt
+ 333              	.LVL21:
+ 114:common/prog/MSP/mcal/msup.c **** }
+ 334              		.loc 1 114 5 is_stmt 1 view .LVU70
+ 114:common/prog/MSP/mcal/msup.c **** }
+ 335              		.loc 1 114 5 is_stmt 0 view .LVU71
+ 336              	.LBE21:
+ 337              	.LBE23:
+ 146:common/prog/MSP/mcal/msup.c **** }
+ 338              		.loc 1 146 12 view .LVU72
+ 339 000a 2068     		ldr	r0, [r4]
+ 340              		.loc 1 147 1 view .LVU73
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 10
+
+
+ 341 000c 10BD     		pop	{r4, pc}
+ 342              	.L14:
+ 343 000e C046     		.align	2
+ 344              	.L13:
+ 345 0010 00000000 		.word	.LANCHOR0
+ 346              		.cfi_endproc
+ 347              	.LFE100:
+ 349              		.section	.rodata.MSUP_delay.cst2,"aM",%progbits,2
+ 350              		.align	1
+ 351              	.LC3:
+ 352 0000 FEFF     		.short	-2
+ 353              		.section	.text.MSUP_delay,"ax",%progbits
+ 354              		.align	1
+ 355              		.global	MSUP_delay
+ 356              		.syntax unified
+ 357              		.code	16
+ 358              		.thumb_func
+ 360              	MSUP_delay:
+ 361              	.LVL22:
+ 362              	.LFB101:
+ 148:common/prog/MSP/mcal/msup.c **** 
+ 149:common/prog/MSP/mcal/msup.c **** 
+ 150:common/prog/MSP/mcal/msup.c **** void MSUP_delay(uint16_t delay)
+ 151:common/prog/MSP/mcal/msup.c **** {
+ 363              		.loc 1 151 1 is_stmt 1 view -0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152:common/prog/MSP/mcal/msup.c ****     uint16_t currentTime = TIM_uiGetCircleMicroSeconds();
+ 367              		.loc 1 152 5 view .LVU75
+ 151:common/prog/MSP/mcal/msup.c ****     uint16_t currentTime = TIM_uiGetCircleMicroSeconds();
+ 368              		.loc 1 151 1 is_stmt 0 view .LVU76
+ 369 0000 70B5     		push	{r4, r5, r6, lr}
+ 370              	.LCFI8:
+ 371              		.cfi_def_cfa_offset 16
+ 372              		.cfi_offset 4, -16
+ 373              		.cfi_offset 5, -12
+ 374              		.cfi_offset 6, -8
+ 375              		.cfi_offset 14, -4
+ 151:common/prog/MSP/mcal/msup.c ****     uint16_t currentTime = TIM_uiGetCircleMicroSeconds();
+ 376              		.loc 1 151 1 view .LVU77
+ 377 0002 0600     		movs	r6, r0
+ 378              		.loc 1 152 28 view .LVU78
+ 379 0004 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 380              	.LVL23:
+ 381              		.loc 1 152 28 view .LVU79
+ 382 0008 074B     		ldr	r3, .L19
+ 383 000a 0500     		movs	r5, r0
+ 384              	.LVL24:
+ 153:common/prog/MSP/mcal/msup.c **** 
+ 154:common/prog/MSP/mcal/msup.c ****     if(delay == UINT16_MAX)
+ 385              		.loc 1 154 5 is_stmt 1 view .LVU80
+ 386 000c 341C     		adds	r4, r6, #0
+ 387 000e 9E42     		cmp	r6, r3
+ 388 0010 01D9     		bls	.L16
+ 389 0012 064B     		ldr	r3, .L19+4
+ 390 0014 1C88     		ldrh	r4, [r3]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 11
+
+
+ 391              	.L16:
+ 392 0016 A4B2     		uxth	r4, r4
+ 393              	.LVL25:
+ 394              	.L17:
+ 155:common/prog/MSP/mcal/msup.c ****     {
+ 156:common/prog/MSP/mcal/msup.c ****         delay--;
+ 157:common/prog/MSP/mcal/msup.c ****     }
+ 158:common/prog/MSP/mcal/msup.c ****     while ((uint16_t)(TIM_uiGetCircleMicroSeconds() - currentTime) <= delay )
+ 159:common/prog/MSP/mcal/msup.c ****     {
+ 160:common/prog/MSP/mcal/msup.c ****         ;
+ 395              		.loc 1 160 9 discriminator 1 view .LVU81
+ 158:common/prog/MSP/mcal/msup.c ****     {
+ 396              		.loc 1 158 68 discriminator 1 view .LVU82
+ 158:common/prog/MSP/mcal/msup.c ****     {
+ 397              		.loc 1 158 23 is_stmt 0 discriminator 1 view .LVU83
+ 398 0018 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 399              	.LVL26:
+ 158:common/prog/MSP/mcal/msup.c ****     {
+ 400              		.loc 1 158 12 discriminator 1 view .LVU84
+ 401 001c 431B     		subs	r3, r0, r5
+ 158:common/prog/MSP/mcal/msup.c ****     {
+ 402              		.loc 1 158 68 discriminator 1 view .LVU85
+ 403 001e 9BB2     		uxth	r3, r3
+ 404 0020 A342     		cmp	r3, r4
+ 405 0022 F9D9     		bls	.L17
+ 161:common/prog/MSP/mcal/msup.c ****     }
+ 162:common/prog/MSP/mcal/msup.c **** }
+ 406              		.loc 1 162 1 view .LVU86
+ 407              		@ sp needed
+ 408              	.LVL27:
+ 409              	.LVL28:
+ 410              		.loc 1 162 1 view .LVU87
+ 411 0024 70BD     		pop	{r4, r5, r6, pc}
+ 412              	.L20:
+ 413 0026 C046     		.align	2
+ 414              	.L19:
+ 415 0028 FEFF0000 		.word	65534
+ 416 002c 00000000 		.word	.LC3
+ 417              		.cfi_endproc
+ 418              	.LFE101:
+ 420              		.section	.text.MSUP_setTimeOut,"ax",%progbits
+ 421              		.align	1
+ 422              		.global	MSUP_setTimeOut
+ 423              		.syntax unified
+ 424              		.code	16
+ 425              		.thumb_func
+ 427              	MSUP_setTimeOut:
+ 428              	.LVL29:
+ 429              	.LFB102:
+ 163:common/prog/MSP/mcal/msup.c **** 
+ 164:common/prog/MSP/mcal/msup.c **** 
+ 165:common/prog/MSP/mcal/msup.c **** void MSUP_setTimeOut(uint32_t timeout)
+ 166:common/prog/MSP/mcal/msup.c **** {
+ 430              		.loc 1 166 1 is_stmt 1 view -0
+ 431              		.cfi_startproc
+ 432              		@ args = 0, pretend = 0, frame = 0
+ 433              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 12
+
+
+ 167:common/prog/MSP/mcal/msup.c ****     MSUP_setTimeOutExt(&MSUP_LocalTimeoutHandle, timeout);
+ 434              		.loc 1 167 5 view .LVU89
+ 435              	.LBB24:
+ 436              	.LBI24:
+ 118:common/prog/MSP/mcal/msup.c **** {
+ 437              		.loc 1 118 6 view .LVU90
+ 438              	.LBB25:
+ 120:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(handle);
+ 439              		.loc 1 120 5 view .LVU91
+ 440              	.LBE25:
+ 441              	.LBE24:
+ 166:common/prog/MSP/mcal/msup.c ****     MSUP_setTimeOutExt(&MSUP_LocalTimeoutHandle, timeout);
+ 442              		.loc 1 166 1 is_stmt 0 view .LVU92
+ 443 0000 10B5     		push	{r4, lr}
+ 444              	.LCFI9:
+ 445              		.cfi_def_cfa_offset 8
+ 446              		.cfi_offset 4, -8
+ 447              		.cfi_offset 14, -4
+ 448              	.LBB28:
+ 449              	.LBB26:
+ 120:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(handle);
+ 450              		.loc 1 120 21 view .LVU93
+ 451 0002 034B     		ldr	r3, .L22
+ 452              	.LBE26:
+ 453              	.LBE28:
+ 168:common/prog/MSP/mcal/msup.c **** }
+ 454              		.loc 1 168 1 view .LVU94
+ 455              		@ sp needed
+ 456              	.LBB29:
+ 457              	.LBB27:
+ 120:common/prog/MSP/mcal/msup.c ****     MSUP_startTimeMeasureExt(handle);
+ 458              		.loc 1 120 21 view .LVU95
+ 459 0004 5860     		str	r0, [r3, #4]
+ 121:common/prog/MSP/mcal/msup.c **** }
+ 460              		.loc 1 121 5 is_stmt 1 view .LVU96
+ 461 0006 1800     		movs	r0, r3
+ 462              	.LVL30:
+ 121:common/prog/MSP/mcal/msup.c **** }
+ 463              		.loc 1 121 5 is_stmt 0 view .LVU97
+ 464 0008 FFF7FEFF 		bl	MSUP_startTimeMeasureExt
+ 465              	.LVL31:
+ 121:common/prog/MSP/mcal/msup.c **** }
+ 466              		.loc 1 121 5 view .LVU98
+ 467              	.LBE27:
+ 468              	.LBE29:
+ 469              		.loc 1 168 1 view .LVU99
+ 470 000c 10BD     		pop	{r4, pc}
+ 471              	.L23:
+ 472 000e C046     		.align	2
+ 473              	.L22:
+ 474 0010 00000000 		.word	.LANCHOR0
+ 475              		.cfi_endproc
+ 476              	.LFE102:
+ 478              		.section	.text.MSUP_isTimeOut,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	MSUP_isTimeOut
+ 481              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 13
+
+
+ 482              		.code	16
+ 483              		.thumb_func
+ 485              	MSUP_isTimeOut:
+ 486              	.LFB103:
+ 169:common/prog/MSP/mcal/msup.c **** 
+ 170:common/prog/MSP/mcal/msup.c **** 
+ 171:common/prog/MSP/mcal/msup.c **** bool MSUP_isTimeOut(void)
+ 172:common/prog/MSP/mcal/msup.c **** {
+ 487              		.loc 1 172 1 is_stmt 1 view -0
+ 488              		.cfi_startproc
+ 489              		@ args = 0, pretend = 0, frame = 0
+ 490              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173:common/prog/MSP/mcal/msup.c ****     return MSUP_isTimeOutExt(&MSUP_LocalTimeoutHandle);
+ 491              		.loc 1 173 5 view .LVU101
+ 172:common/prog/MSP/mcal/msup.c ****     return MSUP_isTimeOutExt(&MSUP_LocalTimeoutHandle);
+ 492              		.loc 1 172 1 is_stmt 0 view .LVU102
+ 493 0000 10B5     		push	{r4, lr}
+ 494              	.LCFI10:
+ 495              		.cfi_def_cfa_offset 8
+ 496              		.cfi_offset 4, -8
+ 497              		.cfi_offset 14, -4
+ 498              		.loc 1 173 12 view .LVU103
+ 499 0002 0248     		ldr	r0, .L25
+ 500 0004 FFF7FEFF 		bl	MSUP_isTimeOutExt
+ 501              	.LVL32:
+ 174:common/prog/MSP/mcal/msup.c **** }
+ 502              		.loc 1 174 1 view .LVU104
+ 503              		@ sp needed
+ 504 0008 10BD     		pop	{r4, pc}
+ 505              	.L26:
+ 506 000a C046     		.align	2
+ 507              	.L25:
+ 508 000c 00000000 		.word	.LANCHOR0
+ 509              		.cfi_endproc
+ 510              	.LFE103:
+ 512              		.section	.text.MSUP_generateReset,"ax",%progbits
+ 513              		.align	1
+ 514              		.weak	MSUP_generateReset
+ 515              		.syntax unified
+ 516              		.code	16
+ 517              		.thumb_func
+ 519              	MSUP_generateReset:
+ 520              	.LFB104:
+ 175:common/prog/MSP/mcal/msup.c **** 
+ 176:common/prog/MSP/mcal/msup.c **** 
+ 177:common/prog/MSP/mcal/msup.c **** SYMBOL_WEAK SYMBOL_NO_RETURN void MSUP_generateReset(void)
+ 178:common/prog/MSP/mcal/msup.c **** {
+ 521              		.loc 1 178 1 is_stmt 1 view -0
+ 522              		.cfi_startproc
+ 523              		@ Volatile: function does not return.
+ 524              		@ args = 0, pretend = 0, frame = 0
+ 525              		@ frame_needed = 0, uses_anonymous_args = 0
+ 526              		@ link register save eliminated.
+ 179:common/prog/MSP/mcal/msup.c ****     NVIC_SystemReset();  //Reset the system provided by CMSIS
+ 527              		.loc 1 179 5 view .LVU106
+ 528              	.LBB36:
+ 529              	.LBI36:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 14
+
+
+ 530              		.file 2 "common/prog/MSP/CMSIS/core_cm0plus.h"
+   1:common/prog/MSP/CMSIS/core_cm0plus.h **** /**************************************************************************//**
+   2:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @file     core_cm0plus.h
+   3:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @brief    CMSIS Cortex-M0+ Core Peripheral Access Layer Header File
+   4:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @version  V5.0.9
+   5:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @date     21. August 2019
+   6:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+   7:common/prog/MSP/CMSIS/core_cm0plus.h **** /*
+   8:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
+   9:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  10:common/prog/MSP/CMSIS/core_cm0plus.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  12:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:common/prog/MSP/CMSIS/core_cm0plus.h ****  * not use this file except in compliance with the License.
+  14:common/prog/MSP/CMSIS/core_cm0plus.h ****  * You may obtain a copy of the License at
+  15:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  16:common/prog/MSP/CMSIS/core_cm0plus.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  18:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:common/prog/MSP/CMSIS/core_cm0plus.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:common/prog/MSP/CMSIS/core_cm0plus.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:common/prog/MSP/CMSIS/core_cm0plus.h ****  * See the License for the specific language governing permissions and
+  22:common/prog/MSP/CMSIS/core_cm0plus.h ****  * limitations under the License.
+  23:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  24:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  25:common/prog/MSP/CMSIS/core_cm0plus.h **** #if   defined ( __ICCARM__ )
+  26:common/prog/MSP/CMSIS/core_cm0plus.h ****   #pragma system_include         /* treat file as system include file for MISRA check */
+  27:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined (__clang__)
+  28:common/prog/MSP/CMSIS/core_cm0plus.h ****   #pragma clang system_header   /* treat file as system include file */
+  29:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+  30:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  31:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CORE_CM0PLUS_H_GENERIC
+  32:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORE_CM0PLUS_H_GENERIC
+  33:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  34:common/prog/MSP/CMSIS/core_cm0plus.h **** #include <stdint.h>
+  35:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  36:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+  37:common/prog/MSP/CMSIS/core_cm0plus.h ****  extern "C" {
+  38:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+  39:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  40:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+  41:common/prog/MSP/CMSIS/core_cm0plus.h ****   \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  42:common/prog/MSP/CMSIS/core_cm0plus.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  43:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  44:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  45:common/prog/MSP/CMSIS/core_cm0plus.h ****      Function definitions in header files are used to allow 'inlining'.
+  46:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  47:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  48:common/prog/MSP/CMSIS/core_cm0plus.h ****      Unions are used for effective representation of core registers.
+  49:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  50:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  51:common/prog/MSP/CMSIS/core_cm0plus.h ****      Function-like macros are used to allow more efficient code.
+  52:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  53:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  54:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  55:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+  56:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                 CMSIS definitions
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 15
+
+
+  57:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+  58:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+  59:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup Cortex-M0+
+  60:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+  61:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  62:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  63:common/prog/MSP/CMSIS/core_cm0plus.h **** #include "cmsis_version.h"
+  64:common/prog/MSP/CMSIS/core_cm0plus.h ****  
+  65:common/prog/MSP/CMSIS/core_cm0plus.h **** /*  CMSIS CM0+ definitions */
+  66:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION_MAIN (__CM_CMSIS_VERSION_MAIN)                  /*!< \deprecated [3
+  67:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION_SUB  (__CM_CMSIS_VERSION_SUB)                   /*!< \deprecated [1
+  68:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION      ((__CM0PLUS_CMSIS_VERSION_MAIN << 16U) | \
+  69:common/prog/MSP/CMSIS/core_cm0plus.h ****                                        __CM0PLUS_CMSIS_VERSION_SUB           )  /*!< \deprecated CM
+  70:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  71:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORTEX_M                   (0U)                                       /*!< Cortex-M Core 
+  72:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  73:common/prog/MSP/CMSIS/core_cm0plus.h **** /** __FPU_USED indicates whether an FPU is used or not.
+  74:common/prog/MSP/CMSIS/core_cm0plus.h ****     This core does not support an FPU at all
+  75:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+  76:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __FPU_USED       0U
+  77:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  78:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined ( __CC_ARM )
+  79:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __TARGET_FPU_VFP
+  80:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  81:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  82:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  83:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  84:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __ARM_FP
+  85:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  86:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  87:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  88:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __GNUC__ )
+  89:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+  90:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  91:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  92:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  93:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __ICCARM__ )
+  94:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __ARMVFP__
+  95:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  96:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  97:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  98:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __TI_ARM__ )
+  99:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __TI_VFP_SUPPORT__
+ 100:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 101:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 102:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 103:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __TASKING__ )
+ 104:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __FPU_VFP__
+ 105:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 106:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 107:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 108:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __CSMC__ )
+ 109:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if ( __CSMC__ & 0x400U)
+ 110:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 111:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 112:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 113:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 16
+
+
+ 114:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 115:common/prog/MSP/CMSIS/core_cm0plus.h **** #include "cmsis_compiler.h"               /* CMSIS compiler specific defines */
+ 116:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 117:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 118:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 119:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 120:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 121:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 122:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif /* __CORE_CM0PLUS_H_GENERIC */
+ 123:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 124:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CMSIS_GENERIC
+ 125:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 126:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CORE_CM0PLUS_H_DEPENDANT
+ 127:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORE_CM0PLUS_H_DEPENDANT
+ 128:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 129:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 130:common/prog/MSP/CMSIS/core_cm0plus.h ****  extern "C" {
+ 131:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 132:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 133:common/prog/MSP/CMSIS/core_cm0plus.h **** /* check device defines and use defaults */
+ 134:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined __CHECK_DEVICE_DEFINES
+ 135:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __CM0PLUS_REV
+ 136:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __CM0PLUS_REV             0x0000U
+ 137:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__CM0PLUS_REV not defined in device header file; using default!"
+ 138:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 139:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 140:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __MPU_PRESENT
+ 141:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __MPU_PRESENT             0U
+ 142:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 143:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 144:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 145:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __VTOR_PRESENT
+ 146:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __VTOR_PRESENT            0U
+ 147:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__VTOR_PRESENT not defined in device header file; using default!"
+ 148:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 149:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 150:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __NVIC_PRIO_BITS
+ 151:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __NVIC_PRIO_BITS          2U
+ 152:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 153:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 154:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 155:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __Vendor_SysTickConfig
+ 156:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __Vendor_SysTickConfig    0U
+ 157:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 158:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 159:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 160:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 161:common/prog/MSP/CMSIS/core_cm0plus.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 162:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 163:common/prog/MSP/CMSIS/core_cm0plus.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 164:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 165:common/prog/MSP/CMSIS/core_cm0plus.h ****     <strong>IO Type Qualifiers</strong> are used
+ 166:common/prog/MSP/CMSIS/core_cm0plus.h ****     \li to specify the access to peripheral variables.
+ 167:common/prog/MSP/CMSIS/core_cm0plus.h ****     \li for automatic generation of peripheral register debug information.
+ 168:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 169:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 170:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 17
+
+
+ 171:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 172:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions */
+ 173:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 174:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __O     volatile             /*!< Defines 'write only' permissions */
+ 175:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+ 176:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 177:common/prog/MSP/CMSIS/core_cm0plus.h **** /* following defines should be used for structure members */
+ 178:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IM     volatile const      /*! Defines 'read only' structure member permissions */
+ 179:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
+ 180:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
+ 181:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 182:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group Cortex-M0+ */
+ 183:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 184:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 185:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 186:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+ 187:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                 Register Abstraction
+ 188:common/prog/MSP/CMSIS/core_cm0plus.h ****   Core Register contain:
+ 189:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core Register
+ 190:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core NVIC Register
+ 191:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SCB Register
+ 192:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SysTick Register
+ 193:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core MPU Register
+ 194:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+ 195:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 196:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_core_register Defines and Type Definitions
+ 197:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief Type definitions and defines for Cortex-M processor based devices.
+ 198:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 199:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 200:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 201:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 202:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_CORE  Status and Control Registers
+ 203:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Core Register type definitions.
+ 204:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 205:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 206:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 207:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 208:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Application Program Status Register (APSR).
+ 209:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 210:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 211:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 212:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 213:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 214:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:28;              /*!< bit:  0..27  Reserved */
+ 215:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 216:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 217:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 218:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 219:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 220:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 221:common/prog/MSP/CMSIS/core_cm0plus.h **** } APSR_Type;
+ 222:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 223:common/prog/MSP/CMSIS/core_cm0plus.h **** /* APSR Register Definitions */
+ 224:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_N_Pos                         31U                                            /*!< APSR
+ 225:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_N_Msk                         (1UL << APSR_N_Pos)                            /*!< APSR
+ 226:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 227:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_Z_Pos                         30U                                            /*!< APSR
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 18
+
+
+ 228:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_Z_Msk                         (1UL << APSR_Z_Pos)                            /*!< APSR
+ 229:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 230:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_C_Pos                         29U                                            /*!< APSR
+ 231:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_C_Msk                         (1UL << APSR_C_Pos)                            /*!< APSR
+ 232:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 233:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_V_Pos                         28U                                            /*!< APSR
+ 234:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_V_Msk                         (1UL << APSR_V_Pos)                            /*!< APSR
+ 235:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 236:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 237:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 238:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 239:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 240:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 241:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 242:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 243:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 244:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 245:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
+ 246:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 247:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 248:common/prog/MSP/CMSIS/core_cm0plus.h **** } IPSR_Type;
+ 249:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 250:common/prog/MSP/CMSIS/core_cm0plus.h **** /* IPSR Register Definitions */
+ 251:common/prog/MSP/CMSIS/core_cm0plus.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ 252:common/prog/MSP/CMSIS/core_cm0plus.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
+ 253:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 254:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 255:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 256:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 257:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 258:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 259:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 260:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 261:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 262:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 263:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved */
+ 264:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0) */
+ 265:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved1:3;               /*!< bit: 25..27  Reserved */
+ 266:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 267:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 268:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 269:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 270:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 271:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 272:common/prog/MSP/CMSIS/core_cm0plus.h **** } xPSR_Type;
+ 273:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 274:common/prog/MSP/CMSIS/core_cm0plus.h **** /* xPSR Register Definitions */
+ 275:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_N_Pos                         31U                                            /*!< xPSR
+ 276:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_N_Msk                         (1UL << xPSR_N_Pos)                            /*!< xPSR
+ 277:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 278:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_Z_Pos                         30U                                            /*!< xPSR
+ 279:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_Z_Msk                         (1UL << xPSR_Z_Pos)                            /*!< xPSR
+ 280:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 281:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_C_Pos                         29U                                            /*!< xPSR
+ 282:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_C_Msk                         (1UL << xPSR_C_Pos)                            /*!< xPSR
+ 283:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 284:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_V_Pos                         28U                                            /*!< xPSR
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 19
+
+
+ 285:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_V_Msk                         (1UL << xPSR_V_Pos)                            /*!< xPSR
+ 286:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 287:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_T_Pos                         24U                                            /*!< xPSR
+ 288:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_T_Msk                         (1UL << xPSR_T_Pos)                            /*!< xPSR
+ 289:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 290:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
+ 291:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
+ 292:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 293:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 294:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 295:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Control Registers (CONTROL).
+ 296:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 297:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 298:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 299:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 300:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 301:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 302:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used */
+ 303:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved1:30;              /*!< bit:  2..31  Reserved */
+ 304:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 305:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 306:common/prog/MSP/CMSIS/core_cm0plus.h **** } CONTROL_Type;
+ 307:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 308:common/prog/MSP/CMSIS/core_cm0plus.h **** /* CONTROL Register Definitions */
+ 309:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_SPSEL_Pos                   1U                                            /*!< CONT
+ 310:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_SPSEL_Msk                  (1UL << CONTROL_SPSEL_Pos)                     /*!< CONT
+ 311:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 312:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_nPRIV_Pos                   0U                                            /*!< CONT
+ 313:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_nPRIV_Msk                  (1UL /*<< CONTROL_nPRIV_Pos*/)                 /*!< CONT
+ 314:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 315:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_CORE */
+ 316:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 317:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 318:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 319:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 320:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 321:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Type definitions for the NVIC Registers
+ 322:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 323:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 324:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 325:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 326:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 327:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 328:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 329:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 330:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ISER[1U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 331:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED0[31U];
+ 332:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICER[1U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 333:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED1[31U];
+ 334:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ISPR[1U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register *
+ 335:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED2[31U];
+ 336:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICPR[1U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 337:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED3[31U];
+ 338:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED4[64U];
+ 339:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t IP[8U];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+ 340:common/prog/MSP/CMSIS/core_cm0plus.h **** }  NVIC_Type;
+ 341:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 20
+
+
+ 342:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_NVIC */
+ 343:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 344:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 345:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 346:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 347:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_SCB     System Control Block (SCB)
+ 348:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the System Control Block Registers
+ 349:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 350:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 351:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 352:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 353:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the System Control Block (SCB).
+ 354:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 355:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 356:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 357:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 358:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 359:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 360:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t VTOR;                   /*!< Offset: 0x008 (R/W)  Vector Table Offset Register */
+ 361:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 362:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED0;
+ 363:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 364:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 365:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+ 366:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register *
+ 367:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED1;
+ 368:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SHP[2U];                /*!< Offset: 0x01C (R/W)  System Handlers Priority Registe
+ 369:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 370:common/prog/MSP/CMSIS/core_cm0plus.h **** } SCB_Type;
+ 371:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 372:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB CPUID Register Definitions */
+ 373:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24U                                            /*!< SCB 
+ 374:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 375:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 376:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_VARIANT_Pos              20U                                            /*!< SCB 
+ 377:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 378:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 379:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
+ 380:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 381:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 382:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
+ 383:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 384:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 385:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
+ 386:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
+ 387:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 388:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Interrupt Control State Register Definitions */
+ 389:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_NMIPENDSET_Pos            31U                                            /*!< SCB 
+ 390:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 391:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 392:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVSET_Pos             28U                                            /*!< SCB 
+ 393:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 394:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 395:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVCLR_Pos             27U                                            /*!< SCB 
+ 396:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 397:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 398:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTSET_Pos             26U                                            /*!< SCB 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 21
+
+
+ 399:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 400:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 401:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTCLR_Pos             25U                                            /*!< SCB 
+ 402:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 403:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 404:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23U                                            /*!< SCB 
+ 405:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 406:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 407:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPENDING_Pos            22U                                            /*!< SCB 
+ 408:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 409:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 410:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTPENDING_Pos           12U                                            /*!< SCB 
+ 411:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 412:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 413:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTACTIVE_Pos             0U                                            /*!< SCB 
+ 414:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL /*<< SCB_ICSR_VECTACTIVE_Pos*/)       /*!< SCB 
+ 415:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 416:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 417:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Interrupt Control State Register Definitions */
+ 418:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_VTOR_TBLOFF_Pos                 8U                                            /*!< SCB 
+ 419:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_VTOR_TBLOFF_Msk                (0xFFFFFFUL << SCB_VTOR_TBLOFF_Pos)            /*!< SCB 
+ 420:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 421:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 422:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 423:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEY_Pos              16U                                            /*!< SCB 
+ 424:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 425:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 426:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16U                                            /*!< SCB 
+ 427:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 428:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 429:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_ENDIANESS_Pos            15U                                            /*!< SCB 
+ 430:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 431:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 432:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
+ 433:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 434:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 435:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
+ 436:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 437:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 438:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB System Control Register Definitions */
+ 439:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
+ 440:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 441:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 442:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPDEEP_Pos               2U                                            /*!< SCB 
+ 443:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 444:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 445:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1U                                            /*!< SCB 
+ 446:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 447:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 448:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Configuration Control Register Definitions */
+ 449:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_STKALIGN_Pos                9U                                            /*!< SCB 
+ 450:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 451:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 452:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3U                                            /*!< SCB 
+ 453:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 454:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 455:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB System Handler Control and State Register Definitions */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 22
+
+
+ 456:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB 
+ 457:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 458:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 459:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_SCB */
+ 460:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 461:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 462:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 463:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 464:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 465:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the System Timer Registers.
+ 466:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 467:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 468:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 469:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 470:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the System Timer (SysTick).
+ 471:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 472:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 473:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 474:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 475:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+ 476:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
+ 477:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+ 478:common/prog/MSP/CMSIS/core_cm0plus.h **** } SysTick_Type;
+ 479:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 480:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Control / Status Register Definitions */
+ 481:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
+ 482:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 483:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 484:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2U                                            /*!< SysT
+ 485:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 486:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 487:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_TICKINT_Pos            1U                                            /*!< SysT
+ 488:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 489:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 490:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_ENABLE_Pos             0U                                            /*!< SysT
+ 491:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysT
+ 492:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 493:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Reload Register Definitions */
+ 494:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_LOAD_RELOAD_Pos             0U                                            /*!< SysT
+ 495:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysT
+ 496:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 497:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Current Register Definitions */
+ 498:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_VAL_CURRENT_Pos             0U                                            /*!< SysT
+ 499:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysT
+ 500:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 501:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Calibration Register Definitions */
+ 502:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_NOREF_Pos            31U                                            /*!< SysT
+ 503:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 504:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 505:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_SKEW_Pos             30U                                            /*!< SysT
+ 506:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 507:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 508:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysT
+ 509:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysT
+ 510:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 511:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_SysTick */
+ 512:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 23
+
+
+ 513:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+ 514:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 515:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 516:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
+ 517:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the Memory Protection Unit (MPU)
+ 518:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 519:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 520:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 521:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 522:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the Memory Protection Unit (MPU).
+ 523:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 524:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 525:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 526:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t TYPE;                   /*!< Offset: 0x000 (R/ )  MPU Type Register */
+ 527:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x004 (R/W)  MPU Control Register */
+ 528:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RNR;                    /*!< Offset: 0x008 (R/W)  MPU Region RNRber Register */
+ 529:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RBAR;                   /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+ 530:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RASR;                   /*!< Offset: 0x010 (R/W)  MPU Region Attribute and Size Re
+ 531:common/prog/MSP/CMSIS/core_cm0plus.h **** } MPU_Type;
+ 532:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 533:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_RALIASES                  1U
+ 534:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 535:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Type Register Definitions */
+ 536:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_IREGION_Pos               16U                                            /*!< MPU 
+ 537:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+ 538:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 539:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_DREGION_Pos                8U                                            /*!< MPU 
+ 540:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+ 541:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 542:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_SEPARATE_Pos               0U                                            /*!< MPU 
+ 543:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL /*<< MPU_TYPE_SEPARATE_Pos*/)             /*!< MPU 
+ 544:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 545:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Control Register Definitions */
+ 546:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2U                                            /*!< MPU 
+ 547:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+ 548:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 549:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_HFNMIENA_Pos               1U                                            /*!< MPU 
+ 550:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+ 551:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 552:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_ENABLE_Pos                 0U                                            /*!< MPU 
+ 553:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_ENABLE_Msk                (1UL /*<< MPU_CTRL_ENABLE_Pos*/)               /*!< MPU 
+ 554:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 555:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Number Register Definitions */
+ 556:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RNR_REGION_Pos                  0U                                            /*!< MPU 
+ 557:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL /*<< MPU_RNR_REGION_Pos*/)             /*!< MPU 
+ 558:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 559:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Base Address Register Definitions */
+ 560:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_ADDR_Pos                   8U                                            /*!< MPU 
+ 561:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_ADDR_Msk                  (0xFFFFFFUL << MPU_RBAR_ADDR_Pos)              /*!< MPU 
+ 562:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 563:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_VALID_Pos                  4U                                            /*!< MPU 
+ 564:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
+ 565:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 566:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_REGION_Pos                 0U                                            /*!< MPU 
+ 567:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_REGION_Msk                (0xFUL /*<< MPU_RBAR_REGION_Pos*/)             /*!< MPU 
+ 568:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 569:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Attribute and Size Register Definitions */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 24
+
+
+ 570:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ATTRS_Pos                 16U                                            /*!< MPU 
+ 571:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
+ 572:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 573:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_XN_Pos                    28U                                            /*!< MPU 
+ 574:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_XN_Msk                    (1UL << MPU_RASR_XN_Pos)                       /*!< MPU 
+ 575:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 576:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_AP_Pos                    24U                                            /*!< MPU 
+ 577:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_AP_Msk                    (0x7UL << MPU_RASR_AP_Pos)                     /*!< MPU 
+ 578:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 579:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_TEX_Pos                   19U                                            /*!< MPU 
+ 580:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_TEX_Msk                   (0x7UL << MPU_RASR_TEX_Pos)                    /*!< MPU 
+ 581:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 582:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_S_Pos                     18U                                            /*!< MPU 
+ 583:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_S_Msk                     (1UL << MPU_RASR_S_Pos)                        /*!< MPU 
+ 584:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 585:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_C_Pos                     17U                                            /*!< MPU 
+ 586:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_C_Msk                     (1UL << MPU_RASR_C_Pos)                        /*!< MPU 
+ 587:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 588:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_B_Pos                     16U                                            /*!< MPU 
+ 589:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_B_Msk                     (1UL << MPU_RASR_B_Pos)                        /*!< MPU 
+ 590:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 591:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SRD_Pos                    8U                                            /*!< MPU 
+ 592:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SRD_Msk                   (0xFFUL << MPU_RASR_SRD_Pos)                   /*!< MPU 
+ 593:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 594:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SIZE_Pos                   1U                                            /*!< MPU 
+ 595:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SIZE_Msk                  (0x1FUL << MPU_RASR_SIZE_Pos)                  /*!< MPU 
+ 596:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 597:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ENABLE_Pos                 0U                                            /*!< MPU 
+ 598:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ENABLE_Msk                (1UL /*<< MPU_RASR_ENABLE_Pos*/)               /*!< MPU 
+ 599:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 600:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_MPU */
+ 601:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 602:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 603:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 604:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 605:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 606:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+ 607:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Cortex-M0+ Core Debug Registers (DCB registers, SHCSR, and DFSR) are only accessible ov
+ 608:common/prog/MSP/CMSIS/core_cm0plus.h ****             Therefore they are not covered by the Cortex-M0+ header file.
+ 609:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 610:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 611:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_CoreDebug */
+ 612:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 613:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 614:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 615:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 616:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_core_bitfield     Core register bit field macros
+ 617:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Macros for use with bit field definitions (xxx_Pos, xxx_Msk).
+ 618:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 619:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 620:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 621:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 622:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Mask and shift a bit field value for use in a register bit range.
+ 623:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] field  Name of the register bit field.
+ 624:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] value  Value of the bit field. This parameter is interpreted as an uint32_t type.
+ 625:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return           Masked and shifted value.
+ 626:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 25
+
+
+ 627:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _VAL2FLD(field, value)    (((uint32_t)(value) << field ## _Pos) & field ## _Msk)
+ 628:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 629:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 630:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief     Mask and shift a register value to extract a bit filed value.
+ 631:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] field  Name of the register bit field.
+ 632:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] value  Value of register. This parameter is interpreted as an uint32_t type.
+ 633:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return           Masked and shifted bit field value.
+ 634:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 635:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _FLD2VAL(field, value)    (((uint32_t)(value) & field ## _Msk) >> field ## _Pos)
+ 636:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 637:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_core_bitfield */
+ 638:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 639:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 640:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 641:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 642:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_core_base     Core Definitions
+ 643:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Definitions for base addresses, unions, and structures.
+ 644:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 645:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 646:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 647:common/prog/MSP/CMSIS/core_cm0plus.h **** /* Memory mapping of Core Hardware */
+ 648:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+ 649:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
+ 650:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address */
+ 651:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+ 652:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 653:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+ 654:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+ 655:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+ 656:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 657:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+ 658:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit *
+ 659:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit *
+ 660:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 661:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 662:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} */
+ 663:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 664:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 665:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 666:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+ 667:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                Hardware Abstraction Layer
+ 668:common/prog/MSP/CMSIS/core_cm0plus.h ****   Core Function Interface contains:
+ 669:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core NVIC Functions
+ 670:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SysTick Functions
+ 671:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core Register Access Functions
+ 672:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+ 673:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 674:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+ 675:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 676:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 677:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 678:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 679:common/prog/MSP/CMSIS/core_cm0plus.h **** /* ##########################   NVIC functions  #################################### */
+ 680:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 681:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_Core_FunctionInterface
+ 682:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+ 683:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Functions that manage interrupts and exceptions via the NVIC.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 26
+
+
+ 684:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 685:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 686:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 687:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef CMSIS_NVIC_VIRTUAL
+ 688:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef CMSIS_NVIC_VIRTUAL_HEADER_FILE
+ 689:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define CMSIS_NVIC_VIRTUAL_HEADER_FILE "cmsis_nvic_virtual.h"
+ 690:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 691:common/prog/MSP/CMSIS/core_cm0plus.h ****   #include CMSIS_NVIC_VIRTUAL_HEADER_FILE
+ 692:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 693:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPriorityGrouping    __NVIC_SetPriorityGrouping
+ 694:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPriorityGrouping    __NVIC_GetPriorityGrouping
+ 695:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_EnableIRQ              __NVIC_EnableIRQ
+ 696:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetEnableIRQ           __NVIC_GetEnableIRQ
+ 697:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_DisableIRQ             __NVIC_DisableIRQ
+ 698:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPendingIRQ          __NVIC_GetPendingIRQ
+ 699:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPendingIRQ          __NVIC_SetPendingIRQ
+ 700:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_ClearPendingIRQ        __NVIC_ClearPendingIRQ
+ 701:common/prog/MSP/CMSIS/core_cm0plus.h **** /*#define NVIC_GetActive              __NVIC_GetActive             not available for Cortex-M0+ */
+ 702:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPriority            __NVIC_SetPriority
+ 703:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPriority            __NVIC_GetPriority
+ 704:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SystemReset            __NVIC_SystemReset
+ 705:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif /* CMSIS_NVIC_VIRTUAL */
+ 706:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 707:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef CMSIS_VECTAB_VIRTUAL
+ 708:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef CMSIS_VECTAB_VIRTUAL_HEADER_FILE
+ 709:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define CMSIS_VECTAB_VIRTUAL_HEADER_FILE "cmsis_vectab_virtual.h"
+ 710:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 711:common/prog/MSP/CMSIS/core_cm0plus.h ****   #include CMSIS_VECTAB_VIRTUAL_HEADER_FILE
+ 712:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 713:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetVector              __NVIC_SetVector
+ 714:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetVector              __NVIC_GetVector
+ 715:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif  /* (CMSIS_VECTAB_VIRTUAL) */
+ 716:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 717:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC_USER_IRQ_OFFSET          16
+ 718:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 719:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 720:common/prog/MSP/CMSIS/core_cm0plus.h **** /* The following EXC_RETURN values are saved the LR on exception entry */
+ 721:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_HANDLER         (0xFFFFFFF1UL)     /* return to Handler mode, uses MSP after ret
+ 722:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_THREAD_MSP      (0xFFFFFFF9UL)     /* return to Thread mode, uses MSP after retu
+ 723:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_THREAD_PSP      (0xFFFFFFFDUL)     /* return to Thread mode, uses PSP after retu
+ 724:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 725:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 726:common/prog/MSP/CMSIS/core_cm0plus.h **** /* Interrupt Priorities are WORD accessible only under Armv6-M                  */
+ 727:common/prog/MSP/CMSIS/core_cm0plus.h **** /* The following MACROS handle generation of the register offset and byte masks */
+ 728:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _BIT_SHIFT(IRQn)         (  ((((uint32_t)(int32_t)(IRQn))         )      &  0x03UL) * 8UL)
+ 729:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _SHP_IDX(IRQn)           ( (((((uint32_t)(int32_t)(IRQn)) & 0x0FUL)-8UL) >>    2UL)      )
+ 730:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _IP_IDX(IRQn)            (   (((uint32_t)(int32_t)(IRQn))                >>    2UL)      )
+ 731:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 732:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __NVIC_SetPriorityGrouping(X) (void)(X)
+ 733:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __NVIC_GetPriorityGrouping()  (0U)
+ 734:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 735:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 736:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Enable Interrupt
+ 737:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Enables a device specific interrupt in the NVIC interrupt controller.
+ 738:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 739:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 740:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 27
+
+
+ 741:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+ 742:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 743:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 744:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 745:common/prog/MSP/CMSIS/core_cm0plus.h ****     __COMPILER_BARRIER();
+ 746:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ 747:common/prog/MSP/CMSIS/core_cm0plus.h ****     __COMPILER_BARRIER();
+ 748:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 749:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 750:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 751:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 752:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 753:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Get Interrupt Enable status
+ 754:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Returns a device specific interrupt enable status from the NVIC interrupt controller.
+ 755:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 756:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return             0  Interrupt is not enabled.
+ 757:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return             1  Interrupt is enabled.
+ 758:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 759:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 760:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+ 761:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 762:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 763:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 764:common/prog/MSP/CMSIS/core_cm0plus.h ****     return((uint32_t)(((NVIC->ISER[0U] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL)
+ 765:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 766:common/prog/MSP/CMSIS/core_cm0plus.h ****   else
+ 767:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 768:common/prog/MSP/CMSIS/core_cm0plus.h ****     return(0U);
+ 769:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 770:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 771:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 772:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 773:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 774:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Disable Interrupt
+ 775:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Disables a device specific interrupt in the NVIC interrupt controller.
+ 776:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 777:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 778:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 779:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_DisableIRQ(IRQn_Type IRQn)
+ 780:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 781:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 782:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 783:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->ICER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ 784:common/prog/MSP/CMSIS/core_cm0plus.h ****     __DSB();
+ 785:common/prog/MSP/CMSIS/core_cm0plus.h ****     __ISB();
+ 786:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 787:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 788:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 789:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 790:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 791:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Get Pending Interrupt
+ 792:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Reads the NVIC pending register and returns the pending bit for the specified device spe
+ 793:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 794:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return             0  Interrupt status is not pending.
+ 795:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return             1  Interrupt status is pending.
+ 796:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 797:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 28
+
+
+ 798:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+ 799:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 800:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 801:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 802:common/prog/MSP/CMSIS/core_cm0plus.h ****     return((uint32_t)(((NVIC->ISPR[0U] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL)
+ 803:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 804:common/prog/MSP/CMSIS/core_cm0plus.h ****   else
+ 805:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 806:common/prog/MSP/CMSIS/core_cm0plus.h ****     return(0U);
+ 807:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 808:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 809:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 810:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 811:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 812:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Set Pending Interrupt
+ 813:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Sets the pending bit of a device specific interrupt in the NVIC pending register.
+ 814:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 815:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 816:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 817:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+ 818:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 819:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 820:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 821:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->ISPR[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ 822:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 823:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 824:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 825:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 826:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 827:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Clear Pending Interrupt
+ 828:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Clears the pending bit of a device specific interrupt in the NVIC pending register.
+ 829:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 830:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 831:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 832:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+ 833:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 834:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 835:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 836:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->ICPR[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ 837:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 838:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 839:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 840:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 841:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 842:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Set Interrupt Priority
+ 843:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Sets the priority of a device specific interrupt or a processor exception.
+ 844:common/prog/MSP/CMSIS/core_cm0plus.h ****            The interrupt number can be positive to specify a device specific interrupt,
+ 845:common/prog/MSP/CMSIS/core_cm0plus.h ****            or negative to specify a processor exception.
+ 846:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Interrupt number.
+ 847:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]  priority  Priority to set.
+ 848:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    The priority cannot be set for every processor exception.
+ 849:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 850:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+ 851:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 852:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 853:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 854:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->IP[_IP_IDX(IRQn)]  = ((uint32_t)(NVIC->IP[_IP_IDX(IRQn)]  & ~(0xFFUL << _BIT_SHIFT(IRQn))
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 29
+
+
+ 855:common/prog/MSP/CMSIS/core_cm0plus.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 856:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 857:common/prog/MSP/CMSIS/core_cm0plus.h ****   else
+ 858:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 859:common/prog/MSP/CMSIS/core_cm0plus.h ****     SCB->SHP[_SHP_IDX(IRQn)] = ((uint32_t)(SCB->SHP[_SHP_IDX(IRQn)] & ~(0xFFUL << _BIT_SHIFT(IRQn))
+ 860:common/prog/MSP/CMSIS/core_cm0plus.h ****        (((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL) << _BIT_SHIFT(IRQn)));
+ 861:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 862:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 863:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 864:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 865:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 866:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Get Interrupt Priority
+ 867:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Reads the priority of a device specific interrupt or a processor exception.
+ 868:common/prog/MSP/CMSIS/core_cm0plus.h ****            The interrupt number can be positive to specify a device specific interrupt,
+ 869:common/prog/MSP/CMSIS/core_cm0plus.h ****            or negative to specify a processor exception.
+ 870:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]   IRQn  Interrupt number.
+ 871:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return             Interrupt Priority.
+ 872:common/prog/MSP/CMSIS/core_cm0plus.h ****                       Value is aligned automatically to the implemented priority bits of the microc
+ 873:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 874:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE uint32_t __NVIC_GetPriority(IRQn_Type IRQn)
+ 875:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 876:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 877:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 878:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 879:common/prog/MSP/CMSIS/core_cm0plus.h ****     return((uint32_t)(((NVIC->IP[ _IP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U -
+ 880:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 881:common/prog/MSP/CMSIS/core_cm0plus.h ****   else
+ 882:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 883:common/prog/MSP/CMSIS/core_cm0plus.h ****     return((uint32_t)(((SCB->SHP[_SHP_IDX(IRQn)] >> _BIT_SHIFT(IRQn) ) & (uint32_t)0xFFUL) >> (8U -
+ 884:common/prog/MSP/CMSIS/core_cm0plus.h ****   }
+ 885:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 886:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 887:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 888:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 889:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Encode Priority
+ 890:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Encodes the priority for an interrupt with the given priority group,
+ 891:common/prog/MSP/CMSIS/core_cm0plus.h ****            preemptive priority value, and subpriority value.
+ 892:common/prog/MSP/CMSIS/core_cm0plus.h ****            In case of a conflict between priority grouping and available
+ 893:common/prog/MSP/CMSIS/core_cm0plus.h ****            priority bits (__NVIC_PRIO_BITS), the smallest possible priority group is set.
+ 894:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]     PriorityGroup  Used priority group.
+ 895:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]   PreemptPriority  Preemptive priority value (starting from 0).
+ 896:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]       SubPriority  Subpriority value (starting from 0).
+ 897:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return                        Encoded priority. Value can be used in the function \ref NVIC_SetP
+ 898:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 899:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uin
+ 900:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 901:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);   /* only values 0..7 are used   
+ 902:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t PreemptPriorityBits;
+ 903:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t SubPriorityBits;
+ 904:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 905:common/prog/MSP/CMSIS/core_cm0plus.h ****   PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(__NVIC_PRIO_BITS)) ? (uint32_t)(__NV
+ 906:common/prog/MSP/CMSIS/core_cm0plus.h ****   SubPriorityBits     = ((PriorityGroupTmp + (uint32_t)(__NVIC_PRIO_BITS)) < (uint32_t)7UL) ? (uint
+ 907:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 908:common/prog/MSP/CMSIS/core_cm0plus.h ****   return (
+ 909:common/prog/MSP/CMSIS/core_cm0plus.h ****            ((PreemptPriority & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL)) << SubPriorityBits
+ 910:common/prog/MSP/CMSIS/core_cm0plus.h ****            ((SubPriority     & (uint32_t)((1UL << (SubPriorityBits    )) - 1UL)))
+ 911:common/prog/MSP/CMSIS/core_cm0plus.h ****          );
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 30
+
+
+ 912:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 913:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 914:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 915:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 916:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Decode Priority
+ 917:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Decodes an interrupt priority value with a given priority group to
+ 918:common/prog/MSP/CMSIS/core_cm0plus.h ****            preemptive priority value and subpriority value.
+ 919:common/prog/MSP/CMSIS/core_cm0plus.h ****            In case of a conflict between priority grouping and available
+ 920:common/prog/MSP/CMSIS/core_cm0plus.h ****            priority bits (__NVIC_PRIO_BITS) the smallest possible priority group is set.
+ 921:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]         Priority   Priority value, which can be retrieved with the function \ref NVIC
+ 922:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]     PriorityGroup  Used priority group.
+ 923:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [out] pPreemptPriority  Preemptive priority value (starting from 0).
+ 924:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [out]     pSubPriority  Subpriority value (starting from 0).
+ 925:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 926:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGroup, uint32_t* cons
+ 927:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 928:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);   /* only values 0..7 are used   
+ 929:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t PreemptPriorityBits;
+ 930:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t SubPriorityBits;
+ 931:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 932:common/prog/MSP/CMSIS/core_cm0plus.h ****   PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(__NVIC_PRIO_BITS)) ? (uint32_t)(__NV
+ 933:common/prog/MSP/CMSIS/core_cm0plus.h ****   SubPriorityBits     = ((PriorityGroupTmp + (uint32_t)(__NVIC_PRIO_BITS)) < (uint32_t)7UL) ? (uint
+ 934:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 935:common/prog/MSP/CMSIS/core_cm0plus.h ****   *pPreemptPriority = (Priority >> SubPriorityBits) & (uint32_t)((1UL << (PreemptPriorityBits)) - 1
+ 936:common/prog/MSP/CMSIS/core_cm0plus.h ****   *pSubPriority     = (Priority                   ) & (uint32_t)((1UL << (SubPriorityBits    )) - 1
+ 937:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 938:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 939:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 940:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 941:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Set Interrupt Vector
+ 942:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Sets an interrupt vector in SRAM based interrupt vector table.
+ 943:common/prog/MSP/CMSIS/core_cm0plus.h ****            The interrupt number can be positive to specify a device specific interrupt,
+ 944:common/prog/MSP/CMSIS/core_cm0plus.h ****            or negative to specify a processor exception.
+ 945:common/prog/MSP/CMSIS/core_cm0plus.h ****            VTOR must been relocated to SRAM before.
+ 946:common/prog/MSP/CMSIS/core_cm0plus.h ****            If VTOR is not present address 0 must be mapped to SRAM.
+ 947:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]   IRQn      Interrupt number
+ 948:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]   vector    Address of interrupt handler function
+ 949:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 950:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector)
+ 951:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 952:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 953:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t *vectors = (uint32_t *)SCB->VTOR;
+ 954:common/prog/MSP/CMSIS/core_cm0plus.h ****   vectors[(int32_t)IRQn + NVIC_USER_IRQ_OFFSET] = vector;
+ 955:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 956:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t *vectors = (uint32_t *)(NVIC_USER_IRQ_OFFSET << 2);      /* point to 1st user interrupt 
+ 957:common/prog/MSP/CMSIS/core_cm0plus.h ****   *(vectors + (int32_t)IRQn) = vector;                              /* use pointer arithmetic to ac
+ 958:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 959:common/prog/MSP/CMSIS/core_cm0plus.h ****   /* ARM Application Note 321 states that the M0+ does not require the architectural barrier */
+ 960:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 961:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 962:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 963:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 964:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Get Interrupt Vector
+ 965:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Reads an interrupt vector from interrupt vector table.
+ 966:common/prog/MSP/CMSIS/core_cm0plus.h ****            The interrupt number can be positive to specify a device specific interrupt,
+ 967:common/prog/MSP/CMSIS/core_cm0plus.h ****            or negative to specify a processor exception.
+ 968:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]   IRQn      Interrupt number.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 31
+
+
+ 969:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return                 Address of interrupt handler function
+ 970:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 971:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE uint32_t __NVIC_GetVector(IRQn_Type IRQn)
+ 972:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 973:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 974:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t *vectors = (uint32_t *)SCB->VTOR;
+ 975:common/prog/MSP/CMSIS/core_cm0plus.h ****   return vectors[(int32_t)IRQn + NVIC_USER_IRQ_OFFSET];
+ 976:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 977:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t *vectors = (uint32_t *)(NVIC_USER_IRQ_OFFSET << 2);      /* point to 1st user interrupt 
+ 978:common/prog/MSP/CMSIS/core_cm0plus.h ****   return *(vectors + (int32_t)IRQn);                                /* use pointer arithmetic to ac
+ 979:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 980:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 981:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 982:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 983:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 984:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   System Reset
+ 985:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Initiates a system reset request to reset the MCU.
+ 986:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 987:common/prog/MSP/CMSIS/core_cm0plus.h **** __NO_RETURN __STATIC_INLINE void __NVIC_SystemReset(void)
+ 531              		.loc 2 987 34 view .LVU107
+ 532              	.LBB37:
+ 988:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 989:common/prog/MSP/CMSIS/core_cm0plus.h ****   __DSB();                                                          /* Ensure all outstanding memor
+ 533              		.loc 2 989 3 view .LVU108
+ 534              	.LBB38:
+ 535              	.LBI38:
+ 536              		.file 3 "common/prog/MSP/CMSIS/cmsis_gcc.h"
+   1:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**************************************************************************//**
+   2:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * @version  V5.4.1
+   5:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * @date     27. May 2021
+   6:common/prog/MSP/CMSIS/cmsis_gcc.h ****  ******************************************************************************/
+   7:common/prog/MSP/CMSIS/cmsis_gcc.h **** /*
+   8:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * Copyright (c) 2009-2021 Arm Limited. All rights reserved.
+   9:common/prog/MSP/CMSIS/cmsis_gcc.h ****  *
+  10:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:common/prog/MSP/CMSIS/cmsis_gcc.h ****  *
+  12:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+  14:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:common/prog/MSP/CMSIS/cmsis_gcc.h ****  *
+  16:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:common/prog/MSP/CMSIS/cmsis_gcc.h ****  *
+  18:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * limitations under the License.
+  23:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+  24:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+  25:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+  28:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:common/prog/MSP/CMSIS/cmsis_gcc.h **** #pragma GCC diagnostic push
+  30:common/prog/MSP/CMSIS/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 32
+
+
+  31:common/prog/MSP/CMSIS/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:common/prog/MSP/CMSIS/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+  34:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __has_builtin
+  36:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  38:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+  39:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __ASM
+  41:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  43:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __INLINE
+  44:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  46:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  49:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE
+  50:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  52:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __NO_RETURN
+  53:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  55:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __USED
+  56:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+  57:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  58:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __WEAK
+  59:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  61:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __PACKED
+  62:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  64:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  67:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  70:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+  71:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:common/prog/MSP/CMSIS/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  78:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  82:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  86:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+  87:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 33
+
+
+  88:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+  94:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 102:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 110:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 113:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __RESTRICT
+ 114:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 116:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef   __COMPILER_BARRIER
+ 117:common/prog/MSP/CMSIS/cmsis_gcc.h ****   #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
+ 118:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 119:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 120:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* #########################  Startup and Lowlevel Init  ######################## */
+ 121:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 122:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __PROGRAM_START
+ 123:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 124:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 125:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Initializes data and bss sections
+ 126:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details This default implementations initialized all data and additional bss
+ 127:common/prog/MSP/CMSIS/cmsis_gcc.h ****            sections relying on .copy.table and .zero.table specified properly
+ 128:common/prog/MSP/CMSIS/cmsis_gcc.h ****            in the used linker script.
+ 129:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 130:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 131:common/prog/MSP/CMSIS/cmsis_gcc.h **** __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
+ 132:common/prog/MSP/CMSIS/cmsis_gcc.h **** {
+ 133:common/prog/MSP/CMSIS/cmsis_gcc.h ****   extern void _start(void) __NO_RETURN;
+ 134:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 135:common/prog/MSP/CMSIS/cmsis_gcc.h ****   typedef struct {
+ 136:common/prog/MSP/CMSIS/cmsis_gcc.h ****     uint32_t const* src;
+ 137:common/prog/MSP/CMSIS/cmsis_gcc.h ****     uint32_t* dest;
+ 138:common/prog/MSP/CMSIS/cmsis_gcc.h ****     uint32_t  wlen;
+ 139:common/prog/MSP/CMSIS/cmsis_gcc.h ****   } __copy_table_t;
+ 140:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 141:common/prog/MSP/CMSIS/cmsis_gcc.h ****   typedef struct {
+ 142:common/prog/MSP/CMSIS/cmsis_gcc.h ****     uint32_t* dest;
+ 143:common/prog/MSP/CMSIS/cmsis_gcc.h ****     uint32_t  wlen;
+ 144:common/prog/MSP/CMSIS/cmsis_gcc.h ****   } __zero_table_t;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 34
+
+
+ 145:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 146:common/prog/MSP/CMSIS/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_start__;
+ 147:common/prog/MSP/CMSIS/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_end__;
+ 148:common/prog/MSP/CMSIS/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_start__;
+ 149:common/prog/MSP/CMSIS/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_end__;
+ 150:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 151:common/prog/MSP/CMSIS/cmsis_gcc.h ****   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable
+ 152:common/prog/MSP/CMSIS/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 153:common/prog/MSP/CMSIS/cmsis_gcc.h ****       pTable->dest[i] = pTable->src[i];
+ 154:common/prog/MSP/CMSIS/cmsis_gcc.h ****     }
+ 155:common/prog/MSP/CMSIS/cmsis_gcc.h ****   }
+ 156:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 157:common/prog/MSP/CMSIS/cmsis_gcc.h ****   for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable
+ 158:common/prog/MSP/CMSIS/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 159:common/prog/MSP/CMSIS/cmsis_gcc.h ****       pTable->dest[i] = 0u;
+ 160:common/prog/MSP/CMSIS/cmsis_gcc.h ****     }
+ 161:common/prog/MSP/CMSIS/cmsis_gcc.h ****   }
+ 162:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 163:common/prog/MSP/CMSIS/cmsis_gcc.h ****   _start();
+ 164:common/prog/MSP/CMSIS/cmsis_gcc.h **** }
+ 165:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 166:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __PROGRAM_START           __cmsis_start
+ 167:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 168:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 169:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __INITIAL_SP
+ 170:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __INITIAL_SP              __StackTop
+ 171:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 172:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 173:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __STACK_LIMIT
+ 174:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __STACK_LIMIT             __StackLimit
+ 175:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 176:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 177:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __VECTOR_TABLE
+ 178:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __VECTOR_TABLE            __Vectors
+ 179:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 180:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 181:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __VECTOR_TABLE_ATTRIBUTE
+ 182:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __VECTOR_TABLE_ATTRIBUTE  __attribute__((used, section(".vectors")))
+ 183:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 184:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 185:common/prog/MSP/CMSIS/cmsis_gcc.h **** #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
+ 186:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __STACK_SEAL
+ 187:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __STACK_SEAL              __StackSeal
+ 188:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 189:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 190:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __TZ_STACK_SEAL_SIZE
+ 191:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __TZ_STACK_SEAL_SIZE      8U
+ 192:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 193:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 194:common/prog/MSP/CMSIS/cmsis_gcc.h **** #ifndef __TZ_STACK_SEAL_VALUE
+ 195:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __TZ_STACK_SEAL_VALUE     0xFEF5EDA5FEF5EDA5ULL
+ 196:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 197:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 198:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 199:common/prog/MSP/CMSIS/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_STACKSEAL_S (uint32_t* stackTop) {
+ 200:common/prog/MSP/CMSIS/cmsis_gcc.h ****   *((uint64_t *)stackTop) = __TZ_STACK_SEAL_VALUE;
+ 201:common/prog/MSP/CMSIS/cmsis_gcc.h **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 35
+
+
+ 202:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 203:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 204:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 205:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* ##########################  Core Instruction Access  ######################### */
+ 206:common/prog/MSP/CMSIS/cmsis_gcc.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+ 207:common/prog/MSP/CMSIS/cmsis_gcc.h ****   Access to dedicated instructions
+ 208:common/prog/MSP/CMSIS/cmsis_gcc.h ****   @{
+ 209:common/prog/MSP/CMSIS/cmsis_gcc.h **** */
+ 210:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 211:common/prog/MSP/CMSIS/cmsis_gcc.h **** /* Define macros for porting to both thumb1 and thumb2.
+ 212:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * For thumb1, use low register (r0-r7), specified by constraint "l"
+ 213:common/prog/MSP/CMSIS/cmsis_gcc.h ****  * Otherwise, use general registers, specified by constraint "r" */
+ 214:common/prog/MSP/CMSIS/cmsis_gcc.h **** #if defined (__thumb__) && !defined (__thumb2__)
+ 215:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
+ 216:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_RW_REG(r) "+l" (r)
+ 217:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "l" (r)
+ 218:common/prog/MSP/CMSIS/cmsis_gcc.h **** #else
+ 219:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=r" (r)
+ 220:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_RW_REG(r) "+r" (r)
+ 221:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "r" (r)
+ 222:common/prog/MSP/CMSIS/cmsis_gcc.h **** #endif
+ 223:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 224:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 225:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   No Operation
+ 226:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ 227:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 228:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __NOP()                             __ASM volatile ("nop")
+ 229:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 230:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 231:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Wait For Interrupt
+ 232:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details Wait For Interrupt is a hint instruction that suspends execution until one of a number o
+ 233:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 234:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __WFI()                             __ASM volatile ("wfi":::"memory")
+ 235:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 236:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 237:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 238:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Wait For Event
+ 239:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details Wait For Event is a hint instruction that permits the processor to enter
+ 240:common/prog/MSP/CMSIS/cmsis_gcc.h ****            a low-power state until one of a number of events occurs.
+ 241:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 242:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __WFE()                             __ASM volatile ("wfe":::"memory")
+ 243:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 244:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 245:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 246:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Send Event
+ 247:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 248:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 249:common/prog/MSP/CMSIS/cmsis_gcc.h **** #define __SEV()                             __ASM volatile ("sev")
+ 250:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 251:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 252:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 253:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Instruction Synchronization Barrier
+ 254:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 255:common/prog/MSP/CMSIS/cmsis_gcc.h ****            so that all instructions following the ISB are fetched from cache or memory,
+ 256:common/prog/MSP/CMSIS/cmsis_gcc.h ****            after the instruction has been completed.
+ 257:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 258:common/prog/MSP/CMSIS/cmsis_gcc.h **** __STATIC_FORCEINLINE void __ISB(void)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 36
+
+
+ 259:common/prog/MSP/CMSIS/cmsis_gcc.h **** {
+ 260:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __ASM volatile ("isb 0xF":::"memory");
+ 261:common/prog/MSP/CMSIS/cmsis_gcc.h **** }
+ 262:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 263:common/prog/MSP/CMSIS/cmsis_gcc.h **** 
+ 264:common/prog/MSP/CMSIS/cmsis_gcc.h **** /**
+ 265:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \brief   Data Synchronization Barrier
+ 266:common/prog/MSP/CMSIS/cmsis_gcc.h ****   \details Acts as a special kind of Data Memory Barrier.
+ 267:common/prog/MSP/CMSIS/cmsis_gcc.h ****            It completes when all explicit memory accesses before this instruction complete.
+ 268:common/prog/MSP/CMSIS/cmsis_gcc.h ****  */
+ 269:common/prog/MSP/CMSIS/cmsis_gcc.h **** __STATIC_FORCEINLINE void __DSB(void)
+ 537              		.loc 3 269 27 view .LVU109
+ 538              	.LBB39:
+ 270:common/prog/MSP/CMSIS/cmsis_gcc.h **** {
+ 271:common/prog/MSP/CMSIS/cmsis_gcc.h ****   __ASM volatile ("dsb 0xF":::"memory");
+ 539              		.loc 3 271 3 view .LVU110
+ 540              		.syntax divided
+ 541              	@ 271 "common/prog/MSP/CMSIS/cmsis_gcc.h" 1
+ 542 0000 BFF34F8F 		dsb 0xF
+ 543              	@ 0 "" 2
+ 544              		.thumb
+ 545              		.syntax unified
+ 546              	.LBE39:
+ 547              	.LBE38:
+ 990:common/prog/MSP/CMSIS/core_cm0plus.h ****                                                                        buffered write are completed
+ 991:common/prog/MSP/CMSIS/core_cm0plus.h ****   SCB->AIRCR  = ((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+ 548              		.loc 2 991 3 view .LVU111
+ 549              		.loc 2 991 15 is_stmt 0 view .LVU112
+ 550 0004 034B     		ldr	r3, .L29
+ 551 0006 044A     		ldr	r2, .L29+4
+ 552 0008 DA60     		str	r2, [r3, #12]
+ 992:common/prog/MSP/CMSIS/core_cm0plus.h ****                  SCB_AIRCR_SYSRESETREQ_Msk);
+ 993:common/prog/MSP/CMSIS/core_cm0plus.h ****   __DSB();                                                          /* Ensure completion of memory 
+ 553              		.loc 2 993 3 is_stmt 1 view .LVU113
+ 554              	.LBB40:
+ 555              	.LBI40:
+ 269:common/prog/MSP/CMSIS/cmsis_gcc.h **** {
+ 556              		.loc 3 269 27 view .LVU114
+ 557              	.LBB41:
+ 558              		.loc 3 271 3 view .LVU115
+ 559              		.syntax divided
+ 560              	@ 271 "common/prog/MSP/CMSIS/cmsis_gcc.h" 1
+ 561 000a BFF34F8F 		dsb 0xF
+ 562              	@ 0 "" 2
+ 563              		.thumb
+ 564              		.syntax unified
+ 565              	.L28:
+ 566              	.LBE41:
+ 567              	.LBE40:
+ 994:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 995:common/prog/MSP/CMSIS/core_cm0plus.h ****   for(;;)                                                           /* wait until reset */
+ 568              		.loc 2 995 3 view .LVU116
+ 996:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 997:common/prog/MSP/CMSIS/core_cm0plus.h ****     __NOP();
+ 569              		.loc 2 997 5 view .LVU117
+ 570              		.syntax divided
+ 571              	@ 997 "common/prog/MSP/CMSIS/core_cm0plus.h" 1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 37
+
+
+ 572 000e C046     		nop
+ 573              	@ 0 "" 2
+ 995:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 574              		.loc 2 995 3 view .LVU118
+ 575              		.thumb
+ 576              		.syntax unified
+ 577 0010 FDE7     		b	.L28
+ 578              	.L30:
+ 579 0012 C046     		.align	2
+ 580              	.L29:
+ 581 0014 00ED00E0 		.word	-536810240
+ 582 0018 0400FA05 		.word	100270084
+ 583              	.LBE37:
+ 584              	.LBE36:
+ 585              		.cfi_endproc
+ 586              	.LFE104:
+ 588              		.section	.text.MSUP_getHighByte,"ax",%progbits
+ 589              		.align	1
+ 590              		.global	MSUP_getHighByte
+ 591              		.syntax unified
+ 592              		.code	16
+ 593              		.thumb_func
+ 595              	MSUP_getHighByte:
+ 596              	.LVL33:
+ 597              	.LFB105:
+ 180:common/prog/MSP/mcal/msup.c **** }
+ 181:common/prog/MSP/mcal/msup.c **** #endif // (!defined(__cplusplus) && !defined(MOCK_IT)) || (defined ...
+ 182:common/prog/MSP/mcal/msup.c **** 
+ 183:common/prog/MSP/mcal/msup.c **** #if !(defined(__cplusplus) && defined(MOCK_IT)) // do not include in test
+ 184:common/prog/MSP/mcal/msup.c **** 
+ 185:common/prog/MSP/mcal/msup.c **** uint8_t MSUP_getHighByte(uint16_t value)
+ 186:common/prog/MSP/mcal/msup.c **** {
+ 598              		.loc 1 186 1 view -0
+ 599              		.cfi_startproc
+ 600              		@ args = 0, pretend = 0, frame = 0
+ 601              		@ frame_needed = 0, uses_anonymous_args = 0
+ 602              		@ link register save eliminated.
+ 187:common/prog/MSP/mcal/msup.c ****     return (uint8_t)((value) >> 8);
+ 603              		.loc 1 187 5 view .LVU120
+ 604              		.loc 1 187 12 is_stmt 0 view .LVU121
+ 605 0000 000A     		lsrs	r0, r0, #8
+ 606              	.LVL34:
+ 188:common/prog/MSP/mcal/msup.c **** }
+ 607              		.loc 1 188 1 view .LVU122
+ 608              		@ sp needed
+ 609 0002 7047     		bx	lr
+ 610              		.cfi_endproc
+ 611              	.LFE105:
+ 613              		.section	.text.MSUP_getLowByte,"ax",%progbits
+ 614              		.align	1
+ 615              		.global	MSUP_getLowByte
+ 616              		.syntax unified
+ 617              		.code	16
+ 618              		.thumb_func
+ 620              	MSUP_getLowByte:
+ 621              	.LVL35:
+ 622              	.LFB106:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 38
+
+
+ 189:common/prog/MSP/mcal/msup.c **** 
+ 190:common/prog/MSP/mcal/msup.c **** 
+ 191:common/prog/MSP/mcal/msup.c **** uint8_t MSUP_getLowByte(uint16_t value)
+ 192:common/prog/MSP/mcal/msup.c **** {
+ 623              		.loc 1 192 1 is_stmt 1 view -0
+ 624              		.cfi_startproc
+ 625              		@ args = 0, pretend = 0, frame = 0
+ 626              		@ frame_needed = 0, uses_anonymous_args = 0
+ 627              		@ link register save eliminated.
+ 193:common/prog/MSP/mcal/msup.c ****     return (uint8_t)(value);
+ 628              		.loc 1 193 5 view .LVU124
+ 629              		.loc 1 193 12 is_stmt 0 view .LVU125
+ 630 0000 C0B2     		uxtb	r0, r0
+ 631              	.LVL36:
+ 194:common/prog/MSP/mcal/msup.c **** }
+ 632              		.loc 1 194 1 view .LVU126
+ 633              		@ sp needed
+ 634 0002 7047     		bx	lr
+ 635              		.cfi_endproc
+ 636              	.LFE106:
+ 638              		.section	.text.MSUP_setHighByte,"ax",%progbits
+ 639              		.align	1
+ 640              		.global	MSUP_setHighByte
+ 641              		.syntax unified
+ 642              		.code	16
+ 643              		.thumb_func
+ 645              	MSUP_setHighByte:
+ 646              	.LVL37:
+ 647              	.LFB107:
+ 195:common/prog/MSP/mcal/msup.c **** 
+ 196:common/prog/MSP/mcal/msup.c **** /* Conversion between object pointer and void pointer MisraC2012-11.5, tested to work correctly */
+ 197:common/prog/MSP/mcal/msup.c **** /*lint -save -e926 */ 
+ 198:common/prog/MSP/mcal/msup.c **** void MSUP_setHighByte(uint16_t *value1, uint8_t value2)
+ 199:common/prog/MSP/mcal/msup.c **** {
+ 648              		.loc 1 199 1 is_stmt 1 view -0
+ 649              		.cfi_startproc
+ 650              		@ args = 0, pretend = 0, frame = 0
+ 651              		@ frame_needed = 0, uses_anonymous_args = 0
+ 652              		@ link register save eliminated.
+ 200:common/prog/MSP/mcal/msup.c ****     MSUP_HighByte(value1) = value2;
+ 653              		.loc 1 200 5 view .LVU128
+ 654              		.loc 1 200 27 is_stmt 0 view .LVU129
+ 655 0000 4170     		strb	r1, [r0, #1]
+ 201:common/prog/MSP/mcal/msup.c **** }
+ 656              		.loc 1 201 1 view .LVU130
+ 657              		@ sp needed
+ 658 0002 7047     		bx	lr
+ 659              		.cfi_endproc
+ 660              	.LFE107:
+ 662              		.section	.text.MSUP_setLowByte,"ax",%progbits
+ 663              		.align	1
+ 664              		.global	MSUP_setLowByte
+ 665              		.syntax unified
+ 666              		.code	16
+ 667              		.thumb_func
+ 669              	MSUP_setLowByte:
+ 670              	.LVL38:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 39
+
+
+ 671              	.LFB108:
+ 202:common/prog/MSP/mcal/msup.c **** 
+ 203:common/prog/MSP/mcal/msup.c **** 
+ 204:common/prog/MSP/mcal/msup.c **** void MSUP_setLowByte(uint16_t *value1, uint8_t value2)
+ 205:common/prog/MSP/mcal/msup.c **** {
+ 672              		.loc 1 205 1 is_stmt 1 view -0
+ 673              		.cfi_startproc
+ 674              		@ args = 0, pretend = 0, frame = 0
+ 675              		@ frame_needed = 0, uses_anonymous_args = 0
+ 676              		@ link register save eliminated.
+ 206:common/prog/MSP/mcal/msup.c ****     MSUP_LowByte(value1) = value2;
+ 677              		.loc 1 206 5 view .LVU132
+ 678              		.loc 1 206 26 is_stmt 0 view .LVU133
+ 679 0000 0170     		strb	r1, [r0]
+ 207:common/prog/MSP/mcal/msup.c **** }
+ 680              		.loc 1 207 1 view .LVU134
+ 681              		@ sp needed
+ 682 0002 7047     		bx	lr
+ 683              		.cfi_endproc
+ 684              	.LFE108:
+ 686              		.section	.text.MSUP_getHighWord,"ax",%progbits
+ 687              		.align	1
+ 688              		.global	MSUP_getHighWord
+ 689              		.syntax unified
+ 690              		.code	16
+ 691              		.thumb_func
+ 693              	MSUP_getHighWord:
+ 694              	.LVL39:
+ 695              	.LFB109:
+ 208:common/prog/MSP/mcal/msup.c **** 
+ 209:common/prog/MSP/mcal/msup.c **** 
+ 210:common/prog/MSP/mcal/msup.c **** uint32_t MSUP_getHighWord(uint32_t value)
+ 211:common/prog/MSP/mcal/msup.c **** {
+ 696              		.loc 1 211 1 is_stmt 1 view -0
+ 697              		.cfi_startproc
+ 698              		@ args = 0, pretend = 0, frame = 0
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700              		@ link register save eliminated.
+ 212:common/prog/MSP/mcal/msup.c ****     return ((uint16_t)((value) >> 16));  //lint !e9031 tested to work correctly
+ 701              		.loc 1 212 5 view .LVU136
+ 702              		.loc 1 212 32 is_stmt 0 view .LVU137
+ 703 0000 000C     		lsrs	r0, r0, #16
+ 704              	.LVL40:
+ 213:common/prog/MSP/mcal/msup.c **** }
+ 705              		.loc 1 213 1 view .LVU138
+ 706              		@ sp needed
+ 707 0002 7047     		bx	lr
+ 708              		.cfi_endproc
+ 709              	.LFE109:
+ 711              		.section	.text.MSUP_getLowWord,"ax",%progbits
+ 712              		.align	1
+ 713              		.global	MSUP_getLowWord
+ 714              		.syntax unified
+ 715              		.code	16
+ 716              		.thumb_func
+ 718              	MSUP_getLowWord:
+ 719              	.LVL41:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 40
+
+
+ 720              	.LFB110:
+ 214:common/prog/MSP/mcal/msup.c **** 
+ 215:common/prog/MSP/mcal/msup.c **** 
+ 216:common/prog/MSP/mcal/msup.c **** uint32_t MSUP_getLowWord(uint32_t value)
+ 217:common/prog/MSP/mcal/msup.c **** {
+ 721              		.loc 1 217 1 is_stmt 1 view -0
+ 722              		.cfi_startproc
+ 723              		@ args = 0, pretend = 0, frame = 0
+ 724              		@ frame_needed = 0, uses_anonymous_args = 0
+ 725              		@ link register save eliminated.
+ 218:common/prog/MSP/mcal/msup.c ****     return ((uint16_t)(value));
+ 726              		.loc 1 218 5 view .LVU140
+ 727              		.loc 1 218 13 is_stmt 0 view .LVU141
+ 728 0000 80B2     		uxth	r0, r0
+ 729              	.LVL42:
+ 219:common/prog/MSP/mcal/msup.c **** }
+ 730              		.loc 1 219 1 view .LVU142
+ 731              		@ sp needed
+ 732 0002 7047     		bx	lr
+ 733              		.cfi_endproc
+ 734              	.LFE110:
+ 736              		.section	.text.MSUP_setHighWord,"ax",%progbits
+ 737              		.align	1
+ 738              		.global	MSUP_setHighWord
+ 739              		.syntax unified
+ 740              		.code	16
+ 741              		.thumb_func
+ 743              	MSUP_setHighWord:
+ 744              	.LVL43:
+ 745              	.LFB111:
+ 220:common/prog/MSP/mcal/msup.c **** 
+ 221:common/prog/MSP/mcal/msup.c **** 
+ 222:common/prog/MSP/mcal/msup.c **** void MSUP_setHighWord(uint32_t *value1, uint16_t value2)
+ 223:common/prog/MSP/mcal/msup.c **** {
+ 746              		.loc 1 223 1 is_stmt 1 view -0
+ 747              		.cfi_startproc
+ 748              		@ args = 0, pretend = 0, frame = 0
+ 749              		@ frame_needed = 0, uses_anonymous_args = 0
+ 750              		@ link register save eliminated.
+ 224:common/prog/MSP/mcal/msup.c ****     MSUP_HighWord(value1) = value2;
+ 751              		.loc 1 224 5 view .LVU144
+ 752              		.loc 1 224 27 is_stmt 0 view .LVU145
+ 753 0000 4180     		strh	r1, [r0, #2]
+ 225:common/prog/MSP/mcal/msup.c **** }
+ 754              		.loc 1 225 1 view .LVU146
+ 755              		@ sp needed
+ 756 0002 7047     		bx	lr
+ 757              		.cfi_endproc
+ 758              	.LFE111:
+ 760              		.section	.text.MSUP_setLowWord,"ax",%progbits
+ 761              		.align	1
+ 762              		.global	MSUP_setLowWord
+ 763              		.syntax unified
+ 764              		.code	16
+ 765              		.thumb_func
+ 767              	MSUP_setLowWord:
+ 768              	.LVL44:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczA1D5x.s 			page 41
+
+
+ 769              	.LFB112:
+ 226:common/prog/MSP/mcal/msup.c **** 
+ 227:common/prog/MSP/mcal/msup.c **** 
+ 228:common/prog/MSP/mcal/msup.c **** void MSUP_setLowWord(uint32_t *value1, uint16_t value2)
+ 229:common/prog/MSP/mcal/msup.c **** {
+ 770              		.loc 1 229 1 is_stmt 1 view -0
+ 771              		.cfi_startproc
+ 772              		@ args = 0, pretend = 0, frame = 0
+ 773              		@ frame_needed = 0, uses_anonymous_args = 0
+ 774              		@ link register save eliminated.
+ 230:common/prog/MSP/mcal/msup.c ****     MSUP_LowWord(value1) = value2;
+ 775              		.loc 1 230 5 view .LVU148
+ 776              		.loc 1 230 26 is_stmt 0 view .LVU149
+ 777 0000 0180     		strh	r1, [r0]
+ 231:common/prog/MSP/mcal/msup.c **** }
+ 778              		.loc 1 231 1 view .LVU150
+ 779              		@ sp needed
+ 780 0002 7047     		bx	lr
+ 781              		.cfi_endproc
+ 782              	.LFE112:
+ 784              		.section	.bss.MSUP_LocalTimeoutHandle,"aw",%nobits
+ 785              		.align	2
+ 786              		.set	.LANCHOR0,. + 0
+ 789              	MSUP_LocalTimeoutHandle:
+ 790 0000 00000000 		.space	12
+ 790      00000000 
+ 790      00000000 
+ 791              		.text
+ 792              	.Letext0:
+ 793              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 794              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 795              		.file 6 "common/prog/MSP/mcal/msup.h"
+ 796              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 797              		.file 8 "common/prog/ped_fw/timer/timerlib.h"

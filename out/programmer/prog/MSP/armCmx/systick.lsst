@@ -1,0 +1,427 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"systick.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SysTick_GetPeriod,"ax",%progbits
+  18              		.align	1
+  19              		.global	SysTick_GetPeriod
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	SysTick_GetPeriod:
+  25              	.LFB49:
+  26              		.file 1 "common/prog/MSP/armCmx/systick.c"
+   1:common/prog/MSP/armCmx/systick.c **** /*******************************************************************************
+   2:common/prog/MSP/armCmx/systick.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/armCmx/systick.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/armCmx/systick.c ****  *
+   5:common/prog/MSP/armCmx/systick.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/armCmx/systick.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/armCmx/systick.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/armCmx/systick.c ****  *
+   9:common/prog/MSP/armCmx/systick.c ****  *******************************************************************************
+  10:common/prog/MSP/armCmx/systick.c ****  *  PROJECT          Generic SW
+  11:common/prog/MSP/armCmx/systick.c ****  *  COMP_ABBREV      SysTick
+  12:common/prog/MSP/armCmx/systick.c ****  ******************************************************************************/
+  13:common/prog/MSP/armCmx/systick.c **** 
+  14:common/prog/MSP/armCmx/systick.c **** 
+  15:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  16:common/prog/MSP/armCmx/systick.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  18:common/prog/MSP/armCmx/systick.c **** /** \file
+  19:common/prog/MSP/armCmx/systick.c ****  *
+  20:common/prog/MSP/armCmx/systick.c ****  *  \brief    Public definitions and declarations for unit SysTick.
+  21:common/prog/MSP/armCmx/systick.c ****  *
+  22:common/prog/MSP/armCmx/systick.c ****  */
+  23:common/prog/MSP/armCmx/systick.c **** 
+  24:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  25:common/prog/MSP/armCmx/systick.c **** /* INCLUDES                                                                   */
+  26:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  27:common/prog/MSP/armCmx/systick.c **** #include "systick.h"
+  28:common/prog/MSP/armCmx/systick.c **** #include "processor.h"
+  29:common/prog/MSP/armCmx/systick.c **** #include "math/mathDiv.h"
+  30:common/prog/MSP/armCmx/systick.c **** 
+  31:common/prog/MSP/armCmx/systick.c **** 
+  32:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 2
+
+
+  33:common/prog/MSP/armCmx/systick.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  34:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  35:common/prog/MSP/armCmx/systick.c **** 
+  36:common/prog/MSP/armCmx/systick.c **** /* Variable for storing actual SysTick period */
+  37:common/prog/MSP/armCmx/systick.c **** static uint16_t SysTick_period = 0;
+  38:common/prog/MSP/armCmx/systick.c **** 
+  39:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  40:common/prog/MSP/armCmx/systick.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  41:common/prog/MSP/armCmx/systick.c **** /******************************************************************************/
+  42:common/prog/MSP/armCmx/systick.c **** 
+  43:common/prog/MSP/armCmx/systick.c **** uint16_t SysTick_GetPeriod(void)
+  44:common/prog/MSP/armCmx/systick.c **** {
+  27              		.loc 1 44 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  45:common/prog/MSP/armCmx/systick.c ****     return SysTick_period;
+  32              		.loc 1 45 5 view .LVU1
+  33              		.loc 1 45 12 is_stmt 0 view .LVU2
+  34 0000 014B     		ldr	r3, .L2
+  46:common/prog/MSP/armCmx/systick.c **** }
+  35              		.loc 1 46 1 view .LVU3
+  36              		@ sp needed
+  45:common/prog/MSP/armCmx/systick.c ****     return SysTick_period;
+  37              		.loc 1 45 12 view .LVU4
+  38 0002 1888     		ldrh	r0, [r3]
+  39              		.loc 1 46 1 view .LVU5
+  40 0004 7047     		bx	lr
+  41              	.L3:
+  42 0006 C046     		.align	2
+  43              	.L2:
+  44 0008 00000000 		.word	.LANCHOR0
+  45              		.cfi_endproc
+  46              	.LFE49:
+  48              		.section	.text.SysTick_Configure,"ax",%progbits
+  49              		.align	1
+  50              		.global	SysTick_Configure
+  51              		.syntax unified
+  52              		.code	16
+  53              		.thumb_func
+  55              	SysTick_Configure:
+  56              	.LVL0:
+  57              	.LFB50:
+  47:common/prog/MSP/armCmx/systick.c **** 
+  48:common/prog/MSP/armCmx/systick.c **** 
+  49:common/prog/MSP/armCmx/systick.c **** int32_t SysTick_Configure(uint32_t sysClock_Hz, uint16_t period_ms)
+  50:common/prog/MSP/armCmx/systick.c **** {
+  58              		.loc 1 50 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 8
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  51:common/prog/MSP/armCmx/systick.c ****     uint32_t ticks;
+  62              		.loc 1 51 5 view .LVU7
+  52:common/prog/MSP/armCmx/systick.c ****     
+  53:common/prog/MSP/armCmx/systick.c ****     // Update period variable
+  54:common/prog/MSP/armCmx/systick.c ****     SysTick_period = period_ms;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 3
+
+
+  63              		.loc 1 54 5 view .LVU8
+  64              	.LBB4:
+  65              	.LBB5:
+  66              		.file 2 "common/prog/math/mathDiv.h"
+   1:common/prog/math/mathDiv.h **** /*******************************************************************************
+   2:common/prog/math/mathDiv.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/math/mathDiv.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/math/mathDiv.h ****  *
+   5:common/prog/math/mathDiv.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/math/mathDiv.h ****  *  are protected by international copyright laws.
+   7:common/prog/math/mathDiv.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/math/mathDiv.h ****  *
+   9:common/prog/math/mathDiv.h ****  *******************************************************************************
+  10:common/prog/math/mathDiv.h ****  *  PROJECT          Generic SW
+  11:common/prog/math/mathDiv.h ****  ******************************************************************************/
+  12:common/prog/math/mathDiv.h **** 
+  13:common/prog/math/mathDiv.h **** 
+  14:common/prog/math/mathDiv.h **** #ifndef MATHDIV_H
+  15:common/prog/math/mathDiv.h **** #define MATHDIV_H
+  16:common/prog/math/mathDiv.h **** 
+  17:common/prog/math/mathDiv.h **** #ifdef __cplusplus
+  18:common/prog/math/mathDiv.h **** extern "C" {
+  19:common/prog/math/mathDiv.h **** #endif
+  20:common/prog/math/mathDiv.h **** 
+  21:common/prog/math/mathDiv.h **** 
+  22:common/prog/math/mathDiv.h **** /******************************************************************************/
+  23:common/prog/math/mathDiv.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/math/mathDiv.h **** /******************************************************************************/
+  25:common/prog/math/mathDiv.h **** /** \file
+  26:common/prog/math/mathDiv.h ****  *
+  27:common/prog/math/mathDiv.h ****  *  \ingroup  mathematics
+  28:common/prog/math/mathDiv.h ****  *
+  29:common/prog/math/mathDiv.h ****  *  \brief    Public definitions and declarations for unit math_div.
+  30:common/prog/math/mathDiv.h ****  *
+  31:common/prog/math/mathDiv.h ****  *  \details  soft divisions, if not provided by core.
+  32:common/prog/math/mathDiv.h ****  */
+  33:common/prog/math/mathDiv.h **** 
+  34:common/prog/math/mathDiv.h **** 
+  35:common/prog/math/mathDiv.h **** 
+  36:common/prog/math/mathDiv.h **** /******************************************************************************/
+  37:common/prog/math/mathDiv.h **** /* INCLUDES                                                                   */
+  38:common/prog/math/mathDiv.h **** /******************************************************************************/
+  39:common/prog/math/mathDiv.h **** #include "bsh_stdinc.h"
+  40:common/prog/math/mathDiv.h **** #include <stdint.h>
+  41:common/prog/math/mathDiv.h **** #include <stdbool.h>
+  42:common/prog/math/mathDiv.h **** 
+  43:common/prog/math/mathDiv.h **** 
+  44:common/prog/math/mathDiv.h **** /******************************************************************************/
+  45:common/prog/math/mathDiv.h **** /* PUBLIC DEFINITIONS                                                         */
+  46:common/prog/math/mathDiv.h **** /******************************************************************************/
+  47:common/prog/math/mathDiv.h **** 
+  48:common/prog/math/mathDiv.h **** /** \brief    Selection of MTDIV max divisor and result width.
+  49:common/prog/math/mathDiv.h ****  *
+  50:common/prog/math/mathDiv.h ****  *  \note     By default the MTDIV width is 32-bit, but can be reduced to 
+  51:common/prog/math/mathDiv.h ****  *            16-bit to save memory by defining MTDIV_WIDTH_16 if 32-bit
+  52:common/prog/math/mathDiv.h ****  *            division is not used.
+  53:common/prog/math/mathDiv.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 4
+
+
+  54:common/prog/math/mathDiv.h **** #ifndef MTDIV_WIDTH_16
+  55:common/prog/math/mathDiv.h **** #define MTDIV_WIDTH_32
+  56:common/prog/math/mathDiv.h **** #endif // MTDIV_WIDTH_16
+  57:common/prog/math/mathDiv.h **** 
+  58:common/prog/math/mathDiv.h **** /******************************************************************************/
+  59:common/prog/math/mathDiv.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+  60:common/prog/math/mathDiv.h **** /******************************************************************************/
+  61:common/prog/math/mathDiv.h **** 
+  62:common/prog/math/mathDiv.h **** /** \brief    Divisor and result type.
+  63:common/prog/math/mathDiv.h ****  *
+  64:common/prog/math/mathDiv.h ****  *  \note     Divisor and result type is dependent on MTDIV_WIDTH_xx setting.
+  65:common/prog/math/mathDiv.h ****  */
+  66:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_16
+  67:common/prog/math/mathDiv.h **** typedef uint16_t    MTDIV_width_t;
+  68:common/prog/math/mathDiv.h **** #else
+  69:common/prog/math/mathDiv.h **** typedef uint32_t    MTDIV_width_t;
+  70:common/prog/math/mathDiv.h **** #endif
+  71:common/prog/math/mathDiv.h **** 
+  72:common/prog/math/mathDiv.h **** 
+  73:common/prog/math/mathDiv.h **** /** \brief    Return structure from generic division function.
+  74:common/prog/math/mathDiv.h ****  */
+  75:common/prog/math/mathDiv.h **** struct MTDIV_Result
+  76:common/prog/math/mathDiv.h **** {
+  77:common/prog/math/mathDiv.h ****     MTDIV_width_t quotient;
+  78:common/prog/math/mathDiv.h ****     MTDIV_width_t remainder;
+  79:common/prog/math/mathDiv.h **** };
+  80:common/prog/math/mathDiv.h **** 
+  81:common/prog/math/mathDiv.h **** 
+  82:common/prog/math/mathDiv.h **** /******************************************************************************/
+  83:common/prog/math/mathDiv.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  84:common/prog/math/mathDiv.h **** /******************************************************************************/
+  85:common/prog/math/mathDiv.h **** 
+  86:common/prog/math/mathDiv.h **** /** \brief    Main division and modulo function.
+  87:common/prog/math/mathDiv.h ****  *
+  88:common/prog/math/mathDiv.h ****  *  \note     This function performs division and modulo calculation and is
+  89:common/prog/math/mathDiv.h ****  *            intended mainly for internal use. Be careful when using this 
+  90:common/prog/math/mathDiv.h ****  *            function, as divisor and result width are dependent
+  91:common/prog/math/mathDiv.h ****  *            on MTDIV_WIDTH_xx setting. By calling this function you get
+  92:common/prog/math/mathDiv.h ****  *            either quotient or modulo, depending on div parameter.
+  93:common/prog/math/mathDiv.h ****  *
+  94:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+  95:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+  96:common/prog/math/mathDiv.h ****  *
+  97:common/prog/math/mathDiv.h ****  *  \return   struct MTDIV_Result containing both quotient and remainder.
+  98:common/prog/math/mathDiv.h ****  */
+  99:common/prog/math/mathDiv.h **** extern struct MTDIV_Result MTDIV_div_mod(uint32_t dividend, MTDIV_width_t divisor);
+ 100:common/prog/math/mathDiv.h **** 
+ 101:common/prog/math/mathDiv.h **** 
+ 102:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 16bit, result fits into 16bit
+ 103:common/prog/math/mathDiv.h ****  *
+ 104:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 105:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 106:common/prog/math/mathDiv.h ****  *
+ 107:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 108:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 109:common/prog/math/mathDiv.h ****  *
+ 110:common/prog/math/mathDiv.h ****  *  \return   result of division
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 5
+
+
+ 111:common/prog/math/mathDiv.h ****  */
+ 112:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_div_32_16(uint32_t dividend, uint16_t divisor)
+ 113:common/prog/math/mathDiv.h **** {
+ 114:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 115:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, (MTDIV_width_t)divisor).quotient;
+ 116:common/prog/math/mathDiv.h ****   #else
+ 117:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend / (uint32_t)divisor);
+ 118:common/prog/math/mathDiv.h ****   #endif
+ 119:common/prog/math/mathDiv.h **** }
+ 120:common/prog/math/mathDiv.h **** 
+ 121:common/prog/math/mathDiv.h **** 
+ 122:common/prog/math/mathDiv.h **** /** \brief    Modulo 32bit by 16bit, result fits into 16bit
+ 123:common/prog/math/mathDiv.h ****  *
+ 124:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 125:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 126:common/prog/math/mathDiv.h ****  *
+ 127:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 128:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 129:common/prog/math/mathDiv.h ****  *
+ 130:common/prog/math/mathDiv.h ****  *  \return   modulo of division
+ 131:common/prog/math/mathDiv.h ****  */
+ 132:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_mod_32_16(uint32_t dividend, uint16_t divisor)
+ 133:common/prog/math/mathDiv.h **** {
+ 134:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 135:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, divisor).remainder;
+ 136:common/prog/math/mathDiv.h ****   #else
+ 137:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend % (uint32_t)divisor);
+ 138:common/prog/math/mathDiv.h ****   #endif
+ 139:common/prog/math/mathDiv.h **** }
+ 140:common/prog/math/mathDiv.h **** 
+ 141:common/prog/math/mathDiv.h **** 
+ 142:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_32
+ 143:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 32bit, result is 32bit
+ 144:common/prog/math/mathDiv.h ****  *
+ 145:common/prog/math/mathDiv.h ****  *  \note     This function is optimized for 32bit microcontrollers.
+ 146:common/prog/math/mathDiv.h ****  *            Division by 0 returns 0xFFFFFFFF.
+ 147:common/prog/math/mathDiv.h ****  *
+ 148:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 149:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 150:common/prog/math/mathDiv.h ****  *
+ 151:common/prog/math/mathDiv.h ****  *  \return   result of division
+ 152:common/prog/math/mathDiv.h ****  */
+ 153:common/prog/math/mathDiv.h **** static inline uint32_t MTDIV_div_32_32(uint32_t dividend, uint32_t divisor)
+ 154:common/prog/math/mathDiv.h **** {
+ 155:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 156:common/prog/math/mathDiv.h ****     return MTDIV_div_mod(dividend, divisor).quotient;
+  67              		.loc 2 156 12 is_stmt 0 view .LVU9
+  68 0000 FA22     		movs	r2, #250
+  69              	.LBE5:
+  70              	.LBE4:
+  50:common/prog/MSP/armCmx/systick.c ****     uint32_t ticks;
+  71              		.loc 1 50 1 view .LVU10
+  72 0002 13B5     		push	{r0, r1, r4, lr}
+  73              	.LCFI0:
+  74              		.cfi_def_cfa_offset 16
+  75              		.cfi_offset 0, -16
+  76              		.cfi_offset 1, -12
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 6
+
+
+  77              		.cfi_offset 4, -8
+  78              		.cfi_offset 14, -4
+  50:common/prog/MSP/armCmx/systick.c ****     uint32_t ticks;
+  79              		.loc 1 50 1 view .LVU11
+  80 0004 0C00     		movs	r4, r1
+  81              		.loc 1 54 20 view .LVU12
+  82 0006 0C4B     		ldr	r3, .L7
+  83              	.LBB8:
+  84              	.LBB6:
+  85              		.loc 2 156 12 view .LVU13
+  86 0008 9200     		lsls	r2, r2, #2
+  87              	.LBE6:
+  88              	.LBE8:
+  89              		.loc 1 54 20 view .LVU14
+  90 000a 1980     		strh	r1, [r3]
+  55:common/prog/MSP/armCmx/systick.c ****     // Calculate number of ticks for one period
+  56:common/prog/MSP/armCmx/systick.c ****     ticks = (MTDIV_div_32_32((uint32_t)sysClock_Hz,1000U)*period_ms)-1U;
+  91              		.loc 1 56 5 is_stmt 1 view .LVU15
+  92              	.LVL1:
+  93              	.LBB9:
+  94              	.LBI4:
+ 153:common/prog/math/mathDiv.h **** {
+  95              		.loc 2 153 24 view .LVU16
+  96              	.LBB7:
+  97              		.loc 2 156 5 view .LVU17
+  98              		.loc 2 156 12 is_stmt 0 view .LVU18
+  99 000c 0100     		movs	r1, r0
+ 100              	.LVL2:
+ 101              		.loc 2 156 12 view .LVU19
+ 102 000e 6846     		mov	r0, sp
+ 103              	.LVL3:
+ 104              		.loc 2 156 12 view .LVU20
+ 105 0010 FFF7FEFF 		bl	MTDIV_div_mod
+ 106              	.LVL4:
+ 107              		.loc 2 156 12 view .LVU21
+ 108              	.LBE7:
+ 109              	.LBE9:
+  57:common/prog/MSP/armCmx/systick.c ****     // Check if value is valid
+  58:common/prog/MSP/armCmx/systick.c ****     if(ticks > SysTick_LOAD_RELOAD_Msk)
+ 110              		.loc 1 58 7 view .LVU22
+ 111 0014 8023     		movs	r3, #128
+  56:common/prog/MSP/armCmx/systick.c ****     // Check if value is valid
+ 112              		.loc 1 56 58 view .LVU23
+ 113 0016 0098     		ldr	r0, [sp]
+ 114              		.loc 1 58 7 view .LVU24
+ 115 0018 5B04     		lsls	r3, r3, #17
+  56:common/prog/MSP/armCmx/systick.c ****     // Check if value is valid
+ 116              		.loc 1 56 58 view .LVU25
+ 117 001a 6043     		muls	r0, r4
+  56:common/prog/MSP/armCmx/systick.c ****     // Check if value is valid
+ 118              		.loc 1 56 11 view .LVU26
+ 119 001c 0138     		subs	r0, r0, #1
+ 120              	.LVL5:
+ 121              		.loc 1 58 5 is_stmt 1 view .LVU27
+ 122              		.loc 1 58 7 is_stmt 0 view .LVU28
+ 123 001e 9842     		cmp	r0, r3
+ 124 0020 06D2     		bcs	.L6
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 7
+
+
+  59:common/prog/MSP/armCmx/systick.c ****     {
+  60:common/prog/MSP/armCmx/systick.c ****         return -1;
+  61:common/prog/MSP/armCmx/systick.c ****     }
+  62:common/prog/MSP/armCmx/systick.c ****     
+  63:common/prog/MSP/armCmx/systick.c ****     // Configure SysTick
+  64:common/prog/MSP/armCmx/systick.c ****     SysTick->LOAD  = ticks;                         /* set reload register */
+ 125              		.loc 1 64 5 is_stmt 1 view .LVU29
+  65:common/prog/MSP/armCmx/systick.c ****     SysTick->VAL   = 0U;                            /* Load the SysTick Counter Value */
+ 126              		.loc 1 65 20 is_stmt 0 view .LVU30
+ 127 0022 0022     		movs	r2, #0
+  64:common/prog/MSP/armCmx/systick.c ****     SysTick->VAL   = 0U;                            /* Load the SysTick Counter Value */
+ 128              		.loc 1 64 20 view .LVU31
+ 129 0024 054B     		ldr	r3, .L7+4
+ 130 0026 5860     		str	r0, [r3, #4]
+ 131              		.loc 1 65 5 is_stmt 1 view .LVU32
+ 132              		.loc 1 65 20 is_stmt 0 view .LVU33
+ 133 0028 9A60     		str	r2, [r3, #8]
+  66:common/prog/MSP/armCmx/systick.c ****     SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+ 134              		.loc 1 66 5 is_stmt 1 view .LVU34
+ 135              		.loc 1 66 20 is_stmt 0 view .LVU35
+ 136 002a 0732     		adds	r2, r2, #7
+ 137 002c 1A60     		str	r2, [r3]
+  67:common/prog/MSP/armCmx/systick.c ****                      SysTick_CTRL_TICKINT_Msk   |
+  68:common/prog/MSP/armCmx/systick.c ****                      SysTick_CTRL_ENABLE_Msk;       /* Enable SysTick IRQ and SysTick Timer */
+  69:common/prog/MSP/armCmx/systick.c **** 
+  70:common/prog/MSP/armCmx/systick.c ****     return (int32_t)ticks;
+ 138              		.loc 1 70 5 is_stmt 1 view .LVU36
+ 139              	.LVL6:
+ 140              	.L4:
+  71:common/prog/MSP/armCmx/systick.c **** }
+ 141              		.loc 1 71 1 is_stmt 0 view .LVU37
+ 142              		@ sp needed
+ 143 002e 16BD     		pop	{r1, r2, r4, pc}
+ 144              	.LVL7:
+ 145              	.L6:
+  60:common/prog/MSP/armCmx/systick.c ****     }
+ 146              		.loc 1 60 16 view .LVU38
+ 147 0030 0120     		movs	r0, #1
+ 148              	.LVL8:
+  60:common/prog/MSP/armCmx/systick.c ****     }
+ 149              		.loc 1 60 16 view .LVU39
+ 150 0032 4042     		rsbs	r0, r0, #0
+ 151 0034 FBE7     		b	.L4
+ 152              	.L8:
+ 153 0036 C046     		.align	2
+ 154              	.L7:
+ 155 0038 00000000 		.word	.LANCHOR0
+ 156 003c 10E000E0 		.word	-536813552
+ 157              		.cfi_endproc
+ 158              	.LFE50:
+ 160              		.section	.bss.SysTick_period,"aw",%nobits
+ 161              		.align	1
+ 162              		.set	.LANCHOR0,. + 0
+ 165              	SysTick_period:
+ 166 0000 0000     		.space	2
+ 167              		.text
+ 168              	.Letext0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc05zub9.s 			page 8
+
+
+ 169              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 170              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 171              		.file 5 "common/prog/MSP/CMSIS/core_cm0plus.h"
+ 172              		.file 6 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

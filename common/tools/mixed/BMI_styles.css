@@ -1,0 +1,58 @@
+#first{color: solid black;}
+#second{color: solid black;}
+#third{color: #000080;}
+#fourth{color:#000080;}
+#fifth{color: #000080;}
+#sixth{color: #990000;}
+
+table,tr,td,th{bgcolor: #00FF00; padding-top: 10px;  padding-right: 10px;  padding-bottom: 10px;  padding-left: 10px;   border-collapse: collapse;  border: 3px solid black;}
+
+th {display: table-cell;vertical-align: inherit;font-weight: bold;text-align: center;}
+
+#box {
+  background-color: lightgrey;
+  width: 100px;
+  border: 8px solid green;
+  padding: 10px;
+  margin: 20px;
+  width: 70%;
+  right: 10;
+}
+
+tr:nth-child(2) { background-color: #FF9999; }
+tr:nth-child(3) { background-color: #FF9999; }
+tr:nth-child(4) { background-color: #FF9999; }
+tr:nth-child(5) { background-color: #FF9999; }
+tr:nth-child(6) { background-color: #FF9999; }
+tr:nth-child(7) { background-color: #FF9999; }
+tr:nth-child(8) { background-color: #FF9999; }
+tr:nth-child(9) { background-color: #FF9999; }
+tr:nth-child(10) { background-color: #FF9999; }
+tr:nth-child(11) { background-color: #FF9999; }
+
+
+.split {
+  height: 90%;
+  position: fixed;
+  z-index: 1;
+  top: 5%;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  align:left;
+  width: 84%;
+  left: 4;  
+}
+
+/* Control the right side */
+.right {
+  align:right;	
+  width: 16%;
+  right: 0;  
+}
+
+
+

@@ -1,0 +1,360 @@
+
+out/programmer/prog/MSP/sh30f/lib/sh30f9xx_sa0_exti.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.EXTI_Reset:
+
+00000000 <EXTI_Reset>:
+  * @param  None
+  * @retval None
+  */
+void EXTI_Reset(void)
+{
+    EXTI->IMR = 0x00000000;
+   0:	2200      	movs	r2, #0
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <EXTI_Reset+0x1c>)
+   4:	601a      	str	r2, [r3, #0]
+    EXTI->EMR = 0x00000000;
+   6:	605a      	str	r2, [r3, #4]
+    EXTI->DMR = 0x00000000;
+   8:	629a      	str	r2, [r3, #40]	; 0x28
+    EXTI->TMSR = 0x00000000;
+   a:	609a      	str	r2, [r3, #8]
+    EXTI->RTSR = 0x00000000;
+   c:	60da      	str	r2, [r3, #12]
+    EXTI->FTSR = 0x00000000;
+   e:	611a      	str	r2, [r3, #16]
+    EXTI->CFGL.V32 = 0x00000000;
+  10:	61da      	str	r2, [r3, #28]
+    EXTI->CFGH.V32 = 0x00000000;
+  12:	621a      	str	r2, [r3, #32]
+    EXTI->SAMP.V32 = 0x00000000;
+  14:	625a      	str	r2, [r3, #36]	; 0x24
+    EXTI->PR.V32 = 0xFFFF0000;
+  16:	4a02      	ldr	r2, [pc, #8]	; (20 <EXTI_Reset+0x20>)
+  18:	619a      	str	r2, [r3, #24]
+}
+  1a:	4770      	bx	lr
+  1c:	40003400 	.word	0x40003400
+  20:	ffff0000 	.word	0xffff0000
+
+Disassembly of section .text.EXTI_Init:
+
+00000000 <EXTI_Init>:
+  * @param  EXTI_InitStruct: pointer to a @ref EXTI_InitTypeDef structure
+  *         that contains the configuration information for the EXTI peripheral.
+  * @retval None
+  */
+void EXTI_Init(EXTI_InitTypeDef *EXTI_InitStruct)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+        /* clear select exti line enable bit */
+        EXTI->IMR &= (~EXTI_InitStruct->EXTI_Line);
+        EXTI->EMR &= (~EXTI_InitStruct->EXTI_Line);
+        EXTI->DMR &= (~EXTI_InitStruct->EXTI_Line);
+
+        tempAddress += EXTI_InitStruct->EXTI_Mode;
+   2:	4b2e      	ldr	r3, [pc, #184]	; (bc <EXTI_Init+0xbc>)
+   4:	7902      	ldrb	r2, [r0, #4]
+        EXTI->IMR &= (~EXTI_InitStruct->EXTI_Line);
+   6:	6805      	ldr	r5, [r0, #0]
+        tempAddress += EXTI_InitStruct->EXTI_Mode;
+   8:	18d2      	adds	r2, r2, r3
+    if (EXTI_InitStruct->EXTI_LineCmd != SH_DISABLE)
+   a:	7a03      	ldrb	r3, [r0, #8]
+        EXTI->IMR &= (~EXTI_InitStruct->EXTI_Line);
+   c:	43e9      	mvns	r1, r5
+    if (EXTI_InitStruct->EXTI_LineCmd != SH_DISABLE)
+   e:	2b00      	cmp	r3, #0
+  10:	d04f      	beq.n	b2 <EXTI_Init+0xb2>
+        EXTI->IMR &= (~EXTI_InitStruct->EXTI_Line);
+  12:	4b2a      	ldr	r3, [pc, #168]	; (bc <EXTI_Init+0xbc>)
+  14:	681c      	ldr	r4, [r3, #0]
+  16:	400c      	ands	r4, r1
+  18:	601c      	str	r4, [r3, #0]
+        EXTI->EMR &= (~EXTI_InitStruct->EXTI_Line);
+  1a:	685c      	ldr	r4, [r3, #4]
+  1c:	400c      	ands	r4, r1
+  1e:	605c      	str	r4, [r3, #4]
+        EXTI->DMR &= (~EXTI_InitStruct->EXTI_Line);
+  20:	6a9c      	ldr	r4, [r3, #40]	; 0x28
+  22:	4021      	ands	r1, r4
+  24:	6299      	str	r1, [r3, #40]	; 0x28
+        *(__IO uint32_t *)tempAddress |= EXTI_InitStruct->EXTI_Line;
+  26:	6811      	ldr	r1, [r2, #0]
+  28:	4329      	orrs	r1, r5
+  2a:	6011      	str	r1, [r2, #0]
+
+        EXTI->TMSR &= (~EXTI_InitStruct->EXTI_Line);
+  2c:	6899      	ldr	r1, [r3, #8]
+  2e:	6802      	ldr	r2, [r0, #0]
+  30:	4391      	bics	r1, r2
+  32:	6099      	str	r1, [r3, #8]
+        EXTI->RTSR &= (~EXTI_InitStruct->EXTI_Line);
+  34:	68d9      	ldr	r1, [r3, #12]
+        EXTI->TMSR &= (~EXTI_InitStruct->EXTI_Line);
+  36:	43d5      	mvns	r5, r2
+        EXTI->RTSR &= (~EXTI_InitStruct->EXTI_Line);
+  38:	4391      	bics	r1, r2
+  3a:	60d9      	str	r1, [r3, #12]
+        EXTI->FTSR &= (~EXTI_InitStruct->EXTI_Line);
+  3c:	6919      	ldr	r1, [r3, #16]
+  3e:	4391      	bics	r1, r2
+  40:	6119      	str	r1, [r3, #16]
+
+        if (EXTI_InitStruct->EXTI_Trigger >= EXTI_Trigger_HighLevel)
+  42:	7941      	ldrb	r1, [r0, #5]
+        {
+            EXTI->TMSR |= EXTI_InitStruct->EXTI_Line;
+  44:	689c      	ldr	r4, [r3, #8]
+        if (EXTI_InitStruct->EXTI_Trigger >= EXTI_Trigger_HighLevel)
+  46:	292b      	cmp	r1, #43	; 0x2b
+  48:	d927      	bls.n	9a <EXTI_Init+0x9a>
+            EXTI->TMSR |= EXTI_InitStruct->EXTI_Line;
+  4a:	4314      	orrs	r4, r2
+  4c:	609c      	str	r4, [r3, #8]
+        {
+            EXTI->TMSR &= (~EXTI_InitStruct->EXTI_Line);
+        }
+
+        if ((EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling) \
+           || (EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_HighLevel_LowLevel))
+  4e:	293f      	cmp	r1, #63	; 0x3f
+  50:	d127      	bne.n	a2 <EXTI_Init+0xa2>
+        {
+            EXTI->RTSR |= EXTI_InitStruct->EXTI_Line;
+  52:	68d9      	ldr	r1, [r3, #12]
+  54:	4311      	orrs	r1, r2
+  56:	60d9      	str	r1, [r3, #12]
+            EXTI->FTSR |= EXTI_InitStruct->EXTI_Line;
+  58:	6919      	ldr	r1, [r3, #16]
+  5a:	430a      	orrs	r2, r1
+  5c:	611a      	str	r2, [r3, #16]
+            *(__IO uint32_t *)tempAddress |= EXTI_InitStruct->EXTI_Line;
+        }
+        for (pinPosition = 0; pinPosition < 16; pinPosition++)
+        {
+            EXTI_Linex = ((uint32_t)0x01) << pinPosition;
+            if ((EXTI_InitStruct->EXTI_Line & EXTI_Linex) == EXTI_Linex)
+  5e:	2100      	movs	r1, #0
+            {
+                if (pinPosition < 0x05)
+                {
+                    EXTI->SAMP.V32 &= (~(((uint32_t)0x0F) << (pinPosition * 4)));
+  60:	260f      	movs	r6, #15
+            if ((EXTI_InitStruct->EXTI_Line & EXTI_Linex) == EXTI_Linex)
+  62:	6802      	ldr	r2, [r0, #0]
+  64:	9201      	str	r2, [sp, #4]
+            EXTI_Linex = ((uint32_t)0x01) << pinPosition;
+  66:	2201      	movs	r2, #1
+  68:	408a      	lsls	r2, r1
+            if ((EXTI_InitStruct->EXTI_Line & EXTI_Linex) == EXTI_Linex)
+  6a:	9c01      	ldr	r4, [sp, #4]
+  6c:	4014      	ands	r4, r2
+  6e:	4294      	cmp	r4, r2
+  70:	d10f      	bne.n	92 <EXTI_Init+0x92>
+                if (pinPosition < 0x05)
+  72:	2904      	cmp	r1, #4
+  74:	d80d      	bhi.n	92 <EXTI_Init+0x92>
+                    EXTI->SAMP.V32 &= (~(((uint32_t)0x0F) << (pinPosition * 4)));
+  76:	0037      	movs	r7, r6
+  78:	008c      	lsls	r4, r1, #2
+  7a:	40a7      	lsls	r7, r4
+  7c:	6a5a      	ldr	r2, [r3, #36]	; 0x24
+  7e:	43ba      	bics	r2, r7
+  80:	625a      	str	r2, [r3, #36]	; 0x24
+                    EXTI->SAMP.V32 |= (((uint32_t)EXTI_InitStruct->EXTI_SampleCycle \
+                                       | ((uint32_t)EXTI_InitStruct->EXTI_SampleClockDivision << 2)) \
+  82:	79c2      	ldrb	r2, [r0, #7]
+                    EXTI->SAMP.V32 |= (((uint32_t)EXTI_InitStruct->EXTI_SampleCycle \
+  84:	7985      	ldrb	r5, [r0, #6]
+                                       | ((uint32_t)EXTI_InitStruct->EXTI_SampleClockDivision << 2)) \
+  86:	0092      	lsls	r2, r2, #2
+  88:	432a      	orrs	r2, r5
+                                       << (pinPosition * 4));
+  8a:	40a2      	lsls	r2, r4
+                    EXTI->SAMP.V32 |= (((uint32_t)EXTI_InitStruct->EXTI_SampleCycle \
+  8c:	6a5f      	ldr	r7, [r3, #36]	; 0x24
+  8e:	433a      	orrs	r2, r7
+  90:	625a      	str	r2, [r3, #36]	; 0x24
+        for (pinPosition = 0; pinPosition < 16; pinPosition++)
+  92:	3101      	adds	r1, #1
+  94:	2910      	cmp	r1, #16
+  96:	d1e6      	bne.n	66 <EXTI_Init+0x66>
+    else
+    {
+        tempAddress += EXTI_InitStruct->EXTI_Mode;
+        *(__IO uint32_t *)tempAddress &= (~EXTI_InitStruct->EXTI_Line);
+    }
+}
+  98:	bdf7      	pop	{r0, r1, r2, r4, r5, r6, r7, pc}
+            EXTI->TMSR &= (~EXTI_InitStruct->EXTI_Line);
+  9a:	402c      	ands	r4, r5
+  9c:	609c      	str	r4, [r3, #8]
+        if ((EXTI_InitStruct->EXTI_Trigger == EXTI_Trigger_Rising_Falling) \
+  9e:	290f      	cmp	r1, #15
+  a0:	d0d7      	beq.n	52 <EXTI_Init+0x52>
+            tempAddress += (EXTI_InitStruct->EXTI_Trigger & 0x1F);
+  a2:	241f      	movs	r4, #31
+  a4:	4021      	ands	r1, r4
+  a6:	4c05      	ldr	r4, [pc, #20]	; (bc <EXTI_Init+0xbc>)
+  a8:	1909      	adds	r1, r1, r4
+            *(__IO uint32_t *)tempAddress |= EXTI_InitStruct->EXTI_Line;
+  aa:	680c      	ldr	r4, [r1, #0]
+  ac:	4322      	orrs	r2, r4
+  ae:	600a      	str	r2, [r1, #0]
+  b0:	e7d5      	b.n	5e <EXTI_Init+0x5e>
+        *(__IO uint32_t *)tempAddress &= (~EXTI_InitStruct->EXTI_Line);
+  b2:	6813      	ldr	r3, [r2, #0]
+  b4:	4019      	ands	r1, r3
+  b6:	6011      	str	r1, [r2, #0]
+}
+  b8:	e7ee      	b.n	98 <EXTI_Init+0x98>
+  ba:	46c0      	nop			; (mov r8, r8)
+  bc:	40003400 	.word	0x40003400
+
+Disassembly of section .text.EXTI_StructInit:
+
+00000000 <EXTI_StructInit>:
+  * @retval None
+  */
+void EXTI_StructInit(EXTI_InitTypeDef *EXTI_InitStruct)
+{
+    EXTI_InitStruct->EXTI_Line = (uint16_t)0x0000;
+    EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+   0:	2280      	movs	r2, #128	; 0x80
+    EXTI_InitStruct->EXTI_Line = (uint16_t)0x0000;
+   2:	2300      	movs	r3, #0
+    EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+   4:	0152      	lsls	r2, r2, #5
+    EXTI_InitStruct->EXTI_Line = (uint16_t)0x0000;
+   6:	6003      	str	r3, [r0, #0]
+    EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
+   8:	6042      	str	r2, [r0, #4]
+    EXTI_InitStruct->EXTI_Trigger = EXTI_Trigger_Falling;
+    EXTI_InitStruct->EXTI_SampleCycle = EXTI_SampleCycle_1;
+    EXTI_InitStruct->EXTI_SampleClockDivision = EXTI_SampleClockDivision_1;
+    EXTI_InitStruct->EXTI_LineCmd = SH_DISABLE;
+   a:	7203      	strb	r3, [r0, #8]
+}
+   c:	4770      	bx	lr
+
+Disassembly of section .text.EXTI_PinConfig:
+
+00000000 <EXTI_PinConfig>:
+  * @param  EXTI_PinSourcex: specifie the EXTI line to be configured.
+  *         This parameter can be EXTI_PinSourcex @ref EXTI_PIN_Type.
+  * @retval None
+  */
+void EXTI_PinConfig(EXTI_Port_Type EXTI_PortSourceGPIOx, EXTI_PIN_Type EXTI_PinSourcex)
+{
+   0:	b510      	push	{r4, lr}
+   2:	4b0d      	ldr	r3, [pc, #52]	; (38 <EXTI_PinConfig+0x38>)
+    /* Check the parameters */
+    assert_param(IS_EXTI_PORT_SOURCE(EXTI_PortSourceGPIOx));
+    assert_param(IS_EXTI_PIN_SOURCE(EXTI_PinSourcex));
+
+    if (EXTI_PinSourcex > EXTI_PinSource7)
+   4:	2907      	cmp	r1, #7
+   6:	d90b      	bls.n	20 <EXTI_PinConfig+0x20>
+    {
+        EXTI->CFGH.V32 &= (~(((uint32_t)0x0F) << ((EXTI_PinSourcex - EXTI_PinSource8) * 4)));
+   8:	240f      	movs	r4, #15
+   a:	3908      	subs	r1, #8
+   c:	0089      	lsls	r1, r1, #2
+   e:	408c      	lsls	r4, r1
+        EXTI->CFGH.V32 |= ((EXTI_PortSourceGPIOx) << ((EXTI_PinSourcex - EXTI_PinSource8) * 4));
+  10:	4088      	lsls	r0, r1
+        EXTI->CFGH.V32 &= (~(((uint32_t)0x0F) << ((EXTI_PinSourcex - EXTI_PinSource8) * 4)));
+  12:	6a1a      	ldr	r2, [r3, #32]
+  14:	43a2      	bics	r2, r4
+  16:	621a      	str	r2, [r3, #32]
+        EXTI->CFGH.V32 |= ((EXTI_PortSourceGPIOx) << ((EXTI_PinSourcex - EXTI_PinSource8) * 4));
+  18:	6a1a      	ldr	r2, [r3, #32]
+  1a:	4310      	orrs	r0, r2
+  1c:	6218      	str	r0, [r3, #32]
+    else
+    {
+        EXTI->CFGL.V32 &= (~(((uint32_t)0x0F) << (EXTI_PinSourcex * 4)));
+        EXTI->CFGL.V32 |= ((EXTI_PortSourceGPIOx) << (EXTI_PinSourcex * 4));
+    }
+}
+  1e:	bd10      	pop	{r4, pc}
+        EXTI->CFGL.V32 &= (~(((uint32_t)0x0F) << (EXTI_PinSourcex * 4)));
+  20:	240f      	movs	r4, #15
+  22:	0089      	lsls	r1, r1, #2
+  24:	408c      	lsls	r4, r1
+        EXTI->CFGL.V32 |= ((EXTI_PortSourceGPIOx) << (EXTI_PinSourcex * 4));
+  26:	4088      	lsls	r0, r1
+        EXTI->CFGL.V32 &= (~(((uint32_t)0x0F) << (EXTI_PinSourcex * 4)));
+  28:	69da      	ldr	r2, [r3, #28]
+  2a:	43a2      	bics	r2, r4
+  2c:	61da      	str	r2, [r3, #28]
+        EXTI->CFGL.V32 |= ((EXTI_PortSourceGPIOx) << (EXTI_PinSourcex * 4));
+  2e:	69da      	ldr	r2, [r3, #28]
+  30:	4310      	orrs	r0, r2
+  32:	61d8      	str	r0, [r3, #28]
+}
+  34:	e7f3      	b.n	1e <EXTI_PinConfig+0x1e>
+  36:	46c0      	nop			; (mov r8, r8)
+  38:	40003400 	.word	0x40003400
+
+Disassembly of section .text.EXTI_GenerateSWInterrupt:
+
+00000000 <EXTI_GenerateSWInterrupt>:
+void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
+{
+    /* Check the parameters */
+    assert_param(IS_EXTI_LINE(EXTI_Line));
+
+    EXTI->SWIER = EXTI_Line;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <EXTI_GenerateSWInterrupt+0x8>)
+   2:	6158      	str	r0, [r3, #20]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	40003400 	.word	0x40003400
+
+Disassembly of section .text.EXTI_GetPendingFlagStatus:
+
+00000000 <EXTI_GetPendingFlagStatus>:
+    FlagStatus bitStatus;
+
+    /* Check the parameters */
+    assert_param(IS_EXTI_GET_ONE_LINE(EXTI_Line));
+
+    if ((EXTI->PR.V32 & EXTI_Line) != (uint32_t)SH_RESET)
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <EXTI_GetPendingFlagStatus+0x10>)
+   2:	699b      	ldr	r3, [r3, #24]
+   4:	4018      	ands	r0, r3
+   6:	1e43      	subs	r3, r0, #1
+   8:	4198      	sbcs	r0, r3
+    }
+    else
+    {
+        bitStatus = SH_RESET;
+    }
+    return bitStatus;
+   a:	b2c0      	uxtb	r0, r0
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40003400 	.word	0x40003400
+
+Disassembly of section .text.EXTI_ClearPendingFlag:
+
+00000000 <EXTI_ClearPendingFlag>:
+void EXTI_ClearPendingFlag(uint32_t EXTI_Line)
+{
+    /* Check the parameters */
+    assert_param(IS_EXTI_LINE(EXTI_Line));
+
+    EXTI->PR.V32 |= (uint32_t)(EXTI_Line << 16);
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <EXTI_ClearPendingFlag+0xc>)
+   2:	0400      	lsls	r0, r0, #16
+   4:	699a      	ldr	r2, [r3, #24]
+   6:	4310      	orrs	r0, r2
+   8:	6198      	str	r0, [r3, #24]
+}
+   a:	4770      	bx	lr
+   c:	40003400 	.word	0x40003400

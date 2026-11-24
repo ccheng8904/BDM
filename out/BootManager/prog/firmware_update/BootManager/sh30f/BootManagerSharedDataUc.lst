@@ -1,0 +1,91 @@
+
+out/BootManager/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BMDAT_isPowerOnReset:
+
+00000000 <BMDAT_isPowerOnReset>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+bool BMDAT_isPowerOnReset(void)
+{
+    if((RCC->RSTSTR.V32 & RCC_RSTSTR_PORSTF_Msk) != 0u)
+   0:	2204      	movs	r2, #4
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <BMDAT_isPowerOnReset+0x1c>)
+        RCC->RSTCLR.V32 |= (uint32_t)RCC_RSTCLR_PORSTFC_Msk;
+        RCC_REGS_LOCK();
+
+        return true;
+    }
+    return false;
+   4:	2000      	movs	r0, #0
+    if((RCC->RSTSTR.V32 & RCC_RSTSTR_PORSTF_Msk) != 0u)
+   6:	6ad9      	ldr	r1, [r3, #44]	; 0x2c
+   8:	4211      	tst	r1, r2
+   a:	d006      	beq.n	1a <BMDAT_isPowerOnReset+0x1a>
+        RCC_REGS_UNLOCK();
+   c:	4904      	ldr	r1, [pc, #16]	; (20 <BMDAT_isPowerOnReset+0x20>)
+   e:	6359      	str	r1, [r3, #52]	; 0x34
+        RCC->RSTCLR.V32 |= (uint32_t)RCC_RSTCLR_PORSTFC_Msk;
+  10:	6b19      	ldr	r1, [r3, #48]	; 0x30
+  12:	430a      	orrs	r2, r1
+  14:	631a      	str	r2, [r3, #48]	; 0x30
+        RCC_REGS_LOCK();
+  16:	6358      	str	r0, [r3, #52]	; 0x34
+        return true;
+  18:	3001      	adds	r0, #1
+}
+  1a:	4770      	bx	lr
+  1c:	40040800 	.word	0x40040800
+  20:	000033cc 	.word	0x000033cc
+
+Disassembly of section .text.BMDAT_setDataInitializedFlag:
+
+00000000 <BMDAT_setDataInitializedFlag>:
+
+void BMDAT_setDataInitializedFlag(void)
+{
+   0:	b510      	push	{r4, lr}
+    BMDAT_setMagicPattern(BMDAT_magicPattern);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <BMDAT_setDataInitializedFlag+0xc>)
+   4:	f7ff fffe 	bl	0 <BMDAT_setMagicPattern>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	5a714b78 	.word	0x5a714b78
+
+Disassembly of section .text.BMDAT_resetDataInitializedFlag:
+
+00000000 <BMDAT_resetDataInitializedFlag>:
+
+void BMDAT_resetDataInitializedFlag(void)
+{
+   0:	b510      	push	{r4, lr}
+    BMDAT_setMagicPattern(BMDAT_startAppAfterReset);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <BMDAT_resetDataInitializedFlag+0xc>)
+   4:	f7ff fffe 	bl	0 <BMDAT_setMagicPattern>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	55aa7799 	.word	0x55aa7799
+
+Disassembly of section .text.BMDAT_isDataInitialized:
+
+00000000 <BMDAT_isDataInitialized>:
+
+
+bool BMDAT_isDataInitialized(void)
+{
+   0:	b510      	push	{r4, lr}
+    return ((BMDAT_getMagicPattern() == BMDAT_magicPattern) ? true : false);
+   2:	f7ff fffe 	bl	0 <BMDAT_getMagicPattern>
+   6:	4b03      	ldr	r3, [pc, #12]	; (14 <BMDAT_isDataInitialized+0x14>)
+   8:	18c0      	adds	r0, r0, r3
+   a:	4243      	negs	r3, r0
+   c:	4158      	adcs	r0, r3
+   e:	b2c0      	uxtb	r0, r0
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	a58eb488 	.word	0xa58eb488

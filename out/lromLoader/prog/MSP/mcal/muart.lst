@@ -1,0 +1,914 @@
+
+out/lromLoader/prog/MSP/mcal/muart.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MUART_getStatus:
+
+00000000 <MUART_getStatus>:
+
+enum MCAL_Status MUART_getStatus(const struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+
+    enum MCAL_Status status = handle->status;
+   0:	7902      	ldrb	r2, [r0, #4]
+{
+   2:	0003      	movs	r3, r0
+    enum MCAL_Status status = handle->status;
+   4:	b2d0      	uxtb	r0, r2
+    
+    if(status == MCAL_STATUS_READY)
+   6:	2a01      	cmp	r2, #1
+   8:	d10c      	bne.n	24 <MUART_getStatus+0x24>
+    {
+        if(handle->error != MCAL_OK)
+   a:	2205      	movs	r2, #5
+   c:	569a      	ldrsb	r2, [r3, r2]
+   e:	2a00      	cmp	r2, #0
+  10:	d107      	bne.n	22 <MUART_getStatus+0x22>
+}
+
+
+static inline bool MCOM_isReadBusy(const struct MCOM_Transfer *transfer)
+{
+    return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+  12:	7a1a      	ldrb	r2, [r3, #8]
+}
+
+
+static inline bool MCOM_isBusy(const struct MCOM_Transfer *transfer)
+{
+    return (MCOM_isReadBusy(transfer) || MCOM_isWriteBusy(transfer));
+  14:	2a01      	cmp	r2, #1
+  16:	d002      	beq.n	1e <MUART_getStatus+0x1e>
+    return (transfer->writeBufferHandle.status == MCOM_STATUS_BUSY);
+  18:	7d1b      	ldrb	r3, [r3, #20]
+        {
+            status = MCAL_STATUS_ERROR;
+        }
+        else if(MCOM_isBusy(&handle->transfer))
+  1a:	2b01      	cmp	r3, #1
+  1c:	d102      	bne.n	24 <MUART_getStatus+0x24>
+        {
+            status = MCAL_STATUS_BUSY;
+  1e:	2003      	movs	r0, #3
+  20:	e000      	b.n	24 <MUART_getStatus+0x24>
+            status = MCAL_STATUS_ERROR;
+  22:	2002      	movs	r0, #2
+            /* Nothing to do */
+        }
+    }
+    
+    return status;
+}
+  24:	4770      	bx	lr
+
+Disassembly of section .text.MUART_getReadStatus:
+
+00000000 <MUART_getReadStatus>:
+
+enum MCAL_Status MUART_getReadStatus(const struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+
+    enum MCAL_Status status = handle->status;
+   0:	7902      	ldrb	r2, [r0, #4]
+{
+   2:	0003      	movs	r3, r0
+    enum MCAL_Status status = handle->status;
+   4:	b2d0      	uxtb	r0, r2
+    
+    if(status == MCAL_STATUS_READY)
+   6:	2a01      	cmp	r2, #1
+   8:	d107      	bne.n	1a <MUART_getReadStatus+0x1a>
+    {
+        if(handle->error != MCAL_OK)
+   a:	2205      	movs	r2, #5
+   c:	569a      	ldrsb	r2, [r3, r2]
+   e:	2a00      	cmp	r2, #0
+  10:	d104      	bne.n	1c <MUART_getReadStatus+0x1c>
+    return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+  12:	7a1b      	ldrb	r3, [r3, #8]
+        {
+            status = MCAL_STATUS_ERROR;
+        }
+        else if(MCOM_isReadBusy(&handle->transfer))
+  14:	2b01      	cmp	r3, #1
+  16:	d100      	bne.n	1a <MUART_getReadStatus+0x1a>
+        {
+            status = MCAL_STATUS_BUSY;
+  18:	2003      	movs	r0, #3
+            /* Nothing to do */
+        }
+    }
+    
+    return status;
+}
+  1a:	4770      	bx	lr
+            status = MCAL_STATUS_ERROR;
+  1c:	2002      	movs	r0, #2
+  1e:	e7fc      	b.n	1a <MUART_getReadStatus+0x1a>
+
+Disassembly of section .text.MUART_getWriteStatus:
+
+00000000 <MUART_getWriteStatus>:
+
+enum MCAL_Status MUART_getWriteStatus(const struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+
+    enum MCAL_Status status = handle->status;
+   0:	7902      	ldrb	r2, [r0, #4]
+{
+   2:	0003      	movs	r3, r0
+    enum MCAL_Status status = handle->status;
+   4:	b2d0      	uxtb	r0, r2
+    
+    if(status == MCAL_STATUS_READY)
+   6:	2a01      	cmp	r2, #1
+   8:	d103      	bne.n	12 <MUART_getWriteStatus+0x12>
+    return (transfer->writeBufferHandle.status == MCOM_STATUS_BUSY);
+   a:	7d1b      	ldrb	r3, [r3, #20]
+    {
+        if(MCOM_isWriteBusy(&handle->transfer))
+   c:	2b01      	cmp	r3, #1
+   e:	d100      	bne.n	12 <MUART_getWriteStatus+0x12>
+        {
+            status = MCAL_STATUS_BUSY;
+  10:	2003      	movs	r0, #3
+        }
+    }
+    
+    return status;
+}
+  12:	4770      	bx	lr
+
+Disassembly of section .text.MUART_getError:
+
+00000000 <MUART_getError>:
+
+
+enum MCAL_Error MUART_getError(const struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+    return handle->error;
+   0:	7940      	ldrb	r0, [r0, #5]
+   2:	b240      	sxtb	r0, r0
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MUART_clearError:
+
+00000000 <MUART_clearError>:
+
+void MUART_clearError(struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+
+    handle->error = MCAL_OK;
+   0:	2300      	movs	r3, #0
+   2:	7143      	strb	r3, [r0, #5]
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MUART_enable:
+
+00000000 <MUART_enable>:
+
+
+void MUART_enable(struct MUART_Handle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MCAL_assert(handle != NULL);
+
+    MUART_enableChannel(handle->channel);
+   4:	6800      	ldr	r0, [r0, #0]
+   6:	f7ff fffe 	bl	0 <MUART_enableChannel>
+    handle->status = MCAL_STATUS_READY;
+   a:	2301      	movs	r3, #1
+   c:	7123      	strb	r3, [r4, #4]
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MUART_disable:
+
+00000000 <MUART_disable>:
+
+
+void MUART_disable(struct MUART_Handle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MCAL_assert(handle != NULL);
+
+    MUART_disableChannel(handle->channel);
+   4:	6800      	ldr	r0, [r0, #0]
+   6:	f7ff fffe 	bl	0 <MUART_disableChannel>
+    handle->status = MCAL_STATUS_DISABLED;
+   a:	2304      	movs	r3, #4
+   c:	7123      	strb	r3, [r4, #4]
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MUART_read:
+
+00000000 <MUART_read>:
+
+
+enum MCAL_Error MUART_read(struct MUART_Handle *handle, uint8_t buffer[], uint16_t length)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    handle->error = MCAL_OK;
+   2:	2300      	movs	r3, #0
+{
+   4:	0004      	movs	r4, r0
+    handle->error = MCAL_OK;
+   6:	7143      	strb	r3, [r0, #5]
+    MCAL_assert(handle != NULL);
+    MCAL_assert(buffer != NULL);
+    
+    MUART_clearError(handle);
+    
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   8:	7900      	ldrb	r0, [r0, #4]
+{
+   a:	000e      	movs	r6, r1
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   c:	b2c0      	uxtb	r0, r0
+{
+   e:	0017      	movs	r7, r2
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+  10:	f7ff fffe 	bl	0 <MCAL_checkReady>
+  14:	1e05      	subs	r5, r0, #0
+  16:	d10c      	bne.n	32 <MUART_read+0x32>
+    return (transfer->readBufferHandle.status == MCOM_STATUS_READY);
+  18:	7a23      	ldrb	r3, [r4, #8]
+    
+    if(MCOM_isReadReady(&handle->transfer))
+  1a:	2b00      	cmp	r3, #0
+  1c:	d10b      	bne.n	36 <MUART_read+0x36>
+    {
+        MCOM_setReadBuffer(&handle->transfer, buffer, length);
+  1e:	0020      	movs	r0, r4
+  20:	0031      	movs	r1, r6
+  22:	3008      	adds	r0, #8
+  24:	003a      	movs	r2, r7
+  26:	f7ff fffe 	bl	0 <MCOM_setReadBuffer>
+        MUART_IRQ_enableEvent(handle->channel, MCAL_EVENT_READ_BYTE);
+  2a:	2110      	movs	r1, #16
+  2c:	6820      	ldr	r0, [r4, #0]
+  2e:	f7ff fffe 	bl	0 <MUART_IRQ_enableEvent>
+    }
+    else
+    {
+        return MCAL_ERROR_BUSY;
+    }
+}
+  32:	0028      	movs	r0, r5
+  34:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        return MCAL_ERROR_BUSY;
+  36:	2502      	movs	r5, #2
+  38:	e7fb      	b.n	32 <MUART_read+0x32>
+
+Disassembly of section .text.MUART_finishRead:
+
+00000000 <MUART_finishRead>:
+    return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+   0:	7a03      	ldrb	r3, [r0, #8]
+   2:	b2da      	uxtb	r2, r3
+
+void MUART_finishRead(struct MUART_Handle *handle)
+{
+    MCAL_assert(handle != NULL);
+    
+    if(MCOM_isReadBusy(&handle->transfer))
+   4:	2b01      	cmp	r3, #1
+   6:	d100      	bne.n	a <MUART_finishRead+0xa>
+    {
+        handle->finishRead = true;
+   8:	7182      	strb	r2, [r0, #6]
+    }
+}
+   a:	4770      	bx	lr
+
+Disassembly of section .text.MUART_enableEvent:
+
+00000000 <MUART_enableEvent>:
+    }
+}
+
+
+enum MCAL_Error MUART_enableEvent(struct MUART_Handle *handle, MCAL_Callback_t *callback, enum MCAL_Event event)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    uint32_t eventMask;
+    
+    MCAL_assert(handle != NULL);
+    
+    MCAL_RETURN_ON_ERROR(MCAL_checkInitialized(handle->status));
+   2:	7903      	ldrb	r3, [r0, #4]
+{
+   4:	0004      	movs	r4, r0
+   6:	0015      	movs	r5, r2
+ *  \param    status: status to check
+ *  \return   MCAL_OK if status correspond, specific error value otherwise.
+ */
+static inline enum MCAL_Error MCAL_checkInitialized(enum MCAL_Status status)
+{
+    return (MCAL_isInitialized(status)) ? MCAL_OK : MCAL_ERROR_NOT_INITIALIZED;
+   8:	200a      	movs	r0, #10
+   a:	2b00      	cmp	r3, #0
+   c:	d011      	beq.n	32 <MUART_enableEvent+0x32>
+    
+    if(callback != NULL)
+   e:	2900      	cmp	r1, #0
+  10:	d003      	beq.n	1a <MUART_enableEvent+0x1a>
+    {
+        MCAL_enableEvent(&handle->cbList, callback, event);
+  12:	0020      	movs	r0, r4
+  14:	3020      	adds	r0, #32
+  16:	f7ff fffe 	bl	0 <MCAL_enableEvent>
+    }
+    eventMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  1a:	0029      	movs	r1, r5
+  1c:	6820      	ldr	r0, [r4, #0]
+  1e:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+    handle->enabledEvents |= eventMask;
+  22:	6a63      	ldr	r3, [r4, #36]	; 0x24
+    
+    MUART_IRQ_enableEvent(handle->channel, event);
+  24:	0029      	movs	r1, r5
+    handle->enabledEvents |= eventMask;
+  26:	4318      	orrs	r0, r3
+  28:	6260      	str	r0, [r4, #36]	; 0x24
+    MUART_IRQ_enableEvent(handle->channel, event);
+  2a:	6820      	ldr	r0, [r4, #0]
+  2c:	f7ff fffe 	bl	0 <MUART_IRQ_enableEvent>
+  30:	2000      	movs	r0, #0
+    
+    return MCAL_OK;
+}
+  32:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MUART_write:
+
+00000000 <MUART_write>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    handle->error = MCAL_OK;
+   2:	2300      	movs	r3, #0
+{
+   4:	0004      	movs	r4, r0
+    handle->error = MCAL_OK;
+   6:	7143      	strb	r3, [r0, #5]
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   8:	7900      	ldrb	r0, [r0, #4]
+{
+   a:	000e      	movs	r6, r1
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   c:	b2c0      	uxtb	r0, r0
+{
+   e:	0017      	movs	r7, r2
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+  10:	f7ff fffe 	bl	0 <MCAL_checkReady>
+  14:	1e05      	subs	r5, r0, #0
+  16:	d10d      	bne.n	34 <MUART_write+0x34>
+    return (transfer->writeBufferHandle.status == MCOM_STATUS_READY);
+  18:	7d23      	ldrb	r3, [r4, #20]
+    if(MCOM_isWriteReady(&handle->transfer))
+  1a:	2b00      	cmp	r3, #0
+  1c:	d10c      	bne.n	38 <MUART_write+0x38>
+        MCOM_setWriteBuffer(&handle->transfer, buffer, length);
+  1e:	0020      	movs	r0, r4
+  20:	003a      	movs	r2, r7
+  22:	0031      	movs	r1, r6
+  24:	3008      	adds	r0, #8
+  26:	f7ff fffe 	bl	0 <MCOM_setWriteBuffer>
+        (void)MUART_enableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+  2a:	2220      	movs	r2, #32
+  2c:	0029      	movs	r1, r5
+  2e:	0020      	movs	r0, r4
+  30:	f7ff fffe 	bl	0 <MUART_write>
+}
+  34:	0028      	movs	r0, r5
+  36:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        return MCAL_ERROR_BUSY;
+  38:	2502      	movs	r5, #2
+  3a:	e7fb      	b.n	34 <MUART_write+0x34>
+
+Disassembly of section .text.MUART_disableEvent:
+
+00000000 <MUART_disableEvent>:
+
+
+enum MCAL_Error MUART_disableEvent(struct MUART_Handle *handle, MCAL_Callback_t *callback, enum MCAL_Event event)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    uint32_t eventMask;
+    
+    MCAL_assert(handle != NULL);
+    
+    MCAL_RETURN_ON_ERROR(MCAL_checkInitialized(handle->status));
+   2:	7903      	ldrb	r3, [r0, #4]
+{
+   4:	0004      	movs	r4, r0
+   6:	000e      	movs	r6, r1
+   8:	0015      	movs	r5, r2
+   a:	270a      	movs	r7, #10
+   c:	2b00      	cmp	r3, #0
+   e:	d011      	beq.n	34 <MUART_disableEvent+0x34>
+
+    MUART_IRQ_disableEvent(handle->channel, event);
+  10:	0011      	movs	r1, r2
+  12:	6800      	ldr	r0, [r0, #0]
+  14:	f7ff fffe 	bl	0 <MUART_IRQ_disableEvent>
+    
+    eventMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  18:	0029      	movs	r1, r5
+  1a:	6820      	ldr	r0, [r4, #0]
+  1c:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+    handle->enabledEvents &= ~eventMask;
+  20:	2700      	movs	r7, #0
+  22:	6a63      	ldr	r3, [r4, #36]	; 0x24
+  24:	4383      	bics	r3, r0
+  26:	6263      	str	r3, [r4, #36]	; 0x24
+    
+    if(callback != NULL)
+  28:	42be      	cmp	r6, r7
+  2a:	d003      	beq.n	34 <MUART_disableEvent+0x34>
+    {
+        MCAL_disableEvent(callback, event);
+  2c:	0029      	movs	r1, r5
+  2e:	0030      	movs	r0, r6
+  30:	f7ff fffe 	bl	0 <MCAL_disableEvent>
+    }
+    return MCAL_OK;
+}
+  34:	0038      	movs	r0, r7
+  36:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+
+Disassembly of section .text.MUART_getHandle:
+
+00000000 <MUART_getHandle>:
+    /* Note 926:  Conversion between object pointer and void pointer
+       Note 9005: Cast removes const qualification
+       Uncritical in this case */
+    return (struct MUART_Handle*)handlePtr;/*lint !e9005 !e926 */
+  #endif
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.MUART_isEvent:
+
+00000000 <MUART_isEvent>:
+/******************************************************************************/
+/* PRIVATE FUNCTION DEFINITIONS                                               */
+/******************************************************************************/
+
+bool MUART_isEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000e      	movs	r6, r1
+   4:	0004      	movs	r4, r0
+    uint32_t status = MUART_getStatusReg(channel);
+   6:	f7ff fffe 	bl	0 <MUART_getStatusReg>
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+   a:	0031      	movs	r1, r6
+    uint32_t status = MUART_getStatusReg(channel);
+   c:	0005      	movs	r5, r0
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+   e:	0020      	movs	r0, r4
+  10:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+    
+    return (((status & eventStatusMask) != 0U) ? true : false);
+  14:	4028      	ands	r0, r5
+  16:	1e43      	subs	r3, r0, #1
+  18:	4198      	sbcs	r0, r3
+  1a:	b2c0      	uxtb	r0, r0
+}
+  1c:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MUART_writeByte:
+
+00000000 <MUART_writeByte>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    return (handle->status == MCAL_STATUS_READY) ? true : false;
+   2:	7903      	ldrb	r3, [r0, #4]
+{
+   4:	0004      	movs	r4, r0
+   6:	000e      	movs	r6, r1
+    return (handle->status == MCAL_STATUS_READY) ? true : false;
+   8:	b2dd      	uxtb	r5, r3
+    if(MUART_isEnabled(handle))
+   a:	2b01      	cmp	r3, #1
+   c:	d002      	beq.n	14 <MUART_writeByte+0x14>
+    return -1;
+   e:	2001      	movs	r0, #1
+  10:	4240      	negs	r0, r0
+}
+  12:	bd70      	pop	{r4, r5, r6, pc}
+        if(MUART_isEvent(handle->channel, MCAL_EVENT_WRITE_BYTE))
+  14:	2120      	movs	r1, #32
+  16:	6800      	ldr	r0, [r0, #0]
+  18:	f7ff fffe 	bl	0 <MUART_writeByte>
+  1c:	2800      	cmp	r0, #0
+  1e:	d0f6      	beq.n	e <MUART_writeByte+0xe>
+            MUART_writeDataReg(handle->channel, (uint32_t)data);
+  20:	6820      	ldr	r0, [r4, #0]
+  22:	0031      	movs	r1, r6
+  24:	f7ff fffe 	bl	0 <MUART_writeDataReg>
+            return 1;
+  28:	0028      	movs	r0, r5
+  2a:	e7f2      	b.n	12 <MUART_writeByte+0x12>
+
+Disassembly of section .text.MUART_writeBlocking:
+
+00000000 <MUART_writeBlocking>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	9201      	str	r2, [sp, #4]
+   4:	0006      	movs	r6, r0
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   6:	7900      	ldrb	r0, [r0, #4]
+{
+   8:	000f      	movs	r7, r1
+    MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+   a:	b2c0      	uxtb	r0, r0
+   c:	f7ff fffe 	bl	0 <MCAL_checkReady>
+  10:	1e05      	subs	r5, r0, #0
+  12:	d104      	bne.n	1e <MUART_writeBlocking+0x1e>
+  14:	7d33      	ldrb	r3, [r6, #20]
+  16:	b2dc      	uxtb	r4, r3
+    if(MCOM_isWriteReady(&handle->transfer))
+  18:	2b00      	cmp	r3, #0
+  1a:	d00a      	beq.n	32 <MUART_writeBlocking+0x32>
+        return MCAL_ERROR_BUSY;
+  1c:	3502      	adds	r5, #2
+}
+  1e:	0028      	movs	r0, r5
+  20:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+            if(MUART_writeByte(handle, buffer[n]) > 0)
+  22:	0030      	movs	r0, r6
+  24:	5d39      	ldrb	r1, [r7, r4]
+  26:	f7ff fffe 	bl	0 <MUART_writeBlocking>
+  2a:	2800      	cmp	r0, #0
+  2c:	dd01      	ble.n	32 <MUART_writeBlocking+0x32>
+                n++;
+  2e:	3401      	adds	r4, #1
+  30:	b2e4      	uxtb	r4, r4
+        for (uint8_t n = 0; n < length;)
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	429c      	cmp	r4, r3
+  36:	d3f4      	bcc.n	22 <MUART_writeBlocking+0x22>
+  38:	e7f1      	b.n	1e <MUART_writeBlocking+0x1e>
+
+Disassembly of section .text.MUART_readByte:
+
+00000000 <MUART_readByte>:
+{
+   0:	b510      	push	{r4, lr}
+    return (handle->status == MCAL_STATUS_READY) ? true : false;
+   2:	7903      	ldrb	r3, [r0, #4]
+{
+   4:	0004      	movs	r4, r0
+    if(MUART_isEnabled(handle))
+   6:	2b01      	cmp	r3, #1
+   8:	d002      	beq.n	10 <MUART_readByte+0x10>
+    return -1;
+   a:	2001      	movs	r0, #1
+   c:	4240      	negs	r0, r0
+}
+   e:	bd10      	pop	{r4, pc}
+        if(MUART_isEvent(handle->channel, MCAL_EVENT_READ_BYTE))
+  10:	2110      	movs	r1, #16
+  12:	6800      	ldr	r0, [r0, #0]
+  14:	f7ff fffe 	bl	0 <MUART_readByte>
+  18:	2800      	cmp	r0, #0
+  1a:	d0f6      	beq.n	a <MUART_readByte+0xa>
+            return (int32_t)MUART_readDataReg(handle->channel);
+  1c:	6820      	ldr	r0, [r4, #0]
+  1e:	f7ff fffe 	bl	0 <MUART_readDataReg>
+  22:	e7f4      	b.n	e <MUART_readByte+0xe>
+
+Disassembly of section .text.MUART_configurePins:
+
+00000000 <MUART_configurePins>:
+  #endif
+}
+
+
+enum MCAL_Error MUART_configurePins(const struct MDIO_Channel *rxPin, const struct MDIO_Channel *txPin)
+{
+   0:	b537      	push	{r0, r1, r2, r4, r5, lr}
+    struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+   2:	4b0a      	ldr	r3, [pc, #40]	; (2c <MUART_configurePins+0x2c>)
+{
+   4:	0004      	movs	r4, r0
+    struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+   6:	9301      	str	r3, [sp, #4]
+{
+   8:	0008      	movs	r0, r1
+   a:	ad01      	add	r5, sp, #4
+    
+    cfg.outputState = MDIO_OUTPUT_STATE_HIGH;
+    
+    if(txPin != NULL)
+   c:	2900      	cmp	r1, #0
+   e:	d107      	bne.n	20 <MUART_configurePins+0x20>
+    {
+        MCAL_RETURN_ON_ERROR(MDIO_init(txPin, &cfg));
+    }
+    
+    cfg.pullType = MDIO_PULL_UP;
+  10:	2301      	movs	r3, #1
+    if(rxPin != NULL)
+    {
+        MCAL_RETURN_ON_ERROR(MDIO_init(rxPin, &cfg));
+    }
+    
+    return MCAL_OK;
+  12:	1e20      	subs	r0, r4, #0
+    cfg.pullType = MDIO_PULL_UP;
+  14:	706b      	strb	r3, [r5, #1]
+    if(rxPin != NULL)
+  16:	d008      	beq.n	2a <MUART_configurePins+0x2a>
+        MCAL_RETURN_ON_ERROR(MDIO_init(rxPin, &cfg));
+  18:	0029      	movs	r1, r5
+  1a:	f7ff fffe 	bl	0 <MDIO_init>
+  1e:	e004      	b.n	2a <MUART_configurePins+0x2a>
+        MCAL_RETURN_ON_ERROR(MDIO_init(txPin, &cfg));
+  20:	0029      	movs	r1, r5
+  22:	f7ff fffe 	bl	0 <MDIO_init>
+  26:	2800      	cmp	r0, #0
+  28:	d0f2      	beq.n	10 <MUART_configurePins+0x10>
+}
+  2a:	bd3e      	pop	{r1, r2, r3, r4, r5, pc}
+  2c:	02000002 	.word	0x02000002
+
+Disassembly of section .text.MUART_init:
+
+00000000 <MUART_init>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	000e      	movs	r6, r1
+   4:	0004      	movs	r4, r0
+    MCAL_RETURN_ON_ERROR(MUART_configure(channel, cfg));
+   6:	0011      	movs	r1, r2
+   8:	0030      	movs	r0, r6
+{
+   a:	0017      	movs	r7, r2
+    MCAL_RETURN_ON_ERROR(MUART_configure(channel, cfg));
+   c:	f7ff fffe 	bl	0 <MUART_configure>
+  10:	1e05      	subs	r5, r0, #0
+  12:	d119      	bne.n	48 <MUART_init+0x48>
+    MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+  14:	68b1      	ldr	r1, [r6, #8]
+  16:	6870      	ldr	r0, [r6, #4]
+  18:	f7ff fffe 	bl	0 <MUART_init>
+  1c:	1e05      	subs	r5, r0, #0
+  1e:	d113      	bne.n	48 <MUART_init+0x48>
+    MUART_IRQ_enable(handle->channel);
+  20:	0030      	movs	r0, r6
+    handle->channel = channel;
+  22:	6026      	str	r6, [r4, #0]
+    MUART_IRQ_enable(handle->channel);
+  24:	f7ff fffe 	bl	0 <MUART_IRQ_enable>
+    enum MUART_IRQ_Index index = MUART_IRQ_getIndex(handle->channel);
+  28:	6820      	ldr	r0, [r4, #0]
+  2a:	f7ff fffe 	bl	0 <MUART_IRQ_getIndex>
+    if(MUART_IRQ_HandleTable[index] == NULL)/*lint !e661 */
+  2e:	4b07      	ldr	r3, [pc, #28]	; (4c <MUART_init+0x4c>)
+  30:	0080      	lsls	r0, r0, #2
+  32:	58c2      	ldr	r2, [r0, r3]
+  34:	2a00      	cmp	r2, #0
+  36:	d100      	bne.n	3a <MUART_init+0x3a>
+        MUART_IRQ_HandleTable[index] = handle;/*lint !e661 */
+  38:	50c4      	str	r4, [r0, r3]
+    handle->defaultBaudrate = cfg->baudrate;
+  3a:	687b      	ldr	r3, [r7, #4]
+    handle->status = MCAL_STATUS_DISABLED;
+  3c:	2204      	movs	r2, #4
+    handle->defaultBaudrate = cfg->baudrate;
+  3e:	62a3      	str	r3, [r4, #40]	; 0x28
+    handle->cbList = NULL;
+  40:	2300      	movs	r3, #0
+    handle->status = MCAL_STATUS_DISABLED;
+  42:	7122      	strb	r2, [r4, #4]
+    handle->cbList = NULL;
+  44:	6223      	str	r3, [r4, #32]
+    handle->error = MCAL_OK;
+  46:	7163      	strb	r3, [r4, #5]
+}
+  48:	0028      	movs	r0, r5
+  4a:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+  4c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MUART_IRQ_Handler:
+
+00000000 <MUART_IRQ_Handler>:
+/******************************************************************************/
+/* INTERRUPT SERVICE ROUTINES                                                 */
+/******************************************************************************/
+
+void MUART_IRQ_Handler(enum MUART_IRQ_Index index)
+{
+   0:	b57f      	push	{r0, r1, r2, r3, r4, r5, r6, lr}
+    struct MUART_Handle *handle = NULL;
+    if(index < MUART_IRQ_CNT)
+   2:	2803      	cmp	r0, #3
+   4:	d84e      	bhi.n	a4 <MUART_IRQ_Handler+0xa4>
+    {
+        handle = MUART_IRQ_HandleTable[index];
+   6:	4b3e      	ldr	r3, [pc, #248]	; (100 <MUART_IRQ_Handler+0x100>)
+   8:	0080      	lsls	r0, r0, #2
+   a:	58c4      	ldr	r4, [r0, r3]
+    }
+    
+    while(handle != NULL)
+   c:	2c00      	cmp	r4, #0
+   e:	d049      	beq.n	a4 <MUART_IRQ_Handler+0xa4>
+    {
+        uint32_t status = MUART_getStatusReg(handle->channel);
+  10:	6820      	ldr	r0, [r4, #0]
+  12:	f7ff fffe 	bl	0 <MUART_getStatusReg>
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  16:	2180      	movs	r1, #128	; 0x80
+        status &= handle->enabledEvents;
+  18:	6a65      	ldr	r5, [r4, #36]	; 0x24
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  1a:	05c9      	lsls	r1, r1, #23
+        status &= handle->enabledEvents;
+  1c:	4005      	ands	r5, r0
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  1e:	6820      	ldr	r0, [r4, #0]
+  20:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+        
+        if(MUART_isEventPending(handle, MCAL_EVENT_ERROR, status))
+  24:	4228      	tst	r0, r5
+  26:	d03e      	beq.n	a6 <MUART_IRQ_Handler+0xa6>
+    enum MCAL_Error error = MUART_getChannelError(handle->channel);
+  28:	6820      	ldr	r0, [r4, #0]
+  2a:	f7ff fffe 	bl	0 <MUART_getChannelError>
+  2e:	0006      	movs	r6, r0
+    MUART_clearErrorReg(handle->channel);
+  30:	6820      	ldr	r0, [r4, #0]
+  32:	f7ff fffe 	bl	0 <MUART_clearErrorReg>
+    return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+  36:	7a23      	ldrb	r3, [r4, #8]
+    if(MCOM_isReadBusy(&handle->transfer))
+  38:	2b01      	cmp	r3, #1
+  3a:	d102      	bne.n	42 <MUART_IRQ_Handler+0x42>
+}
+
+
+static inline void MCOM_setReadReady(struct MCOM_Transfer *transfer)
+{
+    transfer->readBufferHandle.status = MCOM_STATUS_READY;
+  3c:	2300      	movs	r3, #0
+        handle->error = error;
+  3e:	7166      	strb	r6, [r4, #5]
+  40:	7223      	strb	r3, [r4, #8]
+    eventData->dataType = MCAL_DATA_TYPE_ERROR_VALUE;
+  42:	466a      	mov	r2, sp
+  44:	2307      	movs	r3, #7
+    eventData->data.error = error;
+  46:	7316      	strb	r6, [r2, #12]
+    eventData->dataType = MCAL_DATA_TYPE_ERROR_VALUE;
+  48:	7213      	strb	r3, [r2, #8]
+    MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_ERROR, &eventData);
+  4a:	2280      	movs	r2, #128	; 0x80
+  4c:	ab02      	add	r3, sp, #8
+  4e:	05d2      	lsls	r2, r2, #23
+        MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_COMPLETE, &eventData);
+  50:	2103      	movs	r1, #3
+  52:	6a20      	ldr	r0, [r4, #32]
+  54:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  58:	2120      	movs	r1, #32
+  5a:	6820      	ldr	r0, [r4, #0]
+  5c:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+        else
+        {
+            /* Nothing to do */
+        }
+        
+        if(MUART_isEventPending(handle, MCAL_EVENT_WRITE_BYTE, status))
+  60:	4228      	tst	r0, r5
+  62:	d01f      	beq.n	a4 <MUART_IRQ_Handler+0xa4>
+        {
+            MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_WRITE_BYTE, NULL);
+  64:	2300      	movs	r3, #0
+  66:	2220      	movs	r2, #32
+  68:	2103      	movs	r1, #3
+  6a:	6a20      	ldr	r0, [r4, #32]
+  6c:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+    return (transfer->writeBufferHandle.status == MCOM_STATUS_BUSY);
+  70:	7d23      	ldrb	r3, [r4, #20]
+    if(MCOM_isWriteBusy(&handle->transfer))
+  72:	2b01      	cmp	r3, #1
+  74:	d116      	bne.n	a4 <MUART_IRQ_Handler+0xa4>
+        uint8_t data = MCOM_popByte(&handle->transfer);
+  76:	0020      	movs	r0, r4
+  78:	3008      	adds	r0, #8
+  7a:	f7ff fffe 	bl	0 <MCOM_popByte>
+  7e:	0001      	movs	r1, r0
+        MUART_writeDataReg(handle->channel, (uint32_t)data);
+  80:	6820      	ldr	r0, [r4, #0]
+  82:	f7ff fffe 	bl	0 <MUART_writeDataReg>
+    return (transfer->writeBufferHandle.status == MCOM_STATUS_COMPLETE);
+  86:	7d23      	ldrb	r3, [r4, #20]
+        if(MCOM_isWriteComplete(&handle->transfer))
+  88:	2b02      	cmp	r3, #2
+  8a:	d10b      	bne.n	a4 <MUART_IRQ_Handler+0xa4>
+            (void)MUART_disableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+  8c:	2220      	movs	r2, #32
+  8e:	2100      	movs	r1, #0
+  90:	0020      	movs	r0, r4
+  92:	f7ff fffe 	bl	0 <MUART_IRQ_Handler>
+}
+
+
+static inline void MCOM_setWriteReady(struct MCOM_Transfer *transfer)
+{
+    transfer->writeBufferHandle.status = MCOM_STATUS_READY;
+  96:	2300      	movs	r3, #0
+            MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_WRITE_COMPLETE, NULL);
+  98:	2280      	movs	r2, #128	; 0x80
+  9a:	2103      	movs	r1, #3
+  9c:	6a20      	ldr	r0, [r4, #32]
+  9e:	7523      	strb	r3, [r4, #20]
+  a0:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+        handle = handle->nextHandle;
+      #else
+        break;
+      #endif
+    }
+}
+  a4:	bd7f      	pop	{r0, r1, r2, r3, r4, r5, r6, pc}
+    uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+  a6:	2110      	movs	r1, #16
+  a8:	6820      	ldr	r0, [r4, #0]
+  aa:	f7ff fffe 	bl	0 <MUART_getStatusRegMaskForEvent>
+        else if(MUART_isEventPending(handle, MCAL_EVENT_READ_BYTE, status))
+  ae:	4228      	tst	r0, r5
+  b0:	d0d2      	beq.n	58 <MUART_IRQ_Handler+0x58>
+            uint8_t data = (uint8_t)MUART_readDataReg(handle->channel);
+  b2:	6820      	ldr	r0, [r4, #0]
+  b4:	f7ff fffe 	bl	0 <MUART_readDataReg>
+    eventData->dataType = MCAL_DATA_TYPE_UINT8;
+  b8:	466a      	mov	r2, sp
+  ba:	2301      	movs	r3, #1
+  bc:	b2c6      	uxtb	r6, r0
+  be:	7013      	strb	r3, [r2, #0]
+    eventData->data.uint8 = data;
+  c0:	7116      	strb	r6, [r2, #4]
+  c2:	466b      	mov	r3, sp
+            MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_BYTE, &eventData);
+  c4:	2210      	movs	r2, #16
+  c6:	2103      	movs	r1, #3
+  c8:	6a20      	ldr	r0, [r4, #32]
+  ca:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+    return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+  ce:	7a23      	ldrb	r3, [r4, #8]
+    if(MCOM_isReadBusy(&handle->transfer))
+  d0:	2b01      	cmp	r3, #1
+  d2:	d104      	bne.n	de <MUART_IRQ_Handler+0xde>
+        MCOM_pushByte(&handle->transfer, data);
+  d4:	0020      	movs	r0, r4
+  d6:	0031      	movs	r1, r6
+  d8:	3008      	adds	r0, #8
+  da:	f7ff fffe 	bl	0 <MCOM_pushByte>
+    return (transfer->readBufferHandle.status == MCOM_STATUS_COMPLETE);
+  de:	7a23      	ldrb	r3, [r4, #8]
+    if(MCOM_isReadComplete(&handle->transfer) || handle->finishRead)
+  e0:	2b02      	cmp	r3, #2
+  e2:	d002      	beq.n	ea <MUART_IRQ_Handler+0xea>
+  e4:	79a3      	ldrb	r3, [r4, #6]
+  e6:	2b00      	cmp	r3, #0
+  e8:	d0b6      	beq.n	58 <MUART_IRQ_Handler+0x58>
+        handle->finishRead = false;
+  ea:	2300      	movs	r3, #0
+    eventData->dataType = MCAL_DATA_TYPE_UINT16;
+  ec:	4668      	mov	r0, sp
+  ee:	2102      	movs	r1, #2
+}
+
+
+static inline uint16_t MCOM_getNumOfReadData(const struct MCOM_Transfer *transfer)
+{
+    return transfer->readBufferHandle.index;
+  f0:	8a62      	ldrh	r2, [r4, #18]
+  f2:	71a3      	strb	r3, [r4, #6]
+    eventData->data.uint16 = data;
+  f4:	8182      	strh	r2, [r0, #12]
+    eventData->dataType = MCAL_DATA_TYPE_UINT16;
+  f6:	7201      	strb	r1, [r0, #8]
+        MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_COMPLETE, &eventData);
+  f8:	2240      	movs	r2, #64	; 0x40
+    transfer->readBufferHandle.status = MCOM_STATUS_READY;
+  fa:	7223      	strb	r3, [r4, #8]
+  fc:	ab02      	add	r3, sp, #8
+  fe:	e7a7      	b.n	50 <MUART_IRQ_Handler+0x50>
+ 100:	00000000 	.word	0x00000000

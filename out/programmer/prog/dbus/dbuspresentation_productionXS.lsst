@@ -1,0 +1,1078 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbuspresentation_productionXS.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DBPL_tWriteEcuConfigHw,"ax",%progbits
+  18              		.align	1
+  19              		.global	DBPL_tWriteEcuConfigHw
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	DBPL_tWriteEcuConfigHw:
+  25              	.LVL0:
+  26              	.LFB62:
+  27              		.file 1 "app/prog/dbus/dbuspresentation_productionXS.c"
+   1:app/prog/dbus/dbuspresentation_productionXS.c **** /*******************************************************************************
+   2:app/prog/dbus/dbuspresentation_productionXS.c **** *   Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:app/prog/dbus/dbuspresentation_productionXS.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/dbus/dbuspresentation_productionXS.c **** *
+   5:app/prog/dbus/dbuspresentation_productionXS.c **** *   All rights reserved. This program and the accompanying materials
+   6:app/prog/dbus/dbuspresentation_productionXS.c **** *   are protected by international copyright laws.
+   7:app/prog/dbus/dbuspresentation_productionXS.c **** *   Please contact copyright holder for licensing information.
+   8:app/prog/dbus/dbuspresentation_productionXS.c **** *
+   9:app/prog/dbus/dbuspresentation_productionXS.c **** ********************************************************************************
+  10:app/prog/dbus/dbuspresentation_productionXS.c **** *   PROJECT          Generic SW
+  11:app/prog/dbus/dbuspresentation_productionXS.c **** *   COMP_ABBREV      DBPL
+  12:app/prog/dbus/dbuspresentation_productionXS.c **** *******************************************************************************/
+  13:app/prog/dbus/dbuspresentation_productionXS.c **** /** \file
+  14:app/prog/dbus/dbuspresentation_productionXS.c ****  * \brief Application layer configuration for writing production data
+  15:app/prog/dbus/dbuspresentation_productionXS.c ****  */
+  16:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  17:app/prog/dbus/dbuspresentation_productionXS.c **** #include "bsh_stdinc.h"
+  18:app/prog/dbus/dbuspresentation_productionXS.c **** #include "dbuspresentation_production.h"
+  19:app/prog/dbus/dbuspresentation_productionXS.c **** #include "dbuspresentation.h"
+  20:app/prog/dbus/dbuspresentation_productionXS.c **** #include "firmware_update/version/fwu_version.h"
+  21:app/prog/dbus/dbuspresentation_productionXS.c **** #include "utility.h"
+  22:app/prog/dbus/dbuspresentation_productionXS.c **** #include "stdcrc/StdCrc.h"
+  23:app/prog/dbus/dbuspresentation_productionXS.c **** #include "firmware_update/otp_mem/fwu_otp_memory.h"
+  24:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  25:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  26:app/prog/dbus/dbuspresentation_productionXS.c **** #if defined (DBUS2_APPLIANCE_MSG_IN_APP)
+  27:app/prog/dbus/dbuspresentation_productionXS.c **** static uint8_t DBPL_CopyItem(const uint8_t* const pucSource, uint8_t* const pucDestination, uint8_t
+  28:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* end of DBUS2_APPLIANCE_MSG_IN_APP */
+  29:app/prog/dbus/dbuspresentation_productionXS.c **** /* Appliance Data Item's attributes Array consists of parameter ID number, maximum size of item and
+  30:app/prog/dbus/dbuspresentation_productionXS.c ****  * A data alignment in flash is considered, therefore the union member 'alignedItem' is used for st
+  31:app/prog/dbus/dbuspresentation_productionXS.c ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 2
+
+
+  32:app/prog/dbus/dbuspresentation_productionXS.c **** /* Switch off: Note 923: cast from unsigned int to pointer [MISRA 2012 Rule 11.1, required], [MISRA
+  33:app/prog/dbus/dbuspresentation_productionXS.c ****  * It was checked and it works well */
+  34:app/prog/dbus/dbuspresentation_productionXS.c **** /*lint -save -e923 */
+  35:app/prog/dbus/dbuspresentation_productionXS.c **** #if defined (DBUS2_APPLIANCE_MSG_IN_APP)
+  36:app/prog/dbus/dbuspresentation_productionXS.c **** static const struct DBPL_ApplianceDataItemAttr DBPL_ApplianceDataAttributes[(uint32_t)DBPL_APPLIANC
+  37:app/prog/dbus/dbuspresentation_productionXS.c **** {
+  38:app/prog/dbus/dbuspresentation_productionXS.c **** /* Array index is Appliance Data parameters ID, string item?, Maximum Appliance Data Item's Size Ar
+  39:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_DEVICETYPE] = { false , DBPL_APPLIANCE_DATA_DEVICE_TYPE_SIZE, offsetof(struct D
+  40:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_DEVICETYPESTRING] = { true , DBPL_APPLIANCE_DATA_DEVICE_TYPE_STRING_SIZE, offse
+  41:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_BRAND] = { true, DBPL_APPLIANCE_DATA_BRAND_SIZE, offsetof(struct DBPL_Appliance
+  42:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_BMRK] = { false, DBPL_APPLIANCE_DATA_BMRK_SIZE, offsetof(struct DBPL_ApplianceD
+  43:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_VIB] = { true , DBPL_APPLIANCE_DATA_VIB_SIZE, offsetof(struct DBPL_ApplianceDat
+  44:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_KIALPHANUMERIC] = { true, DBPL_APPLIANCE_DATA_KIALPHANUMERIC_SIZE, offsetof(str
+  45:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_FD] = { false, DBPL_APPLIANCE_DATA_FD_NUMBER_SIZE, offsetof(struct DBPL_Applian
+  46:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_SERIALNUMBER] = { true, DBPL_APPLIANCE_DATA_SERIAL_NUMBER_SIZE, offsetof(struct
+  47:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_MANUFACTURINGTIMESTAMP] = {true , DBPL_APPLIANCE_DATA_MANUFACTURING_TIMESTAMP_S
+  48:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_COUNTRYSETTINGS] = { false , DBPL_APPLIANCE_DATA_COUNTRYSETTINGS_SIZE, offsetof
+  49:app/prog/dbus/dbuspresentation_productionXS.c **** [DBPL_APPLIANCEDATA_BLE_TX_POWER] = { false , DBPL_APPLIANCEDATA_BLE_TX_POWER_SIZE, offsetof(struct
+  50:app/prog/dbus/dbuspresentation_productionXS.c **** };
+  51:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* end of DBUS2_APPLIANCE_MSG_IN_APP */
+  52:app/prog/dbus/dbuspresentation_productionXS.c **** /*lint -restore */
+  53:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  54:app/prog/dbus/dbuspresentation_productionXS.c **** /* Switch off: Note 928: cast from pointer to pointer */
+  55:app/prog/dbus/dbuspresentation_productionXS.c **** /* Switch off: Note 934: Taking address of near auto variable [MISRA 2012 Rule 1.3, required], not 
+  56:app/prog/dbus/dbuspresentation_productionXS.c **** /*lint -save -e928 -e934*/
+  57:app/prog/dbus/dbuspresentation_productionXS.c **** #if ((defined DBUS2_UPDATE_HSI) || (defined DBUS2_PROD_MSG_IN_APP))
+  58:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tWriteEcuConfigHw(const struct STDV_version* const hwVersion)
+  59:app/prog/dbus/dbuspresentation_productionXS.c **** {
+  28              		.loc 1 59 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 24
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  60:app/prog/dbus/dbuspresentation_productionXS.c ****     struct FWU_hw_version_s fwuHwVersion;
+  32              		.loc 1 60 5 view .LVU1
+  61:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  62:app/prog/dbus/dbuspresentation_productionXS.c ****     fwuHwVersion.CRC = CRC_Calc(sizeof(struct STDV_version), (const uint8_t*)hwVersion);
+  33              		.loc 1 62 5 view .LVU2
+  34              	.LBB4:
+  35              	.LBI4:
+  36              		.file 2 "common/prog/ped_fw/stdcrc/StdCrc.h"
+   1:common/prog/ped_fw/stdcrc/StdCrc.h **** /*******************************************************************************
+   2:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   5:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   9:common/prog/ped_fw/stdcrc/StdCrc.h ****  *******************************************************************************
+  10:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  PROJECT          PP PED Framework
+  11:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  COMP_ABBREV      CRC
+  12:common/prog/ped_fw/stdcrc/StdCrc.h ****  ******************************************************************************/
+  13:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  14:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef STDCRC_H
+  15:common/prog/ped_fw/stdcrc/StdCrc.h **** #define STDCRC_H
+  16:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  17:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef __cplusplus
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 3
+
+
+  18:common/prog/ped_fw/stdcrc/StdCrc.h **** extern "C" {
+  19:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+  20:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  21:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  22:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  23:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  24:common/prog/ped_fw/stdcrc/StdCrc.h **** /* DOCUMENTATION                                                                                  *
+  25:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  26:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  27:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  28:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  29:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  30:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  31:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  32:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  33:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  34:common/prog/ped_fw/stdcrc/StdCrc.h **** \mainpage Common used Functions and Definitions
+  35:common/prog/ped_fw/stdcrc/StdCrc.h **** \else
+  36:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  37:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  38:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  39:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  40:common/prog/ped_fw/stdcrc/StdCrc.h **** \section intro Introduction
+  41:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  42:common/prog/ped_fw/stdcrc/StdCrc.h **** The StdCrc library provides functions for Ethernet-CRC and CCITT-CRC.\n
+  43:common/prog/ped_fw/stdcrc/StdCrc.h **** There is a generic SW-Implementation as well as implementations using a peripheral CRC.
+  44:common/prog/ped_fw/stdcrc/StdCrc.h **** The provided interfaces should be used instead of project specific solutions.
+  45:common/prog/ped_fw/stdcrc/StdCrc.h **** The HW-implementation is optimized for speed, but generic SW-implementation is more suitable for pr
+  46:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  47:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ccitt 16-Bit CCITT-CRC Interfaces
+  48:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  49:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Init( void )
+  50:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data )
+  51:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value )
+  52:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value )
+  53:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Finish( uint16_t crc )
+  54:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data )
+  55:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  56:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  57:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ethernet 32-Bit Ethernet-CRC Interfaces
+  58:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  59:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Init( void )
+  60:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data )
+  61:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value )
+  62:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Finish( uint32_t crc )
+  63:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data )
+  64:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  65:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  66:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  67:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  68:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -save -e9059 "C comment contains C++ comment"
+  69:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Codeblock with comments needed. Tested with various parsers to work correctly
+  70:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+  71:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  72:common/prog/ped_fw/stdcrc/StdCrc.h ****  /*------------------------  CRC calculation example start ------------------------
+  73:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC16 (Ethernet type) value by using HW implementation.
+  74:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 4
+
+
+  75:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC16 is possible to calculate over a specific data area by using function CRC_Ccitt_Calc(length
+  76:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+  77:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  78:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  79:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result = CRC_Ccitt_Calc(8,Pointer);
+  80:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  81:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation.
+  82:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  83:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  84:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+  85:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation and
+  86:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ccitt_Finish() after the implementation to get successful result.
+  87:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  88:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  89:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ethernet_Init();
+  90:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+  91:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+  92:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_Update(Crc16Result, SizeOf(Pointer) , Pointer);
+  93:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+  94:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+  95:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  96:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  97:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC16 byte per byte.
+  98:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation
+  99:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ccitt_Finish() after the implementation to get successful result.
+ 100:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 101:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;
+ 102:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Init();
+ 103:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+ 104:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 105:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 106:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_UpdateByte(Crc16Result, ByteVariable);
+ 107:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 108:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+ 109:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 110:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------------------------------------------------------------------
+ 111:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 112:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC32 (Ethernet type) value by using HW implementation.
+ 113:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 114:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC32 is possible to calculate over a specific data area by using function CRC_Ethernet_Calc(len
+ 115:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+ 116:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 117:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 118:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result = CRC_Ethernet_Calc(8,Pointer);
+ 119:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 120:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation. Calculation over whole flash 0x10000000 
+ 121:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 122:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 123:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+ 124:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation and
+ 125:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ethernet_Finish() after the implementation to get successful result.
+ 126:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 127:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 128:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 129:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i< required length ;i++)        // cycle over a specific memory area
+ 130:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 131:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_Update(Crc32Result, SizeOf(Pointer) , Pointer);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 5
+
+
+ 132:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 133:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 134:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 135:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 136:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC32 byte per byte.
+ 137:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation
+ 138:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ethernet_Finish() after the implementation to get successful result.
+ 139:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 140:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;          // pointer to a specific address
+ 141:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 142:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i = 0;i< required length ;i++)    // cycle over a specific memory area 
+ 143:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 144:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 145:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_UpdateByte(Crc32Result, ByteVariable);
+ 146:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 147:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 148:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 149:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------  CRC calculation example end ------------------------*/
+ 150:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -restore -e9059 */
+ 151:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 152:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 153:common/prog/ped_fw/stdcrc/StdCrc.h **** /* INCLUDES                                                                                       *
+ 154:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 155:common/prog/ped_fw/stdcrc/StdCrc.h **** #include "bsh_stdinc.h"
+ 156:common/prog/ped_fw/stdcrc/StdCrc.h **** #include <stdint.h>
+ 157:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 158:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 159:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 160:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+ 161:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 162:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 163:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 164:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint16_t CRC_crc_t; ///< data type for platform crc
+ 165:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 166:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint32_t CRC_crc_t; ///< data type for platform crc
+ 167:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 168:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 169:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 170:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 171:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+ 172:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 173:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 174:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 175:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the CCITT CRC calculation
+ 176:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 177:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 178:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 179:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 180:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 181:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 182:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Init( void );
+ 183:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 184:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 185:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 186:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 187:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a data block
+ 188:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 6
+
+
+ 189:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 190:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 191:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 192:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 193:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 194:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 195:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 196:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 197:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 198:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 199:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 200:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 201:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 202:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data );
+ 203:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 204:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 205:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 206:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 207:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte
+ 208:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 209:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 210:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 211:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 212:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 213:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 214:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 215:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 216:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 217:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 218:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 219:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 220:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value );
+ 221:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 222:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 223:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 224:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte (optimized for speed)
+ 225:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 226:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 227:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 228:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 229:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 230:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 231:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 232:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 233:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 234:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 235:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 236:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 237:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value );
+ 238:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 239:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 240:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 241:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 242:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the CCITT CRC calculation.
+ 243:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 244:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ccitt_UpdateByte or \ref CRC_Ccitt_Up
+ 245:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 7
+
+
+ 246:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note In case of CCITT this interface does no influence the CRC.
+ 247:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 248:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 249:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 250:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 251:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 252:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 253:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Finish( uint16_t crc );
+ 254:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 255:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 256:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 257:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 258:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the CCITT CRC for the complete data block
+ 259:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 260:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 261:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 262:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 263:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 264:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 265:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data );
+ 266:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 267:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 268:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 269:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 270:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 271:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the Ethernet CRC calculation
+ 272:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 273:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 274:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 275:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 276:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 277:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 278:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Init( void );
+ 279:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 280:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 281:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 282:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 283:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 284:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 285:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 286:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 287:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 288:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 289:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 290:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 291:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 292:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 293:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 294:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 295:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 296:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data );
+ 297:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 298:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 299:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 300:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 301:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 302:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 8
+
+
+ 303:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 304:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 305:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 306:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 307:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 308:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 309:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 310:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 311:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 312:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 313:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 314:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value );
+ 315:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 316:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 317:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 318:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 319:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the Ethernet CRC calculation.
+ 320:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 321:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 322:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 323:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 324:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 325:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 326:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 327:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Finish( uint32_t crc );
+ 328:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 329:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 330:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 331:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 332:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the Ethernet CRC for the complete data block
+ 333:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 334:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 335:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 336:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 337:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 338:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 339:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 340:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data );
+ 341:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 342:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 343:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 344:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 345:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the platform CRC calculation
+ 346:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 347:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 348:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 349:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 350:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 351:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 352:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 353:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Init( void )
+ 354:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 355:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 356:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Init();
+ 357:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 358:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Init();
+ 359:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 9
+
+
+ 360:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 361:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 362:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Init( void );
+ 363:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 364:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 365:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 366:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 367:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a data block
+ 368:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 369:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 370:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 371:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 372:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 373:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 374:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 375:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 376:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 377:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 378:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 379:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 380:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 381:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 382:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 383:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data )
+ 384:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 385:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 386:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Update(crc, len, data );
+ 387:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Update(crc, len, data );
+ 389:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 390:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 391:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 392:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data );
+ 393:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 394:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 395:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 396:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 397:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a single byte
+ 398:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 399:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 400:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 401:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 402:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 403:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 404:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 405:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 406:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 407:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 408:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 409:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 410:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 411:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value )
+ 412:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 413:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 414:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_UpdateByte(crc, value );
+ 415:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 416:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_UpdateByte(crc, value );
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 10
+
+
+ 417:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 418:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 419:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 420:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value );
+ 421:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 422:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 423:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 424:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 425:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the platform CRC calculation.
+ 426:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 427:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 428:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 429:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 430:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 431:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 432:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 433:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 434:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Finish( CRC_crc_t crc )
+ 435:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 436:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 437:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Finish( crc );
+ 438:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 439:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Finish( crc );
+ 440:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 441:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 442:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 443:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Finish( CRC_crc_t crc );
+ 444:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 445:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 446:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 447:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 448:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 449:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the platform CRC for the complete data block
+ 450:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 451:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 452:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 453:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 454:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 455:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 456:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 457:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 458:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Calc( uint32_t len, const uint8_t *data )
+  37              		.loc 2 458 25 view .LVU3
+  38              	.LBB5:
+ 459:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 460:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 461:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Calc(len, data );
+ 462:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 463:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Calc(len, data );
+  39              		.loc 2 463 5 view .LVU4
+  40              	.LBE5:
+  41              	.LBE4:
+  59:app/prog/dbus/dbuspresentation_productionXS.c ****     struct FWU_hw_version_s fwuHwVersion;
+  42              		.loc 1 59 1 is_stmt 0 view .LVU5
+  43 0000 10B5     		push	{r4, lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 11
+
+
+  46              		.cfi_offset 4, -8
+  47              		.cfi_offset 14, -4
+  48              	.LBB8:
+  49              	.LBB6:
+  50              		.loc 2 463 12 view .LVU6
+  51 0002 0100     		movs	r1, r0
+  52              	.LBE6:
+  53              	.LBE8:
+  59:app/prog/dbus/dbuspresentation_productionXS.c ****     struct FWU_hw_version_s fwuHwVersion;
+  54              		.loc 1 59 1 view .LVU7
+  55 0004 86B0     		sub	sp, sp, #24
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 32
+  59:app/prog/dbus/dbuspresentation_productionXS.c ****     struct FWU_hw_version_s fwuHwVersion;
+  58              		.loc 1 59 1 view .LVU8
+  59 0006 0400     		movs	r4, r0
+  60              	.LBB9:
+  61              	.LBB7:
+  62              		.loc 2 463 12 view .LVU9
+  63 0008 1220     		movs	r0, #18
+  64              	.LVL1:
+  65              		.loc 2 463 12 view .LVU10
+  66 000a FFF7FEFF 		bl	CRC_Ethernet_Calc
+  67              	.LVL2:
+  68              		.loc 2 463 12 view .LVU11
+  69              	.LBE7:
+  70              	.LBE9:
+  63:app/prog/dbus/dbuspresentation_productionXS.c ****     fwuHwVersion.version = *hwVersion;
+  71              		.loc 1 63 26 view .LVU12
+  72 000e 1222     		movs	r2, #18
+  73 0010 2100     		movs	r1, r4
+  62:app/prog/dbus/dbuspresentation_productionXS.c ****     fwuHwVersion.version = *hwVersion;
+  74              		.loc 1 62 22 view .LVU13
+  75 0012 0090     		str	r0, [sp]
+  76              		.loc 1 63 5 is_stmt 1 view .LVU14
+  77              		.loc 1 63 26 is_stmt 0 view .LVU15
+  78 0014 01A8     		add	r0, sp, #4
+  79 0016 FFF7FEFF 		bl	memcpy
+  80              	.LVL3:
+  64:app/prog/dbus/dbuspresentation_productionXS.c ****     
+  65:app/prog/dbus/dbuspresentation_productionXS.c ****     if(OTP_writeHardwareVersion(&fwuHwVersion))
+  81              		.loc 1 65 5 is_stmt 1 view .LVU16
+  82              		.loc 1 65 8 is_stmt 0 view .LVU17
+  83 001a 6846     		mov	r0, sp
+  84 001c FFF7FEFF 		bl	OTP_writeHardwareVersion
+  85              	.LVL4:
+  66:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+  67:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusOK;
+  86              		.loc 1 67 16 view .LVU18
+  87 0020 A023     		movs	r3, #160
+  65:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+  88              		.loc 1 65 7 view .LVU19
+  89 0022 0028     		cmp	r0, #0
+  90 0024 00D1     		bne	.L2
+  68:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+  69:app/prog/dbus/dbuspresentation_productionXS.c ****     else
+  70:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 12
+
+
+  71:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusFunctionError;
+  91              		.loc 1 71 16 view .LVU20
+  92 0026 3033     		adds	r3, r3, #48
+  93              	.L2:
+  72:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+  73:app/prog/dbus/dbuspresentation_productionXS.c **** }
+  94              		.loc 1 73 1 view .LVU21
+  95 0028 1800     		movs	r0, r3
+  96 002a 06B0     		add	sp, sp, #24
+  97              		@ sp needed
+  98              	.LVL5:
+  99              		.loc 1 73 1 view .LVU22
+ 100 002c 10BD     		pop	{r4, pc}
+ 101              		.cfi_endproc
+ 102              	.LFE62:
+ 104              		.section	.text.DBPL_tWriteTracingId,"ax",%progbits
+ 105              		.align	1
+ 106              		.global	DBPL_tWriteTracingId
+ 107              		.syntax unified
+ 108              		.code	16
+ 109              		.thumb_func
+ 111              	DBPL_tWriteTracingId:
+ 112              	.LVL6:
+ 113              	.LFB63:
+  74:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  75:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tWriteTracingId(const struct DBPL_TracingId* const tracingId)
+  76:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 114              		.loc 1 76 1 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+  77:app/prog/dbus/dbuspresentation_productionXS.c ****     if(OTP_writeTracingID(tracingId))
+ 118              		.loc 1 77 5 view .LVU24
+  76:app/prog/dbus/dbuspresentation_productionXS.c ****     if(OTP_writeTracingID(tracingId))
+ 119              		.loc 1 76 1 is_stmt 0 view .LVU25
+ 120 0000 10B5     		push	{r4, lr}
+ 121              	.LCFI2:
+ 122              		.cfi_def_cfa_offset 8
+ 123              		.cfi_offset 4, -8
+ 124              		.cfi_offset 14, -4
+ 125              		.loc 1 77 8 view .LVU26
+ 126 0002 FFF7FEFF 		bl	OTP_writeTracingID
+ 127              	.LVL7:
+  78:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+  79:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusOK;
+ 128              		.loc 1 79 16 view .LVU27
+ 129 0006 A023     		movs	r3, #160
+  77:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 130              		.loc 1 77 7 view .LVU28
+ 131 0008 0028     		cmp	r0, #0
+ 132 000a 00D1     		bne	.L5
+  80:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+  81:app/prog/dbus/dbuspresentation_productionXS.c ****     else
+  82:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+  83:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusFunctionError;
+ 133              		.loc 1 83 16 view .LVU29
+ 134 000c 3033     		adds	r3, r3, #48
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 13
+
+
+ 135              	.L5:
+  84:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+  85:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 136              		.loc 1 85 1 view .LVU30
+ 137 000e 1800     		movs	r0, r3
+ 138              		@ sp needed
+ 139 0010 10BD     		pop	{r4, pc}
+ 140              		.cfi_endproc
+ 141              	.LFE63:
+ 143              		.section	.text.DBPL_tReadProductionTime,"ax",%progbits
+ 144              		.align	1
+ 145              		.global	DBPL_tReadProductionTime
+ 146              		.syntax unified
+ 147              		.code	16
+ 148              		.thumb_func
+ 150              	DBPL_tReadProductionTime:
+ 151              	.LVL8:
+ 152              	.LFB65:
+  86:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  87:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tWriteProductionTime(const struct DBPL_ProductionTime* const timeRe
+  88:app/prog/dbus/dbuspresentation_productionXS.c **** {
+  89:app/prog/dbus/dbuspresentation_productionXS.c ****     enum DBPL_ProductionStatus returnValue = DBPL_ProductionStatusFunctionError;
+  90:app/prog/dbus/dbuspresentation_productionXS.c **** 
+  91:app/prog/dbus/dbuspresentation_productionXS.c ****     if(OTP_writeProductionTime(timeReceived))
+  92:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+  93:app/prog/dbus/dbuspresentation_productionXS.c ****         returnValue = DBPL_ProductionStatusOK;
+  94:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+  95:app/prog/dbus/dbuspresentation_productionXS.c ****     (void)DBPL_tReadProductionTime(timeWritten);
+  96:app/prog/dbus/dbuspresentation_productionXS.c ****     return returnValue;
+  97:app/prog/dbus/dbuspresentation_productionXS.c **** }
+  98:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* ((defined DBUS2_UPDATE_HSI) || (defined DBUS2_PROD_MSG_IN_APP)) */
+  99:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 100:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tReadProductionTime(struct DBPL_ProductionTime* const timeRead)
+ 101:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 153              		.loc 1 101 1 is_stmt 1 view -0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102:app/prog/dbus/dbuspresentation_productionXS.c ****     const struct DBPL_ProductionTime* prodTime = OTP_getProductionTime();
+ 157              		.loc 1 102 5 view .LVU32
+ 101:app/prog/dbus/dbuspresentation_productionXS.c ****     const struct DBPL_ProductionTime* prodTime = OTP_getProductionTime();
+ 158              		.loc 1 101 1 is_stmt 0 view .LVU33
+ 159 0000 10B5     		push	{r4, lr}
+ 160              	.LCFI3:
+ 161              		.cfi_def_cfa_offset 8
+ 162              		.cfi_offset 4, -8
+ 163              		.cfi_offset 14, -4
+ 101:app/prog/dbus/dbuspresentation_productionXS.c ****     const struct DBPL_ProductionTime* prodTime = OTP_getProductionTime();
+ 164              		.loc 1 101 1 view .LVU34
+ 165 0002 0400     		movs	r4, r0
+ 166              		.loc 1 102 50 view .LVU35
+ 167 0004 FFF7FEFF 		bl	OTP_getProductionTime
+ 168              	.LVL9:
+ 169              		.loc 1 102 50 view .LVU36
+ 170 0008 0100     		movs	r1, r0
+ 171              	.LVL10:
+ 103:app/prog/dbus/dbuspresentation_productionXS.c ****     
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 14
+
+
+ 104:app/prog/dbus/dbuspresentation_productionXS.c ****     if(prodTime != NULL)
+ 172              		.loc 1 104 5 is_stmt 1 view .LVU37
+ 105:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 106:app/prog/dbus/dbuspresentation_productionXS.c ****         *timeRead = *prodTime;
+ 107:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusOK;
+ 108:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 109:app/prog/dbus/dbuspresentation_productionXS.c ****     else
+ 110:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 111:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusFunctionError;
+ 173              		.loc 1 111 16 is_stmt 0 view .LVU38
+ 174 000a D020     		movs	r0, #208
+ 175              	.LVL11:
+ 104:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 176              		.loc 1 104 7 view .LVU39
+ 177 000c 0029     		cmp	r1, #0
+ 178 000e 04D0     		beq	.L8
+ 106:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusOK;
+ 179              		.loc 1 106 9 is_stmt 1 view .LVU40
+ 106:app/prog/dbus/dbuspresentation_productionXS.c ****         return DBPL_ProductionStatusOK;
+ 180              		.loc 1 106 19 is_stmt 0 view .LVU41
+ 181 0010 0A22     		movs	r2, #10
+ 182 0012 2000     		movs	r0, r4
+ 183 0014 FFF7FEFF 		bl	memcpy
+ 184              	.LVL12:
+ 107:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 185              		.loc 1 107 9 is_stmt 1 view .LVU42
+ 107:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 186              		.loc 1 107 16 is_stmt 0 view .LVU43
+ 187 0018 A020     		movs	r0, #160
+ 188              	.L8:
+ 112:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 113:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 189              		.loc 1 113 1 view .LVU44
+ 190              		@ sp needed
+ 191              	.LVL13:
+ 192              		.loc 1 113 1 view .LVU45
+ 193 001a 10BD     		pop	{r4, pc}
+ 194              		.cfi_endproc
+ 195              	.LFE65:
+ 197              		.section	.text.DBPL_tWriteProductionTime,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	DBPL_tWriteProductionTime
+ 200              		.syntax unified
+ 201              		.code	16
+ 202              		.thumb_func
+ 204              	DBPL_tWriteProductionTime:
+ 205              	.LVL14:
+ 206              	.LFB64:
+  88:app/prog/dbus/dbuspresentation_productionXS.c ****     enum DBPL_ProductionStatus returnValue = DBPL_ProductionStatusFunctionError;
+ 207              		.loc 1 88 1 is_stmt 1 view -0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 0
+ 210              		@ frame_needed = 0, uses_anonymous_args = 0
+  89:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 211              		.loc 1 89 5 view .LVU47
+  91:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 212              		.loc 1 91 5 view .LVU48
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 15
+
+
+  88:app/prog/dbus/dbuspresentation_productionXS.c ****     enum DBPL_ProductionStatus returnValue = DBPL_ProductionStatusFunctionError;
+ 213              		.loc 1 88 1 is_stmt 0 view .LVU49
+ 214 0000 70B5     		push	{r4, r5, r6, lr}
+ 215              	.LCFI4:
+ 216              		.cfi_def_cfa_offset 16
+ 217              		.cfi_offset 4, -16
+ 218              		.cfi_offset 5, -12
+ 219              		.cfi_offset 6, -8
+ 220              		.cfi_offset 14, -4
+  88:app/prog/dbus/dbuspresentation_productionXS.c ****     enum DBPL_ProductionStatus returnValue = DBPL_ProductionStatusFunctionError;
+ 221              		.loc 1 88 1 view .LVU50
+ 222 0002 0C00     		movs	r4, r1
+  91:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 223              		.loc 1 91 8 view .LVU51
+ 224 0004 FFF7FEFF 		bl	OTP_writeProductionTime
+ 225              	.LVL15:
+  89:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 226              		.loc 1 89 32 view .LVU52
+ 227 0008 D025     		movs	r5, #208
+  91:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 228              		.loc 1 91 7 view .LVU53
+ 229 000a 0028     		cmp	r0, #0
+ 230 000c 00D0     		beq	.L11
+  93:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 231              		.loc 1 93 21 view .LVU54
+ 232 000e 303D     		subs	r5, r5, #48
+ 233              	.L11:
+ 234              	.LVL16:
+  95:app/prog/dbus/dbuspresentation_productionXS.c ****     return returnValue;
+ 235              		.loc 1 95 5 is_stmt 1 view .LVU55
+  95:app/prog/dbus/dbuspresentation_productionXS.c ****     return returnValue;
+ 236              		.loc 1 95 11 is_stmt 0 view .LVU56
+ 237 0010 2000     		movs	r0, r4
+  97:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* ((defined DBUS2_UPDATE_HSI) || (defined DBUS2_PROD_MSG_IN_APP)) */
+ 238              		.loc 1 97 1 view .LVU57
+ 239              		@ sp needed
+  95:app/prog/dbus/dbuspresentation_productionXS.c ****     return returnValue;
+ 240              		.loc 1 95 11 view .LVU58
+ 241 0012 FFF7FEFF 		bl	DBPL_tReadProductionTime
+ 242              	.LVL17:
+  96:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 243              		.loc 1 96 5 is_stmt 1 view .LVU59
+  97:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* ((defined DBUS2_UPDATE_HSI) || (defined DBUS2_PROD_MSG_IN_APP)) */
+ 244              		.loc 1 97 1 is_stmt 0 view .LVU60
+ 245 0016 2800     		movs	r0, r5
+ 246              	.LVL18:
+ 247              	.LVL19:
+  97:app/prog/dbus/dbuspresentation_productionXS.c **** #endif /* ((defined DBUS2_UPDATE_HSI) || (defined DBUS2_PROD_MSG_IN_APP)) */
+ 248              		.loc 1 97 1 view .LVU61
+ 249 0018 70BD     		pop	{r4, r5, r6, pc}
+ 250              		.cfi_endproc
+ 251              	.LFE64:
+ 253              		.section	.text.DBPL_tWriteTestState,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	DBPL_tWriteTestState
+ 256              		.syntax unified
+ 257              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 16
+
+
+ 258              		.thumb_func
+ 260              	DBPL_tWriteTestState:
+ 261              	.LVL20:
+ 262              	.LFB66:
+ 114:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 115:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tWriteTestState(enum DBPL_TestState stateReceived, enum DBPL_TestSt
+ 116:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 263              		.loc 1 116 1 is_stmt 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267              		@ link register save eliminated.
+ 117:app/prog/dbus/dbuspresentation_productionXS.c ****     *stateWritten = stateReceived;
+ 268              		.loc 1 117 5 view .LVU63
+ 118:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 269              		.loc 1 118 16 is_stmt 0 view .LVU64
+ 270 0000 0023     		movs	r3, #0
+ 119:app/prog/dbus/dbuspresentation_productionXS.c ****     return DBPL_ProductionStatusOK;
+ 120:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 271              		.loc 1 120 1 view .LVU65
+ 272              		@ sp needed
+ 117:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 273              		.loc 1 117 19 view .LVU66
+ 274 0002 0870     		strb	r0, [r1]
+ 118:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 275              		.loc 1 118 5 is_stmt 1 view .LVU67
+ 276              		.loc 1 120 1 is_stmt 0 view .LVU68
+ 277 0004 A020     		movs	r0, #160
+ 278              	.LVL21:
+ 118:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 279              		.loc 1 118 16 view .LVU69
+ 280 0006 1370     		strb	r3, [r2]
+ 281              	.LVL22:
+ 119:app/prog/dbus/dbuspresentation_productionXS.c ****     return DBPL_ProductionStatusOK;
+ 282              		.loc 1 119 5 is_stmt 1 view .LVU70
+ 283              		.loc 1 120 1 is_stmt 0 view .LVU71
+ 284 0008 7047     		bx	lr
+ 285              		.cfi_endproc
+ 286              	.LFE66:
+ 288              		.section	.text.DBPL_tReadTestStateRepairCnt,"ax",%progbits
+ 289              		.align	1
+ 290              		.global	DBPL_tReadTestStateRepairCnt
+ 291              		.syntax unified
+ 292              		.code	16
+ 293              		.thumb_func
+ 295              	DBPL_tReadTestStateRepairCnt:
+ 296              	.LVL23:
+ 297              	.LFB67:
+ 121:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 122:app/prog/dbus/dbuspresentation_productionXS.c **** enum DBPL_ProductionStatus DBPL_tReadTestStateRepairCnt(enum DBPL_TestState* const stateRead, uint8
+ 123:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 298              		.loc 1 123 1 is_stmt 1 view -0
+ 299              		.cfi_startproc
+ 300              		@ args = 0, pretend = 0, frame = 0
+ 301              		@ frame_needed = 0, uses_anonymous_args = 0
+ 302              		@ link register save eliminated.
+ 124:app/prog/dbus/dbuspresentation_productionXS.c ****     *stateRead = DBPL_TestStateOK;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 17
+
+
+ 303              		.loc 1 124 5 view .LVU73
+ 304              		.loc 1 124 16 is_stmt 0 view .LVU74
+ 305 0000 0123     		movs	r3, #1
+ 125:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 126:app/prog/dbus/dbuspresentation_productionXS.c ****     return DBPL_ProductionStatusOK;
+ 127:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 306              		.loc 1 127 1 view .LVU75
+ 307              		@ sp needed
+ 124:app/prog/dbus/dbuspresentation_productionXS.c ****     *stateRead = DBPL_TestStateOK;
+ 308              		.loc 1 124 16 view .LVU76
+ 309 0002 0370     		strb	r3, [r0]
+ 125:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 310              		.loc 1 125 5 is_stmt 1 view .LVU77
+ 125:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 311              		.loc 1 125 16 is_stmt 0 view .LVU78
+ 312 0004 0023     		movs	r3, #0
+ 313              		.loc 1 127 1 view .LVU79
+ 314 0006 A020     		movs	r0, #160
+ 315              	.LVL24:
+ 125:app/prog/dbus/dbuspresentation_productionXS.c ****     *repairCnt = 0U;
+ 316              		.loc 1 125 16 view .LVU80
+ 317 0008 0B70     		strb	r3, [r1]
+ 126:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 318              		.loc 1 126 5 is_stmt 1 view .LVU81
+ 319              		.loc 1 127 1 is_stmt 0 view .LVU82
+ 320 000a 7047     		bx	lr
+ 321              		.cfi_endproc
+ 322              	.LFE67:
+ 324              		.section	.text.DBPL_vDoFactoryReset,"ax",%progbits
+ 325              		.align	1
+ 326              		.global	DBPL_vDoFactoryReset
+ 327              		.syntax unified
+ 328              		.code	16
+ 329              		.thumb_func
+ 331              	DBPL_vDoFactoryReset:
+ 332              	.LFB68:
+ 128:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 129:app/prog/dbus/dbuspresentation_productionXS.c **** void DBPL_vDoFactoryReset(void)
+ 130:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 333              		.loc 1 130 1 is_stmt 1 view -0
+ 334              		.cfi_startproc
+ 335              		@ args = 0, pretend = 0, frame = 0
+ 336              		@ frame_needed = 0, uses_anonymous_args = 0
+ 337              		@ link register save eliminated.
+ 131:app/prog/dbus/dbuspresentation_productionXS.c ****     /* Factory test data reset after testing (if needed). */
+ 132:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 338              		.loc 1 132 1 view .LVU84
+ 339              		@ sp needed
+ 340 0000 7047     		bx	lr
+ 341              		.cfi_endproc
+ 342              	.LFE68:
+ 344              		.section	.text.DBPL_tGetUniqueIdReadResult,"ax",%progbits
+ 345              		.align	1
+ 346              		.global	DBPL_tGetUniqueIdReadResult
+ 347              		.syntax unified
+ 348              		.code	16
+ 349              		.thumb_func
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccYsHCvk.s 			page 18
+
+
+ 351              	DBPL_tGetUniqueIdReadResult:
+ 352              	.LVL25:
+ 353              	.LFB69:
+ 133:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 134:app/prog/dbus/dbuspresentation_productionXS.c **** /*lint -e{818} In programmer second param could be const, but not in app!*/
+ 135:app/prog/dbus/dbuspresentation_productionXS.c **** void DBPL_tGetUniqueIdReadResult(uint8_t maxReadableUniqueIdLen, struct DBPL_EcuUniqueIdReadResult*
+ 136:app/prog/dbus/dbuspresentation_productionXS.c **** {
+ 354              		.loc 1 136 1 view -0
+ 355              		.cfi_startproc
+ 356              		@ args = 0, pretend = 0, frame = 0
+ 357              		@ frame_needed = 0, uses_anonymous_args = 0
+ 358              		@ link register save eliminated.
+ 137:app/prog/dbus/dbuspresentation_productionXS.c **** #ifdef VARIANT_PROGRAMMER
+ 138:app/prog/dbus/dbuspresentation_productionXS.c ****     (void)maxReadableUniqueIdLen;
+ 359              		.loc 1 138 5 view .LVU86
+ 139:app/prog/dbus/dbuspresentation_productionXS.c ****     (void)*result;
+ 360              		.loc 1 139 5 view .LVU87
+ 140:app/prog/dbus/dbuspresentation_productionXS.c **** #else
+ 141:app/prog/dbus/dbuspresentation_productionXS.c ****     const struct DBPL_TracingId *pucTrid = OTP_getTracingID();
+ 142:app/prog/dbus/dbuspresentation_productionXS.c ****     result->uniqueIdLen = (uint8_t)sizeof(struct DBPL_TracingId);
+ 143:app/prog/dbus/dbuspresentation_productionXS.c **** 
+ 144:app/prog/dbus/dbuspresentation_productionXS.c ****     if(NULL == pucTrid)
+ 145:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 146:app/prog/dbus/dbuspresentation_productionXS.c ****         /*TRID is not in OTP memory*/
+ 147:app/prog/dbus/dbuspresentation_productionXS.c ****         result->status = DBPL_EcuStatusError;
+ 148:app/prog/dbus/dbuspresentation_productionXS.c ****         result->uniqueIdLen = 0u;
+ 149:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 150:app/prog/dbus/dbuspresentation_productionXS.c ****     else if(result->uniqueIdLen > maxReadableUniqueIdLen)
+ 151:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 152:app/prog/dbus/dbuspresentation_productionXS.c ****         /*Does not fit into transmit buffer of Dbus*/
+ 153:app/prog/dbus/dbuspresentation_productionXS.c ****         result->status = DBPL_EcuStatusUnsupported;
+ 154:app/prog/dbus/dbuspresentation_productionXS.c ****         result->uniqueIdLen = 0u;
+ 155:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 156:app/prog/dbus/dbuspresentation_productionXS.c ****     else
+ 157:app/prog/dbus/dbuspresentation_productionXS.c ****     {
+ 158:app/prog/dbus/dbuspresentation_productionXS.c ****         result->status = DBPL_EcuStatusOK;
+ 159:app/prog/dbus/dbuspresentation_productionXS.c ****         UTI_vMemCopy((const uint8_t*)pucTrid, result->uniqueIdPtr, (uint16_t)result->uniqueIdLen);
+ 160:app/prog/dbus/dbuspresentation_productionXS.c ****     }
+ 161:app/prog/dbus/dbuspresentation_productionXS.c **** #endif
+ 162:app/prog/dbus/dbuspresentation_productionXS.c **** }
+ 361              		.loc 1 162 1 is_stmt 0 view .LVU88
+ 362              		@ sp needed
+ 363 0000 7047     		bx	lr
+ 364              		.cfi_endproc
+ 365              	.LFE69:
+ 367              		.text
+ 368              	.Letext0:
+ 369              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 370              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 371              		.file 5 "common/prog/dbus/dbuspresentation_production_types.h"
+ 372              		.file 6 "common/prog/std_lib/std_version.h"
+ 373              		.file 7 "common/prog/dbus/dbuspresentation_ecu_types.h"
+ 374              		.file 8 "common/prog/firmware_update/version/fwu_version.h"
+ 375              		.file 9 "common/prog/firmware_update/otp_mem/fwu_otp_memory.h"
+ 376              		.file 10 "<built-in>"

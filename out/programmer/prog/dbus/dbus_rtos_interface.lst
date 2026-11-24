@@ -1,0 +1,92 @@
+
+out/programmer/prog/dbus/dbus_rtos_interface.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DBR_Handle_BAL:
+
+00000000 <DBR_Handle_BAL>:
+
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+uint8_t DBR_Handle_BAL( void )
+{
+   0:	b510      	push	{r4, lr}
+#ifdef RTOS_DBUS_EVENTDRIVEN
+    return (BAL_SendMessage() == false) ? TASK_INITIALISED : TASK_TERMINATE;
+#else
+    return( BAL_HandleTask() );
+   2:	f7ff fffe 	bl	0 <BAL_HandleTask>
+#endif
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBR_Handle_DBPL:
+
+00000000 <DBR_Handle_DBPL>:
+
+
+uint8_t DBR_Handle_DBPL( void )
+{
+   0:	b510      	push	{r4, lr}
+    else
+    {
+        RetVal = TASK_TERMINATE;
+    }
+#else
+    RetVal = DBPL_HandleTask();
+   2:	f7ff fffe 	bl	0 <DBPL_HandleTask>
+#endif //RTOS_DBUS_EVENTDRIVEN
+
+    return RetVal;
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBR_Handle_DLL:
+
+00000000 <DBR_Handle_DLL>:
+
+
+uint8_t DBR_Handle_DLL( void )
+{
+   0:	b510      	push	{r4, lr}
+    {
+        WasInit = false; //Prepare for a later reinit
+        RetVal = TASK_TERMINATE;
+    }
+#else
+    RetVal = DLL_HandleTask();
+   2:	f7ff fffe 	bl	0 <DLL_HandleTask>
+#endif //RTOS_DBUS_EVENTDRIVEN
+
+    return RetVal;
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBR_SetEventflag:
+
+00000000 <DBR_SetEventflag>:
+#ifdef RTOS_DBUS_EVENTDRIVEN
+    //A possible error would be set on lower layer
+    (void)RTOS_runEventDrivenTask( task_flag, RTOS_THREAD_ID_DBUS );
+#else
+    (void)task_flag;
+    HSUP_vNop();
+   0:	46c0      	nop			; (mov r8, r8)
+#endif
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBR_RunEventdrivenDbusTask:
+
+00000000 <DBR_RunEventdrivenDbusTask>:
+{
+#ifdef RTOS_DBUS_EVENTDRIVEN
+    RTOS_reactivateTask( task_id ); /*lint -e9034 tested to work correctly */
+#else
+    (void)task_id;
+    HSUP_vNop();
+   0:	46c0      	nop			; (mov r8, r8)
+#endif
+}
+   2:	4770      	bx	lr

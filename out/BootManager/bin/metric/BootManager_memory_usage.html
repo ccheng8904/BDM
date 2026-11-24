@@ -1,0 +1,5022 @@
+﻿<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+            * {
+              margin: auto;
+              width: 1000px;
+              box-sizing: border-box;
+              text-align: center;
+              font-size: 11px;
+              font-family: Verdana;
+            }
+
+            h1 {
+              font-size: 14px;
+              margin: 20px auto;
+            }
+
+            h2 {
+              font-size: 12px;
+              margin: 20px auto;
+            }
+
+            ul.level-0 {
+            }
+
+            ul.level-1 {
+            }
+
+            li {
+              text-align: left;
+            }
+
+            table.table-1 {
+              border-spacing: 0;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              margin: auto;
+            }
+
+            thead.table-1 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-1 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-1 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-1 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+              font-weight: bold;
+            }
+
+            tbody.table-1 td {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+              text-align: right;
+            }
+
+            table.table-2 {
+              width: 800px;
+              border-spacing: 0;
+              border: 1px solid #58A0DC;
+              margin: 20px auto;
+            }
+
+            thead.table-2 th {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-2 tr:first-child {
+              background: #B4CFEC;
+              border: none;
+            }
+
+            table.table-3 {
+              width: 800px;
+              border-spacing: 0;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              margin: 20px auto;
+            }
+
+            thead.table-3 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-3 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-3 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-3 td {
+              text-align: right;
+              font-size: 10px;
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-3 td:first-child {
+
+              text-align: center;
+            }
+
+            tbody.table-3 td:last-child {
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-3 td:nth-child(2) {
+              white-space: nowrap;
+              text-align: left;
+            }
+
+            tbody.table-3 tr:last-child td {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            table.table-4 {
+              width: 1000px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border: none;
+              margin: 20px auto;
+              padding: 0;
+            }
+
+            tbody.table-4 td {
+              vertical-align: top;
+            }
+
+            table.table-5 {
+              width: 1000px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              padding: 0;
+            }
+
+            thead.table-5 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-5 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-5 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-5 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+              font-weight: bold;
+            }
+
+            tbody.table-5 td {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+              text-align: right;
+            }
+
+            table.table-6 {
+              width: 500px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              padding: 0;
+            }
+
+            thead.table-6 tr:first-child {
+              background: #D2E2F4;
+            }
+
+            thead.table-6 tr:nth-child(2) {
+              background: #D2E2F4;
+            }
+
+            thead.table-6 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;              
+            }
+
+            tbody.table-6 td {
+              font-size: 10px;
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-6 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+            }
+
+            tbody.table-6 td:last-child {
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-6 td:nth-child(2) {
+              text-align: right;
+            }
+
+            tbody.table-6 td:nth-child(3) {
+              text-align: right;
+            }
+
+            tbody.table-6 tr:last-child {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            .unknownSymbol {
+              color: #FF0000;
+            }
+
+            table.legend {
+              width: 800px;
+              margin: 0 auto;
+            }
+  
+            tbody.legend td {
+              text-align: left;
+              font-size: 10px;
+            }
+
+            div {
+              text-align: center;
+            }
+        
+          </style>
+  </head>
+  <body>
+    <h1>Memory Usage Report</h1>
+    <h2>Source: E:\project\example\MD370R\out\BootManager\bin\BootManager.elf</h2>
+    <h2>Format: ELF/DWARF</h2>
+    <h2>Architecture: Advanced RISC Machines (ARM)</h2>
+    <h2>Generator: Maksym 3.0.2</h2>
+    <h2>
+      Contents
+    </h2>
+    <div>
+      <ul class="level-0">
+        <li><a href="#total-memory-usage">
+            Total Memory Usage
+          </a></li>
+        <li><a href="#section-list">
+            Memory Sections
+          </a></li>
+        <li><a href="#symbol-section-mapping">
+            Symbol to Section Mapping
+          </a><ul class="level-1">
+            <li><a href="#0x00000000">0x00000000 - 0x00000007</a></li>
+            <li><a href="#0x00000000">0x00000000 - 0x00000038</a></li>
+            <li><a href="#0x00000000">0x00000000 - 0x00003E54</a></li>
+            <li><a href="#0x00000010">0x00000010 - 0x0000001B</a></li>
+            <li><a href="#0x00000020">0x00000020 - 0x00000E4F</a></li>
+            <li><a href="#0x00006000">0x00006000 - 0x000060AB</a></li>
+            <li><a href="#0x20000000">0x20000000 - 0x2000007F</a></li>
+            <li><a href="#0x20000080">0x20000080 - 0x20000087</a></li>
+            <li><a href="#0x20000088">0x20000088 - 0x200000F0</a></li>
+            <li><a href="#0x200003BC">0x200003BC - 0x200007BB</a></li>
+            <li><a href="#0x200007C0">0x200007C0 - 0x200007DF</a></li>
+          </ul>
+        </li>
+        <li><a href="#module-list">
+            Modules
+          </a></li>
+        <li><a href="#symbol-module-mapping">
+            Symbol in Module Mapping
+          </a><ul class="level-1">
+            <li><a href="#E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c">E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c</a></li>
+            <li><a href="#E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c">E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c</a></li>
+            <li><a href="#E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c">E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c</a></li>
+            <li><a href="#E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c">E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c">E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c">E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c">E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c">E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c">E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c">E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c">E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c">E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c">E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c">E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c">E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c">E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c">E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c">E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <h2 id="total-memory-usage">
+      Total Memory Usage
+    </h2>
+    <table class="table-1">
+      <thead class="table-1">
+        <tr>
+          <th></th>
+          <th colspan="3">Generic Library</th>
+          <th colspan="3">System Library</th>
+          <th colspan="3">Application</th>
+          <th colspan="3">Unknown</th>
+          <th colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody class="table-1">
+        <tr>
+          <td>Variables</td>
+          <td>101</td>
+          <td>208</td>
+          <td>309</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>32</td>
+          <td>128</td>
+          <td>160</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>133</td>
+          <td>336</td>
+          <td>469</td>
+        </tr>
+        <tr>
+          <td>Functions</td>
+          <td>0</td>
+          <td>2448</td>
+          <td>2448</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>272</td>
+          <td>272</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>2720</td>
+          <td>2720</td>
+        </tr>
+        <tr>
+          <td>Unknown</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1164</td>
+          <td>768</td>
+          <td>1932</td>
+          <td>1164</td>
+          <td>768</td>
+          <td>1932</td>
+        </tr>
+        <tr>
+          <td>Total Size</td>
+          <td>101</td>
+          <td>2656</td>
+          <td>2757</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>32</td>
+          <td>400</td>
+          <td>432</td>
+          <td>1164</td>
+          <td>768</td>
+          <td>1932</td>
+          <td>1297</td>
+          <td>3824</td>
+          <td>5121</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="section-list">
+      Memory Sections
+    </h2>
+    <table class="table-2">
+      <thead class="table-2">
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            Name
+          </th>
+          <th>
+            Start
+          </th>
+          <th>
+            End
+          </th>
+          <th>
+            Size
+          </th>
+          <th>
+            Flag
+          </th>
+          <th>
+            Memory
+          </th>
+        </tr>
+      </thead>
+      <tbody class="table-2">
+        <tr>
+          <td><a href="#0x00000000">1</a></td>
+          <td>.boot1</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td>8</td>
+          <td>ALLOC</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x00000000">2</a></td>
+          <td>.comment</td>
+          <td>0x00000000</td>
+          <td>0x00000038</td>
+          <td>57</td>
+          <td>0x00000030</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x00000000">3</a></td>
+          <td>.debug_str</td>
+          <td>0x00000000</td>
+          <td>0x00003E54</td>
+          <td>15957</td>
+          <td>0x00000030</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x00000010">4</a></td>
+          <td>.boot2</td>
+          <td>0x00000010</td>
+          <td>0x0000001B</td>
+          <td>12</td>
+          <td>ALLOC</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x00000020">5</a></td>
+          <td>.text2</td>
+          <td>0x00000020</td>
+          <td>0x00000E4F</td>
+          <td>3632</td>
+          <td>ALLOC_EXECINSTR</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x00006000">6</a></td>
+          <td>.fwu_otp_memory</td>
+          <td>0x00006000</td>
+          <td>0x000060AB</td>
+          <td>172</td>
+          <td>ALLOC</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x20000000">7</a></td>
+          <td>.no_init</td>
+          <td>0x20000000</td>
+          <td>0x2000007F</td>
+          <td>128</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x20000080">8</a></td>
+          <td>.data</td>
+          <td>0x20000080</td>
+          <td>0x20000087</td>
+          <td>8</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x20000088">9</a></td>
+          <td>.bss</td>
+          <td>0x20000088</td>
+          <td>0x200000F0</td>
+          <td>105</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x200003BC">10</a></td>
+          <td>.stack</td>
+          <td>0x200003BC</td>
+          <td>0x200007BB</td>
+          <td>1024</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x200007C0">11</a></td>
+          <td>.fs_excluded_ram</td>
+          <td>0x200007C0</td>
+          <td>0x200007DF</td>
+          <td>32</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="legend">
+      <tbody class="legend">
+        <tr>
+          <td>
+            WRITE - The section contains data that should be writable during process execution.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            ALLOC - The section occupies memory during process execution.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            EXECINSTR - The section contains executable machine instructions.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="symbol-section-mapping">
+      Symbol to Section Mapping
+    </h2>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">1: .boot1, 0x00000000 - 0x00000007, 8 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">2: .comment, 0x00000000 - 0x00000038, 57 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000008</td>
+          <td>0x0000000F</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MAL_DataAnchor</td>
+          <td>0x00000010</td>
+          <td>0x00000017</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MAL_FwuOptBytes</td>
+          <td>0x00000018</td>
+          <td>0x0000001B</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000001C</td>
+          <td>0x00000020</td>
+          <td>5</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>__do_global_dtors_aux</td>
+          <td>0x00000021</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">3: .debug_str, 0x00000000 - 0x00003E54, 15957 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000008</td>
+          <td>0x0000000F</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MAL_DataAnchor</td>
+          <td>0x00000010</td>
+          <td>0x00000017</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MAL_FwuOptBytes</td>
+          <td>0x00000018</td>
+          <td>0x0000001B</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000001C</td>
+          <td>0x00000020</td>
+          <td>5</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>__do_global_dtors_aux</td>
+          <td>0x00000021</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000021</td>
+          <td>0x00000048</td>
+          <td>40</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>frame_dummy</td>
+          <td>0x00000049</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000049</td>
+          <td>0x00000068</td>
+          <td>32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BASIC_vInitPlatform</td>
+          <td>0x00000069</td>
+          <td>0x00000144</td>
+          <td class="symTdSize">220</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vStartUpRomCrcCheck</td>
+          <td>0x00000145</td>
+          <td>0x00000170</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_u32GetNumberOfRamSegments</td>
+          <td>0x00000171</td>
+          <td>0x00000174</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>_FSF_vReportFatal</td>
+          <td>0x00000175</td>
+          <td>0x00000178</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vSetApplicationSafeState</td>
+          <td>0x00000179</td>
+          <td>0x0000017A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000017B</td>
+          <td>0x0000017C</td>
+          <td>2</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>ITBL_vResetHandler</td>
+          <td>0x0000017D</td>
+          <td>0x000001B0</td>
+          <td class="symTdSize">52</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>ITBL_StartApplication</td>
+          <td>0x000001B1</td>
+          <td>0x000001BE</td>
+          <td class="symTdSize">14</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000001BF</td>
+          <td>0x000001C0</td>
+          <td>2</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>FSF_vRamcheck</td>
+          <td>0x000001C1</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000001C1</td>
+          <td>0x00000258</td>
+          <td>152</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>DRVIF_isAddrRangeValid</td>
+          <td>0x00000259</td>
+          <td>0x0000026C</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>DRVIF_resetFlash</td>
+          <td>0x0000026D</td>
+          <td>0x00000284</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>DRVIF_initFlash</td>
+          <td>0x00000285</td>
+          <td>0x000002CC</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>DRVIF_deinitFlash</td>
+          <td>0x000002CC</td>
+          <td>0x00000303</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>DRVIF_deinitFlash</td>
+          <td>0x000002CD</td>
+          <td>0x00000304</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>CRC_Ethernet_Init</td>
+          <td>0x00000305</td>
+          <td>0x00000334</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>CRC_Ethernet_Update</td>
+          <td>0x00000335</td>
+          <td>0x000003C4</td>
+          <td class="symTdSize">144</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>CRC_Ethernet_Finish</td>
+          <td>0x000003C5</td>
+          <td>0x000003C8</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>CRC_Ethernet_Calc</td>
+          <td>0x000003C9</td>
+          <td>0x000003DE</td>
+          <td class="symTdSize">22</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000003DF</td>
+          <td>0x000003E0</td>
+          <td>2</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>Main</td>
+          <td>0x000003E1</td>
+          <td>0x00000470</td>
+          <td class="symTdSize">144</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMMOD_bInitMemoryModule</td>
+          <td>0x00000471</td>
+          <td>0x000004A8</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMMOD_startModule</td>
+          <td>0x000004A9</td>
+          <td>0x000004F0</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMMOD_isModuleStartable</td>
+          <td>0x000004F1</td>
+          <td>0x00000510</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMMOD_isModuleFirmwareIdValid</td>
+          <td>0x00000511</td>
+          <td>0x00000590</td>
+          <td class="symTdSize">128</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMMOD_isModuleIntegrityOk</td>
+          <td>0x00000591</td>
+          <td>0x000005BC</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_initSharedData</td>
+          <td>0x000005BD</td>
+          <td>0x0000060C</td>
+          <td class="symTdSize">80</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setErrorFlag</td>
+          <td>0x0000060D</td>
+          <td>0x0000061C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setErrorModule</td>
+          <td>0x0000061D</td>
+          <td>0x00000628</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_incrementStartAttempts</td>
+          <td>0x00000629</td>
+          <td>0x00000638</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_getStartAttempts</td>
+          <td>0x00000639</td>
+          <td>0x00000644</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setIsrTableAddr</td>
+          <td>0x00000645</td>
+          <td>0x00000650</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setBootModule</td>
+          <td>0x00000651</td>
+          <td>0x00000660</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_getBootModule</td>
+          <td>0x00000661</td>
+          <td>0x0000066C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setMagicPattern</td>
+          <td>0x0000066D</td>
+          <td>0x00000678</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_getMagicPattern</td>
+          <td>0x00000679</td>
+          <td>0x00000684</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setUninitDataChecked</td>
+          <td>0x00000685</td>
+          <td>0x00000694</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_isUninitDataChecked</td>
+          <td>0x00000695</td>
+          <td>0x000006AC</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_isPowerOnReset</td>
+          <td>0x000006AD</td>
+          <td>0x000006D0</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setDataInitializedFlag</td>
+          <td>0x000006D1</td>
+          <td>0x000006E0</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_resetDataInitializedFlag</td>
+          <td>0x000006E1</td>
+          <td>0x000006F0</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_isDataInitialized</td>
+          <td>0x000006F1</td>
+          <td>0x00000708</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>OTP_isEmpty</td>
+          <td>0x00000709</td>
+          <td>0x00000720</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>OTP_getFirmwareIDs</td>
+          <td>0x00000721</td>
+          <td>0x0000073C</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vReg_FatalException</td>
+          <td>0x0000073D</td>
+          <td>0x00000744</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vRam_FatalException</td>
+          <td>0x00000745</td>
+          <td>0x0000074C</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vBoot</td>
+          <td>0x0000074D</td>
+          <td>0x00000768</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vReportFatal</td>
+          <td>0x00000769</td>
+          <td>0x00000770</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_setProgramCounterMonitoringVal</td>
+          <td>0x00000771</td>
+          <td>0x00000784</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_DoProgramCounterMonitoring</td>
+          <td>0x00000785</td>
+          <td>0x000007B4</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vRegistercheck</td>
+          <td>0x000007B5</td>
+          <td>0x000007C4</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>FSF_do_xPSRandR14LinkRegisterCheck</td>
+          <td>0x000007C5</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000007C5</td>
+          <td>0x000007FC</td>
+          <td>56</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>FSF_doGeneralPurposeR0_R12RegisterCheck</td>
+          <td>0x000007FD</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000007FD</td>
+          <td>0x0000092A</td>
+          <td>302</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>FSF_doStackPointerR13RegisterCheck</td>
+          <td>0x0000092B</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000092B</td>
+          <td>0x00000990</td>
+          <td>102</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>HSUP_vGenerateReset</td>
+          <td>0x00000991</td>
+          <td>0x000009AC</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_createModuleDictionary</td>
+          <td>0x000009AD</td>
+          <td>0x00000A14</td>
+          <td class="symTdSize">104</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_initPartition</td>
+          <td>0x00000A15</td>
+          <td>0x00000A20</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_GetMemModule</td>
+          <td>0x00000A21</td>
+          <td>0x00000A50</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_GetMemModuleByIndex</td>
+          <td>0x00000A51</td>
+          <td>0x00000A78</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_getPartitionSize</td>
+          <td>0x00000A79</td>
+          <td>0x00000A86</td>
+          <td class="symTdSize">14</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000A87</td>
+          <td>0x00000A88</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_PartitionToHeader</td>
+          <td>0x00000A89</td>
+          <td>0x00000ACC</td>
+          <td class="symTdSize">68</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_isIntegrityOk</td>
+          <td>0x00000ACD</td>
+          <td>0x00000B5A</td>
+          <td class="symTdSize">142</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_getBuildId</td>
+          <td>0x00000B5A</td>
+          <td>0x00000B7B</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_getBuildId.part.0</td>
+          <td>0x00000B5B</td>
+          <td>0x00000B7C</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_isBuildInApplication</td>
+          <td>0x00000B7D</td>
+          <td>0x00000B98</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_isModuleIntegrityOk</td>
+          <td>0x00000B99</td>
+          <td>0x00000C3C</td>
+          <td class="symTdSize">164</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_entryCheck</td>
+          <td>0x00000C3D</td>
+          <td>0x00000C68</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_readBlock</td>
+          <td>0x00000C69</td>
+          <td>0x00000C84</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_open</td>
+          <td>0x00000C85</td>
+          <td>0x00000CCC</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_read</td>
+          <td>0x00000CCD</td>
+          <td>0x00000CF0</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_calcCrc</td>
+          <td>0x00000CF1</td>
+          <td>0x00000D50</td>
+          <td class="symTdSize">96</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_close</td>
+          <td>0x00000D51</td>
+          <td>0x00000D64</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>COMA_read</td>
+          <td>0x00000D65</td>
+          <td>0x00000D76</td>
+          <td class="symTdSize">18</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>memcpy</td>
+          <td>0x00000D77</td>
+          <td>0x00000D88</td>
+          <td class="symTdSize">18</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>_init</td>
+          <td>0x00000D89</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000D89</td>
+          <td>0x00000D94</td>
+          <td>12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>_fini</td>
+          <td>0x00000D95</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000D95</td>
+          <td>0x00000D9F</td>
+          <td>11</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MAL_partitionFix</td>
+          <td>0x00000DA0</td>
+          <td>0x00000DFF</td>
+          <td class="symTdSize">96</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MEMDRV_driverTable</td>
+          <td>0x00000E00</td>
+          <td>0x00000E17</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>FSF_atRamSegments</td>
+          <td>0x00000E18</td>
+          <td>0x00000E1F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>DRVIF_driver</td>
+          <td>0x00000E20</td>
+          <td>0x00000E2F</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000E30</td>
+          <td>0x00000E4B</td>
+          <td>28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Variable</td>
+          <td>__EH_FRAME_BEGIN__</td>
+          <td>0x00000E4C</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Variable</td>
+          <td>__FRAME_END__</td>
+          <td>0x00000E4C</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000010">4: .boot2, 0x00000010 - 0x0000001B, 12 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>MAL_DataAnchor</td>
+          <td>0x00000010</td>
+          <td>0x00000017</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MAL_FwuOptBytes</td>
+          <td>0x00000018</td>
+          <td>0x0000001B</td>
+          <td class="symTdSize">4</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000020">5: .text2, 0x00000020 - 0x00000E4F, 3632 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr style="color:red">
+          <td>Function</td>
+          <td>__do_global_dtors_aux</td>
+          <td>0x00000021</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000021</td>
+          <td>0x00000048</td>
+          <td>40</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>frame_dummy</td>
+          <td>0x00000049</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000049</td>
+          <td>0x00000068</td>
+          <td>32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BASIC_vInitPlatform</td>
+          <td>0x00000069</td>
+          <td>0x00000144</td>
+          <td class="symTdSize">220</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vStartUpRomCrcCheck</td>
+          <td>0x00000145</td>
+          <td>0x00000170</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_u32GetNumberOfRamSegments</td>
+          <td>0x00000171</td>
+          <td>0x00000174</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>_FSF_vReportFatal</td>
+          <td>0x00000175</td>
+          <td>0x00000178</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vSetApplicationSafeState</td>
+          <td>0x00000179</td>
+          <td>0x0000017A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000017B</td>
+          <td>0x0000017C</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>ITBL_vResetHandler</td>
+          <td>0x0000017D</td>
+          <td>0x000001B0</td>
+          <td class="symTdSize">52</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>ITBL_StartApplication</td>
+          <td>0x000001B1</td>
+          <td>0x000001BE</td>
+          <td class="symTdSize">14</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000001BF</td>
+          <td>0x000001C0</td>
+          <td>2</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>FSF_vRamcheck</td>
+          <td>0x000001C1</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000001C1</td>
+          <td>0x00000258</td>
+          <td>152</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>DRVIF_isAddrRangeValid</td>
+          <td>0x00000259</td>
+          <td>0x0000026C</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>DRVIF_resetFlash</td>
+          <td>0x0000026D</td>
+          <td>0x00000284</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>DRVIF_initFlash</td>
+          <td>0x00000285</td>
+          <td>0x000002CC</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>DRVIF_deinitFlash</td>
+          <td>0x000002CC</td>
+          <td>0x00000303</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>DRVIF_deinitFlash</td>
+          <td>0x000002CD</td>
+          <td>0x00000304</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>CRC_Ethernet_Init</td>
+          <td>0x00000305</td>
+          <td>0x00000334</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>CRC_Ethernet_Update</td>
+          <td>0x00000335</td>
+          <td>0x000003C4</td>
+          <td class="symTdSize">144</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>CRC_Ethernet_Finish</td>
+          <td>0x000003C5</td>
+          <td>0x000003C8</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>CRC_Ethernet_Calc</td>
+          <td>0x000003C9</td>
+          <td>0x000003DE</td>
+          <td class="symTdSize">22</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000003DF</td>
+          <td>0x000003E0</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>Main</td>
+          <td>0x000003E1</td>
+          <td>0x00000470</td>
+          <td class="symTdSize">144</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMMOD_bInitMemoryModule</td>
+          <td>0x00000471</td>
+          <td>0x000004A8</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMMOD_startModule</td>
+          <td>0x000004A9</td>
+          <td>0x000004F0</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMMOD_isModuleStartable</td>
+          <td>0x000004F1</td>
+          <td>0x00000510</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMMOD_isModuleFirmwareIdValid</td>
+          <td>0x00000511</td>
+          <td>0x00000590</td>
+          <td class="symTdSize">128</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMMOD_isModuleIntegrityOk</td>
+          <td>0x00000591</td>
+          <td>0x000005BC</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_initSharedData</td>
+          <td>0x000005BD</td>
+          <td>0x0000060C</td>
+          <td class="symTdSize">80</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setErrorFlag</td>
+          <td>0x0000060D</td>
+          <td>0x0000061C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setErrorModule</td>
+          <td>0x0000061D</td>
+          <td>0x00000628</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_incrementStartAttempts</td>
+          <td>0x00000629</td>
+          <td>0x00000638</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_getStartAttempts</td>
+          <td>0x00000639</td>
+          <td>0x00000644</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setIsrTableAddr</td>
+          <td>0x00000645</td>
+          <td>0x00000650</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setBootModule</td>
+          <td>0x00000651</td>
+          <td>0x00000660</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_getBootModule</td>
+          <td>0x00000661</td>
+          <td>0x0000066C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setMagicPattern</td>
+          <td>0x0000066D</td>
+          <td>0x00000678</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_getMagicPattern</td>
+          <td>0x00000679</td>
+          <td>0x00000684</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_setUninitDataChecked</td>
+          <td>0x00000685</td>
+          <td>0x00000694</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_isUninitDataChecked</td>
+          <td>0x00000695</td>
+          <td>0x000006AC</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_isPowerOnReset</td>
+          <td>0x000006AD</td>
+          <td>0x000006D0</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_setDataInitializedFlag</td>
+          <td>0x000006D1</td>
+          <td>0x000006E0</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BMDAT_resetDataInitializedFlag</td>
+          <td>0x000006E1</td>
+          <td>0x000006F0</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BMDAT_isDataInitialized</td>
+          <td>0x000006F1</td>
+          <td>0x00000708</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>OTP_isEmpty</td>
+          <td>0x00000709</td>
+          <td>0x00000720</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>OTP_getFirmwareIDs</td>
+          <td>0x00000721</td>
+          <td>0x0000073C</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vReg_FatalException</td>
+          <td>0x0000073D</td>
+          <td>0x00000744</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vRam_FatalException</td>
+          <td>0x00000745</td>
+          <td>0x0000074C</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vBoot</td>
+          <td>0x0000074D</td>
+          <td>0x00000768</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_vReportFatal</td>
+          <td>0x00000769</td>
+          <td>0x00000770</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_setProgramCounterMonitoringVal</td>
+          <td>0x00000771</td>
+          <td>0x00000784</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>FSF_DoProgramCounterMonitoring</td>
+          <td>0x00000785</td>
+          <td>0x000007B4</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>FSF_vRegistercheck</td>
+          <td>0x000007B5</td>
+          <td>0x000007C4</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>FSF_do_xPSRandR14LinkRegisterCheck</td>
+          <td>0x000007C5</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000007C5</td>
+          <td>0x000007FC</td>
+          <td>56</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>FSF_doGeneralPurposeR0_R12RegisterCheck</td>
+          <td>0x000007FD</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000007FD</td>
+          <td>0x0000092A</td>
+          <td>302</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>FSF_doStackPointerR13RegisterCheck</td>
+          <td>0x0000092B</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000092B</td>
+          <td>0x00000990</td>
+          <td>102</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>HSUP_vGenerateReset</td>
+          <td>0x00000991</td>
+          <td>0x000009AC</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_createModuleDictionary</td>
+          <td>0x000009AD</td>
+          <td>0x00000A14</td>
+          <td class="symTdSize">104</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_initPartition</td>
+          <td>0x00000A15</td>
+          <td>0x00000A20</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_GetMemModule</td>
+          <td>0x00000A21</td>
+          <td>0x00000A50</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_GetMemModuleByIndex</td>
+          <td>0x00000A51</td>
+          <td>0x00000A78</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_getPartitionSize</td>
+          <td>0x00000A79</td>
+          <td>0x00000A86</td>
+          <td class="symTdSize">14</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000A87</td>
+          <td>0x00000A88</td>
+          <td>2</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_PartitionToHeader</td>
+          <td>0x00000A89</td>
+          <td>0x00000ACC</td>
+          <td class="symTdSize">68</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_isIntegrityOk</td>
+          <td>0x00000ACD</td>
+          <td>0x00000B5A</td>
+          <td class="symTdSize">142</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_getBuildId</td>
+          <td>0x00000B5A</td>
+          <td>0x00000B7B</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_getBuildId.part.0</td>
+          <td>0x00000B5B</td>
+          <td>0x00000B7C</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MAL_isBuildInApplication</td>
+          <td>0x00000B7D</td>
+          <td>0x00000B98</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MAL_isModuleIntegrityOk</td>
+          <td>0x00000B99</td>
+          <td>0x00000C3C</td>
+          <td class="symTdSize">164</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_entryCheck</td>
+          <td>0x00000C3D</td>
+          <td>0x00000C68</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_readBlock</td>
+          <td>0x00000C69</td>
+          <td>0x00000C84</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_open</td>
+          <td>0x00000C85</td>
+          <td>0x00000CCC</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_read</td>
+          <td>0x00000CCD</td>
+          <td>0x00000CF0</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MEMDRV_calcCrc</td>
+          <td>0x00000CF1</td>
+          <td>0x00000D50</td>
+          <td class="symTdSize">96</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MEMDRV_close</td>
+          <td>0x00000D51</td>
+          <td>0x00000D64</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>COMA_read</td>
+          <td>0x00000D65</td>
+          <td>0x00000D76</td>
+          <td class="symTdSize">18</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>memcpy</td>
+          <td>0x00000D77</td>
+          <td>0x00000D88</td>
+          <td class="symTdSize">18</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>_init</td>
+          <td>0x00000D89</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000D89</td>
+          <td>0x00000D94</td>
+          <td>12</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>_fini</td>
+          <td>0x00000D95</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000D95</td>
+          <td>0x00000D9F</td>
+          <td>11</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MAL_partitionFix</td>
+          <td>0x00000DA0</td>
+          <td>0x00000DFF</td>
+          <td class="symTdSize">96</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MEMDRV_driverTable</td>
+          <td>0x00000E00</td>
+          <td>0x00000E17</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>FSF_atRamSegments</td>
+          <td>0x00000E18</td>
+          <td>0x00000E1F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>DRVIF_driver</td>
+          <td>0x00000E20</td>
+          <td>0x00000E2F</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000E30</td>
+          <td>0x00000E4B</td>
+          <td>28</td>
+        </tr>
+        <tr style="color:red">
+          <td>Variable</td>
+          <td>__EH_FRAME_BEGIN__</td>
+          <td>0x00000E4C</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Variable</td>
+          <td>__FRAME_END__</td>
+          <td>0x00000E4C</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00006000">6: .fwu_otp_memory, 0x00006000 - 0x000060AB, 172 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>OTP_Data</td>
+          <td>0x00006000</td>
+          <td>0x000060AB</td>
+          <td class="symTdSize">172</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x20000000">7: .no_init, 0x20000000 - 0x2000007F, 128 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>BMDAT_sharedData</td>
+          <td>0x20000000</td>
+          <td>0x2000001B</td>
+          <td class="symTdSize">28</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x20000080">8: .data, 0x20000080 - 0x20000087, 8 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr style="color:red">
+          <td>Variable</td>
+          <td>__frame_dummy_init_array_entry</td>
+          <td>0x20000080</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x20000080</td>
+          <td>0x20000083</td>
+          <td>4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Variable</td>
+          <td>__do_global_dtors_aux_fini_array_entry</td>
+          <td>0x20000084</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x20000088">9: .bss, 0x20000088 - 0x200000F0, 105 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr style="color:red">
+          <td>Variable</td>
+          <td>completed.1</td>
+          <td>0x20000088</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x20000088</td>
+          <td>0x2000008B</td>
+          <td>4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Variable</td>
+          <td>object.0</td>
+          <td>0x2000008C</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x2000008C</td>
+          <td>0x200000A3</td>
+          <td>24</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>DRV_LVRState</td>
+          <td>0x200000A4</td>
+          <td>0x200000A4</td>
+          <td class="symTdSize">1</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x200000A5</td>
+          <td>0x200000A7</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BMMOD_header</td>
+          <td>0x200000A8</td>
+          <td>0x200000AB</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BMMOD_partition</td>
+          <td>0x200000AC</td>
+          <td>0x200000AF</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>FSF_ui32BMPrgSeqMonVal</td>
+          <td>0x200000B0</td>
+          <td>0x200000B3</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>FSF_ui32BMPrgSeqMonValInv</td>
+          <td>0x200000B4</td>
+          <td>0x200000B7</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MAL_ModuleCount</td>
+          <td>0x200000B8</td>
+          <td>0x200000B8</td>
+          <td class="symTdSize">1</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x200000B9</td>
+          <td>0x200000B9</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MAL_moduleDictionary</td>
+          <td>0x200000BA</td>
+          <td>0x200000BF</td>
+          <td class="symTdSize">6</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>actualPartition</td>
+          <td>0x200000C0</td>
+          <td>0x200000C3</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>moduleHeaderInRam</td>
+          <td>0x200000C4</td>
+          <td>0x200000EB</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MEMDRV_driver</td>
+          <td>0x200000EC</td>
+          <td>0x200000EF</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MEMDRV_lastError</td>
+          <td>0x200000F0</td>
+          <td>0x200000F0</td>
+          <td class="symTdSize">1</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x200003BC">10: .stack, 0x200003BC - 0x200007BB, 1024 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x200007C0">11: .fs_excluded_ram, 0x200007C0 - 0x200007DF, 32 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>FSF_arMarchDataBuffer</td>
+          <td>0x200007C0</td>
+          <td>0x200007DF</td>
+          <td class="symTdSize">32</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="module-list">
+      Modules
+    </h2>
+    <table class="table-2">
+      <thead class="table-2">
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            File Path
+          </th>
+        </tr>
+      </thead>
+      <tbody class="table-2">
+        <tr>
+          <td><a href="#E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c">1</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c">2</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c">3</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c">4</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c">5</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c">6</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c">7</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c">8</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c">9</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c">10</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c">11</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c">12</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c">13</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c">14</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c">15</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c">16</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c">17</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c">18</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c">19</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">20</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c">21</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c">22</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="symbol-module-mapping">
+      Symbol to Module Mapping
+    </h2>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c">1: Application, E:\project\example\MD370R\app/prog/firmware_update/mal\module_administration_cfg.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>96</td>
+                  <td>96</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>96</td>
+                  <td>96</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MAL_partitionFix</td>
+                  <td>0x00000DA0</td>
+                  <td>96</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c">2: Application, E:\project\example\MD370R\app/prog/firmware_update\mem_drv_config.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>24</td>
+                  <td>24</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>24</td>
+                  <td>24</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MEMDRV_driverTable</td>
+                  <td>0x00000E00</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c">3: Application, E:\project\example\MD370R\app/prog/FuncSafe\fSafeXS.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>32</td>
+                  <td>8</td>
+                  <td>40</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>52</td>
+                  <td>52</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>32</td>
+                  <td>60</td>
+                  <td>92</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_atRamSegments</td>
+                  <td>0x00000E18</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>FSF_arMarchDataBuffer</td>
+                  <td>0x200007C0</td>
+                  <td>32</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_vStartUpRomCrcCheck</td>
+                  <td>0x00000145</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>FSF_u32GetNumberOfRamSegments</td>
+                  <td>0x00000171</td>
+                  <td>4</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>_FSF_vReportFatal</td>
+                  <td>0x00000175</td>
+                  <td>4</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c">4: Application, E:\project\example\MD370R\app/prog/ped_fw/basic/sh30f\basicMcXs.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>220</td>
+                  <td>220</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>220</td>
+                  <td>220</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BASIC_vInitPlatform</td>
+                  <td>0x00000069</td>
+                  <td>220</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c">5: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f\BootManagerSharedDataUc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>92</td>
+                  <td>92</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>92</td>
+                  <td>92</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BMDAT_isPowerOnReset</td>
+                  <td>0x000006AD</td>
+                  <td>36</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_setDataInitializedFlag</td>
+                  <td>0x000006D1</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_resetDataInitializedFlag</td>
+                  <td>0x000006E1</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_isDataInitialized</td>
+                  <td>0x000006F1</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c">6: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManager.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>144</td>
+                  <td>144</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>144</td>
+                  <td>144</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>Main</td>
+                  <td>0x000003E1</td>
+                  <td>144</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c">7: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerModule.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>8</td>
+                  <td>0</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>332</td>
+                  <td>332</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>8</td>
+                  <td>332</td>
+                  <td>340</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BMMOD_header</td>
+                  <td>0x200000A8</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMMOD_partition</td>
+                  <td>0x200000AC</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BMMOD_bInitMemoryModule</td>
+                  <td>0x00000471</td>
+                  <td>56</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMMOD_startModule</td>
+                  <td>0x000004A9</td>
+                  <td>72</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMMOD_isModuleStartable</td>
+                  <td>0x000004F1</td>
+                  <td>32</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMMOD_isModuleFirmwareIdValid</td>
+                  <td>0x00000511</td>
+                  <td>128</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMMOD_isModuleIntegrityOk</td>
+                  <td>0x00000591</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c">8: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootManager\BootManagerSharedData.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>28</td>
+                  <td>0</td>
+                  <td>28</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>240</td>
+                  <td>240</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>28</td>
+                  <td>240</td>
+                  <td>268</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BMDAT_sharedData</td>
+                  <td>0x20000000</td>
+                  <td>28</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BMDAT_initSharedData</td>
+                  <td>0x000005BD</td>
+                  <td>80</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_setErrorFlag</td>
+                  <td>0x0000060D</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_setErrorModule</td>
+                  <td>0x0000061D</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_incrementStartAttempts</td>
+                  <td>0x00000629</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_getStartAttempts</td>
+                  <td>0x00000639</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_setIsrTableAddr</td>
+                  <td>0x00000645</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_setBootModule</td>
+                  <td>0x00000651</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_getBootModule</td>
+                  <td>0x00000661</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_setMagicPattern</td>
+                  <td>0x0000066D</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_getMagicPattern</td>
+                  <td>0x00000679</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BMDAT_setUninitDataChecked</td>
+                  <td>0x00000685</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BMDAT_isUninitDataChecked</td>
+                  <td>0x00000695</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c">9: Generic, E:\project\example\MD370R\common/prog/firmware_update/mal\dataAnchor.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>12</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>12</td>
+                  <td>12</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MAL_DataAnchor</td>
+                  <td>0x00000010</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_FwuOptBytes</td>
+                  <td>0x00000018</td>
+                  <td>4</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c">10: Generic, E:\project\example\MD370R\common/prog/firmware_update/mal\moduleAdministration.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>51</td>
+                  <td>0</td>
+                  <td>51</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>654</td>
+                  <td>654</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>51</td>
+                  <td>654</td>
+                  <td>705</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MAL_ModuleCount</td>
+                  <td>0x200000B8</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_moduleDictionary</td>
+                  <td>0x200000BA</td>
+                  <td>6</td>
+                  <td>RAM</td>
+                </tr>
+                <tr>
+                  <td>actualPartition</td>
+                  <td>0x200000C0</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>moduleHeaderInRam</td>
+                  <td>0x200000C4</td>
+                  <td>40</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MAL_createModuleDictionary</td>
+                  <td>0x000009AD</td>
+                  <td>104</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_initPartition</td>
+                  <td>0x00000A15</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MAL_GetMemModule</td>
+                  <td>0x00000A21</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_GetMemModuleByIndex</td>
+                  <td>0x00000A51</td>
+                  <td>40</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MAL_getPartitionSize</td>
+                  <td>0x00000A79</td>
+                  <td>14</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_PartitionToHeader</td>
+                  <td>0x00000A89</td>
+                  <td>68</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MAL_isIntegrityOk</td>
+                  <td>0x00000ACD</td>
+                  <td>142</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_getBuildId</td>
+                  <td>0x00000B5A</td>
+                  <td>34</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MAL_isBuildInApplication</td>
+                  <td>0x00000B7D</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MAL_isModuleIntegrityOk</td>
+                  <td>0x00000B99</td>
+                  <td>164</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c">11: Generic, E:\project\example\MD370R\common/prog/firmware_update/mem_drv\com_mal.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>18</td>
+                  <td>18</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>18</td>
+                  <td>18</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>COMA_read</td>
+                  <td>0x00000D65</td>
+                  <td>18</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c">12: Generic, E:\project\example\MD370R\common/prog/firmware_update/mem_drv\mem_drv.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>5</td>
+                  <td>0</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>296</td>
+                  <td>296</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>5</td>
+                  <td>296</td>
+                  <td>301</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MEMDRV_driver</td>
+                  <td>0x200000EC</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MEMDRV_lastError</td>
+                  <td>0x200000F0</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MEMDRV_entryCheck</td>
+                  <td>0x00000C3D</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MEMDRV_readBlock</td>
+                  <td>0x00000C69</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MEMDRV_open</td>
+                  <td>0x00000C85</td>
+                  <td>72</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MEMDRV_read</td>
+                  <td>0x00000CCD</td>
+                  <td>36</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MEMDRV_calcCrc</td>
+                  <td>0x00000CF1</td>
+                  <td>96</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MEMDRV_close</td>
+                  <td>0x00000D51</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c">13: Generic, E:\project\example\MD370R\common/prog/firmware_update/otp_mem\fwu_otp_memory.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>172</td>
+                  <td>172</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>52</td>
+                  <td>52</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>224</td>
+                  <td>224</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>OTP_Data</td>
+                  <td>0x00006000</td>
+                  <td>172</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>OTP_isEmpty</td>
+                  <td>0x00000709</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>OTP_getFirmwareIDs</td>
+                  <td>0x00000721</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c">14: Generic, E:\project\example\MD370R\common/prog/FuncSafe/armCmx\fs_registers_checks_arm_cmx.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_vRegistercheck</td>
+                  <td>0x000007B5</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c">15: Generic, E:\project\example\MD370R\common/prog/FuncSafe\fs_psm.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>8</td>
+                  <td>0</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>68</td>
+                  <td>68</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>8</td>
+                  <td>68</td>
+                  <td>76</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_ui32BMPrgSeqMonVal</td>
+                  <td>0x200000B0</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>FSF_ui32BMPrgSeqMonValInv</td>
+                  <td>0x200000B4</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_setProgramCounterMonitoringVal</td>
+                  <td>0x00000771</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>FSF_DoProgramCounterMonitoring</td>
+                  <td>0x00000785</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c">16: Generic, E:\project\example\MD370R\common/prog/FuncSafe\fsCom.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>36</td>
+                  <td>36</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>36</td>
+                  <td>36</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_vBoot</td>
+                  <td>0x0000074D</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>FSF_vReportFatal</td>
+                  <td>0x00000769</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c">17: Generic, E:\project\example\MD370R\common/prog/FuncSafe\fsRam.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>8</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>8</td>
+                  <td>8</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_vRam_FatalException</td>
+                  <td>0x00000745</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c">18: Generic, E:\project\example\MD370R\common/prog/FuncSafe\fsReg.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>8</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>8</td>
+                  <td>8</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>FSF_vReg_FatalException</td>
+                  <td>0x0000073D</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c">19: Generic, E:\project\example\MD370R\common/prog/MSP/armCmx\hsupArmCM.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>HSUP_vGenerateReset</td>
+                  <td>0x00000991</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">20: Generic, E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>8</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>66</td>
+                  <td>66</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>74</td>
+                  <td>74</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>ITBL_fixedVectors</td>
+                  <td>0x00000000</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>ITBL_vResetHandler</td>
+                  <td>0x0000017D</td>
+                  <td>52</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>ITBL_StartApplication</td>
+                  <td>0x000001B1</td>
+                  <td>14</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c">21: Generic, E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv\intflash_drv.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>1</td>
+                  <td>16</td>
+                  <td>17</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>172</td>
+                  <td>172</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>1</td>
+                  <td>188</td>
+                  <td>189</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>DRVIF_driver</td>
+                  <td>0x00000E20</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>DRV_LVRState</td>
+                  <td>0x200000A4</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>DRVIF_isAddrRangeValid</td>
+                  <td>0x00000259</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>DRVIF_resetFlash</td>
+                  <td>0x0000026D</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>DRVIF_initFlash</td>
+                  <td>0x00000285</td>
+                  <td>72</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>DRVIF_deinitFlash</td>
+                  <td>0x000002CC</td>
+                  <td>56</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c">22: Generic, E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f\StdCrc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>218</td>
+                  <td>218</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>218</td>
+                  <td>218</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>CRC_Ethernet_Init</td>
+                  <td>0x00000305</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>CRC_Ethernet_Update</td>
+                  <td>0x00000335</td>
+                  <td>144</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>CRC_Ethernet_Finish</td>
+                  <td>0x000003C5</td>
+                  <td>4</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>CRC_Ethernet_Calc</td>
+                  <td>0x000003C9</td>
+                  <td>22</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

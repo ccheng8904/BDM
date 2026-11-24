@@ -1,0 +1,760 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fwu_otp_memory.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.OTP_writeProductionTime,"ax",%progbits
+  18              		.align	1
+  19              		.global	OTP_writeProductionTime
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	OTP_writeProductionTime:
+  25              	.LVL0:
+  26              	.LFB62:
+  27              		.file 1 "common/prog/firmware_update/otp_mem/fwu_otp_memory.c"
+   1:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*******************************************************************************
+   2:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *
+   5:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *
+   9:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *******************************************************************************
+  10:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  PROJECT          Firmware Update
+  11:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  13:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  14:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  15:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  17:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /** \file
+  18:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *
+  19:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  \ingroup  firmware_update
+  20:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *
+  21:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *  \brief    Implementation of one-time programable area.
+  22:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  *
+  23:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  */
+  24:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  25:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  26:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  27:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  29:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  30:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #include "bsh_stdinc.h"
+  31:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #include "fwu_otp_memory.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 2
+
+
+  32:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #include "utility/utility.h"
+  33:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #include "build_version.h"
+  34:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  35:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #if defined(FWU_OTP_MEMORY_START_ADDRESS)
+  36:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     #include "SegmentDef.h"
+  37:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     #include "std_lib/std_symbol.h"
+  38:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #if !defined(FWU_MEM_DRV_READ_ONLY)
+  39:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     #include "firmware_update/mem_drv/intflash_drv.h"
+  40:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     #include "firmware_update/mem_drv/intflash_abs.h"
+  41:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif
+  42:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+  43:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  44:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  45:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* PRIVATE DEFINITIONS                                                        */
+  46:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  47:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  48:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef REMOTE_FIRMWARE_UPDATE
+  49:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #define FWU_FW_ID_EMPTY     {MAL_NO_MODULE, {{0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFFu, 0xFF
+  50:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+  51:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  52:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #if !defined(FWU_MEM_DRV_READ_ONLY) && defined(FWU_OTP_MEMORY_START_ADDRESS) && !defined (PSOC4) &&
+  53:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #define MAX_WRITE_BLOCK_SIZE    8U
+  54:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+  55:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  56:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  57:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* PRIVATE TYPE DEFINITION                                                    */
+  58:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+  59:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  60:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*lint -save -e19 -e9018 Useless Declaration - it is not */
+  61:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* Note 19: Useless Declaration - it is not
+  62:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****  * Note 9018: union declared [MISRA 2012 Rule 19.2, advisory] - needed and uncritical*/
+  63:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  64:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef FWU_OTP_MEMORY_START_ADDRESS
+  65:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     // Declaration of OTP compatible types for production data
+  66:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TYPEDEF_ITEM(struct DBPL_ProductionTime, OTP_ProductionTime_t);
+  67:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TYPEDEF_ITEM(struct DBPL_TracingId, OTP_TracingId_t);
+  68:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TYPEDEF_ITEM(struct FWU_hw_version_s, OTP_hw_version_t);
+  69:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     
+  70:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef REMOTE_FIRMWARE_UPDATE
+  71:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TYPEDEF_ITEM(struct MAL_fw_id_array, OTP_id_array_t);
+  72:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /* REMOTE_FIRMWARE_UPDATE */
+  73:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  74:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef DBUS2_APPLIANCE_MSG_IN_APP
+  75:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TYPEDEF_ITEM(struct DBPL_ApplianceData, OTP_ApplianceData_t);
+  76:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /*DBUS2_APPLIANCE_MSG_IN_APP */
+  77:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  78:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif /* FWU_OTP_MEMORY_START_ADDRESS */
+  79:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*lint -restore -e19 -e9018*/
+  80:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  81:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  82:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+  83:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef FWU_OTP_MEMORY_START_ADDRESS
+  84:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** struct OTP_Data_s
+  85:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+  86:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_ProductionTime_t   productionTime;
+  87:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_TracingId_t        tracingID;
+  88:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_hw_version_t       hardwareVersion;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 3
+
+
+  89:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     
+  90:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef REMOTE_FIRMWARE_UPDATE
+  91:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_id_array_t         fwIdArray;
+  92:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /* REMOTE_FIRMWARE_UPDATE */
+  93:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     
+  94:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef DBUS2_APPLIANCE_MSG_IN_APP
+  95:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     OTP_ApplianceData_t    applianceData;
+  96:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /*DBUS2_APPLIANCE_MSG_IN_APP */
+  97:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** };
+  98:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif /* FWU_OTP_MEMORY_START_ADDRESS */
+  99:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 100:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 101:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 102:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* OTP MEMORY DATA DEFINITION                                                 */
+ 103:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 104:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 105:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* Define data only if there is OTP memory segment defined */
+ 106:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #if defined(FWU_OTP_MEMORY_START_ADDRESS)
+ 107:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** SDEF_SetSegmentConst(FWU_OTP_MEMORY)
+ 108:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*Axivion Next Line MisraC2012-8.4 Missing declaration for object definition */
+ 109:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** SYMBOL_USED const struct OTP_Data_s OTP_Data =
+ 110:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 111:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     .productionTime = {.raw_data = {0}},
+ 112:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     .tracingID      = {.raw_data = {0}},
+ 113:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     .hardwareVersion = {.raw_data = {0}}
+ 114:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     
+ 115:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef REMOTE_FIRMWARE_UPDATE
+ 116:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****    ,.fwIdArray =
+ 117:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     {
+ 118:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         .value =
+ 119:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 120:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****             .CRC = 0xABCDu, // Dummy CRC value - will be overwritten by patchbin
+ 121:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****             .entries =
+ 122:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****             {
+ 123:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 {MAL_PRODUCT_APP1, {STDV_ParseIdentifier(UID)}},     // Dummy APP FWID for testing
+ 124:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 125:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 126:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 127:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 128:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 129:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 130:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 131:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY,
+ 132:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****                 FWU_FW_ID_EMPTY
+ 133:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****             }
+ 134:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         }
+ 135:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     }
+ 136:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /* REMOTE_FIRMWARE_UPDATE */
+ 137:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   
+ 138:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef DBUS2_APPLIANCE_MSG_IN_APP
+ 139:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****    ,.applianceData  = {{}}
+ 140:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif /* DBUS2_APPLIANCE_MSG_IN_APP */
+ 141:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** };
+ 142:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** SDEF_SetSegmentConst_Default()
+ 143:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif /* FWU_OTP_MEMORY_START_ADDRESS */
+ 144:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 145:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 4
+
+
+ 146:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 147:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 148:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 149:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 150:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*lint -save -e928 cast from pointer to pointer */
+ 151:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef FWU_OTP_MEMORY_START_ADDRESS
+ 152:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_writeProductionTime(const struct DBPL_ProductionTime* const productionTime)
+ 153:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+  28              		.loc 1 153 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 154:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_writeFlash(OTP_Data.productionTime.raw_data, sizeof(struct DBPL_ProductionTime), (co
+  33              		.loc 1 154 5 view .LVU1
+ 155:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+  34              		.loc 1 155 1 is_stmt 0 view .LVU2
+  35 0000 0020     		movs	r0, #0
+  36              	.LVL1:
+  37              		.loc 1 155 1 view .LVU3
+  38              		@ sp needed
+  39 0002 7047     		bx	lr
+  40              		.cfi_endproc
+  41              	.LFE62:
+  43              		.section	.text.OTP_writeTracingID,"ax",%progbits
+  44              		.align	1
+  45              		.global	OTP_writeTracingID
+  46              		.syntax unified
+  47              		.code	16
+  48              		.thumb_func
+  50              	OTP_writeTracingID:
+  51              	.LFB74:
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		@ link register save eliminated.
+  56 0000 0020     		movs	r0, #0
+  57              		@ sp needed
+  58 0002 7047     		bx	lr
+  59              		.cfi_endproc
+  60              	.LFE74:
+  62              		.section	.text.OTP_writeHardwareVersion,"ax",%progbits
+  63              		.align	1
+  64              		.global	OTP_writeHardwareVersion
+  65              		.syntax unified
+  66              		.code	16
+  67              		.thumb_func
+  69              	OTP_writeHardwareVersion:
+  70              	.LFB76:
+  71              		.cfi_startproc
+  72              		@ args = 0, pretend = 0, frame = 0
+  73              		@ frame_needed = 0, uses_anonymous_args = 0
+  74              		@ link register save eliminated.
+  75 0000 0020     		movs	r0, #0
+  76              		@ sp needed
+  77 0002 7047     		bx	lr
+  78              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 5
+
+
+  79              	.LFE76:
+  81              		.section	.text.OTP_getProductionTime,"ax",%progbits
+  82              		.align	1
+  83              		.global	OTP_getProductionTime
+  84              		.syntax unified
+  85              		.code	16
+  86              		.thumb_func
+  88              	OTP_getProductionTime:
+  89              	.LFB65:
+ 156:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 157:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 158:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_writeTracingID(const struct DBPL_TracingId* const tracingID)
+ 159:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 160:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_writeFlash(OTP_Data.tracingID.raw_data, sizeof(struct DBPL_TracingId), (const uint8_
+ 161:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 162:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 163:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 164:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_writeHardwareVersion(const struct FWU_hw_version_s* const hwVersion)
+ 165:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 166:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_writeFlash(OTP_Data.hardwareVersion.raw_data, sizeof(struct FWU_hw_version_s), (cons
+ 167:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 168:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 169:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif /* FWU_OTP_MEMORY_START_ADDRESS */
+ 170:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 171:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 172:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** const struct DBPL_ProductionTime* OTP_getProductionTime(void)
+ 173:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+  90              		.loc 1 173 1 is_stmt 1 view -0
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94              		@ link register save eliminated.
+ 174:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef FWU_OTP_MEMORY_START_ADDRESS
+ 175:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return &OTP_Data.productionTime.value;
+  95              		.loc 1 175 5 view .LVU5
+  96              		.loc 1 175 12 is_stmt 0 view .LVU6
+  97 0000 0048     		ldr	r0, .L5
+ 176:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #else
+ 177:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return NULL;
+ 178:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif
+ 179:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+  98              		.loc 1 179 1 view .LVU7
+  99              		@ sp needed
+ 100 0002 7047     		bx	lr
+ 101              	.L6:
+ 102              		.align	2
+ 103              	.L5:
+ 104 0004 00000000 		.word	OTP_Data
+ 105              		.cfi_endproc
+ 106              	.LFE65:
+ 108              		.section	.text.OTP_getTracingID,"ax",%progbits
+ 109              		.align	1
+ 110              		.global	OTP_getTracingID
+ 111              		.syntax unified
+ 112              		.code	16
+ 113              		.thumb_func
+ 115              	OTP_getTracingID:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 6
+
+
+ 116              	.LFB66:
+ 180:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 181:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 182:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** const struct DBPL_TracingId* OTP_getTracingID(void)
+ 183:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 117              		.loc 1 183 1 is_stmt 1 view -0
+ 118              		.cfi_startproc
+ 119              		@ args = 0, pretend = 0, frame = 0
+ 120              		@ frame_needed = 0, uses_anonymous_args = 0
+ 121              		@ link register save eliminated.
+ 184:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef FWU_OTP_MEMORY_START_ADDRESS
+ 185:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return &OTP_Data.tracingID.value;
+ 122              		.loc 1 185 5 view .LVU9
+ 123              		.loc 1 185 12 is_stmt 0 view .LVU10
+ 124 0000 0048     		ldr	r0, .L8
+ 186:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #else
+ 187:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return NULL;
+ 188:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif
+ 189:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 125              		.loc 1 189 1 view .LVU11
+ 126              		@ sp needed
+ 127 0002 7047     		bx	lr
+ 128              	.L9:
+ 129              		.align	2
+ 130              	.L8:
+ 131 0004 0C000000 		.word	OTP_Data+12
+ 132              		.cfi_endproc
+ 133              	.LFE66:
+ 135              		.section	.text.OTP_getHardwareVersion,"ax",%progbits
+ 136              		.align	1
+ 137              		.global	OTP_getHardwareVersion
+ 138              		.syntax unified
+ 139              		.code	16
+ 140              		.thumb_func
+ 142              	OTP_getHardwareVersion:
+ 143              	.LFB67:
+ 190:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 191:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 192:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** const struct FWU_hw_version_s* OTP_getHardwareVersion(void)
+ 193:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 144              		.loc 1 193 1 is_stmt 1 view -0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		@ link register save eliminated.
+ 194:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #ifdef FWU_OTP_MEMORY_START_ADDRESS
+ 195:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return &OTP_Data.hardwareVersion.value;
+ 149              		.loc 1 195 5 view .LVU13
+ 150              		.loc 1 195 12 is_stmt 0 view .LVU14
+ 151 0000 0048     		ldr	r0, .L11
+ 196:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #else
+ 197:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return NULL;
+ 198:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****   #endif
+ 199:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 152              		.loc 1 199 1 view .LVU15
+ 153              		@ sp needed
+ 154 0002 7047     		bx	lr
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 7
+
+
+ 155              	.L12:
+ 156              		.align	2
+ 157              	.L11:
+ 158 0004 2C000000 		.word	OTP_Data+44
+ 159              		.cfi_endproc
+ 160              	.LFE67:
+ 162              		.section	.text.OTP_writeFirmwareIDs,"ax",%progbits
+ 163              		.align	1
+ 164              		.global	OTP_writeFirmwareIDs
+ 165              		.syntax unified
+ 166              		.code	16
+ 167              		.thumb_func
+ 169              	OTP_writeFirmwareIDs:
+ 170              	.LFB78:
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174              		@ link register save eliminated.
+ 175 0000 0020     		movs	r0, #0
+ 176              		@ sp needed
+ 177 0002 7047     		bx	lr
+ 178              		.cfi_endproc
+ 179              	.LFE78:
+ 181              		.section	.text.OTP_initializeFirmwareIDArray,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	OTP_initializeFirmwareIDArray
+ 184              		.syntax unified
+ 185              		.code	16
+ 186              		.thumb_func
+ 188              	OTP_initializeFirmwareIDArray:
+ 189              	.LVL2:
+ 190              	.LFB69:
+ 200:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 201:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 202:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef REMOTE_FIRMWARE_UPDATE
+ 203:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_writeFirmwareIDs(const struct MAL_fw_id_array* const firmwareIDs)
+ 204:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 205:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_writeFlash(OTP_Data.fwIdArray.raw_data, (sizeof(struct MAL_fw_id_array)), (const uin
+ 206:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 207:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 208:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 209:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** void OTP_initializeFirmwareIDArray(struct MAL_fw_id_array* const firmwareIDArray)
+ 210:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 191              		.loc 1 210 1 is_stmt 1 view -0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 211:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     //memset((void*)firmwareIDArray, OTP_UNFLASHED_BYTE, sizeof(struct MAL_fw_id_array));
+ 212:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     UTI_vMemFill((uint8_t *)firmwareIDArray, OTP_UNFLASHED_BYTE, (uint16_t)sizeof(struct MAL_fw_id_
+ 195              		.loc 1 212 5 view .LVU17
+ 210:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     //memset((void*)firmwareIDArray, OTP_UNFLASHED_BYTE, sizeof(struct MAL_fw_id_array));
+ 196              		.loc 1 210 1 is_stmt 0 view .LVU18
+ 197 0000 10B5     		push	{r4, lr}
+ 198              	.LCFI0:
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 4, -8
+ 201              		.cfi_offset 14, -4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 8
+
+
+ 202              		.loc 1 212 5 view .LVU19
+ 203 0002 6822     		movs	r2, #104
+ 213:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 204              		.loc 1 213 1 view .LVU20
+ 205              		@ sp needed
+ 212:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 206              		.loc 1 212 5 view .LVU21
+ 207 0004 0021     		movs	r1, #0
+ 208 0006 FFF7FEFF 		bl	UTI_vMemFill
+ 209              	.LVL3:
+ 210              		.loc 1 213 1 view .LVU22
+ 211 000a 10BD     		pop	{r4, pc}
+ 212              		.cfi_endproc
+ 213              	.LFE69:
+ 215              		.section	.text.OTP_isEmpty,"ax",%progbits
+ 216              		.align	1
+ 217              		.global	OTP_isEmpty
+ 218              		.syntax unified
+ 219              		.code	16
+ 220              		.thumb_func
+ 222              	OTP_isEmpty:
+ 223              	.LVL4:
+ 224              	.LFB71:
+ 214:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 215:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 216:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** const struct MAL_fw_id_array* OTP_getFirmwareIDs(void)
+ 217:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 218:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_isEmpty(OTP_Data.fwIdArray.raw_data, sizeof(OTP_id_array_t)) ? NULL : &(OTP_Data.fwI
+ 219:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 220:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+ 221:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 222:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 223:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #ifdef DBUS2_APPLIANCE_MSG_IN_APP
+ 224:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** const struct DBPL_ApplianceData* OTP_getApplianceData(void)
+ 225:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 226:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return &OTP_Data.applianceData.value;
+ 227:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 228:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+ 229:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /*lint -restore -e928 */
+ 230:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 231:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 232:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /* PUBLIC FUNCTION DEFINITIONS FOR LOW LEVEL ACCESS                           */
+ 233:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** /******************************************************************************/
+ 234:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 235:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_isEmpty(const uint8_t* addr, uint32_t size)
+ 236:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #if !defined(FWU_OTP_MEMORY_START_ADDRESS)
+ 237:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 238:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     (void)*addr;
+ 239:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     (void)size;
+ 240:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return false;
+ 241:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 242:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #else
+ 243:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 225              		.loc 1 243 1 is_stmt 1 view -0
+ 226              		.cfi_startproc
+ 227              		@ args = 0, pretend = 0, frame = 0
+ 228              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 9
+
+
+ 229              		@ link register save eliminated.
+ 244:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     for(uint32_t n = 0; n < size; n++)
+ 230              		.loc 1 244 5 view .LVU24
+ 231              	.LBB10:
+ 232              		.loc 1 244 9 view .LVU25
+ 233              		.loc 1 244 9 is_stmt 0 view .LVU26
+ 234 0000 4118     		adds	r1, r0, r1
+ 235              	.LVL5:
+ 236              	.L16:
+ 237              		.loc 1 244 27 is_stmt 1 discriminator 1 view .LVU27
+ 238 0002 8842     		cmp	r0, r1
+ 239 0004 01D1     		bne	.L18
+ 240              	.LBE10:
+ 245:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     {
+ 246:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         if(addr[n] != OTP_UNFLASHED_BYTE)
+ 247:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 248:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****             return false;
+ 249:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         }
+ 250:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     }
+ 251:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     
+ 252:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return true;
+ 241              		.loc 1 252 12 is_stmt 0 view .LVU28
+ 242 0006 0120     		movs	r0, #1
+ 243              	.LVL6:
+ 244              	.L17:
+ 253:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 245              		.loc 1 253 1 view .LVU29
+ 246              		@ sp needed
+ 247 0008 7047     		bx	lr
+ 248              	.LVL7:
+ 249              	.L18:
+ 250              	.LBB11:
+ 246:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 251              		.loc 1 246 9 is_stmt 1 view .LVU30
+ 246:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 252              		.loc 1 246 11 is_stmt 0 view .LVU31
+ 253 000a 0130     		adds	r0, r0, #1
+ 254              	.LVL8:
+ 246:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 255              		.loc 1 246 16 view .LVU32
+ 256 000c 431E     		subs	r3, r0, #1
+ 246:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         {
+ 257              		.loc 1 246 11 view .LVU33
+ 258 000e 1B78     		ldrb	r3, [r3]
+ 259 0010 002B     		cmp	r3, #0
+ 260 0012 F6D0     		beq	.L16
+ 248:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         }
+ 261              		.loc 1 248 20 view .LVU34
+ 262 0014 0020     		movs	r0, #0
+ 263              	.LVL9:
+ 248:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****         }
+ 264              		.loc 1 248 20 view .LVU35
+ 265 0016 F7E7     		b	.L17
+ 266              	.LBE11:
+ 267              		.cfi_endproc
+ 268              	.LFE71:
+ 270              		.section	.text.OTP_getFirmwareIDs,"ax",%progbits
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 10
+
+
+ 271              		.align	1
+ 272              		.global	OTP_getFirmwareIDs
+ 273              		.syntax unified
+ 274              		.code	16
+ 275              		.thumb_func
+ 277              	OTP_getFirmwareIDs:
+ 278              	.LFB70:
+ 217:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_isEmpty(OTP_Data.fwIdArray.raw_data, sizeof(OTP_id_array_t)) ? NULL : &(OTP_Data.fwI
+ 279              		.loc 1 217 1 is_stmt 1 view -0
+ 280              		.cfi_startproc
+ 281              		@ args = 0, pretend = 0, frame = 0
+ 282              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 283              		.loc 1 218 5 view .LVU37
+ 217:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return OTP_isEmpty(OTP_Data.fwIdArray.raw_data, sizeof(OTP_id_array_t)) ? NULL : &(OTP_Data.fwI
+ 284              		.loc 1 217 1 is_stmt 0 view .LVU38
+ 285 0000 10B5     		push	{r4, lr}
+ 286              	.LCFI1:
+ 287              		.cfi_def_cfa_offset 8
+ 288              		.cfi_offset 4, -8
+ 289              		.cfi_offset 14, -4
+ 218:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 290              		.loc 1 218 12 view .LVU39
+ 291 0002 054C     		ldr	r4, .L23
+ 292 0004 6821     		movs	r1, #104
+ 219:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+ 293              		.loc 1 219 1 view .LVU40
+ 294              		@ sp needed
+ 218:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 295              		.loc 1 218 12 view .LVU41
+ 296 0006 2000     		movs	r0, r4
+ 297 0008 FFF7FEFF 		bl	OTP_isEmpty
+ 298              	.LVL10:
+ 218:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 299              		.loc 1 218 84 view .LVU42
+ 300 000c 4342     		rsbs	r3, r0, #0
+ 301 000e 5841     		adcs	r0, r0, r3
+ 302 0010 4042     		rsbs	r0, r0, #0
+ 303 0012 2040     		ands	r0, r4
+ 219:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif
+ 304              		.loc 1 219 1 view .LVU43
+ 305 0014 10BD     		pop	{r4, pc}
+ 306              	.L24:
+ 307 0016 C046     		.align	2
+ 308              	.L23:
+ 309 0018 44000000 		.word	OTP_Data+68
+ 310              		.cfi_endproc
+ 311              	.LFE70:
+ 313              		.section	.text.OTP_writeFlash,"ax",%progbits
+ 314              		.align	1
+ 315              		.global	OTP_writeFlash
+ 316              		.syntax unified
+ 317              		.code	16
+ 318              		.thumb_func
+ 320              	OTP_writeFlash:
+ 321              	.LVL11:
+ 322              	.LFB72:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 11
+
+
+ 254:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #endif /* !defined(FWU_OTP_MEMORY_START_ADDRESS) */
+ 255:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 256:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** 
+ 257:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** bool OTP_writeFlash(const uint8_t* addr, uint32_t size, const uint8_t* const data)
+ 258:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** #if defined(FWU_MEM_DRV_READ_ONLY) || !defined(FWU_OTP_MEMORY_START_ADDRESS)
+ 259:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** {
+ 323              		.loc 1 259 1 is_stmt 1 view -0
+ 324              		.cfi_startproc
+ 325              		@ args = 0, pretend = 0, frame = 0
+ 326              		@ frame_needed = 0, uses_anonymous_args = 0
+ 327              		@ link register save eliminated.
+ 260:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     (void)*addr;
+ 328              		.loc 1 260 5 view .LVU45
+ 261:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     (void)size;
+ 329              		.loc 1 261 5 view .LVU46
+ 262:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     (void)*data;
+ 330              		.loc 1 262 5 view .LVU47
+ 263:common/prog/firmware_update/otp_mem/fwu_otp_memory.c ****     return false;
+ 331              		.loc 1 263 5 view .LVU48
+ 264:common/prog/firmware_update/otp_mem/fwu_otp_memory.c **** }
+ 332              		.loc 1 264 1 is_stmt 0 view .LVU49
+ 333 0000 0020     		movs	r0, #0
+ 334              	.LVL12:
+ 335              		.loc 1 264 1 view .LVU50
+ 336              		@ sp needed
+ 337 0002 7047     		bx	lr
+ 338              		.cfi_endproc
+ 339              	.LFE72:
+ 341              		.global	OTP_Data
+ 342              		.section	.FWU_OTP_MEMORY,"a"
+ 343              		.align	2
+ 346              	OTP_Data:
+ 347 0000 00       		.byte	0
+ 348 0001 00000000 		.space	11
+ 348      00000000 
+ 348      000000
+ 349 000c 00       		.byte	0
+ 350 000d 00000000 		.space	31
+ 350      00000000 
+ 350      00000000 
+ 350      00000000 
+ 350      00000000 
+ 351 002c 00       		.byte	0
+ 352 002d 00000000 		.space	23
+ 352      00000000 
+ 352      00000000 
+ 352      00000000 
+ 352      00000000 
+ 353 0044 CDAB0000 		.word	43981
+ 354 0048 0022     		.short	8704
+ 355 004a 00       		.byte	0
+ 356 004b 00       		.byte	0
+ 357 004c 00       		.byte	0
+ 358 004d 00       		.byte	0
+ 359 004e 00       		.byte	0
+ 360 004f 00       		.byte	0
+ 361 0050 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 12
+
+
+ 362 0051 00       		.byte	0
+ 363 0052 FFFF     		.short	-1
+ 364 0054 FF       		.byte	-1
+ 365 0055 FF       		.byte	-1
+ 366 0056 FF       		.byte	-1
+ 367 0057 FF       		.byte	-1
+ 368 0058 FF       		.byte	-1
+ 369 0059 FF       		.byte	-1
+ 370 005a FF       		.byte	-1
+ 371 005b FF       		.byte	-1
+ 372 005c FFFF     		.short	-1
+ 373 005e FF       		.byte	-1
+ 374 005f FF       		.byte	-1
+ 375 0060 FF       		.byte	-1
+ 376 0061 FF       		.byte	-1
+ 377 0062 FF       		.byte	-1
+ 378 0063 FF       		.byte	-1
+ 379 0064 FF       		.byte	-1
+ 380 0065 FF       		.byte	-1
+ 381 0066 FFFF     		.short	-1
+ 382 0068 FF       		.byte	-1
+ 383 0069 FF       		.byte	-1
+ 384 006a FF       		.byte	-1
+ 385 006b FF       		.byte	-1
+ 386 006c FF       		.byte	-1
+ 387 006d FF       		.byte	-1
+ 388 006e FF       		.byte	-1
+ 389 006f FF       		.byte	-1
+ 390 0070 FFFF     		.short	-1
+ 391 0072 FF       		.byte	-1
+ 392 0073 FF       		.byte	-1
+ 393 0074 FF       		.byte	-1
+ 394 0075 FF       		.byte	-1
+ 395 0076 FF       		.byte	-1
+ 396 0077 FF       		.byte	-1
+ 397 0078 FF       		.byte	-1
+ 398 0079 FF       		.byte	-1
+ 399 007a FFFF     		.short	-1
+ 400 007c FF       		.byte	-1
+ 401 007d FF       		.byte	-1
+ 402 007e FF       		.byte	-1
+ 403 007f FF       		.byte	-1
+ 404 0080 FF       		.byte	-1
+ 405 0081 FF       		.byte	-1
+ 406 0082 FF       		.byte	-1
+ 407 0083 FF       		.byte	-1
+ 408 0084 FFFF     		.short	-1
+ 409 0086 FF       		.byte	-1
+ 410 0087 FF       		.byte	-1
+ 411 0088 FF       		.byte	-1
+ 412 0089 FF       		.byte	-1
+ 413 008a FF       		.byte	-1
+ 414 008b FF       		.byte	-1
+ 415 008c FF       		.byte	-1
+ 416 008d FF       		.byte	-1
+ 417 008e FFFF     		.short	-1
+ 418 0090 FF       		.byte	-1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccLGxLV1.s 			page 13
+
+
+ 419 0091 FF       		.byte	-1
+ 420 0092 FF       		.byte	-1
+ 421 0093 FF       		.byte	-1
+ 422 0094 FF       		.byte	-1
+ 423 0095 FF       		.byte	-1
+ 424 0096 FF       		.byte	-1
+ 425 0097 FF       		.byte	-1
+ 426 0098 FFFF     		.short	-1
+ 427 009a FF       		.byte	-1
+ 428 009b FF       		.byte	-1
+ 429 009c FF       		.byte	-1
+ 430 009d FF       		.byte	-1
+ 431 009e FF       		.byte	-1
+ 432 009f FF       		.byte	-1
+ 433 00a0 FF       		.byte	-1
+ 434 00a1 FF       		.byte	-1
+ 435 00a2 FFFF     		.short	-1
+ 436 00a4 FF       		.byte	-1
+ 437 00a5 FF       		.byte	-1
+ 438 00a6 FF       		.byte	-1
+ 439 00a7 FF       		.byte	-1
+ 440 00a8 FF       		.byte	-1
+ 441 00a9 FF       		.byte	-1
+ 442 00aa FF       		.byte	-1
+ 443 00ab FF       		.byte	-1
+ 444              		.text
+ 445              	.Letext0:
+ 446              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 447              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 448              		.file 4 "common/prog/dbus/dbuspresentation_production_types.h"
+ 449              		.file 5 "common/prog/std_lib/std_version.h"
+ 450              		.file 6 "common/prog/firmware_update/version/fwu_version.h"
+ 451              		.file 7 "common/prog/ped_fw/stdcrc/StdCrc.h"
+ 452              		.file 8 "common/prog/firmware_update/mal/moduleAdministration.h"
+ 453              		.file 9 "common/prog/ped_fw/utility/utility.h"
+ 454              		.file 10 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 455              		.file 11 "app/prog/firmware_update/mal/module_administration_cfg.h"

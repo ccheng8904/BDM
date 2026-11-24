@@ -1,0 +1,124 @@
+
+out/programmer/prog/dbus/sh30f/dbusmappingMc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DBM_INT_EnableIrq:
+
+00000000 <DBM_INT_EnableIrq>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+/** Enable the used hardware interrupt */
+void DBM_INT_EnableIrq(void)
+{
+   0:	b510      	push	{r4, lr}
+    MEXTI_enableEvent(&DBM_MextiHandle1, &DBM_MextiCallback1);
+   2:	4902      	ldr	r1, [pc, #8]	; (c <DBM_INT_EnableIrq+0xc>)
+   4:	4802      	ldr	r0, [pc, #8]	; (10 <DBM_INT_EnableIrq+0x10>)
+   6:	f7ff fffe 	bl	0 <MEXTI_enableEvent>
+}
+   a:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DBM_INT_DisableIrq:
+
+00000000 <DBM_INT_DisableIrq>:
+
+/** Disable the used hardware interrupt */
+void DBM_INT_DisableIrq(void)
+{
+   0:	b510      	push	{r4, lr}
+    if(DBM_MextiHandle1.enabledEvent == true)   // if MEXTI already initialized
+   2:	4804      	ldr	r0, [pc, #16]	; (14 <DBM_INT_DisableIrq+0x14>)
+   4:	7a03      	ldrb	r3, [r0, #8]
+   6:	2b00      	cmp	r3, #0
+   8:	d002      	beq.n	10 <DBM_INT_DisableIrq+0x10>
+    {
+        MEXTI_disableEvent(&DBM_MextiHandle1, &DBM_MextiCallback1);
+   a:	4903      	ldr	r1, [pc, #12]	; (18 <DBM_INT_DisableIrq+0x18>)
+   c:	f7ff fffe 	bl	0 <MEXTI_disableEvent>
+    }
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBM_INT_ClearIrq:
+
+00000000 <DBM_INT_ClearIrq>:
+
+/** Clear interrupt pending flag. */
+void DBM_INT_ClearIrq(void)
+{
+   0:	b510      	push	{r4, lr}
+    MEXTI_clearEventReg(DBM_MextiHandle1.channel);
+   2:	4b02      	ldr	r3, [pc, #8]	; (c <DBM_INT_ClearIrq+0xc>)
+   4:	6818      	ldr	r0, [r3, #0]
+   6:	f7ff fffe 	bl	0 <MEXTI_clearEventReg>
+}
+   a:	bd10      	pop	{r4, pc}
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_INT_Init:
+
+00000000 <DBM_INT_Init>:
+
+/** Enable the used hardware interrupt */
+void DBM_INT_Init(uint8_t ucIndex)
+{
+   0:	b510      	push	{r4, lr}
+    static const struct MEXTI_Config mextiCfg = {.trigger = MEXTI_TRIGGER_FALLING};
+    (void)ucIndex;
+    (void)MEXTI_init(&DBM_MextiHandle1, DBM_MEXTI_IN1, &mextiCfg);
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <DBM_INT_Init+0x14>)
+   4:	4904      	ldr	r1, [pc, #16]	; (18 <DBM_INT_Init+0x18>)
+   6:	4805      	ldr	r0, [pc, #20]	; (1c <DBM_INT_Init+0x1c>)
+   8:	f7ff fffe 	bl	0 <MEXTI_init>
+    DBM_INT_DisableIrq();
+   c:	f7ff fffe 	bl	0 <DBM_INT_Init>
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBM_INT_IsIrqEvent:
+
+00000000 <DBM_INT_IsIrqEvent>:
+
+/** Is interrupt pending? */
+bool DBM_INT_IsIrqEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+    return MEXTI_isEvent(DBM_MEXTI_IN1);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <DBM_INT_IsIrqEvent+0xc>)
+   4:	f7ff fffe 	bl	0 <MEXTI_isEvent>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_INT_SetIrqModeFalling:
+
+00000000 <DBM_INT_SetIrqModeFalling>:
+
+/** Interrupt pending only on falling edge */
+void DBM_INT_SetIrqModeFalling(void)
+{
+    // nothing to do here, edge trigger was already set in DBM_INT_Init
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBM_INT_bGetPin:
+
+00000000 <DBM_INT_bGetPin>:
+
+bool DBM_INT_bGetPin(void)
+{
+   0:	b510      	push	{r4, lr}
+    return(MDIO_read(DBM_MEXTI_IN1->mextiPin));
+   2:	4b02      	ldr	r3, [pc, #8]	; (c <DBM_INT_bGetPin+0xc>)
+   4:	6818      	ldr	r0, [r3, #0]
+   6:	f7ff fffe 	bl	0 <MDIO_read>
+}
+   a:	bd10      	pop	{r4, pc}
+   c:	00000000 	.word	0x00000000

@@ -1,0 +1,2700 @@
+
+out/programmer/prog/MSP/sh30f/lib/sh30f9xx_sa0_flash.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FLASH_SetLatency:
+
+00000000 <FLASH_SetLatency>:
+
+    /* Check the parameters */
+    assert_param(IS_FLASH_LATENCY(FLASH_Latency));
+
+    /* Clear FLASH_Latency */
+    tmpreg = FLASH->ACR.V32 & (~FLASH_ACR_LATENCY_Msk);
+   0:	2203      	movs	r2, #3
+   2:	4904      	ldr	r1, [pc, #16]	; (14 <FLASH_SetLatency+0x14>)
+   4:	680b      	ldr	r3, [r1, #0]
+   6:	4393      	bics	r3, r2
+    /* Set the Latency cycles according to the new value */
+    tmpreg |= ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (FLASH_Latency << FLASH_ACR_LATENCY_Pos));
+   8:	4a03      	ldr	r2, [pc, #12]	; (18 <FLASH_SetLatency+0x18>)
+   a:	4303      	orrs	r3, r0
+   c:	4313      	orrs	r3, r2
+    /* Store the new value */
+    FLASH->ACR.V32 = tmpreg;
+   e:	600b      	str	r3, [r1, #0]
+}
+  10:	4770      	bx	lr
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	40040c00 	.word	0x40040c00
+  18:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.FLASH_PrefetchOnOff:
+
+00000000 <FLASH_PrefetchOnOff>:
+
+    /* Check the parameters */
+    assert_param(IS_CMD_STATE(NewState));
+
+    /* Clear PRFTEN bit */
+    tmpreg = FLASH->ACR.V32 & (~FLASH_ACR_PRFTEN_Msk);
+   0:	4a04      	ldr	r2, [pc, #16]	; (14 <FLASH_PrefetchOnOff+0x14>)
+   2:	4905      	ldr	r1, [pc, #20]	; (18 <FLASH_PrefetchOnOff+0x18>)
+   4:	6813      	ldr	r3, [r2, #0]
+    /* Set PRFTEN bit according to the New State value */
+    tmpreg |= ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (NewState << FLASH_ACR_PRFTEN_Pos));
+   6:	0200      	lsls	r0, r0, #8
+    tmpreg = FLASH->ACR.V32 & (~FLASH_ACR_PRFTEN_Msk);
+   8:	400b      	ands	r3, r1
+    tmpreg |= ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (NewState << FLASH_ACR_PRFTEN_Pos));
+   a:	4318      	orrs	r0, r3
+   c:	4b03      	ldr	r3, [pc, #12]	; (1c <FLASH_PrefetchOnOff+0x1c>)
+   e:	4303      	orrs	r3, r0
+    /* Store the new value */
+    FLASH->ACR.V32 = tmpreg;
+  10:	6013      	str	r3, [r2, #0]
+}
+  12:	4770      	bx	lr
+  14:	40040c00 	.word	0x40040c00
+  18:	fffffeff 	.word	0xfffffeff
+  1c:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.FLASH_CacheReset:
+
+00000000 <FLASH_CacheReset>:
+  * @brief  Resets the Instruction Cache and the Data Cache.
+  * @retval None
+  */
+void FLASH_CacheReset(void)
+{
+    uint32_t tmpreg = FLASH->ACR.V32;
+   0:	4b04      	ldr	r3, [pc, #16]	; (14 <FLASH_CacheReset+0x14>)
+    /* Set CRST bit to Reset Cache  */
+    FLASH->ACR.V32 |= ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (SH_SET << FLASH_ACR_CRST_Pos));
+   2:	4a05      	ldr	r2, [pc, #20]	; (18 <FLASH_CacheReset+0x18>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	6819      	ldr	r1, [r3, #0]
+    FLASH->ACR.V32 |= ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (SH_SET << FLASH_ACR_CRST_Pos));
+   6:	6818      	ldr	r0, [r3, #0]
+   8:	4302      	orrs	r2, r0
+   a:	601a      	str	r2, [r3, #0]
+    FLASH->ACR.V32 = (tmpreg | (0x5AA5 << FLASH_ACR_LOCK_Pos));
+   c:	4a03      	ldr	r2, [pc, #12]	; (1c <FLASH_CacheReset+0x1c>)
+   e:	430a      	orrs	r2, r1
+  10:	601a      	str	r2, [r3, #0]
+}
+  12:	4770      	bx	lr
+  14:	40040c00 	.word	0x40040c00
+  18:	5aa50800 	.word	0x5aa50800
+  1c:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.FLASH_Set_PGMWindow:
+
+00000000 <FLASH_Set_PGMWindow>:
+
+    /* Sets the upper limit value of counter */
+    FLASH->UPCNTR = UpperCounterValue;
+
+    /* Enable the downcounter */
+    FLASH->CNTCR = SH_SET;
+   0:	2201      	movs	r2, #1
+    FLASH->CNTR = CounterInitValue;
+   2:	4b02      	ldr	r3, [pc, #8]	; (c <FLASH_Set_PGMWindow+0xc>)
+   4:	6298      	str	r0, [r3, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+   6:	62d9      	str	r1, [r3, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+   8:	631a      	str	r2, [r3, #48]	; 0x30
+}
+   a:	4770      	bx	lr
+   c:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_Clear_PGMWindow:
+
+00000000 <FLASH_Clear_PGMWindow>:
+  * @retval None
+  */
+void FLASH_Clear_PGMWindow(void)
+{
+    /* Clears the window counters */
+    FLASH->CNTR = 0x0;
+   0:	2200      	movs	r2, #0
+   2:	4b02      	ldr	r3, [pc, #8]	; (c <FLASH_Clear_PGMWindow+0xc>)
+   4:	629a      	str	r2, [r3, #40]	; 0x28
+    FLASH->UPCNTR = 0x0;
+   6:	62da      	str	r2, [r3, #44]	; 0x2c
+    FLASH->CNTCR = SH_RESET;
+   8:	631a      	str	r2, [r3, #48]	; 0x30
+}
+   a:	4770      	bx	lr
+   c:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_Calculate_WinCounterVal:
+
+00000000 <FLASH_Calculate_WinCounterVal>:
+  * @brief  Calculates the programming window counter value according the window time.
+  * @param  usDelay: the time of programming window.
+  * @retval CounterValue: The counter value of the window time
+  */
+uint32_t FLASH_Calculate_WinCounterVal(uint32_t us100Delay)
+{
+   0:	b51f      	push	{r0, r1, r2, r3, r4, lr}
+   2:	0004      	movs	r4, r0
+    uint32_t CounterValue = 0;
+    RCC_Clocks_TypeDef curClk;
+
+    /* Get current system's clock frequency */
+    RCC_GetClocksFreq(&curClk);
+   4:	4668      	mov	r0, sp
+   6:	f7ff fffe 	bl	0 <RCC_GetClocksFreq>
+
+    /* Calculates the window counter value according the window time */
+    CounterValue = curClk.sysFreq / 10000 * us100Delay;
+   a:	9800      	ldr	r0, [sp, #0]
+   c:	4902      	ldr	r1, [pc, #8]	; (18 <FLASH_Calculate_WinCounterVal+0x18>)
+   e:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+  12:	4360      	muls	r0, r4
+
+    return CounterValue;
+}
+  14:	b004      	add	sp, #16
+  16:	bd10      	pop	{r4, pc}
+  18:	00002710 	.word	0x00002710
+
+Disassembly of section .text.FLASH_Main_Lock:
+
+00000000 <FLASH_Main_Lock>:
+  * @retval None
+  */
+void FLASH_Main_Lock(void)
+{
+    /* Set the LOCK Bit to lock the FLASH Registers access */
+    FLASH->CR.BIT.MNLCK = SH_SET;
+   0:	2380      	movs	r3, #128	; 0x80
+   2:	4a03      	ldr	r2, [pc, #12]	; (10 <FLASH_Main_Lock+0x10>)
+   4:	021b      	lsls	r3, r3, #8
+   6:	6911      	ldr	r1, [r2, #16]
+   8:	430b      	orrs	r3, r1
+   a:	6113      	str	r3, [r2, #16]
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_Main_Unlock:
+
+00000000 <FLASH_Main_Unlock>:
+  *         MULTI_OPERATION: The multiple operations unlock
+  * @retval None
+  */
+void FLASH_Main_Unlock(uint8_t OperationType)
+{
+    if (FLASH->CR.BIT.E2LCK == SH_RESET)
+   0:	4b0f      	ldr	r3, [pc, #60]	; (40 <FLASH_Main_Unlock+0x40>)
+   2:	691a      	ldr	r2, [r3, #16]
+   4:	0452      	lsls	r2, r2, #17
+   6:	d404      	bmi.n	12 <FLASH_Main_Unlock+0x12>
+    {
+        FLASH->CR.BIT.E2LCK = SH_SET;
+   8:	2280      	movs	r2, #128	; 0x80
+   a:	6919      	ldr	r1, [r3, #16]
+   c:	01d2      	lsls	r2, r2, #7
+   e:	430a      	orrs	r2, r1
+  10:	611a      	str	r2, [r3, #16]
+    }
+    if (FLASH->CR.BIT.INFLCK == SH_RESET)
+  12:	691a      	ldr	r2, [r3, #16]
+  14:	04d2      	lsls	r2, r2, #19
+  16:	d404      	bmi.n	22 <FLASH_Main_Unlock+0x22>
+    {
+        FLASH->CR.BIT.INFLCK = SH_SET;
+  18:	2280      	movs	r2, #128	; 0x80
+  1a:	6919      	ldr	r1, [r3, #16]
+  1c:	0152      	lsls	r2, r2, #5
+  1e:	430a      	orrs	r2, r1
+  20:	611a      	str	r2, [r3, #16]
+    }
+    if (FLASH->CR.BIT.MNLCK != SH_RESET)
+  22:	691a      	ldr	r2, [r3, #16]
+  24:	0412      	lsls	r2, r2, #16
+  26:	d505      	bpl.n	34 <FLASH_Main_Unlock+0x34>
+    {
+        /* Authorize the FLASH Registers access */
+        FLASH->MKYR = FLASH_MAIN_KEY;
+  28:	4a06      	ldr	r2, [pc, #24]	; (44 <FLASH_Main_Unlock+0x44>)
+  2a:	605a      	str	r2, [r3, #4]
+
+        /* The single unlock key unlocks the flash interface for one write or erase operation. */
+        if (OperationType == SINGLE_OPERATION)
+  2c:	2800      	cmp	r0, #0
+  2e:	d102      	bne.n	36 <FLASH_Main_Unlock+0x36>
+            FLASH->MKYR = FLASH_SINGLE_OP_KEY;
+  30:	4a05      	ldr	r2, [pc, #20]	; (48 <FLASH_Main_Unlock+0x48>)
+
+        /* The multiple unlock key unlocks the flash interface for write or 
+                                              erase operations until the block is locked. */
+        else if (OperationType == MULTI_OPERATION)
+            FLASH->MKYR = FLASH_MULTI_OP_KEY;
+  32:	605a      	str	r2, [r3, #4]
+    }
+}
+  34:	4770      	bx	lr
+        else if (OperationType == MULTI_OPERATION)
+  36:	2801      	cmp	r0, #1
+  38:	d1fc      	bne.n	34 <FLASH_Main_Unlock+0x34>
+            FLASH->MKYR = FLASH_MULTI_OP_KEY;
+  3a:	4a04      	ldr	r2, [pc, #16]	; (4c <FLASH_Main_Unlock+0x4c>)
+  3c:	e7f9      	b.n	32 <FLASH_Main_Unlock+0x32>
+  3e:	46c0      	nop			; (mov r8, r8)
+  40:	40040c00 	.word	0x40040c00
+  44:	8ace0246 	.word	0x8ace0246
+  48:	c3c3c3c3 	.word	0xc3c3c3c3
+  4c:	b4b4b4b4 	.word	0xb4b4b4b4
+
+Disassembly of section .text.FLASH_Info_Lock:
+
+00000000 <FLASH_Info_Lock>:
+* @retval None
+*/
+void FLASH_Info_Lock(void)
+{
+    /* Set the INFLCK Bit to lock the FLASH Registers access */
+    FLASH->CR.BIT.INFLCK = SH_SET;
+   0:	2380      	movs	r3, #128	; 0x80
+   2:	4a03      	ldr	r2, [pc, #12]	; (10 <FLASH_Info_Lock+0x10>)
+   4:	015b      	lsls	r3, r3, #5
+   6:	6911      	ldr	r1, [r2, #16]
+   8:	430b      	orrs	r3, r1
+   a:	6113      	str	r3, [r2, #16]
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_Info_Unlock:
+
+00000000 <FLASH_Info_Unlock>:
+
+* @retval None
+*/
+void FLASH_Info_Unlock(uint8_t OperationType)
+{
+    if (FLASH->CR.BIT.MNLCK == SH_RESET)
+   0:	4b0f      	ldr	r3, [pc, #60]	; (40 <FLASH_Info_Unlock+0x40>)
+   2:	691a      	ldr	r2, [r3, #16]
+   4:	0412      	lsls	r2, r2, #16
+   6:	d404      	bmi.n	12 <FLASH_Info_Unlock+0x12>
+        FLASH->CR.BIT.MNLCK = SH_SET;
+   8:	2280      	movs	r2, #128	; 0x80
+   a:	6919      	ldr	r1, [r3, #16]
+   c:	0212      	lsls	r2, r2, #8
+   e:	430a      	orrs	r2, r1
+  10:	611a      	str	r2, [r3, #16]
+
+    if (FLASH->CR.BIT.E2LCK == SH_RESET)
+  12:	691a      	ldr	r2, [r3, #16]
+  14:	0452      	lsls	r2, r2, #17
+  16:	d404      	bmi.n	22 <FLASH_Info_Unlock+0x22>
+        FLASH->CR.BIT.E2LCK = SH_SET;
+  18:	2280      	movs	r2, #128	; 0x80
+  1a:	6919      	ldr	r1, [r3, #16]
+  1c:	01d2      	lsls	r2, r2, #7
+  1e:	430a      	orrs	r2, r1
+  20:	611a      	str	r2, [r3, #16]
+
+    if (FLASH->CR.BIT.INFLCK != SH_RESET)
+  22:	691a      	ldr	r2, [r3, #16]
+  24:	04d2      	lsls	r2, r2, #19
+  26:	d505      	bpl.n	34 <FLASH_Info_Unlock+0x34>
+    {
+        /* Authorize the FLASH Registers access */
+        FLASH->IKYR = FLASH_INFO_KEY;
+  28:	4a06      	ldr	r2, [pc, #24]	; (44 <FLASH_Info_Unlock+0x44>)
+  2a:	635a      	str	r2, [r3, #52]	; 0x34
+
+        /* The single unlock key unlocks the flash interface for one write or erase operation. */
+        if (OperationType == SINGLE_OPERATION)
+  2c:	2800      	cmp	r0, #0
+  2e:	d102      	bne.n	36 <FLASH_Info_Unlock+0x36>
+            FLASH->IKYR = FLASH_SINGLE_OP_KEY;
+  30:	4a05      	ldr	r2, [pc, #20]	; (48 <FLASH_Info_Unlock+0x48>)
+
+        /* The multiple unlock key unlocks the flash interface for write or  
+        erase operations until the block is locked. */
+        else if (OperationType == MULTI_OPERATION)
+            FLASH->IKYR = FLASH_MULTI_OP_KEY;
+  32:	635a      	str	r2, [r3, #52]	; 0x34
+    }
+}
+  34:	4770      	bx	lr
+        else if (OperationType == MULTI_OPERATION)
+  36:	2801      	cmp	r0, #1
+  38:	d1fc      	bne.n	34 <FLASH_Info_Unlock+0x34>
+            FLASH->IKYR = FLASH_MULTI_OP_KEY;
+  3a:	4a04      	ldr	r2, [pc, #16]	; (4c <FLASH_Info_Unlock+0x4c>)
+  3c:	e7f9      	b.n	32 <FLASH_Info_Unlock+0x32>
+  3e:	46c0      	nop			; (mov r8, r8)
+  40:	40040c00 	.word	0x40040c00
+  44:	abcd5678 	.word	0xabcd5678
+  48:	c3c3c3c3 	.word	0xc3c3c3c3
+  4c:	b4b4b4b4 	.word	0xb4b4b4b4
+
+Disassembly of section .text.FLASH_GetFlagStatus:
+
+00000000 <FLASH_GetFlagStatus>:
+{
+    FlagStatus bitstatus = SH_RESET;
+    /* Check the parameters */
+    assert_param(IS_FLASH_GET_FLAG(FLASH_FLAG));
+
+    if ((FLASH->SR.V32 & FLASH_FLAG) != (uint32_t)SH_RESET)
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <FLASH_GetFlagStatus+0x10>)
+   2:	68db      	ldr	r3, [r3, #12]
+   4:	4018      	ands	r0, r3
+   6:	1e43      	subs	r3, r0, #1
+   8:	4198      	sbcs	r0, r3
+    else
+    {
+        bitstatus = SH_RESET;
+    }
+    /* Return the new state of FLASH_FLAG (SH_SET or SH_RESET) */
+    return bitstatus;
+   a:	b2c0      	uxtb	r0, r0
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_ClearFlag:
+
+00000000 <FLASH_ClearFlag>:
+{
+    /* Check the parameters */
+    assert_param(IS_FLASH_CLEAR_FLAG(FLASH_FLAG));
+
+    /* Clear the flags */
+    FLASH->SR.V32 |= (FLASH_FLAG << 16);
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <FLASH_ClearFlag+0xc>)
+   2:	0400      	lsls	r0, r0, #16
+   4:	68da      	ldr	r2, [r3, #12]
+   6:	4310      	orrs	r0, r2
+   8:	60d8      	str	r0, [r3, #12]
+}
+   a:	4770      	bx	lr
+   c:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_GetStatus:
+
+00000000 <FLASH_GetStatus>:
+*/
+FLASH_Status FLASH_GetStatus(void)
+{
+    FLASH_Status flashstatus = FLASH_COMPLETE;
+
+    if ((FLASH->SR.V32 & FLASH_FLAG_BSY) == FLASH_FLAG_BSY)
+   0:	4b11      	ldr	r3, [pc, #68]	; (48 <FLASH_GetStatus+0x48>)
+    {
+        flashstatus = FLASH_BUSY;
+   2:	2001      	movs	r0, #1
+    if ((FLASH->SR.V32 & FLASH_FLAG_BSY) == FLASH_FLAG_BSY)
+   4:	68da      	ldr	r2, [r3, #12]
+{
+   6:	b510      	push	{r4, lr}
+    if ((FLASH->SR.V32 & FLASH_FLAG_BSY) == FLASH_FLAG_BSY)
+   8:	0412      	lsls	r2, r2, #16
+   a:	d41c      	bmi.n	46 <FLASH_GetStatus+0x46>
+    }
+    else
+    {
+        if ((FLASH->SR.V32 & FLASH_FLAG_WRPERR) != (uint32_t)0x00)
+   c:	68da      	ldr	r2, [r3, #12]
+        {
+            flashstatus = FLASH_ERROR_WRP;
+   e:	3004      	adds	r0, #4
+        if ((FLASH->SR.V32 & FLASH_FLAG_WRPERR) != (uint32_t)0x00)
+  10:	06d2      	lsls	r2, r2, #27
+  12:	d418      	bmi.n	46 <FLASH_GetStatus+0x46>
+        }
+        else
+        {
+            if ((FLASH->SR.V32 & FLASH_FLAG_FLSERR) != (uint32_t)0x00)
+  14:	68da      	ldr	r2, [r3, #12]
+            {
+                flashstatus = FLASH_ERROR_FLS;
+  16:	3001      	adds	r0, #1
+            if ((FLASH->SR.V32 & FLASH_FLAG_FLSERR) != (uint32_t)0x00)
+  18:	0712      	lsls	r2, r2, #28
+  1a:	d414      	bmi.n	46 <FLASH_GetStatus+0x46>
+            }
+            else
+            {
+                if ((FLASH->SR.V32 & FLASH_FLAG_PGPERR) != (uint32_t)0x00)
+  1c:	68da      	ldr	r2, [r3, #12]
+                {
+                    flashstatus = FLASH_ERROR_PGP;
+  1e:	3802      	subs	r0, #2
+                if ((FLASH->SR.V32 & FLASH_FLAG_PGPERR) != (uint32_t)0x00)
+  20:	0692      	lsls	r2, r2, #26
+  22:	d410      	bmi.n	46 <FLASH_GetStatus+0x46>
+                }
+                else
+                {
+                    if ((FLASH->SR.V32 & FLASH_FLAG_PGWERR) != (uint32_t)0x00)
+  24:	68da      	ldr	r2, [r3, #12]
+                    {
+                        flashstatus = FLASH_ERROR_PGW;
+  26:	3801      	subs	r0, #1
+                    if ((FLASH->SR.V32 & FLASH_FLAG_PGWERR) != (uint32_t)0x00)
+  28:	0652      	lsls	r2, r2, #25
+  2a:	d40c      	bmi.n	46 <FLASH_GetStatus+0x46>
+                    }
+                    else
+                    {
+                        if ((FLASH->SR.V32 & FLASH_FLAG_STAERR) != (uint32_t)0x00)
+  2c:	2202      	movs	r2, #2
+  2e:	68d9      	ldr	r1, [r3, #12]
+                        {
+                            flashstatus = FLASH_ERROR_STA;
+  30:	0010      	movs	r0, r2
+                        if ((FLASH->SR.V32 & FLASH_FLAG_STAERR) != (uint32_t)0x00)
+  32:	0609      	lsls	r1, r1, #24
+  34:	d407      	bmi.n	46 <FLASH_GetStatus+0x46>
+                        }
+                        else
+                        {
+                            if ((FLASH->SR.V32 & FLASH_FLAG_OPERR) != (uint32_t)0x00)
+  36:	68db      	ldr	r3, [r3, #12]
+                            {
+                                flashstatus = FLASH_ERROR_OPERATION;
+  38:	3005      	adds	r0, #5
+                            if ((FLASH->SR.V32 & FLASH_FLAG_OPERR) != (uint32_t)0x00)
+  3a:	4213      	tst	r3, r2
+  3c:	d103      	bne.n	46 <FLASH_GetStatus+0x46>
+                            }
+                            else
+                            {
+                                flashstatus = FLASH_COMPLETE;
+                                FLASH_ClearFlag(FLASH_FLAG_EOP);
+  3e:	3806      	subs	r0, #6
+  40:	f7ff fffe 	bl	0 <FLASH_GetStatus>
+                                flashstatus = FLASH_COMPLETE;
+  44:	200c      	movs	r0, #12
+            }
+        }
+    }
+    /* Return the FLASH Status */
+    return flashstatus;
+}
+  46:	bd10      	pop	{r4, pc}
+  48:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_WaitForLastOperation:
+
+00000000 <FLASH_WaitForLastOperation>:
+*         FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*         FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*         FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_WaitForLastOperation(void)
+{
+   0:	b513      	push	{r0, r1, r4, lr}
+    __IO FLASH_Status status = FLASH_COMPLETE;
+   2:	466b      	mov	r3, sp
+   4:	1ddc      	adds	r4, r3, #7
+   6:	230c      	movs	r3, #12
+   8:	7023      	strb	r3, [r4, #0]
+    /* Wait for the FLASH operation to complete by polling on BUSY flag to be reset.
+    Even if the FLASH operation fails, the BUSY flag will be reset and an error
+    flag will be set */
+    while (status == FLASH_BUSY)
+    {
+        status = FLASH_GetStatus();
+   a:	f7ff fffe 	bl	0 <FLASH_WaitForLastOperation>
+   e:	7020      	strb	r0, [r4, #0]
+    while (status == FLASH_BUSY)
+  10:	7823      	ldrb	r3, [r4, #0]
+  12:	2b01      	cmp	r3, #1
+  14:	d0f9      	beq.n	a <FLASH_WaitForLastOperation+0xa>
+    }
+    /* Return the operation status */
+    return status;
+  16:	7820      	ldrb	r0, [r4, #0]
+  18:	b2c0      	uxtb	r0, r0
+}
+  1a:	bd16      	pop	{r1, r2, r4, pc}
+
+Disassembly of section .text.FLASH_Main_EraseSector:
+
+00000000 <FLASH_Main_EraseSector>:
+*           FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*           FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*           FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_Main_EraseSector(uint32_t FLASH_Sector)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0006      	movs	r6, r0
+
+    /* Check the parameters */
+    assert_param(IS_FLASH_SECTOR(FLASH_Sector));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   4:	f7ff fffe 	bl	0 <FLASH_Main_EraseSector>
+   8:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   a:	280c      	cmp	r0, #12
+   c:	d112      	bne.n	34 <FLASH_Main_EraseSector+0x34>
+    FLASH->CNTR = CounterInitValue;
+   e:	2301      	movs	r3, #1
+  10:	4d0a      	ldr	r5, [pc, #40]	; (3c <FLASH_Main_EraseSector+0x3c>)
+  12:	425b      	negs	r3, r3
+  14:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  16:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  18:	3302      	adds	r3, #2
+  1a:	632b      	str	r3, [r5, #48]	; 0x30
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to erase the sector */
+        FLASH->CR1 = FLASH_Sector;
+        FLASH->CR.V32 = (FLASH_CR_CMD_MSE << FLASH_CR_CMD_Pos) | (SH_SET << FLASH_CR_STRT_Pos);
+  1c:	4b08      	ldr	r3, [pc, #32]	; (40 <FLASH_Main_EraseSector+0x40>)
+        FLASH->CR1 = FLASH_Sector;
+  1e:	616e      	str	r6, [r5, #20]
+        FLASH->CR.V32 = (FLASH_CR_CMD_MSE << FLASH_CR_CMD_Pos) | (SH_SET << FLASH_CR_STRT_Pos);
+  20:	612b      	str	r3, [r5, #16]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  22:	f7ff fffe 	bl	0 <FLASH_Main_EraseSector>
+  26:	0004      	movs	r4, r0
+        if (status == FLASH_COMPLETE)
+  28:	280c      	cmp	r0, #12
+  2a:	d101      	bne.n	30 <FLASH_Main_EraseSector+0x30>
+        {
+            /* if the erase operation is completed, disable the operation command */
+            FLASH->CR.V32 = 0;
+  2c:	2300      	movs	r3, #0
+  2e:	612b      	str	r3, [r5, #16]
+        }
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  30:	f7ff fffe 	bl	0 <FLASH_Main_EraseSector>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  34:	f7ff fffe 	bl	0 <FLASH_Main_EraseSector>
+    /* Return the Erase Status */
+    return status;
+}
+  38:	0020      	movs	r0, r4
+  3a:	bd70      	pop	{r4, r5, r6, pc}
+  3c:	40040c00 	.word	0x40040c00
+  40:	e6190100 	.word	0xe6190100
+
+Disassembly of section .text.FLASH_Main_EraseAllSectors:
+
+00000000 <FLASH_Main_EraseAllSectors>:
+*           FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*           FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*           FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_Main_EraseAllSectors(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   2:	f7ff fffe 	bl	0 <FLASH_Main_EraseAllSectors>
+   6:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   8:	280c      	cmp	r0, #12
+   a:	d10f      	bne.n	2c <FLASH_Main_EraseAllSectors+0x2c>
+    FLASH->CNTR = CounterInitValue;
+   c:	2301      	movs	r3, #1
+   e:	4d09      	ldr	r5, [pc, #36]	; (34 <FLASH_Main_EraseAllSectors+0x34>)
+  10:	425b      	negs	r3, r3
+  12:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  14:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  16:	3302      	adds	r3, #2
+  18:	632b      	str	r3, [r5, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to erase all sectors */
+        FLASH->CR.V32 = (FLASH_CR_CMD_ME0 << FLASH_CR_CMD_Pos) | (SH_SET << FLASH_CR_STRT_Pos);
+  1a:	4b07      	ldr	r3, [pc, #28]	; (38 <FLASH_Main_EraseAllSectors+0x38>)
+  1c:	612b      	str	r3, [r5, #16]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  1e:	f7ff fffe 	bl	0 <FLASH_Main_EraseAllSectors>
+
+        /* if the erase operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  22:	2300      	movs	r3, #0
+  24:	612b      	str	r3, [r5, #16]
+        status = FLASH_WaitForLastOperation();
+  26:	0004      	movs	r4, r0
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  28:	f7ff fffe 	bl	0 <FLASH_Main_EraseAllSectors>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  2c:	f7ff fffe 	bl	0 <FLASH_Main_EraseAllSectors>
+    /* Return the Erase Status */
+    return status;
+}
+  30:	0020      	movs	r0, r4
+  32:	bd70      	pop	{r4, r5, r6, pc}
+  34:	40040c00 	.word	0x40040c00
+  38:	aa550100 	.word	0xaa550100
+
+Disassembly of section .text.FLASH_Main_ProgramWord:
+
+00000000 <FLASH_Main_ProgramWord>:
+*                FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*                FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*                FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_Main_ProgramWord(uint32_t Address, uint32_t Data)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+   2:	4c14      	ldr	r4, [pc, #80]	; (54 <FLASH_Main_ProgramWord+0x54>)
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   4:	4e14      	ldr	r6, [pc, #80]	; (58 <FLASH_Main_ProgramWord+0x58>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   6:	6823      	ldr	r3, [r4, #0]
+{
+   8:	9101      	str	r1, [sp, #4]
+    uint32_t tmpreg = FLASH->ACR.V32;
+   a:	9300      	str	r3, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	2303      	movs	r3, #3
+   e:	9a00      	ldr	r2, [sp, #0]
+{
+  10:	0007      	movs	r7, r0
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	4013      	ands	r3, r2
+  14:	4333      	orrs	r3, r6
+  16:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_FLASH_MAIN_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  18:	f7ff fffe 	bl	0 <FLASH_Main_ProgramWord>
+  1c:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1e:	280c      	cmp	r0, #12
+  20:	d110      	bne.n	44 <FLASH_Main_ProgramWord+0x44>
+    FLASH->CNTR = CounterInitValue;
+  22:	2301      	movs	r3, #1
+  24:	425b      	negs	r3, r3
+  26:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  28:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  2a:	3302      	adds	r3, #2
+  2c:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  2e:	4b0b      	ldr	r3, [pc, #44]	; (5c <FLASH_Main_ProgramWord+0x5c>)
+  30:	6123      	str	r3, [r4, #16]
+                        | (FLASH_CR_CMD_MPG << FLASH_CR_CMD_Pos)   \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint32_t *)Address = Data;
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	603b      	str	r3, [r7, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  36:	f7ff fffe 	bl	0 <FLASH_Main_ProgramWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  3a:	2300      	movs	r3, #0
+  3c:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3e:	0005      	movs	r5, r0
+ 
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  40:	f7ff fffe 	bl	0 <FLASH_Main_ProgramWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  44:	9b00      	ldr	r3, [sp, #0]
+  46:	431e      	orrs	r6, r3
+ 
+    FLASH->ACR.V32 = tmpreg;
+  48:	6026      	str	r6, [r4, #0]
+    
+    /* Cache reset */
+    FLASH_CacheReset();
+  4a:	f7ff fffe 	bl	0 <FLASH_Main_ProgramWord>
+ 
+    /* Return the Program Status */
+    return status;
+}
+  4e:	0028      	movs	r0, r5
+  50:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  52:	46c0      	nop			; (mov r8, r8)
+  54:	40040c00 	.word	0x40040c00
+  58:	5aa50000 	.word	0x5aa50000
+  5c:	6e910100 	.word	0x6e910100
+
+Disassembly of section .text.FLASH_Main_ProgramHalfWord:
+
+00000000 <FLASH_Main_ProgramHalfWord>:
+{
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   0:	2303      	movs	r3, #3
+{
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	4c12      	ldr	r4, [pc, #72]	; (50 <FLASH_Main_ProgramHalfWord+0x50>)
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   6:	4e13      	ldr	r6, [pc, #76]	; (54 <FLASH_Main_ProgramHalfWord+0x54>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   8:	6827      	ldr	r7, [r4, #0]
+{
+   a:	9000      	str	r0, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	403b      	ands	r3, r7
+   e:	4333      	orrs	r3, r6
+{
+  10:	9101      	str	r1, [sp, #4]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_FLASH_MAIN_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  14:	f7ff fffe 	bl	0 <FLASH_Main_ProgramHalfWord>
+  18:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1a:	280c      	cmp	r0, #12
+  1c:	d111      	bne.n	42 <FLASH_Main_ProgramHalfWord+0x42>
+    FLASH->CNTR = CounterInitValue;
+  1e:	2301      	movs	r3, #1
+  20:	425b      	negs	r3, r3
+  22:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  24:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  26:	3302      	adds	r3, #2
+  28:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2a:	4b0b      	ldr	r3, [pc, #44]	; (58 <FLASH_Main_ProgramHalfWord+0x58>)
+                        | (FLASH_CR_CMD_MPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint16_t *)Address = Data;
+  2c:	9a01      	ldr	r2, [sp, #4]
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2e:	6123      	str	r3, [r4, #16]
+        *(__IO uint16_t *)Address = Data;
+  30:	9b00      	ldr	r3, [sp, #0]
+  32:	801a      	strh	r2, [r3, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  34:	f7ff fffe 	bl	0 <FLASH_Main_ProgramHalfWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  38:	2300      	movs	r3, #0
+  3a:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3c:	0005      	movs	r5, r0
+ 
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  3e:	f7ff fffe 	bl	0 <FLASH_Main_ProgramHalfWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  42:	433e      	orrs	r6, r7
+ 
+    FLASH->ACR.V32 = tmpreg;
+  44:	6026      	str	r6, [r4, #0]
+ 
+    /* Cache reset */
+    FLASH_CacheReset();
+  46:	f7ff fffe 	bl	0 <FLASH_Main_ProgramHalfWord>
+ 
+    /* Return the Program Status */
+    return status;
+}
+  4a:	0028      	movs	r0, r5
+  4c:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  4e:	46c0      	nop			; (mov r8, r8)
+  50:	40040c00 	.word	0x40040c00
+  54:	5aa50000 	.word	0x5aa50000
+  58:	6e910500 	.word	0x6e910500
+
+Disassembly of section .text.FLASH_CB_EraseSector:
+
+00000000 <FLASH_CB_EraseSector>:
+*                  FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*                  FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+
+FLASH_Status FLASH_CB_EraseSector(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   2:	f7ff fffe 	bl	0 <FLASH_CB_EraseSector>
+   6:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   8:	280c      	cmp	r0, #12
+   a:	d10f      	bne.n	2c <FLASH_CB_EraseSector+0x2c>
+    FLASH->CNTR = CounterInitValue;
+   c:	2301      	movs	r3, #1
+   e:	4d09      	ldr	r5, [pc, #36]	; (34 <FLASH_CB_EraseSector+0x34>)
+  10:	425b      	negs	r3, r3
+  12:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  14:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  16:	3302      	adds	r3, #2
+  18:	632b      	str	r3, [r5, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to erase the sector */
+        FLASH->CR.V32 = ((FLASH_CR_CMD_CBSE << FLASH_CR_CMD_Pos) \
+  1a:	4b07      	ldr	r3, [pc, #28]	; (38 <FLASH_CB_EraseSector+0x38>)
+  1c:	612b      	str	r3, [r5, #16]
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  1e:	f7ff fffe 	bl	0 <FLASH_CB_EraseSector>
+
+        /* if the erase operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  22:	2300      	movs	r3, #0
+  24:	612b      	str	r3, [r5, #16]
+        status = FLASH_WaitForLastOperation();
+  26:	0004      	movs	r4, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  28:	f7ff fffe 	bl	0 <FLASH_CB_EraseSector>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  2c:	f7ff fffe 	bl	0 <FLASH_CB_EraseSector>
+    /* Return the Erase Status */
+    return status;
+}
+  30:	0020      	movs	r0, r4
+  32:	bd70      	pop	{r4, r5, r6, pc}
+  34:	40040c00 	.word	0x40040c00
+  38:	3cc30100 	.word	0x3cc30100
+
+Disassembly of section .text.FLASH_CB_ProgramWord:
+
+00000000 <FLASH_CB_ProgramWord>:
+*                     FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*                     FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+
+FLASH_Status FLASH_CB_ProgramWord(uint32_t Address, uint32_t Data)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+   2:	4c14      	ldr	r4, [pc, #80]	; (54 <FLASH_CB_ProgramWord+0x54>)
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   4:	4e14      	ldr	r6, [pc, #80]	; (58 <FLASH_CB_ProgramWord+0x58>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   6:	6823      	ldr	r3, [r4, #0]
+{
+   8:	9101      	str	r1, [sp, #4]
+    uint32_t tmpreg = FLASH->ACR.V32;
+   a:	9300      	str	r3, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	2303      	movs	r3, #3
+   e:	9a00      	ldr	r2, [sp, #0]
+{
+  10:	0007      	movs	r7, r0
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	4013      	ands	r3, r2
+  14:	4333      	orrs	r3, r6
+  16:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_CUSTOMER_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  18:	f7ff fffe 	bl	0 <FLASH_CB_ProgramWord>
+  1c:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1e:	280c      	cmp	r0, #12
+  20:	d110      	bne.n	44 <FLASH_CB_ProgramWord+0x44>
+    FLASH->CNTR = CounterInitValue;
+  22:	2301      	movs	r3, #1
+  24:	425b      	negs	r3, r3
+  26:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  28:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  2a:	3302      	adds	r3, #2
+  2c:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  2e:	4b0b      	ldr	r3, [pc, #44]	; (5c <FLASH_CB_ProgramWord+0x5c>)
+  30:	6123      	str	r3, [r4, #16]
+                        | (FLASH_CR_CMD_CBPG << FLASH_CR_CMD_Pos)  \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint32_t *)Address = Data;
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	603b      	str	r3, [r7, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  36:	f7ff fffe 	bl	0 <FLASH_CB_ProgramWord>
+
+        /* if the program operation is completed, disable the operation command  */
+        FLASH->CR.V32 = 0;
+  3a:	2300      	movs	r3, #0
+  3c:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3e:	0005      	movs	r5, r0
+ 
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  40:	f7ff fffe 	bl	0 <FLASH_CB_ProgramWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  44:	9b00      	ldr	r3, [sp, #0]
+  46:	431e      	orrs	r6, r3
+
+    FLASH->ACR.V32 = tmpreg;
+  48:	6026      	str	r6, [r4, #0]
+
+    /* Cache reset */
+    FLASH_CacheReset();
+  4a:	f7ff fffe 	bl	0 <FLASH_CB_ProgramWord>
+ 
+    /* Return the Program Status */
+    return status;
+}
+  4e:	0028      	movs	r0, r5
+  50:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  52:	46c0      	nop			; (mov r8, r8)
+  54:	40040c00 	.word	0x40040c00
+  58:	5aa50000 	.word	0x5aa50000
+  5c:	c33c0100 	.word	0xc33c0100
+
+Disassembly of section .text.FLASH_CB_ProgramHalfWord:
+
+00000000 <FLASH_CB_ProgramHalfWord>:
+{
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   0:	2303      	movs	r3, #3
+{
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	4c12      	ldr	r4, [pc, #72]	; (50 <FLASH_CB_ProgramHalfWord+0x50>)
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   6:	4e13      	ldr	r6, [pc, #76]	; (54 <FLASH_CB_ProgramHalfWord+0x54>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   8:	6827      	ldr	r7, [r4, #0]
+{
+   a:	9000      	str	r0, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	403b      	ands	r3, r7
+   e:	4333      	orrs	r3, r6
+{
+  10:	9101      	str	r1, [sp, #4]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_CUSTOMER_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  14:	f7ff fffe 	bl	0 <FLASH_CB_ProgramHalfWord>
+  18:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1a:	280c      	cmp	r0, #12
+  1c:	d111      	bne.n	42 <FLASH_CB_ProgramHalfWord+0x42>
+    FLASH->CNTR = CounterInitValue;
+  1e:	2301      	movs	r3, #1
+  20:	425b      	negs	r3, r3
+  22:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  24:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  26:	3302      	adds	r3, #2
+  28:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2a:	4b0b      	ldr	r3, [pc, #44]	; (58 <FLASH_CB_ProgramHalfWord+0x58>)
+                        | (FLASH_CR_CMD_CBPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint16_t *)Address = Data;
+  2c:	9a01      	ldr	r2, [sp, #4]
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2e:	6123      	str	r3, [r4, #16]
+        *(__IO uint16_t *)Address = Data;
+  30:	9b00      	ldr	r3, [sp, #0]
+  32:	801a      	strh	r2, [r3, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  34:	f7ff fffe 	bl	0 <FLASH_CB_ProgramHalfWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  38:	2300      	movs	r3, #0
+  3a:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3c:	0005      	movs	r5, r0
+ 
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  3e:	f7ff fffe 	bl	0 <FLASH_CB_ProgramHalfWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  42:	433e      	orrs	r6, r7
+
+    FLASH->ACR.V32 = tmpreg;
+  44:	6026      	str	r6, [r4, #0]
+
+    /* Cache reset */
+    FLASH_CacheReset();
+  46:	f7ff fffe 	bl	0 <FLASH_CB_ProgramHalfWord>
+ 
+    /* Return the Program Status */
+    return status;
+}
+  4a:	0028      	movs	r0, r5
+  4c:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  4e:	46c0      	nop			; (mov r8, r8)
+  50:	40040c00 	.word	0x40040c00
+  54:	5aa50000 	.word	0x5aa50000
+  58:	c33c0500 	.word	0xc33c0500
+
+Disassembly of section .text.FLASH_OTP_ProgramWord:
+
+00000000 <FLASH_OTP_ProgramWord>:
+*               FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*               FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*               FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_OTP_ProgramWord(uint32_t Address, uint32_t Data)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+   2:	4c14      	ldr	r4, [pc, #80]	; (54 <FLASH_OTP_ProgramWord+0x54>)
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   4:	4e14      	ldr	r6, [pc, #80]	; (58 <FLASH_OTP_ProgramWord+0x58>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   6:	6823      	ldr	r3, [r4, #0]
+{
+   8:	9101      	str	r1, [sp, #4]
+    uint32_t tmpreg = FLASH->ACR.V32;
+   a:	9300      	str	r3, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	2303      	movs	r3, #3
+   e:	9a00      	ldr	r2, [sp, #0]
+{
+  10:	0007      	movs	r7, r0
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	4013      	ands	r3, r2
+  14:	4333      	orrs	r3, r6
+  16:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_OTP_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  18:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramWord>
+  1c:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1e:	280c      	cmp	r0, #12
+  20:	d110      	bne.n	44 <FLASH_OTP_ProgramWord+0x44>
+    FLASH->CNTR = CounterInitValue;
+  22:	2301      	movs	r3, #1
+  24:	425b      	negs	r3, r3
+  26:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  28:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  2a:	3302      	adds	r3, #2
+  2c:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  2e:	4b0b      	ldr	r3, [pc, #44]	; (5c <FLASH_OTP_ProgramWord+0x5c>)
+  30:	6123      	str	r3, [r4, #16]
+                        | (FLASH_CR_CMD_OPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint32_t *)Address = Data;
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	603b      	str	r3, [r7, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  36:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  3a:	2300      	movs	r3, #0
+  3c:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3e:	0005      	movs	r5, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  40:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  44:	9b00      	ldr	r3, [sp, #0]
+  46:	431e      	orrs	r6, r3
+
+    FLASH->ACR.V32 = tmpreg;
+  48:	6026      	str	r6, [r4, #0]
+
+    /* Cache reset */
+    FLASH_CacheReset();
+  4a:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramWord>
+    /* Return the Program Status */
+    return status;
+}
+  4e:	0028      	movs	r0, r5
+  50:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  52:	46c0      	nop			; (mov r8, r8)
+  54:	40040c00 	.word	0x40040c00
+  58:	5aa50000 	.word	0x5aa50000
+  5c:	f00f0100 	.word	0xf00f0100
+
+Disassembly of section .text.FLASH_OTP_ProgramHalfWord:
+
+00000000 <FLASH_OTP_ProgramHalfWord>:
+{
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   0:	2303      	movs	r3, #3
+{
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	4c12      	ldr	r4, [pc, #72]	; (50 <FLASH_OTP_ProgramHalfWord+0x50>)
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   6:	4e13      	ldr	r6, [pc, #76]	; (54 <FLASH_OTP_ProgramHalfWord+0x54>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   8:	6827      	ldr	r7, [r4, #0]
+{
+   a:	9000      	str	r0, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	403b      	ands	r3, r7
+   e:	4333      	orrs	r3, r6
+{
+  10:	9101      	str	r1, [sp, #4]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_OTP_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  14:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramHalfWord>
+  18:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1a:	280c      	cmp	r0, #12
+  1c:	d111      	bne.n	42 <FLASH_OTP_ProgramHalfWord+0x42>
+    FLASH->CNTR = CounterInitValue;
+  1e:	2301      	movs	r3, #1
+  20:	425b      	negs	r3, r3
+  22:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  24:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  26:	3302      	adds	r3, #2
+  28:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2a:	4b0b      	ldr	r3, [pc, #44]	; (58 <FLASH_OTP_ProgramHalfWord+0x58>)
+                        | (FLASH_CR_CMD_OPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint16_t *)Address = Data;
+  2c:	9a01      	ldr	r2, [sp, #4]
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2e:	6123      	str	r3, [r4, #16]
+        *(__IO uint16_t *)Address = Data;
+  30:	9b00      	ldr	r3, [sp, #0]
+  32:	801a      	strh	r2, [r3, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  34:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramHalfWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  38:	2300      	movs	r3, #0
+  3a:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3c:	0005      	movs	r5, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  3e:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramHalfWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  42:	433e      	orrs	r6, r7
+
+    FLASH->ACR.V32 = tmpreg;
+  44:	6026      	str	r6, [r4, #0]
+    /* Cache reset */
+    FLASH_CacheReset();
+  46:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramHalfWord>
+    /* Return the Program Status */
+    return status;
+}
+  4a:	0028      	movs	r0, r5
+  4c:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  4e:	46c0      	nop			; (mov r8, r8)
+  50:	40040c00 	.word	0x40040c00
+  54:	5aa50000 	.word	0x5aa50000
+  58:	f00f0500 	.word	0xf00f0500
+
+Disassembly of section .text.FLASH_PRTB_ProgramWord:
+
+00000000 <FLASH_PRTB_ProgramWord>:
+*              FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+*              FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+*              FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE  
+*/
+FLASH_Status FLASH_PRTB_ProgramWord(uint32_t Address, uint32_t Data)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+   2:	4c14      	ldr	r4, [pc, #80]	; (54 <FLASH_PRTB_ProgramWord+0x54>)
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   4:	4e14      	ldr	r6, [pc, #80]	; (58 <FLASH_PRTB_ProgramWord+0x58>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   6:	6823      	ldr	r3, [r4, #0]
+{
+   8:	9101      	str	r1, [sp, #4]
+    uint32_t tmpreg = FLASH->ACR.V32;
+   a:	9300      	str	r3, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	2303      	movs	r3, #3
+   e:	9a00      	ldr	r2, [sp, #0]
+{
+  10:	0007      	movs	r7, r0
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	4013      	ands	r3, r2
+  14:	4333      	orrs	r3, r6
+  16:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_PROTECT_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  18:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramWord>
+  1c:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1e:	280c      	cmp	r0, #12
+  20:	d110      	bne.n	44 <FLASH_PRTB_ProgramWord+0x44>
+    FLASH->CNTR = CounterInitValue;
+  22:	2301      	movs	r3, #1
+  24:	425b      	negs	r3, r3
+  26:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  28:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  2a:	3302      	adds	r3, #2
+  2c:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  2e:	4b0b      	ldr	r3, [pc, #44]	; (5c <FLASH_PRTB_ProgramWord+0x5c>)
+  30:	6123      	str	r3, [r4, #16]
+                        | (FLASH_CR_CMD_SPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint32_t *)Address = Data;
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	603b      	str	r3, [r7, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  36:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  3a:	2300      	movs	r3, #0
+  3c:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3e:	0005      	movs	r5, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  40:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  44:	9b00      	ldr	r3, [sp, #0]
+  46:	431e      	orrs	r6, r3
+
+    FLASH->ACR.V32 = tmpreg;
+  48:	6026      	str	r6, [r4, #0]
+    /* Cache reset */
+    FLASH_CacheReset();
+  4a:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramWord>
+    /* Return the Program Status */
+    return status;
+}
+  4e:	0028      	movs	r0, r5
+  50:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  52:	46c0      	nop			; (mov r8, r8)
+  54:	40040c00 	.word	0x40040c00
+  58:	5aa50000 	.word	0x5aa50000
+  5c:	d22d0100 	.word	0xd22d0100
+
+Disassembly of section .text.FLASH_PRTB_ProgramHalfWord:
+
+00000000 <FLASH_PRTB_ProgramHalfWord>:
+{
+    FLASH_Status status = FLASH_COMPLETE;
+
+    uint32_t tmpreg = FLASH->ACR.V32;
+
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   0:	2303      	movs	r3, #3
+{
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    uint32_t tmpreg = FLASH->ACR.V32;
+   4:	4c12      	ldr	r4, [pc, #72]	; (50 <FLASH_PRTB_ProgramHalfWord+0x50>)
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   6:	4e13      	ldr	r6, [pc, #76]	; (54 <FLASH_PRTB_ProgramHalfWord+0x54>)
+    uint32_t tmpreg = FLASH->ACR.V32;
+   8:	6827      	ldr	r7, [r4, #0]
+{
+   a:	9000      	str	r0, [sp, #0]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+   c:	403b      	ands	r3, r7
+   e:	4333      	orrs	r3, r6
+{
+  10:	9101      	str	r1, [sp, #4]
+    FLASH->ACR.V32 = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | (tmpreg & FLASH_ACR_LATENCY_Msk));
+  12:	6023      	str	r3, [r4, #0]
+
+    /* Check the parameters */
+    assert_param(IS_PROTECT_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+  14:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramHalfWord>
+  18:	0005      	movs	r5, r0
+
+    if (status == FLASH_COMPLETE)
+  1a:	280c      	cmp	r0, #12
+  1c:	d111      	bne.n	42 <FLASH_PRTB_ProgramHalfWord+0x42>
+    FLASH->CNTR = CounterInitValue;
+  1e:	2301      	movs	r3, #1
+  20:	425b      	negs	r3, r3
+  22:	62a3      	str	r3, [r4, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  24:	62e3      	str	r3, [r4, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  26:	3302      	adds	r3, #2
+  28:	6323      	str	r3, [r4, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+ 
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2a:	4b0b      	ldr	r3, [pc, #44]	; (58 <FLASH_PRTB_ProgramHalfWord+0x58>)
+                        | (FLASH_CR_CMD_SPG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint16_t *)Address = Data;
+  2c:	9a01      	ldr	r2, [sp, #4]
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  2e:	6123      	str	r3, [r4, #16]
+        *(__IO uint16_t *)Address = Data;
+  30:	9b00      	ldr	r3, [sp, #0]
+  32:	801a      	strh	r2, [r3, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  34:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramHalfWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  38:	2300      	movs	r3, #0
+  3a:	6123      	str	r3, [r4, #16]
+        status = FLASH_WaitForLastOperation();
+  3c:	0005      	movs	r5, r0
+ 
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  3e:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramHalfWord>
+    }
+    tmpreg = ((0x5AA5 << FLASH_ACR_LOCK_Pos) | tmpreg);
+  42:	433e      	orrs	r6, r7
+
+    FLASH->ACR.V32 = tmpreg;
+  44:	6026      	str	r6, [r4, #0]
+    /* Cache reset */
+    FLASH_CacheReset();
+  46:	f7ff fffe 	bl	0 <FLASH_PRTB_ProgramHalfWord>
+    /* Return the Program Status */
+    return status;
+}
+  4a:	0028      	movs	r0, r5
+  4c:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  4e:	46c0      	nop			; (mov r8, r8)
+  50:	40040c00 	.word	0x40040c00
+  54:	5aa50000 	.word	0x5aa50000
+  58:	d22d0500 	.word	0xd22d0500
+
+Disassembly of section .text.FLASH_Verify_Byte:
+
+00000000 <FLASH_Verify_Byte>:
+  * @note  
+  * @param  Buf: the sourse data of programming operation
+  * @retval FLASH Status: The returned value can be: FLASH_ERROR_VERIFY or FLASH_COMPLETE.
+  */
+FLASH_Status FLASH_Verify_Byte(uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+   0:	b510      	push	{r4, lr}
+   2:	1841      	adds	r1, r0, r1
+    assert_param(IS_LENGTH_OK(Length));
+
+    tmp_addr = StartAddr;
+    while (tmp_len < Length)
+    {
+        if (*(__IO uint8_t *)tmp_addr != *((uint8_t *)(Buf + tmp_len)))
+   4:	1a12      	subs	r2, r2, r0
+    while (tmp_len < Length)
+   6:	4288      	cmp	r0, r1
+   8:	d101      	bne.n	e <FLASH_Verify_Byte+0xe>
+        }
+        tmp_addr++;
+        tmp_len++;
+    }
+
+    return status;
+   a:	200c      	movs	r0, #12
+}
+   c:	bd10      	pop	{r4, pc}
+        if (*(__IO uint8_t *)tmp_addr != *((uint8_t *)(Buf + tmp_len)))
+   e:	7803      	ldrb	r3, [r0, #0]
+  10:	5c14      	ldrb	r4, [r2, r0]
+  12:	429c      	cmp	r4, r3
+  14:	d101      	bne.n	1a <FLASH_Verify_Byte+0x1a>
+        tmp_addr++;
+  16:	3001      	adds	r0, #1
+        tmp_len++;
+  18:	e7f5      	b.n	6 <FLASH_Verify_Byte+0x6>
+            return status;
+  1a:	200b      	movs	r0, #11
+  1c:	e7f6      	b.n	c <FLASH_Verify_Byte+0xc>
+
+Disassembly of section .text.FLASH_Verify_HalfWord:
+
+00000000 <FLASH_Verify_HalfWord>:
+  * @retval FLASH Status: The returned value can be: FLASH_ERROR_VERIFY or FLASH_COMPLETE.
+  */
+FLASH_Status FLASH_Verify_HalfWord(uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+    FLASH_Status status = FLASH_COMPLETE;
+    uint32_t tmp_len = 0;
+   0:	2300      	movs	r3, #0
+{
+   2:	b530      	push	{r4, r5, lr}
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    tmp_addr = StartAddr;
+    while (tmp_len < Length)
+   4:	428b      	cmp	r3, r1
+   6:	d301      	bcc.n	c <FLASH_Verify_HalfWord+0xc>
+        }
+        tmp_addr += 2;
+        tmp_len += 2;
+    }
+
+    return status;
+   8:	200c      	movs	r0, #12
+}
+   a:	bd30      	pop	{r4, r5, pc}
+        if (*(__IO uint16_t *)tmp_addr != *((uint16_t *)(Buf + tmp_len)))
+   c:	181c      	adds	r4, r3, r0
+   e:	8824      	ldrh	r4, [r4, #0]
+  10:	5ad5      	ldrh	r5, [r2, r3]
+  12:	42a5      	cmp	r5, r4
+  14:	d101      	bne.n	1a <FLASH_Verify_HalfWord+0x1a>
+        tmp_len += 2;
+  16:	3302      	adds	r3, #2
+  18:	e7f4      	b.n	4 <FLASH_Verify_HalfWord+0x4>
+            return status;
+  1a:	200b      	movs	r0, #11
+  1c:	e7f5      	b.n	a <FLASH_Verify_HalfWord+0xa>
+
+Disassembly of section .text.FLASH_VerifyPage:
+
+00000000 <FLASH_VerifyPage>:
+  * @retval FLASH Status: The returned value can be: FLASH_ERROR_VERIFY or FLASH_COMPLETE.
+  */
+FLASH_Status FLASH_VerifyPage(uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+    FLASH_Status status = FLASH_COMPLETE;
+    uint32_t tmp_len = 0;
+   0:	2300      	movs	r3, #0
+{
+   2:	b530      	push	{r4, r5, lr}
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    tmp_addr = StartAddr;
+    while (tmp_len < Length)
+   4:	428b      	cmp	r3, r1
+   6:	d301      	bcc.n	c <FLASH_VerifyPage+0xc>
+        }
+        tmp_addr += 4;
+        tmp_len += 4;
+    }
+
+    return status;
+   8:	200c      	movs	r0, #12
+}
+   a:	bd30      	pop	{r4, r5, pc}
+        if (*(__IO uint32_t *)tmp_addr != *((uint32_t *)(Buf + tmp_len)))
+   c:	181c      	adds	r4, r3, r0
+   e:	6825      	ldr	r5, [r4, #0]
+  10:	58d4      	ldr	r4, [r2, r3]
+  12:	42a5      	cmp	r5, r4
+  14:	d101      	bne.n	1a <FLASH_VerifyPage+0x1a>
+        tmp_len += 4;
+  16:	3304      	adds	r3, #4
+  18:	e7f4      	b.n	4 <FLASH_VerifyPage+0x4>
+            return status;
+  1a:	200b      	movs	r0, #11
+  1c:	e7f5      	b.n	a <FLASH_VerifyPage+0xa>
+
+Disassembly of section .text.FLASH_Main_ProgramPage:
+
+00000000 <FLASH_Main_ProgramPage>:
+  *                 FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                 FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                 FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_Main_ProgramPage(uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0005      	movs	r5, r0
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    /* Clear pending flags (if any) */
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   4:	20fb      	movs	r0, #251	; 0xfb
+{
+   6:	000e      	movs	r6, r1
+   8:	0017      	movs	r7, r2
+    uint32_t tmp_len = 0;
+   a:	2400      	movs	r4, #0
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   c:	f7ff fffe 	bl	0 <FLASH_Main_ProgramPage>
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    tmp_addr = StartAddr;
+    while (tmp_len < Length)
+  10:	1960      	adds	r0, r4, r5
+  12:	42b4      	cmp	r4, r6
+  14:	d305      	bcc.n	22 <FLASH_Main_ProgramPage+0x22>
+    }
+
+    if (status == FLASH_COMPLETE)
+    {
+        /* Verify the page */
+        status = FLASH_Verify_Byte(StartAddr, Length, Buf);
+  16:	003a      	movs	r2, r7
+  18:	0031      	movs	r1, r6
+  1a:	0028      	movs	r0, r5
+  1c:	f7ff fffe 	bl	0 <FLASH_Main_ProgramPage>
+    }
+
+    return status;
+}
+  20:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        status = FLASH_Main_ProgramWord(tmp_addr, *((uint32_t *)(Buf + tmp_len)));
+  22:	5939      	ldr	r1, [r7, r4]
+  24:	f7ff fffe 	bl	0 <FLASH_Main_ProgramPage>
+        if (status == FLASH_COMPLETE)
+  28:	280c      	cmp	r0, #12
+  2a:	d1f9      	bne.n	20 <FLASH_Main_ProgramPage+0x20>
+            tmp_len += 4;
+  2c:	3404      	adds	r4, #4
+  2e:	e7ef      	b.n	10 <FLASH_Main_ProgramPage+0x10>
+
+Disassembly of section .text.FLASH_OTP_ProgramPage:
+
+00000000 <FLASH_OTP_ProgramPage>:
+  *              FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *              FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *              FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_OTP_ProgramPage(uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0005      	movs	r5, r0
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    /* Clear pending flags (if any) */
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   4:	20fb      	movs	r0, #251	; 0xfb
+{
+   6:	000e      	movs	r6, r1
+   8:	0017      	movs	r7, r2
+    uint32_t tmp_len = 0;
+   a:	2400      	movs	r4, #0
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   c:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramPage>
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    tmp_addr = StartAddr;
+    while (tmp_len < Length)
+  10:	1960      	adds	r0, r4, r5
+  12:	42b4      	cmp	r4, r6
+  14:	d305      	bcc.n	22 <FLASH_OTP_ProgramPage+0x22>
+    }
+
+    if (status == FLASH_COMPLETE)
+    {
+        /* Verify the page */
+        status = FLASH_Verify_Byte(StartAddr, Length, Buf);
+  16:	003a      	movs	r2, r7
+  18:	0031      	movs	r1, r6
+  1a:	0028      	movs	r0, r5
+  1c:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramPage>
+    }
+
+    return status;
+}
+  20:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        status = FLASH_OTP_ProgramWord(tmp_addr, *((uint32_t *)(Buf + tmp_len)));
+  22:	5939      	ldr	r1, [r7, r4]
+  24:	f7ff fffe 	bl	0 <FLASH_OTP_ProgramPage>
+        if (status == FLASH_COMPLETE)
+  28:	280c      	cmp	r0, #12
+  2a:	d1f9      	bne.n	20 <FLASH_OTP_ProgramPage+0x20>
+            tmp_len += 4;
+  2c:	3404      	adds	r4, #4
+  2e:	e7ef      	b.n	10 <FLASH_OTP_ProgramPage+0x10>
+
+Disassembly of section .text.FLASH_SetWriteProtect:
+
+00000000 <FLASH_SetWriteProtect>:
+  *                     FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                     FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                     FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_SetWriteProtect(uint32_t WRT_PRT)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    /* Programs the write protection values */
+    tmpreg = 0xFF00FF00;
+    tmpreg |= ((WRT_PRT & 0x000000FF)) | ((WRT_PRT & 0x0000FF00) << 8);
+   4:	26ff      	movs	r6, #255	; 0xff
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   6:	20fb      	movs	r0, #251	; 0xfb
+   8:	f7ff fffe 	bl	0 <FLASH_SetWriteProtect>
+    tmpreg |= ((WRT_PRT & 0x000000FF)) | ((WRT_PRT & 0x0000FF00) << 8);
+   c:	27ff      	movs	r7, #255	; 0xff
+   e:	0023      	movs	r3, r4
+  10:	0221      	lsls	r1, r4, #8
+  12:	0436      	lsls	r6, r6, #16
+  14:	4d0c      	ldr	r5, [pc, #48]	; (48 <FLASH_SetWriteProtect+0x48>)
+  16:	4031      	ands	r1, r6
+  18:	403b      	ands	r3, r7
+  1a:	4319      	orrs	r1, r3
+    status = FLASH_PRTB_ProgramWord(WRITE_PROTECT_ADDRESS, tmpreg);
+  1c:	480b      	ldr	r0, [pc, #44]	; (4c <FLASH_SetWriteProtect+0x4c>)
+    tmpreg |= ((WRT_PRT & 0x000000FF)) | ((WRT_PRT & 0x0000FF00) << 8);
+  1e:	4329      	orrs	r1, r5
+    status = FLASH_PRTB_ProgramWord(WRITE_PROTECT_ADDRESS, tmpreg);
+  20:	f7ff fffe 	bl	0 <FLASH_SetWriteProtect>
+    if (status == FLASH_COMPLETE)
+  24:	280c      	cmp	r0, #12
+  26:	d108      	bne.n	3a <FLASH_SetWriteProtect+0x3a>
+    {
+        tmpreg = 0xFF00FF00;
+        tmpreg |= ((WRT_PRT & 0x00FF0000) >> 16) | ((WRT_PRT & 0xFF000000) >> 8);
+  28:	0c21      	lsrs	r1, r4, #16
+  2a:	0a23      	lsrs	r3, r4, #8
+  2c:	4039      	ands	r1, r7
+  2e:	4033      	ands	r3, r6
+  30:	4319      	orrs	r1, r3
+        status = FLASH_PRTB_ProgramWord(WRITE_PROTECT_ADDRESS + 0x4, tmpreg);
+  32:	4807      	ldr	r0, [pc, #28]	; (50 <FLASH_SetWriteProtect+0x50>)
+        tmpreg |= ((WRT_PRT & 0x00FF0000) >> 16) | ((WRT_PRT & 0xFF000000) >> 8);
+  34:	4329      	orrs	r1, r5
+        status = FLASH_PRTB_ProgramWord(WRITE_PROTECT_ADDRESS + 0x4, tmpreg);
+  36:	f7ff fffe 	bl	0 <FLASH_SetWriteProtect>
+  * @retval The FLASH Write Protection  Option Bytes value
+  */
+uint32_t FLASH_GetWriteProtect(void)
+{
+    /* Return the FLASH write protection Register value */
+    return (FLASH->WRPR);
+  3a:	4b06      	ldr	r3, [pc, #24]	; (54 <FLASH_SetWriteProtect+0x54>)
+  3c:	6a1b      	ldr	r3, [r3, #32]
+    if (FLASH_GetWriteProtect() != WRT_PRT)
+  3e:	429c      	cmp	r4, r3
+  40:	d000      	beq.n	44 <FLASH_SetWriteProtect+0x44>
+        status = FLASH_ERROR_VERIFY;
+  42:	200b      	movs	r0, #11
+}
+  44:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+  46:	46c0      	nop			; (mov r8, r8)
+  48:	ff00ff00 	.word	0xff00ff00
+  4c:	0fff8010 	.word	0x0fff8010
+  50:	0fff8014 	.word	0x0fff8014
+  54:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_SetReadProtect:
+
+00000000 <FLASH_SetReadProtect>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   4:	20fb      	movs	r0, #251	; 0xfb
+   6:	f7ff fffe 	bl	0 <FLASH_SetReadProtect>
+    status = FLASH_PRTB_ProgramHalfWord(READ_PROTECT_ADDRESS, RD_PRT);
+   a:	0021      	movs	r1, r4
+   c:	4804      	ldr	r0, [pc, #16]	; (20 <FLASH_SetReadProtect+0x20>)
+   e:	f7ff fffe 	bl	0 <FLASH_SetReadProtect>
+    if (FLASH->RPR != RD_PRT)
+  12:	4b04      	ldr	r3, [pc, #16]	; (24 <FLASH_SetReadProtect+0x24>)
+  14:	69db      	ldr	r3, [r3, #28]
+  16:	42a3      	cmp	r3, r4
+  18:	d000      	beq.n	1c <FLASH_SetReadProtect+0x1c>
+        status = FLASH_ERROR_VERIFY;
+  1a:	200b      	movs	r0, #11
+}
+  1c:	bd10      	pop	{r4, pc}
+  1e:	46c0      	nop			; (mov r8, r8)
+  20:	0fff8000 	.word	0x0fff8000
+  24:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_GetWriteProtect:
+
+00000000 <FLASH_GetWriteProtect>:
+    return (FLASH->WRPR);
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <FLASH_GetWriteProtect+0x8>)
+   2:	6a18      	ldr	r0, [r3, #32]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_GetReadProtect:
+
+00000000 <FLASH_GetReadProtect>:
+  */
+FlagStatus FLASH_GetReadProtect(void)
+{
+    FlagStatus readstatus = SH_RESET;
+
+    if ((FLASH->RPR != (uint8_t)RD_PRT_NO_PROTECT))
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <FLASH_GetReadProtect+0x10>)
+   2:	69d8      	ldr	r0, [r3, #28]
+   4:	385a      	subs	r0, #90	; 0x5a
+   6:	1e43      	subs	r3, r0, #1
+   8:	4198      	sbcs	r0, r3
+    }
+    else
+    {
+        readstatus = SH_RESET;
+    }
+    return readstatus;
+   a:	b2c0      	uxtb	r0, r0
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_SetCustomerOption:
+
+00000000 <FLASH_SetCustomerOption>:
+  * @retval FLASH_Status: The returned value can be: FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                                                  FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                                                  FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_SetCustomerOption(uint32_t OPT)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    /* Programs the customer option0 */
+    status = FLASH_CB_ProgramWord(OP_CUST1_ADDRESS, OPT);
+   4:	4d07      	ldr	r5, [pc, #28]	; (24 <FLASH_SetCustomerOption+0x24>)
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   6:	20fb      	movs	r0, #251	; 0xfb
+   8:	f7ff fffe 	bl	0 <FLASH_SetCustomerOption>
+    status = FLASH_CB_ProgramWord(OP_CUST1_ADDRESS, OPT);
+   c:	0021      	movs	r1, r4
+   e:	0028      	movs	r0, r5
+  10:	f7ff fffe 	bl	0 <FLASH_SetCustomerOption>
+
+    if (status == FLASH_COMPLETE)
+  14:	280c      	cmp	r0, #12
+  16:	d103      	bne.n	20 <FLASH_SetCustomerOption+0x20>
+    {
+        /* Verify the Customer Option0 */
+        if (*(__IO uint32_t *)OP_CUST1_ADDRESS != OPT)
+  18:	682b      	ldr	r3, [r5, #0]
+  1a:	42a3      	cmp	r3, r4
+  1c:	d000      	beq.n	20 <FLASH_SetCustomerOption+0x20>
+        {
+            status = FLASH_ERROR_VERIFY;
+  1e:	3801      	subs	r0, #1
+        }
+    }
+    return status;
+}
+  20:	bd70      	pop	{r4, r5, r6, pc}
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	0fffa008 	.word	0x0fffa008
+
+Disassembly of section .text.FLASH_GetCustomerOPT0:
+
+00000000 <FLASH_GetCustomerOPT0>:
+  * @retval The Customer Option0 Bytes value
+  */
+uint32_t FLASH_GetCustomerOPT0(void)
+{
+    /* Return the Customer Option0 Bytes value */
+    return (FLASH->OPR.V32);
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <FLASH_GetCustomerOPT0+0x8>)
+   2:	6998      	ldr	r0, [r3, #24]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_GetCustomerOPT1:
+
+00000000 <FLASH_GetCustomerOPT1>:
+  * @retval The Customer Option0 Bytes value
+  */
+uint32_t FLASH_GetCustomerOPT1(void)
+{
+    /* Return the Customer Option1 Bytes value */
+    return (FLASH->OPR_CUST1.V32);
+   0:	2380      	movs	r3, #128	; 0x80
+   2:	4a02      	ldr	r2, [pc, #8]	; (c <FLASH_GetCustomerOPT1+0xc>)
+   4:	009b      	lsls	r3, r3, #2
+   6:	58d0      	ldr	r0, [r2, r3]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_SetCustomerSecurity:
+
+00000000 <FLASH_SetCustomerSecurity>:
+  *               FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *               FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *               FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_SetCustomerSecurity(uint32_t CS0, uint32_t CS1)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0005      	movs	r5, r0
+    FLASH_Status status = FLASH_COMPLETE;
+
+    /* Sets the programming window timer values */
+    FLASH_Set_PGMWindow(FLASH_Calculate_WinCounterVal(2 * PGM_WORD_TIME),
+   4:	208c      	movs	r0, #140	; 0x8c
+{
+   6:	000c      	movs	r4, r1
+    FLASH_Set_PGMWindow(FLASH_Calculate_WinCounterVal(2 * PGM_WORD_TIME),
+   8:	f7ff fffe 	bl	0 <FLASH_SetCustomerSecurity>
+   c:	0006      	movs	r6, r0
+   e:	208c      	movs	r0, #140	; 0x8c
+  10:	f7ff fffe 	bl	0 <FLASH_SetCustomerSecurity>
+    FLASH->CNTCR = SH_SET;
+  14:	2201      	movs	r2, #1
+    FLASH->CNTR = CounterInitValue;
+  16:	4b0f      	ldr	r3, [pc, #60]	; (54 <FLASH_SetCustomerSecurity+0x54>)
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    /* Programs the read protection values */
+    status = FLASH_CB_ProgramWord(CUSTOM_SECURITY_ADDRESS, CS0);
+  18:	4f0f      	ldr	r7, [pc, #60]	; (58 <FLASH_SetCustomerSecurity+0x58>)
+    FLASH->CNTR = CounterInitValue;
+  1a:	629e      	str	r6, [r3, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  1c:	62d8      	str	r0, [r3, #44]	; 0x2c
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+  1e:	20fb      	movs	r0, #251	; 0xfb
+    FLASH->CNTCR = SH_SET;
+  20:	631a      	str	r2, [r3, #48]	; 0x30
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+  22:	f7ff fffe 	bl	0 <FLASH_SetCustomerSecurity>
+    status = FLASH_CB_ProgramWord(CUSTOM_SECURITY_ADDRESS, CS0);
+  26:	0029      	movs	r1, r5
+  28:	0038      	movs	r0, r7
+  2a:	f7ff fffe 	bl	0 <FLASH_SetCustomerSecurity>
+    if (status == FLASH_COMPLETE)
+  2e:	280c      	cmp	r0, #12
+  30:	d10c      	bne.n	4c <FLASH_SetCustomerSecurity+0x4c>
+    {
+        status = FLASH_CB_ProgramWord(CUSTOM_SECURITY_ADDRESS + 4, CS1);
+  32:	4e0a      	ldr	r6, [pc, #40]	; (5c <FLASH_SetCustomerSecurity+0x5c>)
+  34:	0021      	movs	r1, r4
+  36:	0030      	movs	r0, r6
+  38:	f7ff fffe 	bl	0 <FLASH_SetCustomerSecurity>
+    }
+
+    if (status == FLASH_COMPLETE)
+  3c:	280c      	cmp	r0, #12
+  3e:	d105      	bne.n	4c <FLASH_SetCustomerSecurity+0x4c>
+    {
+        /* Verify the Customer Option0 */
+        if (*(__IO uint32_t *)CUSTOM_SECURITY_ADDRESS != CS0)
+  40:	683b      	ldr	r3, [r7, #0]
+  42:	42ab      	cmp	r3, r5
+  44:	d103      	bne.n	4e <FLASH_SetCustomerSecurity+0x4e>
+            status = FLASH_ERROR_VERIFY;
+        }
+        else
+        {
+            /* Verify the Customer Option1 */
+            if (*(__IO uint32_t *)(CUSTOM_SECURITY_ADDRESS + 4) != CS1)
+  46:	6833      	ldr	r3, [r6, #0]
+  48:	42a3      	cmp	r3, r4
+  4a:	d100      	bne.n	4e <FLASH_SetCustomerSecurity+0x4e>
+                status = FLASH_ERROR_VERIFY;
+            }
+        }
+    }
+    return status;
+}
+  4c:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+                status = FLASH_ERROR_VERIFY;
+  4e:	200b      	movs	r0, #11
+  50:	e7fc      	b.n	4c <FLASH_SetCustomerSecurity+0x4c>
+  52:	46c0      	nop			; (mov r8, r8)
+  54:	40040c00 	.word	0x40040c00
+  58:	0fffa020 	.word	0x0fffa020
+  5c:	0fffa024 	.word	0x0fffa024
+
+Disassembly of section .text.FLASH_GetUniqueID:
+
+00000000 <FLASH_GetUniqueID>:
+{
+    uint32_t tmp_i = 0;
+    /* Return the Customer Option1 Bytes value */
+    for (tmp_i = 0; tmp_i < 3; tmp_i++)
+    {
+        *((uint32_t *)(Buf + tmp_i * 4)) = *((uint32_t *)(UNIQUE_ID_ADDRESS + tmp_i * 4));
+   0:	4b04      	ldr	r3, [pc, #16]	; (14 <FLASH_GetUniqueID+0x14>)
+   2:	681b      	ldr	r3, [r3, #0]
+   4:	6003      	str	r3, [r0, #0]
+   6:	4b04      	ldr	r3, [pc, #16]	; (18 <FLASH_GetUniqueID+0x18>)
+   8:	681b      	ldr	r3, [r3, #0]
+   a:	6043      	str	r3, [r0, #4]
+   c:	4b03      	ldr	r3, [pc, #12]	; (1c <FLASH_GetUniqueID+0x1c>)
+   e:	681b      	ldr	r3, [r3, #0]
+  10:	6083      	str	r3, [r0, #8]
+    }
+}
+  12:	4770      	bx	lr
+  14:	0fffe110 	.word	0x0fffe110
+  18:	0fffe114 	.word	0x0fffe114
+  1c:	0fffe118 	.word	0x0fffe118
+
+Disassembly of section .text.FLASH_GetAgentID:
+
+00000000 <FLASH_GetAgentID>:
+{
+    uint32_t tmp_i = 0;
+    /* Return the Customer Option1 Bytes value */
+    for (tmp_i = 0; tmp_i < 4; tmp_i++)
+    {
+        *((uint32_t *)(Buf + tmp_i * 4)) = *((uint32_t *)(AGENT_ID_ADDRESS + tmp_i * 4));
+   0:	4b06      	ldr	r3, [pc, #24]	; (1c <FLASH_GetAgentID+0x1c>)
+   2:	681b      	ldr	r3, [r3, #0]
+   4:	6003      	str	r3, [r0, #0]
+   6:	4b06      	ldr	r3, [pc, #24]	; (20 <FLASH_GetAgentID+0x20>)
+   8:	681b      	ldr	r3, [r3, #0]
+   a:	6043      	str	r3, [r0, #4]
+   c:	4b05      	ldr	r3, [pc, #20]	; (24 <FLASH_GetAgentID+0x24>)
+   e:	681b      	ldr	r3, [r3, #0]
+  10:	6083      	str	r3, [r0, #8]
+  12:	4b05      	ldr	r3, [pc, #20]	; (28 <FLASH_GetAgentID+0x28>)
+  14:	681b      	ldr	r3, [r3, #0]
+  16:	60c3      	str	r3, [r0, #12]
+    }
+}
+  18:	4770      	bx	lr
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	0fffc080 	.word	0x0fffc080
+  20:	0fffc084 	.word	0x0fffc084
+  24:	0fffc088 	.word	0x0fffc088
+  28:	0fffc08c 	.word	0x0fffc08c
+
+Disassembly of section .text.FLASH_If_Write:
+
+00000000 <FLASH_If_Write>:
+  *         1: Error occurred while writing data in Flash memory
+  *         2: Written Data in flash memory is different from expected one
+  */
+uint32_t FLASH_If_Write(__IO uint32_t *FlashAddress, uint8_t *Data,
+                        uint16_t DataLength, uint32_t file_size)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+    static uint32_t total = 0;
+    uint32_t tmp_len = 0;
+    uint32_t tmp_addr = 0;
+
+    /* Clear pending flags (if any) */
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   4:	20fb      	movs	r0, #251	; 0xfb
+{
+   6:	000d      	movs	r5, r1
+   8:	001e      	movs	r6, r3
+   a:	9201      	str	r2, [sp, #4]
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   c:	f7ff fffe 	bl	0 <FLASH_If_Write>
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    tmp_addr = *FlashAddress;
+  10:	6827      	ldr	r7, [r4, #0]
+    uint32_t tmp_len = 0;
+  12:	2400      	movs	r4, #0
+    while (tmp_len < DataLength)
+  14:	9b01      	ldr	r3, [sp, #4]
+  16:	19e0      	adds	r0, r4, r7
+  18:	42a3      	cmp	r3, r4
+  1a:	d90e      	bls.n	3a <FLASH_If_Write+0x3a>
+    {
+        /* Programming a Word to the special address */
+        status = FLASH_Main_ProgramWord(tmp_addr, *(uint32_t *)(Data + tmp_len));
+  1c:	5929      	ldr	r1, [r5, r4]
+  1e:	f7ff fffe 	bl	0 <FLASH_If_Write>
+        if (status == FLASH_COMPLETE)
+  22:	280c      	cmp	r0, #12
+  24:	d109      	bne.n	3a <FLASH_If_Write+0x3a>
+        {
+            tmp_addr += 4;
+            tmp_len += 4;
+            total++;
+  26:	4a06      	ldr	r2, [pc, #24]	; (40 <FLASH_If_Write+0x40>)
+            tmp_len += 4;
+  28:	3404      	adds	r4, #4
+            total++;
+  2a:	6813      	ldr	r3, [r2, #0]
+  2c:	3301      	adds	r3, #1
+  2e:	6013      	str	r3, [r2, #0]
+            if (total * 4 >= file_size)
+  30:	009b      	lsls	r3, r3, #2
+  32:	42b3      	cmp	r3, r6
+  34:	d3ee      	bcc.n	14 <FLASH_If_Write+0x14>
+            {
+                total = 0;
+  36:	2300      	movs	r3, #0
+  38:	6013      	str	r3, [r2, #0]
+            break;
+        }
+    }
+
+    return (0);
+}
+  3a:	2000      	movs	r0, #0
+  3c:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  3e:	46c0      	nop			; (mov r8, r8)
+  40:	00000000 	.word	0x00000000
+
+Disassembly of section .text.FLASH_E2_Lock:
+
+00000000 <FLASH_E2_Lock>:
+* @brief  Locks the EEPRom block control register access
+*/
+void FLASH_E2_Lock(void)
+{
+    /* Set the E2LCK Bit to lock the EEPRom block control Registers access */
+    FLASH->CR.BIT.E2LCK = SH_SET;
+   0:	2380      	movs	r3, #128	; 0x80
+   2:	4a03      	ldr	r2, [pc, #12]	; (10 <FLASH_E2_Lock+0x10>)
+   4:	01db      	lsls	r3, r3, #7
+   6:	6911      	ldr	r1, [r2, #16]
+   8:	430b      	orrs	r3, r1
+   a:	6113      	str	r3, [r2, #16]
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040c00 	.word	0x40040c00
+
+Disassembly of section .text.FLASH_E2_Unlock:
+
+00000000 <FLASH_E2_Unlock>:
+*            @arg SINGLE_OPERATION: The single operation unlock
+*            @arg MULTI_OPERATION: The multiple operations unlock
+*/
+void FLASH_E2_Unlock(uint8_t OperationType)
+{
+    if (FLASH->CR.BIT.MNLCK == SH_RESET)
+   0:	4b0f      	ldr	r3, [pc, #60]	; (40 <FLASH_E2_Unlock+0x40>)
+   2:	691a      	ldr	r2, [r3, #16]
+   4:	0412      	lsls	r2, r2, #16
+   6:	d404      	bmi.n	12 <FLASH_E2_Unlock+0x12>
+    {
+        FLASH->CR.BIT.MNLCK = SH_SET;
+   8:	2280      	movs	r2, #128	; 0x80
+   a:	6919      	ldr	r1, [r3, #16]
+   c:	0212      	lsls	r2, r2, #8
+   e:	430a      	orrs	r2, r1
+  10:	611a      	str	r2, [r3, #16]
+    }
+    if (FLASH->CR.BIT.INFLCK == SH_RESET)
+  12:	691a      	ldr	r2, [r3, #16]
+  14:	04d2      	lsls	r2, r2, #19
+  16:	d404      	bmi.n	22 <FLASH_E2_Unlock+0x22>
+    {
+        FLASH->CR.BIT.INFLCK = SH_SET;
+  18:	2280      	movs	r2, #128	; 0x80
+  1a:	6919      	ldr	r1, [r3, #16]
+  1c:	0152      	lsls	r2, r2, #5
+  1e:	430a      	orrs	r2, r1
+  20:	611a      	str	r2, [r3, #16]
+    }
+
+    if (FLASH->CR.BIT.E2LCK != SH_RESET)
+  22:	691a      	ldr	r2, [r3, #16]
+  24:	0452      	lsls	r2, r2, #17
+  26:	d505      	bpl.n	34 <FLASH_E2_Unlock+0x34>
+    {
+        /* Authorize the FLASH Registers access */
+        FLASH->E2KYR = FLASH_E2_KEY;
+  28:	4a06      	ldr	r2, [pc, #24]	; (44 <FLASH_E2_Unlock+0x44>)
+  2a:	609a      	str	r2, [r3, #8]
+
+        /* The single unlock key unlocks the flash interface for one write or erase operation. */
+        if (OperationType == SINGLE_OPERATION)
+  2c:	2800      	cmp	r0, #0
+  2e:	d102      	bne.n	36 <FLASH_E2_Unlock+0x36>
+            FLASH->E2KYR = FLASH_SINGLE_OP_KEY;
+  30:	4a05      	ldr	r2, [pc, #20]	; (48 <FLASH_E2_Unlock+0x48>)
+
+        /* The multiple unlock key unlocks the flash interface for 
+                                write or erase operations until the block is locked. */
+        else if (OperationType == MULTI_OPERATION)
+            FLASH->E2KYR = FLASH_MULTI_OP_KEY;
+  32:	609a      	str	r2, [r3, #8]
+    }
+}
+  34:	4770      	bx	lr
+        else if (OperationType == MULTI_OPERATION)
+  36:	2801      	cmp	r0, #1
+  38:	d1fc      	bne.n	34 <FLASH_E2_Unlock+0x34>
+            FLASH->E2KYR = FLASH_MULTI_OP_KEY;
+  3a:	4a04      	ldr	r2, [pc, #16]	; (4c <FLASH_E2_Unlock+0x4c>)
+  3c:	e7f9      	b.n	32 <FLASH_E2_Unlock+0x32>
+  3e:	46c0      	nop			; (mov r8, r8)
+  40:	40040c00 	.word	0x40040c00
+  44:	9bdf1357 	.word	0x9bdf1357
+  48:	c3c3c3c3 	.word	0xc3c3c3c3
+  4c:	b4b4b4b4 	.word	0xb4b4b4b4
+
+Disassembly of section .text.FLASH_E2_ReadByte:
+
+00000000 <FLASH_E2_ReadByte>:
+  * @param  Length: the length of programming operation
+  * @param  pBuf: Target address saved by read data
+  */
+void FLASH_E2_ReadByte(E2_SECTOR_NUM_Type e2psector, uint32_t StartAddr,
+                       uint32_t Length, uint8_t *pBuf)
+{
+   0:	b510      	push	{r4, lr}
+   2:	4c06      	ldr	r4, [pc, #24]	; (1c <FLASH_E2_ReadByte+0x1c>)
+    uint32_t tmp_len = 0;
+    while (tmp_len < Length)
+    {
+        *pBuf++ = *((uint8_t *)(E2_BLOCK_ADDRESS + (e2psector << 10) + StartAddr + tmp_len));
+   4:	0280      	lsls	r0, r0, #10
+   6:	1909      	adds	r1, r1, r4
+    uint32_t tmp_len = 0;
+   8:	2400      	movs	r4, #0
+   a:	1840      	adds	r0, r0, r1
+    while (tmp_len < Length)
+   c:	4294      	cmp	r4, r2
+   e:	d100      	bne.n	12 <FLASH_E2_ReadByte+0x12>
+        tmp_len++;
+    }
+}
+  10:	bd10      	pop	{r4, pc}
+        *pBuf++ = *((uint8_t *)(E2_BLOCK_ADDRESS + (e2psector << 10) + StartAddr + tmp_len));
+  12:	5c21      	ldrb	r1, [r4, r0]
+  14:	5519      	strb	r1, [r3, r4]
+        tmp_len++;
+  16:	3401      	adds	r4, #1
+  18:	e7f8      	b.n	c <FLASH_E2_ReadByte+0xc>
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	0ffc0000 	.word	0x0ffc0000
+
+Disassembly of section .text.FLASH_E2_EraseSector:
+
+00000000 <FLASH_E2_EraseSector>:
+  *                FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+**/
+FLASH_Status FLASH_E2_EraseSector(E2_SECTOR_NUM_Type E2_Sector)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0006      	movs	r6, r0
+
+    /* Check the parameters */
+    assert_param(IS_E2_BLOCK_SECTOR(E2_Sector));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   4:	f7ff fffe 	bl	0 <FLASH_E2_EraseSector>
+   8:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   a:	280c      	cmp	r0, #12
+   c:	d110      	bne.n	30 <FLASH_E2_EraseSector+0x30>
+    FLASH->CNTR = CounterInitValue;
+   e:	2301      	movs	r3, #1
+  10:	4d09      	ldr	r5, [pc, #36]	; (38 <FLASH_E2_EraseSector+0x38>)
+  12:	425b      	negs	r3, r3
+  14:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  16:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  18:	3302      	adds	r3, #2
+  1a:	632b      	str	r3, [r5, #48]	; 0x30
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to erase the sector */
+        FLASH->CR1 = E2_Sector;
+        FLASH->CR.V32 = ((FLASH_CR_CMD_E2SE << FLASH_CR_CMD_Pos) | (SH_SET << FLASH_CR_STRT_Pos));
+  1c:	4b07      	ldr	r3, [pc, #28]	; (3c <FLASH_E2_EraseSector+0x3c>)
+        FLASH->CR1 = E2_Sector;
+  1e:	616e      	str	r6, [r5, #20]
+        FLASH->CR.V32 = ((FLASH_CR_CMD_E2SE << FLASH_CR_CMD_Pos) | (SH_SET << FLASH_CR_STRT_Pos));
+  20:	612b      	str	r3, [r5, #16]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  22:	f7ff fffe 	bl	0 <FLASH_E2_EraseSector>
+
+        /* if the erase operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  26:	2300      	movs	r3, #0
+  28:	612b      	str	r3, [r5, #16]
+        status = FLASH_WaitForLastOperation();
+  2a:	0004      	movs	r4, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  2c:	f7ff fffe 	bl	0 <FLASH_E2_EraseSector>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  30:	f7ff fffe 	bl	0 <FLASH_E2_EraseSector>
+    /* Return the Erase Status */
+    return status;
+}
+  34:	0020      	movs	r0, r4
+  36:	bd70      	pop	{r4, r5, r6, pc}
+  38:	40040c00 	.word	0x40040c00
+  3c:	4bb40100 	.word	0x4bb40100
+
+Disassembly of section .text.FLASH_E2_ProgramWord:
+
+00000000 <FLASH_E2_ProgramWord>:
+  *                 FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                 FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                 FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+*/
+FLASH_Status FLASH_E2_ProgramWord(uint32_t Address, uint32_t Data)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0006      	movs	r6, r0
+   4:	000f      	movs	r7, r1
+
+    /* Check the parameters */
+    assert_param(IS_E2_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   6:	f7ff fffe 	bl	0 <FLASH_E2_ProgramWord>
+   a:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   c:	280c      	cmp	r0, #12
+   e:	d110      	bne.n	32 <FLASH_E2_ProgramWord+0x32>
+    FLASH->CNTR = CounterInitValue;
+  10:	2301      	movs	r3, #1
+  12:	4d0a      	ldr	r5, [pc, #40]	; (3c <FLASH_E2_ProgramWord+0x3c>)
+  14:	425b      	negs	r3, r3
+  16:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  18:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  1a:	3302      	adds	r3, #2
+  1c:	632b      	str	r3, [r5, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_WD << FLASH_CR_PSIZE_Pos) \
+  1e:	4b08      	ldr	r3, [pc, #32]	; (40 <FLASH_E2_ProgramWord+0x40>)
+  20:	612b      	str	r3, [r5, #16]
+                        | (FLASH_CR_CMD_E2PG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint32_t *)Address = Data;
+  22:	6037      	str	r7, [r6, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  24:	f7ff fffe 	bl	0 <FLASH_E2_ProgramWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  28:	2300      	movs	r3, #0
+  2a:	612b      	str	r3, [r5, #16]
+        status = FLASH_WaitForLastOperation();
+  2c:	0004      	movs	r4, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  2e:	f7ff fffe 	bl	0 <FLASH_E2_ProgramWord>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  32:	f7ff fffe 	bl	0 <FLASH_E2_ProgramWord>
+    /* Return the Program Status */
+    return status;
+}
+  36:	0020      	movs	r0, r4
+  38:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+  3a:	46c0      	nop			; (mov r8, r8)
+  3c:	40040c00 	.word	0x40040c00
+  40:	b44b0100 	.word	0xb44b0100
+
+Disassembly of section .text.FLASH_E2_ProgramHalfWord:
+
+00000000 <FLASH_E2_ProgramHalfWord>:
+  *                FLASH_BUSY,FLASH_ERROR_STA,FLASH_ERROR_PGW,FLASH_ERROR_PGP,FLASH_ERROR_WRP,
+  *                FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+*/
+FLASH_Status FLASH_E2_ProgramHalfWord(uint32_t Address, uint16_t Data)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0006      	movs	r6, r0
+   4:	000f      	movs	r7, r1
+
+    /* Check the parameters */
+    assert_param(IS_E2_BLOCK_ADDRESS(Address));
+
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation();
+   6:	f7ff fffe 	bl	0 <FLASH_E2_ProgramHalfWord>
+   a:	0004      	movs	r4, r0
+
+    if (status == FLASH_COMPLETE)
+   c:	280c      	cmp	r0, #12
+   e:	d110      	bne.n	32 <FLASH_E2_ProgramHalfWord+0x32>
+    FLASH->CNTR = CounterInitValue;
+  10:	2301      	movs	r3, #1
+  12:	4d0a      	ldr	r5, [pc, #40]	; (3c <FLASH_E2_ProgramHalfWord+0x3c>)
+  14:	425b      	negs	r3, r3
+  16:	62ab      	str	r3, [r5, #40]	; 0x28
+    FLASH->UPCNTR = UpperCounterValue;
+  18:	62eb      	str	r3, [r5, #44]	; 0x2c
+    FLASH->CNTCR = SH_SET;
+  1a:	3302      	adds	r3, #2
+  1c:	632b      	str	r3, [r5, #48]	; 0x30
+    {
+        /* Sets the programming window timer values */
+        FLASH_Set_PGMWindow(SE_ERS_TIME, SE_ERS_TIME);
+
+        /* if the previous operation is completed, proceed to program the new data */
+        FLASH->CR.V32 = ((FLASH_CR_PSIZE_HALFWD << FLASH_CR_PSIZE_Pos) \
+  1e:	4b08      	ldr	r3, [pc, #32]	; (40 <FLASH_E2_ProgramHalfWord+0x40>)
+  20:	612b      	str	r3, [r5, #16]
+                        | (FLASH_CR_CMD_E2PG << FLASH_CR_CMD_Pos) \
+                        | (SH_SET << FLASH_CR_STRT_Pos));
+
+        *(__IO uint16_t *)Address = Data;
+  22:	8037      	strh	r7, [r6, #0]
+
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation();
+  24:	f7ff fffe 	bl	0 <FLASH_E2_ProgramHalfWord>
+
+        /* if the program operation is completed, disable the operation command */
+        FLASH->CR.V32 = 0;
+  28:	2300      	movs	r3, #0
+  2a:	612b      	str	r3, [r5, #16]
+        status = FLASH_WaitForLastOperation();
+  2c:	0004      	movs	r4, r0
+
+        /* Clears the programming window timer values */
+        FLASH_Clear_PGMWindow();
+  2e:	f7ff fffe 	bl	0 <FLASH_E2_ProgramHalfWord>
+    }
+    /* Cache reset */
+    FLASH_CacheReset();
+  32:	f7ff fffe 	bl	0 <FLASH_E2_ProgramHalfWord>
+    /* Return the Program Status */
+    return status;
+}
+  36:	0020      	movs	r0, r4
+  38:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+  3a:	46c0      	nop			; (mov r8, r8)
+  3c:	40040c00 	.word	0x40040c00
+  40:	b44b0500 	.word	0xb44b0500
+
+Disassembly of section .text.FLASH_E2_ProgramPage_HalfWord:
+
+00000000 <FLASH_E2_ProgramPage_HalfWord>:
+  *              FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *              FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_E2_ProgramPage_HalfWord(E2_SECTOR_NUM_Type E2Sector,
+                                           uint32_t StartAddr, uint32_t Length, uint8_t *Buf)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    /* Clear pending flags (if any) */
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   6:	20fb      	movs	r0, #251	; 0xfb
+{
+   8:	001f      	movs	r7, r3
+   a:	0016      	movs	r6, r2
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   c:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage_HalfWord>
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    tmp_addr = E2_BLOCK_ADDRESS + E2Sector * 1024 + StartAddr;
+  10:	4b0a      	ldr	r3, [pc, #40]	; (3c <FLASH_E2_ProgramPage_HalfWord+0x3c>)
+  12:	18e4      	adds	r4, r4, r3
+  14:	02a4      	lsls	r4, r4, #10
+  16:	1964      	adds	r4, r4, r5
+    uint32_t tmp_len = 0;
+  18:	2500      	movs	r5, #0
+  1a:	1928      	adds	r0, r5, r4
+    while (tmp_len < Length)
+  1c:	42b5      	cmp	r5, r6
+  1e:	d305      	bcc.n	2c <FLASH_E2_ProgramPage_HalfWord+0x2c>
+    tmp_addr = E2_BLOCK_ADDRESS + E2Sector * 1024 + StartAddr;
+
+    if (status == FLASH_COMPLETE)
+    {
+        /* Verify the page */
+        status = FLASH_Verify_Byte(tmp_addr, Length, Buf);
+  20:	003a      	movs	r2, r7
+  22:	0031      	movs	r1, r6
+  24:	0020      	movs	r0, r4
+  26:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage_HalfWord>
+    }
+
+    return status;
+}
+  2a:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        status = FLASH_E2_ProgramHalfWord(tmp_addr, *((uint16_t *)(Buf + tmp_len)));
+  2c:	5b79      	ldrh	r1, [r7, r5]
+  2e:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage_HalfWord>
+        if (status == FLASH_COMPLETE)
+  32:	280c      	cmp	r0, #12
+  34:	d1f9      	bne.n	2a <FLASH_E2_ProgramPage_HalfWord+0x2a>
+            tmp_len += 2;
+  36:	3502      	adds	r5, #2
+  38:	e7ef      	b.n	1a <FLASH_E2_ProgramPage_HalfWord+0x1a>
+  3a:	46c0      	nop			; (mov r8, r8)
+  3c:	0003ff00 	.word	0x0003ff00
+
+Disassembly of section .text.FLASH_E2_ProgramPage:
+
+00000000 <FLASH_E2_ProgramPage>:
+  *                 FLASH_ERROR_FLS,FLASH_ERROR_OPERATION,FLASH_ERROR_ERASE,FLASH_ERROR_PROGRAM,
+  *                 FLASH_ERROR_BLANK,FLASH_ERROR_VERIFY,FLASH_COMPLETE 
+  */
+FLASH_Status FLASH_E2_ProgramPage(E2_SECTOR_NUM_Type E2Sector, uint32_t StartAddr,
+                                  uint32_t Length, uint8_t *Buf)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+
+    /* Check the parameters */
+    assert_param(IS_LENGTH_OK(Length));
+
+    /* Clear pending flags (if any) */
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   6:	20fb      	movs	r0, #251	; 0xfb
+{
+   8:	001f      	movs	r7, r3
+   a:	0016      	movs	r6, r2
+    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR \
+   c:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage>
+                    | FLASH_FLAG_STAERR | FLASH_FLAG_PGPERR \
+                    | FLASH_FLAG_PGWERR | FLASH_FLAG_FLSERR);
+
+    tmp_addr = E2_BLOCK_ADDRESS + E2Sector * 1024 + StartAddr;
+  10:	4b0a      	ldr	r3, [pc, #40]	; (3c <FLASH_E2_ProgramPage+0x3c>)
+  12:	18e4      	adds	r4, r4, r3
+  14:	02a4      	lsls	r4, r4, #10
+  16:	1964      	adds	r4, r4, r5
+    uint32_t tmp_len = 0;
+  18:	2500      	movs	r5, #0
+  1a:	1928      	adds	r0, r5, r4
+    while (tmp_len < Length)
+  1c:	42b5      	cmp	r5, r6
+  1e:	d305      	bcc.n	2c <FLASH_E2_ProgramPage+0x2c>
+    tmp_addr = E2_BLOCK_ADDRESS + E2Sector * 1024 + StartAddr;
+
+    if (status == FLASH_COMPLETE)
+    {
+        /* Verify the page */
+        status = FLASH_Verify_Byte(tmp_addr, Length, Buf);
+  20:	003a      	movs	r2, r7
+  22:	0031      	movs	r1, r6
+  24:	0020      	movs	r0, r4
+  26:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage>
+    }
+
+    return status;
+}
+  2a:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        status = FLASH_E2_ProgramWord(tmp_addr, *((uint32_t *)(Buf + tmp_len)));
+  2c:	5979      	ldr	r1, [r7, r5]
+  2e:	f7ff fffe 	bl	0 <FLASH_E2_ProgramPage>
+        if (status == FLASH_COMPLETE)
+  32:	280c      	cmp	r0, #12
+  34:	d1f9      	bne.n	2a <FLASH_E2_ProgramPage+0x2a>
+            tmp_len += 4;
+  36:	3504      	adds	r5, #4
+  38:	e7ef      	b.n	1a <FLASH_E2_ProgramPage+0x1a>
+  3a:	46c0      	nop			; (mov r8, r8)
+  3c:	0003ff00 	.word	0x0003ff00

@@ -1,0 +1,48 @@
+
+out/BootManager/prog/MSP/armCmx/int_exc_cfg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.SpuriousIsr_Handler:
+
+00000000 <SpuriousIsr_Handler>:
+    * where 0x10 in subtraction represents IRQs offset
+    */
+    (void) SpuriousInt;
+
+    /* Endless loop - no return from spurious interrupt */
+    for(;;) {}
+   0:	e7fe      	b.n	0 <SpuriousIsr_Handler>
+
+Disassembly of section .text.HardFault_Handler:
+
+00000000 <HardFault_Handler>:
+ */
+__STATIC_FORCEINLINE uint32_t __get_MSP(void)
+{
+  uint32_t result;
+
+  __ASM volatile ("MRS %0, msp" : "=r" (result) );
+   0:	f3ef 8208 	mrs	r2, MSP
+
+
+SYMBOL_IRQ SYMBOL_NO_RETURN void HardFault_Handler(void)
+{
+    /* Read stack frame */
+    INT_StackFrame = INT_getStackFrame();
+   4:	4b01      	ldr	r3, [pc, #4]	; (c <HardFault_Handler+0xc>)
+   6:	601a      	str	r2, [r3, #0]
+    (void) INT_StackFrame;
+#if defined (LOG_EXCEPTION_ENABLED)
+    INT_logException(INT_StackFrame->LR, INT_HANDLER_TYPE_HARDFAULT);
+#endif
+    /* Endless loop - no return from fault */
+    for(;;) {}
+   8:	e7fe      	b.n	8 <HardFault_Handler+0x8>
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.NMI_Handler:
+
+00000000 <NMI_Handler>:
+   0:	b510      	push	{r4, lr}
+   2:	f7ff fffe 	bl	0 <NMI_Handler>

@@ -1,0 +1,361 @@
+
+out/programmer/prog/MSP/mcal/msup.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MSUP_handleTimerExt:
+
+00000000 <MSUP_handleTimerExt>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+void MSUP_handleTimerExt(struct MSUP_TimeoutHandle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    uint16_t actualTime = TIM_uiGetCircleMicroSeconds();
+   4:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+    uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+   8:	8923      	ldrh	r3, [r4, #8]
+    handle->timeStamp = actualTime;
+    handle->timer += deltaTime;
+   a:	6822      	ldr	r2, [r4, #0]
+    uint16_t deltaTime = (uint16_t)(actualTime - handle->timeStamp);
+   c:	1ac3      	subs	r3, r0, r3
+   e:	b29b      	uxth	r3, r3
+    handle->timer += deltaTime;
+  10:	18d3      	adds	r3, r2, r3
+    handle->timeStamp = actualTime;
+  12:	8120      	strh	r0, [r4, #8]
+    handle->timer += deltaTime;
+  14:	6023      	str	r3, [r4, #0]
+}
+  16:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MSUP_startTimeMeasureExt:
+
+00000000 <MSUP_startTimeMeasureExt>:
+
+
+void MSUP_startTimeMeasureExt(struct MSUP_TimeoutHandle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    handle->timeStamp = TIM_uiGetCircleMicroSeconds();
+   4:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+    handle->timer = 0uL;
+   8:	2300      	movs	r3, #0
+    handle->timeStamp = TIM_uiGetCircleMicroSeconds();
+   a:	8120      	strh	r0, [r4, #8]
+    handle->timer = 0uL;
+   c:	6023      	str	r3, [r4, #0]
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MSUP_getMeasuredTimeExt:
+
+00000000 <MSUP_getMeasuredTimeExt>:
+
+
+uint32_t MSUP_getMeasuredTimeExt(struct MSUP_TimeoutHandle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MSUP_handleTimerExt(handle);
+   4:	f7ff fffe 	bl	0 <MSUP_getMeasuredTimeExt>
+    return handle->timer;
+   8:	6820      	ldr	r0, [r4, #0]
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MSUP_setTimeOutExt:
+
+00000000 <MSUP_setTimeOutExt>:
+
+
+void MSUP_setTimeOutExt(struct MSUP_TimeoutHandle *handle, uint32_t timeout)
+{
+   0:	b510      	push	{r4, lr}
+    handle->timeout = timeout;
+   2:	6041      	str	r1, [r0, #4]
+    MSUP_startTimeMeasureExt(handle);
+   4:	f7ff fffe 	bl	0 <MSUP_setTimeOutExt>
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MSUP_isTimeOutExt:
+
+00000000 <MSUP_isTimeOutExt>:
+
+
+bool MSUP_isTimeOutExt(struct MSUP_TimeoutHandle *handle)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MSUP_handleTimerExt(handle);
+   4:	f7ff fffe 	bl	0 <MSUP_isTimeOutExt>
+    return (handle->timer >= handle->timeout) ? true : false;
+   8:	cc0c      	ldmia	r4!, {r2, r3}
+   a:	2000      	movs	r0, #0
+   c:	429a      	cmp	r2, r3
+   e:	4140      	adcs	r0, r0
+  10:	b2c0      	uxtb	r0, r0
+}
+  12:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MSUP_handleTimer:
+
+00000000 <MSUP_handleTimer>:
+
+
+void MSUP_handleTimer(void)
+{
+   0:	b510      	push	{r4, lr}
+    MSUP_handleTimerExt(&MSUP_LocalTimeoutHandle);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <MSUP_handleTimer+0xc>)
+   4:	f7ff fffe 	bl	0 <MSUP_handleTimer>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_startTimeMeasure:
+
+00000000 <MSUP_startTimeMeasure>:
+
+
+void MSUP_startTimeMeasure(void)
+{
+   0:	b510      	push	{r4, lr}
+    MSUP_startTimeMeasureExt(&MSUP_LocalTimeoutHandle);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <MSUP_startTimeMeasure+0xc>)
+   4:	f7ff fffe 	bl	0 <MSUP_startTimeMeasure>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_getMeasuredTime:
+
+00000000 <MSUP_getMeasuredTime>:
+
+
+uint32_t MSUP_getMeasuredTime(void)
+{
+   0:	b510      	push	{r4, lr}
+    MSUP_handleTimerExt(handle);
+   2:	4c03      	ldr	r4, [pc, #12]	; (10 <MSUP_getMeasuredTime+0x10>)
+   4:	0020      	movs	r0, r4
+   6:	f7ff fffe 	bl	0 <MSUP_getMeasuredTime>
+    return MSUP_getMeasuredTimeExt(&MSUP_LocalTimeoutHandle);
+   a:	6820      	ldr	r0, [r4, #0]
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_delay:
+
+00000000 <MSUP_delay>:
+
+
+void MSUP_delay(uint16_t delay)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0006      	movs	r6, r0
+    uint16_t currentTime = TIM_uiGetCircleMicroSeconds();
+   4:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   8:	4b07      	ldr	r3, [pc, #28]	; (28 <MSUP_delay+0x28>)
+   a:	0005      	movs	r5, r0
+
+    if(delay == UINT16_MAX)
+   c:	1c34      	adds	r4, r6, #0
+   e:	429e      	cmp	r6, r3
+  10:	d901      	bls.n	16 <MSUP_delay+0x16>
+  12:	4b06      	ldr	r3, [pc, #24]	; (2c <MSUP_delay+0x2c>)
+  14:	881c      	ldrh	r4, [r3, #0]
+  16:	b2a4      	uxth	r4, r4
+    {
+        delay--;
+    }
+    while ((uint16_t)(TIM_uiGetCircleMicroSeconds() - currentTime) <= delay )
+  18:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+  1c:	1b43      	subs	r3, r0, r5
+  1e:	b29b      	uxth	r3, r3
+  20:	42a3      	cmp	r3, r4
+  22:	d9f9      	bls.n	18 <MSUP_delay+0x18>
+    {
+        ;
+    }
+}
+  24:	bd70      	pop	{r4, r5, r6, pc}
+  26:	46c0      	nop			; (mov r8, r8)
+  28:	0000fffe 	.word	0x0000fffe
+  2c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_setTimeOut:
+
+00000000 <MSUP_setTimeOut>:
+
+
+void MSUP_setTimeOut(uint32_t timeout)
+{
+   0:	b510      	push	{r4, lr}
+    handle->timeout = timeout;
+   2:	4b03      	ldr	r3, [pc, #12]	; (10 <MSUP_setTimeOut+0x10>)
+   4:	6058      	str	r0, [r3, #4]
+    MSUP_startTimeMeasureExt(handle);
+   6:	0018      	movs	r0, r3
+   8:	f7ff fffe 	bl	0 <MSUP_setTimeOut>
+    MSUP_setTimeOutExt(&MSUP_LocalTimeoutHandle, timeout);
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_isTimeOut:
+
+00000000 <MSUP_isTimeOut>:
+
+
+bool MSUP_isTimeOut(void)
+{
+   0:	b510      	push	{r4, lr}
+    return MSUP_isTimeOutExt(&MSUP_LocalTimeoutHandle);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <MSUP_isTimeOut+0xc>)
+   4:	f7ff fffe 	bl	0 <MSUP_isTimeOut>
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MSUP_generateReset:
+
+00000000 <MSUP_generateReset>:
+  \details Acts as a special kind of Data Memory Barrier.
+           It completes when all explicit memory accesses before this instruction complete.
+ */
+__STATIC_FORCEINLINE void __DSB(void)
+{
+  __ASM volatile ("dsb 0xF":::"memory");
+   0:	f3bf 8f4f 	dsb	sy
+ */
+__NO_RETURN __STATIC_INLINE void __NVIC_SystemReset(void)
+{
+  __DSB();                                                          /* Ensure all outstanding memory accesses included
+                                                                       buffered write are completed before reset */
+  SCB->AIRCR  = ((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <MSUP_generateReset+0x14>)
+   6:	4a04      	ldr	r2, [pc, #16]	; (18 <MSUP_generateReset+0x18>)
+   8:	60da      	str	r2, [r3, #12]
+   a:	f3bf 8f4f 	dsb	sy
+                 SCB_AIRCR_SYSRESETREQ_Msk);
+  __DSB();                                                          /* Ensure completion of memory access */
+
+  for(;;)                                                           /* wait until reset */
+  {
+    __NOP();
+   e:	46c0      	nop			; (mov r8, r8)
+  for(;;)                                                           /* wait until reset */
+  10:	e7fd      	b.n	e <MSUP_generateReset+0xe>
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	e000ed00 	.word	0xe000ed00
+  18:	05fa0004 	.word	0x05fa0004
+
+Disassembly of section .text.MSUP_getHighByte:
+
+00000000 <MSUP_getHighByte>:
+
+#if !(defined(__cplusplus) && defined(MOCK_IT)) // do not include in test
+
+uint8_t MSUP_getHighByte(uint16_t value)
+{
+    return (uint8_t)((value) >> 8);
+   0:	0a00      	lsrs	r0, r0, #8
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_getLowByte:
+
+00000000 <MSUP_getLowByte>:
+
+
+uint8_t MSUP_getLowByte(uint16_t value)
+{
+    return (uint8_t)(value);
+   0:	b2c0      	uxtb	r0, r0
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_setHighByte:
+
+00000000 <MSUP_setHighByte>:
+
+/* Conversion between object pointer and void pointer MisraC2012-11.5, tested to work correctly */
+/*lint -save -e926 */ 
+void MSUP_setHighByte(uint16_t *value1, uint8_t value2)
+{
+    MSUP_HighByte(value1) = value2;
+   0:	7041      	strb	r1, [r0, #1]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_setLowByte:
+
+00000000 <MSUP_setLowByte>:
+
+
+void MSUP_setLowByte(uint16_t *value1, uint8_t value2)
+{
+    MSUP_LowByte(value1) = value2;
+   0:	7001      	strb	r1, [r0, #0]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_getHighWord:
+
+00000000 <MSUP_getHighWord>:
+
+
+uint32_t MSUP_getHighWord(uint32_t value)
+{
+    return ((uint16_t)((value) >> 16));  //lint !e9031 tested to work correctly
+   0:	0c00      	lsrs	r0, r0, #16
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_getLowWord:
+
+00000000 <MSUP_getLowWord>:
+
+
+uint32_t MSUP_getLowWord(uint32_t value)
+{
+    return ((uint16_t)(value));
+   0:	b280      	uxth	r0, r0
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_setHighWord:
+
+00000000 <MSUP_setHighWord>:
+
+
+void MSUP_setHighWord(uint32_t *value1, uint16_t value2)
+{
+    MSUP_HighWord(value1) = value2;
+   0:	8041      	strh	r1, [r0, #2]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MSUP_setLowWord:
+
+00000000 <MSUP_setLowWord>:
+
+
+void MSUP_setLowWord(uint32_t *value1, uint16_t value2)
+{
+    MSUP_LowWord(value1) = value2;
+   0:	8001      	strh	r1, [r0, #0]
+}
+   2:	4770      	bx	lr

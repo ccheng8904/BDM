@@ -1,0 +1,62 @@
+
+out/lromLoader/prog/firmware_update/BootLoader/BLmessageLoop.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BLMLP_handleMessageLoop:
+
+00000000 <BLMLP_handleMessageLoop>:
+
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+void BLMLP_handleMessageLoop(uint16_t bootTimeOut)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+/******************************************************************************/
+/* PRIVATE FUNCTION DEFINITIONS                                               */
+/******************************************************************************/
+static void BLMLP_init(void)
+{
+    BLCOM_init();
+   4:	f7ff fffe 	bl	0 <BLCOM_init>
+    BLSRV_init();
+   8:	f7ff fffe 	bl	0 <BLSRV_init>
+    BLCOM_sendByte(BL_HAND_SHAKE);
+   c:	2054      	movs	r0, #84	; 0x54
+   e:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+        rxResult = BLCOM_receiveFrame(BLMLP_msgBuffer, BLMLP_frameLength, timeOut);
+  12:	4d0c      	ldr	r5, [pc, #48]	; (44 <BLMLP_handleMessageLoop+0x44>)
+  14:	0022      	movs	r2, r4
+  16:	2104      	movs	r1, #4
+  18:	0028      	movs	r0, r5
+  1a:	f7ff fffe 	bl	0 <BLCOM_receiveFrame>
+        if (rxResult == BLCOM_rxSuccess)
+  1e:	2800      	cmp	r0, #0
+  20:	d102      	bne.n	28 <BLMLP_handleMessageLoop+0x28>
+            rxResult = BLSRV_doCommandService(BLMLP_msgBuffer);
+  22:	0028      	movs	r0, r5
+  24:	f7ff fffe 	bl	0 <BLSRV_doCommandService>
+        if (rxResult == BLCOM_rxError)
+  28:	2801      	cmp	r0, #1
+  2a:	d103      	bne.n	34 <BLMLP_handleMessageLoop+0x34>
+            BLCOM_sendAck(BL_TRANSMISSION_ERROR);
+  2c:	3005      	adds	r0, #5
+  2e:	f7ff fffe 	bl	0 <BLCOM_sendAck>
+        if (rxResult == BLCOM_rxTimeOut)
+  32:	e7ee      	b.n	12 <BLMLP_handleMessageLoop+0x12>
+  34:	2802      	cmp	r0, #2
+  36:	d1ec      	bne.n	12 <BLMLP_handleMessageLoop+0x12>
+            BLCOM_sendAck(BL_RECEIVER_TIMEOUT);
+  38:	3005      	adds	r0, #5
+  3a:	f7ff fffe 	bl	0 <BLCOM_sendAck>
+
+/** Generate the Reset
+ */
+static inline void BLCOM_generateReset(void)
+{
+    MSUP_generateReset();
+  3e:	f7ff fffe 	bl	0 <MSUP_generateReset>
+}
+  42:	e7e6      	b.n	12 <BLMLP_handleMessageLoop+0x12>
+  44:	00000000 	.word	0x00000000

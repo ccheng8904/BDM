@@ -1,0 +1,775 @@
+
+out/programmer/prog/firmware_update/map/SRC/common/map_cmd.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MAP_CMD_GetDeviceInfo:
+
+00000000 <MAP_CMD_GetDeviceInfo>:
+/******************************************************************************/
+
+/* Axivion Disable Style MisraC2012-11.5: "Conversion between object pointer and void pointer" 
+   Tested to work correctly for all platforms*/
+static void MAP_CMD_GetDeviceInfo(struct MAP_Arguments args)
+{
+   0:	b084      	sub	sp, #16
+   2:	b5f0      	push	{r4, r5, r6, r7, lr}
+   4:	b099      	sub	sp, #100	; 0x64
+   6:	9305      	str	r3, [sp, #20]
+   8:	911f      	str	r1, [sp, #124]	; 0x7c
+   a:	9220      	str	r2, [sp, #128]	; 0x80
+   c:	9321      	str	r3, [sp, #132]	; 0x84
+   e:	9006      	str	r0, [sp, #24]
+  10:	901e      	str	r0, [sp, #120]	; 0x78
+  12:	ab1e      	add	r3, sp, #120	; 0x78
+  14:	8a5b      	ldrh	r3, [r3, #18]
+  16:	0017      	movs	r7, r2
+  18:	9307      	str	r3, [sp, #28]
+    uint8_t nameLen;
+    uint8_t name[MAP_CMD_DEV_INFO_MAX_NAME_LEN];
+
+    bool getOneMoreModuleInfo=true;
+
+    *args.txLen=(uint16_t)sizeof(struct MAP_DeviceInfoResp);
+  1a:	2304      	movs	r3, #4
+  1c:	9a05      	ldr	r2, [sp, #20]
+
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_DeviceInfoReq))
+  1e:	b289      	uxth	r1, r1
+    *args.txLen=(uint16_t)sizeof(struct MAP_DeviceInfoResp);
+  20:	8013      	strh	r3, [r2, #0]
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_DeviceInfoReq))
+  22:	2903      	cmp	r1, #3
+  24:	d00e      	beq.n	44 <MAP_CMD_GetDeviceInfo+0x44>
+    {/*Wrong length of request*/
+        resp->nextIndex=0U;
+  26:	2300      	movs	r3, #0
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  28:	2502      	movs	r5, #2
+        resp->nextIndex=0U;
+  2a:	70fb      	strb	r3, [r7, #3]
+}
+/* Axivion Enable Style MisraC2012-11.5 */
+
+static void MAP_CMD_SetResponseHeader(struct MAP_RespHeader *const*header, enum MAP_CMD_ID id, uint8_t requestSeqCnt, uint8_t status)
+{
+    (*header)->id=(uint8_t)id;
+  2c:	2202      	movs	r2, #2
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_DEV_INFO_RESP, req->header.seqCnt, status);
+  2e:	9b06      	ldr	r3, [sp, #24]
+  30:	785b      	ldrb	r3, [r3, #1]
+    (*header)->id=(uint8_t)id;
+  32:	703a      	strb	r2, [r7, #0]
+}
+
+
+static uint8_t MAP_CMD_GetResponseSeqCnt(uint8_t requestSeqCnt)
+{
+    return (requestSeqCnt+1U);
+  34:	3301      	adds	r3, #1
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  36:	707b      	strb	r3, [r7, #1]
+    (*header)->status=status;
+  38:	70bd      	strb	r5, [r7, #2]
+}
+  3a:	b019      	add	sp, #100	; 0x64
+  3c:	bcf0      	pop	{r4, r5, r6, r7}
+  3e:	bc08      	pop	{r3}
+  40:	b004      	add	sp, #16
+  42:	4718      	bx	r3
+    else if(args.maxTxPayload<(uint16_t)(sizeof(struct MAP_DeviceInfoResp)+sizeof(struct MAP_ModuleInfo)))
+  44:	9b07      	ldr	r3, [sp, #28]
+  46:	2b0a      	cmp	r3, #10
+  48:	d803      	bhi.n	52 <MAP_CMD_GetDeviceInfo+0x52>
+        *args.txLen=(uint16_t)sizeof(struct MAP_RespHeader);
+  4a:	9b05      	ldr	r3, [sp, #20]
+        status=(uint8_t)MAP_ST_PAYLOAD_SIZE_EXCEEDED;
+  4c:	2505      	movs	r5, #5
+        *args.txLen=(uint16_t)sizeof(struct MAP_RespHeader);
+  4e:	8019      	strh	r1, [r3, #0]
+        status=(uint8_t)MAP_ST_PAYLOAD_SIZE_EXCEEDED;
+  50:	e7ec      	b.n	2c <MAP_CMD_GetDeviceInfo+0x2c>
+        oldIndex=req->index;
+  52:	9b06      	ldr	r3, [sp, #24]
+        moduleInfo.bytePtr=resp->moduleInfos;
+  54:	1d3c      	adds	r4, r7, #4
+        oldIndex=req->index;
+  56:	789b      	ldrb	r3, [r3, #2]
+  58:	9304      	str	r3, [sp, #16]
+            status=MAP_MemAccess.devInfo(oldIndex, &newIndex, &modNum, &modSize, &nameLen, MAP_CMD_DEV_INFO_MAX_NAME_LEN, name);
+  5a:	aa0b      	add	r2, sp, #44	; 0x2c
+  5c:	9202      	str	r2, [sp, #8]
+  5e:	2232      	movs	r2, #50	; 0x32
+  60:	2615      	movs	r6, #21
+  62:	9201      	str	r2, [sp, #4]
+  64:	aa04      	add	r2, sp, #16
+  66:	18b6      	adds	r6, r6, r2
+  68:	2216      	movs	r2, #22
+  6a:	4b22      	ldr	r3, [pc, #136]	; (f4 <MAP_CMD_GetDeviceInfo+0xf4>)
+  6c:	9600      	str	r6, [sp, #0]
+  6e:	a904      	add	r1, sp, #16
+  70:	681d      	ldr	r5, [r3, #0]
+  72:	1852      	adds	r2, r2, r1
+  74:	ab0a      	add	r3, sp, #40	; 0x28
+  76:	9804      	ldr	r0, [sp, #16]
+  78:	a909      	add	r1, sp, #36	; 0x24
+  7a:	47a8      	blx	r5
+                getOneMoreModuleInfo=false;
+  7c:	2300      	movs	r3, #0
+            status=MAP_MemAccess.devInfo(oldIndex, &newIndex, &modNum, &modSize, &nameLen, MAP_CMD_DEV_INFO_MAX_NAME_LEN, name);
+  7e:	0005      	movs	r5, r0
+            if(status==(uint8_t)MAP_ST_OK)
+  80:	4298      	cmp	r0, r3
+  82:	d113      	bne.n	ac <MAP_CMD_GetDeviceInfo+0xac>
+                if(args.maxTxPayload<(*args.txLen+(uint16_t)sizeof(struct MAP_ModuleInfo)+nameLen))
+  84:	9b05      	ldr	r3, [sp, #20]
+  86:	7836      	ldrb	r6, [r6, #0]
+  88:	881b      	ldrh	r3, [r3, #0]
+  8a:	9807      	ldr	r0, [sp, #28]
+  8c:	1dd9      	adds	r1, r3, #7
+                    if(req->index==(newIndex-1U))
+  8e:	aa04      	add	r2, sp, #16
+                if(args.maxTxPayload<(*args.txLen+(uint16_t)sizeof(struct MAP_ModuleInfo)+nameLen))
+  90:	1989      	adds	r1, r1, r6
+                    if(req->index==(newIndex-1U))
+  92:	7d12      	ldrb	r2, [r2, #20]
+                if(args.maxTxPayload<(*args.txLen+(uint16_t)sizeof(struct MAP_ModuleInfo)+nameLen))
+  94:	4288      	cmp	r0, r1
+  96:	da12      	bge.n	be <MAP_CMD_GetDeviceInfo+0xbe>
+                    if(req->index==(newIndex-1U))
+  98:	9b06      	ldr	r3, [sp, #24]
+  9a:	3a01      	subs	r2, #1
+  9c:	7899      	ldrb	r1, [r3, #2]
+  9e:	4291      	cmp	r1, r2
+  a0:	d100      	bne.n	a4 <MAP_CMD_GetDeviceInfo+0xa4>
+                        status=(uint8_t)MAP_ST_PAYLOAD_SIZE_EXCEEDED;
+  a2:	2505      	movs	r5, #5
+                    newIndex=oldIndex;
+  a4:	9a04      	ldr	r2, [sp, #16]
+  a6:	ab04      	add	r3, sp, #16
+  a8:	751a      	strb	r2, [r3, #20]
+                    getOneMoreModuleInfo=false;
+  aa:	2300      	movs	r3, #0
+            resp->nextIndex=newIndex;
+  ac:	aa04      	add	r2, sp, #16
+  ae:	7d12      	ldrb	r2, [r2, #20]
+  b0:	9204      	str	r2, [sp, #16]
+  b2:	70fa      	strb	r2, [r7, #3]
+            if(newIndex==0U)
+  b4:	2a00      	cmp	r2, #0
+  b6:	d0b9      	beq.n	2c <MAP_CMD_GetDeviceInfo+0x2c>
+        while(getOneMoreModuleInfo)
+  b8:	2b00      	cmp	r3, #0
+  ba:	d1ce      	bne.n	5a <MAP_CMD_GetDeviceInfo+0x5a>
+  bc:	e7b6      	b.n	2c <MAP_CMD_GetDeviceInfo+0x2c>
+                    (*args.txLen)+=(uint16_t)sizeof(struct MAP_ModuleInfo)+nameLen;
+  be:	9a05      	ldr	r2, [sp, #20]
+  c0:	199b      	adds	r3, r3, r6
+  c2:	3307      	adds	r3, #7
+  c4:	8013      	strh	r3, [r2, #0]
+                    BIGE_SetShortBytes(&moduleInfo.modulePtr->moduleNumber, modNum);
+  c6:	ab04      	add	r3, sp, #16
+  c8:	8adb      	ldrh	r3, [r3, #22]
+                    moduleInfo.modulePtr->nameLength=nameLen;
+  ca:	71a6      	strb	r6, [r4, #6]
+*   \param[in] Value to be transformed into bytes
+*/
+static inline void BIGE_SetShortBytes(struct BIGE_Short *const bytes, uint16_t value);
+static inline void BIGE_SetShortBytes(struct BIGE_Short *const bytes, uint16_t value)
+{
+    bytes->hi=(uint8_t)(value>>8);
+  cc:	0a1a      	lsrs	r2, r3, #8
+    bytes->lo=(uint8_t)value;
+  ce:	7063      	strb	r3, [r4, #1]
+                    BIGE_SetLongBytes(&moduleInfo.modulePtr->moduleSize, modSize);
+  d0:	9b0a      	ldr	r3, [sp, #40]	; 0x28
+    bytes->hi=(uint8_t)(value>>8);
+  d2:	7022      	strb	r2, [r4, #0]
+* \param[in] Value to be transformed into bytes
+*/
+static inline void BIGE_SetLongBytes(struct BIGE_Long *const bytes, uint32_t value);
+static inline void BIGE_SetLongBytes(struct BIGE_Long *const bytes, uint32_t value)
+{
+    bytes->hh=(uint8_t)(value>>24);
+  d4:	0e19      	lsrs	r1, r3, #24
+  d6:	70a1      	strb	r1, [r4, #2]
+    bytes->hl=(uint8_t)(value>>16);
+  d8:	0c19      	lsrs	r1, r3, #16
+  da:	70e1      	strb	r1, [r4, #3]
+    bytes->lh=(uint8_t)(value>>8);
+  dc:	0a19      	lsrs	r1, r3, #8
+  de:	7121      	strb	r1, [r4, #4]
+    bytes->ll=(uint8_t)value;
+  e0:	7163      	strb	r3, [r4, #5]
+                        moduleInfo.modulePtr->name[i]=name[i];
+  e2:	0032      	movs	r2, r6
+  e4:	1de0      	adds	r0, r4, #7
+  e6:	a90b      	add	r1, sp, #44	; 0x2c
+                    moduleInfo.bytePtr+=(uint8_t)sizeof(struct MAP_ModuleInfo)+nameLen;
+  e8:	3607      	adds	r6, #7
+                        moduleInfo.modulePtr->name[i]=name[i];
+  ea:	f7ff fffe 	bl	0 <memcpy>
+                    moduleInfo.bytePtr+=(uint8_t)sizeof(struct MAP_ModuleInfo)+nameLen;
+  ee:	19a4      	adds	r4, r4, r6
+  f0:	2301      	movs	r3, #1
+  f2:	e7db      	b.n	ac <MAP_CMD_GetDeviceInfo+0xac>
+  f4:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MAP_CMD_SetUpModule:
+
+00000000 <MAP_CMD_SetUpModule>:
+{
+   0:	b084      	sub	sp, #16
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   4:	0005      	movs	r5, r0
+   6:	9008      	str	r0, [sp, #32]
+   8:	9109      	str	r1, [sp, #36]	; 0x24
+   a:	0018      	movs	r0, r3
+   c:	930b      	str	r3, [sp, #44]	; 0x2c
+   e:	920a      	str	r2, [sp, #40]	; 0x28
+  10:	ab08      	add	r3, sp, #32
+  12:	0014      	movs	r4, r2
+  14:	8a1a      	ldrh	r2, [r3, #16]
+    *args.txLen=(uint16_t)sizeof(struct MAP_SetUpModuleResp);
+  16:	2306      	movs	r3, #6
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_SetUpModuleReq))
+  18:	b289      	uxth	r1, r1
+    *args.txLen=(uint16_t)sizeof(struct MAP_SetUpModuleResp);
+  1a:	8003      	strh	r3, [r0, #0]
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_SetUpModuleReq))
+  1c:	2904      	cmp	r1, #4
+  1e:	d00f      	beq.n	40 <MAP_CMD_SetUpModule+0x40>
+    bytes->hi=(uint8_t)(value>>8);
+  20:	0a13      	lsrs	r3, r2, #8
+  22:	70e3      	strb	r3, [r4, #3]
+        resp->maxTimeoutExponentOfPowerOfTwoOfSeconds=0U;
+  24:	2300      	movs	r3, #0
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  26:	2002      	movs	r0, #2
+    bytes->lo=(uint8_t)value;
+  28:	7122      	strb	r2, [r4, #4]
+        resp->maxTimeoutExponentOfPowerOfTwoOfSeconds=0U;
+  2a:	7163      	strb	r3, [r4, #5]
+    (*header)->id=(uint8_t)id;
+  2c:	2204      	movs	r2, #4
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_SETUP_MODULE_RESP, req->header.seqCnt, status);
+  2e:	786b      	ldrb	r3, [r5, #1]
+    (*header)->id=(uint8_t)id;
+  30:	7022      	strb	r2, [r4, #0]
+    return (requestSeqCnt+1U);
+  32:	3301      	adds	r3, #1
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  34:	7063      	strb	r3, [r4, #1]
+    (*header)->status=status;
+  36:	70a0      	strb	r0, [r4, #2]
+}
+  38:	bcf7      	pop	{r0, r1, r2, r4, r5, r6, r7}
+  3a:	bc08      	pop	{r3}
+  3c:	b004      	add	sp, #16
+  3e:	4718      	bx	r3
+    else if(args.maxTxPayload<(uint16_t)sizeof(struct MAP_SetUpModuleResp))
+  40:	ab08      	add	r3, sp, #32
+  42:	8a5b      	ldrh	r3, [r3, #18]
+  44:	2b05      	cmp	r3, #5
+  46:	d803      	bhi.n	50 <MAP_CMD_SetUpModule+0x50>
+        *args.txLen=(uint16_t)sizeof(struct MAP_RespHeader);
+  48:	2303      	movs	r3, #3
+  4a:	8003      	strh	r3, [r0, #0]
+        status=(uint8_t)MAP_ST_PAYLOAD_SIZE_EXCEEDED;
+  4c:	2005      	movs	r0, #5
+  4e:	e7ed      	b.n	2c <MAP_CMD_SetUpModule+0x2c>
+        modNum=BIGE_ToShort(&req->moduleNumber);
+  50:	78eb      	ldrb	r3, [r5, #3]
+  52:	78a9      	ldrb	r1, [r5, #2]
+  54:	021b      	lsls	r3, r3, #8
+  56:	430b      	orrs	r3, r1
+  58:	4669      	mov	r1, sp
+  5a:	ba5b      	rev16	r3, r3
+  5c:	804b      	strh	r3, [r1, #2]
+    bytes->hi=(uint8_t)(value>>8);
+  5e:	0a13      	lsrs	r3, r2, #8
+  60:	70e3      	strb	r3, [r4, #3]
+  62:	884f      	ldrh	r7, [r1, #2]
+        if(modNum==MAP_CMD_INVALID_MODULE_NUMBER)
+  64:	4b11      	ldr	r3, [pc, #68]	; (ac <MAP_CMD_SetUpModule+0xac>)
+    bytes->lo=(uint8_t)value;
+  66:	7122      	strb	r2, [r4, #4]
+  68:	429f      	cmp	r7, r3
+  6a:	d103      	bne.n	74 <MAP_CMD_SetUpModule+0x74>
+            resp->maxTimeoutExponentOfPowerOfTwoOfSeconds=0U;
+  6c:	2300      	movs	r3, #0
+            status=(uint8_t)MAP_ST_WRONG_PARAM;
+  6e:	2001      	movs	r0, #1
+            resp->maxTimeoutExponentOfPowerOfTwoOfSeconds=0U;
+  70:	7163      	strb	r3, [r4, #5]
+            status=(uint8_t)MAP_ST_WRONG_PARAM;
+  72:	e7db      	b.n	2c <MAP_CMD_SetUpModule+0x2c>
+            if(MAP_CMD_lastModuleOpened!=MAP_CMD_INVALID_MODULE_NUMBER)
+  74:	4a0e      	ldr	r2, [pc, #56]	; (b0 <MAP_CMD_SetUpModule+0xb0>)
+  76:	4e0f      	ldr	r6, [pc, #60]	; (b4 <MAP_CMD_SetUpModule+0xb4>)
+  78:	8810      	ldrh	r0, [r2, #0]
+  7a:	9201      	str	r2, [sp, #4]
+  7c:	4298      	cmp	r0, r3
+  7e:	d10f      	bne.n	a0 <MAP_CMD_SetUpModule+0xa0>
+                status=MAP_MemAccess.open(modNum, &resp->maxTimeoutExponentOfPowerOfTwoOfSeconds);
+  80:	0038      	movs	r0, r7
+  82:	6873      	ldr	r3, [r6, #4]
+  84:	1d61      	adds	r1, r4, #5
+  86:	4798      	blx	r3
+                if(status==(uint8_t)MAP_ST_OK)
+  88:	2800      	cmp	r0, #0
+  8a:	d1cf      	bne.n	2c <MAP_CMD_SetUpModule+0x2c>
+                status=MAP_MemAccess.open(modNum, &resp->maxTimeoutExponentOfPowerOfTwoOfSeconds);
+  8c:	200a      	movs	r0, #10
+                    if(resp->maxTimeoutExponentOfPowerOfTwoOfSeconds>MAP_CMD_MAX_EXPONENT_OF_TIMEOUT)
+  8e:	7963      	ldrb	r3, [r4, #5]
+                    MAP_CMD_lastModuleOpened=modNum;
+  90:	466a      	mov	r2, sp
+                status=MAP_MemAccess.open(modNum, &resp->maxTimeoutExponentOfPowerOfTwoOfSeconds);
+  92:	4298      	cmp	r0, r3
+  94:	4180      	sbcs	r0, r0
+                    MAP_CMD_lastModuleOpened=modNum;
+  96:	8852      	ldrh	r2, [r2, #2]
+  98:	9b01      	ldr	r3, [sp, #4]
+                status=MAP_MemAccess.open(modNum, &resp->maxTimeoutExponentOfPowerOfTwoOfSeconds);
+  9a:	4240      	negs	r0, r0
+                    MAP_CMD_lastModuleOpened=modNum;
+  9c:	801a      	strh	r2, [r3, #0]
+  9e:	e7c5      	b.n	2c <MAP_CMD_SetUpModule+0x2c>
+                status=MAP_MemAccess.close(MAP_CMD_lastModuleOpened);
+  a0:	68b3      	ldr	r3, [r6, #8]
+  a2:	4798      	blx	r3
+           if(status==(uint8_t)MAP_ST_OK)
+  a4:	2800      	cmp	r0, #0
+  a6:	d0eb      	beq.n	80 <MAP_CMD_SetUpModule+0x80>
+  a8:	e7c0      	b.n	2c <MAP_CMD_SetUpModule+0x2c>
+  aa:	46c0      	nop			; (mov r8, r8)
+  ac:	0000ffff 	.word	0x0000ffff
+	...
+
+Disassembly of section .text.MAP_CMD_WriteAppend:
+
+00000000 <MAP_CMD_WriteAppend>:
+{
+   0:	b084      	sub	sp, #16
+   2:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   4:	0015      	movs	r5, r2
+   6:	9208      	str	r2, [sp, #32]
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+   8:	2203      	movs	r2, #3
+{
+   a:	9107      	str	r1, [sp, #28]
+   c:	9309      	str	r3, [sp, #36]	; 0x24
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+   e:	801a      	strh	r2, [r3, #0]
+{
+  10:	9006      	str	r0, [sp, #24]
+  12:	b289      	uxth	r1, r1
+  14:	0004      	movs	r4, r0
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  16:	2302      	movs	r3, #2
+    else if(req->header.seqCnt==MAP_CMD_GetLastCorrectWriteRequestSeqCnt())
+  18:	7842      	ldrb	r2, [r0, #1]
+  1a:	4e14      	ldr	r6, [pc, #80]	; (6c <MAP_CMD_WriteAppend+0x6c>)
+    if(args.rxLen<(uint16_t)sizeof(struct MAP_WriteAppendReq))
+  1c:	2903      	cmp	r1, #3
+  1e:	d908      	bls.n	32 <MAP_CMD_WriteAppend+0x32>
+}
+
+
+static uint8_t MAP_CMD_GetLastCorrectWriteRequestSeqCnt(void)
+{
+    return MAP_CMD_seqCntOfLastCorrectWriteMsg;
+  20:	4f13      	ldr	r7, [pc, #76]	; (70 <MAP_CMD_WriteAppend+0x70>)
+  22:	783b      	ldrb	r3, [r7, #0]
+    else if(req->header.seqCnt==MAP_CMD_GetLastCorrectWriteRequestSeqCnt())
+  24:	4293      	cmp	r3, r2
+  26:	d005      	beq.n	34 <MAP_CMD_WriteAppend+0x34>
+}
+
+
+static uint8_t MAP_CMD_GetPresentCorrectWriteRequestSeqCnt(void)
+{
+    return (MAP_CMD_seqCntOfLastCorrectWriteMsg+2U);
+  28:	3302      	adds	r3, #2
+    else if(req->header.seqCnt!=MAP_CMD_GetPresentCorrectWriteRequestSeqCnt())
+  2a:	b2db      	uxtb	r3, r3
+  2c:	4293      	cmp	r3, r2
+  2e:	d00c      	beq.n	4a <MAP_CMD_WriteAppend+0x4a>
+        status=(uint8_t)MAP_ST_SEQUENCE_CNT_ERROR;
+  30:	2304      	movs	r3, #4
+  32:	7033      	strb	r3, [r6, #0]
+    (*header)->id=(uint8_t)id;
+  34:	2109      	movs	r1, #9
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_WRITE_RESP, req->header.seqCnt, status);
+  36:	7863      	ldrb	r3, [r4, #1]
+  38:	7832      	ldrb	r2, [r6, #0]
+    return (requestSeqCnt+1U);
+  3a:	3301      	adds	r3, #1
+    (*header)->id=(uint8_t)id;
+  3c:	7029      	strb	r1, [r5, #0]
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  3e:	706b      	strb	r3, [r5, #1]
+    (*header)->status=status;
+  40:	70aa      	strb	r2, [r5, #2]
+}
+  42:	bcf8      	pop	{r3, r4, r5, r6, r7}
+  44:	bc08      	pop	{r3}
+  46:	b004      	add	sp, #16
+  48:	4718      	bx	r3
+        status=MAP_MemAccess.writeAppend(modNum, bytesToWriteInThisMessage, req->data);
+  4a:	7883      	ldrb	r3, [r0, #2]
+  4c:	1d02      	adds	r2, r0, #4
+  4e:	78c0      	ldrb	r0, [r0, #3]
+        bytesToWriteInThisMessage=args.rxLen-(uint16_t)sizeof(struct MAP_WriteAppendReq);
+  50:	3904      	subs	r1, #4
+        status=MAP_MemAccess.writeAppend(modNum, bytesToWriteInThisMessage, req->data);
+  52:	0200      	lsls	r0, r0, #8
+  54:	4318      	orrs	r0, r3
+  56:	4b07      	ldr	r3, [pc, #28]	; (74 <MAP_CMD_WriteAppend+0x74>)
+  58:	ba40      	rev16	r0, r0
+  5a:	695b      	ldr	r3, [r3, #20]
+  5c:	b289      	uxth	r1, r1
+  5e:	b280      	uxth	r0, r0
+  60:	4798      	blx	r3
+  62:	7030      	strb	r0, [r6, #0]
+    MAP_CMD_seqCntOfLastCorrectWriteMsg=value;
+  64:	7863      	ldrb	r3, [r4, #1]
+  66:	703b      	strb	r3, [r7, #0]
+}
+  68:	e7e4      	b.n	34 <MAP_CMD_WriteAppend+0x34>
+  6a:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAP_CMD_HandleUnknownCmd:
+
+00000000 <MAP_CMD_HandleUnknownCmd>:
+{
+   0:	b084      	sub	sp, #16
+   2:	9101      	str	r1, [sp, #4]
+   4:	9202      	str	r2, [sp, #8]
+   6:	0011      	movs	r1, r2
+    *args.txLen=(uint16_t)sizeof(struct MAP_UnknowCmdResp);
+   8:	2203      	movs	r2, #3
+{
+   a:	9000      	str	r0, [sp, #0]
+    *args.txLen=(uint16_t)sizeof(struct MAP_UnknowCmdResp);
+   c:	801a      	strh	r2, [r3, #0]
+{
+   e:	9303      	str	r3, [sp, #12]
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_UNKNOWN_CMD_RESP, req->seqCnt, (uint8_t)MAP_ST_UNKNOWN_REQ);
+  10:	7843      	ldrb	r3, [r0, #1]
+    (*header)->id=(uint8_t)id;
+  12:	20ff      	movs	r0, #255	; 0xff
+    return (requestSeqCnt+1U);
+  14:	3301      	adds	r3, #1
+    (*header)->id=(uint8_t)id;
+  16:	7008      	strb	r0, [r1, #0]
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  18:	704b      	strb	r3, [r1, #1]
+    (*header)->status=status;
+  1a:	708a      	strb	r2, [r1, #2]
+}
+  1c:	b004      	add	sp, #16
+  1e:	4770      	bx	lr
+
+Disassembly of section .text.BIGE_ToLong.isra.0:
+
+00000000 <BIGE_ToLong.isra.0>:
+    return ((uint32_t)bytes->hh<<24)|((uint32_t)bytes->hl<<16)|((uint32_t)bytes->lh<<8)|((uint32_t)bytes->ll);
+   0:	0212      	lsls	r2, r2, #8
+   2:	431a      	orrs	r2, r3
+   4:	0409      	lsls	r1, r1, #16
+   6:	430a      	orrs	r2, r1
+   8:	0600      	lsls	r0, r0, #24
+   a:	4310      	orrs	r0, r2
+}
+   c:	4770      	bx	lr
+
+Disassembly of section .text.MAP_CMD_WritePrematurelyEnd:
+
+00000000 <MAP_CMD_WritePrematurelyEnd>:
+{
+   0:	b084      	sub	sp, #16
+   2:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   4:	0015      	movs	r5, r2
+   6:	9208      	str	r2, [sp, #32]
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+   8:	2203      	movs	r2, #3
+{
+   a:	9309      	str	r3, [sp, #36]	; 0x24
+   c:	9006      	str	r0, [sp, #24]
+   e:	9107      	str	r1, [sp, #28]
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+  10:	801a      	strh	r2, [r3, #0]
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_WriteprematurelyEndReq))
+  12:	ab06      	add	r3, sp, #24
+  14:	889b      	ldrh	r3, [r3, #4]
+{
+  16:	0004      	movs	r4, r0
+    else if(req->header.seqCnt==MAP_CMD_GetLastCorrectWriteRequestSeqCnt())
+  18:	7842      	ldrb	r2, [r0, #1]
+  1a:	4e17      	ldr	r6, [pc, #92]	; (78 <MAP_CMD_WritePrematurelyEnd+0x78>)
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_WriteprematurelyEndReq))
+  1c:	2b08      	cmp	r3, #8
+  1e:	d00c      	beq.n	3a <MAP_CMD_WritePrematurelyEnd+0x3a>
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  20:	2302      	movs	r3, #2
+        status=(uint8_t)MAP_ST_SEQUENCE_CNT_ERROR;
+  22:	7033      	strb	r3, [r6, #0]
+    (*header)->id=(uint8_t)id;
+  24:	2109      	movs	r1, #9
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_WRITE_RESP, req->header.seqCnt, status);
+  26:	7863      	ldrb	r3, [r4, #1]
+  28:	7832      	ldrb	r2, [r6, #0]
+    return (requestSeqCnt+1U);
+  2a:	3301      	adds	r3, #1
+    (*header)->id=(uint8_t)id;
+  2c:	7029      	strb	r1, [r5, #0]
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  2e:	706b      	strb	r3, [r5, #1]
+    (*header)->status=status;
+  30:	70aa      	strb	r2, [r5, #2]
+}
+  32:	bcf8      	pop	{r3, r4, r5, r6, r7}
+  34:	bc08      	pop	{r3}
+  36:	b004      	add	sp, #16
+  38:	4718      	bx	r3
+    return MAP_CMD_seqCntOfLastCorrectWriteMsg;
+  3a:	4f10      	ldr	r7, [pc, #64]	; (7c <MAP_CMD_WritePrematurelyEnd+0x7c>)
+  3c:	783b      	ldrb	r3, [r7, #0]
+    else if(req->header.seqCnt==MAP_CMD_GetLastCorrectWriteRequestSeqCnt())
+  3e:	4293      	cmp	r3, r2
+  40:	d0f0      	beq.n	24 <MAP_CMD_WritePrematurelyEnd+0x24>
+    return (MAP_CMD_seqCntOfLastCorrectWriteMsg+2U);
+  42:	3302      	adds	r3, #2
+    else if(req->header.seqCnt!=MAP_CMD_GetPresentCorrectWriteRequestSeqCnt())
+  44:	b2db      	uxtb	r3, r3
+  46:	4293      	cmp	r3, r2
+  48:	d001      	beq.n	4e <MAP_CMD_WritePrematurelyEnd+0x4e>
+        status=(uint8_t)MAP_ST_SEQUENCE_CNT_ERROR;
+  4a:	2304      	movs	r3, #4
+  4c:	e7e9      	b.n	22 <MAP_CMD_WritePrematurelyEnd+0x22>
+        overallBytesWritten=BIGE_ToLong(&req->overallBytesWritten);
+  4e:	79c3      	ldrb	r3, [r0, #7]
+  50:	7982      	ldrb	r2, [r0, #6]
+  52:	7941      	ldrb	r1, [r0, #5]
+  54:	7900      	ldrb	r0, [r0, #4]
+  56:	f7ff fffe 	bl	0 <MAP_CMD_WritePrematurelyEnd>
+        status=MAP_MemAccess.writePrematurelyEnd(modNum, overallBytesWritten);
+  5a:	78e3      	ldrb	r3, [r4, #3]
+  5c:	78a2      	ldrb	r2, [r4, #2]
+  5e:	021b      	lsls	r3, r3, #8
+  60:	4313      	orrs	r3, r2
+  62:	ba5b      	rev16	r3, r3
+        overallBytesWritten=BIGE_ToLong(&req->overallBytesWritten);
+  64:	0001      	movs	r1, r0
+        status=MAP_MemAccess.writePrematurelyEnd(modNum, overallBytesWritten);
+  66:	b298      	uxth	r0, r3
+  68:	4b05      	ldr	r3, [pc, #20]	; (80 <MAP_CMD_WritePrematurelyEnd+0x80>)
+  6a:	699b      	ldr	r3, [r3, #24]
+  6c:	4798      	blx	r3
+  6e:	7030      	strb	r0, [r6, #0]
+    MAP_CMD_seqCntOfLastCorrectWriteMsg=value;
+  70:	7863      	ldrb	r3, [r4, #1]
+  72:	703b      	strb	r3, [r7, #0]
+}
+  74:	e7d6      	b.n	24 <MAP_CMD_WritePrematurelyEnd+0x24>
+  76:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAP_CMD_WriteStart:
+
+00000000 <MAP_CMD_WriteStart>:
+{
+   0:	b084      	sub	sp, #16
+   2:	b570      	push	{r4, r5, r6, lr}
+   4:	0015      	movs	r5, r2
+   6:	9206      	str	r2, [sp, #24]
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+   8:	2203      	movs	r2, #3
+   a:	b28e      	uxth	r6, r1
+{
+   c:	0004      	movs	r4, r0
+   e:	9004      	str	r0, [sp, #16]
+  10:	9105      	str	r1, [sp, #20]
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  12:	2002      	movs	r0, #2
+{
+  14:	9307      	str	r3, [sp, #28]
+    *args.txLen=(uint16_t)sizeof(struct MAP_WriteResp);
+  16:	801a      	strh	r2, [r3, #0]
+    if(args.rxLen<(uint16_t)sizeof(struct MAP_WriteStartReq))
+  18:	2e07      	cmp	r6, #7
+  1a:	d91a      	bls.n	52 <MAP_CMD_WriteStart+0x52>
+        overallNumOfBytes=BIGE_ToLong(&req->overallNumberOfBytes);
+  1c:	79a2      	ldrb	r2, [r4, #6]
+  1e:	7961      	ldrb	r1, [r4, #5]
+  20:	79e3      	ldrb	r3, [r4, #7]
+  22:	7920      	ldrb	r0, [r4, #4]
+  24:	f7ff fffe 	bl	0 <MAP_CMD_WriteStart>
+        bytesToWriteInThisMessage=args.rxLen-(uint16_t)sizeof(struct MAP_WriteStartReq);
+  28:	0032      	movs	r2, r6
+  2a:	3a08      	subs	r2, #8
+  2c:	b292      	uxth	r2, r2
+        overallNumOfBytes=BIGE_ToLong(&req->overallNumberOfBytes);
+  2e:	0001      	movs	r1, r0
+            status=(uint8_t)MAP_ST_WRONG_PARAM;
+  30:	2001      	movs	r0, #1
+        if(overallNumOfBytes<bytesToWriteInThisMessage)
+  32:	428a      	cmp	r2, r1
+  34:	d80d      	bhi.n	52 <MAP_CMD_WriteStart+0x52>
+            status=MAP_MemAccess.writeStart(modNum, overallNumOfBytes, bytesToWriteInThisMessage, req->data);
+  36:	78e3      	ldrb	r3, [r4, #3]
+  38:	78a0      	ldrb	r0, [r4, #2]
+  3a:	021b      	lsls	r3, r3, #8
+  3c:	4303      	orrs	r3, r0
+  3e:	ba5b      	rev16	r3, r3
+  40:	b298      	uxth	r0, r3
+  42:	4b09      	ldr	r3, [pc, #36]	; (68 <MAP_CMD_WriteStart+0x68>)
+  44:	691e      	ldr	r6, [r3, #16]
+  46:	0023      	movs	r3, r4
+  48:	3308      	adds	r3, #8
+  4a:	47b0      	blx	r6
+    MAP_CMD_seqCntOfLastCorrectWriteMsg=value;
+  4c:	4b07      	ldr	r3, [pc, #28]	; (6c <MAP_CMD_WriteStart+0x6c>)
+  4e:	7862      	ldrb	r2, [r4, #1]
+  50:	701a      	strb	r2, [r3, #0]
+    (*header)->id=(uint8_t)id;
+  52:	2209      	movs	r2, #9
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_WRITE_RESP, req->header.seqCnt, status);
+  54:	7863      	ldrb	r3, [r4, #1]
+    (*header)->id=(uint8_t)id;
+  56:	702a      	strb	r2, [r5, #0]
+    return (requestSeqCnt+1U);
+  58:	3301      	adds	r3, #1
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  5a:	706b      	strb	r3, [r5, #1]
+    (*header)->status=status;
+  5c:	70a8      	strb	r0, [r5, #2]
+}
+  5e:	bc70      	pop	{r4, r5, r6}
+  60:	bc08      	pop	{r3}
+  62:	b004      	add	sp, #16
+  64:	4718      	bx	r3
+  66:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAP_CMD_Read:
+
+00000000 <MAP_CMD_Read>:
+{
+   0:	b084      	sub	sp, #16
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   4:	9300      	str	r3, [sp, #0]
+   6:	9008      	str	r0, [sp, #32]
+   8:	9109      	str	r1, [sp, #36]	; 0x24
+   a:	920a      	str	r2, [sp, #40]	; 0x28
+   c:	930b      	str	r3, [sp, #44]	; 0x2c
+   e:	ab08      	add	r3, sp, #32
+  10:	8a5f      	ldrh	r7, [r3, #18]
+    *args.txLen=(uint16_t)sizeof(struct MAP_ReadResp);
+  12:	2303      	movs	r3, #3
+{
+  14:	0016      	movs	r6, r2
+    *args.txLen=(uint16_t)sizeof(struct MAP_ReadResp);
+  16:	9a00      	ldr	r2, [sp, #0]
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_ReadReq))
+  18:	b289      	uxth	r1, r1
+{
+  1a:	0005      	movs	r5, r0
+    *args.txLen=(uint16_t)sizeof(struct MAP_ReadResp);
+  1c:	8013      	strh	r3, [r2, #0]
+        status=(uint8_t)MAP_ST_MISMATCH_PARAM;
+  1e:	2002      	movs	r0, #2
+    if(args.rxLen!=(uint16_t)sizeof(struct MAP_ReadReq))
+  20:	290a      	cmp	r1, #10
+  22:	d128      	bne.n	76 <MAP_CMD_Read+0x76>
+        status=(uint8_t)MAP_ST_PAYLOAD_SIZE_EXCEEDED;
+  24:	18c0      	adds	r0, r0, r3
+    else if(args.maxTxPayload==(uint16_t)sizeof(struct MAP_ReadResp))
+  26:	429f      	cmp	r7, r3
+  28:	d025      	beq.n	76 <MAP_CMD_Read+0x76>
+        modNum=BIGE_ToShort(&req->moduleNumber);
+  2a:	78eb      	ldrb	r3, [r5, #3]
+  2c:	78aa      	ldrb	r2, [r5, #2]
+  2e:	021b      	lsls	r3, r3, #8
+  30:	4313      	orrs	r3, r2
+  32:	ba5b      	rev16	r3, r3
+  34:	b29b      	uxth	r3, r3
+  36:	796c      	ldrb	r4, [r5, #5]
+  38:	9301      	str	r3, [sp, #4]
+        dataLen=BIGE_ToShort(&req->numOfBytes);
+  3a:	792b      	ldrb	r3, [r5, #4]
+  3c:	0224      	lsls	r4, r4, #8
+        offset=BIGE_ToLong(&req->offset);
+  3e:	79e9      	ldrb	r1, [r5, #7]
+  40:	431c      	orrs	r4, r3
+  42:	7a2a      	ldrb	r2, [r5, #8]
+  44:	7a6b      	ldrb	r3, [r5, #9]
+  46:	79a8      	ldrb	r0, [r5, #6]
+  48:	f7ff fffe 	bl	0 <MAP_CMD_Read>
+  4c:	ba64      	rev16	r4, r4
+  4e:	b2a4      	uxth	r4, r4
+        if(dataLen>(args.maxTxPayload-(uint16_t)sizeof(struct MAP_RespHeader)))
+  50:	1ebb      	subs	r3, r7, #2
+        offset=BIGE_ToLong(&req->offset);
+  52:	0001      	movs	r1, r0
+        if(dataLen>(args.maxTxPayload-(uint16_t)sizeof(struct MAP_RespHeader)))
+  54:	42a3      	cmp	r3, r4
+  56:	dc01      	bgt.n	5c <MAP_CMD_Read+0x5c>
+            dataLen=args.maxTxPayload-(uint16_t)sizeof(struct MAP_RespHeader);
+  58:	3f03      	subs	r7, #3
+  5a:	b2bc      	uxth	r4, r7
+        status=MAP_MemAccess.read(modNum, offset, dataLen, resp->data);
+  5c:	4a0b      	ldr	r2, [pc, #44]	; (8c <MAP_CMD_Read+0x8c>)
+  5e:	9801      	ldr	r0, [sp, #4]
+  60:	68d7      	ldr	r7, [r2, #12]
+  62:	1cf3      	adds	r3, r6, #3
+  64:	0022      	movs	r2, r4
+  66:	47b8      	blx	r7
+        if(status==(uint8_t)MAP_ST_OK)
+  68:	2800      	cmp	r0, #0
+  6a:	d104      	bne.n	76 <MAP_CMD_Read+0x76>
+            *args.txLen+=dataLen;
+  6c:	9b00      	ldr	r3, [sp, #0]
+  6e:	881b      	ldrh	r3, [r3, #0]
+  70:	18e4      	adds	r4, r4, r3
+  72:	9b00      	ldr	r3, [sp, #0]
+  74:	801c      	strh	r4, [r3, #0]
+    (*header)->id=(uint8_t)id;
+  76:	2206      	movs	r2, #6
+    MAP_CMD_SetResponseHeader(&respHeader, MAP_CMD_ID_READ_RESP, req->header.seqCnt, status);
+  78:	786b      	ldrb	r3, [r5, #1]
+    (*header)->id=(uint8_t)id;
+  7a:	7032      	strb	r2, [r6, #0]
+    return (requestSeqCnt+1U);
+  7c:	3301      	adds	r3, #1
+    (*header)->seqCnt=MAP_CMD_GetResponseSeqCnt(requestSeqCnt);
+  7e:	7073      	strb	r3, [r6, #1]
+    (*header)->status=status;
+  80:	70b0      	strb	r0, [r6, #2]
+}
+  82:	bcf7      	pop	{r0, r1, r2, r4, r5, r6, r7}
+  84:	bc08      	pop	{r3}
+  86:	b004      	add	sp, #16
+  88:	4718      	bx	r3
+  8a:	46c0      	nop			; (mov r8, r8)
+  8c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MAP_CMD_GetCmdExecFunc:
+
+00000000 <MAP_CMD_GetCmdExecFunc>:
+    switch(id)
+   0:	3801      	subs	r0, #1
+   2:	b2c3      	uxtb	r3, r0
+{
+   4:	4803      	ldr	r0, [pc, #12]	; (14 <MAP_CMD_GetCmdExecFunc+0x14>)
+   6:	2b09      	cmp	r3, #9
+   8:	d802      	bhi.n	10 <MAP_CMD_GetCmdExecFunc+0x10>
+   a:	4a03      	ldr	r2, [pc, #12]	; (18 <MAP_CMD_GetCmdExecFunc+0x18>)
+   c:	009b      	lsls	r3, r3, #2
+   e:	5898      	ldr	r0, [r3, r2]
+}
+  10:	4770      	bx	lr
+  12:	46c0      	nop			; (mov r8, r8)
+	...

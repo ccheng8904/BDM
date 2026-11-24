@@ -1,0 +1,948 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbuspresentationXs.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MOD_bGetId,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  23              	MOD_bGetId:
+  24              	.LVL0:
+  25              	.LFB8:
+  26              		.file 1 "app/prog/dbus/dbuspresentationXs.c"
+   1:app/prog/dbus/dbuspresentationXs.c **** /*******************************************************************************
+   2:app/prog/dbus/dbuspresentationXs.c **** *   Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:app/prog/dbus/dbuspresentationXs.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/dbus/dbuspresentationXs.c **** *
+   5:app/prog/dbus/dbuspresentationXs.c **** *   All rights reserved. This program and the accompanying materials
+   6:app/prog/dbus/dbuspresentationXs.c **** *   are protected by international copyright laws.
+   7:app/prog/dbus/dbuspresentationXs.c **** *   Please contact copyright holder for licensing information.
+   8:app/prog/dbus/dbuspresentationXs.c **** *
+   9:app/prog/dbus/dbuspresentationXs.c **** ********************************************************************************
+  10:app/prog/dbus/dbuspresentationXs.c **** *   PROJECT          Generic SW
+  11:app/prog/dbus/dbuspresentationXs.c **** *   COMP_ABBREV      DBPL
+  12:app/prog/dbus/dbuspresentationXs.c **** *******************************************************************************/
+  13:app/prog/dbus/dbuspresentationXs.c **** 
+  14:app/prog/dbus/dbuspresentationXs.c **** /******************************************************************************/
+  15:app/prog/dbus/dbuspresentationXs.c **** /* DOCUMENTATION                                                              */
+  16:app/prog/dbus/dbuspresentationXs.c **** /******************************************************************************/
+  17:app/prog/dbus/dbuspresentationXs.c **** /** \file
+  18:app/prog/dbus/dbuspresentationXs.c ****  *     Presentation layer for the D-Bus-2 - excess template
+  19:app/prog/dbus/dbuspresentationXs.c ****  *     
+  20:app/prog/dbus/dbuspresentationXs.c ****  *     This is the excess template, which may be modified in any project using D-Bus-2 Presentation
+  21:app/prog/dbus/dbuspresentationXs.c ****  *     for system dependent implementations/adaptions
+  22:app/prog/dbus/dbuspresentationXs.c ****  */
+  23:app/prog/dbus/dbuspresentationXs.c **** 
+  24:app/prog/dbus/dbuspresentationXs.c **** /******************************************************************************/
+  25:app/prog/dbus/dbuspresentationXs.c **** /* INCLUDES                                                                   */
+  26:app/prog/dbus/dbuspresentationXs.c **** /******************************************************************************/
+  27:app/prog/dbus/dbuspresentationXs.c **** #include "bsh_stdinc.h"
+  28:app/prog/dbus/dbuspresentationXs.c **** #include "build_date.h"
+  29:app/prog/dbus/dbuspresentationXs.c **** 
+  30:app/prog/dbus/dbuspresentationXs.c **** #ifdef DOXY_DEVELOPERS_DOC
+  31:app/prog/dbus/dbuspresentationXs.c **** //Doxygen documentation of compiler switch
+  32:app/prog/dbus/dbuspresentationXs.c **** /**
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 2
+
+
+  33:app/prog/dbus/dbuspresentationXs.c **** Local compiler switch.
+  34:app/prog/dbus/dbuspresentationXs.c **** 
+  35:app/prog/dbus/dbuspresentationXs.c **** If set: Minimal implementation.
+  36:app/prog/dbus/dbuspresentationXs.c **** */
+  37:app/prog/dbus/dbuspresentationXs.c **** #define LSW_DBPL_MINIMAL_IMPLEMENTATION
+  38:app/prog/dbus/dbuspresentationXs.c **** 
+  39:app/prog/dbus/dbuspresentationXs.c **** //Doxygen documentation of compiler switch
+  40:app/prog/dbus/dbuspresentationXs.c **** /**
+  41:app/prog/dbus/dbuspresentationXs.c **** Local compiler switch.
+  42:app/prog/dbus/dbuspresentationXs.c **** 
+  43:app/prog/dbus/dbuspresentationXs.c **** If set: Memory module 1 will be defined as a array, which can be addressed starting with address 0.
+  44:app/prog/dbus/dbuspresentationXs.c **** */
+  45:app/prog/dbus/dbuspresentationXs.c **** #endif
+  46:app/prog/dbus/dbuspresentationXs.c **** 
+  47:app/prog/dbus/dbuspresentationXs.c **** #ifndef DOXY_DEVELOPERS_DOC
+  48:app/prog/dbus/dbuspresentationXs.c **** //        #define LSW_DBPL_MINIMAL_IMPLEMENTATION
+  49:app/prog/dbus/dbuspresentationXs.c **** #endif
+  50:app/prog/dbus/dbuspresentationXs.c **** 
+  51:app/prog/dbus/dbuspresentationXs.c **** 
+  52:app/prog/dbus/dbuspresentationXs.c **** #include <string.h>    //memcpy()
+  53:app/prog/dbus/dbuspresentationXs.c **** #include "LibTypes.h"
+  54:app/prog/dbus/dbuspresentationXs.c **** #include "LibDefines.h"
+  55:app/prog/dbus/dbuspresentationXs.c **** #include "bustypes.h"
+  56:app/prog/dbus/dbuspresentationXs.c **** #include "dbuspresentation.h"
+  57:app/prog/dbus/dbuspresentationXs.c **** #include "dbuspresentation_ecu_types.h"
+  58:app/prog/dbus/dbuspresentationXs.c **** #include "dbuspresentation_production_types.h"
+  59:app/prog/dbus/dbuspresentationXs.c **** #include "bal.h"
+  60:app/prog/dbus/dbuspresentationXs.c **** #include "dbusdll.h"
+  61:app/prog/dbus/dbuspresentationXs.c **** 
+  62:app/prog/dbus/dbuspresentationXs.c **** #if defined (REMOTE_FIRMWARE_UPDATE) || defined (WIRED_FIRMWARE_UPDATE)
+  63:app/prog/dbus/dbuspresentationXs.c **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+  64:app/prog/dbus/dbuspresentationXs.c **** #endif
+  65:app/prog/dbus/dbuspresentationXs.c **** #if defined (BTM_FIRMWARE_UPDATE)
+  66:app/prog/dbus/dbuspresentationXs.c **** #include "firmware_update/gecko_bl/gecko_bl_api.h"
+  67:app/prog/dbus/dbuspresentationXs.c **** #endif
+  68:app/prog/dbus/dbuspresentationXs.c **** 
+  69:app/prog/dbus/dbuspresentationXs.c **** #include "utility.h"    //UTI_NELEMENTS()
+  70:app/prog/dbus/dbuspresentationXs.c **** 
+  71:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBUS2_UPDATE_HSI
+  72:app/prog/dbus/dbuspresentationXs.c **** #include "hsi_basic.h"
+  73:app/prog/dbus/dbuspresentationXs.c **** #endif
+  74:app/prog/dbus/dbuspresentationXs.c **** 
+  75:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBAL_INCLUDED
+  76:app/prog/dbus/dbuspresentationXs.c **** #include "BshDBus2AppLayer_internal.h"
+  77:app/prog/dbus/dbuspresentationXs.c **** #endif
+  78:app/prog/dbus/dbuspresentationXs.c **** 
+  79:app/prog/dbus/dbuspresentationXs.c **** /* The functions, which are prototyped here, may be defined/prototyped in an external file, which i
+  80:app/prog/dbus/dbuspresentationXs.c **** /*lint -esym(818,pucBuffer) parameter cannot by declared constant */
+  81:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bRead(uint8_t ucMemoryModule, uint16_t uiAddress, uint8_t ucDataLen, uint8_t *pucBu
+  82:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bWrite(uint8_t ucMemoryModule, uint16_t uiAddress, uint8_t ucDataLen, uint8_t *pucB
+  83:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bGetId(uint8_t ucMemoryModule, uint16_t *puiIdAddress);
+  84:app/prog/dbus/dbuspresentationXs.c **** #ifndef LSW_DBPL_MINIMAL_IMPLEMENTATION
+  85:app/prog/dbus/dbuspresentationXs.c **** /**
+  86:app/prog/dbus/dbuspresentationXs.c ****  ModuleDict (data type: TbusModuleTable) is a table where the different read/write/id-functions are
+  87:app/prog/dbus/dbuspresentationXs.c ****     NOTE: DO NOT REMOVE default memory module 0, it is used in cases when invalid memory module or 
+  88:app/prog/dbus/dbuspresentationXs.c **** */
+  89:app/prog/dbus/dbuspresentationXs.c **** const TbusModuleTable DBPL_tModuleDict[] = {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 3
+
+
+  90:app/prog/dbus/dbuspresentationXs.c **** /*  Module, ReadFunction, WriteFunction, IdFunction, Blocksize */
+  91:app/prog/dbus/dbuspresentationXs.c ****        {0, MOD_bRead, MOD_bWrite, MOD_bGetId, 1}      //!<Access to memory module 0 (mandatory, do 
+  92:app/prog/dbus/dbuspresentationXs.c ****       ,{1, MOD_bRead, MOD_bWrite, MOD_bGetId, 16}     //!<Access to memory module 1
+  93:app/prog/dbus/dbuspresentationXs.c **** //      ,{2, MOD_bRead, MOD_bWrite, MOD_bGetId, 1}    //!<Access to memory module 2
+  94:app/prog/dbus/dbuspresentationXs.c **** //      ,{9, MOD_bRead, MOD_bWrite, MOD_bGetId, 32}   //!<Access to memory module 9
+  95:app/prog/dbus/dbuspresentationXs.c **** };
+  96:app/prog/dbus/dbuspresentationXs.c **** #endif
+  97:app/prog/dbus/dbuspresentationXs.c **** const uint8_t DBPL_ucNumberOfElements = (uint8_t)UTI_NELEMENTS(DBPL_tModuleDict); //!< A constant c
+  98:app/prog/dbus/dbuspresentationXs.c **** 
+  99:app/prog/dbus/dbuspresentationXs.c **** #ifndef ID
+ 100:app/prog/dbus/dbuspresentationXs.c **** #define DBUS2_ID "MyDummyId\0"
+ 101:app/prog/dbus/dbuspresentationXs.c **** #else
+ 102:app/prog/dbus/dbuspresentationXs.c **** #define DBUS2_ID LD_STRINGIZE(ID) "\0"
+ 103:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 104:app/prog/dbus/dbuspresentationXs.c **** 
+ 105:app/prog/dbus/dbuspresentationXs.c **** #ifndef DBUS2_NODE_DATE
+ 106:app/prog/dbus/dbuspresentationXs.c **** #define DBUS2_NODE_DATE 1111111111 //Dummy date. The date should be defined by the build process.
+ 107:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 108:app/prog/dbus/dbuspresentationXs.c **** #ifndef DBUS2_NODE_ID
+ 109:app/prog/dbus/dbuspresentationXs.c **** //No ID is defined by build chain
+ 110:app/prog/dbus/dbuspresentationXs.c **** #define NODE_ID "This is a dummy ID of this node. The ID should be defined by the build process."
+ 111:app/prog/dbus/dbuspresentationXs.c **** #else
+ 112:app/prog/dbus/dbuspresentationXs.c **** //ID is defined by build chain
+ 113:app/prog/dbus/dbuspresentationXs.c **** #define NODE_ID LD_STRINGIZE(DBUS2_NODE_ID)
+ 114:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 115:app/prog/dbus/dbuspresentationXs.c **** 
+ 116:app/prog/dbus/dbuspresentationXs.c **** 
+ 117:app/prog/dbus/dbuspresentationXs.c **** /*
+ 118:app/prog/dbus/dbuspresentationXs.c **** Local functions
+ 119:app/prog/dbus/dbuspresentationXs.c **** */
+ 120:app/prog/dbus/dbuspresentationXs.c **** #ifdef LSW_DBPL_MINIMAL_IMPLEMENTATION
+ 121:app/prog/dbus/dbuspresentationXs.c **** /**This function DBPL_ucGetModuleIndex(uint8_t ucMemoryModule) replaces the existing by an empty fu
+ 122:app/prog/dbus/dbuspresentationXs.c **** uint8_t DBPL_ucGetModuleIndex(uint8_t ucMemoryModule)
+ 123:app/prog/dbus/dbuspresentationXs.c **** {
+ 124:app/prog/dbus/dbuspresentationXs.c ****    return 0U;
+ 125:app/prog/dbus/dbuspresentationXs.c **** }
+ 126:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 127:app/prog/dbus/dbuspresentationXs.c **** 
+ 128:app/prog/dbus/dbuspresentationXs.c **** /**
+ 129:app/prog/dbus/dbuspresentationXs.c ****  Example of a function for reading e.g. memory module 0.
+ 130:app/prog/dbus/dbuspresentationXs.c **** 
+ 131:app/prog/dbus/dbuspresentationXs.c **** This function should be adapted, depending on the application.
+ 132:app/prog/dbus/dbuspresentationXs.c **** By data length of e.g. 2 consideration must be taken, whether data consistentcy is guaranteed;
+ 133:app/prog/dbus/dbuspresentationXs.c **** interrupts may have to be disabled for the time it takes to read the two bytes.
+ 134:app/prog/dbus/dbuspresentationXs.c **** 
+ 135:app/prog/dbus/dbuspresentationXs.c **** \param ucMemoryModule
+ 136:app/prog/dbus/dbuspresentationXs.c ****  Possibly redundant, depending on whether other modules are indirectly addressable over this module
+ 137:app/prog/dbus/dbuspresentationXs.c **** \b type    :   uint8_t\n
+ 138:app/prog/dbus/dbuspresentationXs.c **** \b range   :   0..255\n
+ 139:app/prog/dbus/dbuspresentationXs.c **** 
+ 140:app/prog/dbus/dbuspresentationXs.c **** \param uiAddress
+ 141:app/prog/dbus/dbuspresentationXs.c **** The address, corresponding to the wanted memory access\n
+ 142:app/prog/dbus/dbuspresentationXs.c **** \b type   :    uint16_t
+ 143:app/prog/dbus/dbuspresentationXs.c **** 
+ 144:app/prog/dbus/dbuspresentationXs.c **** \param ucDataLen
+ 145:app/prog/dbus/dbuspresentationXs.c **** How many bytes should be read.\n
+ 146:app/prog/dbus/dbuspresentationXs.c **** \b type : uint8_t\n
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 4
+
+
+ 147:app/prog/dbus/dbuspresentationXs.c **** \b range : 0..MaxDataLength (depending on the size of the smallest buffer, which must be regarded)
+ 148:app/prog/dbus/dbuspresentationXs.c **** 
+ 149:app/prog/dbus/dbuspresentationXs.c **** \param pucBuffer
+ 150:app/prog/dbus/dbuspresentationXs.c ****  The data to return.\n
+ 151:app/prog/dbus/dbuspresentationXs.c **** \b type   :   uint8_t *
+ 152:app/prog/dbus/dbuspresentationXs.c **** 
+ 153:app/prog/dbus/dbuspresentationXs.c **** \return
+ 154:app/prog/dbus/dbuspresentationXs.c ****  state of request\n
+ 155:app/prog/dbus/dbuspresentationXs.c **** \b type    :   bool\n
+ 156:app/prog/dbus/dbuspresentationXs.c **** \b range   :   discrete values: DBPL_DONE (true), DBPL_ONGOING (false)
+ 157:app/prog/dbus/dbuspresentationXs.c **** */
+ 158:app/prog/dbus/dbuspresentationXs.c **** 
+ 159:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bRead(uint8_t ucMemoryModule, uint16_t uiAddress, uint8_t ucDataLen, uint8_t *pucBu
+ 160:app/prog/dbus/dbuspresentationXs.c **** {
+ 161:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 162:app/prog/dbus/dbuspresentationXs.c ****     * If the read process cannot be performed because of invalid parameters (e.g. memory address) o
+ 163:app/prog/dbus/dbuspresentationXs.c ****     * DBPL_bInvalidReadProcess = true;
+ 164:app/prog/dbus/dbuspresentationXs.c ****     */
+ 165:app/prog/dbus/dbuspresentationXs.c ****     uint32_t    ulAddress32;
+ 166:app/prog/dbus/dbuspresentationXs.c ****     ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+ 167:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 168:app/prog/dbus/dbuspresentationXs.c ****     (void)ucMemoryModule;
+ 169:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+ 170:app/prog/dbus/dbuspresentationXs.c **** }
+ 171:app/prog/dbus/dbuspresentationXs.c **** /**
+ 172:app/prog/dbus/dbuspresentationXs.c ****  Example of a function for writing e.g. memory module 0.
+ 173:app/prog/dbus/dbuspresentationXs.c **** 
+ 174:app/prog/dbus/dbuspresentationXs.c **** This function should be adapted, depending on the application.
+ 175:app/prog/dbus/dbuspresentationXs.c **** By data length of e.g. 2 consideration must be taken, whether data consistentcy is guaranteed;
+ 176:app/prog/dbus/dbuspresentationXs.c **** interrupts may have to be disabled for the time it takes to write the two bytes.
+ 177:app/prog/dbus/dbuspresentationXs.c **** 
+ 178:app/prog/dbus/dbuspresentationXs.c **** \param ucMemoryModule
+ 179:app/prog/dbus/dbuspresentationXs.c **** Possibly redundant, depending if other modules are indirectly addressable over this module.\n
+ 180:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint8_t\n
+ 181:app/prog/dbus/dbuspresentationXs.c **** \b range      : 0..255
+ 182:app/prog/dbus/dbuspresentationXs.c **** 
+ 183:app/prog/dbus/dbuspresentationXs.c **** \param uiAddress
+ 184:app/prog/dbus/dbuspresentationXs.c ****  description: The address, corresponding to the wanted memory access\n
+ 185:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint16_t
+ 186:app/prog/dbus/dbuspresentationXs.c **** 
+ 187:app/prog/dbus/dbuspresentationXs.c **** \param ucDataLen
+ 188:app/prog/dbus/dbuspresentationXs.c **** How many bytes should be written.\n
+ 189:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint8_t\n
+ 190:app/prog/dbus/dbuspresentationXs.c **** \b range      : 0..MaxDataLength (depending on the size of the smallest buffer, which must be regar
+ 191:app/prog/dbus/dbuspresentationXs.c **** 
+ 192:app/prog/dbus/dbuspresentationXs.c **** \param pucBuffer
+ 193:app/prog/dbus/dbuspresentationXs.c **** \b The data to write.\n
+ 194:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint8_t *
+ 195:app/prog/dbus/dbuspresentationXs.c **** 
+ 196:app/prog/dbus/dbuspresentationXs.c **** \return
+ 197:app/prog/dbus/dbuspresentationXs.c ****  state of request\n
+ 198:app/prog/dbus/dbuspresentationXs.c **** \b type       : bool\n
+ 199:app/prog/dbus/dbuspresentationXs.c **** \b range      : discrete values: DBPL_DONE (true), DBPL_ONGOING (false)
+ 200:app/prog/dbus/dbuspresentationXs.c **** */
+ 201:app/prog/dbus/dbuspresentationXs.c **** 
+ 202:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bWrite(uint8_t ucMemoryModule, uint16_t uiAddress, uint8_t ucDataLen, uint8_t *pucB
+ 203:app/prog/dbus/dbuspresentationXs.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 5
+
+
+ 204:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 205:app/prog/dbus/dbuspresentationXs.c ****     * If the write process cannot be performed because of invalid parameters (e.g. memory address) 
+ 206:app/prog/dbus/dbuspresentationXs.c ****     * DBPL_bInvalidWriteProcess = true;
+ 207:app/prog/dbus/dbuspresentationXs.c ****     */
+ 208:app/prog/dbus/dbuspresentationXs.c ****     (void)ucMemoryModule;
+ 209:app/prog/dbus/dbuspresentationXs.c ****     uint32_t    ulAddress32;
+ 210:app/prog/dbus/dbuspresentationXs.c ****     ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+ 211:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+ 212:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+ 213:app/prog/dbus/dbuspresentationXs.c **** }//lint !e818   pucBuffer cannot be const as service interface is fixed
+ 214:app/prog/dbus/dbuspresentationXs.c **** 
+ 215:app/prog/dbus/dbuspresentationXs.c **** 
+ 216:app/prog/dbus/dbuspresentationXs.c **** /** Example of a function for getting the address of the identification string of e.g. memory modul
+ 217:app/prog/dbus/dbuspresentationXs.c **** 
+ 218:app/prog/dbus/dbuspresentationXs.c **** This function should be adapted, depending on the application.
+ 219:app/prog/dbus/dbuspresentationXs.c **** 
+ 220:app/prog/dbus/dbuspresentationXs.c **** \param ucMemoryModule
+ 221:app/prog/dbus/dbuspresentationXs.c **** Possibly redundant, depending if other modules are indirectly addressable over this module.\n
+ 222:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint8_t\n
+ 223:app/prog/dbus/dbuspresentationXs.c **** \b range      : 0..255
+ 224:app/prog/dbus/dbuspresentationXs.c **** 
+ 225:app/prog/dbus/dbuspresentationXs.c **** \param puiIdAddress
+ 226:app/prog/dbus/dbuspresentationXs.c **** The data to write.\n
+ 227:app/prog/dbus/dbuspresentationXs.c **** \b type       : uint16_t *
+ 228:app/prog/dbus/dbuspresentationXs.c **** 
+ 229:app/prog/dbus/dbuspresentationXs.c **** \return
+ 230:app/prog/dbus/dbuspresentationXs.c **** state of request\n
+ 231:app/prog/dbus/dbuspresentationXs.c **** \b type       : bool\n
+ 232:app/prog/dbus/dbuspresentationXs.c **** \b range      : discrete values: DBPL_DONE (true), DBPL_ONGOING (false)
+ 233:app/prog/dbus/dbuspresentationXs.c **** */
+ 234:app/prog/dbus/dbuspresentationXs.c **** 
+ 235:app/prog/dbus/dbuspresentationXs.c **** static bool MOD_bGetId(uint8_t ucMemoryModule, uint16_t *puiIdAddress)
+ 236:app/prog/dbus/dbuspresentationXs.c **** {
+  27              		.loc 1 236 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ 237:app/prog/dbus/dbuspresentationXs.c ****    //lint -e{840} Info 840: Use of nul character in a string literal --> is the intention!
+ 238:app/prog/dbus/dbuspresentationXs.c ****    static const uint8_t aucDummyId32[] =
+  32              		.loc 1 238 4 view .LVU1
+ 239:app/prog/dbus/dbuspresentationXs.c ****    NODE_ID
+ 240:app/prog/dbus/dbuspresentationXs.c ****    "\0"
+ 241:app/prog/dbus/dbuspresentationXs.c ****    LD_STRINGIZE(DBUS2_NODE_DATE)
+ 242:app/prog/dbus/dbuspresentationXs.c ****    "\0"
+ 243:app/prog/dbus/dbuspresentationXs.c ****    "32-bit-MemoryModule\0"
+ 244:app/prog/dbus/dbuspresentationXs.c ****    DBUS2_ID;
+ 245:app/prog/dbus/dbuspresentationXs.c ****    
+ 246:app/prog/dbus/dbuspresentationXs.c ****    uint32_t ulIdAddress32 = (uint32_t)aucDummyId32; //lint !e923 Cast is tested to work correctly
+  33              		.loc 1 246 4 view .LVU2
+  34              		.loc 1 246 13 is_stmt 0 view .LVU3
+  35 0000 034B     		ldr	r3, .L2
+ 247:app/prog/dbus/dbuspresentationXs.c ****    DBPL_uiPage   = (uint16_t)(ulIdAddress32>>INT_SIZE); //Save high integer part of address.
+  36              		.loc 1 247 4 is_stmt 1 view .LVU4
+  37              		.loc 1 247 18 is_stmt 0 view .LVU5
+  38 0002 044A     		ldr	r2, .L2+4
+  39              		.loc 1 247 44 view .LVU6
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 6
+
+
+  40 0004 180C     		lsrs	r0, r3, #16
+  41              	.LVL1:
+  42              		.loc 1 247 20 view .LVU7
+  43 0006 1080     		strh	r0, [r2]
+ 248:app/prog/dbus/dbuspresentationXs.c ****    *puiIdAddress = (uint16_t)ulIdAddress32;// &DummyId32[0];
+  44              		.loc 1 248 4 is_stmt 1 view .LVU8
+ 249:app/prog/dbus/dbuspresentationXs.c ****    
+ 250:app/prog/dbus/dbuspresentationXs.c ****    (void)ucMemoryModule;
+ 251:app/prog/dbus/dbuspresentationXs.c ****    
+ 252:app/prog/dbus/dbuspresentationXs.c ****    /* Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 253:app/prog/dbus/dbuspresentationXs.c ****       Code is tested to work correctly
+ 254:app/prog/dbus/dbuspresentationXs.c ****    */
+ 255:app/prog/dbus/dbuspresentationXs.c ****    return DBPL_DONE;
+ 256:app/prog/dbus/dbuspresentationXs.c **** }
+  45              		.loc 1 256 1 is_stmt 0 view .LVU9
+  46              		@ sp needed
+  47 0008 0120     		movs	r0, #1
+ 248:app/prog/dbus/dbuspresentationXs.c ****    *puiIdAddress = (uint16_t)ulIdAddress32;// &DummyId32[0];
+  48              		.loc 1 248 20 view .LVU10
+  49 000a 0B80     		strh	r3, [r1]
+ 250:app/prog/dbus/dbuspresentationXs.c ****    
+  50              		.loc 1 250 4 is_stmt 1 view .LVU11
+ 255:app/prog/dbus/dbuspresentationXs.c **** }
+  51              		.loc 1 255 4 view .LVU12
+  52              		.loc 1 256 1 is_stmt 0 view .LVU13
+  53 000c 7047     		bx	lr
+  54              	.L3:
+  55 000e C046     		.align	2
+  56              	.L2:
+  57 0010 00000000 		.word	.LANCHOR0
+  58 0014 00000000 		.word	DBPL_uiPage
+  59              		.cfi_endproc
+  60              	.LFE8:
+  62              		.section	.text.MOD_bWrite,"ax",%progbits
+  63              		.align	1
+  64              		.syntax unified
+  65              		.code	16
+  66              		.thumb_func
+  68              	MOD_bWrite:
+  69              	.LVL2:
+  70              	.LFB7:
+ 203:app/prog/dbus/dbuspresentationXs.c ****     /*
+  71              		.loc 1 203 1 is_stmt 1 view -0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 0
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+ 208:app/prog/dbus/dbuspresentationXs.c ****     uint32_t    ulAddress32;
+  75              		.loc 1 208 5 view .LVU15
+ 209:app/prog/dbus/dbuspresentationXs.c ****     ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+  76              		.loc 1 209 5 view .LVU16
+ 210:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+  77              		.loc 1 210 5 view .LVU17
+ 211:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+  78              		.loc 1 211 5 view .LVU18
+ 210:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+  79              		.loc 1 210 20 is_stmt 0 view .LVU19
+  80 0000 0448     		ldr	r0, .L5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 7
+
+
+  81              	.LVL3:
+ 203:app/prog/dbus/dbuspresentationXs.c ****     /*
+  82              		.loc 1 203 1 view .LVU20
+  83 0002 10B5     		push	{r4, lr}
+  84              	.LCFI0:
+  85              		.cfi_def_cfa_offset 8
+  86              		.cfi_offset 4, -8
+  87              		.cfi_offset 14, -4
+ 210:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+  88              		.loc 1 210 20 view .LVU21
+  89 0004 0088     		ldrh	r0, [r0]
+  90              	.LVL4:
+ 213:app/prog/dbus/dbuspresentationXs.c **** 
+  91              		.loc 1 213 1 view .LVU22
+  92              		@ sp needed
+ 210:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+  93              		.loc 1 210 41 view .LVU23
+  94 0006 0004     		lsls	r0, r0, #16
+ 210:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts 
+  95              		.loc 1 210 17 view .LVU24
+  96 0008 4018     		adds	r0, r0, r1
+  97              	.LVL5:
+ 211:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+  98              		.loc 1 211 11 view .LVU25
+  99 000a 1900     		movs	r1, r3
+ 100              	.LVL6:
+ 211:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+ 101              		.loc 1 211 11 view .LVU26
+ 102 000c FFF7FEFF 		bl	memcpy
+ 103              	.LVL7:
+ 212:app/prog/dbus/dbuspresentationXs.c **** }//lint !e818   pucBuffer cannot be const as service interface is fixed
+ 104              		.loc 1 212 5 is_stmt 1 view .LVU27
+ 213:app/prog/dbus/dbuspresentationXs.c **** 
+ 105              		.loc 1 213 1 is_stmt 0 view .LVU28
+ 106 0010 0120     		movs	r0, #1
+ 107 0012 10BD     		pop	{r4, pc}
+ 108              	.L6:
+ 109              		.align	2
+ 110              	.L5:
+ 111 0014 00000000 		.word	DBPL_uiPage
+ 112              		.cfi_endproc
+ 113              	.LFE7:
+ 115              		.section	.text.MOD_bRead,"ax",%progbits
+ 116              		.align	1
+ 117              		.syntax unified
+ 118              		.code	16
+ 119              		.thumb_func
+ 121              	MOD_bRead:
+ 122              	.LVL8:
+ 123              	.LFB6:
+ 160:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 124              		.loc 1 160 1 is_stmt 1 view -0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 0
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165:app/prog/dbus/dbuspresentationXs.c ****     ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+ 128              		.loc 1 165 5 view .LVU30
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 8
+
+
+ 166:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 129              		.loc 1 166 5 view .LVU31
+ 167:app/prog/dbus/dbuspresentationXs.c ****     (void)ucMemoryModule;
+ 130              		.loc 1 167 5 view .LVU32
+ 160:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 131              		.loc 1 160 1 is_stmt 0 view .LVU33
+ 132 0000 1800     		movs	r0, r3
+ 133              	.LVL9:
+ 166:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 134              		.loc 1 166 20 view .LVU34
+ 135 0002 044B     		ldr	r3, .L8
+ 136              	.LVL10:
+ 160:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 137              		.loc 1 160 1 view .LVU35
+ 138 0004 10B5     		push	{r4, lr}
+ 139              	.LCFI1:
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 4, -8
+ 142              		.cfi_offset 14, -4
+ 166:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 143              		.loc 1 166 20 view .LVU36
+ 144 0006 1C88     		ldrh	r4, [r3]
+ 170:app/prog/dbus/dbuspresentationXs.c **** /**
+ 145              		.loc 1 170 1 view .LVU37
+ 146              		@ sp needed
+ 166:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 147              		.loc 1 166 41 view .LVU38
+ 148 0008 2404     		lsls	r4, r4, #16
+ 166:app/prog/dbus/dbuspresentationXs.c ****     (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts 
+ 149              		.loc 1 166 17 view .LVU39
+ 150 000a 6118     		adds	r1, r4, r1
+ 151              	.LVL11:
+ 167:app/prog/dbus/dbuspresentationXs.c ****     (void)ucMemoryModule;
+ 152              		.loc 1 167 11 view .LVU40
+ 153 000c FFF7FEFF 		bl	memcpy
+ 154              	.LVL12:
+ 168:app/prog/dbus/dbuspresentationXs.c ****     return DBPL_DONE;
+ 155              		.loc 1 168 5 is_stmt 1 view .LVU41
+ 169:app/prog/dbus/dbuspresentationXs.c **** }
+ 156              		.loc 1 169 5 view .LVU42
+ 170:app/prog/dbus/dbuspresentationXs.c **** /**
+ 157              		.loc 1 170 1 is_stmt 0 view .LVU43
+ 158 0010 0120     		movs	r0, #1
+ 159 0012 10BD     		pop	{r4, pc}
+ 160              	.L9:
+ 161              		.align	2
+ 162              	.L8:
+ 163 0014 00000000 		.word	DBPL_uiPage
+ 164              		.cfi_endproc
+ 165              	.LFE6:
+ 167              		.section	.text.DBPL_ucPossiblyChangeTimerBase,"ax",%progbits
+ 168              		.align	1
+ 169              		.global	DBPL_ucPossiblyChangeTimerBase
+ 170              		.syntax unified
+ 171              		.code	16
+ 172              		.thumb_func
+ 174              	DBPL_ucPossiblyChangeTimerBase:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 9
+
+
+ 175              	.LVL13:
+ 176              	.LFB9:
+ 257:app/prog/dbus/dbuspresentationXs.c **** 
+ 258:app/prog/dbus/dbuspresentationXs.c **** //#define DBPL_CHANGE_2_S_TIMER_BASE
+ 259:app/prog/dbus/dbuspresentationXs.c **** /** To be defined to change the 2s timer base. */
+ 260:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBPL_CHANGE_2_S_TIMER_BASE
+ 261:app/prog/dbus/dbuspresentationXs.c **** #define DBPL_MAX_VALUE_FOR_1S   128U    //Maximum representable value, when using 1 s timer instead
+ 262:app/prog/dbus/dbuspresentationXs.c **** uint8_t DBPL_ucPossiblyChangeTimerBase(uint8_t ucBase)
+ 263:app/prog/dbus/dbuspresentationXs.c **** {
+ 264:app/prog/dbus/dbuspresentationXs.c ****    /*  Change timer base 2s to 1s (return 0, which represents eternity, if value cannot be represen
+ 265:app/prog/dbus/dbuspresentationXs.c ****    */
+ 266:app/prog/dbus/dbuspresentationXs.c ****    if (ucBase < DBPL_MAX_VALUE_FOR_1S)
+ 267:app/prog/dbus/dbuspresentationXs.c ****    {
+ 268:app/prog/dbus/dbuspresentationXs.c ****       return (ucBase*2);
+ 269:app/prog/dbus/dbuspresentationXs.c ****    }
+ 270:app/prog/dbus/dbuspresentationXs.c ****    else
+ 271:app/prog/dbus/dbuspresentationXs.c ****    {
+ 272:app/prog/dbus/dbuspresentationXs.c ****       return 0; //This represents eternity (= until power off).
+ 273:app/prog/dbus/dbuspresentationXs.c ****    }
+ 274:app/prog/dbus/dbuspresentationXs.c **** }
+ 275:app/prog/dbus/dbuspresentationXs.c **** #else
+ 276:app/prog/dbus/dbuspresentationXs.c **** uint8_t DBPL_ucPossiblyChangeTimerBase(uint8_t ucBase)
+ 277:app/prog/dbus/dbuspresentationXs.c **** {
+ 177              		.loc 1 277 1 is_stmt 1 view -0
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 0
+ 180              		@ frame_needed = 0, uses_anonymous_args = 0
+ 181              		@ link register save eliminated.
+ 278:app/prog/dbus/dbuspresentationXs.c ****    return ucBase;
+ 182              		.loc 1 278 4 view .LVU45
+ 279:app/prog/dbus/dbuspresentationXs.c **** }
+ 183              		.loc 1 279 1 is_stmt 0 view .LVU46
+ 184              		@ sp needed
+ 185 0000 7047     		bx	lr
+ 186              		.cfi_endproc
+ 187              	.LFE9:
+ 189              		.section	.text.DBPL_vGoOffline,"ax",%progbits
+ 190              		.align	1
+ 191              		.global	DBPL_vGoOffline
+ 192              		.syntax unified
+ 193              		.code	16
+ 194              		.thumb_func
+ 196              	DBPL_vGoOffline:
+ 197              	.LFB10:
+ 280:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 281:app/prog/dbus/dbuspresentationXs.c **** /*
+ 282:app/prog/dbus/dbuspresentationXs.c **** The following functions are called directly by the library source. These functions constitute an in
+ 283:app/prog/dbus/dbuspresentationXs.c **** */
+ 284:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vGoOffline(void)
+ 285:app/prog/dbus/dbuspresentationXs.c **** {
+ 198              		.loc 1 285 1 is_stmt 1 view -0
+ 199              		.cfi_startproc
+ 200              		@ args = 0, pretend = 0, frame = 0
+ 201              		@ frame_needed = 0, uses_anonymous_args = 0
+ 202              		@ link register save eliminated.
+ 286:app/prog/dbus/dbuspresentationXs.c ****    /* Possibly notify the application before entering offline mode. Possibly shut down actuators ..
+ 287:app/prog/dbus/dbuspresentationXs.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 10
+
+
+ 203              		.loc 1 287 1 view .LVU48
+ 204              		@ sp needed
+ 205 0000 7047     		bx	lr
+ 206              		.cfi_endproc
+ 207              	.LFE10:
+ 209              		.section	.text.DBPL_vEnterBootloaderMode,"ax",%progbits
+ 210              		.align	1
+ 211              		.global	DBPL_vEnterBootloaderMode
+ 212              		.syntax unified
+ 213              		.code	16
+ 214              		.thumb_func
+ 216              	DBPL_vEnterBootloaderMode:
+ 217              	.LFB11:
+ 288:app/prog/dbus/dbuspresentationXs.c **** 
+ 289:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vEnterBootloaderMode(void)
+ 290:app/prog/dbus/dbuspresentationXs.c **** {
+ 218              		.loc 1 290 1 view -0
+ 219              		.cfi_startproc
+ 220              		@ args = 0, pretend = 0, frame = 0
+ 221              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291:app/prog/dbus/dbuspresentationXs.c **** #if defined (WIRED_FIRMWARE_UPDATE)
+ 292:app/prog/dbus/dbuspresentationXs.c ****     BMDAT_setMagicPattern(BMDAT_startBlAfterReset);
+ 293:app/prog/dbus/dbuspresentationXs.c **** #elif defined (REMOTE_FIRMWARE_UPDATE)
+ 294:app/prog/dbus/dbuspresentationXs.c ****     BMDAT_setBootModule(MAL_BP2_LOADER_ID);
+ 222              		.loc 1 294 5 view .LVU50
+ 290:app/prog/dbus/dbuspresentationXs.c **** #if defined (WIRED_FIRMWARE_UPDATE)
+ 223              		.loc 1 290 1 is_stmt 0 view .LVU51
+ 224 0000 10B5     		push	{r4, lr}
+ 225              	.LCFI2:
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 4, -8
+ 228              		.cfi_offset 14, -4
+ 229              		.loc 1 294 5 view .LVU52
+ 230 0002 0248     		ldr	r0, .L13
+ 231 0004 FFF7FEFF 		bl	BMDAT_setBootModule
+ 232              	.LVL14:
+ 295:app/prog/dbus/dbuspresentationXs.c **** #elif defined (BTM_FIRMWARE_UPDATE)
+ 296:app/prog/dbus/dbuspresentationXs.c ****     GBTL_bootGromLoaderAfterReset();
+ 297:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 298:app/prog/dbus/dbuspresentationXs.c **** 
+ 299:app/prog/dbus/dbuspresentationXs.c ****     /* Possibly notify the application before entering firmware update mode. Possibly shut down act
+ 300:app/prog/dbus/dbuspresentationXs.c **** }
+ 233              		.loc 1 300 1 view .LVU53
+ 234              		@ sp needed
+ 235 0008 10BD     		pop	{r4, pc}
+ 236              	.L14:
+ 237 000a C046     		.align	2
+ 238              	.L13:
+ 239 000c 20550000 		.word	21792
+ 240              		.cfi_endproc
+ 241              	.LFE11:
+ 243              		.section	.text.DBPL_vHSI_DataIndication,"ax",%progbits
+ 244              		.align	1
+ 245              		.global	DBPL_vHSI_DataIndication
+ 246              		.syntax unified
+ 247              		.code	16
+ 248              		.thumb_func
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 11
+
+
+ 250              	DBPL_vHSI_DataIndication:
+ 251              	.LVL15:
+ 252              	.LFB12:
+ 301:app/prog/dbus/dbuspresentationXs.c **** 
+ 302:app/prog/dbus/dbuspresentationXs.c **** /*lint -e{715,818} parameter no used if update disabled */
+ 303:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vHSI_DataIndication(void* const data, uint32_t data_length)
+ 304:app/prog/dbus/dbuspresentationXs.c **** {
+ 253              		.loc 1 304 1 is_stmt 1 view -0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 305:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBUS2_UPDATE_HSI
+ 306:app/prog/dbus/dbuspresentationXs.c ****     HSI_DataIndication(data, data_length);
+ 257              		.loc 1 306 5 view .LVU55
+ 304:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBUS2_UPDATE_HSI
+ 258              		.loc 1 304 1 is_stmt 0 view .LVU56
+ 259 0000 10B5     		push	{r4, lr}
+ 260              	.LCFI3:
+ 261              		.cfi_def_cfa_offset 8
+ 262              		.cfi_offset 4, -8
+ 263              		.cfi_offset 14, -4
+ 264              		.loc 1 306 5 view .LVU57
+ 265 0002 FFF7FEFF 		bl	HSI_DataIndication
+ 266              	.LVL16:
+ 307:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 308:app/prog/dbus/dbuspresentationXs.c **** }
+ 267              		.loc 1 308 1 view .LVU58
+ 268              		@ sp needed
+ 269 0006 10BD     		pop	{r4, pc}
+ 270              		.cfi_endproc
+ 271              	.LFE12:
+ 273              		.section	.text.DBPL_bIsNodeToBeWokenUp,"ax",%progbits
+ 274              		.align	1
+ 275              		.global	DBPL_bIsNodeToBeWokenUp
+ 276              		.syntax unified
+ 277              		.code	16
+ 278              		.thumb_func
+ 280              	DBPL_bIsNodeToBeWokenUp:
+ 281              	.LVL17:
+ 282              	.LFB13:
+ 309:app/prog/dbus/dbuspresentationXs.c **** 
+ 310:app/prog/dbus/dbuspresentationXs.c **** bool DBPL_bIsNodeToBeWokenUp(uint8_t nodeAddress)
+ 311:app/prog/dbus/dbuspresentationXs.c **** {
+ 283              		.loc 1 311 1 is_stmt 1 view -0
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 0
+ 286              		@ frame_needed = 0, uses_anonymous_args = 0
+ 287              		@ link register save eliminated.
+ 312:app/prog/dbus/dbuspresentationXs.c **** #ifdef DBAL_INCLUDED
+ 313:app/prog/dbus/dbuspresentationXs.c ****     return DBAL_isNodeToBeWokenUp(nodeAddress);
+ 314:app/prog/dbus/dbuspresentationXs.c **** #else
+ 315:app/prog/dbus/dbuspresentationXs.c ****     bool ret = true;
+ 288              		.loc 1 315 5 view .LVU60
+ 316:app/prog/dbus/dbuspresentationXs.c ****     (void)nodeAddress;
+ 289              		.loc 1 316 5 view .LVU61
+ 317:app/prog/dbus/dbuspresentationXs.c ****     /*
+ 318:app/prog/dbus/dbuspresentationXs.c ****     Call, if you have woken up all nodes,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 12
+
+
+ 319:app/prog/dbus/dbuspresentationXs.c ****     or if your project specific timeout has occured:
+ 320:app/prog/dbus/dbuspresentationXs.c ****     DBPL_vUnNotifyWakeupBreakSent();
+ 321:app/prog/dbus/dbuspresentationXs.c ****     */
+ 322:app/prog/dbus/dbuspresentationXs.c ****     return ret;
+ 290              		.loc 1 322 5 view .LVU62
+ 323:app/prog/dbus/dbuspresentationXs.c **** #endif
+ 324:app/prog/dbus/dbuspresentationXs.c **** }
+ 291              		.loc 1 324 1 is_stmt 0 view .LVU63
+ 292 0000 0120     		movs	r0, #1
+ 293              	.LVL18:
+ 294              		.loc 1 324 1 view .LVU64
+ 295              		@ sp needed
+ 296 0002 7047     		bx	lr
+ 297              		.cfi_endproc
+ 298              	.LFE13:
+ 300              		.section	.text.DBPL_vWakeupSentResponseReceived,"ax",%progbits
+ 301              		.align	1
+ 302              		.global	DBPL_vWakeupSentResponseReceived
+ 303              		.syntax unified
+ 304              		.code	16
+ 305              		.thumb_func
+ 307              	DBPL_vWakeupSentResponseReceived:
+ 308              	.LVL19:
+ 309              	.LFB14:
+ 325:app/prog/dbus/dbuspresentationXs.c **** 
+ 326:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vWakeupSentResponseReceived(uint8_t nodeAddress)
+ 327:app/prog/dbus/dbuspresentationXs.c **** {
+ 310              		.loc 1 327 1 is_stmt 1 view -0
+ 311              		.cfi_startproc
+ 312              		@ args = 0, pretend = 0, frame = 0
+ 313              		@ frame_needed = 0, uses_anonymous_args = 0
+ 314              		@ link register save eliminated.
+ 328:app/prog/dbus/dbuspresentationXs.c ****     (void)nodeAddress;
+ 315              		.loc 1 328 5 view .LVU66
+ 329:app/prog/dbus/dbuspresentationXs.c **** }
+ 316              		.loc 1 329 1 is_stmt 0 view .LVU67
+ 317              		@ sp needed
+ 318 0000 7047     		bx	lr
+ 319              		.cfi_endproc
+ 320              	.LFE14:
+ 322              		.section	.text.DBPL_ucGetOwnAddressToInformOtherNodes,"ax",%progbits
+ 323              		.align	1
+ 324              		.global	DBPL_ucGetOwnAddressToInformOtherNodes
+ 325              		.syntax unified
+ 326              		.code	16
+ 327              		.thumb_func
+ 329              	DBPL_ucGetOwnAddressToInformOtherNodes:
+ 330              	.LFB15:
+ 330:app/prog/dbus/dbuspresentationXs.c **** 
+ 331:app/prog/dbus/dbuspresentationXs.c **** uint8_t DBPL_ucGetOwnAddressToInformOtherNodes(void)
+ 332:app/prog/dbus/dbuspresentationXs.c **** {
+ 331              		.loc 1 332 1 is_stmt 1 view -0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 333:app/prog/dbus/dbuspresentationXs.c ****     /*The node address must be correct and should contain a subsystem implemented by the user appli
+ 334:app/prog/dbus/dbuspresentationXs.c ****     /*This standard implementation here always returns the lowest subsystem implemented by the user
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 13
+
+
+ 335:app/prog/dbus/dbuspresentationXs.c ****     for(uint8_t node = 0; node < UINT8_MAX; node++)
+ 335              		.loc 1 335 5 view .LVU69
+ 336              	.LBB2:
+ 337              		.loc 1 335 9 view .LVU70
+ 338              	.LVL20:
+ 339              		.loc 1 335 32 view .LVU71
+ 340              	.LBE2:
+ 332:app/prog/dbus/dbuspresentationXs.c ****     /*The node address must be correct and should contain a subsystem implemented by the user appli
+ 341              		.loc 1 332 1 is_stmt 0 view .LVU72
+ 342 0000 10B5     		push	{r4, lr}
+ 343              	.LCFI4:
+ 344              		.cfi_def_cfa_offset 8
+ 345              		.cfi_offset 4, -8
+ 346              		.cfi_offset 14, -4
+ 347              	.LBB3:
+ 348              		.loc 1 335 17 view .LVU73
+ 349 0002 0024     		movs	r4, #0
+ 350              	.LVL21:
+ 351              	.L20:
+ 336:app/prog/dbus/dbuspresentationXs.c ****     {
+ 337:app/prog/dbus/dbuspresentationXs.c ****         if((DLL_bIsCurrentNode(node) == true) && (BAL_ucGetSubsystemIndex(node) != 0U))/*lint !e931
+ 352              		.loc 1 337 9 is_stmt 1 view .LVU74
+ 353              		.loc 1 337 13 is_stmt 0 view .LVU75
+ 354 0004 2000     		movs	r0, r4
+ 355 0006 FFF7FEFF 		bl	DLL_bIsCurrentNode
+ 356              	.LVL22:
+ 357              		.loc 1 337 11 view .LVU76
+ 358 000a 0028     		cmp	r0, #0
+ 359 000c 08D1     		bne	.L19
+ 360              	.L23:
+ 335:app/prog/dbus/dbuspresentationXs.c ****     {
+ 361              		.loc 1 335 49 is_stmt 1 view .LVU77
+ 362 000e 0134     		adds	r4, r4, #1
+ 363              	.LVL23:
+ 335:app/prog/dbus/dbuspresentationXs.c ****     {
+ 364              		.loc 1 335 49 is_stmt 0 view .LVU78
+ 365 0010 E4B2     		uxtb	r4, r4
+ 366              	.LVL24:
+ 335:app/prog/dbus/dbuspresentationXs.c ****     {
+ 367              		.loc 1 335 32 is_stmt 1 view .LVU79
+ 368 0012 FF2C     		cmp	r4, #255
+ 369 0014 F6D1     		bne	.L20
+ 370              	.LBE3:
+ 338:app/prog/dbus/dbuspresentationXs.c ****         {
+ 339:app/prog/dbus/dbuspresentationXs.c ****             return node;
+ 340:app/prog/dbus/dbuspresentationXs.c ****         }
+ 341:app/prog/dbus/dbuspresentationXs.c ****     }
+ 342:app/prog/dbus/dbuspresentationXs.c **** 
+ 343:app/prog/dbus/dbuspresentationXs.c ****     /*No subsystem apart from zero (Service Messages) implemented. Return subsystem zero.*/
+ 344:app/prog/dbus/dbuspresentationXs.c ****     return ((uint8_t)(DLL_ucGetMainNodeAddress()<<NIBBLE_SIZE));
+ 371              		.loc 1 344 5 view .LVU80
+ 372              		.loc 1 344 23 is_stmt 0 view .LVU81
+ 373 0016 FFF7FEFF 		bl	DLL_ucGetMainNodeAddress
+ 374              	.LVL25:
+ 375              		.loc 1 344 13 view .LVU82
+ 376 001a 0401     		lsls	r4, r0, #4
+ 377              	.LVL26:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 14
+
+
+ 378              		.loc 1 344 13 view .LVU83
+ 379 001c E4B2     		uxtb	r4, r4
+ 380 001e 04E0     		b	.L22
+ 381              	.LVL27:
+ 382              	.L19:
+ 383              	.LBB4:
+ 337:app/prog/dbus/dbuspresentationXs.c ****         {
+ 384              		.loc 1 337 51 discriminator 1 view .LVU84
+ 385 0020 2000     		movs	r0, r4
+ 386 0022 FFF7FEFF 		bl	BAL_ucGetSubsystemIndex
+ 387              	.LVL28:
+ 337:app/prog/dbus/dbuspresentationXs.c ****         {
+ 388              		.loc 1 337 47 discriminator 1 view .LVU85
+ 389 0026 0028     		cmp	r0, #0
+ 390 0028 F1D0     		beq	.L23
+ 391              	.LVL29:
+ 392              	.L22:
+ 337:app/prog/dbus/dbuspresentationXs.c ****         {
+ 393              		.loc 1 337 47 discriminator 1 view .LVU86
+ 394              	.LBE4:
+ 345:app/prog/dbus/dbuspresentationXs.c **** }
+ 395              		.loc 1 345 1 view .LVU87
+ 396 002a 2000     		movs	r0, r4
+ 397              		@ sp needed
+ 398 002c 10BD     		pop	{r4, pc}
+ 399              		.cfi_endproc
+ 400              	.LFE15:
+ 402              		.section	.text.DBPL_vSilentModeHasBeenEntered,"ax",%progbits
+ 403              		.align	1
+ 404              		.global	DBPL_vSilentModeHasBeenEntered
+ 405              		.syntax unified
+ 406              		.code	16
+ 407              		.thumb_func
+ 409              	DBPL_vSilentModeHasBeenEntered:
+ 410              	.LFB23:
+ 411              		.cfi_startproc
+ 412              		@ args = 0, pretend = 0, frame = 0
+ 413              		@ frame_needed = 0, uses_anonymous_args = 0
+ 414              		@ link register save eliminated.
+ 415              		@ sp needed
+ 416 0000 7047     		bx	lr
+ 417              		.cfi_endproc
+ 418              	.LFE23:
+ 420              		.section	.text.DBPL_vPowerFailNotificationHasBeenReceived,"ax",%progbits
+ 421              		.align	1
+ 422              		.global	DBPL_vPowerFailNotificationHasBeenReceived
+ 423              		.syntax unified
+ 424              		.code	16
+ 425              		.thumb_func
+ 427              	DBPL_vPowerFailNotificationHasBeenReceived:
+ 428              	.LFB25:
+ 429              		.cfi_startproc
+ 430              		@ args = 0, pretend = 0, frame = 0
+ 431              		@ frame_needed = 0, uses_anonymous_args = 0
+ 432              		@ link register save eliminated.
+ 433              		@ sp needed
+ 434 0000 7047     		bx	lr
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 15
+
+
+ 435              		.cfi_endproc
+ 436              	.LFE25:
+ 438              		.section	.text.DBPL_vPowerResurgeNotificationHasBeenReceived,"ax",%progbits
+ 439              		.align	1
+ 440              		.global	DBPL_vPowerResurgeNotificationHasBeenReceived
+ 441              		.syntax unified
+ 442              		.code	16
+ 443              		.thumb_func
+ 445              	DBPL_vPowerResurgeNotificationHasBeenReceived:
+ 446              	.LFB21:
+ 447              		.cfi_startproc
+ 448              		@ args = 0, pretend = 0, frame = 0
+ 449              		@ frame_needed = 0, uses_anonymous_args = 0
+ 450              		@ link register save eliminated.
+ 451              		@ sp needed
+ 452 0000 7047     		bx	lr
+ 453              		.cfi_endproc
+ 454              	.LFE21:
+ 456              		.section	.text.DBPL_vNotifyNonDeliverablePowerMessage,"ax",%progbits
+ 457              		.align	1
+ 458              		.global	DBPL_vNotifyNonDeliverablePowerMessage
+ 459              		.syntax unified
+ 460              		.code	16
+ 461              		.thumb_func
+ 463              	DBPL_vNotifyNonDeliverablePowerMessage:
+ 464              	.LVL30:
+ 465              	.LFB19:
+ 346:app/prog/dbus/dbuspresentationXs.c **** 
+ 347:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vSilentModeHasBeenEntered(void)
+ 348:app/prog/dbus/dbuspresentationXs.c **** {
+ 349:app/prog/dbus/dbuspresentationXs.c **** 
+ 350:app/prog/dbus/dbuspresentationXs.c **** }
+ 351:app/prog/dbus/dbuspresentationXs.c **** 
+ 352:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vPowerFailNotificationHasBeenReceived(void)
+ 353:app/prog/dbus/dbuspresentationXs.c **** {
+ 354:app/prog/dbus/dbuspresentationXs.c ****     /*Caution. This is called directly from interrupt handler of DBUS! Do not put too much logic he
+ 355:app/prog/dbus/dbuspresentationXs.c **** }
+ 356:app/prog/dbus/dbuspresentationXs.c **** 
+ 357:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vPowerResurgeNotificationHasBeenReceived(uint8_t sender)
+ 358:app/prog/dbus/dbuspresentationXs.c **** {
+ 359:app/prog/dbus/dbuspresentationXs.c ****     (void)sender;
+ 360:app/prog/dbus/dbuspresentationXs.c **** }
+ 361:app/prog/dbus/dbuspresentationXs.c **** 
+ 362:app/prog/dbus/dbuspresentationXs.c **** void DBPL_vNotifyNonDeliverablePowerMessage(uint16_t msgId)
+ 363:app/prog/dbus/dbuspresentationXs.c **** {
+ 466              		.loc 1 363 1 is_stmt 1 view -0
+ 467              		.cfi_startproc
+ 468              		@ args = 0, pretend = 0, frame = 0
+ 469              		@ frame_needed = 0, uses_anonymous_args = 0
+ 470              		@ link register save eliminated.
+ 364:app/prog/dbus/dbuspresentationXs.c ****     (void)msgId;
+ 471              		.loc 1 364 5 view .LVU89
+ 365:app/prog/dbus/dbuspresentationXs.c **** }
+ 472              		.loc 1 365 1 is_stmt 0 view .LVU90
+ 473              		@ sp needed
+ 474 0000 7047     		bx	lr
+ 475              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cccrmQET.s 			page 16
+
+
+ 476              	.LFE19:
+ 478              		.global	DBPL_ucNumberOfElements
+ 479              		.global	DBPL_tModuleDict
+ 480              		.section	.rodata.DBPL_tModuleDict,"a"
+ 483              	DBPL_tModuleDict:
+ 484 0000 00       		.byte	0
+ 485 0001 00000000 		.4byte	MOD_bRead
+ 486 0005 00000000 		.4byte	MOD_bWrite
+ 487 0009 00000000 		.4byte	MOD_bGetId
+ 488 000d 01       		.byte	1
+ 489 000e 01       		.byte	1
+ 490 000f 00000000 		.4byte	MOD_bRead
+ 491 0013 00000000 		.4byte	MOD_bWrite
+ 492 0017 00000000 		.4byte	MOD_bGetId
+ 493 001b 10       		.byte	16
+ 494              		.section	.rodata.DBPL_ucNumberOfElements,"a"
+ 497              	DBPL_ucNumberOfElements:
+ 498 0000 02       		.byte	2
+ 499              		.section	.rodata.aucDummyId32.0,"a"
+ 500              		.set	.LANCHOR0,. + 0
+ 503              	aucDummyId32.0:
+ 504 0000 56617269 		.ascii	"Variant_programmer\000date:20261118\00032-bit-Memor"
+ 504      616E745F 
+ 504      70726F67 
+ 504      72616D6D 
+ 504      65720064 
+ 505 002d 794D6F64 		.ascii	"yModule\000MyDummyId\000\000"
+ 505      756C6500 
+ 505      4D794475 
+ 505      6D6D7949 
+ 505      640000
+ 506              		.text
+ 507              	.Letext0:
+ 508              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\lib\\gcc\\arm-none-eabi\\11.3.1\\i
+ 509              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 510              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 511              		.file 5 "common/prog/dbus/bustypes.h"
+ 512              		.file 6 "common/prog/dbus/dbuspresentation.h"
+ 513              		.file 7 "common/prog/dbus/bal.h"
+ 514              		.file 8 "common/prog/dbus/dbusdll.h"
+ 515              		.file 9 "common/prog/firmware_update/hsi/hsi_basic.h"
+ 516              		.file 10 "common/prog/firmware_update/BootManager/BootManagerSharedData.h"
+ 517              		.file 11 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\string.h"
+ 518              		.file 12 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 519              		.file 13 "<built-in>"

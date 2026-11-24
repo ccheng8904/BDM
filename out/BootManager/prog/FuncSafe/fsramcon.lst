@@ -1,0 +1,389 @@
+
+out/BootManager/prog/FuncSafe/fsramcon.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._FSF_RAM_CON_vCheckBySum:
+
+00000000 <_FSF_RAM_CON_vCheckBySum>:
+#define SIZE_OF_CHECKED_BYTES  4uL
+/*lint -save -e9005 attempt to cast away const/volatile from a pointer or reference */
+
+/*~+:void _FSF_RAM_CON_vCheckBySum(uint8_t ucCheckValue, uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, uint8_t ucId)*/
+void _FSF_RAM_CON_vCheckBySum(uint8_t ucCheckValue, uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, uint8_t ucId)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0014      	movs	r4, r2
+   uint8_t ucNewCheckValue;
+   uint8_t m;
+
+   ucNewCheckValue = 0;
+   4:	2500      	movs	r5, #0
+{
+   6:	001a      	movs	r2, r3
+   8:	1861      	adds	r1, r4, r1
+
+   //HSUP_vDisableInt();//moved into fsramcon.h (macro FSF_RAM_CON_vCheck)-> is too late ucCheckValue is already on stack
+   for(m = 0; m < ucSizeInBytes; m++)
+   a:	428c      	cmp	r4, r1
+   c:	d106      	bne.n	1c <_FSF_RAM_CON_vCheckBySum+0x1c>
+      ucNewCheckValue += *pucStartAddress;
+
+      pucStartAddress++;
+   }
+
+   if (ucNewCheckValue != ucCheckValue)
+   e:	4285      	cmp	r5, r0
+  10:	d003      	beq.n	1a <_FSF_RAM_CON_vCheckBySum+0x1a>
+   {
+       _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENCY_CHECK, ucId);
+  12:	2108      	movs	r1, #8
+  14:	2009      	movs	r0, #9
+  16:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   }
+
+   //HSUP_vEnableInt();//moved itno fsramcon.h
+}
+  1a:	bd70      	pop	{r4, r5, r6, pc}
+      ucNewCheckValue += *pucStartAddress;
+  1c:	7823      	ldrb	r3, [r4, #0]
+      pucStartAddress++;
+  1e:	3401      	adds	r4, #1
+      ucNewCheckValue += *pucStartAddress;
+  20:	18ed      	adds	r5, r5, r3
+  22:	b2ed      	uxtb	r5, r5
+   for(m = 0; m < ucSizeInBytes; m++)
+  24:	e7f1      	b.n	a <_FSF_RAM_CON_vCheckBySum+0xa>
+
+Disassembly of section .text._FSF_RAM_CON_vCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vCheckByMirror>:
+
+/*~+:void _FSF_RAM_CON_vCheckByMirror(uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, const uint8_t* pucMIrrorStartAddress, uint8_t ucId)*/
+void _FSF_RAM_CON_vCheckByMirror(uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, const uint8_t* pucMIrrorStartAddress, uint8_t ucId)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	000e      	movs	r6, r1
+   4:	0017      	movs	r7, r2
+   uint32_t u32BytesCounter = 0u;
+   6:	2400      	movs	r4, #0
+{
+   8:	001d      	movs	r5, r3
+   uint32_t u32CountOfAlignedBytes;
+
+   u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+   a:	0883      	lsrs	r3, r0, #2
+{
+   c:	b085      	sub	sp, #20
+   u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+   e:	009b      	lsls	r3, r3, #2
+{
+  10:	9000      	str	r0, [sp, #0]
+   u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+  12:	9301      	str	r3, [sp, #4]
+
+   HSUP_vDisableInt();
+   for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+  14:	193b      	adds	r3, r7, r4
+  16:	9303      	str	r3, [sp, #12]
+  18:	1933      	adds	r3, r6, r4
+  1a:	9302      	str	r3, [sp, #8]
+  1c:	9b01      	ldr	r3, [sp, #4]
+  1e:	429c      	cmp	r4, r3
+  20:	d305      	bcc.n	2e <_FSF_RAM_CON_vCheckByMirror+0x2e>
+  22:	0026      	movs	r6, r4
+       }
+       pucStartAddress += SIZE_OF_CHECKED_BYTES;       /*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+       pucMIrrorStartAddress += SIZE_OF_CHECKED_BYTES; /*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+   }
+
+   for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+  24:	9b00      	ldr	r3, [sp, #0]
+  26:	42b3      	cmp	r3, r6
+  28:	d80d      	bhi.n	46 <_FSF_RAM_CON_vCheckByMirror+0x46>
+       }
+       pucStartAddress++;
+       pucMIrrorStartAddress++;
+   }
+   HSUP_vEnableInt();
+}
+  2a:	b005      	add	sp, #20
+  2c:	bdf0      	pop	{r4, r5, r6, r7, pc}
+       if(*(uint32_t*)pucStartAddress != ((*(uint32_t*)pucMIrrorStartAddress) ^ 0xFFFFFFFFuL)) /*lint !e927 cast tested to work correctly, upper layer responsible for 4 bytes alignment!! */
+  2e:	593b      	ldr	r3, [r7, r4]
+  30:	5932      	ldr	r2, [r6, r4]
+  32:	43db      	mvns	r3, r3
+  34:	429a      	cmp	r2, r3
+  36:	d004      	beq.n	42 <_FSF_RAM_CON_vCheckByMirror+0x42>
+           _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENCY_CHECK, ucId);
+  38:	002a      	movs	r2, r5
+  3a:	2108      	movs	r1, #8
+  3c:	2009      	movs	r0, #9
+  3e:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+  42:	3404      	adds	r4, #4
+  44:	e7e6      	b.n	14 <_FSF_RAM_CON_vCheckByMirror+0x14>
+       if((*pucStartAddress) != ((*pucMIrrorStartAddress) ^ 0xFFu))
+  46:	9b02      	ldr	r3, [sp, #8]
+  48:	1b1a      	subs	r2, r3, r4
+  4a:	9b03      	ldr	r3, [sp, #12]
+  4c:	5d92      	ldrb	r2, [r2, r6]
+  4e:	1b1b      	subs	r3, r3, r4
+  50:	5d9b      	ldrb	r3, [r3, r6]
+  52:	43db      	mvns	r3, r3
+  54:	b2db      	uxtb	r3, r3
+  56:	429a      	cmp	r2, r3
+  58:	d004      	beq.n	64 <_FSF_RAM_CON_vCheckByMirror+0x64>
+           _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENCY_CHECK, ucId);
+  5a:	002a      	movs	r2, r5
+  5c:	2108      	movs	r1, #8
+  5e:	2009      	movs	r0, #9
+  60:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+  64:	3601      	adds	r6, #1
+  66:	e7dd      	b.n	24 <_FSF_RAM_CON_vCheckByMirror+0x24>
+
+Disassembly of section .text._FSF_RAM_CON_vUpdateCheckBySum:
+
+00000000 <_FSF_RAM_CON_vUpdateCheckBySum>:
+void _FSF_RAM_CON_vUpdateCheckBySum(uint8_t *pucCheckValue, uint8_t ucSizeInBytes, const uint8_t *pucStartAddress)
+{
+   uint8_t ucNewCheckValue;
+   uint8_t m;
+
+   ucNewCheckValue = 0;
+   0:	2300      	movs	r3, #0
+{
+   2:	b510      	push	{r4, lr}
+   4:	1851      	adds	r1, r2, r1
+
+   HSUP_vDisableInt();
+   for(m = 0; m < ucSizeInBytes; m++)
+   6:	428a      	cmp	r2, r1
+   8:	d101      	bne.n	e <_FSF_RAM_CON_vUpdateCheckBySum+0xe>
+      ucNewCheckValue += *pucStartAddress;
+
+      pucStartAddress++;
+   }
+
+   *pucCheckValue = ucNewCheckValue;
+   a:	7003      	strb	r3, [r0, #0]
+
+   HSUP_vEnableInt();
+}
+   c:	bd10      	pop	{r4, pc}
+      ucNewCheckValue += *pucStartAddress;
+   e:	7814      	ldrb	r4, [r2, #0]
+      pucStartAddress++;
+  10:	3201      	adds	r2, #1
+      ucNewCheckValue += *pucStartAddress;
+  12:	191b      	adds	r3, r3, r4
+  14:	b2db      	uxtb	r3, r3
+   for(m = 0; m < ucSizeInBytes; m++)
+  16:	e7f6      	b.n	6 <_FSF_RAM_CON_vUpdateCheckBySum+0x6>
+
+Disassembly of section .text._FSF_RAM_CON_vUpdateCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vUpdateCheckByMirror>:
+
+/*~+:void _FSF_RAM_CON_vUpdateCheckByMirror(uint8_t ucSizeInBytes, const uint8_t *pucStartAddress, uint8_t *pucMirrorStartAddress)*/
+void _FSF_RAM_CON_vUpdateCheckByMirror(uint8_t ucSizeInBytes, const uint8_t *pucStartAddress, uint8_t *pucMirrorStartAddress)
+{
+    uint32_t u32BytesCounter = 0u;
+   0:	2300      	movs	r3, #0
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+    uint32_t u32CountOfAlignedBytes;
+
+    u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+   4:	0886      	lsrs	r6, r0, #2
+   6:	00b6      	lsls	r6, r6, #2
+
+   HSUP_vDisableInt();
+   for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+   8:	18d4      	adds	r4, r2, r3
+   a:	18cd      	adds	r5, r1, r3
+   c:	42b3      	cmp	r3, r6
+   e:	d304      	bcc.n	1a <_FSF_RAM_CON_vUpdateCheckByMirror+0x1a>
+       pucMirrorStartAddress += SIZE_OF_CHECKED_BYTES;  /*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+   }
+
+   for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+   {
+       *pucMirrorStartAddress = (*pucStartAddress) ^ 0xFFu;
+  10:	1ae2      	subs	r2, r4, r3
+  12:	1aed      	subs	r5, r5, r3
+   for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+  14:	4298      	cmp	r0, r3
+  16:	d805      	bhi.n	24 <_FSF_RAM_CON_vUpdateCheckByMirror+0x24>
+       pucStartAddress++;
+       pucMirrorStartAddress++;
+   }
+
+   HSUP_vEnableInt();
+}
+  18:	bd70      	pop	{r4, r5, r6, pc}
+       *(uint32_t*)pucMirrorStartAddress = (*(uint32_t*)pucStartAddress) ^ 0xFFFFFFFFuL; /*lint !e927 cast tested to work correctly, upper layer responsible for 4 bytes alignment!! */
+  1a:	58cc      	ldr	r4, [r1, r3]
+  1c:	43e4      	mvns	r4, r4
+  1e:	50d4      	str	r4, [r2, r3]
+   for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+  20:	3304      	adds	r3, #4
+  22:	e7f1      	b.n	8 <_FSF_RAM_CON_vUpdateCheckByMirror+0x8>
+       *pucMirrorStartAddress = (*pucStartAddress) ^ 0xFFu;
+  24:	5cec      	ldrb	r4, [r5, r3]
+  26:	43e4      	mvns	r4, r4
+  28:	54d4      	strb	r4, [r2, r3]
+   for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+  2a:	3301      	adds	r3, #1
+  2c:	e7f2      	b.n	14 <_FSF_RAM_CON_vUpdateCheckByMirror+0x14>
+
+Disassembly of section .text._FSF_RAM_CON_vSetUcharBySum:
+
+00000000 <_FSF_RAM_CON_vSetUcharBySum>:
+#endif
+
+
+/*~+:void _FSF_RAM_CON_vSetUcharBySum(uint8_t *pucVariable, uint8_t *pucCheckValue, uint8_t ucNewVal)*/
+void _FSF_RAM_CON_vSetUcharBySum(uint8_t *pucVariable, uint8_t *pucCheckValue, uint8_t ucNewVal)
+{
+   0:	b510      	push	{r4, lr}
+   HSUP_vDisableInt();
+
+   (*(pucCheckValue)) = ((*pucCheckValue) - (*pucVariable)) + (ucNewVal);
+   2:	780b      	ldrb	r3, [r1, #0]
+   4:	7804      	ldrb	r4, [r0, #0]
+   6:	1b1b      	subs	r3, r3, r4
+   8:	18d3      	adds	r3, r2, r3
+   a:	700b      	strb	r3, [r1, #0]
+
+   *pucVariable = ucNewVal;
+   c:	7002      	strb	r2, [r0, #0]
+
+   HSUP_vEnableInt();
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vSetUintBySum:
+
+00000000 <_FSF_RAM_CON_vSetUintBySum>:
+
+/*~+:void _FSF_RAM_CON_vSetUintBySum(uint16_t *puiVariable, uint8_t *pucCheckValue, uint16_t uiNewVal)*/
+void _FSF_RAM_CON_vSetUintBySum(uint16_t *puiVariable, uint8_t *pucCheckValue, uint16_t uiNewVal)
+{
+   0:	b510      	push	{r4, lr}
+   HSUP_vDisableInt();
+
+   (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetHighByte(*puiVariable)) + HSUP_ucGetHighByte(uiNewVal);
+   2:	780c      	ldrb	r4, [r1, #0]
+
+\return High byte of val.\n
+ \b type: uint8_t\n
+ \b range:0x00 .. 0xFF
+*/
+static inline uint8_t HSUP_ucGetHighByte(uint16_t val){return (uint8_t)(val >> 8U);}
+   4:	0a13      	lsrs	r3, r2, #8
+   6:	191b      	adds	r3, r3, r4
+   8:	8804      	ldrh	r4, [r0, #0]
+   a:	0a24      	lsrs	r4, r4, #8
+   c:	1b1b      	subs	r3, r3, r4
+   e:	b2db      	uxtb	r3, r3
+  10:	700b      	strb	r3, [r1, #0]
+
+\return Low byte of val.\n
+ \b type: uint8_t\n
+ \b range: 0x00 .. 0xFF
+*/
+static inline uint8_t HSUP_ucGetLowByte(uint16_t val){return (uint8_t)val;}
+  12:	8804      	ldrh	r4, [r0, #0]
+   (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetLowByte(*puiVariable)) + HSUP_ucGetLowByte(uiNewVal);
+  14:	1b14      	subs	r4, r2, r4
+  16:	191b      	adds	r3, r3, r4
+  18:	700b      	strb	r3, [r1, #0]
+   *puiVariable = uiNewVal;
+  1a:	8002      	strh	r2, [r0, #0]
+
+   HSUP_vEnableInt();
+}
+  1c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vSetBitUintBySum:
+
+00000000 <_FSF_RAM_CON_vSetBitUintBySum>:
+
+/*~+:void _FSF_RAM_CON_vSetBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMask)*/
+void _FSF_RAM_CON_vSetBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMask)
+{
+   0:	b530      	push	{r4, r5, lr}
+   uint16_t uiTemp;
+
+   HSUP_vDisableInt();
+
+   uiTemp = *puiBitField;
+   2:	8804      	ldrh	r4, [r0, #0]
+   *pucCheckValue = (*pucCheckValue) - HSUP_ucGetLowByte(uiTemp);
+
+   uiTemp |= uiBitMask;
+
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetHighByte(uiTemp);
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+   4:	780d      	ldrb	r5, [r1, #0]
+   uiTemp |= uiBitMask;
+   6:	4322      	orrs	r2, r4
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+   8:	1b13      	subs	r3, r2, r4
+   a:	18ed      	adds	r5, r5, r3
+static inline uint8_t HSUP_ucGetHighByte(uint16_t val){return (uint8_t)(val >> 8U);}
+   c:	0a13      	lsrs	r3, r2, #8
+   e:	195b      	adds	r3, r3, r5
+  10:	0a24      	lsrs	r4, r4, #8
+  12:	1b1b      	subs	r3, r3, r4
+  14:	700b      	strb	r3, [r1, #0]
+
+   *puiBitField = uiTemp;
+  16:	8002      	strh	r2, [r0, #0]
+
+   HSUP_vEnableInt();
+}
+  18:	bd30      	pop	{r4, r5, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vResBitUintBySum:
+
+00000000 <_FSF_RAM_CON_vResBitUintBySum>:
+
+/*~+:void _FSF_RAM_CON_vResBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMask)*/
+void _FSF_RAM_CON_vResBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMask)
+{
+   0:	b530      	push	{r4, r5, lr}
+   uint16_t uiTemp;
+
+   HSUP_vDisableInt();
+
+   uiTemp = *puiBitField;
+   2:	8804      	ldrh	r4, [r0, #0]
+   *pucCheckValue = (*pucCheckValue) - HSUP_ucGetLowByte(uiTemp);
+
+   uiTemp &= ~uiBitMask;
+
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetHighByte(uiTemp);
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+   4:	780d      	ldrb	r5, [r1, #0]
+   uiTemp &= ~uiBitMask;
+   6:	0023      	movs	r3, r4
+   8:	4393      	bics	r3, r2
+   a:	001a      	movs	r2, r3
+   *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+   c:	1b1b      	subs	r3, r3, r4
+   e:	18ed      	adds	r5, r5, r3
+  10:	0a13      	lsrs	r3, r2, #8
+  12:	195b      	adds	r3, r3, r5
+  14:	0a24      	lsrs	r4, r4, #8
+  16:	1b1b      	subs	r3, r3, r4
+  18:	700b      	strb	r3, [r1, #0]
+
+   *puiBitField = uiTemp;
+  1a:	8002      	strh	r2, [r0, #0]
+
+   HSUP_vEnableInt();
+
+}
+  1c:	bd30      	pop	{r4, r5, pc}

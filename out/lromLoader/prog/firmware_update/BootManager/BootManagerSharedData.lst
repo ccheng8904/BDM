@@ -1,0 +1,326 @@
+
+out/lromLoader/prog/firmware_update/BootManager/BootManagerSharedData.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BMDAT_initSharedData:
+
+00000000 <BMDAT_initSharedData>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+void BMDAT_initSharedData(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    if (BMDAT_isPowerOnReset() || (BMDAT_isDataInitialized() == false))
+   2:	f7ff fffe 	bl	0 <BMDAT_isPowerOnReset>
+   6:	4c0d      	ldr	r4, [pc, #52]	; (3c <BMDAT_initSharedData+0x3c>)
+   8:	2800      	cmp	r0, #0
+   a:	d011      	beq.n	30 <BMDAT_initSharedData+0x30>
+    {
+        BMDAT_sharedData = (struct BMDAT_sharedData_s)
+   c:	0022      	movs	r2, r4
+   e:	4b0c      	ldr	r3, [pc, #48]	; (40 <BMDAT_initSharedData+0x40>)
+  10:	cb23      	ldmia	r3!, {r0, r1, r5}
+  12:	c223      	stmia	r2!, {r0, r1, r5}
+  14:	cb23      	ldmia	r3!, {r0, r1, r5}
+  16:	c223      	stmia	r2!, {r0, r1, r5}
+  18:	681b      	ldr	r3, [r3, #0]
+  1a:	6013      	str	r3, [r2, #0]
+            .startAttempts     = 0U,
+            .fatalErrorCounter = 0U,
+            .magicPattern      = BMDAT_magicPattern,
+            .ramCheckState     = BMDAT_UNINIT_DATA_CHECKED
+        };
+        BMDAT_setDataInitializedFlag();
+  1c:	f7ff fffe 	bl	0 <BMDAT_setDataInitializedFlag>
+    }
+    if (BMDAT_sharedData.bootModule != FWU_DEFAULT_START_MODULE)
+  20:	2388      	movs	r3, #136	; 0x88
+  22:	8962      	ldrh	r2, [r4, #10]
+  24:	019b      	lsls	r3, r3, #6
+  26:	429a      	cmp	r2, r3
+  28:	d001      	beq.n	2e <BMDAT_initSharedData+0x2e>
+    {
+        // load default values after next reset
+        BMDAT_resetDataInitializedFlag();
+  2a:	f7ff fffe 	bl	0 <BMDAT_resetDataInitializedFlag>
+    }
+#if defined(VARIANT_BOOTMANAGER) && defined(FEATURE_FUNCTIONAL_SAFETY_ENABLED)
+    FSF_DoProgramCounterMonitoring(FSF_BM_PLATFORM_INITIALIZED, FSF_BM_SHARED_DATA_INITIALIZED);
+#endif
+}
+  2e:	bd70      	pop	{r4, r5, r6, pc}
+    if (BMDAT_isPowerOnReset() || (BMDAT_isDataInitialized() == false))
+  30:	f7ff fffe 	bl	0 <BMDAT_isDataInitialized>
+  34:	2800      	cmp	r0, #0
+  36:	d0e9      	beq.n	c <BMDAT_initSharedData+0xc>
+  38:	e7f2      	b.n	20 <BMDAT_initSharedData+0x20>
+  3a:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.BMDAT_setErrorFlag:
+
+00000000 <BMDAT_setErrorFlag>:
+
+void BMDAT_setErrorFlag(enum BMDAT_errorFlags error)
+{
+    BMDAT_sharedData.errorFlags |= (uint32_t)error;
+   0:	4a02      	ldr	r2, [pc, #8]	; (c <BMDAT_setErrorFlag+0xc>)
+   2:	6853      	ldr	r3, [r2, #4]
+   4:	4303      	orrs	r3, r0
+   6:	6053      	str	r3, [r2, #4]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getErrorFlags:
+
+00000000 <BMDAT_getErrorFlags>:
+
+
+uint32_t BMDAT_getErrorFlags(void)
+{
+    return BMDAT_sharedData.errorFlags;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getErrorFlags+0x8>)
+   2:	6858      	ldr	r0, [r3, #4]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setErrorModule:
+
+00000000 <BMDAT_setErrorModule>:
+
+
+void BMDAT_setErrorModule(enum MAL_ModuleEnum errorModule)
+{
+    BMDAT_sharedData.errorModule = errorModule;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_setErrorModule+0x8>)
+   2:	8118      	strh	r0, [r3, #8]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_incrementStartAttempts:
+
+00000000 <BMDAT_incrementStartAttempts>:
+
+
+void BMDAT_incrementStartAttempts(void)
+{
+    BMDAT_sharedData.startAttempts++; // may overflow, feature just for debugging
+   0:	4a02      	ldr	r2, [pc, #8]	; (c <BMDAT_incrementStartAttempts+0xc>)
+   2:	89d3      	ldrh	r3, [r2, #14]
+   4:	3301      	adds	r3, #1
+   6:	81d3      	strh	r3, [r2, #14]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getStartAttempts:
+
+00000000 <BMDAT_getStartAttempts>:
+
+
+uint16_t BMDAT_getStartAttempts(void)
+{
+    return BMDAT_sharedData.startAttempts;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getStartAttempts+0x8>)
+   2:	89d8      	ldrh	r0, [r3, #14]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_incrementFatalErrorCounter:
+
+00000000 <BMDAT_incrementFatalErrorCounter>:
+
+
+void BMDAT_incrementFatalErrorCounter(void)
+{
+    BMDAT_sharedData.fatalErrorCounter++; // may overflow, feature just for debugging
+   0:	4a02      	ldr	r2, [pc, #8]	; (c <BMDAT_incrementFatalErrorCounter+0xc>)
+   2:	8a13      	ldrh	r3, [r2, #16]
+   4:	3301      	adds	r3, #1
+   6:	8213      	strh	r3, [r2, #16]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getFatalErrorCounter:
+
+00000000 <BMDAT_getFatalErrorCounter>:
+
+
+uint16_t BMDAT_getFatalErrorCounter(void)
+{
+    return BMDAT_sharedData.fatalErrorCounter;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getFatalErrorCounter+0x8>)
+   2:	8a18      	ldrh	r0, [r3, #16]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setIsrTableAddr:
+
+00000000 <BMDAT_setIsrTableAddr>:
+
+
+void BMDAT_setIsrTableAddr(size_t tableAddr)
+{
+    BMDAT_sharedData.IsrTableAddress = tableAddr;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_setIsrTableAddr+0x8>)
+   2:	6018      	str	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getIsrTableAddr:
+
+00000000 <BMDAT_getIsrTableAddr>:
+
+
+size_t BMDAT_getIsrTableAddr(void)
+{
+    return BMDAT_sharedData.IsrTableAddress;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getIsrTableAddr+0x8>)
+   2:	6818      	ldr	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setBootModule:
+
+00000000 <BMDAT_setBootModule>:
+
+
+void BMDAT_setBootModule(enum MAL_ModuleEnum bootModule)
+{
+   0:	b510      	push	{r4, lr}
+    BMDAT_sharedData.bootModule = bootModule;
+   2:	4b02      	ldr	r3, [pc, #8]	; (c <BMDAT_setBootModule+0xc>)
+   4:	8158      	strh	r0, [r3, #10]
+    BMDAT_setDataInitializedFlag(); 
+   6:	f7ff fffe 	bl	0 <BMDAT_setDataInitializedFlag>
+}
+   a:	bd10      	pop	{r4, pc}
+   c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getBootModule:
+
+00000000 <BMDAT_getBootModule>:
+
+
+enum MAL_ModuleEnum BMDAT_getBootModule(void)
+{
+    return BMDAT_sharedData.bootModule;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getBootModule+0x8>)
+   2:	8958      	ldrh	r0, [r3, #10]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setBaudRate:
+
+00000000 <BMDAT_setBaudRate>:
+
+
+void BMDAT_setBaudRate(uint16_t baudRate)
+{
+    BMDAT_sharedData.baudRate = baudRate;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_setBaudRate+0x8>)
+   2:	8198      	strh	r0, [r3, #12]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getBaudRate:
+
+00000000 <BMDAT_getBaudRate>:
+
+
+uint16_t BMDAT_getBaudRate(void)
+{
+    return BMDAT_sharedData.baudRate;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getBaudRate+0x8>)
+   2:	8998      	ldrh	r0, [r3, #12]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setMagicPattern:
+
+00000000 <BMDAT_setMagicPattern>:
+
+void BMDAT_setMagicPattern(enum BMDAT_magicPatterns magicPattern)
+{
+    BMDAT_sharedData.magicPattern = magicPattern;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_setMagicPattern+0x8>)
+   2:	6158      	str	r0, [r3, #20]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_getMagicPattern:
+
+00000000 <BMDAT_getMagicPattern>:
+
+
+enum BMDAT_magicPatterns BMDAT_getMagicPattern(void)
+{
+    return BMDAT_sharedData.magicPattern;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_getMagicPattern+0x8>)
+   2:	6958      	ldr	r0, [r3, #20]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMDAT_setUninitDataChecked:
+
+00000000 <BMDAT_setUninitDataChecked>:
+
+
+void BMDAT_setUninitDataChecked(void)
+{
+    BMDAT_sharedData.ramCheckState = BMDAT_UNINIT_DATA_CHECKED;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BMDAT_setUninitDataChecked+0x8>)
+   2:	4a02      	ldr	r2, [pc, #8]	; (c <BMDAT_setUninitDataChecked+0xc>)
+   4:	619a      	str	r2, [r3, #24]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+   c:	4ab60e39 	.word	0x4ab60e39
+
+Disassembly of section .text.BMDAT_isUninitDataChecked:
+
+00000000 <BMDAT_isUninitDataChecked>:
+
+bool BMDAT_isUninitDataChecked(void)
+{
+    return ((BMDAT_sharedData.ramCheckState == BMDAT_UNINIT_DATA_CHECKED) ? true : false);
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <BMDAT_isUninitDataChecked+0x10>)
+   2:	6998      	ldr	r0, [r3, #24]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <BMDAT_isUninitDataChecked+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	b549f1c7 	.word	0xb549f1c7

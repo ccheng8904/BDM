@@ -1,0 +1,155 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccEPRHWN.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"weakvectbl.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HWVT_vSpuriousIsr,"ax",%progbits
+  18              		.align	1
+  19              		.global	HWVT_vSpuriousIsr
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	HWVT_vSpuriousIsr:
+  25              	.LFB0:
+  26              		.file 1 "common/prog/MSP/sh30f/weakvectbl.c"
+   1:common/prog/MSP/sh30f/weakvectbl.c **** /*******************************************************************************
+   2:common/prog/MSP/sh30f/weakvectbl.c **** *   Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/sh30f/weakvectbl.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/sh30f/weakvectbl.c **** *
+   5:common/prog/MSP/sh30f/weakvectbl.c **** *   All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/sh30f/weakvectbl.c **** *   are protected by international copyright laws.
+   7:common/prog/MSP/sh30f/weakvectbl.c **** *   Please contact copyright holder for licensing information.
+   8:common/prog/MSP/sh30f/weakvectbl.c **** *
+   9:common/prog/MSP/sh30f/weakvectbl.c **** ********************************************************************************
+  10:common/prog/MSP/sh30f/weakvectbl.c **** *   PROJECT          Generic SW
+  11:common/prog/MSP/sh30f/weakvectbl.c **** *   COMP_ABBREV      HWVT
+  12:common/prog/MSP/sh30f/weakvectbl.c **** *   PROCESSOR        SH30F9X71
+  13:common/prog/MSP/sh30f/weakvectbl.c **** *******************************************************************************/
+  14:common/prog/MSP/sh30f/weakvectbl.c **** 
+  15:common/prog/MSP/sh30f/weakvectbl.c **** 
+  16:common/prog/MSP/sh30f/weakvectbl.c **** /******************************************************************************/
+  17:common/prog/MSP/sh30f/weakvectbl.c **** /* DOCUMENTATION                                                              */
+  18:common/prog/MSP/sh30f/weakvectbl.c **** /******************************************************************************/
+  19:common/prog/MSP/sh30f/weakvectbl.c **** /** \file     weakvectbl.c
+  20:common/prog/MSP/sh30f/weakvectbl.c **** *   \brief    Implementation of the HAL Weak Vector Table.
+  21:common/prog/MSP/sh30f/weakvectbl.c **** */
+  22:common/prog/MSP/sh30f/weakvectbl.c ****  
+  23:common/prog/MSP/sh30f/weakvectbl.c **** /******************************************************************************/
+  24:common/prog/MSP/sh30f/weakvectbl.c **** /* INCLUDES                                                                   */
+  25:common/prog/MSP/sh30f/weakvectbl.c **** /******************************************************************************/
+  26:common/prog/MSP/sh30f/weakvectbl.c **** #include "bsh_stdinc.h"
+  27:common/prog/MSP/sh30f/weakvectbl.c **** #include "weakvectbl.h"
+  28:common/prog/MSP/sh30f/weakvectbl.c **** #include "IntTblArmCM.h"
+  29:common/prog/MSP/sh30f/weakvectbl.c **** 
+  30:common/prog/MSP/sh30f/weakvectbl.c **** 
+  31:common/prog/MSP/sh30f/weakvectbl.c **** void HWVT_vSpuriousIsr(void)
+  32:common/prog/MSP/sh30f/weakvectbl.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccEPRHWN.s 			page 2
+
+
+  27              		.loc 1 32 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  33:common/prog/MSP/sh30f/weakvectbl.c ****     ITBL_vSpuriousIsr(); // call application function  
+  31              		.loc 1 33 5 view .LVU1
+  32:common/prog/MSP/sh30f/weakvectbl.c ****     ITBL_vSpuriousIsr(); // call application function  
+  32              		.loc 1 32 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 33 5 view .LVU3
+  39 0002 FFF7FEFF 		bl	ITBL_vSpuriousIsr
+  40              	.LVL0:
+  34:common/prog/MSP/sh30f/weakvectbl.c **** }
+  41              		.loc 1 34 1 view .LVU4
+  42              		@ sp needed
+  43 0006 10BD     		pop	{r4, pc}
+  44              		.cfi_endproc
+  45              	.LFE0:
+  47              		.weak	TOUCH_KEY_IRQHandler
+  48              		.thumb_set TOUCH_KEY_IRQHandler,HWVT_vSpuriousIsr
+  49              		.weak	TIM3_IRQHandler
+  50              		.thumb_set TIM3_IRQHandler,HWVT_vSpuriousIsr
+  51              		.weak	TIM2_IRQHandler
+  52              		.thumb_set TIM2_IRQHandler,HWVT_vSpuriousIsr
+  53              		.weak	TIM1_IRQHandler
+  54              		.thumb_set TIM1_IRQHandler,HWVT_vSpuriousIsr
+  55              		.weak	TIM0_IRQHandler
+  56              		.thumb_set TIM0_IRQHandler,HWVT_vSpuriousIsr
+  57              		.weak	EXTI15_10_IRQHandler
+  58              		.thumb_set EXTI15_10_IRQHandler,HWVT_vSpuriousIsr
+  59              		.weak	UART3_IRQHandler
+  60              		.thumb_set UART3_IRQHandler,HWVT_vSpuriousIsr
+  61              		.weak	UART2_IRQHandler
+  62              		.thumb_set UART2_IRQHandler,HWVT_vSpuriousIsr
+  63              		.weak	UART1_IRQHandler
+  64              		.thumb_set UART1_IRQHandler,HWVT_vSpuriousIsr
+  65              		.weak	SPI1_LED_IRQHandler
+  66              		.thumb_set SPI1_LED_IRQHandler,HWVT_vSpuriousIsr
+  67              		.weak	SPI0_IRQHandler
+  68              		.thumb_set SPI0_IRQHandler,HWVT_vSpuriousIsr
+  69              		.weak	TWI0_IRQHandler
+  70              		.thumb_set TWI0_IRQHandler,HWVT_vSpuriousIsr
+  71              		.weak	UART0_IRQHandler
+  72              		.thumb_set UART0_IRQHandler,HWVT_vSpuriousIsr
+  73              		.weak	EXTI9_4_IRQHandler
+  74              		.thumb_set EXTI9_4_IRQHandler,HWVT_vSpuriousIsr
+  75              		.weak	PCA3_IRQHandler
+  76              		.thumb_set PCA3_IRQHandler,HWVT_vSpuriousIsr
+  77              		.weak	PCA2_IRQHandler
+  78              		.thumb_set PCA2_IRQHandler,HWVT_vSpuriousIsr
+  79              		.weak	PCA1_IRQHandler
+  80              		.thumb_set PCA1_IRQHandler,HWVT_vSpuriousIsr
+  81              		.weak	PCA0_IRQHandler
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccEPRHWN.s 			page 3
+
+
+  82              		.thumb_set PCA0_IRQHandler,HWVT_vSpuriousIsr
+  83              		.weak	PWM3_IRQHandler
+  84              		.thumb_set PWM3_IRQHandler,HWVT_vSpuriousIsr
+  85              		.weak	PWM2_IRQHandler
+  86              		.thumb_set PWM2_IRQHandler,HWVT_vSpuriousIsr
+  87              		.weak	PWM1_IRQHandler
+  88              		.thumb_set PWM1_IRQHandler,HWVT_vSpuriousIsr
+  89              		.weak	PWM0_IRQHandler
+  90              		.thumb_set PWM0_IRQHandler,HWVT_vSpuriousIsr
+  91              		.weak	ADC_IRQHandler
+  92              		.thumb_set ADC_IRQHandler,HWVT_vSpuriousIsr
+  93              		.weak	DMA_CH2_3_IRQHandler
+  94              		.thumb_set DMA_CH2_3_IRQHandler,HWVT_vSpuriousIsr
+  95              		.weak	DMA_CH0_1_IRQHandler
+  96              		.thumb_set DMA_CH0_1_IRQHandler,HWVT_vSpuriousIsr
+  97              		.weak	EXTI3_IRQHandler
+  98              		.thumb_set EXTI3_IRQHandler,HWVT_vSpuriousIsr
+  99              		.weak	EXTI2_IRQHandler
+ 100              		.thumb_set EXTI2_IRQHandler,HWVT_vSpuriousIsr
+ 101              		.weak	EXTI1_IRQHandler
+ 102              		.thumb_set EXTI1_IRQHandler,HWVT_vSpuriousIsr
+ 103              		.weak	EXTI0_IRQHandler
+ 104              		.thumb_set EXTI0_IRQHandler,HWVT_vSpuriousIsr
+ 105              		.weak	RCC_IRQHandler
+ 106              		.thumb_set RCC_IRQHandler,HWVT_vSpuriousIsr
+ 107              		.weak	BOD_IRQHandler
+ 108              		.thumb_set BOD_IRQHandler,HWVT_vSpuriousIsr
+ 109              		.weak	WWDT_IRQHandler
+ 110              		.thumb_set WWDT_IRQHandler,HWVT_vSpuriousIsr
+ 111              		.text
+ 112              	.Letext0:
+ 113              		.file 2 "common/prog/MSP/armCmx/IntTblArmCM.h"

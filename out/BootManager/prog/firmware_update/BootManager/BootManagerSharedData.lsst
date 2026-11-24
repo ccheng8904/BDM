@@ -1,0 +1,939 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BootManagerSharedData.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BMDAT_initSharedData,"ax",%progbits
+  18              		.align	1
+  19              		.global	BMDAT_initSharedData
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BMDAT_initSharedData:
+  25              	.LFB69:
+  26              		.file 1 "common/prog/firmware_update/BootManager/BootManagerSharedData.c"
+   1:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+   5:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+   9:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  PROJECT          Firmware Update Boot-Manager
+  11:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  13:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  14:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /** \file
+  18:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+  19:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  \ingroup  BootManager
+  20:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+  21:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  \brief    Implementation of for Boot Manager shared data.
+  22:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+  23:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  */
+  24:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  25:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  26:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  27:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include <stddef.h>
+  31:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include <stdbool.h>
+  32:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include <stdint.h>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 2
+
+
+  33:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "std_lib/std_symbol.h"
+  34:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "BootManagerSharedData.h"
+  35:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "BootManagerSharedDataUc.h"
+  36:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "firmware_update/mal/module_administration_cfg.h"
+  37:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "firmware_update/fwu_config.h"
+  38:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "SegmentDef.h"
+  39:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #if defined(VARIANT_BOOTMANAGER) && defined(FEATURE_FUNCTIONAL_SAFETY_ENABLED)
+  40:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "FuncSafe/fSafeXS.h"
+  41:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #include "FuncSafe/fs_psm.h"
+  42:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif
+  43:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  44:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  45:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  46:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* PRIVATE DEFINITIONS                                                        */
+  47:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  48:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #ifdef __IAR_SYSTEMS_ICC__
+  49:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     #define NO_INIT __no_init
+  50:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #else
+  51:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     #define NO_INIT   ///< data not initialized in startup
+  52:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif
+  53:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  54:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  55:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #ifndef FWU_DEFAULT_START_MODULE
+  56:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #define FWU_DEFAULT_START_MODULE    MAL_PRODUCT_APP1
+  57:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif 
+  58:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  59:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #ifndef FWU_DEFAULT_BAUDRATE
+  60:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #define FWU_DEFAULT_BAUDRATE        DBUS_DEFAULT_BAUDRATE
+  61:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif
+  62:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  63:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  64:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  65:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  66:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  67:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /** \brief struct for volatile data memory map
+  68:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+  69:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  \note  The data hold in this structure shall not be initialized during start-up
+  70:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  */
+  71:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** struct BMDAT_sharedData_s
+  72:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+  73:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     size_t   IsrTableAddress;  ///< physical address of interrupt vector table
+  74:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     uint32_t errorFlags;       ///< error flags
+  75:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     enum MAL_ModuleEnum errorModule; ///< module-ID caused an error during booting
+  76:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     enum MAL_ModuleEnum bootModule;  ///< identifier of module to boot
+  77:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     uint16_t baudRate;         ///< start baud rate for boot loader
+  78:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     uint16_t startAttempts;    ///< number of start attempts for boot manager
+  79:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     uint16_t fatalErrorCounter;///< fatal error counter (used in case of functional safety error)
+  80:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     enum BMDAT_magicPatterns magicPattern;     ///< holds a magic pattern to recognize uninitialize
+  81:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     enum BMDAT_RamCheckState ramCheckState;          ///< flag for SW/HW reset
+  82:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** };
+  83:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  84:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  85:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  86:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  87:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+  88:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  89:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /** \brief    data which is shared between different applications
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 3
+
+
+  90:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *
+  91:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *  \details  The following data is placed in a special segment and is used
+  92:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  *            to share data between the boot manager and other applications.
+  93:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****  */
+  94:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** SDEF_SetSegmentRW(FWU_SHARED_DATA) // put it into segment FWU_SHARED_DATA
+  95:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** SYMBOL_USED NO_INIT struct BMDAT_sharedData_s BMDAT_sharedData;
+  96:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** SDEF_SetSegmentRW_Default()
+  97:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  98:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+  99:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 100:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+ 101:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 102:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** /******************************************************************************/
+ 103:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 104:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_initSharedData(void)
+ 105:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+  27              		.loc 1 105 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     if (BMDAT_isPowerOnReset() || (BMDAT_isDataInitialized() == false))
+  31              		.loc 1 106 5 view .LVU1
+ 105:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     if (BMDAT_isPowerOnReset() || (BMDAT_isDataInitialized() == false))
+  32              		.loc 1 105 1 is_stmt 0 view .LVU2
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 106 9 view .LVU3
+  41 0002 FFF7FEFF 		bl	BMDAT_isPowerOnReset
+  42              	.LVL0:
+  43 0006 104C     		ldr	r4, .L9
+  44              		.loc 1 106 8 view .LVU4
+  45 0008 0028     		cmp	r0, #0
+  46 000a 17D0     		beq	.L2
+  47              	.L4:
+  48              	.LBB2:
+ 107:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     {
+ 108:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         BMDAT_sharedData = (struct BMDAT_sharedData_s)
+  49              		.loc 1 108 9 is_stmt 1 view .LVU5
+  50              		.loc 1 108 26 is_stmt 0 view .LVU6
+  51 000c 2200     		movs	r2, r4
+  52 000e 0F4B     		ldr	r3, .L9+4
+  53 0010 23CB     		ldmia	r3!, {r0, r1, r5}
+  54 0012 23C2     		stmia	r2!, {r0, r1, r5}
+  55 0014 23CB     		ldmia	r3!, {r0, r1, r5}
+  56 0016 23C2     		stmia	r2!, {r0, r1, r5}
+  57 0018 1B68     		ldr	r3, [r3]
+  58 001a 1360     		str	r3, [r2]
+ 109:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         {
+ 110:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .IsrTableAddress   = 0U,
+ 111:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .errorFlags        = 0U,
+ 112:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .errorModule       = MAL_NO_MODULE,
+ 113:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .bootModule        = FWU_DEFAULT_START_MODULE,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 4
+
+
+ 114:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .baudRate          = FWU_DEFAULT_BAUDRATE,
+ 115:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .startAttempts     = 0U,
+ 116:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .fatalErrorCounter = 0U,
+ 117:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .magicPattern      = BMDAT_magicPattern,
+ 118:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****             .ramCheckState     = BMDAT_UNINIT_DATA_CHECKED
+ 119:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         };
+ 120:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         BMDAT_setDataInitializedFlag();
+  59              		.loc 1 120 9 is_stmt 1 view .LVU7
+  60 001c FFF7FEFF 		bl	BMDAT_setDataInitializedFlag
+  61              	.LVL1:
+  62              	.L3:
+  63              	.LBE2:
+ 121:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     }
+ 122:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     if (BMDAT_sharedData.bootModule != FWU_DEFAULT_START_MODULE)
+  64              		.loc 1 122 5 view .LVU8
+  65              		.loc 1 122 8 is_stmt 0 view .LVU9
+  66 0020 8823     		movs	r3, #136
+  67 0022 6289     		ldrh	r2, [r4, #10]
+  68 0024 9B01     		lsls	r3, r3, #6
+  69 0026 9A42     		cmp	r2, r3
+  70 0028 01D0     		beq	.L5
+ 123:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     {
+ 124:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         // load default values after next reset
+ 125:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****         BMDAT_resetDataInitializedFlag();
+  71              		.loc 1 125 9 is_stmt 1 view .LVU10
+  72 002a FFF7FEFF 		bl	BMDAT_resetDataInitializedFlag
+  73              	.LVL2:
+  74              	.L5:
+ 126:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     }
+ 127:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #if defined(VARIANT_BOOTMANAGER) && defined(FEATURE_FUNCTIONAL_SAFETY_ENABLED)
+ 128:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_PLATFORM_INITIALIZED, FSF_BM_SHARED_DATA_INITIALIZED);
+  75              		.loc 1 128 5 view .LVU11
+ 129:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif
+ 130:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+  76              		.loc 1 130 1 is_stmt 0 view .LVU12
+  77              		@ sp needed
+ 128:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** #endif
+  78              		.loc 1 128 5 view .LVU13
+  79 002e 8021     		movs	r1, #128
+  80 0030 8020     		movs	r0, #128
+  81 0032 8900     		lsls	r1, r1, #2
+  82 0034 4000     		lsls	r0, r0, #1
+  83 0036 FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+  84              	.LVL3:
+  85              		.loc 1 130 1 view .LVU14
+  86 003a 70BD     		pop	{r4, r5, r6, pc}
+  87              	.L2:
+ 106:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     {
+  88              		.loc 1 106 36 discriminator 1 view .LVU15
+  89 003c FFF7FEFF 		bl	BMDAT_isDataInitialized
+  90              	.LVL4:
+ 106:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     {
+  91              		.loc 1 106 32 discriminator 1 view .LVU16
+  92 0040 0028     		cmp	r0, #0
+  93 0042 E3D0     		beq	.L4
+  94 0044 ECE7     		b	.L3
+  95              	.L10:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 5
+
+
+  96 0046 C046     		.align	2
+  97              	.L9:
+  98 0048 00000000 		.word	.LANCHOR0
+  99 004c 00000000 		.word	.LANCHOR1
+ 100              		.cfi_endproc
+ 101              	.LFE69:
+ 103              		.section	.text.BMDAT_setErrorFlag,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	BMDAT_setErrorFlag
+ 106              		.syntax unified
+ 107              		.code	16
+ 108              		.thumb_func
+ 110              	BMDAT_setErrorFlag:
+ 111              	.LVL5:
+ 112              	.LFB70:
+ 131:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 132:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setErrorFlag(enum BMDAT_errorFlags error)
+ 133:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 113              		.loc 1 133 1 is_stmt 1 view -0
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 0
+ 116              		@ frame_needed = 0, uses_anonymous_args = 0
+ 117              		@ link register save eliminated.
+ 134:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.errorFlags |= (uint32_t)error;
+ 118              		.loc 1 134 5 view .LVU18
+ 119              		.loc 1 134 33 is_stmt 0 view .LVU19
+ 120 0000 024A     		ldr	r2, .L12
+ 135:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 121              		.loc 1 135 1 view .LVU20
+ 122              		@ sp needed
+ 134:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.errorFlags |= (uint32_t)error;
+ 123              		.loc 1 134 33 view .LVU21
+ 124 0002 5368     		ldr	r3, [r2, #4]
+ 125 0004 0343     		orrs	r3, r0
+ 126 0006 5360     		str	r3, [r2, #4]
+ 127              		.loc 1 135 1 view .LVU22
+ 128 0008 7047     		bx	lr
+ 129              	.L13:
+ 130 000a C046     		.align	2
+ 131              	.L12:
+ 132 000c 00000000 		.word	.LANCHOR0
+ 133              		.cfi_endproc
+ 134              	.LFE70:
+ 136              		.section	.text.BMDAT_getErrorFlags,"ax",%progbits
+ 137              		.align	1
+ 138              		.global	BMDAT_getErrorFlags
+ 139              		.syntax unified
+ 140              		.code	16
+ 141              		.thumb_func
+ 143              	BMDAT_getErrorFlags:
+ 144              	.LFB71:
+ 136:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 137:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 138:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** uint32_t BMDAT_getErrorFlags(void)
+ 139:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 145              		.loc 1 139 1 is_stmt 1 view -0
+ 146              		.cfi_startproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 6
+
+
+ 147              		@ args = 0, pretend = 0, frame = 0
+ 148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 149              		@ link register save eliminated.
+ 140:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.errorFlags;
+ 150              		.loc 1 140 5 view .LVU24
+ 151              		.loc 1 140 28 is_stmt 0 view .LVU25
+ 152 0000 014B     		ldr	r3, .L15
+ 141:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 153              		.loc 1 141 1 view .LVU26
+ 154              		@ sp needed
+ 140:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.errorFlags;
+ 155              		.loc 1 140 28 view .LVU27
+ 156 0002 5868     		ldr	r0, [r3, #4]
+ 157              		.loc 1 141 1 view .LVU28
+ 158 0004 7047     		bx	lr
+ 159              	.L16:
+ 160 0006 C046     		.align	2
+ 161              	.L15:
+ 162 0008 00000000 		.word	.LANCHOR0
+ 163              		.cfi_endproc
+ 164              	.LFE71:
+ 166              		.section	.text.BMDAT_setErrorModule,"ax",%progbits
+ 167              		.align	1
+ 168              		.global	BMDAT_setErrorModule
+ 169              		.syntax unified
+ 170              		.code	16
+ 171              		.thumb_func
+ 173              	BMDAT_setErrorModule:
+ 174              	.LVL6:
+ 175              	.LFB72:
+ 142:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 143:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 144:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setErrorModule(enum MAL_ModuleEnum errorModule)
+ 145:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 176              		.loc 1 145 1 is_stmt 1 view -0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 146:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.errorModule = errorModule;
+ 181              		.loc 1 146 5 view .LVU30
+ 182              		.loc 1 146 34 is_stmt 0 view .LVU31
+ 183 0000 014B     		ldr	r3, .L18
+ 147:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 184              		.loc 1 147 1 view .LVU32
+ 185              		@ sp needed
+ 146:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.errorModule = errorModule;
+ 186              		.loc 1 146 34 view .LVU33
+ 187 0002 1881     		strh	r0, [r3, #8]
+ 188              		.loc 1 147 1 view .LVU34
+ 189 0004 7047     		bx	lr
+ 190              	.L19:
+ 191 0006 C046     		.align	2
+ 192              	.L18:
+ 193 0008 00000000 		.word	.LANCHOR0
+ 194              		.cfi_endproc
+ 195              	.LFE72:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 7
+
+
+ 197              		.section	.text.BMDAT_incrementStartAttempts,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	BMDAT_incrementStartAttempts
+ 200              		.syntax unified
+ 201              		.code	16
+ 202              		.thumb_func
+ 204              	BMDAT_incrementStartAttempts:
+ 205              	.LFB73:
+ 148:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 149:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 150:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_incrementStartAttempts(void)
+ 151:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 206              		.loc 1 151 1 is_stmt 1 view -0
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 0
+ 209              		@ frame_needed = 0, uses_anonymous_args = 0
+ 210              		@ link register save eliminated.
+ 152:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.startAttempts++; // may overflow, feature just for debugging
+ 211              		.loc 1 152 5 view .LVU36
+ 212              		.loc 1 152 35 is_stmt 0 view .LVU37
+ 213 0000 024A     		ldr	r2, .L21
+ 153:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 214              		.loc 1 153 1 view .LVU38
+ 215              		@ sp needed
+ 152:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.startAttempts++; // may overflow, feature just for debugging
+ 216              		.loc 1 152 35 view .LVU39
+ 217 0002 D389     		ldrh	r3, [r2, #14]
+ 218 0004 0133     		adds	r3, r3, #1
+ 219 0006 D381     		strh	r3, [r2, #14]
+ 220              		.loc 1 153 1 view .LVU40
+ 221 0008 7047     		bx	lr
+ 222              	.L22:
+ 223 000a C046     		.align	2
+ 224              	.L21:
+ 225 000c 00000000 		.word	.LANCHOR0
+ 226              		.cfi_endproc
+ 227              	.LFE73:
+ 229              		.section	.text.BMDAT_getStartAttempts,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	BMDAT_getStartAttempts
+ 232              		.syntax unified
+ 233              		.code	16
+ 234              		.thumb_func
+ 236              	BMDAT_getStartAttempts:
+ 237              	.LFB74:
+ 154:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 155:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 156:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** uint16_t BMDAT_getStartAttempts(void)
+ 157:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 238              		.loc 1 157 1 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 242              		@ link register save eliminated.
+ 158:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.startAttempts;
+ 243              		.loc 1 158 5 view .LVU42
+ 244              		.loc 1 158 28 is_stmt 0 view .LVU43
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 8
+
+
+ 245 0000 014B     		ldr	r3, .L24
+ 159:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 246              		.loc 1 159 1 view .LVU44
+ 247              		@ sp needed
+ 158:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.startAttempts;
+ 248              		.loc 1 158 28 view .LVU45
+ 249 0002 D889     		ldrh	r0, [r3, #14]
+ 250              		.loc 1 159 1 view .LVU46
+ 251 0004 7047     		bx	lr
+ 252              	.L25:
+ 253 0006 C046     		.align	2
+ 254              	.L24:
+ 255 0008 00000000 		.word	.LANCHOR0
+ 256              		.cfi_endproc
+ 257              	.LFE74:
+ 259              		.section	.text.BMDAT_incrementFatalErrorCounter,"ax",%progbits
+ 260              		.align	1
+ 261              		.global	BMDAT_incrementFatalErrorCounter
+ 262              		.syntax unified
+ 263              		.code	16
+ 264              		.thumb_func
+ 266              	BMDAT_incrementFatalErrorCounter:
+ 267              	.LFB75:
+ 160:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 161:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 162:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_incrementFatalErrorCounter(void)
+ 163:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 268              		.loc 1 163 1 is_stmt 1 view -0
+ 269              		.cfi_startproc
+ 270              		@ args = 0, pretend = 0, frame = 0
+ 271              		@ frame_needed = 0, uses_anonymous_args = 0
+ 272              		@ link register save eliminated.
+ 164:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.fatalErrorCounter++; // may overflow, feature just for debugging
+ 273              		.loc 1 164 5 view .LVU48
+ 274              		.loc 1 164 39 is_stmt 0 view .LVU49
+ 275 0000 024A     		ldr	r2, .L27
+ 165:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 276              		.loc 1 165 1 view .LVU50
+ 277              		@ sp needed
+ 164:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.fatalErrorCounter++; // may overflow, feature just for debugging
+ 278              		.loc 1 164 39 view .LVU51
+ 279 0002 138A     		ldrh	r3, [r2, #16]
+ 280 0004 0133     		adds	r3, r3, #1
+ 281 0006 1382     		strh	r3, [r2, #16]
+ 282              		.loc 1 165 1 view .LVU52
+ 283 0008 7047     		bx	lr
+ 284              	.L28:
+ 285 000a C046     		.align	2
+ 286              	.L27:
+ 287 000c 00000000 		.word	.LANCHOR0
+ 288              		.cfi_endproc
+ 289              	.LFE75:
+ 291              		.section	.text.BMDAT_getFatalErrorCounter,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	BMDAT_getFatalErrorCounter
+ 294              		.syntax unified
+ 295              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 9
+
+
+ 296              		.thumb_func
+ 298              	BMDAT_getFatalErrorCounter:
+ 299              	.LFB76:
+ 166:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 167:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 168:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** uint16_t BMDAT_getFatalErrorCounter(void)
+ 169:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 300              		.loc 1 169 1 is_stmt 1 view -0
+ 301              		.cfi_startproc
+ 302              		@ args = 0, pretend = 0, frame = 0
+ 303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 304              		@ link register save eliminated.
+ 170:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.fatalErrorCounter;
+ 305              		.loc 1 170 5 view .LVU54
+ 306              		.loc 1 170 28 is_stmt 0 view .LVU55
+ 307 0000 014B     		ldr	r3, .L30
+ 171:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 308              		.loc 1 171 1 view .LVU56
+ 309              		@ sp needed
+ 170:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.fatalErrorCounter;
+ 310              		.loc 1 170 28 view .LVU57
+ 311 0002 188A     		ldrh	r0, [r3, #16]
+ 312              		.loc 1 171 1 view .LVU58
+ 313 0004 7047     		bx	lr
+ 314              	.L31:
+ 315 0006 C046     		.align	2
+ 316              	.L30:
+ 317 0008 00000000 		.word	.LANCHOR0
+ 318              		.cfi_endproc
+ 319              	.LFE76:
+ 321              		.section	.text.BMDAT_setIsrTableAddr,"ax",%progbits
+ 322              		.align	1
+ 323              		.global	BMDAT_setIsrTableAddr
+ 324              		.syntax unified
+ 325              		.code	16
+ 326              		.thumb_func
+ 328              	BMDAT_setIsrTableAddr:
+ 329              	.LVL7:
+ 330              	.LFB77:
+ 172:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 173:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 174:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setIsrTableAddr(size_t tableAddr)
+ 175:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 331              		.loc 1 175 1 is_stmt 1 view -0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335              		@ link register save eliminated.
+ 176:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.IsrTableAddress = tableAddr;
+ 336              		.loc 1 176 5 view .LVU60
+ 337              		.loc 1 176 38 is_stmt 0 view .LVU61
+ 338 0000 014B     		ldr	r3, .L33
+ 177:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 339              		.loc 1 177 1 view .LVU62
+ 340              		@ sp needed
+ 176:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.IsrTableAddress = tableAddr;
+ 341              		.loc 1 176 38 view .LVU63
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 10
+
+
+ 342 0002 1860     		str	r0, [r3]
+ 343              		.loc 1 177 1 view .LVU64
+ 344 0004 7047     		bx	lr
+ 345              	.L34:
+ 346 0006 C046     		.align	2
+ 347              	.L33:
+ 348 0008 00000000 		.word	.LANCHOR0
+ 349              		.cfi_endproc
+ 350              	.LFE77:
+ 352              		.section	.text.BMDAT_getIsrTableAddr,"ax",%progbits
+ 353              		.align	1
+ 354              		.global	BMDAT_getIsrTableAddr
+ 355              		.syntax unified
+ 356              		.code	16
+ 357              		.thumb_func
+ 359              	BMDAT_getIsrTableAddr:
+ 360              	.LFB78:
+ 178:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 179:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 180:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** size_t BMDAT_getIsrTableAddr(void)
+ 181:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 361              		.loc 1 181 1 is_stmt 1 view -0
+ 362              		.cfi_startproc
+ 363              		@ args = 0, pretend = 0, frame = 0
+ 364              		@ frame_needed = 0, uses_anonymous_args = 0
+ 365              		@ link register save eliminated.
+ 182:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.IsrTableAddress;
+ 366              		.loc 1 182 5 view .LVU66
+ 367              		.loc 1 182 28 is_stmt 0 view .LVU67
+ 368 0000 014B     		ldr	r3, .L36
+ 183:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 369              		.loc 1 183 1 view .LVU68
+ 370              		@ sp needed
+ 182:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.IsrTableAddress;
+ 371              		.loc 1 182 28 view .LVU69
+ 372 0002 1868     		ldr	r0, [r3]
+ 373              		.loc 1 183 1 view .LVU70
+ 374 0004 7047     		bx	lr
+ 375              	.L37:
+ 376 0006 C046     		.align	2
+ 377              	.L36:
+ 378 0008 00000000 		.word	.LANCHOR0
+ 379              		.cfi_endproc
+ 380              	.LFE78:
+ 382              		.section	.text.BMDAT_setBootModule,"ax",%progbits
+ 383              		.align	1
+ 384              		.global	BMDAT_setBootModule
+ 385              		.syntax unified
+ 386              		.code	16
+ 387              		.thumb_func
+ 389              	BMDAT_setBootModule:
+ 390              	.LVL8:
+ 391              	.LFB79:
+ 184:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 185:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 186:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setBootModule(enum MAL_ModuleEnum bootModule)
+ 187:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 11
+
+
+ 392              		.loc 1 187 1 is_stmt 1 view -0
+ 393              		.cfi_startproc
+ 394              		@ args = 0, pretend = 0, frame = 0
+ 395              		@ frame_needed = 0, uses_anonymous_args = 0
+ 188:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.bootModule = bootModule;
+ 396              		.loc 1 188 5 view .LVU72
+ 187:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.bootModule = bootModule;
+ 397              		.loc 1 187 1 is_stmt 0 view .LVU73
+ 398 0000 10B5     		push	{r4, lr}
+ 399              	.LCFI1:
+ 400              		.cfi_def_cfa_offset 8
+ 401              		.cfi_offset 4, -8
+ 402              		.cfi_offset 14, -4
+ 403              		.loc 1 188 33 view .LVU74
+ 404 0002 024B     		ldr	r3, .L39
+ 189:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_setDataInitializedFlag(); 
+ 190:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 405              		.loc 1 190 1 view .LVU75
+ 406              		@ sp needed
+ 188:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_setDataInitializedFlag(); 
+ 407              		.loc 1 188 33 view .LVU76
+ 408 0004 5881     		strh	r0, [r3, #10]
+ 189:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_setDataInitializedFlag(); 
+ 409              		.loc 1 189 5 is_stmt 1 view .LVU77
+ 410 0006 FFF7FEFF 		bl	BMDAT_setDataInitializedFlag
+ 411              	.LVL9:
+ 412              		.loc 1 190 1 is_stmt 0 view .LVU78
+ 413 000a 10BD     		pop	{r4, pc}
+ 414              	.L40:
+ 415              		.align	2
+ 416              	.L39:
+ 417 000c 00000000 		.word	.LANCHOR0
+ 418              		.cfi_endproc
+ 419              	.LFE79:
+ 421              		.section	.text.BMDAT_getBootModule,"ax",%progbits
+ 422              		.align	1
+ 423              		.global	BMDAT_getBootModule
+ 424              		.syntax unified
+ 425              		.code	16
+ 426              		.thumb_func
+ 428              	BMDAT_getBootModule:
+ 429              	.LFB80:
+ 191:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 192:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 193:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** enum MAL_ModuleEnum BMDAT_getBootModule(void)
+ 194:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 430              		.loc 1 194 1 is_stmt 1 view -0
+ 431              		.cfi_startproc
+ 432              		@ args = 0, pretend = 0, frame = 0
+ 433              		@ frame_needed = 0, uses_anonymous_args = 0
+ 434              		@ link register save eliminated.
+ 195:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.bootModule;
+ 435              		.loc 1 195 5 view .LVU80
+ 436              		.loc 1 195 28 is_stmt 0 view .LVU81
+ 437 0000 014B     		ldr	r3, .L42
+ 196:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 438              		.loc 1 196 1 view .LVU82
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 12
+
+
+ 439              		@ sp needed
+ 195:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.bootModule;
+ 440              		.loc 1 195 28 view .LVU83
+ 441 0002 5889     		ldrh	r0, [r3, #10]
+ 442              		.loc 1 196 1 view .LVU84
+ 443 0004 7047     		bx	lr
+ 444              	.L43:
+ 445 0006 C046     		.align	2
+ 446              	.L42:
+ 447 0008 00000000 		.word	.LANCHOR0
+ 448              		.cfi_endproc
+ 449              	.LFE80:
+ 451              		.section	.text.BMDAT_setBaudRate,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	BMDAT_setBaudRate
+ 454              		.syntax unified
+ 455              		.code	16
+ 456              		.thumb_func
+ 458              	BMDAT_setBaudRate:
+ 459              	.LVL10:
+ 460              	.LFB81:
+ 197:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 198:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 199:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setBaudRate(uint16_t baudRate)
+ 200:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 461              		.loc 1 200 1 is_stmt 1 view -0
+ 462              		.cfi_startproc
+ 463              		@ args = 0, pretend = 0, frame = 0
+ 464              		@ frame_needed = 0, uses_anonymous_args = 0
+ 465              		@ link register save eliminated.
+ 201:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.baudRate = baudRate;
+ 466              		.loc 1 201 5 view .LVU86
+ 467              		.loc 1 201 31 is_stmt 0 view .LVU87
+ 468 0000 014B     		ldr	r3, .L45
+ 202:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 469              		.loc 1 202 1 view .LVU88
+ 470              		@ sp needed
+ 201:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.baudRate = baudRate;
+ 471              		.loc 1 201 31 view .LVU89
+ 472 0002 9881     		strh	r0, [r3, #12]
+ 473              		.loc 1 202 1 view .LVU90
+ 474 0004 7047     		bx	lr
+ 475              	.L46:
+ 476 0006 C046     		.align	2
+ 477              	.L45:
+ 478 0008 00000000 		.word	.LANCHOR0
+ 479              		.cfi_endproc
+ 480              	.LFE81:
+ 482              		.section	.text.BMDAT_getBaudRate,"ax",%progbits
+ 483              		.align	1
+ 484              		.global	BMDAT_getBaudRate
+ 485              		.syntax unified
+ 486              		.code	16
+ 487              		.thumb_func
+ 489              	BMDAT_getBaudRate:
+ 490              	.LFB82:
+ 203:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 13
+
+
+ 204:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 205:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** uint16_t BMDAT_getBaudRate(void)
+ 206:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 491              		.loc 1 206 1 is_stmt 1 view -0
+ 492              		.cfi_startproc
+ 493              		@ args = 0, pretend = 0, frame = 0
+ 494              		@ frame_needed = 0, uses_anonymous_args = 0
+ 495              		@ link register save eliminated.
+ 207:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.baudRate;
+ 496              		.loc 1 207 5 view .LVU92
+ 497              		.loc 1 207 28 is_stmt 0 view .LVU93
+ 498 0000 014B     		ldr	r3, .L48
+ 208:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 499              		.loc 1 208 1 view .LVU94
+ 500              		@ sp needed
+ 207:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.baudRate;
+ 501              		.loc 1 207 28 view .LVU95
+ 502 0002 9889     		ldrh	r0, [r3, #12]
+ 503              		.loc 1 208 1 view .LVU96
+ 504 0004 7047     		bx	lr
+ 505              	.L49:
+ 506 0006 C046     		.align	2
+ 507              	.L48:
+ 508 0008 00000000 		.word	.LANCHOR0
+ 509              		.cfi_endproc
+ 510              	.LFE82:
+ 512              		.section	.text.BMDAT_setMagicPattern,"ax",%progbits
+ 513              		.align	1
+ 514              		.global	BMDAT_setMagicPattern
+ 515              		.syntax unified
+ 516              		.code	16
+ 517              		.thumb_func
+ 519              	BMDAT_setMagicPattern:
+ 520              	.LVL11:
+ 521              	.LFB83:
+ 209:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 210:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setMagicPattern(enum BMDAT_magicPatterns magicPattern)
+ 211:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 522              		.loc 1 211 1 is_stmt 1 view -0
+ 523              		.cfi_startproc
+ 524              		@ args = 0, pretend = 0, frame = 0
+ 525              		@ frame_needed = 0, uses_anonymous_args = 0
+ 526              		@ link register save eliminated.
+ 212:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.magicPattern = magicPattern;
+ 527              		.loc 1 212 5 view .LVU98
+ 528              		.loc 1 212 35 is_stmt 0 view .LVU99
+ 529 0000 014B     		ldr	r3, .L51
+ 213:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 530              		.loc 1 213 1 view .LVU100
+ 531              		@ sp needed
+ 212:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.magicPattern = magicPattern;
+ 532              		.loc 1 212 35 view .LVU101
+ 533 0002 5861     		str	r0, [r3, #20]
+ 534              		.loc 1 213 1 view .LVU102
+ 535 0004 7047     		bx	lr
+ 536              	.L52:
+ 537 0006 C046     		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 14
+
+
+ 538              	.L51:
+ 539 0008 00000000 		.word	.LANCHOR0
+ 540              		.cfi_endproc
+ 541              	.LFE83:
+ 543              		.section	.text.BMDAT_getMagicPattern,"ax",%progbits
+ 544              		.align	1
+ 545              		.global	BMDAT_getMagicPattern
+ 546              		.syntax unified
+ 547              		.code	16
+ 548              		.thumb_func
+ 550              	BMDAT_getMagicPattern:
+ 551              	.LFB84:
+ 214:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 215:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 216:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** enum BMDAT_magicPatterns BMDAT_getMagicPattern(void)
+ 217:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 552              		.loc 1 217 1 is_stmt 1 view -0
+ 553              		.cfi_startproc
+ 554              		@ args = 0, pretend = 0, frame = 0
+ 555              		@ frame_needed = 0, uses_anonymous_args = 0
+ 556              		@ link register save eliminated.
+ 218:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.magicPattern;
+ 557              		.loc 1 218 5 view .LVU104
+ 558              		.loc 1 218 28 is_stmt 0 view .LVU105
+ 559 0000 014B     		ldr	r3, .L54
+ 219:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 560              		.loc 1 219 1 view .LVU106
+ 561              		@ sp needed
+ 218:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return BMDAT_sharedData.magicPattern;
+ 562              		.loc 1 218 28 view .LVU107
+ 563 0002 5869     		ldr	r0, [r3, #20]
+ 564              		.loc 1 219 1 view .LVU108
+ 565 0004 7047     		bx	lr
+ 566              	.L55:
+ 567 0006 C046     		.align	2
+ 568              	.L54:
+ 569 0008 00000000 		.word	.LANCHOR0
+ 570              		.cfi_endproc
+ 571              	.LFE84:
+ 573              		.section	.text.BMDAT_setUninitDataChecked,"ax",%progbits
+ 574              		.align	1
+ 575              		.global	BMDAT_setUninitDataChecked
+ 576              		.syntax unified
+ 577              		.code	16
+ 578              		.thumb_func
+ 580              	BMDAT_setUninitDataChecked:
+ 581              	.LFB85:
+ 220:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 221:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 222:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** void BMDAT_setUninitDataChecked(void)
+ 223:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 582              		.loc 1 223 1 is_stmt 1 view -0
+ 583              		.cfi_startproc
+ 584              		@ args = 0, pretend = 0, frame = 0
+ 585              		@ frame_needed = 0, uses_anonymous_args = 0
+ 586              		@ link register save eliminated.
+ 224:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.ramCheckState = BMDAT_UNINIT_DATA_CHECKED;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 15
+
+
+ 587              		.loc 1 224 5 view .LVU110
+ 588              		.loc 1 224 36 is_stmt 0 view .LVU111
+ 589 0000 014B     		ldr	r3, .L57
+ 590 0002 024A     		ldr	r2, .L57+4
+ 225:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 591              		.loc 1 225 1 view .LVU112
+ 592              		@ sp needed
+ 224:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     BMDAT_sharedData.ramCheckState = BMDAT_UNINIT_DATA_CHECKED;
+ 593              		.loc 1 224 36 view .LVU113
+ 594 0004 9A61     		str	r2, [r3, #24]
+ 595              		.loc 1 225 1 view .LVU114
+ 596 0006 7047     		bx	lr
+ 597              	.L58:
+ 598              		.align	2
+ 599              	.L57:
+ 600 0008 00000000 		.word	.LANCHOR0
+ 601 000c 390EB64A 		.word	1253445177
+ 602              		.cfi_endproc
+ 603              	.LFE85:
+ 605              		.section	.text.BMDAT_isUninitDataChecked,"ax",%progbits
+ 606              		.align	1
+ 607              		.global	BMDAT_isUninitDataChecked
+ 608              		.syntax unified
+ 609              		.code	16
+ 610              		.thumb_func
+ 612              	BMDAT_isUninitDataChecked:
+ 613              	.LFB86:
+ 226:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** 
+ 227:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** bool BMDAT_isUninitDataChecked(void)
+ 228:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** {
+ 614              		.loc 1 228 1 is_stmt 1 view -0
+ 615              		.cfi_startproc
+ 616              		@ args = 0, pretend = 0, frame = 0
+ 617              		@ frame_needed = 0, uses_anonymous_args = 0
+ 618              		@ link register save eliminated.
+ 229:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return ((BMDAT_sharedData.ramCheckState == BMDAT_UNINIT_DATA_CHECKED) ? true : false);
+ 619              		.loc 1 229 5 view .LVU116
+ 620              		.loc 1 229 30 is_stmt 0 view .LVU117
+ 621 0000 034B     		ldr	r3, .L60
+ 230:common/prog/firmware_update/BootManager/BootManagerSharedData.c **** }
+ 622              		.loc 1 230 1 view .LVU118
+ 623              		@ sp needed
+ 229:common/prog/firmware_update/BootManager/BootManagerSharedData.c ****     return ((BMDAT_sharedData.ramCheckState == BMDAT_UNINIT_DATA_CHECKED) ? true : false);
+ 624              		.loc 1 229 82 view .LVU119
+ 625 0002 9869     		ldr	r0, [r3, #24]
+ 626 0004 034B     		ldr	r3, .L60+4
+ 627 0006 C018     		adds	r0, r0, r3
+ 628 0008 4342     		rsbs	r3, r0, #0
+ 629 000a 5841     		adcs	r0, r0, r3
+ 630 000c C0B2     		uxtb	r0, r0
+ 631              		.loc 1 230 1 view .LVU120
+ 632 000e 7047     		bx	lr
+ 633              	.L61:
+ 634              		.align	2
+ 635              	.L60:
+ 636 0010 00000000 		.word	.LANCHOR0
+ 637 0014 C7F149B5 		.word	-1253445177
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccp0yEnI.s 			page 16
+
+
+ 638              		.cfi_endproc
+ 639              	.LFE86:
+ 641              		.global	BMDAT_sharedData
+ 642              		.section	.rodata
+ 643              		.align	2
+ 644              		.set	.LANCHOR1,. + 0
+ 645              	.LC0:
+ 646 0000 00000000 		.word	0
+ 647 0004 00000000 		.word	0
+ 648 0008 FFFF     		.short	-1
+ 649 000a 0022     		.short	8704
+ 650 000c 6000     		.short	96
+ 651 000e 0000     		.short	0
+ 652 0010 0000     		.short	0
+ 653 0012 0000     		.space	2
+ 654 0014 784B715A 		.word	1517374328
+ 655 0018 390EB64A 		.word	1253445177
+ 656              		.section	.FWU_SHARED_DATA,"aw"
+ 657              		.align	2
+ 658              		.set	.LANCHOR0,. + 0
+ 661              	BMDAT_sharedData:
+ 662 0000 00000000 		.space	28
+ 662      00000000 
+ 662      00000000 
+ 662      00000000 
+ 662      00000000 
+ 663              		.text
+ 664              	.Letext0:
+ 665              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\lib\\gcc\\arm-none-eabi\\11.3.1\\i
+ 666              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 667              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 668              		.file 5 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 669              		.file 6 "common/prog/firmware_update/BootManager/BootManagerSharedData.h"
+ 670              		.file 7 "common/prog/FuncSafe/fs_psm.h"
+ 671              		.file 8 "common/prog/firmware_update/BootManager/BootManagerSharedDataUc.h"
+ 672              		.file 9 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

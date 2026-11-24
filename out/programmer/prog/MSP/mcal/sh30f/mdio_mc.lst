@@ -1,0 +1,390 @@
+
+out/programmer/prog/MSP/mcal/sh30f/mdio_mc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MDIO_enablePort:
+
+00000000 <MDIO_enablePort>:
+/******************************************************************************/
+
+void MDIO_enablePort(const struct MDIO_Port *port)
+{
+    (void)*port;
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_getPort:
+
+00000000 <MDIO_getPort>:
+
+
+const struct MDIO_Port *MDIO_getPort(const struct MDIO_Channel *channel)
+{
+    return channel->port;
+   0:	6800      	ldr	r0, [r0, #0]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_getPin:
+
+00000000 <MDIO_getPin>:
+
+
+enum MDIO_Pin MDIO_getPin(const struct MDIO_Channel *channel)
+{
+    return channel->pin;
+   0:	7900      	ldrb	r0, [r0, #4]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_configureOutputType:
+
+00000000 <MDIO_configureOutputType>:
+
+
+void MDIO_configureOutputType(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_OutputType outputType)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    /* get GPIO output type */
+    GPIOOType_TypeDef outPutT;
+    if (outputType == MDIO_OUTPUT_TYPE_PUSH_PULL )
+   2:	2a00      	cmp	r2, #0
+   4:	d001      	beq.n	a <MDIO_configureOutputType+0xa>
+    {
+        outPutT = GPIO_OType_PP;
+    }
+    else if (outputType == MDIO_OUTPUT_TYPE_OPEN_DRAIN)
+   6:	2a01      	cmp	r2, #1
+   8:	d112      	bne.n	30 <MDIO_configureOutputType+0x30>
+    {
+        return;
+    }
+
+    /* Output driver configuration, Set to default configuration, weak driver */
+    port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+   a:	6803      	ldr	r3, [r0, #0]
+   c:	2001      	movs	r0, #1
+   e:	0006      	movs	r6, r0
+  10:	004d      	lsls	r5, r1, #1
+  12:	40ae      	lsls	r6, r5
+    port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+
+    /* Output type configuration */
+    port->GPIOx->OTYPER.V32 &= ~((uint32_t)GPIO_OTYPER_OT_Msk << (uint8_t)pin);
+  14:	4088      	lsls	r0, r1
+    port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+  16:	408a      	lsls	r2, r1
+    port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+  18:	69dc      	ldr	r4, [r3, #28]
+    port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+  1a:	b292      	uxth	r2, r2
+    port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+  1c:	43b4      	bics	r4, r6
+  1e:	61dc      	str	r4, [r3, #28]
+    port->GPIOx->ODRVR.V32 |= ((uint32_t)GPIO_ODrv_NORMAL << ((uint16_t)pin * 2U));
+  20:	69dc      	ldr	r4, [r3, #28]
+  22:	61dc      	str	r4, [r3, #28]
+    port->GPIOx->OTYPER.V32 &= ~((uint32_t)GPIO_OTYPER_OT_Msk << (uint8_t)pin);
+  24:	699c      	ldr	r4, [r3, #24]
+  26:	4384      	bics	r4, r0
+  28:	619c      	str	r4, [r3, #24]
+    port->GPIOx->OTYPER.V32 |= (uint16_t)(((uint16_t)outPutT) << (uint8_t)pin);
+  2a:	6998      	ldr	r0, [r3, #24]
+  2c:	4302      	orrs	r2, r0
+  2e:	619a      	str	r2, [r3, #24]
+}
+  30:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_configurePullType:
+
+00000000 <MDIO_configurePullType>:
+
+
+void MDIO_configurePullType(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_PullType pullType)
+{
+   0:	b510      	push	{r4, lr}
+    {
+        pupd = GPIO_PuPd_NOPULL;
+    }
+
+    /* Pull-up Pull-down configuration   GPIO_CFG_PUPDR_PHDR0_Msk */
+    port->GPIOx->PUPDR.V32 &= ~((uint32_t)GPIO_PUPDR_PHDR0_Msk << ((uint16_t)pin * 2U));
+   2:	2401      	movs	r4, #1
+   4:	0049      	lsls	r1, r1, #1
+   6:	408c      	lsls	r4, r1
+   8:	6803      	ldr	r3, [r0, #0]
+    if (pullType == MDIO_PULL_UP)
+   a:	3a01      	subs	r2, #1
+    port->GPIOx->PUPDR.V32 &= ~((uint32_t)GPIO_PUPDR_PHDR0_Msk << ((uint16_t)pin * 2U));
+   c:	6a18      	ldr	r0, [r3, #32]
+   e:	43a0      	bics	r0, r4
+    if (pullType == MDIO_PULL_UP)
+  10:	4254      	negs	r4, r2
+  12:	4162      	adcs	r2, r4
+    port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+  14:	408a      	lsls	r2, r1
+    port->GPIOx->PUPDR.V32 &= ~((uint32_t)GPIO_PUPDR_PHDR0_Msk << ((uint16_t)pin * 2U));
+  16:	6218      	str	r0, [r3, #32]
+    port->GPIOx->PUPDR.V32 |= (((uint32_t)pupd) << ((uint16_t)pin * 2U));
+  18:	6a18      	ldr	r0, [r3, #32]
+  1a:	4302      	orrs	r2, r0
+  1c:	621a      	str	r2, [r3, #32]
+}
+  1e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MDIO_configureMode:
+
+00000000 <MDIO_configureMode>:
+
+
+void MDIO_configureMode(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_Mode mode)
+{
+   0:	b510      	push	{r4, lr}
+    GPIOMode_TypeDef gpioMode;
+    if (mode == MDIO_MODE_DIGITAL_INPUT)
+   2:	2a00      	cmp	r2, #0
+   4:	d001      	beq.n	a <MDIO_configureMode+0xa>
+    {
+        gpioMode = GPIO_Mode_IN;
+    }
+    else if (mode == MDIO_MODE_DIGITAL_OUTPUT)
+   6:	2a01      	cmp	r2, #1
+   8:	d109      	bne.n	1e <MDIO_configureMode+0x1e>
+    else
+    {
+        return;
+    }
+    
+    port->GPIOx->MODER.V32 &= ~((uint32_t)GPIO_MODER_MODER0_Msk << ((uint8_t)pin));
+   a:	2401      	movs	r4, #1
+   c:	408c      	lsls	r4, r1
+    port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+   e:	408a      	lsls	r2, r1
+    port->GPIOx->MODER.V32 &= ~((uint32_t)GPIO_MODER_MODER0_Msk << ((uint8_t)pin));
+  10:	6803      	ldr	r3, [r0, #0]
+  12:	6818      	ldr	r0, [r3, #0]
+  14:	43a0      	bics	r0, r4
+  16:	6018      	str	r0, [r3, #0]
+    port->GPIOx->MODER.V32 |= ((uint32_t)gpioMode << (uint8_t)pin);
+  18:	6818      	ldr	r0, [r3, #0]
+  1a:	4302      	orrs	r2, r0
+  1c:	601a      	str	r2, [r3, #0]
+}
+  1e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MDIO_configureSpeed:
+
+00000000 <MDIO_configureSpeed>:
+
+
+void MDIO_configureSpeed(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_Speed speed)
+{
+   0:	b510      	push	{r4, lr}
+    /* get GPIO configuration mode */
+    uint32_t mode = (port->GPIOx->MODER.V32 & ((uint32_t)GPIO_MODER_MODER0_Msk << ((uint8_t)pin))) >> (uint8_t)pin;
+   2:	2401      	movs	r4, #1
+   4:	408c      	lsls	r4, r1
+   6:	6800      	ldr	r0, [r0, #0]
+   8:	6803      	ldr	r3, [r0, #0]
+   a:	4023      	ands	r3, r4
+   c:	40cb      	lsrs	r3, r1
+
+    /* set GPIO output type */
+    if (mode == (uint32_t)GPIO_Mode_OUT)
+   e:	2b01      	cmp	r3, #1
+  10:	d108      	bne.n	24 <MDIO_configureSpeed+0x24>
+    {
+        /* Output driver configuration, Set to default configuration, weak driver */
+        port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+  12:	0049      	lsls	r1, r1, #1
+  14:	408b      	lsls	r3, r1
+        port->GPIOx->ODRVR.V32 |= ((uint32_t)speed << ((uint16_t)pin * 2U));
+  16:	408a      	lsls	r2, r1
+        port->GPIOx->ODRVR.V32 &= ~((uint32_t)GPIO_ODRVR_ODRVR_SINK_Pos << ((uint16_t)pin * 2U));
+  18:	69c4      	ldr	r4, [r0, #28]
+  1a:	439c      	bics	r4, r3
+  1c:	61c4      	str	r4, [r0, #28]
+        port->GPIOx->ODRVR.V32 |= ((uint32_t)speed << ((uint16_t)pin * 2U));
+  1e:	69c3      	ldr	r3, [r0, #28]
+  20:	431a      	orrs	r2, r3
+  22:	61c2      	str	r2, [r0, #28]
+    }
+}
+  24:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MDIO_configureAlternateFunction:
+
+00000000 <MDIO_configureAlternateFunction>:
+
+
+void MDIO_configureAlternateFunction(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_AltFunc altFunc)
+{
+   0:	b510      	push	{r4, lr}
+   2:	6803      	ldr	r3, [r0, #0]
+    if ((uint16_t)pin > 0x07U)
+   4:	2907      	cmp	r1, #7
+   6:	d90c      	bls.n	22 <MDIO_configureAlternateFunction+0x22>
+    {
+        port->GPIOx->AFRH.V32 &= (~((uint32_t)0x0F << (((uint16_t)pin & 0x07U) * 4U)));
+   8:	2407      	movs	r4, #7
+   a:	4021      	ands	r1, r4
+   c:	0089      	lsls	r1, r1, #2
+   e:	3408      	adds	r4, #8
+  10:	408c      	lsls	r4, r1
+        port->GPIOx->AFRH.V32 |= ((uint32_t)altFunc << (((uint16_t)pin & 0x07U) * 4U));
+  12:	408a      	lsls	r2, r1
+        port->GPIOx->AFRH.V32 &= (~((uint32_t)0x0F << (((uint16_t)pin & 0x07U) * 4U)));
+  14:	6ad8      	ldr	r0, [r3, #44]	; 0x2c
+  16:	43a0      	bics	r0, r4
+  18:	62d8      	str	r0, [r3, #44]	; 0x2c
+        port->GPIOx->AFRH.V32 |= ((uint32_t)altFunc << (((uint16_t)pin & 0x07U) * 4U));
+  1a:	6ad8      	ldr	r0, [r3, #44]	; 0x2c
+  1c:	4302      	orrs	r2, r0
+  1e:	62da      	str	r2, [r3, #44]	; 0x2c
+    else
+    {
+        port->GPIOx->AFRL.V32 &= (~((uint32_t)0x0F << ((uint16_t)pin * 4U)));
+        port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+    }
+}
+  20:	bd10      	pop	{r4, pc}
+        port->GPIOx->AFRL.V32 &= (~((uint32_t)0x0F << ((uint16_t)pin * 4U)));
+  22:	240f      	movs	r4, #15
+  24:	0089      	lsls	r1, r1, #2
+  26:	408c      	lsls	r4, r1
+        port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+  28:	408a      	lsls	r2, r1
+        port->GPIOx->AFRL.V32 &= (~((uint32_t)0x0F << ((uint16_t)pin * 4U)));
+  2a:	6a98      	ldr	r0, [r3, #40]	; 0x28
+  2c:	43a0      	bics	r0, r4
+  2e:	6298      	str	r0, [r3, #40]	; 0x28
+        port->GPIOx->AFRL.V32 |= ((uint32_t)altFunc << ((uint16_t)pin * 4U));
+  30:	6a98      	ldr	r0, [r3, #40]	; 0x28
+  32:	4302      	orrs	r2, r0
+  34:	629a      	str	r2, [r3, #40]	; 0x28
+}
+  36:	e7f3      	b.n	20 <MDIO_configureAlternateFunction+0x20>
+
+Disassembly of section .text.MDIO_configure:
+
+00000000 <MDIO_configure>:
+
+
+enum MCAL_Error MDIO_configure(const struct MDIO_Channel *channel, const struct MDIO_Config *cfg)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	000f      	movs	r7, r1
+   4:	0006      	movs	r6, r0
+    return channel->pin;
+   6:	7905      	ldrb	r5, [r0, #4]
+    return channel->port;
+   8:	6804      	ldr	r4, [r0, #0]
+    const struct MDIO_Port* port = MDIO_getPort(channel);
+    const enum MDIO_Pin pin = MDIO_getPin(channel);
+
+    /* GPIO init */
+    MDIO_configureSpeed(port, pin, channel->scfg.speed);
+   a:	0029      	movs	r1, r5
+   c:	7982      	ldrb	r2, [r0, #6]
+   e:	0020      	movs	r0, r4
+  10:	f7ff fffe 	bl	0 <MDIO_configure>
+    MDIO_configureOutputState(port, pin, cfg->outputState);
+  14:	0029      	movs	r1, r5
+  16:	78fa      	ldrb	r2, [r7, #3]
+  18:	0020      	movs	r0, r4
+  1a:	f7ff fffe 	bl	0 <MDIO_configureOutputState>
+    MDIO_configureOutputType(port, pin, cfg->outputType);
+  1e:	0029      	movs	r1, r5
+  20:	78ba      	ldrb	r2, [r7, #2]
+  22:	0020      	movs	r0, r4
+  24:	f7ff fffe 	bl	0 <MDIO_configure>
+    MDIO_configurePullType(port, pin, cfg->pullType);
+  28:	0029      	movs	r1, r5
+  2a:	787a      	ldrb	r2, [r7, #1]
+  2c:	0020      	movs	r0, r4
+  2e:	f7ff fffe 	bl	0 <MDIO_configure>
+    MDIO_configureMode(port, pin, cfg->mode);
+  32:	0029      	movs	r1, r5
+  34:	783a      	ldrb	r2, [r7, #0]
+  36:	0020      	movs	r0, r4
+  38:	f7ff fffe 	bl	0 <MDIO_configure>
+
+    /* GPIO Alternate function */
+    MDIO_configureAlternateFunction(port, pin, channel->scfg.altFunc);
+  3c:	0029      	movs	r1, r5
+  3e:	0020      	movs	r0, r4
+  40:	7972      	ldrb	r2, [r6, #5]
+  42:	f7ff fffe 	bl	0 <MDIO_configure>
+
+    return MCAL_OK;
+}
+  46:	2000      	movs	r0, #0
+  48:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+
+Disassembly of section .text.MDIO_readPort:
+
+00000000 <MDIO_readPort>:
+
+
+MDIO_Pins MDIO_readPort(const struct MDIO_Port *port)
+{
+    return (MDIO_Pins)(port->GPIOx->IDR);
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	6858      	ldr	r0, [r3, #4]
+   4:	b280      	uxth	r0, r0
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_readPortOutput:
+
+00000000 <MDIO_readPortOutput>:
+
+
+MDIO_Pins MDIO_readPortOutput(const struct MDIO_Port *port)
+{
+    return (MDIO_Pins)(port->GPIOx->ODR);
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	6898      	ldr	r0, [r3, #8]
+   4:	b280      	uxth	r0, r0
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_writePort:
+
+00000000 <MDIO_writePort>:
+
+
+void MDIO_writePort(const struct MDIO_Port *port, MDIO_Pins pinStates)
+{
+    port->GPIOx->ODR = pinStates;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	6099      	str	r1, [r3, #8]
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_setPort:
+
+00000000 <MDIO_setPort>:
+
+
+void MDIO_setPort(const struct MDIO_Port *port, MDIO_Pins pinMask)
+{
+    port->GPIOx->BSRR.V32 = pinMask;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	60d9      	str	r1, [r3, #12]
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MDIO_resetPort:
+
+00000000 <MDIO_resetPort>:
+
+
+void MDIO_resetPort(const struct MDIO_Port *port, MDIO_Pins pinMask)
+{
+    port->GPIOx->BSRR.V32 = (uint32_t)pinMask << 16;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	0409      	lsls	r1, r1, #16
+   4:	60d9      	str	r1, [r3, #12]
+}
+   6:	4770      	bx	lr

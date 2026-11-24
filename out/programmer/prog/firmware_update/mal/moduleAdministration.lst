@@ -1,0 +1,256 @@
+
+out/programmer/prog/firmware_update/mal/moduleAdministration.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MAL_copyPatToDictionary.constprop.0:
+
+00000000 <MAL_copyPatToDictionary.constprop.0>:
+ *
+ *  \param pTbl: pointer to a partition table to copyright
+ *
+ *  \param max_size: maximum entries in table
+ */
+static void MAL_copyPatToDictionary(const struct MAL_partition_s * pTbl, uint8_t max_size)
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+{
+    if(pTbl == NULL){return;} // no valid partition table
+   2:	2800      	cmp	r0, #0
+   4:	d01b      	beq.n	3e <MAL_copyPatToDictionary.constprop.0+0x3e>
+   6:	0001      	movs	r1, r0
+   8:	2400      	movs	r4, #0
+   a:	4e11      	ldr	r6, [pc, #68]	; (50 <MAL_copyPatToDictionary.constprop.0+0x50>)
+   c:	3068      	adds	r0, #104	; 0x68
+   e:	7833      	ldrb	r3, [r6, #0]
+  10:	3108      	adds	r1, #8
+  12:	9001      	str	r0, [sp, #4]
+    for(uint8_t i =0u; i < max_size; i++)
+    {
+        if (pTbl[i].mod_number == MAL_NO_MODULE) {break;} // end has been found
+  14:	880d      	ldrh	r5, [r1, #0]
+  16:	4a0f      	ldr	r2, [pc, #60]	; (54 <MAL_copyPatToDictionary.constprop.0+0x54>)
+  18:	4295      	cmp	r5, r2
+  1a:	d00d      	beq.n	38 <MAL_copyPatToDictionary.constprop.0+0x38>
+ *  \param mod_number: module number to check
+ *  \return true if module is already in dictionary, otherwise false
+ */
+static bool MAL_isInDictionary(enum  MAL_ModuleEnum mod_number)
+{
+    for(uint8_t i = 0u; i< (uint8_t)(MAL_ModuleCount); i++)
+  1c:	2200      	movs	r2, #0
+  1e:	480e      	ldr	r0, [pc, #56]	; (58 <MAL_copyPatToDictionary.constprop.0+0x58>)
+  20:	429a      	cmp	r2, r3
+  22:	d10d      	bne.n	40 <MAL_copyPatToDictionary.constprop.0+0x40>
+        MAL_ModuleCount++;
+  24:	2401      	movs	r4, #1
+        MAL_moduleDictionary[MAL_ModuleCount] = pTbl[i].mod_number;
+  26:	480c      	ldr	r0, [pc, #48]	; (58 <MAL_copyPatToDictionary.constprop.0+0x58>)
+  28:	005a      	lsls	r2, r3, #1
+        MAL_ModuleCount++;
+  2a:	3301      	adds	r3, #1
+        MAL_moduleDictionary[MAL_ModuleCount] = pTbl[i].mod_number;
+  2c:	5285      	strh	r5, [r0, r2]
+        MAL_ModuleCount++;
+  2e:	b2db      	uxtb	r3, r3
+    for(uint8_t i =0u; i < max_size; i++)
+  30:	9a01      	ldr	r2, [sp, #4]
+  32:	3120      	adds	r1, #32
+  34:	4291      	cmp	r1, r2
+  36:	d1ed      	bne.n	14 <MAL_copyPatToDictionary.constprop.0+0x14>
+  38:	2c00      	cmp	r4, #0
+  3a:	d000      	beq.n	3e <MAL_copyPatToDictionary.constprop.0+0x3e>
+  3c:	7033      	strb	r3, [r6, #0]
+}
+  3e:	bdf7      	pop	{r0, r1, r2, r4, r5, r6, r7, pc}
+    {
+        if(MAL_moduleDictionary[i] == mod_number){return true;}
+  40:	3002      	adds	r0, #2
+  42:	1e87      	subs	r7, r0, #2
+  44:	883f      	ldrh	r7, [r7, #0]
+  46:	42af      	cmp	r7, r5
+  48:	d0f2      	beq.n	30 <MAL_copyPatToDictionary.constprop.0+0x30>
+    for(uint8_t i = 0u; i< (uint8_t)(MAL_ModuleCount); i++)
+  4a:	3201      	adds	r2, #1
+  4c:	b2d2      	uxtb	r2, r2
+  4e:	e7e7      	b.n	20 <MAL_copyPatToDictionary.constprop.0+0x20>
+  50:	00000000 	.word	0x00000000
+  54:	0000ffff 	.word	0x0000ffff
+  58:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MAL_initPartition:
+
+00000000 <MAL_initPartition>:
+    MAL_ModuleCount = 0u;
+   0:	2200      	movs	r2, #0
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <MAL_initPartition+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MAL_GetMemModule:
+
+00000000 <MAL_GetMemModule>:
+        partition = MAL_searchMemModule( module, MAL_DataAnchor.partitionTblFix,
+   0:	4a09      	ldr	r2, [pc, #36]	; (28 <MAL_GetMemModule+0x28>)
+{
+   2:	0003      	movs	r3, r0
+        partition = MAL_searchMemModule( module, MAL_DataAnchor.partitionTblFix,
+   4:	6810      	ldr	r0, [r2, #0]
+{
+   6:	b510      	push	{r4, lr}
+    if(partitionTbl == NULL){return NULL;} // no valid partition table
+   8:	2800      	cmp	r0, #0
+   a:	d00b      	beq.n	24 <MAL_GetMemModule+0x24>
+   c:	0001      	movs	r1, r0
+        if (partitionTbl[index].mod_number == MAL_NO_MODULE)
+   e:	4c07      	ldr	r4, [pc, #28]	; (2c <MAL_GetMemModule+0x2c>)
+  10:	3160      	adds	r1, #96	; 0x60
+  12:	8902      	ldrh	r2, [r0, #8]
+  14:	42a2      	cmp	r2, r4
+  16:	d004      	beq.n	22 <MAL_GetMemModule+0x22>
+        if ( partitionTbl[index].mod_number == module )
+  18:	4293      	cmp	r3, r2
+  1a:	d003      	beq.n	24 <MAL_GetMemModule+0x24>
+    for (uint8_t index = 0u; index < maxTableLen; index++)
+  1c:	3020      	adds	r0, #32
+  1e:	4288      	cmp	r0, r1
+  20:	d1f7      	bne.n	12 <MAL_GetMemModule+0x12>
+    if(partitionTbl == NULL){return NULL;} // no valid partition table
+  22:	2000      	movs	r0, #0
+}
+  24:	bd10      	pop	{r4, pc}
+  26:	46c0      	nop			; (mov r8, r8)
+  28:	00000000 	.word	0x00000000
+  2c:	0000ffff 	.word	0x0000ffff
+
+Disassembly of section .text.MAL_GetMemModuleCount:
+
+00000000 <MAL_GetMemModuleCount>:
+{
+   0:	b510      	push	{r4, lr}
+    if(MAL_ModuleCount == 0u) // dictionary already initialized?
+   2:	4c05      	ldr	r4, [pc, #20]	; (18 <MAL_GetMemModuleCount+0x18>)
+   4:	7823      	ldrb	r3, [r4, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d103      	bne.n	12 <MAL_GetMemModuleCount+0x12>
+        MAL_copyPatToDictionary(MAL_DataAnchor.partitionTblFix,  MAL_FIX_PARTITION_ENTRIES);
+   a:	4b04      	ldr	r3, [pc, #16]	; (1c <MAL_GetMemModuleCount+0x1c>)
+   c:	6818      	ldr	r0, [r3, #0]
+   e:	f7ff fffe 	bl	0 <MAL_GetMemModuleCount>
+    return MAL_ModuleCount;
+  12:	7820      	ldrb	r0, [r4, #0]
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_GetMemModuleByIndex:
+
+00000000 <MAL_GetMemModuleByIndex>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    if(MAL_ModuleCount == 0u) // dictionary already initialized?
+   2:	4d09      	ldr	r5, [pc, #36]	; (28 <MAL_GetMemModuleByIndex+0x28>)
+{
+   4:	0004      	movs	r4, r0
+    if(MAL_ModuleCount == 0u) // dictionary already initialized?
+   6:	782b      	ldrb	r3, [r5, #0]
+   8:	2b00      	cmp	r3, #0
+   a:	d103      	bne.n	14 <MAL_GetMemModuleByIndex+0x14>
+        MAL_copyPatToDictionary(MAL_DataAnchor.partitionTblFix,  MAL_FIX_PARTITION_ENTRIES);
+   c:	4b07      	ldr	r3, [pc, #28]	; (2c <MAL_GetMemModuleByIndex+0x2c>)
+   e:	6818      	ldr	r0, [r3, #0]
+  10:	f7ff fffe 	bl	0 <MAL_GetMemModuleByIndex>
+    if (index < MAL_ModuleCount)
+  14:	782b      	ldrb	r3, [r5, #0]
+        return NULL;
+  16:	2000      	movs	r0, #0
+    if (index < MAL_ModuleCount)
+  18:	42a3      	cmp	r3, r4
+  1a:	d904      	bls.n	26 <MAL_GetMemModuleByIndex+0x26>
+        return MAL_GetMemModule(MAL_moduleDictionary[index]);
+  1c:	4b04      	ldr	r3, [pc, #16]	; (30 <MAL_GetMemModuleByIndex+0x30>)
+  1e:	0064      	lsls	r4, r4, #1
+  20:	5ae0      	ldrh	r0, [r4, r3]
+  22:	f7ff fffe 	bl	0 <MAL_GetMemModuleByIndex>
+}
+  26:	bd70      	pop	{r4, r5, r6, pc}
+	...
+
+Disassembly of section .text.MAL_getPartitionSize:
+
+00000000 <MAL_getPartitionSize>:
+    if(partition != NULL)
+   0:	2800      	cmp	r0, #0
+   2:	d003      	beq.n	c <MAL_getPartitionSize+0xc>
+        partitionSize = (uint32_t)((partition->physical_end.addr - partition->physical_start.addr) + 1u);
+   4:	6843      	ldr	r3, [r0, #4]
+   6:	6800      	ldr	r0, [r0, #0]
+   8:	3301      	adds	r3, #1
+   a:	1a18      	subs	r0, r3, r0
+}
+   c:	4770      	bx	lr
+
+Disassembly of section .text.MAL_PartitionToHeader:
+
+00000000 <MAL_PartitionToHeader>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	1e04      	subs	r4, r0, #0
+    if(partition == NULL)
+   4:	d102      	bne.n	c <MAL_PartitionToHeader+0xc>
+        return NULL;
+   6:	2600      	movs	r6, #0
+}
+   8:	0030      	movs	r0, r6
+   a:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+    if(actualPartition != partition)
+   c:	4f0b      	ldr	r7, [pc, #44]	; (3c <MAL_PartitionToHeader+0x3c>)
+    return &moduleHeaderInRam;
+   e:	4e0c      	ldr	r6, [pc, #48]	; (40 <MAL_PartitionToHeader+0x40>)
+    if(actualPartition != partition)
+  10:	683b      	ldr	r3, [r7, #0]
+  12:	4283      	cmp	r3, r0
+  14:	d0f8      	beq.n	8 <MAL_PartitionToHeader+0x8>
+    if(MEMDRV_open(partition->driver_id) == MAL_ST_OK)
+  16:	7a80      	ldrb	r0, [r0, #10]
+  18:	f7ff fffe 	bl	0 <MEMDRV_open>
+  1c:	2800      	cmp	r0, #0
+  1e:	d1f2      	bne.n	6 <MAL_PartitionToHeader+0x6>
+        status = MEMDRV_read(partition->physical_start.addr, sizeof(struct MAL_ModuleHeader_s), (uint8_t*)moduleHeaderInRam);/*lint !e928 */
+  20:	0032      	movs	r2, r6
+  22:	2128      	movs	r1, #40	; 0x28
+  24:	6820      	ldr	r0, [r4, #0]
+  26:	f7ff fffe 	bl	0 <MEMDRV_read>
+  2a:	0005      	movs	r5, r0
+        enum MAL_Status closeStatus = MEMDRV_close();
+  2c:	f7ff fffe 	bl	0 <MEMDRV_close>
+        if(MAL_copyModuleHeaderToRAM(partition, &moduleHeaderInRam) != true)
+  30:	4305      	orrs	r5, r0
+  32:	b2ed      	uxtb	r5, r5
+  34:	2d00      	cmp	r5, #0
+  36:	d1e6      	bne.n	6 <MAL_PartitionToHeader+0x6>
+        actualPartition = partition;
+  38:	603c      	str	r4, [r7, #0]
+  3a:	e7e5      	b.n	8 <MAL_PartitionToHeader+0x8>
+	...
+
+Disassembly of section .text.MAL_isBuildInApplication:
+
+00000000 <MAL_isBuildInApplication>:
+    if(partition != NULL)
+   0:	2800      	cmp	r0, #0
+   2:	d008      	beq.n	16 <MAL_isBuildInApplication+0x16>
+        return ((moduleId == MAL_PROGRAMMER_ID) || (moduleId == MAL_BP2_LOADER_ID));
+   4:	4b04      	ldr	r3, [pc, #16]	; (18 <MAL_isBuildInApplication+0x18>)
+   6:	8900      	ldrh	r0, [r0, #8]
+   8:	18c0      	adds	r0, r0, r3
+   a:	2310      	movs	r3, #16
+   c:	4398      	bics	r0, r3
+   e:	b280      	uxth	r0, r0
+  10:	4243      	negs	r3, r0
+  12:	4158      	adcs	r0, r3
+  14:	b2c0      	uxtb	r0, r0
+}
+  16:	4770      	bx	lr
+  18:	ffffaaf0 	.word	0xffffaaf0

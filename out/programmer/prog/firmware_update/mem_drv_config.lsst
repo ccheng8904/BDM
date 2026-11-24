@@ -1,0 +1,40 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccSdJI5t.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mem_drv_config.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	MEMDRV_driverTable
+  18              		.section	.rodata.MEMDRV_driverTable,"a"
+  19              		.align	2
+  22              	MEMDRV_driverTable:
+  23 0000 00000000 		.word	DRVIF_driver
+  24 0004 01       		.byte	1
+  25 0005 000000   		.space	3
+  26 0008 00000000 		.word	0
+  27 000c 00000000 		.word	0
+  28 0010 00       		.byte	0
+  29 0011 000000   		.space	3
+  30 0014 00000000 		.word	0
+  31              		.text
+  32              	.Letext0:
+  33              		.file 1 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\lib\\gcc\\arm-none-eabi\\11.3.1\\i
+  34              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  35              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  36              		.file 4 "app/prog/firmware_update/mal/module_administration_cfg.h"
+  37              		.file 5 "common/prog/firmware_update/mem_drv/mem_drv.h"
+  38              		.file 6 "common/prog/firmware_update/mem_drv/intflash_drv.h"
+  39              		.file 7 "app/prog/firmware_update/mem_drv_config.c"

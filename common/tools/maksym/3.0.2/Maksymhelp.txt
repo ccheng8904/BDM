@@ -1,0 +1,130 @@
+Usage:  maksym <switch> <Executable path and file> <list of modules> <additional switch>
+If the module list is absent, all modules will be regarded
+
+Note(s):  - This tool only supports TIS formatted executables.
+          - There is only one function switch allowed; no combinations
+          - All output is directly sent to the standard output
+          - Basically, symbol extraction is possible for relocatable
+            modules and relocated modules. But here, only relocated 
+            modules are allowed.
+          - Always redirect the tools output into a file as this will
+            speed up the extraction process.
+          - Function size and metrics extraction can't be preformed for
+            some executables. This mainly depends on the optimizer and
+            how optimization is realized. For example: if optimization
+            is based on common code and created subroutines, its not
+            possible to create the code size metrics.
+          - Data objects will basically be measured in bytes. For example:
+            a data structure like struct {int a; int b;}; will be 
+            registered like an array of 4 bytes, if the size of an int
+            has 2 bytes each.
+          - Configure the linking process in a way so that debugging
+            information will be placed into the executable. This mainly
+            concerns the sections .debug_info and .debug_abbrev for 
+            DWARF.
+          - Do not try to optimize or shrink the debugging information 
+            as this would lead to a loss of important information.
+            Propably, the extraction process will fail.
+          - If your tool chain supports both, far and near addressing,
+            make sure to leave the address class attribute in the DWARF
+            debugging information, otherwise pointers will be regarded to
+            be 2 bytes in size (near addressing by default). This can't
+            be changed by command line switch as this information is
+            provided by the compiler vendor.
+          - Objects, that do not have sufficient size information will not
+            be registered. The reason for this: if a compiler does not have
+            sufficient information about an object, it will create this 
+            object by default, but its size information will be 0 (zero).
+            Hence, the compilation process can continue.
+
+		    Consider the example:
+		    in module 1:
+		    extern char array[];   // size defaults to zero!
+		    
+		    in module 2:            
+		    char  array[a constant size] = { initialization };
+
+            If that case, the debugging information includes two objects
+            of different size. The object from module 1 will not be registered.
+          - Combination of switches "-TENG=Register <Executable> -SIGNVER 2016" generates a new Sy2 data format. The generated file should have the sy2 extension (*.sy2).
+          
+<switch>: use a minus sign followed by a functional switch without spaces
+          in between
+-SYC      Create a list of public symbols. The list of modules will be
+          ignored. Its format follows the SYC specification.
+
+-VERBOSE  Create a very detailed list of all .debug_info section entries,
+          but only for the compilation units described in the module list.
+          As a result, there might be a huge output.
+
+-TENG=<f> From the list of modules or all modules, create a list of data
+          and procedure objects that were linked into that module(s). This
+          main function has some subfunctions and it is mandatory to pass one:
+          
+          -TENG=Register will produce a list of objects to be registered to
+                         the test engine.
+          -TENG=Release  will produce a list of objects to be released from
+                         the test engine.
+
+-SYM      Create a list of public symbols. This list may be used for Tcl users
+          that have created their own TENG object registration. The output is
+          organized like:
+          <type of symbol: PROC or DATA>  <name of symbol> <address of symbol>
+          
+-METRIC=<f> Create a list of functions and data together with its actual size.
+          If no format specifier is given, its output will be formatted as raw
+          text. This main function allows to specify a different format:
+          -METRIC=CSV will produce a metric list that is formatted according
+                      to the Microsoft (R) specified Excel.CSV format. Its
+                      current separator sign is read from the registry.
+          -METRIC=XML will produce a metric list in XML data format which 
+                      can be easily transform to another format (HTML).
+                      For correct distinguishing the source files to generic, system or 
+                      application is important file path. 
+                      1. For generic the file path must start R:\SW_lib\sw\Release
+                      2. For application the important is folder where is source file with main function
+                      3. For system all files which do not meet the first two rules					  
+
+-TAGLIST  Create a list of all tag entries that describe a procedure or a
+          variable or data structure members or union members.
+		  
+-PSYD     Create a list of public symbols in Project Symbol Description format (XML).
+          -PSYD=SIGN will add the signature attribute.
+
+-TREE     Create a tree of all symbols.
+          
+<Executable path and file>: A full path specification, including the file
+          name, of the executable. An executable must be created from a
+          tool vendor that is actually supported. It is identified by a 
+          machine identifier that is read from the executable. The list of
+          actually supported machine identifiers:
+
+          0x0003    created by GNU tool vendor, architecture: Intel 80386
+          0x0004    created by Freescale tool vendor (CodeWarior Compiler), architecture: Motorola 68000, microcontroller: ColdFire
+          0x0008    created by GNU tool vendor, architecture: MIPS I Architecture
+          0x0014    created by GNU tool vendor, architecture: PowerPC
+          0x0024    created by GNU tool vendor, architecture: NEC V800
+          0x0028    created by Keil tool vendor (ARM C/C++ Compiler), architecture: ARM, microcontroller: STM32
+          0x0035    created by Metrowerks tool vendor, architecture: Motorola M68HC12
+          0x0042    created by Cosmic tool vendor, microcontroller: STM8
+          0x0047    created by Metrowerks tool vendor, architecture: Motorola MC68HC08 Microcontroller
+          0x0053    created by GNU tool vendor, microcontroller: Atmel AVR
+          0x0075    created by Renesas tool vendor (NC30 Compiler), architecture: Renesas M16C, microcontroller: M16C, R8C
+          0x00a5    created by Keil tool vendor (C51 C Compiler), architecture: Intel 8051, microcontroller: Intel 8051 (MSC-51)
+          0x00ad    created by IAR tool vendor, architecture: Renesas RX (Renesas Extreme)
+          0x00c5    created by IAR tool vendor, architecture: Renesas RL78	  
+          0x18ad    created by GNU tool vendor          
+          0x1c20    created by IAR tool vendor, architecture: Renesas M16C, microcontroller: M16C, R8C
+          0x4d12    created by Metrowerks tool vendor
+          0xbaab    created by Metrowerks tool vendor, microcontroller: MicroBlaze
+          
+<list of modules>: A list of modules for which the actual functionality is wished. The modules have to be separated by a space sign. 
+                   If this parameter is missing, all modules will be regarded.
+
+<additional switch>: use a minus sign followed by a functional switch without spaces in between
+-GETSYM <symbol name>       Generate symbol located at zero address.
+-I <symbol file>            Symbols specified in this file will be added to output.
+-CF <control file>          Specification for black, white, check and rename list.
+-OFFSET <value>             Adds positive value to or subtracts negative value from all absolute addresses. The value must be hexadecimal number.
+-SIGNVER {2008|2016|2008F}  Set the signature version, where 2008 represents the old version, 2008F old version with support for float data type and 2016 new version.
+-SWREV <value>              Generate software revision info.

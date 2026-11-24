@@ -1,0 +1,29 @@
+
+out/programmer/prog/MSP/armCmx/int_prio_cfg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.INTP_setApplicationPriority:
+
+00000000 <INTP_setApplicationPriority>:
+
+//lint -e765 external symbol 'INTP_setApplicationPriority' could be made static [MISRA 2012 Rule 8.7, advisory]
+//lint -e714 external symbol 'INTP_setApplicationPriority' was defined but not referenced
+
+void INTP_setApplicationPriority(void)
+{
+   0:	b510      	push	{r4, lr}
+    /* Set Interrupt Priority of configurable interrupts          */
+    /* Allowed values CM0: INT_PRIO_0 ... INT_PRIO_3              */
+    /* Allowed values CM3, CM4, CM4F: INT_PRIO_0 ... INT_PRIO_15  */
+
+    INTP_setDefaultInterruptPriority();
+   2:	f7ff fffe 	bl	0 <INTP_setDefaultInterruptPriority>
+#if !defined(PSOC4)
+    ITBL_setCustomInterruptPriority();
+   6:	f7ff fffe 	bl	0 <ITBL_setCustomInterruptPriority>
+#endif
+#if defined(RTOS)
+    RTOS_setRtosInterruptPriority();
+#endif
+}
+   a:	bd10      	pop	{r4, pc}

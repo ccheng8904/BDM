@@ -1,0 +1,431 @@
+
+out/BootManager/prog/ped_fw/stdcrc/sh30f/StdCrc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.CRC_Ccitt_Init:
+
+00000000 <CRC_Ccitt_Init>:
+/******************************************************************************/
+/*Axivion Disable MisraC2012-8.7 : Routine can be declared static in primary file. */
+uint16_t CRC_Ccitt_Init( void )
+{
+    /* Unlock RCC registers */
+    RCC_REGS_UNLOCK();
+   0:	4b07      	ldr	r3, [pc, #28]	; (20 <CRC_Ccitt_Init+0x20>)
+   2:	4a08      	ldr	r2, [pc, #32]	; (24 <CRC_Ccitt_Init+0x24>)
+    RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+    /* Lock RCC registers */
+    RCC_REGS_LOCK();
+    CRC0->INIT          = CRC_CCITT_INIT;
+   4:	4808      	ldr	r0, [pc, #32]	; (28 <CRC_Ccitt_Init+0x28>)
+    RCC_REGS_UNLOCK();
+   6:	635a      	str	r2, [r3, #52]	; 0x34
+    RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+   8:	2204      	movs	r2, #4
+   a:	6a19      	ldr	r1, [r3, #32]
+   c:	430a      	orrs	r2, r1
+   e:	621a      	str	r2, [r3, #32]
+    RCC_REGS_LOCK();
+  10:	2200      	movs	r2, #0
+  12:	635a      	str	r2, [r3, #52]	; 0x34
+    CRC0->INIT          = CRC_CCITT_INIT;
+  14:	4b05      	ldr	r3, [pc, #20]	; (2c <CRC_Ccitt_Init+0x2c>)
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  16:	4a06      	ldr	r2, [pc, #24]	; (30 <CRC_Ccitt_Init+0x30>)
+    CRC0->INIT          = CRC_CCITT_INIT;
+  18:	6098      	str	r0, [r3, #8]
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  1a:	605a      	str	r2, [r3, #4]
+    return CRC_CCITT_INIT;
+}
+  1c:	4770      	bx	lr
+  1e:	46c0      	nop			; (mov r8, r8)
+  20:	40040800 	.word	0x40040800
+  24:	000033cc 	.word	0x000033cc
+  28:	0000ffff 	.word	0x0000ffff
+  2c:	40041000 	.word	0x40041000
+  30:	00000201 	.word	0x00000201
+
+Disassembly of section .text.CRC_Ccitt_UpdateByte:
+
+00000000 <CRC_Ccitt_UpdateByte>:
+
+/*****************************************************************************/
+uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value )
+{
+    CRC0->INIT = crc;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <CRC_Ccitt_UpdateByte+0x10>)
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <CRC_Ccitt_UpdateByte+0x14>)
+    CRC0->INIT = crc;
+   4:	6098      	str	r0, [r3, #8]
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+   6:	605a      	str	r2, [r3, #4]
+    CRC_DR_BYTE = value;
+   8:	7019      	strb	r1, [r3, #0]
+    return (uint16_t)CRC_DATA;
+   a:	6818      	ldr	r0, [r3, #0]
+   c:	b280      	uxth	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	40041000 	.word	0x40041000
+  14:	00000201 	.word	0x00000201
+
+Disassembly of section .text.CRC_Ccitt_UpdateByteFast:
+
+00000000 <CRC_Ccitt_UpdateByteFast>:
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <CRC_Ccitt_UpdateByteFast+0x10>)
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <CRC_Ccitt_UpdateByteFast+0x14>)
+   4:	6098      	str	r0, [r3, #8]
+   6:	605a      	str	r2, [r3, #4]
+   8:	7019      	strb	r1, [r3, #0]
+   a:	6818      	ldr	r0, [r3, #0]
+   c:	b280      	uxth	r0, r0
+   e:	4770      	bx	lr
+  10:	40041000 	.word	0x40041000
+  14:	00000201 	.word	0x00000201
+
+Disassembly of section .text.CRC_Ccitt_Update:
+
+00000000 <CRC_Ccitt_Update>:
+
+
+/*****************************************************************************/
+uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data )
+{
+    CRC0->INIT = crc;
+   0:	4b12      	ldr	r3, [pc, #72]	; (4c <CRC_Ccitt_Update+0x4c>)
+{
+   2:	b5f0      	push	{r4, r5, r6, r7, lr}
+    CRC0->INIT = crc;
+   4:	6098      	str	r0, [r3, #8]
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+   6:	4812      	ldr	r0, [pc, #72]	; (50 <CRC_Ccitt_Update+0x50>)
+    IWDT->CLR = 0xAAAAU;
+   8:	4d12      	ldr	r5, [pc, #72]	; (54 <CRC_Ccitt_Update+0x54>)
+    CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+   a:	6058      	str	r0, [r3, #4]
+    /* optimised for speed by reducing branches and loop decrement*/
+    for(uint32_t length = len / sizeof(uint32_t); length > 0U; length--)
+   c:	0888      	lsrs	r0, r1, #2
+   e:	0080      	lsls	r0, r0, #2
+    WWDT->CLR = 0x5555U;
+  10:	4e11      	ldr	r6, [pc, #68]	; (58 <CRC_Ccitt_Update+0x58>)
+  12:	4f12      	ldr	r7, [pc, #72]	; (5c <CRC_Ccitt_Update+0x5c>)
+  14:	1810      	adds	r0, r2, r0
+    for(uint32_t length = len / sizeof(uint32_t); length > 0U; length--)
+  16:	4282      	cmp	r2, r0
+  18:	d107      	bne.n	2a <CRC_Ccitt_Update+0x2a>
+        CRC_DR_BYTE = *data++;
+        CRC_DR_BYTE = *data++;
+    }
+
+    /* Handle unaligned data at buffer end */
+    for(uint32_t length = len % sizeof(uint32_t); length > 0U; length--)
+  1a:	2003      	movs	r0, #3
+  1c:	4001      	ands	r1, r0
+  1e:	1889      	adds	r1, r1, r2
+  20:	428a      	cmp	r2, r1
+  22:	d10f      	bne.n	44 <CRC_Ccitt_Update+0x44>
+    {
+        CRC_DR_BYTE = *data++;
+    }
+
+    return (uint16_t)CRC_DATA;
+  24:	6818      	ldr	r0, [r3, #0]
+  26:	b280      	uxth	r0, r0
+}
+  28:	bdf0      	pop	{r4, r5, r6, r7, pc}
+    IWDT->CLR = 0xAAAAU;
+  2a:	4c0d      	ldr	r4, [pc, #52]	; (60 <CRC_Ccitt_Update+0x60>)
+  2c:	6065      	str	r5, [r4, #4]
+    WWDT->CLR = 0x5555U;
+  2e:	60b7      	str	r7, [r6, #8]
+        CRC_DR_BYTE = *data++;
+  30:	7814      	ldrb	r4, [r2, #0]
+  32:	701c      	strb	r4, [r3, #0]
+        CRC_DR_BYTE = *data++;
+  34:	7854      	ldrb	r4, [r2, #1]
+  36:	701c      	strb	r4, [r3, #0]
+        CRC_DR_BYTE = *data++;
+  38:	7894      	ldrb	r4, [r2, #2]
+  3a:	701c      	strb	r4, [r3, #0]
+        CRC_DR_BYTE = *data++;
+  3c:	78d4      	ldrb	r4, [r2, #3]
+  3e:	3204      	adds	r2, #4
+  40:	701c      	strb	r4, [r3, #0]
+    for(uint32_t length = len / sizeof(uint32_t); length > 0U; length--)
+  42:	e7e8      	b.n	16 <CRC_Ccitt_Update+0x16>
+        CRC_DR_BYTE = *data++;
+  44:	7810      	ldrb	r0, [r2, #0]
+  46:	3201      	adds	r2, #1
+  48:	7018      	strb	r0, [r3, #0]
+    for(uint32_t length = len % sizeof(uint32_t); length > 0U; length--)
+  4a:	e7e9      	b.n	20 <CRC_Ccitt_Update+0x20>
+  4c:	40041000 	.word	0x40041000
+  50:	00000201 	.word	0x00000201
+  54:	0000aaaa 	.word	0x0000aaaa
+  58:	40003c00 	.word	0x40003c00
+  5c:	00005555 	.word	0x00005555
+  60:	40003800 	.word	0x40003800
+
+Disassembly of section .text.CRC_Ccitt_Finish:
+
+00000000 <CRC_Ccitt_Finish>:
+
+/*****************************************************************************/
+uint16_t CRC_Ccitt_Finish( uint16_t crc )
+{
+    return crc; // nothing to do for CCITT CRC
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.CRC_Ccitt_Calc:
+
+00000000 <CRC_Ccitt_Calc>:
+
+/*****************************************************************************/
+uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data )
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+    uint16_t crc;
+
+    crc = CRC_Ccitt_Init();
+   6:	f7ff fffe 	bl	0 <CRC_Ccitt_Calc>
+    crc = CRC_Ccitt_Update( crc, len, data );
+   a:	002a      	movs	r2, r5
+   c:	0021      	movs	r1, r4
+   e:	f7ff fffe 	bl	0 <CRC_Ccitt_Calc>
+    // Hint: CRC_Ccitt_Finish not required for CCITT
+    return crc;
+}
+  12:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.CRC_Ethernet_Init:
+
+00000000 <CRC_Ethernet_Init>:
+/*************************** Ethernet Interfaces *****************************/
+/*****************************************************************************/
+uint32_t CRC_Ethernet_Init( void )
+{
+    /* Unlock RCC registers */
+    RCC_REGS_UNLOCK();
+   0:	4b07      	ldr	r3, [pc, #28]	; (20 <CRC_Ethernet_Init+0x20>)
+   2:	4a08      	ldr	r2, [pc, #32]	; (24 <CRC_Ethernet_Init+0x24>)
+    RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+    /* Lock RCC registers */
+    RCC_REGS_LOCK();
+    CRC0->INIT          = CRC_ETHERNET_INIT;
+   4:	2001      	movs	r0, #1
+    RCC_REGS_UNLOCK();
+   6:	635a      	str	r2, [r3, #52]	; 0x34
+    RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+   8:	2204      	movs	r2, #4
+   a:	6a19      	ldr	r1, [r3, #32]
+    CRC0->INIT          = CRC_ETHERNET_INIT;
+   c:	4240      	negs	r0, r0
+    RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+   e:	430a      	orrs	r2, r1
+  10:	621a      	str	r2, [r3, #32]
+    RCC_REGS_LOCK();
+  12:	2200      	movs	r2, #0
+  14:	635a      	str	r2, [r3, #52]	; 0x34
+    CRC0->INIT          = CRC_ETHERNET_INIT;
+  16:	4b04      	ldr	r3, [pc, #16]	; (28 <CRC_Ethernet_Init+0x28>)
+    CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+  18:	4a04      	ldr	r2, [pc, #16]	; (2c <CRC_Ethernet_Init+0x2c>)
+    CRC0->INIT          = CRC_ETHERNET_INIT;
+  1a:	6098      	str	r0, [r3, #8]
+    CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+  1c:	605a      	str	r2, [r3, #4]
+    return CRC_ETHERNET_INIT;
+}
+  1e:	4770      	bx	lr
+  20:	40040800 	.word	0x40040800
+  24:	000033cc 	.word	0x000033cc
+  28:	40041000 	.word	0x40041000
+  2c:	0000c801 	.word	0x0000c801
+
+Disassembly of section .text.CRC_Ethernet_UpdateByte:
+
+00000000 <CRC_Ethernet_UpdateByte>:
+    Compare implementation CRC_Ethernet_Update()
+    CRC_INIT = crc;
+    CRC_INIT = CRC_DR;
+ */
+    (void)crc;
+    CRC_DR_BYTE = value;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <CRC_Ethernet_UpdateByte+0x8>)
+   2:	7019      	strb	r1, [r3, #0]
+    return CRC_DATA;
+   4:	6818      	ldr	r0, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	40041000 	.word	0x40041000
+
+Disassembly of section .text.CRC_Ethernet_Update:
+
+00000000 <CRC_Ethernet_Update>:
+{
+    const uint8_t  *byte_ptr = data;
+    const uint32_t *word_ptr;
+    
+    uint32_t crc_reverse = 0;
+    for(uint32_t i = 0U; i < 32U; i++)
+   0:	2300      	movs	r3, #0
+{
+   2:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    {
+        if((crc >> i) & 0x01U)
+        {
+            crc_reverse |= ((uint32_t)1 << (31U - i));
+   4:	2680      	movs	r6, #128	; 0x80
+    uint32_t crc_reverse = 0;
+   6:	001c      	movs	r4, r3
+        if((crc >> i) & 0x01U)
+   8:	2501      	movs	r5, #1
+            crc_reverse |= ((uint32_t)1 << (31U - i));
+   a:	0636      	lsls	r6, r6, #24
+        if((crc >> i) & 0x01U)
+   c:	0007      	movs	r7, r0
+   e:	40df      	lsrs	r7, r3
+  10:	422f      	tst	r7, r5
+  12:	d002      	beq.n	1a <CRC_Ethernet_Update+0x1a>
+            crc_reverse |= ((uint32_t)1 << (31U - i));
+  14:	0037      	movs	r7, r6
+  16:	40df      	lsrs	r7, r3
+  18:	433c      	orrs	r4, r7
+    for(uint32_t i = 0U; i < 32U; i++)
+  1a:	3301      	adds	r3, #1
+  1c:	2b20      	cmp	r3, #32
+  1e:	d1f5      	bne.n	c <CRC_Ethernet_Update+0xc>
+        }
+    }
+    CRC0->INIT          = crc_reverse;
+  20:	4b15      	ldr	r3, [pc, #84]	; (78 <CRC_Ethernet_Update+0x78>)
+    CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+  22:	4816      	ldr	r0, [pc, #88]	; (7c <CRC_Ethernet_Update+0x7c>)
+    CRC0->INIT          = crc_reverse;
+  24:	609c      	str	r4, [r3, #8]
+    CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+  26:	6058      	str	r0, [r3, #4]
+    return ( ( (uintptr_t)data % CRC_WordAlignBytes ) == 0U ) ? (true) : (false);
+  28:	2003      	movs	r0, #3
+  2a:	9201      	str	r2, [sp, #4]
+
+    while ( ( CRC_isWordAligned(byte_ptr) == false ) && ( len > 0U ) )
+  2c:	4202      	tst	r2, r0
+  2e:	d001      	beq.n	34 <CRC_Ethernet_Update+0x34>
+  30:	2900      	cmp	r1, #0
+  32:	d10f      	bne.n	54 <CRC_Ethernet_Update+0x54>
+    }
+
+    /* cast is allowed as buffer start is aligned (checked by CRC_isWordAligned()) */
+    word_ptr = (const uint32_t*)byte_ptr; /*lint !e927 */
+
+    for (uint32_t length = len / CRC_WordAlignBytes; length > 0U; length--)
+  34:	0888      	lsrs	r0, r1, #2
+  36:	0004      	movs	r4, r0
+    IWDT->CLR = 0xAAAAU;
+  38:	4d11      	ldr	r5, [pc, #68]	; (80 <CRC_Ethernet_Update+0x80>)
+    WWDT->CLR = 0x5555U;
+  3a:	4f12      	ldr	r7, [pc, #72]	; (84 <CRC_Ethernet_Update+0x84>)
+    for (uint32_t length = len / CRC_WordAlignBytes; length > 0U; length--)
+  3c:	2c00      	cmp	r4, #0
+  3e:	d10e      	bne.n	5e <CRC_Ethernet_Update+0x5e>
+        CRC_DATA = *word_ptr++;
+    }
+    /*lint -e{928}  cast is OK as alignment of word is stricter than pointer of byte */
+    byte_ptr = (const uint8_t*)word_ptr;
+
+    for (uint32_t length = len % CRC_WordAlignBytes; length > 0U; length--)
+  40:	9a01      	ldr	r2, [sp, #4]
+  42:	0080      	lsls	r0, r0, #2
+  44:	1810      	adds	r0, r2, r0
+  46:	2203      	movs	r2, #3
+  48:	4011      	ands	r1, r2
+  4a:	1809      	adds	r1, r1, r0
+  4c:	4288      	cmp	r0, r1
+  4e:	d10e      	bne.n	6e <CRC_Ethernet_Update+0x6e>
+    {
+        CRC_DR_BYTE = *byte_ptr++;
+    }
+
+    return CRC_DATA;
+  50:	6818      	ldr	r0, [r3, #0]
+}
+  52:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+        CRC_DR_BYTE = *byte_ptr++;
+  54:	7814      	ldrb	r4, [r2, #0]
+        len--;
+  56:	3901      	subs	r1, #1
+        CRC_DR_BYTE = *byte_ptr++;
+  58:	701c      	strb	r4, [r3, #0]
+        len--;
+  5a:	3201      	adds	r2, #1
+  5c:	e7e5      	b.n	2a <CRC_Ethernet_Update+0x2a>
+    IWDT->CLR = 0xAAAAU;
+  5e:	4e0a      	ldr	r6, [pc, #40]	; (88 <CRC_Ethernet_Update+0x88>)
+    for (uint32_t length = len / CRC_WordAlignBytes; length > 0U; length--)
+  60:	3c01      	subs	r4, #1
+    IWDT->CLR = 0xAAAAU;
+  62:	606e      	str	r6, [r5, #4]
+    WWDT->CLR = 0x5555U;
+  64:	4e09      	ldr	r6, [pc, #36]	; (8c <CRC_Ethernet_Update+0x8c>)
+  66:	60b7      	str	r7, [r6, #8]
+        CRC_DATA = *word_ptr++;
+  68:	ca40      	ldmia	r2!, {r6}
+  6a:	601e      	str	r6, [r3, #0]
+    for (uint32_t length = len / CRC_WordAlignBytes; length > 0U; length--)
+  6c:	e7e6      	b.n	3c <CRC_Ethernet_Update+0x3c>
+        CRC_DR_BYTE = *byte_ptr++;
+  6e:	7802      	ldrb	r2, [r0, #0]
+  70:	3001      	adds	r0, #1
+  72:	701a      	strb	r2, [r3, #0]
+    for (uint32_t length = len % CRC_WordAlignBytes; length > 0U; length--)
+  74:	e7ea      	b.n	4c <CRC_Ethernet_Update+0x4c>
+  76:	46c0      	nop			; (mov r8, r8)
+  78:	40041000 	.word	0x40041000
+  7c:	0000c801 	.word	0x0000c801
+  80:	40003800 	.word	0x40003800
+  84:	00005555 	.word	0x00005555
+  88:	0000aaaa 	.word	0x0000aaaa
+  8c:	40003c00 	.word	0x40003c00
+
+Disassembly of section .text.CRC_Ethernet_Finish:
+
+00000000 <CRC_Ethernet_Finish>:
+
+/*****************************************************************************/
+uint32_t CRC_Ethernet_Finish( uint32_t crc )
+{
+    return crc ^ CRC_ETHERNET_XOR_OUT;
+   0:	43c0      	mvns	r0, r0
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.CRC_Ethernet_Calc:
+
+00000000 <CRC_Ethernet_Calc>:
+
+/*****************************************************************************/
+uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data )
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+    uint32_t crc;
+
+    crc = CRC_Ethernet_Init();
+   6:	f7ff fffe 	bl	0 <CRC_Ethernet_Calc>
+    crc = CRC_Ethernet_Update( crc, len, data );
+   a:	002a      	movs	r2, r5
+   c:	0021      	movs	r1, r4
+   e:	f7ff fffe 	bl	0 <CRC_Ethernet_Calc>
+    return crc ^ CRC_ETHERNET_XOR_OUT;
+  12:	43c0      	mvns	r0, r0
+    return CRC_Ethernet_Finish( crc );
+}
+  14:	bd70      	pop	{r4, r5, r6, pc}

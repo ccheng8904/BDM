@@ -1,0 +1,493 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mwdt.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MWDT_init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MWDT_init
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MWDT_init:
+  25              	.LVL0:
+  26              	.LFB70:
+  27              		.file 1 "common/prog/MSP/mcal/mwdt.c"
+   1:common/prog/MSP/mcal/mwdt.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/mwdt.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/mwdt.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/mwdt.c ****  *
+   5:common/prog/MSP/mcal/mwdt.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/mwdt.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/mwdt.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/mwdt.c ****  *
+   9:common/prog/MSP/mcal/mwdt.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/mwdt.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/mwdt.c ****  *  COMP_ABBREV      MWDT
+  12:common/prog/MSP/mcal/mwdt.c ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/mwdt.c **** 
+  14:common/prog/MSP/mcal/mwdt.c **** 
+  15:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  16:common/prog/MSP/mcal/mwdt.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  18:common/prog/MSP/mcal/mwdt.c **** /** \file
+  19:common/prog/MSP/mcal/mwdt.c ****  *
+  20:common/prog/MSP/mcal/mwdt.c ****  *  \ingroup  MCAL
+  21:common/prog/MSP/mcal/mwdt.c ****  *
+  22:common/prog/MSP/mcal/mwdt.c ****  *  \brief    Implementation of MWDT
+  23:common/prog/MSP/mcal/mwdt.c ****  */
+  24:common/prog/MSP/mcal/mwdt.c **** 
+  25:common/prog/MSP/mcal/mwdt.c **** 
+  26:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  27:common/prog/MSP/mcal/mwdt.c **** /* INCLUDES                                                                   */
+  28:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/mwdt.c **** #include "BSH_stdinc.h"
+  30:common/prog/MSP/mcal/mwdt.c **** #include "mwdt.h"
+  31:common/prog/MSP/mcal/mwdt.c **** #include "math/mathDiv.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 2
+
+
+  32:common/prog/MSP/mcal/mwdt.c **** #include "mwdt_mc.h"
+  33:common/prog/MSP/mcal/mwdt.c **** #include "mcal/mwdt_priv.h"
+  34:common/prog/MSP/mcal/mwdt.c **** 
+  35:common/prog/MSP/mcal/mwdt.c **** #ifdef MCAL_MPCM_INCLUDED
+  36:common/prog/MSP/mcal/mwdt.c ****     #include "mpcm.h"
+  37:common/prog/MSP/mcal/mwdt.c **** #endif
+  38:common/prog/MSP/mcal/mwdt.c **** 
+  39:common/prog/MSP/mcal/mwdt.c **** //lint -esym(9045,*MWDT_Config)    "non-hidden definition of type struct MWDT_Config"
+  40:common/prog/MSP/mcal/mwdt.c **** //lint -esym(9045,*MCAL_EventData) "non-hidden definition of type struct MCAL_EventData"
+  41:common/prog/MSP/mcal/mwdt.c **** 
+  42:common/prog/MSP/mcal/mwdt.c **** 
+  43:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  44:common/prog/MSP/mcal/mwdt.c **** /* PRIVATE DEFINITIONS                                                        */
+  45:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  46:common/prog/MSP/mcal/mwdt.c **** #define MWDT_MS_TO_US                   1000U
+  47:common/prog/MSP/mcal/mwdt.c **** 
+  48:common/prog/MSP/mcal/mwdt.c **** 
+  49:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  50:common/prog/MSP/mcal/mwdt.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  51:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  52:common/prog/MSP/mcal/mwdt.c **** 
+  53:common/prog/MSP/mcal/mwdt.c **** 
+  54:common/prog/MSP/mcal/mwdt.c **** 
+  55:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  56:common/prog/MSP/mcal/mwdt.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  57:common/prog/MSP/mcal/mwdt.c **** /******************************************************************************/
+  58:common/prog/MSP/mcal/mwdt.c **** 
+  59:common/prog/MSP/mcal/mwdt.c **** enum MCAL_Error MWDT_init(const struct MWDT_Config *config)
+  60:common/prog/MSP/mcal/mwdt.c **** {
+  28              		.loc 1 60 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  61:common/prog/MSP/mcal/mwdt.c ****     // Unlock Watchdog peripheral
+  62:common/prog/MSP/mcal/mwdt.c ****     if(MWDT_unlock() == MCAL_OK)
+  32              		.loc 1 62 5 view .LVU1
+  60:common/prog/MSP/mcal/mwdt.c ****     // Unlock Watchdog peripheral
+  33              		.loc 1 60 1 is_stmt 0 view .LVU2
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  60:common/prog/MSP/mcal/mwdt.c ****     // Unlock Watchdog peripheral
+  39              		.loc 1 60 1 view .LVU3
+  40 0002 0400     		movs	r4, r0
+  41              		.loc 1 62 8 view .LVU4
+  42 0004 FFF7FEFF 		bl	MWDT_unlock
+  43              	.LVL1:
+  44              		.loc 1 62 8 view .LVU5
+  45 0008 0300     		movs	r3, r0
+  63:common/prog/MSP/mcal/mwdt.c ****     {
+  64:common/prog/MSP/mcal/mwdt.c ****         // Configure/enable Watchdog
+  65:common/prog/MSP/mcal/mwdt.c ****         return (MWDT_initWDT(config));
+  66:common/prog/MSP/mcal/mwdt.c ****     }
+  67:common/prog/MSP/mcal/mwdt.c ****     else
+  68:common/prog/MSP/mcal/mwdt.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 3
+
+
+  69:common/prog/MSP/mcal/mwdt.c ****         // Watchdog unlock failed
+  70:common/prog/MSP/mcal/mwdt.c ****         return MCAL_ERROR_CONFIG;
+  46              		.loc 1 70 16 view .LVU6
+  47 000a 0420     		movs	r0, #4
+  62:common/prog/MSP/mcal/mwdt.c ****     {
+  48              		.loc 1 62 7 view .LVU7
+  49 000c 002B     		cmp	r3, #0
+  50 000e 02D1     		bne	.L2
+  65:common/prog/MSP/mcal/mwdt.c ****     }
+  51              		.loc 1 65 9 is_stmt 1 view .LVU8
+  65:common/prog/MSP/mcal/mwdt.c ****     }
+  52              		.loc 1 65 17 is_stmt 0 view .LVU9
+  53 0010 2000     		movs	r0, r4
+  54 0012 FFF7FEFF 		bl	MWDT_initWDT
+  55              	.LVL2:
+  56              	.L2:
+  71:common/prog/MSP/mcal/mwdt.c ****     }
+  72:common/prog/MSP/mcal/mwdt.c **** }
+  57              		.loc 1 72 1 view .LVU10
+  58              		@ sp needed
+  59              	.LVL3:
+  60              		.loc 1 72 1 view .LVU11
+  61 0016 10BD     		pop	{r4, pc}
+  62              		.cfi_endproc
+  63              	.LFE70:
+  65              		.section	.text.MWDT_trigger,"ax",%progbits
+  66              		.align	1
+  67              		.global	MWDT_trigger
+  68              		.syntax unified
+  69              		.code	16
+  70              		.thumb_func
+  72              	MWDT_trigger:
+  73              	.LFB71:
+  73:common/prog/MSP/mcal/mwdt.c **** 
+  74:common/prog/MSP/mcal/mwdt.c **** 
+  75:common/prog/MSP/mcal/mwdt.c **** void MWDT_trigger(void)
+  76:common/prog/MSP/mcal/mwdt.c **** {
+  74              		.loc 1 76 1 is_stmt 1 view -0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  77:common/prog/MSP/mcal/mwdt.c ****     // trigger watchdog peripheral
+  78:common/prog/MSP/mcal/mwdt.c ****     MWDT_triggerWDT();
+  78              		.loc 1 78 5 view .LVU13
+  76:common/prog/MSP/mcal/mwdt.c ****     // trigger watchdog peripheral
+  79              		.loc 1 76 1 is_stmt 0 view .LVU14
+  80 0000 10B5     		push	{r4, lr}
+  81              	.LCFI1:
+  82              		.cfi_def_cfa_offset 8
+  83              		.cfi_offset 4, -8
+  84              		.cfi_offset 14, -4
+  85              		.loc 1 78 5 view .LVU15
+  86 0002 FFF7FEFF 		bl	MWDT_triggerWDT
+  87              	.LVL4:
+  79:common/prog/MSP/mcal/mwdt.c **** }
+  88              		.loc 1 79 1 view .LVU16
+  89              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 4
+
+
+  90 0006 10BD     		pop	{r4, pc}
+  91              		.cfi_endproc
+  92              	.LFE71:
+  94              		.section	.text.MWDT_initConfigStruct,"ax",%progbits
+  95              		.align	1
+  96              		.global	MWDT_initConfigStruct
+  97              		.syntax unified
+  98              		.code	16
+  99              		.thumb_func
+ 101              	MWDT_initConfigStruct:
+ 102              	.LFB72:
+  80:common/prog/MSP/mcal/mwdt.c **** 
+  81:common/prog/MSP/mcal/mwdt.c **** 
+  82:common/prog/MSP/mcal/mwdt.c **** void MWDT_initConfigStruct(void)
+  83:common/prog/MSP/mcal/mwdt.c **** {
+ 103              		.loc 1 83 1 is_stmt 1 view -0
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 0
+ 106              		@ frame_needed = 0, uses_anonymous_args = 0
+  84:common/prog/MSP/mcal/mwdt.c ****     MWDT_initConfigStructMWDT();
+ 107              		.loc 1 84 5 view .LVU18
+  83:common/prog/MSP/mcal/mwdt.c ****     MWDT_initConfigStructMWDT();
+ 108              		.loc 1 83 1 is_stmt 0 view .LVU19
+ 109 0000 10B5     		push	{r4, lr}
+ 110              	.LCFI2:
+ 111              		.cfi_def_cfa_offset 8
+ 112              		.cfi_offset 4, -8
+ 113              		.cfi_offset 14, -4
+ 114              		.loc 1 84 5 view .LVU20
+ 115 0002 FFF7FEFF 		bl	MWDT_initConfigStructMWDT
+ 116              	.LVL5:
+  85:common/prog/MSP/mcal/mwdt.c **** }
+ 117              		.loc 1 85 1 view .LVU21
+ 118              		@ sp needed
+ 119 0006 10BD     		pop	{r4, pc}
+ 120              		.cfi_endproc
+ 121              	.LFE72:
+ 123              		.section	.text.MWDT_getPrecisionInPercent,"ax",%progbits
+ 124              		.align	1
+ 125              		.global	MWDT_getPrecisionInPercent
+ 126              		.syntax unified
+ 127              		.code	16
+ 128              		.thumb_func
+ 130              	MWDT_getPrecisionInPercent:
+ 131              	.LVL6:
+ 132              	.LFB73:
+  86:common/prog/MSP/mcal/mwdt.c **** 
+  87:common/prog/MSP/mcal/mwdt.c **** 
+  88:common/prog/MSP/mcal/mwdt.c **** uint16_t MWDT_getPrecisionInPercent(uint32_t actualTimeUs, uint16_t requiredTimeMs)
+  89:common/prog/MSP/mcal/mwdt.c **** {
+ 133              		.loc 1 89 1 is_stmt 1 view -0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 8
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+  90:common/prog/MSP/mcal/mwdt.c ****     // percent in % = ((actualTimeUs / (requiredTimeMs * 1000)) * 100) the same as
+  91:common/prog/MSP/mcal/mwdt.c ****     // percent in % = (actualTimeUs / (requiredTimeMs * 10))
+  92:common/prog/MSP/mcal/mwdt.c ****     uint32_t percent;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 5
+
+
+ 137              		.loc 1 92 5 view .LVU23
+  93:common/prog/MSP/mcal/mwdt.c ****     percent = MTDIV_div_32_32(actualTimeUs, (uint32_t)requiredTimeMs * (MWDT_MS_TO_US / 100u));
+ 138              		.loc 1 93 5 view .LVU24
+ 139              	.LBB4:
+ 140              	.LBI4:
+ 141              		.file 2 "common/prog/math/mathDiv.h"
+   1:common/prog/math/mathDiv.h **** /*******************************************************************************
+   2:common/prog/math/mathDiv.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/math/mathDiv.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/math/mathDiv.h ****  *
+   5:common/prog/math/mathDiv.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/math/mathDiv.h ****  *  are protected by international copyright laws.
+   7:common/prog/math/mathDiv.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/math/mathDiv.h ****  *
+   9:common/prog/math/mathDiv.h ****  *******************************************************************************
+  10:common/prog/math/mathDiv.h ****  *  PROJECT          Generic SW
+  11:common/prog/math/mathDiv.h ****  ******************************************************************************/
+  12:common/prog/math/mathDiv.h **** 
+  13:common/prog/math/mathDiv.h **** 
+  14:common/prog/math/mathDiv.h **** #ifndef MATHDIV_H
+  15:common/prog/math/mathDiv.h **** #define MATHDIV_H
+  16:common/prog/math/mathDiv.h **** 
+  17:common/prog/math/mathDiv.h **** #ifdef __cplusplus
+  18:common/prog/math/mathDiv.h **** extern "C" {
+  19:common/prog/math/mathDiv.h **** #endif
+  20:common/prog/math/mathDiv.h **** 
+  21:common/prog/math/mathDiv.h **** 
+  22:common/prog/math/mathDiv.h **** /******************************************************************************/
+  23:common/prog/math/mathDiv.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/math/mathDiv.h **** /******************************************************************************/
+  25:common/prog/math/mathDiv.h **** /** \file
+  26:common/prog/math/mathDiv.h ****  *
+  27:common/prog/math/mathDiv.h ****  *  \ingroup  mathematics
+  28:common/prog/math/mathDiv.h ****  *
+  29:common/prog/math/mathDiv.h ****  *  \brief    Public definitions and declarations for unit math_div.
+  30:common/prog/math/mathDiv.h ****  *
+  31:common/prog/math/mathDiv.h ****  *  \details  soft divisions, if not provided by core.
+  32:common/prog/math/mathDiv.h ****  */
+  33:common/prog/math/mathDiv.h **** 
+  34:common/prog/math/mathDiv.h **** 
+  35:common/prog/math/mathDiv.h **** 
+  36:common/prog/math/mathDiv.h **** /******************************************************************************/
+  37:common/prog/math/mathDiv.h **** /* INCLUDES                                                                   */
+  38:common/prog/math/mathDiv.h **** /******************************************************************************/
+  39:common/prog/math/mathDiv.h **** #include "bsh_stdinc.h"
+  40:common/prog/math/mathDiv.h **** #include <stdint.h>
+  41:common/prog/math/mathDiv.h **** #include <stdbool.h>
+  42:common/prog/math/mathDiv.h **** 
+  43:common/prog/math/mathDiv.h **** 
+  44:common/prog/math/mathDiv.h **** /******************************************************************************/
+  45:common/prog/math/mathDiv.h **** /* PUBLIC DEFINITIONS                                                         */
+  46:common/prog/math/mathDiv.h **** /******************************************************************************/
+  47:common/prog/math/mathDiv.h **** 
+  48:common/prog/math/mathDiv.h **** /** \brief    Selection of MTDIV max divisor and result width.
+  49:common/prog/math/mathDiv.h ****  *
+  50:common/prog/math/mathDiv.h ****  *  \note     By default the MTDIV width is 32-bit, but can be reduced to 
+  51:common/prog/math/mathDiv.h ****  *            16-bit to save memory by defining MTDIV_WIDTH_16 if 32-bit
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 6
+
+
+  52:common/prog/math/mathDiv.h ****  *            division is not used.
+  53:common/prog/math/mathDiv.h ****  */
+  54:common/prog/math/mathDiv.h **** #ifndef MTDIV_WIDTH_16
+  55:common/prog/math/mathDiv.h **** #define MTDIV_WIDTH_32
+  56:common/prog/math/mathDiv.h **** #endif // MTDIV_WIDTH_16
+  57:common/prog/math/mathDiv.h **** 
+  58:common/prog/math/mathDiv.h **** /******************************************************************************/
+  59:common/prog/math/mathDiv.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+  60:common/prog/math/mathDiv.h **** /******************************************************************************/
+  61:common/prog/math/mathDiv.h **** 
+  62:common/prog/math/mathDiv.h **** /** \brief    Divisor and result type.
+  63:common/prog/math/mathDiv.h ****  *
+  64:common/prog/math/mathDiv.h ****  *  \note     Divisor and result type is dependent on MTDIV_WIDTH_xx setting.
+  65:common/prog/math/mathDiv.h ****  */
+  66:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_16
+  67:common/prog/math/mathDiv.h **** typedef uint16_t    MTDIV_width_t;
+  68:common/prog/math/mathDiv.h **** #else
+  69:common/prog/math/mathDiv.h **** typedef uint32_t    MTDIV_width_t;
+  70:common/prog/math/mathDiv.h **** #endif
+  71:common/prog/math/mathDiv.h **** 
+  72:common/prog/math/mathDiv.h **** 
+  73:common/prog/math/mathDiv.h **** /** \brief    Return structure from generic division function.
+  74:common/prog/math/mathDiv.h ****  */
+  75:common/prog/math/mathDiv.h **** struct MTDIV_Result
+  76:common/prog/math/mathDiv.h **** {
+  77:common/prog/math/mathDiv.h ****     MTDIV_width_t quotient;
+  78:common/prog/math/mathDiv.h ****     MTDIV_width_t remainder;
+  79:common/prog/math/mathDiv.h **** };
+  80:common/prog/math/mathDiv.h **** 
+  81:common/prog/math/mathDiv.h **** 
+  82:common/prog/math/mathDiv.h **** /******************************************************************************/
+  83:common/prog/math/mathDiv.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  84:common/prog/math/mathDiv.h **** /******************************************************************************/
+  85:common/prog/math/mathDiv.h **** 
+  86:common/prog/math/mathDiv.h **** /** \brief    Main division and modulo function.
+  87:common/prog/math/mathDiv.h ****  *
+  88:common/prog/math/mathDiv.h ****  *  \note     This function performs division and modulo calculation and is
+  89:common/prog/math/mathDiv.h ****  *            intended mainly for internal use. Be careful when using this 
+  90:common/prog/math/mathDiv.h ****  *            function, as divisor and result width are dependent
+  91:common/prog/math/mathDiv.h ****  *            on MTDIV_WIDTH_xx setting. By calling this function you get
+  92:common/prog/math/mathDiv.h ****  *            either quotient or modulo, depending on div parameter.
+  93:common/prog/math/mathDiv.h ****  *
+  94:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+  95:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+  96:common/prog/math/mathDiv.h ****  *
+  97:common/prog/math/mathDiv.h ****  *  \return   struct MTDIV_Result containing both quotient and remainder.
+  98:common/prog/math/mathDiv.h ****  */
+  99:common/prog/math/mathDiv.h **** extern struct MTDIV_Result MTDIV_div_mod(uint32_t dividend, MTDIV_width_t divisor);
+ 100:common/prog/math/mathDiv.h **** 
+ 101:common/prog/math/mathDiv.h **** 
+ 102:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 16bit, result fits into 16bit
+ 103:common/prog/math/mathDiv.h ****  *
+ 104:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 105:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 106:common/prog/math/mathDiv.h ****  *
+ 107:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 108:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 7
+
+
+ 109:common/prog/math/mathDiv.h ****  *
+ 110:common/prog/math/mathDiv.h ****  *  \return   result of division
+ 111:common/prog/math/mathDiv.h ****  */
+ 112:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_div_32_16(uint32_t dividend, uint16_t divisor)
+ 113:common/prog/math/mathDiv.h **** {
+ 114:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 115:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, (MTDIV_width_t)divisor).quotient;
+ 116:common/prog/math/mathDiv.h ****   #else
+ 117:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend / (uint32_t)divisor);
+ 118:common/prog/math/mathDiv.h ****   #endif
+ 119:common/prog/math/mathDiv.h **** }
+ 120:common/prog/math/mathDiv.h **** 
+ 121:common/prog/math/mathDiv.h **** 
+ 122:common/prog/math/mathDiv.h **** /** \brief    Modulo 32bit by 16bit, result fits into 16bit
+ 123:common/prog/math/mathDiv.h ****  *
+ 124:common/prog/math/mathDiv.h ****  *  \note     Be careful, the maximum result is 0xFFFF. You should be sure, that
+ 125:common/prog/math/mathDiv.h ****  *            your result fits into uint16_t.
+ 126:common/prog/math/mathDiv.h ****  *
+ 127:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 128:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 129:common/prog/math/mathDiv.h ****  *
+ 130:common/prog/math/mathDiv.h ****  *  \return   modulo of division
+ 131:common/prog/math/mathDiv.h ****  */
+ 132:common/prog/math/mathDiv.h **** static inline uint16_t MTDIV_mod_32_16(uint32_t dividend, uint16_t divisor)
+ 133:common/prog/math/mathDiv.h **** {
+ 134:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 135:common/prog/math/mathDiv.h ****     return (uint16_t)MTDIV_div_mod(dividend, divisor).remainder;
+ 136:common/prog/math/mathDiv.h ****   #else
+ 137:common/prog/math/mathDiv.h ****     return (uint16_t)(dividend % (uint32_t)divisor);
+ 138:common/prog/math/mathDiv.h ****   #endif
+ 139:common/prog/math/mathDiv.h **** }
+ 140:common/prog/math/mathDiv.h **** 
+ 141:common/prog/math/mathDiv.h **** 
+ 142:common/prog/math/mathDiv.h **** #ifdef MTDIV_WIDTH_32
+ 143:common/prog/math/mathDiv.h **** /** \brief    Division 32bit by 32bit, result is 32bit
+ 144:common/prog/math/mathDiv.h ****  *
+ 145:common/prog/math/mathDiv.h ****  *  \note     This function is optimized for 32bit microcontrollers.
+ 146:common/prog/math/mathDiv.h ****  *            Division by 0 returns 0xFFFFFFFF.
+ 147:common/prog/math/mathDiv.h ****  *
+ 148:common/prog/math/mathDiv.h ****  *  \param    dividend:  the dividend
+ 149:common/prog/math/mathDiv.h ****  *  \param    divisor:   the divider
+ 150:common/prog/math/mathDiv.h ****  *
+ 151:common/prog/math/mathDiv.h ****  *  \return   result of division
+ 152:common/prog/math/mathDiv.h ****  */
+ 153:common/prog/math/mathDiv.h **** static inline uint32_t MTDIV_div_32_32(uint32_t dividend, uint32_t divisor)
+ 142              		.loc 2 153 24 view .LVU25
+ 143              	.LBB5:
+ 154:common/prog/math/mathDiv.h **** {
+ 155:common/prog/math/mathDiv.h ****   #ifdef NO_CORE_DEVIDER
+ 156:common/prog/math/mathDiv.h ****     return MTDIV_div_mod(dividend, divisor).quotient;
+ 144              		.loc 2 156 5 view .LVU26
+ 145              	.LBE5:
+ 146              	.LBE4:
+  89:common/prog/MSP/mcal/mwdt.c ****     // percent in % = ((actualTimeUs / (requiredTimeMs * 1000)) * 100) the same as
+ 147              		.loc 1 89 1 is_stmt 0 view .LVU27
+ 148 0000 07B5     		push	{r0, r1, r2, lr}
+ 149              	.LCFI3:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 8
+
+
+ 150              		.cfi_def_cfa_offset 16
+ 151              		.cfi_offset 0, -16
+ 152              		.cfi_offset 1, -12
+ 153              		.cfi_offset 2, -8
+ 154              		.cfi_offset 14, -4
+ 155              		.loc 1 93 15 view .LVU28
+ 156 0002 0A22     		movs	r2, #10
+ 157 0004 4A43     		muls	r2, r1
+ 158              	.LVL7:
+ 159              	.LBB7:
+ 160              	.LBB6:
+ 161              		.loc 2 156 12 view .LVU29
+ 162 0006 0100     		movs	r1, r0
+ 163              	.LVL8:
+ 164              		.loc 2 156 12 view .LVU30
+ 165 0008 6846     		mov	r0, sp
+ 166              	.LVL9:
+ 167              		.loc 2 156 12 view .LVU31
+ 168 000a FFF7FEFF 		bl	MTDIV_div_mod
+ 169              	.LVL10:
+ 170              		.loc 2 156 44 view .LVU32
+ 171 000e 009B     		ldr	r3, [sp]
+ 172              	.LVL11:
+ 173              		.loc 2 156 44 view .LVU33
+ 174              	.LBE6:
+ 175              	.LBE7:
+  94:common/prog/MSP/mcal/mwdt.c ****     if(percent < 100u)
+ 176              		.loc 1 94 5 is_stmt 1 view .LVU34
+  95:common/prog/MSP/mcal/mwdt.c ****     {
+  96:common/prog/MSP/mcal/mwdt.c ****         percent = 100u - percent;
+  97:common/prog/MSP/mcal/mwdt.c ****     } else
+  98:common/prog/MSP/mcal/mwdt.c ****     {
+  99:common/prog/MSP/mcal/mwdt.c ****         percent = percent - 100u;
+ 177              		.loc 1 99 17 is_stmt 0 view .LVU35
+ 178 0010 1800     		movs	r0, r3
+ 179 0012 6438     		subs	r0, r0, #100
+  94:common/prog/MSP/mcal/mwdt.c ****     if(percent < 100u)
+ 180              		.loc 1 94 7 view .LVU36
+ 181 0014 632B     		cmp	r3, #99
+ 182 0016 01D8     		bhi	.L8
+  96:common/prog/MSP/mcal/mwdt.c ****     } else
+ 183              		.loc 1 96 9 is_stmt 1 view .LVU37
+  96:common/prog/MSP/mcal/mwdt.c ****     } else
+ 184              		.loc 1 96 17 is_stmt 0 view .LVU38
+ 185 0018 6420     		movs	r0, #100
+ 186 001a C01A     		subs	r0, r0, r3
+ 187              	.LVL12:
+ 188              	.L8:
+ 100:common/prog/MSP/mcal/mwdt.c ****     }
+ 101:common/prog/MSP/mcal/mwdt.c ****     return (uint16_t)percent;
+ 189              		.loc 1 101 5 is_stmt 1 view .LVU39
+ 190              		.loc 1 101 12 is_stmt 0 view .LVU40
+ 191 001c 80B2     		uxth	r0, r0
+ 192              	.LVL13:
+ 102:common/prog/MSP/mcal/mwdt.c **** }
+ 193              		.loc 1 102 1 view .LVU41
+ 194              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccHMFpVX.s 			page 9
+
+
+ 195 001e 0EBD     		pop	{r1, r2, r3, pc}
+ 196              		.cfi_endproc
+ 197              	.LFE73:
+ 199              		.text
+ 200              	.Letext0:
+ 201              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 202              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 203              		.file 5 "common/prog/MSP/mcal/mcal_types.h"
+ 204              		.file 6 "common/prog/MSP/mcal/mwdt_types.h"
+ 205              		.file 7 "common/prog/MSP/mcal/sh30f/mwdt_mc.h"

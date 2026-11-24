@@ -1,0 +1,45 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc0krszW.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ModuleHeader.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.FWU_SW_MODULE_HEADER,"a"
+  18              		.align	2
+  21              	MDHD_ModuleHeader:
+  22 0000 00000000 		.word	0
+  23 0004 00000000 		.word	ITBL_coreVectors
+  24 0008 00460000 		.word	17920
+  25 000c 001A0000 		.word	6656
+  26 0010 0000     		.ascii	"\000\000"
+  27 0012 00000000 		.space	6
+  27      0000
+  28 0018 0000     		.ascii	"\000\000"
+  29 001a 0000     		.ascii	"\000\000"
+  30 001c 0000     		.ascii	"\000\000"
+  31 001e 00000000 		.ascii	"\000\000\000\000"
+  32 0022 0000     		.short	0
+  33 0024 00000000 		.word	0
+  34              		.text
+  35              	.Letext0:
+  36              		.file 1 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  37              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  38              		.file 3 "common/prog/std_lib/std_version.h"
+  39              		.file 4 "common/prog/firmware_update/version/fwu_version.h"
+  40              		.file 5 "common/prog/firmware_update/mal/moduleAdministration.h"
+  41              		.file 6 "common/prog/MSP/armCmx/IntTblArmCM.h"
+  42              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+  43              		.file 8 "common/prog/firmware_update/Programmer/ModuleHeader.c"

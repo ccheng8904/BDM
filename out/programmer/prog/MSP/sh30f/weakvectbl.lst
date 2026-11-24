@@ -1,0 +1,18 @@
+
+out/programmer/prog/MSP/sh30f/weakvectbl.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.HWVT_vSpuriousIsr:
+
+00000000 <HWVT_vSpuriousIsr>:
+#include "weakvectbl.h"
+#include "IntTblArmCM.h"
+
+
+void HWVT_vSpuriousIsr(void)
+{
+   0:	b510      	push	{r4, lr}
+    ITBL_vSpuriousIsr(); // call application function  
+   2:	f7ff fffe 	bl	0 <ITBL_vSpuriousIsr>
+}
+   6:	bd10      	pop	{r4, pc}

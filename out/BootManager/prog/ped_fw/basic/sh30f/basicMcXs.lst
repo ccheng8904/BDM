@@ -1,0 +1,187 @@
+
+out/BootManager/prog/ped_fw/basic/sh30f/basicMcXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BASIC_vInitPlatform:
+
+00000000 <BASIC_vInitPlatform>:
+
+static void BASIC_vInitClock(void)
+{
+
+    /* Set Flash latency */
+    FLASH->ACR.V32 = FLASH_ACR_LATENCY_VALUE;
+   0:	4b2b      	ldr	r3, [pc, #172]	; (b0 <BASIC_vInitPlatform+0xb0>)
+   2:	482c      	ldr	r0, [pc, #176]	; (b4 <BASIC_vInitPlatform+0xb4>)
+{
+   4:	b510      	push	{r4, lr}
+
+    /* Unlock RCC Configuration Register */
+    RCC_REGS_UNLOCK();
+   6:	4a2c      	ldr	r2, [pc, #176]	; (b8 <BASIC_vInitPlatform+0xb8>)
+    FLASH->ACR.V32 = FLASH_ACR_LATENCY_VALUE;
+   8:	6003      	str	r3, [r0, #0]
+    RCC_REGS_UNLOCK();
+   a:	4b2c      	ldr	r3, [pc, #176]	; (bc <BASIC_vInitPlatform+0xbc>)
+   c:	635a      	str	r2, [r3, #52]	; 0x34
+
+    /* Enable SYSCFG Module */
+    RCC->AHBENR.BIT.SYSCFGEN = 1U;
+   e:	2202      	movs	r2, #2
+  10:	6a19      	ldr	r1, [r3, #32]
+  12:	430a      	orrs	r2, r1
+  14:	621a      	str	r2, [r3, #32]
+
+    /* Unlock SYSCFG SAFR register and set XTAL1 and XTAL2 pins to GPIO mode */
+    SYSCFG->SAFR.V32 = SYSCFG_SAFR_XTAL1_XTAL2_GPIO_MODE;
+  16:	492a      	ldr	r1, [pc, #168]	; (c0 <BASIC_vInitPlatform+0xc0>)
+  18:	4a2a      	ldr	r2, [pc, #168]	; (c4 <BASIC_vInitPlatform+0xc4>)
+  1a:	6091      	str	r1, [r2, #8]
+
+    /* Enable HSI */
+    RCC->CR.BIT.HSION = 1U;
+  1c:	2280      	movs	r2, #128	; 0x80
+  1e:	681c      	ldr	r4, [r3, #0]
+  20:	0192      	lsls	r2, r2, #6
+  22:	4322      	orrs	r2, r4
+  24:	601a      	str	r2, [r3, #0]
+
+    /* Wait till HSI Ready */
+    while (RCC->CR.BIT.HSIRDY == 0U) {}
+  26:	681a      	ldr	r2, [r3, #0]
+  28:	0452      	lsls	r2, r2, #17
+  2a:	d5fc      	bpl.n	26 <BASIC_vInitPlatform+0x26>
+
+    /* Set HSI as PLL clock source */
+    RCC->CFGR.BIT.PLLSRC = RCC_CFGR_PLLSRC_HSI;
+  2c:	685a      	ldr	r2, [r3, #4]
+  2e:	4c26      	ldr	r4, [pc, #152]	; (c8 <BASIC_vInitPlatform+0xc8>)
+  30:	4022      	ands	r2, r4
+  32:	605a      	str	r2, [r3, #4]
+
+
+static void BASIC_vSetPLL(uint32_t divFactorPLL, uint32_t mulFactorPLL, uint32_t divFactorPLL2)
+{
+    /* Set PLL dividers and multiplier */
+    RCC->CFGR.BIT.PLLXTPRE = (uint8_t)(divFactorPLL - PLLXTPRE_OFFSET); //PREFCLK = PLLCLKIN / N
+  34:	22c0      	movs	r2, #192	; 0xc0
+  36:	685c      	ldr	r4, [r3, #4]
+  38:	0392      	lsls	r2, r2, #14
+  3a:	4322      	orrs	r2, r4
+  3c:	605a      	str	r2, [r3, #4]
+    RCC->CFGR.BIT.PLLF = (uint8_t)(mulFactorPLL - PLLF_OFFSET);         //VCOCLK = PRECLK * F
+  3e:	685c      	ldr	r4, [r3, #4]
+  40:	4a22      	ldr	r2, [pc, #136]	; (cc <BASIC_vInitPlatform+0xcc>)
+  42:	4014      	ands	r4, r2
+  44:	2288      	movs	r2, #136	; 0x88
+  46:	0292      	lsls	r2, r2, #10
+  48:	4322      	orrs	r2, r4
+  4a:	605a      	str	r2, [r3, #4]
+    RCC->CFGR.BIT.PLLK = (uint8_t)(divFactorPLL2 - PLLK_OFFSET);        //PLLCLK = (VCOCLK / K) * (1 / 4)
+  4c:	685a      	ldr	r2, [r3, #4]
+  4e:	4c20      	ldr	r4, [pc, #128]	; (d0 <BASIC_vInitPlatform+0xd0>)
+  50:	4022      	ands	r2, r4
+  52:	605a      	str	r2, [r3, #4]
+    /* Set HSE as PLL clock source */
+    RCC->CFGR.BIT.PLLSRC = RCC_CFGR_PLLSRC_HSE;
+#endif
+
+    /* Enable PLL clock */
+    RCC->CR.V32 |= RCC_CR_PLLON;
+  54:	2280      	movs	r2, #128	; 0x80
+  56:	681c      	ldr	r4, [r3, #0]
+  58:	4322      	orrs	r2, r4
+  5a:	601a      	str	r2, [r3, #0]
+
+    /* Wait till PLL circuit ready */
+    while ((RCC->CR.V32 & RCC_CR_PLLRDY) == 0U) {}
+  5c:	2280      	movs	r2, #128	; 0x80
+  5e:	0052      	lsls	r2, r2, #1
+  60:	681c      	ldr	r4, [r3, #0]
+  62:	4214      	tst	r4, r2
+  64:	d0fc      	beq.n	60 <BASIC_vInitPlatform+0x60>
+
+    /* Switch SYSCLK to PLL */
+    RCC->CR.BIT.SW = (uint32_t)SYSTEM_CLK_SRC_PLL;
+  66:	2207      	movs	r2, #7
+  68:	681c      	ldr	r4, [r3, #0]
+  6a:	4394      	bics	r4, r2
+  6c:	3a06      	subs	r2, #6
+  6e:	4322      	orrs	r2, r4
+  70:	601a      	str	r2, [r3, #0]
+
+    /* Wait for SYSCLK to switch to PLL */
+    while (RCC->CR.BIT.SWS != (uint32_t)SYSTEM_CLK_SRC_PLL) {}
+  72:	681a      	ldr	r2, [r3, #0]
+  74:	0692      	lsls	r2, r2, #26
+  76:	0f52      	lsrs	r2, r2, #29
+  78:	2a01      	cmp	r2, #1
+  7a:	d1fa      	bne.n	72 <BASIC_vInitPlatform+0x72>
+
+    /* Set AHB, APB0(PCLOCK0) and APB1(PCLOCK1) pre-scaler */
+    RCC->CFGR.BIT.HPRE = RCC_HPRE_PSC;
+  7c:	2407      	movs	r4, #7
+  7e:	685a      	ldr	r2, [r3, #4]
+  80:	43a2      	bics	r2, r4
+  82:	605a      	str	r2, [r3, #4]
+    RCC->CFGR.BIT.PPRE0 = RCC_APB0_PSC;
+  84:	2238      	movs	r2, #56	; 0x38
+  86:	685c      	ldr	r4, [r3, #4]
+  88:	4394      	bics	r4, r2
+  8a:	3a30      	subs	r2, #48	; 0x30
+  8c:	4322      	orrs	r2, r4
+  8e:	605a      	str	r2, [r3, #4]
+    RCC->CFGR.BIT.PPRE1 = RCC_APB1_PSC;
+  90:	685c      	ldr	r4, [r3, #4]
+  92:	4a10      	ldr	r2, [pc, #64]	; (d4 <BASIC_vInitPlatform+0xd4>)
+  94:	4014      	ands	r4, r2
+  96:	2240      	movs	r2, #64	; 0x40
+  98:	4322      	orrs	r2, r4
+  9a:	605a      	str	r2, [r3, #4]
+    RCC_REGS_LOCK();
+  9c:	2200      	movs	r2, #0
+  9e:	635a      	str	r2, [r3, #52]	; 0x34
+    uint32_t tmpreg = FLASH->ACR.V32 & (~FLASH_ACR_PRFTEN_Msk);
+  a0:	6803      	ldr	r3, [r0, #0]
+  a2:	4a0d      	ldr	r2, [pc, #52]	; (d8 <BASIC_vInitPlatform+0xd8>)
+  a4:	4013      	ands	r3, r2
+    tmpreg |= (((uint32_t)0x5AA5U << FLASH_ACR_LOCK_Pos) | ((uint32_t)PREFETCH_VALUE << FLASH_ACR_PRFTEN_Pos));
+  a6:	4319      	orrs	r1, r3
+    FLASH->ACR.V32 = tmpreg;
+  a8:	6001      	str	r1, [r0, #0]
+    FSF_vBoot();
+  aa:	f7ff fffe 	bl	0 <FSF_vBoot>
+}
+  ae:	bd10      	pop	{r4, pc}
+  b0:	5aa50001 	.word	0x5aa50001
+  b4:	40040c00 	.word	0x40040c00
+  b8:	000033cc 	.word	0x000033cc
+  bc:	40040800 	.word	0x40040800
+  c0:	5aa50000 	.word	0x5aa50000
+  c4:	40040400 	.word	0x40040400
+  c8:	fff7ffff 	.word	0xfff7ffff
+  cc:	fffc1fff 	.word	0xfffc1fff
+  d0:	ffffe3ff 	.word	0xffffe3ff
+  d4:	fffffe3f 	.word	0xfffffe3f
+  d8:	fffffeff 	.word	0xfffffeff
+
+Disassembly of section .text.BASIC_vConfigPlatform:
+
+00000000 <BASIC_vConfigPlatform>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+void BASIC_vConfigPlatform (void)
+{
+   0:	b510      	push	{r4, lr}
+    /* Clock Configuration*/
+    BASIC_vInitPlatform();
+   2:	f7ff fffe 	bl	0 <BASIC_vConfigPlatform>
+    // HADC_vInit(0);
+
+    /* all other initializations */
+    // ...
+#endif
+}
+   6:	bd10      	pop	{r4, pc}

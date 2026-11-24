@@ -1,0 +1,590 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BootManager.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Main,"ax",%progbits
+  18              		.align	1
+  19              		.global	Main
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	Main:
+  25              	.LFB66:
+  26              		.file 1 "common/prog/firmware_update/BootManager/BootManager.c"
+   1:common/prog/firmware_update/BootManager/BootManager.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootManager/BootManager.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootManager/BootManager.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootManager/BootManager.c ****  *
+   5:common/prog/firmware_update/BootManager/BootManager.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootManager/BootManager.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootManager/BootManager.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootManager/BootManager.c ****  *
+   9:common/prog/firmware_update/BootManager/BootManager.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootManager/BootManager.c ****  *  PROJECT          Firmware Update Boot-Manager
+  11:common/prog/firmware_update/BootManager/BootManager.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootManager/BootManager.c **** 
+  13:common/prog/firmware_update/BootManager/BootManager.c **** 
+  14:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootManager/BootManager.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootManager/BootManager.c **** /** \file
+  18:common/prog/firmware_update/BootManager/BootManager.c ****  *
+  19:common/prog/firmware_update/BootManager/BootManager.c ****  *  \ingroup  BootManager
+  20:common/prog/firmware_update/BootManager/BootManager.c ****  *
+  21:common/prog/firmware_update/BootManager/BootManager.c ****  *  \brief    Implementation of Boot-Manager-Main 
+  22:common/prog/firmware_update/BootManager/BootManager.c ****  *
+  23:common/prog/firmware_update/BootManager/BootManager.c ****  */
+  24:common/prog/firmware_update/BootManager/BootManager.c **** 
+  25:common/prog/firmware_update/BootManager/BootManager.c **** 
+  26:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  27:common/prog/firmware_update/BootManager/BootManager.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootManager/BootManager.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/BootManager/BootManager.c **** #include "firmware_update/fwu_config.h"
+  31:common/prog/firmware_update/BootManager/BootManager.c **** #include "BootManagerSharedData.h"
+  32:common/prog/firmware_update/BootManager/BootManager.c **** #include "BootManagerModule.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 2
+
+
+  33:common/prog/firmware_update/BootManager/BootManager.c **** #if defined(MCAL_MSUP_INCLUDED)
+  34:common/prog/firmware_update/BootManager/BootManager.c **** #include "mcal/msup.h" //Needed for reset execution
+  35:common/prog/firmware_update/BootManager/BootManager.c **** #else
+  36:common/prog/firmware_update/BootManager/BootManager.c **** #include "hsup.h" 
+  37:common/prog/firmware_update/BootManager/BootManager.c **** #endif //MCAL_MSUP_INCLUDED
+  38:common/prog/firmware_update/BootManager/BootManager.c **** #include "ped_fw/basic/basic.h"
+  39:common/prog/firmware_update/BootManager/BootManager.c **** #include "firmware_update/mal/fwu_opt_bytes.h"
+  40:common/prog/firmware_update/BootManager/BootManager.c **** 
+  41:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  42:common/prog/firmware_update/BootManager/BootManager.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  43:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  44:common/prog/firmware_update/BootManager/BootManager.c **** static void BMAPP_switchBootModule(void);
+  45:common/prog/firmware_update/BootManager/BootManager.c **** static bool BMAPP_isModuleValidToStart(enum MAL_ModuleEnum bootModule);
+  46:common/prog/firmware_update/BootManager/BootManager.c **** 
+  47:common/prog/firmware_update/BootManager/BootManager.c **** 
+  48:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  49:common/prog/firmware_update/BootManager/BootManager.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  50:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  51:common/prog/firmware_update/BootManager/BootManager.c **** 
+  52:common/prog/firmware_update/BootManager/BootManager.c **** /*lint -esym(9046,?ain) Note 9046: 'main' is typographically ambiguous with
+  53:common/prog/firmware_update/BootManager/BootManager.c ****     respect to 'Main' when ignoring case [MISRA 2012 Directive 4.5, advisory] */
+  54:common/prog/firmware_update/BootManager/BootManager.c **** #if defined(NO_RAM_INIT) && !defined(IARRX)
+  55:common/prog/firmware_update/BootManager/BootManager.c **** void Main(void)/*lint !e970 that's ansi C*/
+  56:common/prog/firmware_update/BootManager/BootManager.c **** #else
+  57:common/prog/firmware_update/BootManager/BootManager.c **** int main(void)/*lint !e970 that's ansi C*/
+  58:common/prog/firmware_update/BootManager/BootManager.c **** #endif
+  59:common/prog/firmware_update/BootManager/BootManager.c **** {
+  27              		.loc 1 59 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  60:common/prog/firmware_update/BootManager/BootManager.c ****     BASIC_vInitPlatform(); // initialise system clock
+  31              		.loc 1 60 5 view .LVU1
+  59:common/prog/firmware_update/BootManager/BootManager.c ****     BASIC_vInitPlatform(); // initialise system clock
+  32              		.loc 1 59 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 60 5 view .LVU3
+  39 0002 FFF7FEFF 		bl	BASIC_vInitPlatform
+  40              	.LVL0:
+  61:common/prog/firmware_update/BootManager/BootManager.c ****     BMDAT_initSharedData();
+  41              		.loc 1 61 5 is_stmt 1 view .LVU4
+  42 0006 FFF7FEFF 		bl	BMDAT_initSharedData
+  43              	.LVL1:
+  62:common/prog/firmware_update/BootManager/BootManager.c **** 
+  63:common/prog/firmware_update/BootManager/BootManager.c ****     if (BMAPP_isModuleValidToStart( BMDAT_getBootModule()) )
+  44              		.loc 1 63 5 view .LVU5
+  45              		.loc 1 63 9 is_stmt 0 view .LVU6
+  46 000a FFF7FEFF 		bl	BMDAT_getBootModule
+  47              	.LVL2:
+  48              	.LBB30:
+  49              	.LBI30:
+  64:common/prog/firmware_update/BootManager/BootManager.c ****     {
+  65:common/prog/firmware_update/BootManager/BootManager.c ****        BMMOD_startModule();   // never come back
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 3
+
+
+  66:common/prog/firmware_update/BootManager/BootManager.c ****     }
+  67:common/prog/firmware_update/BootManager/BootManager.c ****     /* something wrong selected module could not be started */
+  68:common/prog/firmware_update/BootManager/BootManager.c ****     BMDAT_incrementStartAttempts();
+  69:common/prog/firmware_update/BootManager/BootManager.c ****     
+  70:common/prog/firmware_update/BootManager/BootManager.c ****     if (BMDAT_getStartAttempts() >= FWU_MAX_RETRIES_TO_SWITCH_MODULE)
+  71:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try another boot module after some attempts
+  72:common/prog/firmware_update/BootManager/BootManager.c ****         BMAPP_switchBootModule();
+  73:common/prog/firmware_update/BootManager/BootManager.c ****     }
+  74:common/prog/firmware_update/BootManager/BootManager.c ****     // Exit!!
+  75:common/prog/firmware_update/BootManager/BootManager.c **** #if defined(MCAL_MSUP_INCLUDED)
+  76:common/prog/firmware_update/BootManager/BootManager.c ****     MSUP_generateReset(); // try again after reset
+  77:common/prog/firmware_update/BootManager/BootManager.c **** #else
+  78:common/prog/firmware_update/BootManager/BootManager.c ****     HSUP_vGenerateReset(); // try again after reset
+  79:common/prog/firmware_update/BootManager/BootManager.c **** #endif 
+  80:common/prog/firmware_update/BootManager/BootManager.c **** #if !defined(NO_RAM_INIT)
+  81:common/prog/firmware_update/BootManager/BootManager.c ****     return 1; // line cannot be reached, to prevent SCA and compiler warning
+  82:common/prog/firmware_update/BootManager/BootManager.c **** #endif
+  83:common/prog/firmware_update/BootManager/BootManager.c **** }
+  84:common/prog/firmware_update/BootManager/BootManager.c **** 
+  85:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  86:common/prog/firmware_update/BootManager/BootManager.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+  87:common/prog/firmware_update/BootManager/BootManager.c **** /******************************************************************************/
+  88:common/prog/firmware_update/BootManager/BootManager.c **** 
+  89:common/prog/firmware_update/BootManager/BootManager.c **** /** \brief    Switches to the next possible boot module.
+  90:common/prog/firmware_update/BootManager/BootManager.c ****  *
+  91:common/prog/firmware_update/BootManager/BootManager.c ****  *  \details  If any error occurs during module start this function is called
+  92:common/prog/firmware_update/BootManager/BootManager.c ****  *            to switch to the next possible boot module
+  93:common/prog/firmware_update/BootManager/BootManager.c ****  */
+  94:common/prog/firmware_update/BootManager/BootManager.c **** static void BMAPP_switchBootModule(void)
+  95:common/prog/firmware_update/BootManager/BootManager.c **** {
+  96:common/prog/firmware_update/BootManager/BootManager.c ****     if (BMDAT_getBootModule() != MAL_PROGRAMMER_ID)
+  97:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try first the programmer
+  98:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setBootModule(MAL_PROGRAMMER_ID);
+  99:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 100:common/prog/firmware_update/BootManager/BootManager.c ****     else
+ 101:common/prog/firmware_update/BootManager/BootManager.c ****     {   // when programmer not works try application
+ 102:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setBootModule(MAL_PRODUCT_APP1);
+ 103:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 104:common/prog/firmware_update/BootManager/BootManager.c ****     /* note when Programmer and application does not work the
+ 105:common/prog/firmware_update/BootManager/BootManager.c ****        the BP2 loader may be started.
+ 106:common/prog/firmware_update/BootManager/BootManager.c ****        This is not done because of security
+ 107:common/prog/firmware_update/BootManager/BootManager.c ****      */
+ 108:common/prog/firmware_update/BootManager/BootManager.c **** }
+ 109:common/prog/firmware_update/BootManager/BootManager.c **** 
+ 110:common/prog/firmware_update/BootManager/BootManager.c **** 
+ 111:common/prog/firmware_update/BootManager/BootManager.c **** /** \brief    Checks if the selected boot module is valid to start.
+ 112:common/prog/firmware_update/BootManager/BootManager.c ****  *
+ 113:common/prog/firmware_update/BootManager/BootManager.c ****  *  \param    bootModule: sw module to be started
+ 114:common/prog/firmware_update/BootManager/BootManager.c ****  *  \return   true if the given module is valid and start-able
+ 115:common/prog/firmware_update/BootManager/BootManager.c ****  */
+ 116:common/prog/firmware_update/BootManager/BootManager.c **** static bool BMAPP_isModuleValidToStart(enum MAL_ModuleEnum bootModule)
+  50              		.loc 1 116 13 is_stmt 1 view .LVU7
+  51              	.LBB31:
+ 117:common/prog/firmware_update/BootManager/BootManager.c **** {
+ 118:common/prog/firmware_update/BootManager/BootManager.c ****     if (!BMMOD_bInitMemoryModule(bootModule))
+  52              		.loc 1 118 5 view .LVU8
+  53              		.loc 1 118 10 is_stmt 0 view .LVU9
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 4
+
+
+  54 000e FFF7FEFF 		bl	BMMOD_bInitMemoryModule
+  55              	.LVL3:
+  56              		.loc 1 118 8 view .LVU10
+  57 0012 0028     		cmp	r0, #0
+  58 0014 13D1     		bne	.L2
+ 119:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 120:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setErrorFlag(BMDAT_ER_BOOT_MODULE);
+  59              		.loc 1 120 9 is_stmt 1 view .LVU11
+  60 0016 0130     		adds	r0, r0, #1
+  61              	.L19:
+ 121:common/prog/firmware_update/BootManager/BootManager.c ****         return false;
+ 122:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 123:common/prog/firmware_update/BootManager/BootManager.c ****     if (!BMMOD_isModuleStartable())
+ 124:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 125:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setErrorFlag(BMDAT_ER_UNSTARTABLE);
+  62              		.loc 1 125 9 is_stmt 0 view .LVU12
+  63 0018 FFF7FEFF 		bl	BMDAT_setErrorFlag
+  64              	.LVL4:
+ 126:common/prog/firmware_update/BootManager/BootManager.c ****         return false;
+  65              		.loc 1 126 9 is_stmt 1 view .LVU13
+  66              	.L3:
+  67              		.loc 1 126 9 is_stmt 0 view .LVU14
+  68              	.LBE31:
+  69              	.LBE30:
+  68:common/prog/firmware_update/BootManager/BootManager.c ****     
+  70              		.loc 1 68 5 is_stmt 1 view .LVU15
+  71 001c FFF7FEFF 		bl	BMDAT_incrementStartAttempts
+  72              	.LVL5:
+  70:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try another boot module after some attempts
+  73              		.loc 1 70 5 view .LVU16
+  70:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try another boot module after some attempts
+  74              		.loc 1 70 9 is_stmt 0 view .LVU17
+  75 0020 FFF7FEFF 		bl	BMDAT_getStartAttempts
+  76              	.LVL6:
+  70:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try another boot module after some attempts
+  77              		.loc 1 70 8 view .LVU18
+  78 0024 0228     		cmp	r0, #2
+  79 0026 07D9     		bls	.L10
+  72:common/prog/firmware_update/BootManager/BootManager.c ****     }
+  80              		.loc 1 72 9 is_stmt 1 view .LVU19
+  81              	.LBB40:
+  82              	.LBI40:
+  94:common/prog/firmware_update/BootManager/BootManager.c **** {
+  83              		.loc 1 94 13 view .LVU20
+  84              	.LBB41:
+  96:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try first the programmer
+  85              		.loc 1 96 5 view .LVU21
+  96:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try first the programmer
+  86              		.loc 1 96 9 is_stmt 0 view .LVU22
+  87 0028 FFF7FEFF 		bl	BMDAT_getBootModule
+  88              	.LVL7:
+  96:common/prog/firmware_update/BootManager/BootManager.c ****     {   // try first the programmer
+  89              		.loc 1 96 8 view .LVU23
+  90 002c 164B     		ldr	r3, .L21
+  91 002e 9842     		cmp	r0, r3
+  92 0030 27D0     		beq	.L11
+  98:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 5
+
+
+  93              		.loc 1 98 9 is_stmt 1 view .LVU24
+  94 0032 1800     		movs	r0, r3
+  95              	.L20:
+ 102:common/prog/firmware_update/BootManager/BootManager.c ****     }
+  96              		.loc 1 102 9 is_stmt 0 view .LVU25
+  97 0034 FFF7FEFF 		bl	BMDAT_setBootModule
+  98              	.LVL8:
+  99              	.L10:
+ 100              	.LBE41:
+ 101              	.LBE40:
+  78:common/prog/firmware_update/BootManager/BootManager.c **** #endif 
+ 102              		.loc 1 78 5 is_stmt 1 view .LVU26
+  83:common/prog/firmware_update/BootManager/BootManager.c **** 
+ 103              		.loc 1 83 1 is_stmt 0 view .LVU27
+ 104              		@ sp needed
+  78:common/prog/firmware_update/BootManager/BootManager.c **** #endif 
+ 105              		.loc 1 78 5 view .LVU28
+ 106 0038 FFF7FEFF 		bl	HSUP_vGenerateReset
+ 107              	.LVL9:
+  83:common/prog/firmware_update/BootManager/BootManager.c **** 
+ 108              		.loc 1 83 1 view .LVU29
+ 109 003c 10BD     		pop	{r4, pc}
+ 110              	.L2:
+ 111              	.LBB43:
+ 112              	.LBB38:
+ 123:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 113              		.loc 1 123 5 is_stmt 1 view .LVU30
+ 123:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 114              		.loc 1 123 10 is_stmt 0 view .LVU31
+ 115 003e FFF7FEFF 		bl	BMMOD_isModuleStartable
+ 116              	.LVL10:
+ 123:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 117              		.loc 1 123 8 view .LVU32
+ 118 0042 0028     		cmp	r0, #0
+ 119 0044 01D1     		bne	.L4
+ 125:common/prog/firmware_update/BootManager/BootManager.c ****         return false;
+ 120              		.loc 1 125 9 is_stmt 1 view .LVU33
+ 121 0046 4030     		adds	r0, r0, #64
+ 122 0048 E6E7     		b	.L19
+ 123              	.L4:
+ 127:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 128:common/prog/firmware_update/BootManager/BootManager.c ****     if (!BMMOD_isModuleIntegrityOk()) // Watch dog is triggered in this function 
+ 124              		.loc 1 128 5 view .LVU34
+ 125              		.loc 1 128 10 is_stmt 0 view .LVU35
+ 126 004a FFF7FEFF 		bl	BMMOD_isModuleIntegrityOk
+ 127              	.LVL11:
+ 128              		.loc 1 128 8 view .LVU36
+ 129 004e 0028     		cmp	r0, #0
+ 130 0050 0DD0     		beq	.L5
+ 131              	.L8:
+ 129:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 130:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setErrorFlag(BMDAT_ER_INTEGRITY);
+ 131:common/prog/firmware_update/BootManager/BootManager.c ****         if(!FWU_isIntegCheckDisabledCalc() && !FWU_isIntegCheckErrorIgnored())
+ 132:common/prog/firmware_update/BootManager/BootManager.c ****         {
+ 133:common/prog/firmware_update/BootManager/BootManager.c ****             return false;
+ 134:common/prog/firmware_update/BootManager/BootManager.c ****         }
+ 135:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 6
+
+
+ 136:common/prog/firmware_update/BootManager/BootManager.c ****     if (!BMMOD_isModuleFirmwareIdValid())
+ 132              		.loc 1 136 5 is_stmt 1 view .LVU37
+ 133              		.loc 1 136 10 is_stmt 0 view .LVU38
+ 134 0052 FFF7FEFF 		bl	BMMOD_isModuleFirmwareIdValid
+ 135              	.LVL12:
+ 136              		.loc 1 136 8 view .LVU39
+ 137 0056 0028     		cmp	r0, #0
+ 138 0058 06D1     		bne	.L6
+ 137:common/prog/firmware_update/BootManager/BootManager.c ****     {
+ 138:common/prog/firmware_update/BootManager/BootManager.c ****         BMDAT_setErrorFlag(BMDAT_ER_FW_ID);
+ 139              		.loc 1 138 9 is_stmt 1 view .LVU40
+ 140 005a 8020     		movs	r0, #128
+ 141 005c FFF7FEFF 		bl	BMDAT_setErrorFlag
+ 142              	.LVL13:
+ 139:common/prog/firmware_update/BootManager/BootManager.c ****         if(!FWU_isCompatibilityCheckErrorIgnored())
+ 143              		.loc 1 139 9 view .LVU41
+ 144              	.LBB32:
+ 145              	.LBI32:
+ 146              		.file 2 "common/prog/firmware_update/mal/fwu_opt_bytes.h"
+   1:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /*******************************************************************************
+   2:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   5:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   9:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *******************************************************************************
+  10:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  PROJECT          Firmware Update
+  11:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  ******************************************************************************/
+  12:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  13:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  14:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifndef FIRMWAREUPDATE_H
+  15:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #define FIRMWAREUPDATE_H
+  16:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  17:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef __cplusplus
+  18:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern "C" {
+  19:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  20:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  21:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  22:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  23:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  25:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \file
+  26:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  27:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \brief    Public definitions for FWU option bytes
+  28:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  29:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  A detailed file description that may span several lines
+  30:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            and that has to be terminated by an empty line.
+  31:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  32:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  33:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  34:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  35:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  36:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* INCLUDES                                                                   */
+  37:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  38:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 7
+
+
+  39:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+  40:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #include "firmware_update/mal/moduleAdministration.h"
+  41:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  42:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  43:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  44:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for integrity check configuration */
+  45:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_integrityConfig
+  46:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  47:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_ENABLE       = MAL_ENABLE_DEF,
+  48:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF,
+  49:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_DISABLE_CALC = MAL_DISABLE_CALC_DEF
+  50:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  51:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  52:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for compatibility check configuration */
+  53:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_compatibilityConfig
+  54:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  55:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_ENABLE       = MAL_ENABLE_DEF,
+  56:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF
+  57:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  58:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  59:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for reserved opt. byte */
+  60:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_ReservedConfig
+  61:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  62:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_RESERVED       = MAL_RESERVED_DEF
+  63:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  64:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  65:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    struct for FWU option bytes */
+  66:common/prog/firmware_update/mal/fwu_opt_bytes.h **** struct MAL_FwuOptBytes_s
+  67:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  68:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_integrityConfig      integrityConfig;     ///< Opt. byte for integrity
+  69:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_compatibilityConfig  compatibilityConfig; ///< Opt. byte for compatibility
+  70:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_ReservedConfig       reserved[2];
+  71:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  72:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  73:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  74:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern const struct MAL_FwuOptBytes_s MAL_FwuOptBytes;
+  75:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  76:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  77:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Integrity Configuration variable
+  78:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  79:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of integrityConfig variable is to enable/disable/suppress integrity checks
+  80:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            CRC calculation (FS ROM check)
+  81:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  82:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_INTEGRITY_ENABLE: integrity check is enabled
+  83:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is exec
+  84:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+  85:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+  87:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.integrityConfig;
+  89:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+  90:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  91:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Compatibility Configuration variable
+  92:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  93:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of compatibilityConfig variable is to enable/disable/suppress compatibility c
+  94:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            firmware Id validation
+  95:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 8
+
+
+  96:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_COMPATIBILITY_ENABLE: compatibility check is enabled
+  97:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_COMPATIBILITY_IGNORE_ERROR: compatibility check errors is ignored
+  98:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  99:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_compatibilityConfig MAL_getCompatibilityOpt(void)
+ 100:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 101:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.compatibilityConfig;
+ 102:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 103:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 104:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 105:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns true/false if Integrity check calculation is disabled or not
+ 106:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 107:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  For FWU1 (WIRED_FIRMWARE_UPDATE) there is available only integrity check (CRC)
+ 108:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            There is no BootManager binary where are stored default FWU opt bytes
+ 109:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            which are used in RELEASE case.
+ 110:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            From this reason we must handle it via NDEBUG(RELEASE) switch.
+ 111:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 112:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   true:  calculation is disabled
+ 113:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            false: calculation is enabled
+ 114:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+ 115:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline bool FWU_isIntegCheckDisabledCalc(void)
+ 116:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 117:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+ 118:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_DISABLE_CALC) ? true : false);
+ 119:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #else // WIRED_FIRMWARE_UPDATE
+ 120:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #ifdef NDEBUG // RELEASE
+ 121:common/prog/firmware_update/mal/fwu_opt_bytes.h ****         return false;
+ 122:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #else
+ 123:common/prog/firmware_update/mal/fwu_opt_bytes.h ****         return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_DISABLE_CALC) ? true : false);
+ 124:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #endif
+ 125:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+ 126:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 127:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 128:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 129:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns true/false if Integrity checks errors are ignored or not
+ 130:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 131:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  For FWU1 (WIRED_FIRMWARE_UPDATE) there is available only integrity check (CRC)
+ 132:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            There is no BootManager binary where are stored default FWU opt bytes
+ 133:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            which are used in RELEASE case.
+ 134:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            From this reason we must handle it via NDEBUG(RELEASE) switch.
+ 135:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 136:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   true: errors are ignored
+ 137:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            false: errors are not ignored
+ 138:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+ 139:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline bool FWU_isIntegCheckErrorIgnored(void)
+ 140:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 141:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+ 142:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_IGNORE_ERROR) ? true : false);
+ 143:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #else // WIRED_FIRMWARE_UPDATE
+ 144:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #ifdef NDEBUG // RELEASE
+ 145:common/prog/firmware_update/mal/fwu_opt_bytes.h ****         return false;
+ 146:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #else
+ 147:common/prog/firmware_update/mal/fwu_opt_bytes.h ****         return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_IGNORE_ERROR) ? true : false);
+ 148:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #endif
+ 149:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+ 150:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 151:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 152:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns true/false if Compatibility checks errors are ignored or not
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 9
+
+
+ 153:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 154:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   true: errors are ignored
+ 155:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            false: errors are not ignored
+ 156:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+ 157:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline bool FWU_isCompatibilityCheckErrorIgnored(void)
+ 147              		.loc 2 157 20 view .LVU42
+ 158:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 159:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return ((MAL_getCompatibilityOpt() == MAL_COMPATIBILITY_IGNORE_ERROR) ? true : false);
+ 148              		.loc 2 159 5 view .LVU43
+ 149              	.LBB33:
+ 150              	.LBI33:
+  99:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 151              		.loc 2 99 44 view .LVU44
+ 152              	.LBB34:
+ 101:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 153              		.loc 2 101 5 view .LVU45
+ 101:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 154              		.loc 2 101 27 is_stmt 0 view .LVU46
+ 155 0060 0A4B     		ldr	r3, .L21+4
+ 156              	.LBE34:
+ 157              	.LBE33:
+ 158              	.LBE32:
+ 159              		.loc 1 139 11 view .LVU47
+ 160 0062 5B78     		ldrb	r3, [r3, #1]
+ 161 0064 1E2B     		cmp	r3, #30
+ 162 0066 D9D1     		bne	.L3
+ 163              	.L6:
+ 164              		.loc 1 139 11 view .LVU48
+ 165              	.LBE38:
+ 166              	.LBE43:
+  65:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 167              		.loc 1 65 8 is_stmt 1 view .LVU49
+ 168 0068 FFF7FEFF 		bl	BMMOD_startModule
+ 169              	.LVL14:
+ 170 006c D6E7     		b	.L3
+ 171              	.L5:
+ 172              	.LBB44:
+ 173              	.LBB39:
+ 130:common/prog/firmware_update/BootManager/BootManager.c ****         if(!FWU_isIntegCheckDisabledCalc() && !FWU_isIntegCheckErrorIgnored())
+ 174              		.loc 1 130 9 view .LVU50
+ 175 006e 2020     		movs	r0, #32
+ 176 0070 FFF7FEFF 		bl	BMDAT_setErrorFlag
+ 177              	.LVL15:
+ 131:common/prog/firmware_update/BootManager/BootManager.c ****         {
+ 178              		.loc 1 131 9 view .LVU51
+ 179              	.LBB35:
+ 180              	.LBI35:
+ 115:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 181              		.loc 2 115 20 view .LVU52
+ 118:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #else // WIRED_FIRMWARE_UPDATE
+ 182              		.loc 2 118 5 view .LVU53
+ 183              	.LBB36:
+ 184              	.LBI36:
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 185              		.loc 2 86 40 view .LVU54
+ 186              	.LBB37:
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccvY07dl.s 			page 10
+
+
+ 187              		.loc 2 88 5 view .LVU55
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 188              		.loc 2 88 27 is_stmt 0 view .LVU56
+ 189 0074 054B     		ldr	r3, .L21+4
+ 190 0076 1B78     		ldrb	r3, [r3]
+ 191              	.LBE37:
+ 192              	.LBE36:
+ 193              	.LBE35:
+ 131:common/prog/firmware_update/BootManager/BootManager.c ****         {
+ 194              		.loc 1 131 11 view .LVU57
+ 195 0078 DC2B     		cmp	r3, #220
+ 196 007a EAD0     		beq	.L8
+ 131:common/prog/firmware_update/BootManager/BootManager.c ****         {
+ 197              		.loc 1 131 44 view .LVU58
+ 198 007c 1E2B     		cmp	r3, #30
+ 199 007e E8D0     		beq	.L8
+ 200 0080 CCE7     		b	.L3
+ 201              	.L11:
+ 131:common/prog/firmware_update/BootManager/BootManager.c ****         {
+ 202              		.loc 1 131 44 view .LVU59
+ 203              	.LBE39:
+ 204              	.LBE44:
+ 205              	.LBB45:
+ 206              	.LBB42:
+ 102:common/prog/firmware_update/BootManager/BootManager.c ****     }
+ 207              		.loc 1 102 9 is_stmt 1 view .LVU60
+ 208 0082 8820     		movs	r0, #136
+ 209 0084 8001     		lsls	r0, r0, #6
+ 210 0086 D5E7     		b	.L20
+ 211              	.L22:
+ 212              		.align	2
+ 213              	.L21:
+ 214 0088 10550000 		.word	21776
+ 215 008c 00000000 		.word	MAL_FwuOptBytes
+ 216              	.LBE42:
+ 217              	.LBE45:
+ 218              		.cfi_endproc
+ 219              	.LFE66:
+ 221              		.text
+ 222              	.Letext0:
+ 223              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 224              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 225              		.file 5 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 226              		.file 6 "common/prog/firmware_update/BootManager/BootManagerSharedData.h"
+ 227              		.file 7 "common/prog/firmware_update/BootManager/BootManagerModule.h"
+ 228              		.file 8 "common/prog/MSP/hsup.h"
+ 229              		.file 9 "common/prog/ped_fw/basic/basic.h"

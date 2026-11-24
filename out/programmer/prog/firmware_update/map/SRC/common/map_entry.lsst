@@ -1,0 +1,232 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccKBzzp0.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"map_entry.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MAP_ProcessMessage,"ax",%progbits
+  18              		.align	1
+  19              		.global	MAP_ProcessMessage
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MAP_ProcessMessage:
+  25              	.LVL0:
+  26              	.LFB0:
+  27              		.file 1 "common/prog/firmware_update/map/SRC/common/map_entry.c"
+   1:common/prog/firmware_update/map/SRC/common/map_entry.c **** /*******************************************************************************
+   2:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/map/SRC/common/map_entry.c **** *
+   5:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   are protected by international copyright laws.
+   7:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/map/SRC/common/map_entry.c **** *
+   9:common/prog/firmware_update/map/SRC/common/map_entry.c **** ********************************************************************************
+  10:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   PROJECT          FWU
+  11:common/prog/firmware_update/map/SRC/common/map_entry.c **** *   COMP_ABBREV      MAP
+  12:common/prog/firmware_update/map/SRC/common/map_entry.c **** *******************************************************************************/
+  13:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  14:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  15:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  16:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  18:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  19:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  20:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  21:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  22:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* INCLUDES                                                                   */
+  23:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  24:common/prog/firmware_update/map/SRC/common/map_entry.c **** #include "bsh_stdinc.h"
+  25:common/prog/firmware_update/map/SRC/common/map_entry.c **** #include "map_entry.h"
+  26:common/prog/firmware_update/map/SRC/common/map_entry.c **** #include "map_cmd.h"
+  27:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  28:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  29:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* PRIVATE DEFINITIONS                                                        */
+  30:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  31:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccKBzzp0.s 			page 2
+
+
+  32:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  33:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  34:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  35:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  36:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  37:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  38:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  39:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  40:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  41:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  42:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  43:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  44:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  45:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  46:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  47:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  48:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  49:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  50:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  51:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  52:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  53:common/prog/firmware_update/map/SRC/common/map_entry.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  54:common/prog/firmware_update/map/SRC/common/map_entry.c **** /******************************************************************************/
+  55:common/prog/firmware_update/map/SRC/common/map_entry.c **** 
+  56:common/prog/firmware_update/map/SRC/common/map_entry.c **** void MAP_ProcessMessage(const void *const rxData, uint16_t maxRxLen, uint16_t rxLen, void *const tx
+  57:common/prog/firmware_update/map/SRC/common/map_entry.c **** {
+  28              		.loc 1 57 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 8, pretend = 0, frame = 32
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  58:common/prog/firmware_update/map/SRC/common/map_entry.c ****      if(rxLen<(uint8_t)sizeof(struct MAP_ReqHeader))
+  32              		.loc 1 58 6 view .LVU1
+  57:common/prog/firmware_update/map/SRC/common/map_entry.c ****      if(rxLen<(uint8_t)sizeof(struct MAP_ReqHeader))
+  33              		.loc 1 57 1 is_stmt 0 view .LVU2
+  34 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 20
+  37              		.cfi_offset 4, -20
+  38              		.cfi_offset 5, -16
+  39              		.cfi_offset 6, -12
+  40              		.cfi_offset 7, -8
+  41              		.cfi_offset 14, -4
+  42 0002 8BB0     		sub	sp, sp, #44
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 64
+  57:common/prog/firmware_update/map/SRC/common/map_entry.c ****      if(rxLen<(uint8_t)sizeof(struct MAP_ReqHeader))
+  45              		.loc 1 57 1 view .LVU3
+  46 0004 0393     		str	r3, [sp, #12]
+  47 0006 10AB     		add	r3, sp, #64
+  48              	.LVL1:
+  57:common/prog/firmware_update/map/SRC/common/map_entry.c ****      if(rxLen<(uint8_t)sizeof(struct MAP_ReqHeader))
+  49              		.loc 1 57 1 view .LVU4
+  50 0008 0400     		movs	r4, r0
+  51 000a 1500     		movs	r5, r2
+  52 000c 1E88     		ldrh	r6, [r3]
+  53 000e 0291     		str	r1, [sp, #8]
+  54              		.loc 1 58 8 view .LVU5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccKBzzp0.s 			page 3
+
+
+  55 0010 012A     		cmp	r2, #1
+  56 0012 04D8     		bhi	.L2
+  57              	.L4:
+  59:common/prog/firmware_update/map/SRC/common/map_entry.c ****     {
+  60:common/prog/firmware_update/map/SRC/common/map_entry.c ****         *txLen=0U;/*Not enough data, to form shortest possibble MAP frame (only header).*/
+  58              		.loc 1 60 9 is_stmt 1 view .LVU6
+  59              		.loc 1 60 15 is_stmt 0 view .LVU7
+  60 0014 0023     		movs	r3, #0
+  61              	.LVL2:
+  62              		.loc 1 60 15 view .LVU8
+  63 0016 119A     		ldr	r2, [sp, #68]
+  64              	.LVL3:
+  65              		.loc 1 60 15 view .LVU9
+  66 0018 1380     		strh	r3, [r2]
+  67              	.LVL4:
+  68              	.L1:
+  61:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+  62:common/prog/firmware_update/map/SRC/common/map_entry.c ****     else if(maxTxLen<(uint8_t)sizeof(struct MAP_RespHeader))
+  63:common/prog/firmware_update/map/SRC/common/map_entry.c ****     {
+  64:common/prog/firmware_update/map/SRC/common/map_entry.c ****         *txLen=0U;/*Not enough tx buffer, to send shortest possible response (only header).*/
+  65:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+  66:common/prog/firmware_update/map/SRC/common/map_entry.c ****     else
+  67:common/prog/firmware_update/map/SRC/common/map_entry.c ****     {   /*Axivion Next Line MisraC2012-11.5: Tested to work correctly on all platforms */
+  68:common/prog/firmware_update/map/SRC/common/map_entry.c ****         const struct MAP_ReqHeader *req=(const struct MAP_ReqHeader*)rxData;
+  69:common/prog/firmware_update/map/SRC/common/map_entry.c ****         MAP_CMD_Func_t MAP_CMD_callbackFunction=MAP_CMD_GetCmdExecFunc(req->id);
+  70:common/prog/firmware_update/map/SRC/common/map_entry.c ****         struct MAP_Arguments arguments=
+  71:common/prog/firmware_update/map/SRC/common/map_entry.c ****         {
+  72:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .rxData=rxData,
+  73:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .rxLen=rxLen,
+  74:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .txData=txData,
+  75:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .txLen=txLen,
+  76:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .maxRxPayload=maxRxLen,
+  77:common/prog/firmware_update/map/SRC/common/map_entry.c ****             .maxTxPayload=maxTxLen
+  78:common/prog/firmware_update/map/SRC/common/map_entry.c ****         };
+  79:common/prog/firmware_update/map/SRC/common/map_entry.c ****         MAP_CMD_callbackFunction(arguments);
+  80:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+  81:common/prog/firmware_update/map/SRC/common/map_entry.c **** }
+  69              		.loc 1 81 1 view .LVU10
+  70 001a 0BB0     		add	sp, sp, #44
+  71              		@ sp needed
+  72              	.LVL5:
+  73              		.loc 1 81 1 view .LVU11
+  74 001c F0BD     		pop	{r4, r5, r6, r7, pc}
+  75              	.LVL6:
+  76              	.L2:
+  62:common/prog/firmware_update/map/SRC/common/map_entry.c ****     {
+  77              		.loc 1 62 10 is_stmt 1 view .LVU12
+  62:common/prog/firmware_update/map/SRC/common/map_entry.c ****     {
+  78              		.loc 1 62 12 is_stmt 0 view .LVU13
+  79 001e 022E     		cmp	r6, #2
+  80 0020 F8D9     		bls	.L4
+  81              	.LBB2:
+  68:common/prog/firmware_update/map/SRC/common/map_entry.c ****         MAP_CMD_Func_t MAP_CMD_callbackFunction=MAP_CMD_GetCmdExecFunc(req->id);
+  82              		.loc 1 68 9 is_stmt 1 view .LVU14
+  83              	.LVL7:
+  69:common/prog/firmware_update/map/SRC/common/map_entry.c ****         struct MAP_Arguments arguments=
+  84              		.loc 1 69 9 view .LVU15
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccKBzzp0.s 			page 4
+
+
+  69:common/prog/firmware_update/map/SRC/common/map_entry.c ****         struct MAP_Arguments arguments=
+  85              		.loc 1 69 49 is_stmt 0 view .LVU16
+  86 0022 0078     		ldrb	r0, [r0]
+  87              	.LVL8:
+  69:common/prog/firmware_update/map/SRC/common/map_entry.c ****         struct MAP_Arguments arguments=
+  88              		.loc 1 69 49 view .LVU17
+  89 0024 FFF7FEFF 		bl	MAP_CMD_GetCmdExecFunc
+  90              	.LVL9:
+  70:common/prog/firmware_update/map/SRC/common/map_entry.c ****         {
+  91              		.loc 1 70 30 view .LVU18
+  92 0028 029A     		ldr	r2, [sp, #8]
+  93 002a 05AB     		add	r3, sp, #20
+  94 002c 5E82     		strh	r6, [r3, #18]
+  95 002e 1A82     		strh	r2, [r3, #16]
+  79:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+  96              		.loc 1 79 9 view .LVU19
+  97 0030 099A     		ldr	r2, [sp, #36]
+  70:common/prog/firmware_update/map/SRC/common/map_entry.c ****         {
+  98              		.loc 1 70 30 view .LVU20
+  99 0032 9D80     		strh	r5, [r3, #4]
+  69:common/prog/firmware_update/map/SRC/common/map_entry.c ****         struct MAP_Arguments arguments=
+ 100              		.loc 1 69 49 view .LVU21
+ 101 0034 0700     		movs	r7, r0
+ 102              	.LVL10:
+  70:common/prog/firmware_update/map/SRC/common/map_entry.c ****         {
+ 103              		.loc 1 70 9 is_stmt 1 view .LVU22
+  79:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+ 104              		.loc 1 79 9 view .LVU23
+ 105 0036 0092     		str	r2, [sp]
+ 106 0038 2000     		movs	r0, r4
+ 107              	.LVL11:
+  79:common/prog/firmware_update/map/SRC/common/map_entry.c ****     }
+ 108              		.loc 1 79 9 is_stmt 0 view .LVU24
+ 109 003a 0699     		ldr	r1, [sp, #24]
+ 110 003c 039A     		ldr	r2, [sp, #12]
+ 111 003e 119B     		ldr	r3, [sp, #68]
+ 112 0040 B847     		blx	r7
+ 113              	.LVL12:
+ 114              	.LBE2:
+ 115              		.loc 1 81 1 view .LVU25
+ 116 0042 EAE7     		b	.L1
+ 117              		.cfi_endproc
+ 118              	.LFE0:
+ 120              		.text
+ 121              	.Letext0:
+ 122              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 123              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 124              		.file 4 "common/prog/firmware_update/map/SRC/common/map_cmd_types.h"
+ 125              		.file 5 "common/prog/firmware_update/map/SRC/common/map_cmd.h"

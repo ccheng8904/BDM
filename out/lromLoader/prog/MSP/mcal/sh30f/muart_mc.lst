@@ -1,0 +1,637 @@
+
+out/lromLoader/prog/MSP/mcal/sh30f/muart_mc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MUART_configurePeriphDataBits:
+
+00000000 <MUART_configurePeriphDataBits>:
+/******************************************************************************/
+
+
+void MUART_configurePeriphDataBits(const struct MUART_Periph *muart, enum MUART_DataBits dataBits)
+{
+    uint32_t tmp =  muart->USARTx->CR.V32 & ~UART_CR_SM_Msk;
+   0:	6802      	ldr	r2, [r0, #0]
+   2:	4809      	ldr	r0, [pc, #36]	; (28 <MUART_configurePeriphDataBits+0x28>)
+   4:	6993      	ldr	r3, [r2, #24]
+   6:	4003      	ands	r3, r0
+
+    if(dataBits == MUART_DATA_BITS_8)
+   8:	2901      	cmp	r1, #1
+   a:	d109      	bne.n	20 <MUART_configurePeriphDataBits+0x20>
+     return ((muart->USARTx->CR.V32 & UART_CR_PARITY_ENABLED) != 0U);
+   c:	6991      	ldr	r1, [r2, #24]
+    {
+        if(MUART_isParityEnabled(muart))
+   e:	04c9      	lsls	r1, r1, #19
+  10:	d502      	bpl.n	18 <MUART_configurePeriphDataBits+0x18>
+        }
+    }
+    else if(dataBits == MUART_DATA_BITS_9)
+    {
+        // standart 9-bit mode
+        tmp |= UART_Mode_3; 
+  12:	21c0      	movs	r1, #192	; 0xc0
+  14:	01c9      	lsls	r1, r1, #7
+  16:	e001      	b.n	1c <MUART_configurePeriphDataBits+0x1c>
+            tmp |= UART_Mode_1; 
+  18:	2180      	movs	r1, #128	; 0x80
+  1a:	0189      	lsls	r1, r1, #6
+        tmp |= UART_Mode_3; 
+  1c:	430b      	orrs	r3, r1
+  1e:	e001      	b.n	24 <MUART_configurePeriphDataBits+0x24>
+    else if(dataBits == MUART_DATA_BITS_9)
+  20:	2902      	cmp	r1, #2
+  22:	d0f6      	beq.n	12 <MUART_configurePeriphDataBits+0x12>
+    else
+    {
+        // assert
+    }
+
+    muart->USARTx->CR.V32 =  tmp;
+  24:	6193      	str	r3, [r2, #24]
+}
+  26:	4770      	bx	lr
+  28:	ffff9fff 	.word	0xffff9fff
+
+Disassembly of section .text.MUART_configurePeriphStopBits:
+
+00000000 <MUART_configurePeriphStopBits>:
+
+
+void MUART_configurePeriphStopBits(const struct MUART_Periph *muart, enum MUART_StopBits stopBits)
+{
+    uint32_t tmp = muart->USARTx->CR.V32;
+   0:	6802      	ldr	r2, [r0, #0]
+   2:	6993      	ldr	r3, [r2, #24]
+
+    if(stopBits == MUART_STOP_BITS_1)
+   4:	2901      	cmp	r1, #1
+   6:	d102      	bne.n	e <MUART_configurePeriphStopBits+0xe>
+    {
+        // clean flag for one bit stop
+        tmp &= ~UART_CR_STOP_Msk;
+   8:	438b      	bics	r3, r1
+    else
+    {
+        // assert, invalid option(MUART_STOP_BITS_0_5,MUART_STOP_BITS_1_5)
+    }
+
+    muart->USARTx->CR.V32 = tmp;
+   a:	6193      	str	r3, [r2, #24]
+}
+   c:	4770      	bx	lr
+    else if(stopBits == MUART_STOP_BITS_2)
+   e:	2903      	cmp	r1, #3
+  10:	d1fb      	bne.n	a <MUART_configurePeriphStopBits+0xa>
+        tmp |= UART_CR_STOP_2bits;
+  12:	3902      	subs	r1, #2
+  14:	430b      	orrs	r3, r1
+  16:	e7f8      	b.n	a <MUART_configurePeriphStopBits+0xa>
+
+Disassembly of section .text.MUART_configurePeriphParity:
+
+00000000 <MUART_configurePeriphParity>:
+
+
+void MUART_configurePeriphParity(const struct MUART_Periph *muart, enum MUART_Parity parity)
+{
+    // Clear Parity bits
+    uint32_t tmp = muart->USARTx->CR.V32 & ~(UART_CR_PS_Msk | UART_CR_MULTIE_Msk);
+   0:	6802      	ldr	r2, [r0, #0]
+   2:	4808      	ldr	r0, [pc, #32]	; (24 <MUART_configurePeriphParity+0x24>)
+   4:	6993      	ldr	r3, [r2, #24]
+   6:	4003      	ands	r3, r0
+    
+    /* NOTE: Parity can be enabled only for 9-bit mode (8bit data + 1 bit parity)
+    */
+
+    if(parity == MUART_PARITY_NONE)
+   8:	2900      	cmp	r1, #0
+   a:	d004      	beq.n	16 <MUART_configurePeriphParity+0x16>
+    {
+        // Nothing to do for this settings
+    }
+    else if(parity == MUART_PARITY_EVEN)
+   c:	2902      	cmp	r1, #2
+   e:	d104      	bne.n	1a <MUART_configurePeriphParity+0x1a>
+    {
+        // NOTE: available only in 9-bit mode!
+        tmp |= UART_Parity_Even;
+  10:	21a0      	movs	r1, #160	; 0xa0
+    }
+    else if(parity == MUART_PARITY_ODD)
+    {
+        // NOTE: available only in 9-bit mode!
+        tmp |= UART_Parity_Odd;
+  12:	0149      	lsls	r1, r1, #5
+  14:	430b      	orrs	r3, r1
+    else
+    {
+        // assert
+    }
+
+    muart->USARTx->CR.V32 = tmp;
+  16:	6193      	str	r3, [r2, #24]
+}
+  18:	4770      	bx	lr
+    else if(parity == MUART_PARITY_ODD)
+  1a:	2901      	cmp	r1, #1
+  1c:	d1fb      	bne.n	16 <MUART_configurePeriphParity+0x16>
+        tmp |= UART_Parity_Odd;
+  1e:	2180      	movs	r1, #128	; 0x80
+  20:	e7f7      	b.n	12 <MUART_configurePeriphParity+0x12>
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	ffffe3ff 	.word	0xffffe3ff
+
+Disassembly of section .text.MUART_configurePeriphBaudrate:
+
+00000000 <MUART_configurePeriphBaudrate>:
+{
+    uint32_t clkHz;
+    uint32_t intdiv;
+    uint32_t fradiv;
+    
+    muart->USARTx->CR.V32 |= UART_CR_SBRTEN_Msk;        // enable UART baudrate generator
+   0:	2302      	movs	r3, #2
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+    muart->USARTx->CR.V32 |= UART_CR_SBRTEN_Msk;        // enable UART baudrate generator
+   4:	6804      	ldr	r4, [r0, #0]
+  #endif
+    /* Info 774: boolean condition for 'if' always evaluates to 'true' (involving variable 'clkHz') [MISRA 2012 Rule 14.3, advisory] */
+    if(clkHz > 0U)//lint !e774 : intended to prevent additional compiler switches
+    {
+        
+        intdiv = ((clkHz / 16U) / baudrate) - 1U;
+   6:	480a      	ldr	r0, [pc, #40]	; (30 <MUART_configurePeriphBaudrate+0x30>)
+    muart->USARTx->CR.V32 |= UART_CR_SBRTEN_Msk;        // enable UART baudrate generator
+   8:	69a2      	ldr	r2, [r4, #24]
+{
+   a:	000e      	movs	r6, r1
+    muart->USARTx->CR.V32 |= UART_CR_SBRTEN_Msk;        // enable UART baudrate generator
+   c:	4313      	orrs	r3, r2
+   e:	61a3      	str	r3, [r4, #24]
+        intdiv = ((clkHz / 16U) / baudrate) - 1U;
+  10:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+        fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+  14:	0031      	movs	r1, r6
+        intdiv = ((clkHz / 16U) / baudrate) - 1U;
+  16:	0005      	movs	r5, r0
+        fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+  18:	4806      	ldr	r0, [pc, #24]	; (34 <MUART_configurePeriphBaudrate+0x34>)
+  1a:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+  1e:	012b      	lsls	r3, r5, #4
+  20:	1ac0      	subs	r0, r0, r3
+        intdiv = ((clkHz / 16U) / baudrate) - 1U;
+  22:	3d01      	subs	r5, #1
+        muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 16)));
+  24:	4b04      	ldr	r3, [pc, #16]	; (38 <MUART_configurePeriphBaudrate+0x38>)
+  26:	0400      	lsls	r0, r0, #16
+  28:	4328      	orrs	r0, r5
+  2a:	4018      	ands	r0, r3
+  2c:	6160      	str	r0, [r4, #20]
+    }
+    else
+    {
+        // assert
+    }
+}
+  2e:	bd70      	pop	{r4, r5, r6, pc}
+  30:	0016e360 	.word	0x0016e360
+  34:	016e3600 	.word	0x016e3600
+  38:	000f7fff 	.word	0x000f7fff
+
+Disassembly of section .text.MUART_enableClock:
+
+00000000 <MUART_enableClock>:
+
+
+void MUART_enableClock(const struct MUART_Periph *muart)
+{
+    // unlock RCC registers
+    RCC_REGS_UNLOCK();
+   0:	4a05      	ldr	r2, [pc, #20]	; (18 <MUART_enableClock+0x18>)
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <MUART_enableClock+0x1c>)
+ *  \param regBitField structure containing register pointer and bitfield mask
+ *  \return none
+ */
+static inline void MSUP_setRegBitField32(const struct MSUP_RegBitField32 *regBitField)
+{
+    MSUP_setReg32(regBitField->regPtr, regBitField->bitFieldMask);
+   4:	6881      	ldr	r1, [r0, #8]
+   6:	6353      	str	r3, [r2, #52]	; 0x34
+    *reg |= mask;
+   8:	680b      	ldr	r3, [r1, #0]
+   a:	68c0      	ldr	r0, [r0, #12]
+   c:	4303      	orrs	r3, r0
+   e:	600b      	str	r3, [r1, #0]
+    
+    MSUP_setRegBitField32(&muart->clockCfg.RcuEnr);
+    
+    // Lock RCC registers
+    RCC_REGS_LOCK();
+  10:	2300      	movs	r3, #0
+  12:	6353      	str	r3, [r2, #52]	; 0x34
+}
+  14:	4770      	bx	lr
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	40040800 	.word	0x40040800
+  1c:	000033cc 	.word	0x000033cc
+
+Disassembly of section .text.MUART_disableClock:
+
+00000000 <MUART_disableClock>:
+
+
+void MUART_disableClock(const struct MUART_Periph *muart)
+{
+    // unlock RCC registers
+    RCC_REGS_UNLOCK();
+   0:	4a05      	ldr	r2, [pc, #20]	; (18 <MUART_disableClock+0x18>)
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <MUART_disableClock+0x1c>)
+    MSUP_clearReg32(regBitField->regPtr, regBitField->bitFieldMask);
+   4:	6881      	ldr	r1, [r0, #8]
+   6:	6353      	str	r3, [r2, #52]	; 0x34
+    *reg &= ~mask;
+   8:	680b      	ldr	r3, [r1, #0]
+   a:	68c0      	ldr	r0, [r0, #12]
+   c:	4383      	bics	r3, r0
+   e:	600b      	str	r3, [r1, #0]
+    
+    MSUP_clearRegBitField32(&muart->clockCfg.RcuEnr);
+    
+    // Lock RCC registers
+    RCC_REGS_LOCK();
+  10:	2300      	movs	r3, #0
+  12:	6353      	str	r3, [r2, #52]	; 0x34
+}
+  14:	4770      	bx	lr
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	40040800 	.word	0x40040800
+  1c:	000033cc 	.word	0x000033cc
+
+Disassembly of section .text.MUART_configure:
+
+00000000 <MUART_configure>:
+
+
+enum MCAL_Error MUART_configure(const struct MUART_Channel *channel, const struct MUART_Config *cfg)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000c      	movs	r4, r1
+    const struct MUART_Periph *muart = channel->muart;
+   4:	6805      	ldr	r5, [r0, #0]
+
+    MUART_enableClock(muart);
+   6:	0028      	movs	r0, r5
+   8:	f7ff fffe 	bl	0 <MUART_configure>
+
+    MUART_configurePeriphBaudrate(muart, cfg->baudrate);
+   c:	0028      	movs	r0, r5
+   e:	6861      	ldr	r1, [r4, #4]
+  10:	f7ff fffe 	bl	0 <MUART_configure>
+    MUART_configurePeriphParity(muart, cfg->parity);
+  14:	0028      	movs	r0, r5
+  16:	7861      	ldrb	r1, [r4, #1]
+  18:	f7ff fffe 	bl	0 <MUART_configure>
+    MUART_configurePeriphDataBits(muart, cfg->dataBits);
+  1c:	0028      	movs	r0, r5
+  1e:	7821      	ldrb	r1, [r4, #0]
+  20:	f7ff fffe 	bl	0 <MUART_configure>
+    MUART_configurePeriphStopBits(muart, cfg->stopBits);
+  24:	0028      	movs	r0, r5
+  26:	78a1      	ldrb	r1, [r4, #2]
+  28:	f7ff fffe 	bl	0 <MUART_configure>
+
+    return MCAL_OK;
+}
+  2c:	2000      	movs	r0, #0
+  2e:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MUART_enableChannel:
+
+00000000 <MUART_enableChannel>:
+}
+
+
+void MUART_enableChannel(const struct MUART_Channel *channel)
+{
+    channel->muart->USARTx->CR.V32 |= (UART_CR_TEN_Msk | UART_CR_REN_Msk);
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	681a      	ldr	r2, [r3, #0]
+   4:	23c0      	movs	r3, #192	; 0xc0
+   6:	6991      	ldr	r1, [r2, #24]
+   8:	02db      	lsls	r3, r3, #11
+   a:	430b      	orrs	r3, r1
+   c:	6193      	str	r3, [r2, #24]
+}
+   e:	4770      	bx	lr
+
+Disassembly of section .text.MUART_disableChannel:
+
+00000000 <MUART_disableChannel>:
+
+
+void MUART_disableChannel(const struct MUART_Channel *channel)
+{
+    channel->muart->USARTx->CR.V32 &= ~(UART_CR_TEN_Msk | UART_CR_REN_Msk);
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	4903      	ldr	r1, [pc, #12]	; (10 <MUART_disableChannel+0x10>)
+   4:	681a      	ldr	r2, [r3, #0]
+   6:	6993      	ldr	r3, [r2, #24]
+   8:	400b      	ands	r3, r1
+   a:	6193      	str	r3, [r2, #24]
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	fff9ffff 	.word	0xfff9ffff
+
+Disassembly of section .text.MUART_configureBaudrate:
+
+00000000 <MUART_configureBaudrate>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+    MUART_disableChannel(channel);
+   6:	f7ff fffe 	bl	0 <MUART_configureBaudrate>
+    MUART_configurePeriphBaudrate(channel->muart, baudrate);
+   a:	0029      	movs	r1, r5
+   c:	6820      	ldr	r0, [r4, #0]
+   e:	f7ff fffe 	bl	0 <MUART_configureBaudrate>
+    MUART_enableChannel(channel);
+  12:	0020      	movs	r0, r4
+  14:	f7ff fffe 	bl	0 <MUART_configureBaudrate>
+}
+  18:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MUART_writeDataReg:
+
+00000000 <MUART_writeDataReg>:
+
+
+void MUART_writeDataReg(const struct MUART_Channel *channel, uint32_t data)
+{
+    channel->muart->USARTx->TDR.V32 = data;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	681b      	ldr	r3, [r3, #0]
+   4:	6099      	str	r1, [r3, #8]
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.MUART_readDataReg:
+
+00000000 <MUART_readDataReg>:
+
+
+uint16_t MUART_readDataReg(const struct MUART_Channel *channel)
+{
+    return (uint16_t)channel->muart->USARTx->RDR.V32;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	681b      	ldr	r3, [r3, #0]
+   4:	68d8      	ldr	r0, [r3, #12]
+   6:	b280      	uxth	r0, r0
+}
+   8:	4770      	bx	lr
+
+Disassembly of section .text.MUART_getStatusReg:
+
+00000000 <MUART_getStatusReg>:
+
+
+uint32_t MUART_getStatusReg(const struct MUART_Channel *channel)
+{
+    return channel->muart->USARTx->FR.V32;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	681b      	ldr	r3, [r3, #0]
+   4:	6818      	ldr	r0, [r3, #0]
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.MUART_clearErrorReg:
+
+00000000 <MUART_clearErrorReg>:
+
+
+void MUART_clearErrorReg(const struct MUART_Channel *channel)
+{
+    channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+   0:	22e0      	movs	r2, #224	; 0xe0
+   2:	6803      	ldr	r3, [r0, #0]
+   4:	03d2      	lsls	r2, r2, #15
+   6:	681b      	ldr	r3, [r3, #0]
+   8:	601a      	str	r2, [r3, #0]
+}
+   a:	4770      	bx	lr
+
+Disassembly of section .text.MUART_getStatusRegMaskForEvent:
+
+00000000 <MUART_getStatusRegMaskForEvent>:
+{
+    (void)*channel;
+
+    if(event == MCAL_EVENT_READ_BYTE)
+    {
+        return UART_FR_RI_Msk;
+   0:	2001      	movs	r0, #1
+    if(event == MCAL_EVENT_READ_BYTE)
+   2:	2910      	cmp	r1, #16
+   4:	d008      	beq.n	18 <MUART_getStatusRegMaskForEvent+0x18>
+    }
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+    {
+        return UART_FR_TI_Msk;
+   6:	1800      	adds	r0, r0, r0
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+   8:	2920      	cmp	r1, #32
+   a:	d005      	beq.n	18 <MUART_getStatusRegMaskForEvent+0x18>
+    }
+    else if(event == MCAL_EVENT_ERROR)
+   c:	2380      	movs	r3, #128	; 0x80
+    {
+        return MUART_ERROR_ANY_READ_MASK;
+   e:	306e      	adds	r0, #110	; 0x6e
+    else if(event == MCAL_EVENT_ERROR)
+  10:	05db      	lsls	r3, r3, #23
+  12:	4299      	cmp	r1, r3
+  14:	d000      	beq.n	18 <MUART_getStatusRegMaskForEvent+0x18>
+    }
+    else
+    {
+        return 0u;
+  16:	2000      	movs	r0, #0
+    }
+}
+  18:	4770      	bx	lr
+
+Disassembly of section .text.MUART_getChannelError:
+
+00000000 <MUART_getChannelError>:
+    return channel->muart->USARTx->FR.V32;
+   0:	6803      	ldr	r3, [r0, #0]
+    enum MCAL_Error error = MCAL_OK;
+    uint32_t status = MUART_getStatusReg(channel);
+
+    if(status & UART_FR_FE_Msk)
+    {
+        error = MCAL_ERROR_FRAMING;
+   2:	200c      	movs	r0, #12
+    return channel->muart->USARTx->FR.V32;
+   4:	681b      	ldr	r3, [r3, #0]
+   6:	681b      	ldr	r3, [r3, #0]
+    if(status & UART_FR_FE_Msk)
+   8:	069a      	lsls	r2, r3, #26
+   a:	d409      	bmi.n	20 <MUART_getChannelError+0x20>
+    }
+    else if(status & UART_FR_PE_Msk)
+   c:	2240      	movs	r2, #64	; 0x40
+   e:	0019      	movs	r1, r3
+    {
+        error = MCAL_ERROR_PARITY;
+  10:	3002      	adds	r0, #2
+    else if(status & UART_FR_PE_Msk)
+  12:	4011      	ands	r1, r2
+  14:	4213      	tst	r3, r2
+  16:	d103      	bne.n	20 <MUART_getChannelError+0x20>
+    enum MCAL_Error error = MCAL_OK;
+  18:	0008      	movs	r0, r1
+    }
+    else if(status & UART_FR_RXOV_Msk)
+  1a:	06db      	lsls	r3, r3, #27
+  1c:	d500      	bpl.n	20 <MUART_getChannelError+0x20>
+    {
+        error = MCAL_ERROR_OVERFLOW;
+  1e:	200d      	movs	r0, #13
+    {
+        /* nothing to do */
+    }
+
+    return error;
+}
+  20:	4770      	bx	lr
+
+Disassembly of section .text.MUART_IRQ_getIndex:
+
+00000000 <MUART_IRQ_getIndex>:
+
+
+enum MUART_IRQ_Index MUART_IRQ_getIndex(const struct MUART_Channel *channel)
+{
+    return channel->muart->index;
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	7918      	ldrb	r0, [r3, #4]
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MUART_IRQ_enable:
+
+00000000 <MUART_IRQ_enable>:
+
+
+void MUART_IRQ_enable(const struct MUART_Channel *channel)
+{
+    NVIC_EnableIRQ(channel->muart->IRQn);
+   0:	6803      	ldr	r3, [r0, #0]
+   2:	795b      	ldrb	r3, [r3, #5]
+   4:	b25b      	sxtb	r3, r3
+  \param [in]      IRQn  Device specific interrupt number.
+  \note    IRQn must not be negative.
+ */
+__STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+   6:	2b00      	cmp	r3, #0
+   8:	db06      	blt.n	18 <MUART_IRQ_enable+0x18>
+  {
+    __COMPILER_BARRIER();
+    NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+   a:	221f      	movs	r2, #31
+   c:	4013      	ands	r3, r2
+   e:	3a1e      	subs	r2, #30
+  10:	409a      	lsls	r2, r3
+  12:	0013      	movs	r3, r2
+  14:	4a01      	ldr	r2, [pc, #4]	; (1c <MUART_IRQ_enable+0x1c>)
+  16:	6013      	str	r3, [r2, #0]
+}
+  18:	4770      	bx	lr
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	e000e100 	.word	0xe000e100
+
+Disassembly of section .text.MUART_IRQ_enableEvent:
+
+00000000 <MUART_IRQ_enableEvent>:
+
+
+void MUART_IRQ_enableEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+{
+    if(event == MCAL_EVENT_READ_BYTE)
+   0:	2910      	cmp	r1, #16
+   2:	d106      	bne.n	12 <MUART_IRQ_enableEvent+0x12>
+    {
+        channel->muart->USARTx->CR.V32 |= UART_CR_RIE_Msk;
+   4:	6803      	ldr	r3, [r0, #0]
+   6:	681a      	ldr	r2, [r3, #0]
+   8:	2308      	movs	r3, #8
+   a:	6991      	ldr	r1, [r2, #24]
+    }
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+    {
+        channel->muart->USARTx->CR.V32 |= UART_CR_TIE_Msk;
+   c:	430b      	orrs	r3, r1
+   e:	6193      	str	r3, [r2, #24]
+    }
+    else
+    {
+        /* Nothing to do */
+    }
+}
+  10:	4770      	bx	lr
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+  12:	2920      	cmp	r1, #32
+  14:	d1fc      	bne.n	10 <MUART_IRQ_enableEvent+0x10>
+        channel->muart->USARTx->CR.V32 |= UART_CR_TIE_Msk;
+  16:	6803      	ldr	r3, [r0, #0]
+  18:	681a      	ldr	r2, [r3, #0]
+  1a:	2310      	movs	r3, #16
+  1c:	6991      	ldr	r1, [r2, #24]
+  1e:	e7f5      	b.n	c <MUART_IRQ_enableEvent+0xc>
+
+Disassembly of section .text.MUART_IRQ_disableEvent:
+
+00000000 <MUART_IRQ_disableEvent>:
+
+
+void MUART_IRQ_disableEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+{
+    if(event == MCAL_EVENT_READ_BYTE)
+   0:	2910      	cmp	r1, #16
+   2:	d106      	bne.n	12 <MUART_IRQ_disableEvent+0x12>
+    {
+        channel->muart->USARTx->CR.V32 &= ~UART_CR_RIE_Msk;
+   4:	6803      	ldr	r3, [r0, #0]
+   6:	3908      	subs	r1, #8
+   8:	681a      	ldr	r2, [r3, #0]
+   a:	6993      	ldr	r3, [r2, #24]
+    }
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+    {
+        channel->muart->USARTx->CR.V32 &= ~UART_CR_TIE_Msk;
+   c:	438b      	bics	r3, r1
+   e:	6193      	str	r3, [r2, #24]
+    }
+    else
+    {
+        /* Nothing to do */
+    }
+}
+  10:	4770      	bx	lr
+    else if(event == MCAL_EVENT_WRITE_BYTE)
+  12:	2920      	cmp	r1, #32
+  14:	d1fc      	bne.n	10 <MUART_IRQ_disableEvent+0x10>
+        channel->muart->USARTx->CR.V32 &= ~UART_CR_TIE_Msk;
+  16:	6803      	ldr	r3, [r0, #0]
+  18:	3910      	subs	r1, #16
+  1a:	681a      	ldr	r2, [r3, #0]
+  1c:	6993      	ldr	r3, [r2, #24]
+  1e:	e7f5      	b.n	c <MUART_IRQ_disableEvent+0xc>

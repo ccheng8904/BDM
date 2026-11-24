@@ -1,0 +1,485 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"balXs.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BAL_vNotifyNonDeliverableMessage,"ax",%progbits
+  18              		.align	1
+  19              		.global	BAL_vNotifyNonDeliverableMessage
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BAL_vNotifyNonDeliverableMessage:
+  25              	.LVL0:
+  26              	.LFB57:
+  27              		.file 1 "common/prog/dbus/cfg_templates/balXs.c"
+   1:common/prog/dbus/cfg_templates/balXs.c **** /*******************************************************************************
+   2:common/prog/dbus/cfg_templates/balXs.c **** *   Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/dbus/cfg_templates/balXs.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/dbus/cfg_templates/balXs.c **** *
+   5:common/prog/dbus/cfg_templates/balXs.c **** *   All rights reserved. This program and the accompanying materials
+   6:common/prog/dbus/cfg_templates/balXs.c **** *   are protected by international copyright laws.
+   7:common/prog/dbus/cfg_templates/balXs.c **** *   Please contact copyright holder for licensing information.
+   8:common/prog/dbus/cfg_templates/balXs.c **** *
+   9:common/prog/dbus/cfg_templates/balXs.c **** ********************************************************************************
+  10:common/prog/dbus/cfg_templates/balXs.c **** *   PROJECT          IC DBUS
+  11:common/prog/dbus/cfg_templates/balXs.c **** *   COMP_ABBREV      BAL
+  12:common/prog/dbus/cfg_templates/balXs.c **** *******************************************************************************/
+  13:common/prog/dbus/cfg_templates/balXs.c **** 
+  14:common/prog/dbus/cfg_templates/balXs.c **** /**************************************************************************************************
+  15:common/prog/dbus/cfg_templates/balXs.c **** /* DOCUMENTATION                                                                                  *
+  16:common/prog/dbus/cfg_templates/balXs.c **** /**************************************************************************************************
+  17:common/prog/dbus/cfg_templates/balXs.c **** 
+  18:common/prog/dbus/cfg_templates/balXs.c ****  /** \file 
+  19:common/prog/dbus/cfg_templates/balXs.c ****  *     Application layer configuration template for the D-Bus-2 and CAN Bus
+  20:common/prog/dbus/cfg_templates/balXs.c ****  *     
+  21:common/prog/dbus/cfg_templates/balXs.c ****  *     This layer handles the message distribution of the system messages. Received messages, which
+  22:common/prog/dbus/cfg_templates/balXs.c ****  *     system messages (differentiation according to the identifier) will be distributed to the
+  23:common/prog/dbus/cfg_templates/balXs.c ****  *     subsystem corresponding to either the subsystem addressed (when addressed subsystem differs 
+  24:common/prog/dbus/cfg_templates/balXs.c ****  *     or to the subsystem, which is indirectly addressed via a service function in the correspondi
+  25:common/prog/dbus/cfg_templates/balXs.c ****  *     table.
+  26:common/prog/dbus/cfg_templates/balXs.c ****  *       \image html bal.gif
+  27:common/prog/dbus/cfg_templates/balXs.c ****  *
+  28:common/prog/dbus/cfg_templates/balXs.c ****  */
+  29:common/prog/dbus/cfg_templates/balXs.c ****  /*     ___________________________________________                    ____________________________
+  30:common/prog/dbus/cfg_templates/balXs.c ****  *     |BusObject Table                           |                   |ReceiveObjectSubsystem Table
+  31:common/prog/dbus/cfg_templates/balXs.c ****  *     |  -uint8_t     Subsystem                  |  -  -  -  -  - >  |  -uint32_t Busidentifier   
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 2
+
+
+  32:common/prog/dbus/cfg_templates/balXs.c ****  *     |  -reference to ReceiveObjectSubsystem    |  -                |  -uint8 DataLength         
+  33:common/prog/dbus/cfg_templates/balXs.c ****  *     |  -reference to TransmitObjectSubsystem   |     -             |  -reference to void Service
+  34:common/prog/dbus/cfg_templates/balXs.c ****  *     |  -reference to NumberOfElementsInTxTable |        -          -----------------------------
+  35:common/prog/dbus/cfg_templates/balXs.c ****  *     |  -reference to MessageToTransmitBits     |           -       _____________________________
+  36:common/prog/dbus/cfg_templates/balXs.c ****  *     -------------------------------------------               - >  |TransmitObjectSubsystem Tabl
+  37:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                    |  -uint32_t Busidentifier   
+  38:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                    |  -uint8 DataLength         
+  39:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                    |  -reference to void Service
+  40:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                    |  -reference to void Complet
+  41:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                    -----------------------------
+  42:common/prog/dbus/cfg_templates/balXs.c ****  *                                                                                                 
+  43:common/prog/dbus/cfg_templates/balXs.c ****  */     
+  44:common/prog/dbus/cfg_templates/balXs.c **** 
+  45:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+  46:common/prog/dbus/cfg_templates/balXs.c **** /* INCLUDES                                                                   */
+  47:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+  48:common/prog/dbus/cfg_templates/balXs.c **** #include "bsh_stdinc.h"
+  49:common/prog/dbus/cfg_templates/balXs.c **** #include <stddef.h>
+  50:common/prog/dbus/cfg_templates/balXs.c **** #include "LibTypes.h"
+  51:common/prog/dbus/cfg_templates/balXs.c **** 
+  52:common/prog/dbus/cfg_templates/balXs.c **** #include "bustypes.h"
+  53:common/prog/dbus/cfg_templates/balXs.c **** #include "bal.h"
+  54:common/prog/dbus/cfg_templates/balXs.c **** #include "utility.h"
+  55:common/prog/dbus/cfg_templates/balXs.c **** #include "dbuspresentation.h"
+  56:common/prog/dbus/cfg_templates/balXs.c **** 
+  57:common/prog/dbus/cfg_templates/balXs.c **** #ifdef DBGX_INCLUDED
+  58:common/prog/dbus/cfg_templates/balXs.c **** #include "debug_extended/dbus/dbgx_msg_lists.h"
+  59:common/prog/dbus/cfg_templates/balXs.c **** #endif
+  60:common/prog/dbus/cfg_templates/balXs.c **** 
+  61:common/prog/dbus/cfg_templates/balXs.c **** #ifdef TENG_INCLUDED 
+  62:common/prog/dbus/cfg_templates/balXs.c **** #include "testengine/teng_msgsrv.h"
+  63:common/prog/dbus/cfg_templates/balXs.c **** #include "testengine/teng_msgsrv_xs.h"
+  64:common/prog/dbus/cfg_templates/balXs.c **** #endif
+  65:common/prog/dbus/cfg_templates/balXs.c **** #include "hsup.h"
+  66:common/prog/dbus/cfg_templates/balXs.c **** 
+  67:common/prog/dbus/cfg_templates/balXs.c **** #ifdef CCSS/*SystemStates service.*/
+  68:common/prog/dbus/cfg_templates/balXs.c **** #include "CCCM_Dbus2PedFwMapping.h"
+  69:common/prog/dbus/cfg_templates/balXs.c **** #endif
+  70:common/prog/dbus/cfg_templates/balXs.c **** #ifdef RTOS
+  71:common/prog/dbus/cfg_templates/balXs.c **** #include "rtos_api.h"
+  72:common/prog/dbus/cfg_templates/balXs.c **** #endif
+  73:common/prog/dbus/cfg_templates/balXs.c **** 
+  74:common/prog/dbus/cfg_templates/balXs.c **** #ifdef DBAL_INCLUDED
+  75:common/prog/dbus/cfg_templates/balXs.c **** #include "dbus/DBal/BshDBus2AppLayer.h"
+  76:common/prog/dbus/cfg_templates/balXs.c **** #include "dbus/DBal/BshDBus2AppLayer_internal.h"
+  77:common/prog/dbus/cfg_templates/balXs.c **** #include "dbus/DBal/DBal_cfg.h"
+  78:common/prog/dbus/cfg_templates/balXs.c **** #endif
+  79:common/prog/dbus/cfg_templates/balXs.c **** 
+  80:common/prog/dbus/cfg_templates/balXs.c **** 
+  81:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+  82:common/prog/dbus/cfg_templates/balXs.c **** /* PRIVATE DEFINITIONS                                                        */
+  83:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+  84:common/prog/dbus/cfg_templates/balXs.c **** 
+  85:common/prog/dbus/cfg_templates/balXs.c **** #if !defined(DBM_DBUSCAN)
+  86:common/prog/dbus/cfg_templates/balXs.c **** /**
+  87:common/prog/dbus/cfg_templates/balXs.c ****  BAL_MAX_TRANSMISSION_RETRIES_AFTER_COLLISION: A message, which is aborted, due to a collision,
+  88:common/prog/dbus/cfg_templates/balXs.c ****  must be repeated in order for any recipient to be able to receive the message correctly.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 3
+
+
+  89:common/prog/dbus/cfg_templates/balXs.c ****  In case a node has a hardware defect in the bus interface, it can be advantageous to define a
+  90:common/prog/dbus/cfg_templates/balXs.c ****  definite amount of retries for a message after an occurred collision. This value should be
+  91:common/prog/dbus/cfg_templates/balXs.c ****  at least as large as the expected maximum amount of succeeding collisions in the system (e.g. 16).
+  92:common/prog/dbus/cfg_templates/balXs.c **** */
+  93:common/prog/dbus/cfg_templates/balXs.c **** #define BAL_MAX_TRANSMISSION_RETRIES_AFTER_COLLISION    16
+  94:common/prog/dbus/cfg_templates/balXs.c **** 
+  95:common/prog/dbus/cfg_templates/balXs.c **** /**
+  96:common/prog/dbus/cfg_templates/balXs.c ****  BAL_MAX_TRANSMISSION_RETRIES_AFTER_MISSING_ACKNOWLEDGE: A message, which cannot be received on fir
+  97:common/prog/dbus/cfg_templates/balXs.c ****  (e.g. while the addressed node is not present, or broken), will be retried this many times,
+  98:common/prog/dbus/cfg_templates/balXs.c ****  before the corresponding transmit flag is reset.
+  99:common/prog/dbus/cfg_templates/balXs.c **** */
+ 100:common/prog/dbus/cfg_templates/balXs.c **** #define BAL_MAX_TRANSMISSION_RETRIES_AFTER_MISSING_ACKNOWLEDGE    4
+ 101:common/prog/dbus/cfg_templates/balXs.c **** 
+ 102:common/prog/dbus/cfg_templates/balXs.c **** /**
+ 103:common/prog/dbus/cfg_templates/balXs.c ****  BAL_MAX_TRANSMISSION_RETRIES_AFTER_NEGATIVE_ACKNOWLEDGE: A message, which is not correctly receive
+ 104:common/prog/dbus/cfg_templates/balXs.c ****  by the receiving node, will be retried this many times, before the corresponding transmit flag is 
+ 105:common/prog/dbus/cfg_templates/balXs.c **** */
+ 106:common/prog/dbus/cfg_templates/balXs.c **** #define BAL_MAX_TRANSMISSION_RETRIES_AFTER_NEGATIVE_ACKNOWLEDGE    2
+ 107:common/prog/dbus/cfg_templates/balXs.c **** #endif //!DBM_DBUSCAN
+ 108:common/prog/dbus/cfg_templates/balXs.c **** 
+ 109:common/prog/dbus/cfg_templates/balXs.c **** #define NO_TX_TABLE  ((const TbusTransmitObject *)(NULL))            //!<zero pointer with type Tbu
+ 110:common/prog/dbus/cfg_templates/balXs.c **** #ifdef GSW_INCLUDE_ONLY_MANDATORY_MESSAGES
+ 111:common/prog/dbus/cfg_templates/balXs.c ****         #define REC_SERVICE_MSG_TABLE ((const TbusReceiveObject *) DBPL_tReceiveMandatoryServiceMes
+ 112:common/prog/dbus/cfg_templates/balXs.c **** #else
+ 113:common/prog/dbus/cfg_templates/balXs.c ****      #ifdef GSW_INCLUDE_16_BIT_OPTIONAL_MESSAGES
+ 114:common/prog/dbus/cfg_templates/balXs.c ****         #define REC_SERVICE_MSG_TABLE ((const TbusReceiveObject *) DBPL_tReceiveAll16BitServiceMess
+ 115:common/prog/dbus/cfg_templates/balXs.c ****      #else
+ 116:common/prog/dbus/cfg_templates/balXs.c ****         #if defined (DBUS2_UPDATE)
+ 117:common/prog/dbus/cfg_templates/balXs.c ****             #define REC_SERVICE_MSG_TABLE ((const TbusReceiveObject *) DBPL_tReceiveAllServiceMessa
+ 118:common/prog/dbus/cfg_templates/balXs.c ****         #elif defined (DBUS2_UPDATE_HSI)
+ 119:common/prog/dbus/cfg_templates/balXs.c ****             #define REC_SERVICE_MSG_TABLE ((const TbusReceiveObject *) DBPL_tReceiveAllServiceMessa
+ 120:common/prog/dbus/cfg_templates/balXs.c ****         #else
+ 121:common/prog/dbus/cfg_templates/balXs.c ****             #define REC_SERVICE_MSG_TABLE ((const TbusReceiveObject *) DBPL_tReceiveAllServiceMessa
+ 122:common/prog/dbus/cfg_templates/balXs.c ****         #endif
+ 123:common/prog/dbus/cfg_templates/balXs.c ****      #endif
+ 124:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 125:common/prog/dbus/cfg_templates/balXs.c **** 
+ 126:common/prog/dbus/cfg_templates/balXs.c **** 
+ 127:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+ 128:common/prog/dbus/cfg_templates/balXs.c **** /* DATA DEFINITIONS                                                           */
+ 129:common/prog/dbus/cfg_templates/balXs.c **** /******************************************************************************/
+ 130:common/prog/dbus/cfg_templates/balXs.c **** 
+ 131:common/prog/dbus/cfg_templates/balXs.c **** #ifdef RTOS
+ 132:common/prog/dbus/cfg_templates/balXs.c ****     static char BAL_cMutexName[4] = "BAL";
+ 133:common/prog/dbus/cfg_templates/balXs.c ****     RTOS_MUTEX mutex_BAL =
+ 134:common/prog/dbus/cfg_templates/balXs.c ****     {
+ 135:common/prog/dbus/cfg_templates/balXs.c ****         .mutex_name = BAL_cMutexName,
+ 136:common/prog/dbus/cfg_templates/balXs.c ****         .priority_inheritance = true,
+ 137:common/prog/dbus/cfg_templates/balXs.c ****     };
+ 138:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 139:common/prog/dbus/cfg_templates/balXs.c **** 
+ 140:common/prog/dbus/cfg_templates/balXs.c **** 
+ 141:common/prog/dbus/cfg_templates/balXs.c **** static uint8_t BAL_ucEmptyTxTable = 0u;                 //!< Constant 0, used in BAL_tBusObject
+ 142:common/prog/dbus/cfg_templates/balXs.c **** /* Conversion between object pointer and void pointer [const void*->const _TBusReceiveObject*] Misr
+ 143:common/prog/dbus/cfg_templates/balXs.c **** /*lint -save -e929 : The cast of object pointer and void pointer is no dangerous here and tested to
+ 144:common/prog/dbus/cfg_templates/balXs.c **** const TbusObjectTable BAL_tBusObject[] = {
+ 145:common/prog/dbus/cfg_templates/balXs.c **** #ifndef VARIANT_PROGRAMMER /*If you want to send messages from subsystem 0 by BAL_vTransmitMessage,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 4
+
+
+ 146:common/prog/dbus/cfg_templates/balXs.c ****                                                    /*Include your own tx table for subsystem 0 exac
+ 147:common/prog/dbus/cfg_templates/balXs.c ****  {BAL_SERVICE_SUBSYSTEM_ID, REC_SERVICE_MSG_TABLE, NO_TX_TABLE,  &BAL_ucEmptyTxTable,   &BAL_ucEmpt
+ 148:common/prog/dbus/cfg_templates/balXs.c **** #else /*Do NOT modify entry below this comment, but entry ABOVE, if you want to send messages from 
+ 149:common/prog/dbus/cfg_templates/balXs.c ****  {BAL_SERVICE_SUBSYSTEM_ID, REC_SERVICE_MSG_TABLE, NO_TX_TABLE,  &BAL_ucEmptyTxTable,   &BAL_ucEmpt
+ 150:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 151:common/prog/dbus/cfg_templates/balXs.c ****  /* Example: {0x1, (const TbusReceiveObject *) BAL_tReceiveObject_Subsystem_A, (const TbusTransmitO
+ 152:common/prog/dbus/cfg_templates/balXs.c **** #ifdef CCSS
+ 153:common/prog/dbus/cfg_templates/balXs.c ****  ,{CCCMTD_SUBSYS, (const void *)CCCMTD_RxObject, (const void *)CCCMTD_TxObject, &CCCMTD_NumberOfTxO
+ 154:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 155:common/prog/dbus/cfg_templates/balXs.c **** #ifdef DBGX_INCLUDED
+ 156:common/prog/dbus/cfg_templates/balXs.c ****  /* debug_extended DBus message subsystem */
+ 157:common/prog/dbus/cfg_templates/balXs.c ****  ,{DBGX_SUBSYSTEM_ID, DBGX_tReceiveObject, DBGX_tTransmitObject, &DBGX_numberOfElementsInSubsystem,
+ 158:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 159:common/prog/dbus/cfg_templates/balXs.c **** #ifdef TENG_INCLUDED
+ 160:common/prog/dbus/cfg_templates/balXs.c ****    TENG_BAL_BUSOBJ_ENTRY
+ 161:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 162:common/prog/dbus/cfg_templates/balXs.c **** #ifdef DBAL_INCLUDED
+ 163:common/prog/dbus/cfg_templates/balXs.c **** ,{DBAL_DBUS_HANDLER_SUBSYSTEM, (const void *) DBAL_DBUS_Handler_RxObject, (const void *) DBAL_DBUS_
+ 164:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 165:common/prog/dbus/cfg_templates/balXs.c **** };
+ 166:common/prog/dbus/cfg_templates/balXs.c **** /*lint -restore -e929 */
+ 167:common/prog/dbus/cfg_templates/balXs.c **** 
+ 168:common/prog/dbus/cfg_templates/balXs.c **** const uint8_t BAL_ucNumberOfSubsystems = (uint8_t)UTI_NELEMENTS(BAL_tBusObject); //!< A constant te
+ 169:common/prog/dbus/cfg_templates/balXs.c **** #if !defined(DBM_DBUSCAN)
+ 170:common/prog/dbus/cfg_templates/balXs.c **** const uint8_t BAL_ucMaxCollisionRetries  = BAL_MAX_TRANSMISSION_RETRIES_AFTER_COLLISION; //!<A cons
+ 171:common/prog/dbus/cfg_templates/balXs.c **** const uint8_t BAL_ucMaxMissingAckRetries = BAL_MAX_TRANSMISSION_RETRIES_AFTER_MISSING_ACKNOWLEDGE; 
+ 172:common/prog/dbus/cfg_templates/balXs.c **** const uint8_t BAL_ucMaxNackRetries       = BAL_MAX_TRANSMISSION_RETRIES_AFTER_NEGATIVE_ACKNOWLEDGE;
+ 173:common/prog/dbus/cfg_templates/balXs.c **** #else // DBM_DBUSCAN
+ 174:common/prog/dbus/cfg_templates/balXs.c **** /* With DBusCAN chip it is not possible to differentiate number of transmission retries based on (t
+ 175:common/prog/dbus/cfg_templates/balXs.c **** const uint8_t BAL_ucMaxTxRetries         = 16u; //!<A constant telling how many transmission attemp
+ 176:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 177:common/prog/dbus/cfg_templates/balXs.c **** 
+ 178:common/prog/dbus/cfg_templates/balXs.c **** /**************************************************************************************************
+ 179:common/prog/dbus/cfg_templates/balXs.c **** /* GLOBAL FUNCTION DEFINITIONS                                                                    *
+ 180:common/prog/dbus/cfg_templates/balXs.c **** /**************************************************************************************************
+ 181:common/prog/dbus/cfg_templates/balXs.c **** 
+ 182:common/prog/dbus/cfg_templates/balXs.c **** void BAL_vNotifyNonDeliverableMessage(uint8_t ucSubsystem, uint8_t ucMessageIndex)
+ 183:common/prog/dbus/cfg_templates/balXs.c **** {
+  28              		.loc 1 183 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 184:common/prog/dbus/cfg_templates/balXs.c ****    /* Application specific part: 
+ 185:common/prog/dbus/cfg_templates/balXs.c ****    -take any necessary action.
+ 186:common/prog/dbus/cfg_templates/balXs.c ****    E.g. for remote control, triggering of WrongData should be done here, as the received object doe
+ 187:common/prog/dbus/cfg_templates/balXs.c ****    
+ 188:common/prog/dbus/cfg_templates/balXs.c ****   (void)ucMessageIndex; // unused param
+  33              		.loc 1 188 3 view .LVU1
+ 189:common/prog/dbus/cfg_templates/balXs.c ****    switch( ucSubsystem )
+  34              		.loc 1 189 4 view .LVU2
+ 190:common/prog/dbus/cfg_templates/balXs.c ****    {
+ 191:common/prog/dbus/cfg_templates/balXs.c ****       default:
+ 192:common/prog/dbus/cfg_templates/balXs.c ****       case 0x0U:
+ 193:common/prog/dbus/cfg_templates/balXs.c ****       {
+ 194:common/prog/dbus/cfg_templates/balXs.c ****          break;
+ 195:common/prog/dbus/cfg_templates/balXs.c ****       }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 5
+
+
+ 196:common/prog/dbus/cfg_templates/balXs.c ****       case 0x1U:
+ 197:common/prog/dbus/cfg_templates/balXs.c ****       {
+ 198:common/prog/dbus/cfg_templates/balXs.c ****          break;
+ 199:common/prog/dbus/cfg_templates/balXs.c ****       }
+ 200:common/prog/dbus/cfg_templates/balXs.c **** #ifdef DBAL_INCLUDED      
+ 201:common/prog/dbus/cfg_templates/balXs.c ****       case DBAL_DBUS_HANDLER_SUBSYSTEM:
+ 202:common/prog/dbus/cfg_templates/balXs.c ****       {
+ 203:common/prog/dbus/cfg_templates/balXs.c ****           DBAL_nonDeliverableMessage(ucMessageIndex);
+ 204:common/prog/dbus/cfg_templates/balXs.c ****           break;
+ 205:common/prog/dbus/cfg_templates/balXs.c ****       }
+ 206:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 207:common/prog/dbus/cfg_templates/balXs.c ****       
+ 208:common/prog/dbus/cfg_templates/balXs.c **** #ifdef CCSS
+ 209:common/prog/dbus/cfg_templates/balXs.c ****       case CCCMTD_SUBSYS:
+ 210:common/prog/dbus/cfg_templates/balXs.c ****       {
+ 211:common/prog/dbus/cfg_templates/balXs.c ****           CCCMTD_dbus2PedFwNotifyNondeliverableMessage(ucMessageIndex);
+ 212:common/prog/dbus/cfg_templates/balXs.c ****           break;
+ 213:common/prog/dbus/cfg_templates/balXs.c ****       }
+ 214:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 215:common/prog/dbus/cfg_templates/balXs.c ****    }
+ 216:common/prog/dbus/cfg_templates/balXs.c **** }
+  35              		.loc 1 216 1 is_stmt 0 view .LVU3
+  36              		@ sp needed
+  37 0000 7047     		bx	lr
+  38              		.cfi_endproc
+  39              	.LFE57:
+  41              		.section	.text.BAL_vNotifyError,"ax",%progbits
+  42              		.align	1
+  43              		.global	BAL_vNotifyError
+  44              		.syntax unified
+  45              		.code	16
+  46              		.thumb_func
+  48              	BAL_vNotifyError:
+  49              	.LVL1:
+  50              	.LFB58:
+ 217:common/prog/dbus/cfg_templates/balXs.c **** 
+ 218:common/prog/dbus/cfg_templates/balXs.c **** #define BAL_ERROR_TYPES 4U
+ 219:common/prog/dbus/cfg_templates/balXs.c **** 
+ 220:common/prog/dbus/cfg_templates/balXs.c **** void BAL_vNotifyError(uint8_t ucError)
+ 221:common/prog/dbus/cfg_templates/balXs.c **** {
+  51              		.loc 1 221 1 is_stmt 1 view -0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		@ link register save eliminated.
+ 222:common/prog/dbus/cfg_templates/balXs.c ****    static uint8_t BAL_aucErrorCounter[BAL_ERROR_TYPES] = {0};
+  56              		.loc 1 222 4 view .LVU5
+ 223:common/prog/dbus/cfg_templates/balXs.c **** 
+ 224:common/prog/dbus/cfg_templates/balXs.c ****    if (ucError < BAL_ERROR_TYPES)
+  57              		.loc 1 224 4 view .LVU6
+  58              		.loc 1 224 7 is_stmt 0 view .LVU7
+  59 0000 0328     		cmp	r0, #3
+  60 0002 03D8     		bhi	.L2
+ 225:common/prog/dbus/cfg_templates/balXs.c ****    {
+ 226:common/prog/dbus/cfg_templates/balXs.c ****       (void)BAL_aucErrorCounter[ucError]; /*just access variable*/
+  61              		.loc 1 226 7 is_stmt 1 view .LVU8
+ 227:common/prog/dbus/cfg_templates/balXs.c ****       BAL_aucErrorCounter[ucError]++;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 6
+
+
+  62              		.loc 1 227 7 view .LVU9
+  63              		.loc 1 227 35 is_stmt 0 view .LVU10
+  64 0004 024A     		ldr	r2, .L4
+  65 0006 135C     		ldrb	r3, [r2, r0]
+  66 0008 0133     		adds	r3, r3, #1
+  67 000a 1354     		strb	r3, [r2, r0]
+  68              	.L2:
+ 228:common/prog/dbus/cfg_templates/balXs.c **** 
+ 229:common/prog/dbus/cfg_templates/balXs.c ****    }
+ 230:common/prog/dbus/cfg_templates/balXs.c **** }
+  69              		.loc 1 230 1 view .LVU11
+  70              		@ sp needed
+  71 000c 7047     		bx	lr
+  72              	.L5:
+  73 000e C046     		.align	2
+  74              	.L4:
+  75 0010 00000000 		.word	.LANCHOR0
+  76              		.cfi_endproc
+  77              	.LFE58:
+  79              		.section	.text.BAL_vNotifyUnknownMessage,"ax",%progbits
+  80              		.align	1
+  81              		.global	BAL_vNotifyUnknownMessage
+  82              		.syntax unified
+  83              		.code	16
+  84              		.thumb_func
+  86              	BAL_vNotifyUnknownMessage:
+  87              	.LVL2:
+  88              	.LFB59:
+ 231:common/prog/dbus/cfg_templates/balXs.c **** 
+ 232:common/prog/dbus/cfg_templates/balXs.c **** void BAL_vNotifyUnknownMessage(uint8_t ucReceivedTargetAddress, TbusMessageIdentifier tReceivedMess
+ 233:common/prog/dbus/cfg_templates/balXs.c **** {
+  89              		.loc 1 233 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		@ link register save eliminated.
+ 234:common/prog/dbus/cfg_templates/balXs.c ****     (void)ucReceivedTargetAddress;
+  94              		.loc 1 234 5 view .LVU13
+ 235:common/prog/dbus/cfg_templates/balXs.c ****     (void)tReceivedMessageId;
+  95              		.loc 1 235 5 view .LVU14
+ 236:common/prog/dbus/cfg_templates/balXs.c **** }
+  96              		.loc 1 236 1 is_stmt 0 view .LVU15
+  97              		@ sp needed
+  98 0000 7047     		bx	lr
+  99              		.cfi_endproc
+ 100              	.LFE59:
+ 102              		.section	.text.BAL_bIsIdentifierInRangeOfReceiveTable,"ax",%progbits
+ 103              		.align	1
+ 104              		.global	BAL_bIsIdentifierInRangeOfReceiveTable
+ 105              		.syntax unified
+ 106              		.code	16
+ 107              		.thumb_func
+ 109              	BAL_bIsIdentifierInRangeOfReceiveTable:
+ 110              	.LVL3:
+ 111              	.LFB60:
+ 237:common/prog/dbus/cfg_templates/balXs.c **** 
+ 238:common/prog/dbus/cfg_templates/balXs.c **** bool BAL_bIsIdentifierInRangeOfReceiveTable(TbusMessageIdentifier tMessageIdentifier, uint8_t ucSub
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 7
+
+
+ 239:common/prog/dbus/cfg_templates/balXs.c **** {
+ 112              		.loc 1 239 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116              		@ link register save eliminated.
+ 240:common/prog/dbus/cfg_templates/balXs.c ****     bool ret = false;
+ 117              		.loc 1 240 5 view .LVU17
+ 241:common/prog/dbus/cfg_templates/balXs.c ****     (void)tMessageIdentifier;
+ 118              		.loc 1 241 5 view .LVU18
+ 242:common/prog/dbus/cfg_templates/balXs.c ****     (void)ucSubsystemIndex;
+ 119              		.loc 1 242 5 view .LVU19
+ 243:common/prog/dbus/cfg_templates/balXs.c **** #ifdef CCSS
+ 244:common/prog/dbus/cfg_templates/balXs.c ****     uint8_t subsystemIndexCCSS = BAL_ucGetSubsystemIndex(CCCMTD_SUBSYS);
+ 245:common/prog/dbus/cfg_templates/balXs.c ****     uint16_t lowestMsgIdInCCSSLib = (uint16_t)CCCMTD_MSG_RANGE_START;
+ 246:common/prog/dbus/cfg_templates/balXs.c ****     uint16_t highestMsgIdInCCSSLib = (uint16_t)CCCMTD_MSG_RANGE_END;
+ 247:common/prog/dbus/cfg_templates/balXs.c ****     if(subsystemIndexCCSS == ucSubsystemIndex)
+ 248:common/prog/dbus/cfg_templates/balXs.c ****     {
+ 249:common/prog/dbus/cfg_templates/balXs.c ****          if((tMessageIdentifier >= lowestMsgIdInCCSSLib) && (tMessageIdentifier <= highestMsgIdInCC
+ 250:common/prog/dbus/cfg_templates/balXs.c ****          {
+ 251:common/prog/dbus/cfg_templates/balXs.c ****              ret=true;
+ 252:common/prog/dbus/cfg_templates/balXs.c ****          }
+ 253:common/prog/dbus/cfg_templates/balXs.c ****     }
+ 254:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 255:common/prog/dbus/cfg_templates/balXs.c ****     return ret;
+ 120              		.loc 1 255 5 view .LVU20
+ 256:common/prog/dbus/cfg_templates/balXs.c **** }
+ 121              		.loc 1 256 1 is_stmt 0 view .LVU21
+ 122 0000 0020     		movs	r0, #0
+ 123              	.LVL4:
+ 124              		.loc 1 256 1 view .LVU22
+ 125              		@ sp needed
+ 126 0002 7047     		bx	lr
+ 127              		.cfi_endproc
+ 128              	.LFE60:
+ 130              		.section	.text.BAL_vEnterCriticalSectionForSending,"ax",%progbits
+ 131              		.align	1
+ 132              		.global	BAL_vEnterCriticalSectionForSending
+ 133              		.syntax unified
+ 134              		.code	16
+ 135              		.thumb_func
+ 137              	BAL_vEnterCriticalSectionForSending:
+ 138              	.LFB61:
+ 257:common/prog/dbus/cfg_templates/balXs.c **** 
+ 258:common/prog/dbus/cfg_templates/balXs.c **** 
+ 259:common/prog/dbus/cfg_templates/balXs.c **** void BAL_vEnterCriticalSectionForSending(void)
+ 260:common/prog/dbus/cfg_templates/balXs.c **** {
+ 139              		.loc 1 260 1 is_stmt 1 view -0
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 0
+ 142              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143              		@ link register save eliminated.
+ 261:common/prog/dbus/cfg_templates/balXs.c **** #ifdef RTOS
+ 262:common/prog/dbus/cfg_templates/balXs.c ****     (void)RTOS_enterCriticalSection(&mutex_BAL);
+ 263:common/prog/dbus/cfg_templates/balXs.c **** #endif
+ 264:common/prog/dbus/cfg_templates/balXs.c **** }
+ 144              		.loc 1 264 1 view .LVU24
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 8
+
+
+ 145              		@ sp needed
+ 146 0000 7047     		bx	lr
+ 147              		.cfi_endproc
+ 148              	.LFE61:
+ 150              		.section	.text.BAL_vExitCriticalSectionforSending,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	BAL_vExitCriticalSectionforSending
+ 153              		.syntax unified
+ 154              		.code	16
+ 155              		.thumb_func
+ 157              	BAL_vExitCriticalSectionforSending:
+ 158              	.LFB64:
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162              		@ link register save eliminated.
+ 163              		@ sp needed
+ 164 0000 7047     		bx	lr
+ 165              		.cfi_endproc
+ 166              	.LFE64:
+ 168              		.global	BAL_ucMaxNackRetries
+ 169              		.global	BAL_ucMaxMissingAckRetries
+ 170              		.global	BAL_ucMaxCollisionRetries
+ 171              		.global	BAL_ucNumberOfSubsystems
+ 172              		.global	BAL_tBusObject
+ 173              		.section	.bss.BAL_aucErrorCounter.0,"aw",%nobits
+ 174              		.set	.LANCHOR0,. + 0
+ 177              	BAL_aucErrorCounter.0:
+ 178 0000 00000000 		.space	4
+ 179              		.section	.bss.BAL_ucEmptyTxTable,"aw",%nobits
+ 182              	BAL_ucEmptyTxTable:
+ 183 0000 00       		.space	1
+ 184              		.section	.rodata.BAL_tBusObject,"a"
+ 187              	BAL_tBusObject:
+ 188 0000 00       		.byte	0
+ 189 0001 00000000 		.4byte	DBPL_tReceiveAllServiceMessagesUpdateHsi
+ 190 0005 00000000 		.4byte	0
+ 191 0009 00000000 		.4byte	BAL_ucEmptyTxTable
+ 192 000d 00000000 		.4byte	BAL_ucEmptyTxTable
+ 193              		.section	.rodata.BAL_ucMaxCollisionRetries,"a"
+ 196              	BAL_ucMaxCollisionRetries:
+ 197 0000 10       		.byte	16
+ 198              		.section	.rodata.BAL_ucMaxMissingAckRetries,"a"
+ 201              	BAL_ucMaxMissingAckRetries:
+ 202 0000 04       		.byte	4
+ 203              		.section	.rodata.BAL_ucMaxNackRetries,"a"
+ 206              	BAL_ucMaxNackRetries:
+ 207 0000 02       		.byte	2
+ 208              		.section	.rodata.BAL_ucNumberOfSubsystems,"a"
+ 211              	BAL_ucNumberOfSubsystems:
+ 212 0000 01       		.byte	1
+ 213              		.text
+ 214              	.Letext0:
+ 215              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 216              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 217              		.file 4 "common/prog/dbus/bustypes.h"
+ 218              		.file 5 "common/prog/dbus/bal.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3tmnOf.s 			page 9
+
+
+ 219              		.file 6 "common/prog/dbus/dbuspresentation.h"
+ 220              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

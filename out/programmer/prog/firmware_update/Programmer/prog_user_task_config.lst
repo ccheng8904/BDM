@@ -1,0 +1,15 @@
+
+out/programmer/prog/firmware_update/Programmer/prog_user_task_config.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.PRG_bUserHandleTask:
+
+00000000 <PRG_bUserHandleTask>:
+    Add user specific code there.
+    */
+    
+    // HWDT_vTrigger();
+    return true; // return value is ignored in the Programmer's scheduler
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr

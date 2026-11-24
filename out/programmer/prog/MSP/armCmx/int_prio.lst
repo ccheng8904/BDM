@@ -1,0 +1,54 @@
+
+out/programmer/prog/MSP/armCmx/int_prio.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.INTP_setDefaultInterruptPriority:
+
+00000000 <INTP_setDefaultInterruptPriority>:
+{   /* Note 923: explicit cast from 'unsigned int' to 'uint32_t *'
+     * Necessary here and not a problem on CortexM */
+    /*lint --e{923} */
+    for (uint8_t i=0; i<IPR_MAX; i++)
+    {
+        NVIC_IPR_[i] = DFLT_INT_PRIO;
+   0:	4b0a      	ldr	r3, [pc, #40]	; (2c <INTP_setDefaultInterruptPriority+0x2c>)
+   2:	4a0b      	ldr	r2, [pc, #44]	; (30 <INTP_setDefaultInterruptPriority+0x30>)
+   4:	6013      	str	r3, [r2, #0]
+   6:	4a0b      	ldr	r2, [pc, #44]	; (34 <INTP_setDefaultInterruptPriority+0x34>)
+   8:	6013      	str	r3, [r2, #0]
+   a:	4a0b      	ldr	r2, [pc, #44]	; (38 <INTP_setDefaultInterruptPriority+0x38>)
+   c:	6013      	str	r3, [r2, #0]
+   e:	4a0b      	ldr	r2, [pc, #44]	; (3c <INTP_setDefaultInterruptPriority+0x3c>)
+  10:	6013      	str	r3, [r2, #0]
+  12:	4a0b      	ldr	r2, [pc, #44]	; (40 <INTP_setDefaultInterruptPriority+0x40>)
+  14:	6013      	str	r3, [r2, #0]
+  16:	4a0b      	ldr	r2, [pc, #44]	; (44 <INTP_setDefaultInterruptPriority+0x44>)
+  18:	6013      	str	r3, [r2, #0]
+  1a:	4a0b      	ldr	r2, [pc, #44]	; (48 <INTP_setDefaultInterruptPriority+0x48>)
+  1c:	6013      	str	r3, [r2, #0]
+  1e:	4a0b      	ldr	r2, [pc, #44]	; (4c <INTP_setDefaultInterruptPriority+0x4c>)
+  20:	6013      	str	r3, [r2, #0]
+    }
+
+#if !defined(CORTEX_M0) && !defined(CORTEX_M0_PLUS)
+    SHPR1_ = DFLT_INT_PRIO;      /*!< System Handler Priority Register 1 */
+#endif
+    SHPR2_ = DFLT_INT_PRIO;      /*!< System Handler Priority Register 2 */
+  22:	4a0b      	ldr	r2, [pc, #44]	; (50 <INTP_setDefaultInterruptPriority+0x50>)
+  24:	6013      	str	r3, [r2, #0]
+    SHPR3_ = DFLT_INT_PRIO;      /*!< System Handler Priority Register 3 */
+  26:	4a0b      	ldr	r2, [pc, #44]	; (54 <INTP_setDefaultInterruptPriority+0x54>)
+  28:	6013      	str	r3, [r2, #0]
+}
+  2a:	4770      	bx	lr
+  2c:	70707070 	.word	0x70707070
+  30:	e000e400 	.word	0xe000e400
+  34:	e000e404 	.word	0xe000e404
+  38:	e000e408 	.word	0xe000e408
+  3c:	e000e40c 	.word	0xe000e40c
+  40:	e000e410 	.word	0xe000e410
+  44:	e000e414 	.word	0xe000e414
+  48:	e000e418 	.word	0xe000e418
+  4c:	e000e41c 	.word	0xe000e41c
+  50:	e000ed1c 	.word	0xe000ed1c
+  54:	e000ed20 	.word	0xe000ed20

@@ -1,0 +1,388 @@
+
+out/programmer/prog/MSP/mcal/mcal.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MCAL_checkEventData:
+
+00000000 <MCAL_checkEventData>:
+    {
+        retEventData = *eventData;
+    }
+    else
+    {
+        retEventData.dataType = MCAL_DATA_TYPE_NONE;
+   0:	000b      	movs	r3, r1
+{
+   2:	b530      	push	{r4, r5, lr}
+    if(eventData != NULL)
+   4:	2900      	cmp	r1, #0
+   6:	d004      	beq.n	12 <MCAL_checkEventData+0x12>
+        retEventData = *eventData;
+   8:	0003      	movs	r3, r0
+   a:	000a      	movs	r2, r1
+   c:	ca30      	ldmia	r2!, {r4, r5}
+   e:	c330      	stmia	r3!, {r4, r5}
+  10:	780b      	ldrb	r3, [r1, #0]
+    }
+
+    return retEventData;
+  12:	7003      	strb	r3, [r0, #0]
+}
+  14:	bd30      	pop	{r4, r5, pc}
+
+Disassembly of section .text.MCAL_initCallback:
+
+00000000 <MCAL_initCallback>:
+{
+   0:	b510      	push	{r4, lr}
+    (void)STDCB_InitCallback(callback, (STDCB_CallbackFunction_t)callbackFunction, objPtr, 0u);
+   2:	2300      	movs	r3, #0
+   4:	f7ff fffe 	bl	0 <STDCB_InitCallback>
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MCAL_invokeCallbacks:
+
+00000000 <MCAL_invokeCallbacks>:
+
+
+void MCAL_invokeCallbacks(const MCAL_Callback_t *callback, enum MCAL_Module eventSource, enum MCAL_Event eventType, const struct MCAL_EventData *eventData)
+{
+   0:	b530      	push	{r4, r5, lr}
+   2:	b085      	sub	sp, #20
+   4:	0014      	movs	r4, r2
+    struct MCAL_EventResponse eventResponse;
+    uint32_t eventFlags;
+
+    eventFlags = MCAL_getEventMask(eventType);
+
+    eventResponse.eventSource = eventSource;
+   6:	466a      	mov	r2, sp
+{
+   8:	0005      	movs	r5, r0
+    eventResponse.eventSource = eventSource;
+   a:	7011      	strb	r1, [r2, #0]
+    eventResponse.eventType = eventType;
+    eventResponse.eventData = MCAL_checkEventData(eventData);
+   c:	a802      	add	r0, sp, #8
+   e:	0019      	movs	r1, r3
+    eventResponse.eventType = eventType;
+  10:	9401      	str	r4, [sp, #4]
+    eventResponse.eventData = MCAL_checkEventData(eventData);
+  12:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+
+    /*lint -e{923} "cast from pointer to pointer [MISRA 2012 Rule 11.1, 11.4, 11.6 required]" */
+    (void)STDCB_ExecuteCallbacks(callback, eventFlags, (int32_t)&eventResponse);
+  16:	466a      	mov	r2, sp
+  18:	0021      	movs	r1, r4
+  1a:	0028      	movs	r0, r5
+  1c:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+    /*lint -e{550} "Symbol 'eventResponse' not accessed", Yes it is */
+}
+  20:	b005      	add	sp, #20
+  22:	bd30      	pop	{r4, r5, pc}
+
+Disassembly of section .text.MCAL_invokeChannelCallbacks:
+
+00000000 <MCAL_invokeChannelCallbacks>:
+
+
+void MCAL_invokeChannelCallbacks(const MCAL_Callback_t *callback, enum MCAL_Module eventSource, uint8_t channelNum, const struct MCAL_EventData *eventData)
+{
+   0:	b530      	push	{r4, r5, lr}
+   2:	b085      	sub	sp, #20
+   4:	0015      	movs	r5, r2
+    struct MCAL_EventResponse eventResponse;
+    uint32_t eventFlags;
+
+    eventFlags = MCAL_getChannelEventMask(channelNum);
+
+    eventResponse.eventSource = eventSource;
+   6:	466a      	mov	r2, sp
+   8:	7011      	strb	r1, [r2, #0]
+    eventResponse.eventType = MCAL_EVENT_CHANNEL;
+   a:	2280      	movs	r2, #128	; 0x80
+    eventResponse.eventData = MCAL_checkEventData(eventData);
+   c:	0019      	movs	r1, r3
+{
+   e:	0004      	movs	r4, r0
+    eventResponse.eventType = MCAL_EVENT_CHANNEL;
+  10:	0592      	lsls	r2, r2, #22
+    eventResponse.eventData = MCAL_checkEventData(eventData);
+  12:	a802      	add	r0, sp, #8
+    eventResponse.eventType = MCAL_EVENT_CHANNEL;
+  14:	9201      	str	r2, [sp, #4]
+    eventResponse.eventData = MCAL_checkEventData(eventData);
+  16:	f7ff fffe 	bl	0 <MCAL_invokeChannelCallbacks>
+ *  \details  This function is used as to convert channel number to event flags
+ *            used by STDCB module.
+ */
+static inline uint32_t MCAL_getChannelEventMask(uint8_t channelNum)
+{
+    return (uint32_t)0x01u << channelNum;
+  1a:	2101      	movs	r1, #1
+
+    /*lint -e{923} "cast from pointer to pointer [MISRA 2012 Rule 11.1, 11.4, 11.6 required]" */
+    (void)STDCB_ExecuteCallbacks(callback, eventFlags, (int32_t)&eventResponse);
+  1c:	466a      	mov	r2, sp
+  1e:	40a9      	lsls	r1, r5
+  20:	0020      	movs	r0, r4
+  22:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+    /*lint -e{550} "Symbol 'eventResponse' not accessed", Yes it is */
+}
+  26:	b005      	add	sp, #20
+  28:	bd30      	pop	{r4, r5, pc}
+
+Disassembly of section .text.MCAL_enableEvent:
+
+00000000 <MCAL_enableEvent>:
+
+
+void MCAL_enableEvent(MCAL_Callback_t **cbList, MCAL_Callback_t *callback, enum MCAL_Event event)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000c      	movs	r4, r1
+   4:	0015      	movs	r5, r2
+    MCAL_assert(callback != NULL);
+
+    eventMask = MCAL_getEventMask(event);
+    
+    /* Return value can be ignored as it only returns error when cbList is NULL */
+    (void) STDCB_AttachCallback(cbList, callback);
+   6:	f7ff fffe 	bl	0 <STDCB_AttachCallback>
+extern int32_t STDCB_ExecuteCallbacks(const struct STDCB_Callback *cbPtr, uint32_t eventFlags, int32_t eventData);
+
+
+static inline void STDCB_EnableEvents(struct STDCB_Callback *cbPtr, uint32_t eventMaskToEnable)
+{
+    cbPtr->eventMask |= eventMaskToEnable;
+   a:	68a2      	ldr	r2, [r4, #8]
+   c:	432a      	orrs	r2, r5
+   e:	60a2      	str	r2, [r4, #8]
+    STDCB_EnableEvents(callback, eventMask);
+}
+  10:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MCAL_enableChannelEvent:
+
+00000000 <MCAL_enableChannelEvent>:
+
+
+void MCAL_enableChannelEvent(MCAL_Callback_t **cbList, MCAL_Callback_t *callback, uint8_t channelNum)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0015      	movs	r5, r2
+   4:	000c      	movs	r4, r1
+    MCAL_assert(callback != NULL);
+
+    eventMask = MCAL_getChannelEventMask(channelNum);
+    
+    /* Return value can be ignored as it only returns error when cbList is NULL */
+    (void) STDCB_AttachCallback(cbList, callback);
+   6:	f7ff fffe 	bl	0 <STDCB_AttachCallback>
+   a:	2201      	movs	r2, #1
+   c:	40aa      	lsls	r2, r5
+   e:	68a3      	ldr	r3, [r4, #8]
+  10:	4313      	orrs	r3, r2
+  12:	60a3      	str	r3, [r4, #8]
+    STDCB_EnableEvents(callback, eventMask);
+}
+  14:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MCAL_disableEvent:
+
+00000000 <MCAL_disableEvent>:
+}
+
+
+static inline void STDCB_DisableEvents(struct STDCB_Callback *cbPtr, uint32_t eventMaskToDisable)
+{
+    cbPtr->eventMask &= ~eventMaskToDisable;
+   0:	6883      	ldr	r3, [r0, #8]
+   2:	438b      	bics	r3, r1
+   4:	6083      	str	r3, [r0, #8]
+
+void MCAL_disableEvent(MCAL_Callback_t *callback, enum MCAL_Event event)
+{
+    uint32_t eventMask = MCAL_getEventMask(event);
+    STDCB_DisableEvents(callback, eventMask);
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_disableChannelEvent:
+
+00000000 <MCAL_disableChannelEvent>:
+   0:	2201      	movs	r2, #1
+   2:	408a      	lsls	r2, r1
+   4:	6883      	ldr	r3, [r0, #8]
+   6:	4393      	bics	r3, r2
+   8:	6083      	str	r3, [r0, #8]
+
+void MCAL_disableChannelEvent(MCAL_Callback_t *callback, uint8_t channelNum)
+{
+    uint32_t eventMask = MCAL_getChannelEventMask(channelNum);
+    STDCB_DisableEvents(callback, eventMask);
+}
+   a:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_uint8:
+
+00000000 <MCAL_getEventData_uint8>:
+
+
+uint8_t MCAL_getEventData_uint8(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_UINT8);
+    return eventResponse->eventData.data.uint8;
+   0:	7b00      	ldrb	r0, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_uint16:
+
+00000000 <MCAL_getEventData_uint16>:
+
+
+uint16_t MCAL_getEventData_uint16(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_UINT16);
+    return eventResponse->eventData.data.uint16;
+   0:	8980      	ldrh	r0, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_uint32:
+
+00000000 <MCAL_getEventData_uint32>:
+
+
+uint32_t MCAL_getEventData_uint32(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_UINT32);
+    return eventResponse->eventData.data.uint32;
+   0:	68c0      	ldr	r0, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_int8:
+
+00000000 <MCAL_getEventData_int8>:
+
+
+int8_t MCAL_getEventData_int8(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_INT8);
+    return eventResponse->eventData.data.int8;
+   0:	7b00      	ldrb	r0, [r0, #12]
+   2:	b240      	sxtb	r0, r0
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_int16:
+
+00000000 <MCAL_getEventData_int16>:
+
+
+int16_t MCAL_getEventData_int16(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_INT16);
+    return eventResponse->eventData.data.int16;
+   0:	230c      	movs	r3, #12
+   2:	5ec0      	ldrsh	r0, [r0, r3]
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_int32:
+
+00000000 <MCAL_getEventData_int32>:
+
+
+int32_t MCAL_getEventData_int32(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_INT32);
+    return eventResponse->eventData.data.int32;
+   0:	68c0      	ldr	r0, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MCAL_getEventData_error:
+
+00000000 <MCAL_getEventData_error>:
+enum MCAL_Error MCAL_getEventData_error(const struct MCAL_EventResponse *eventResponse)
+{
+    MCAL_assert(MCAL_getEventDataType(eventResponse) == MCAL_DATA_TYPE_ERROR_VALUE);
+
+    // Check if event data contains error value (additional to assert)
+    if(eventResponse->eventData.dataType != MCAL_DATA_TYPE_ERROR_VALUE)
+   0:	7a03      	ldrb	r3, [r0, #8]
+   2:	2b07      	cmp	r3, #7
+   4:	d102      	bne.n	c <MCAL_getEventData_error+0xc>
+    {
+        return MCAL_ERROR_INVALID;
+    }
+    else
+    {
+        return eventResponse->eventData.data.error;
+   6:	7b00      	ldrb	r0, [r0, #12]
+   8:	b240      	sxtb	r0, r0
+    }
+}
+   a:	4770      	bx	lr
+        return MCAL_ERROR_INVALID;
+   c:	2001      	movs	r0, #1
+   e:	4240      	negs	r0, r0
+  10:	e7fb      	b.n	a <MCAL_getEventData_error+0xa>
+
+Disassembly of section .text.MCAL_checkReady:
+
+00000000 <MCAL_checkReady>:
+
+
+enum MCAL_Error MCAL_checkReady(enum MCAL_Status status)
+{
+   0:	0003      	movs	r3, r0
+   2:	2001      	movs	r0, #1
+   4:	2b04      	cmp	r3, #4
+   6:	d801      	bhi.n	c <MCAL_checkReady+0xc>
+   8:	4a01      	ldr	r2, [pc, #4]	; (10 <MCAL_checkReady+0x10>)
+   a:	56d0      	ldrsb	r0, [r2, r3]
+    }
+    else
+    {
+        return MCAL_ERROR;
+    }
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MCAL_isEventEnabled:
+
+00000000 <MCAL_isEventEnabled>:
+
+
+bool MCAL_isEventEnabled(MCAL_Callback_t **cbList, uint32_t eventMask)
+{
+    MCAL_Callback_t *cb = *cbList;
+   0:	6800      	ldr	r0, [r0, #0]
+
+    while(cb != NULL)
+   2:	2800      	cmp	r0, #0
+   4:	d100      	bne.n	8 <MCAL_isEventEnabled+0x8>
+        }
+        cb = cb->_nextCallback;
+    }
+
+    return false;
+}
+   6:	4770      	bx	lr
+        if((cb->eventMask & eventMask) != 0u)
+   8:	6883      	ldr	r3, [r0, #8]
+   a:	420b      	tst	r3, r1
+   c:	d101      	bne.n	12 <MCAL_isEventEnabled+0x12>
+        cb = cb->_nextCallback;
+   e:	68c0      	ldr	r0, [r0, #12]
+  10:	e7f7      	b.n	2 <MCAL_isEventEnabled+0x2>
+            return true;
+  12:	2001      	movs	r0, #1
+  14:	e7f7      	b.n	6 <MCAL_isEventEnabled+0x6>

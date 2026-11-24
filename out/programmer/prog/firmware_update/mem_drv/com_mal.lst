@@ -1,0 +1,159 @@
+
+out/programmer/prog/firmware_update/mem_drv/com_mal.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.COMA_isAddrRangeValidx:
+
+00000000 <COMA_isAddrRangeValidx>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+DRVIF_RAMCODE bool COMA_isAddrRangeValidx(
+        const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr, uint32_t range)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+DRVIF_RAMCODE static inline bool COMA_isAddrRangeValid
+    (const struct COMA_memSeg_s* memSeg, uint32_t addr, uint32_t range)
+{
+    return ((
+        (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+        (range <=((memSeg->endAddr-addr)+1u))
+   2:	2601      	movs	r6, #1
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+   4:	2500      	movs	r5, #0
+   6:	3004      	adds	r0, #4
+   8:	1ab6      	subs	r6, r6, r2
+   a:	428d      	cmp	r5, r1
+   c:	d101      	bne.n	12 <COMA_isAddrRangeValidx+0x12>
+        if(COMA_isAddrRangeValid(&memSegs[i], addr, range))
+        {
+            return true;
+        }
+    }
+    return false;
+   e:	2000      	movs	r0, #0
+}
+  10:	bd70      	pop	{r4, r5, r6, pc}
+        ) ? true : false);
+  12:	6804      	ldr	r4, [r0, #0]
+  14:	42a2      	cmp	r2, r4
+  16:	d305      	bcc.n	24 <COMA_isAddrRangeValidx+0x24>
+        (addr  >= memSeg->startAddr) && (addr <= memSeg->endAddr) &&
+  18:	6844      	ldr	r4, [r0, #4]
+  1a:	42a2      	cmp	r2, r4
+  1c:	d802      	bhi.n	24 <COMA_isAddrRangeValidx+0x24>
+        (range <=((memSeg->endAddr-addr)+1u))
+  1e:	1934      	adds	r4, r6, r4
+        ) ? true : false);
+  20:	42a3      	cmp	r3, r4
+  22:	d902      	bls.n	2a <COMA_isAddrRangeValidx+0x2a>
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+  24:	3501      	adds	r5, #1
+  26:	300c      	adds	r0, #12
+  28:	e7ef      	b.n	a <COMA_isAddrRangeValidx+0xa>
+            return true;
+  2a:	2001      	movs	r0, #1
+  2c:	e7f0      	b.n	10 <COMA_isAddrRangeValidx+0x10>
+
+Disassembly of section .text.COMA_isBlockAddrValidx:
+
+00000000 <COMA_isBlockAddrValidx>:
+
+
+DRVIF_RAMCODE bool COMA_isBlockAddrValidx(
+        const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr)
+{
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+   0:	2300      	movs	r3, #0
+{
+   2:	b510      	push	{r4, lr}
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+   4:	428b      	cmp	r3, r1
+   6:	d101      	bne.n	c <COMA_isBlockAddrValidx+0xc>
+        {
+            const uint32_t COMA_BlockMask = (uint32_t)(memSegs[i].blockSize-1u);
+            return (((COMA_BlockMask & addr) == 0u) ? true : false);
+        }
+    }
+    return false;
+   8:	2000      	movs	r0, #0
+   a:	e00b      	b.n	24 <COMA_isBlockAddrValidx+0x24>
+   c:	6844      	ldr	r4, [r0, #4]
+   e:	42a2      	cmp	r2, r4
+  10:	d309      	bcc.n	26 <COMA_isBlockAddrValidx+0x26>
+        if(COMA_isAddrRangeValid(&memSegs[i], addr, 0u))
+  12:	6884      	ldr	r4, [r0, #8]
+  14:	42a2      	cmp	r2, r4
+  16:	d806      	bhi.n	26 <COMA_isBlockAddrValidx+0x26>
+            const uint32_t COMA_BlockMask = (uint32_t)(memSegs[i].blockSize-1u);
+  18:	6803      	ldr	r3, [r0, #0]
+  1a:	3b01      	subs	r3, #1
+            return (((COMA_BlockMask & addr) == 0u) ? true : false);
+  1c:	401a      	ands	r2, r3
+  1e:	4253      	negs	r3, r2
+  20:	415a      	adcs	r2, r3
+  22:	b2d0      	uxtb	r0, r2
+}
+  24:	bd10      	pop	{r4, pc}
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+  26:	3301      	adds	r3, #1
+  28:	300c      	adds	r0, #12
+  2a:	e7eb      	b.n	4 <COMA_isBlockAddrValidx+0x4>
+
+Disassembly of section .text.COMA_getBlockSize:
+
+00000000 <COMA_getBlockSize>:
+
+DRVIF_RAMCODE uint32_t COMA_getBlockSize(
+        const struct COMA_memSeg_s* memSegs, uint32_t segCount, uint32_t addr)
+{
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+   0:	2300      	movs	r3, #0
+{
+   2:	b510      	push	{r4, lr}
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+   4:	428b      	cmp	r3, r1
+   6:	d101      	bne.n	c <COMA_getBlockSize+0xc>
+        if(COMA_isAddrRangeValid(&memSegs[i], addr, 0u))
+        {
+            return memSegs[i].blockSize;
+        }
+    }
+    return 0u; // no valid block address
+   8:	2000      	movs	r0, #0
+   a:	e006      	b.n	1a <COMA_getBlockSize+0x1a>
+   c:	6844      	ldr	r4, [r0, #4]
+   e:	42a2      	cmp	r2, r4
+  10:	d304      	bcc.n	1c <COMA_getBlockSize+0x1c>
+        if(COMA_isAddrRangeValid(&memSegs[i], addr, 0u))
+  12:	6884      	ldr	r4, [r0, #8]
+  14:	42a2      	cmp	r2, r4
+  16:	d801      	bhi.n	1c <COMA_getBlockSize+0x1c>
+            return memSegs[i].blockSize;
+  18:	6800      	ldr	r0, [r0, #0]
+}
+  1a:	bd10      	pop	{r4, pc}
+    for(uint32_t i = 0; i<segCount; i++) // do for all memory segments
+  1c:	3301      	adds	r3, #1
+  1e:	300c      	adds	r0, #12
+  20:	e7f0      	b.n	4 <COMA_getBlockSize+0x4>
+
+Disassembly of section .text.COMA_read:
+
+00000000 <COMA_read>:
+
+DRVIF_RAMCODE bool COMA_read(uint32_t addr, uint32_t size, uint8_t* buffer)
+{
+   0:	0003      	movs	r3, r0
+   2:	b510      	push	{r4, lr}
+   4:	0010      	movs	r0, r2
+    /*lint -e{923} "cast from unsigned int to pointer [MISRA 2012 Rule 11.1, required]", required
+           Cast tested to work correctly */
+    if(memcpy((void*)buffer,(const void*)addr, size)){}
+   6:	000a      	movs	r2, r1
+   8:	0019      	movs	r1, r3
+   a:	f7ff fffe 	bl	0 <memcpy>
+    return true;
+}
+   e:	2001      	movs	r0, #1
+  10:	bd10      	pop	{r4, pc}

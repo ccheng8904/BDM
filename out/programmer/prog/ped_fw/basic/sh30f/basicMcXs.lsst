@@ -1,0 +1,806 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"basicMcXs.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BASIC_vInitPlatform,"ax",%progbits
+  18              		.align	1
+  19              		.global	BASIC_vInitPlatform
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BASIC_vInitPlatform:
+  25              	.LFB46:
+  26              		.file 1 "app/prog/ped_fw/basic/sh30f/basicMcXs.c"
+   1:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /*******************************************************************************
+   2:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *
+   5:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *  All rights reserved. This program and the accompanying materials
+   6:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *  are protected by international copyright laws.
+   7:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *  Please contact copyright holder for licensing information.
+   8:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *
+   9:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****  *******************************************************************************
+  10:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *   PROJECT          MCU Framework
+  11:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *   MODULE-PREFIX    BASIC
+  12:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *   AUTHOR           Jing Liu
+  13:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *   CREATED          24.05.2023
+  14:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *******************************************************************************/
+  15:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  16:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  17:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* DOCUMENTATION                                                              */
+  18:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  19:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /** \file   basicMcXs.c
+  20:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *
+  21:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *   \brief  implementation of micro-controller initialization and configuration.
+  22:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *
+  23:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** */
+  24:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  25:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  26:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* INCLUDES                                                                   */
+  27:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  28:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #include "bsh_stdinc.h"
+  29:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #include "basic.h"
+  30:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #include "processor.h"
+  31:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifdef MCAL_MPCM_INCLUDED
+  32:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #include "mcal/mpcm.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 2
+
+
+  33:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #include "mcal/mcal_assert.h"
+  34:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+  35:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if defined(FEATURE_FUNCTIONAL_SAFETY_ENABLED) && \
+  36:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     (defined(VARIANT_BOOTMANAGER) || defined(APP_VARIANT))
+  37:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #include "fSafe.h"
+  38:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+  39:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  40:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /*******************************************************************************
+  41:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  42:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        System Clock source                    | PLL (HSI/HSE)
+  43:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  44:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        SYSCLK(MHz)                            | 4 - 48 MHz
+  45:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  46:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        AHB(MHz) [CORE_CLOCK]                  | max 48 MHz
+  47:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  48:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        APB0, APB1(MHz)                        | max 24 MHz
+  49:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  50:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        AHB Prescaler                          | 2^0 - 2^5 range
+  51:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  52:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        APB0 Prescaler                         | 2^0 - 2^4 range
+  53:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  54:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        APB1 Prescaler                         | 2^0 - 2^4 range
+  55:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  56:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        HXTAL Frequency(MHz)                   | 4-12 MHz
+  57:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  58:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        PLLXTPRE                               | auto
+  59:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  60:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        PLLF                                   | auto
+  61:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  62:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        PLLK                                   | auto
+  63:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  64:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *        Flash Latency(WS)                      | auto
+  65:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *-------------------------------------------------------------------------------
+  66:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** *******************************************************************************/
+  67:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  68:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  69:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  70:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+  71:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, *_SYSCLK) "message: symbol not used..."
+  72:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define MAX_SYSCLK    48U    // max PLL output clock frequency
+  73:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define MIN_SYSCLK    4U     // min PLL output clock frequency
+  74:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define MAX_PCLOCK    24U    // max APB peripheral clock frequency
+  75:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  76:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, FLASH_*) "message: symbol not used..."
+  77:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define FLASH_ACR_LATENCY_0WS          ((uint32_t)0x5AA50000)
+  78:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define FLASH_ACR_LATENCY_1WS          ((uint32_t)0x5AA50001)
+  79:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define FLASH_ACR_LATENCY_2WS          ((uint32_t)0x5AA50002)
+  80:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define FLASH_ACR_LATENCY_3WS          ((uint32_t)0x5AA50003)
+  81:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  82:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, SYSCFG_*) "message: symbol not used..."
+  83:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define SYSCFG_SAFR_XTAL1_XTAL2_GPIO_MODE       ((uint32_t)0x5AA50000)
+  84:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define SYSCFG_SAFR_XTAL1_XTAL2_EXT_OSC_MODE    ((uint32_t)0x5AA50001)
+  85:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  86:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, RCC_*) "message: symbol not used..."
+  87:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV1      0U
+  88:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV2      1U
+  89:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV4      2U
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 3
+
+
+  90:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV8      3U
+  91:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV16     4U
+  92:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HPRE_DIV32     5U
+  93:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  94:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_HSESEL_NORMAL  0U
+  95:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_HSERFB_RFBSEL_500K  3U
+  96:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  97:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PLLSRC_HSI  0U
+  98:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PLLSRC_HSE  1U
+  99:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 100:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE0_DIV1     0U
+ 101:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE0_DIV2     1U
+ 102:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE0_DIV4     2U
+ 103:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE0_DIV8     3U
+ 104:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE0_DIV16    4U
+ 105:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 106:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE1_DIV1     0U
+ 107:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE1_DIV2     1U
+ 108:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE1_DIV4     2U
+ 109:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE1_DIV8     3U
+ 110:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define RCC_CFGR_PPRE1_DIV16    4U
+ 111:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 112:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, HSI) "message: symbol not used..."
+ 113:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define HSI             24U
+ 114:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 115:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* define SRC_CLK based on HSI or HSE */
+ 116:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, SRC_CLK) "message: symbol not used..."
+ 117:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifdef EXT_CRYSTAL_OSC
+ 118:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #define SRC_CLK   EXT_CRYSTAL_OSC
+ 119:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #else
+ 120:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #define SRC_CLK   HSI
+ 121:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 122:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 123:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** //lint -esym( 750, *PLL*) "message: symbol not used..."
+ 124:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define PLLXTPRE_OFFSET    1U
+ 125:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define PLLF_OFFSET        15U
+ 126:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define PLLK_OFFSET        1U
+ 127:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 128:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PLL div/mul calculation and HPRE calculation */
+ 129:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifndef EXT_CRYSTAL_OSC
+ 130:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if (CORE_CLOCK == 48U)
+ 131:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define N_PLLXTPRE    4U  //first divider, range: 1 to 4, result after this division should
+ 132:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define F_PLLF        32U //multiplier, range: 15 to 46, result after this multiplication s
+ 133:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define K_PLLK        1U  //second divider, range: 1 to 8, result after this division shoul
+ 134:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                                   //in the end a divider of 4 is applied to produce the final PLLCL
+ 135:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 136:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define SYSCLK          CORE_CLOCK
+ 137:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif (CORE_CLOCK == 36U)
+ 138:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #error "Unrecommended core_clock"
+ 139:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif (CORE_CLOCK == 24U)
+ 140:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define N_PLLXTPRE    4U  //first divider
+ 141:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define F_PLLF        32U //multiplier
+ 142:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define K_PLLK        2U  //second divider
+ 143:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 144:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define SYSCLK          CORE_CLOCK
+ 145:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif (CORE_CLOCK == 12U)
+ 146:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define N_PLLXTPRE    4U  //first divider
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 4
+
+
+ 147:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define F_PLLF        32U //multiplier
+ 148:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define K_PLLK        4U  //second divider
+ 149:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 150:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define SYSCLK          CORE_CLOCK
+ 151:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif (CORE_CLOCK == 8U)
+ 152:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define N_PLLXTPRE    3U  //first divider
+ 153:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define F_PLLF        32U //multiplier
+ 154:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define K_PLLK        8U  //second divider
+ 155:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 156:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define SYSCLK          CORE_CLOCK
+ 157:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif (CORE_CLOCK == 6U)
+ 158:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define N_PLLXTPRE    4U  //first divider
+ 159:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define F_PLLF        28U //multiplier
+ 160:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define K_PLLK        7U  //second divider
+ 161:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 162:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define SYSCLK          CORE_CLOCK
+ 163:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 164:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #error "Unsupported core_clock."
+ 165:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 166:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #else
+ 167:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if ((4U <= SRC_CLK) && (SRC_CLK <= 12U))
+ 168:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #if (SRC_CLK == 8U)
+ 169:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #if (CORE_CLOCK == 48U)
+ 170:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    1U  //first divider
+ 171:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        24U //multiplier
+ 172:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        1U  //second divider
+ 173:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 174:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 175:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 36U)
+ 176:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #error "Unrecommended core_clock"
+ 177:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 24U)
+ 178:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    1U  //first divider
+ 179:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        24U //multiplier
+ 180:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        2U  //second divider
+ 181:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 182:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 183:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 12U)
+ 184:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    1U  //first divider
+ 185:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        24U //multiplier
+ 186:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        4U  //second divider
+ 187:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 188:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 189:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #else
+ 190:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #error "Unsupported core_clock."
+ 191:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #endif
+ 192:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #elif (SRC_CLK == 12U)
+ 193:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #if (CORE_CLOCK == 48U)
+ 194:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    2U  //first divider
+ 195:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        32U //multiplier
+ 196:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        1U  //second divider
+ 197:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 198:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 199:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 24U)
+ 200:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    2U  //first divider
+ 201:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        32U //multiplier
+ 202:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        2U  //second divider
+ 203:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 5
+
+
+ 204:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 205:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 12U)
+ 206:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    2U  //first divider
+ 207:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        32U //multiplier
+ 208:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        4U  //second divider
+ 209:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 210:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 211:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #else
+ 212:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #error "Unsupported core_clock."
+ 213:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #endif
+ 214:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #elif (SRC_CLK == 4U)
+ 215:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #if (CORE_CLOCK == 36U)
+ 216:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #error "Unrecommended core_clock"
+ 217:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #elif (CORE_CLOCK == 12U)
+ 218:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define N_PLLXTPRE    1U  //first divider
+ 219:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define F_PLLF        36U //multiplier
+ 220:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define K_PLLK        3U  //second divider
+ 221:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define RCC_HPRE_PSC    RCC_CFGR_HPRE_DIV1   /*!< SYSCLK divided by 1  */
+ 222:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #define SYSCLK          CORE_CLOCK
+ 223:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #else
+ 224:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****                 #error "Unsupported core_clock."
+ 225:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****             #endif
+ 226:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #endif
+ 227:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 228:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #error "EXT_CRYSTAL_OSC out of boundaries (4-12MHz)."
+ 229:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 230:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 231:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 232:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 233:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* FLASH_ACR_LATENCY calculation */
+ 234:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if ( SYSCLK <= 12U )
+ 235:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #define FLASH_ACR_LATENCY_VALUE    FLASH_ACR_LATENCY_0WS
+ 236:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if !defined(MCAL_MPCM_INCLUDED)
+ 237:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PREFETCH_VALUE             1u
+ 238:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 239:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #elif (( SYSCLK <= 24U ) && ( 12U < SYSCLK ))
+ 240:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #define FLASH_ACR_LATENCY_VALUE    FLASH_ACR_LATENCY_2WS
+ 241:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if !defined(MCAL_MPCM_INCLUDED)
+ 242:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PREFETCH_VALUE             1u
+ 243:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 244:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #elif (( SYSCLK <= MAX_SYSCLK ) && ( 24U < SYSCLK ))
+ 245:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #define FLASH_ACR_LATENCY_VALUE    FLASH_ACR_LATENCY_1WS
+ 246:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if !defined(MCAL_MPCM_INCLUDED)
+ 247:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PREFETCH_VALUE             0u
+ 248:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 249:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #else
+ 250:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #error "No valid CORE_CLOCK defined!"
+ 251:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 252:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 253:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PCLOCK (APB0) calculation */
+ 254:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifndef PCLOCK
+ 255:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if (CORE_CLOCK < MAX_PCLOCK)
+ 256:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PCLOCK    CORE_CLOCK
+ 257:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 258:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PCLOCK    MAX_PCLOCK
+ 259:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 260:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 6
+
+
+ 261:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 262:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define DIV1 (CORE_CLOCK / PCLOCK)
+ 263:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if ( (CORE_CLOCK % PCLOCK) == 0U ) && ( PCLOCK <= MAX_PCLOCK )
+ 264:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if DIV1 == 1U
+ 265:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB0_PSC       RCC_CFGR_PPRE0_DIV1
+ 266:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV1 == 2U
+ 267:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB0_PSC       RCC_CFGR_PPRE0_DIV2
+ 268:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV1 == 4U
+ 269:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB0_PSC       RCC_CFGR_PPRE0_DIV4
+ 270:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV1 == 8U
+ 271:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB0_PSC       RCC_CFGR_PPRE0_DIV8
+ 272:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV1 == 16U
+ 273:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB0_PSC       RCC_CFGR_PPRE0_DIV16
+ 274:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 275:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #error "No valid value of peripheral clock defined. PCLOCK must be correctly defined."
+ 276:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 277:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #else
+ 278:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #error "No valid peripheral clock defined. PCLOCK must be correctly defined."
+ 279:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 280:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 281:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PCLOCK1 (APB1) calculation */
+ 282:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifndef PCLOCK1
+ 283:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if (CORE_CLOCK < MAX_PCLOCK)
+ 284:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PCLOCK1    CORE_CLOCK
+ 285:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 286:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define PCLOCK1    MAX_PCLOCK
+ 287:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 288:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 289:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 290:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #define DIV2 (CORE_CLOCK / PCLOCK1)
+ 291:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if ( (CORE_CLOCK % PCLOCK1) == 0U ) && ( PCLOCK1 <= MAX_PCLOCK )
+ 292:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #if DIV2 == 1U
+ 293:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB1_PSC       RCC_CFGR_PPRE1_DIV1
+ 294:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV2 == 2U
+ 295:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB1_PSC       RCC_CFGR_PPRE1_DIV2
+ 296:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV2 == 4U
+ 297:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB1_PSC       RCC_CFGR_PPRE1_DIV4
+ 298:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV2 == 8U
+ 299:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB1_PSC       RCC_CFGR_PPRE1_DIV8
+ 300:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #elif DIV2 == 16U
+ 301:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #define RCC_APB1_PSC       RCC_CFGR_PPRE1_DIV16
+ 302:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #else
+ 303:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         #error "No valid value of peripheral clock defined. PCLOCK1 must be correctly defined."
+ 304:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #endif
+ 305:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #else
+ 306:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     #error "No valid peripheral clock defined. PCLOCK1 must be correctly defined."
+ 307:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 308:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 309:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if defined(MCAL_MPCM_INCLUDED)
+ 310:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 311:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* Axivion Disable Style MisraC2012-8.4 : Missing declaration for function definition */
+ 312:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** const struct MPCM_PowerModesConfig customPowerModes =
+ 313:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 314:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Check available configurations for your platform in mcpm_mc.h */
+ 315:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     &MPCM_CFG_DEFAULT,              // Take configuration from make process
+ 316:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     &MPCM_CFG_CORE_8M_PCLK_8M_PLLON,// Lowered clock speeds for low-power run
+ 317:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     NULL,                           // No special configuration for sleep mode
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 7
+
+
+ 318:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     &MPCM_CFG_STOP                  // No special configuration for stop mode
+ 319:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** };
+ 320:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* Axivion Enable Style MisraC2012-8.4 */ 
+ 321:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 322:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 323:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 324:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+ 325:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 326:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if !defined(MCAL_MPCM_INCLUDED)
+ 327:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 328:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /** \brief Sets the PLL */
+ 329:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vSetPLL(uint32_t divFactorPLL, uint32_t mulFactorPLL, uint32_t divFactorPLL2);
+ 330:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 331:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /** \brief Initializes clock based on make configuration */
+ 332:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vInitClock(void);
+ 333:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 334:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /** \brief Enable the Prefetch feature. */
+ 335:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vEnablePrefetch(void);
+ 336:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 337:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif /* !defined(MCAL_MPCM_INCLUDED) */
+ 338:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 339:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 340:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PRIVATE FUNCTION DEFINITIONS AND PRIVATE MACRO FUNCTION DEFINITIONS   v    */
+ 341:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 342:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /*Axivion Disable MisraC2012-8.7 : Routine can be declared static in primary file. */
+ 343:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** void BASIC_vInitPlatform(void)
+ 344:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+  27              		.loc 1 344 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 345:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set the clocks to default state as like after the hardware reset */
+ 346:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 347:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   #if defined(MCAL_MPCM_INCLUDED)
+ 348:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     if(MPCM_init(&customPowerModes) != MCAL_OK)
+ 349:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     {
+ 350:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****         MCAL_error("Invalid MPCM configuration");
+ 351:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     }
+ 352:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   #else
+ 353:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     BASIC_vInitClock();
+  31              		.loc 1 353 5 view .LVU1
+  32              	.LBB8:
+  33              	.LBI8:
+ 354:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     BASIC_vEnablePrefetch();
+ 355:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   #endif
+ 356:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 357:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if defined(FEATURE_FUNCTIONAL_SAFETY_ENABLED) && \
+ 358:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     (defined(VARIANT_BOOTMANAGER) || defined(APP_VARIANT))
+ 359:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     FSF_vBoot();
+ 360:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 361:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 362:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* Axivion Enable Style MisraC2012-8.7 */ 
+ 363:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 364:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #if !defined(MCAL_MPCM_INCLUDED)
+ 365:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 366:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /**
+ 367:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   * @brief  Enable the Prefetch feature.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 8
+
+
+ 368:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   * @note   None
+ 369:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   * @retval None
+ 370:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   */
+ 371:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vEnablePrefetch(void)
+ 372:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 373:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Clear PRFTEN bit */
+ 374:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     uint32_t tmpreg = FLASH->ACR.V32 & (~FLASH_ACR_PRFTEN_Msk);
+ 375:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set PRFTEN bit according to the New State value */
+ 376:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     tmpreg |= (((uint32_t)0x5AA5U << FLASH_ACR_LOCK_Pos) | ((uint32_t)PREFETCH_VALUE << FLASH_ACR_P
+ 377:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Store the new value */
+ 378:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     FLASH->ACR.V32 = tmpreg;
+ 379:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 380:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 381:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vInitClock(void)
+  34              		.loc 1 381 13 view .LVU2
+  35              	.LBB9:
+ 382:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 383:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 384:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set Flash latency */
+ 385:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     FLASH->ACR.V32 = FLASH_ACR_LATENCY_VALUE;
+  36              		.loc 1 385 5 view .LVU3
+  37              		.loc 1 385 20 is_stmt 0 view .LVU4
+  38 0000 2A4B     		ldr	r3, .L11
+  39 0002 2B48     		ldr	r0, .L11+4
+  40              	.LBE9:
+  41              	.LBE8:
+ 344:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set the clocks to default state as like after the hardware reset */
+  42              		.loc 1 344 1 view .LVU5
+  43 0004 10B5     		push	{r4, lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 8
+  46              		.cfi_offset 4, -8
+  47              		.cfi_offset 14, -4
+  48              	.LBB16:
+  49              	.LBB14:
+ 386:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 387:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Unlock RCC Configuration Register */
+ 388:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC_REGS_UNLOCK();
+  50              		.loc 1 388 5 view .LVU6
+  51 0006 2B4A     		ldr	r2, .L11+8
+ 385:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+  52              		.loc 1 385 20 view .LVU7
+  53 0008 0360     		str	r3, [r0]
+  54              		.loc 1 388 5 is_stmt 1 view .LVU8
+  55 000a 2B4B     		ldr	r3, .L11+12
+  56 000c 5A63     		str	r2, [r3, #52]
+ 389:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 390:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Enable SYSCFG Module */
+ 391:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->AHBENR.BIT.SYSCFGEN = 1U;
+  57              		.loc 1 391 5 view .LVU9
+  58              		.loc 1 391 30 is_stmt 0 view .LVU10
+  59 000e 0222     		movs	r2, #2
+  60 0010 196A     		ldr	r1, [r3, #32]
+  61 0012 0A43     		orrs	r2, r1
+  62 0014 1A62     		str	r2, [r3, #32]
+ 392:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 393:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Unlock SYSCFG SAFR register and set XTAL1 and XTAL2 pins to GPIO mode */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 9
+
+
+ 394:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     SYSCFG->SAFR.V32 = SYSCFG_SAFR_XTAL1_XTAL2_GPIO_MODE;
+  63              		.loc 1 394 5 is_stmt 1 view .LVU11
+  64              		.loc 1 394 22 is_stmt 0 view .LVU12
+  65 0016 2949     		ldr	r1, .L11+16
+  66 0018 294A     		ldr	r2, .L11+20
+  67 001a 9160     		str	r1, [r2, #8]
+ 395:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 396:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Enable HSI */
+ 397:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CR.BIT.HSION = 1U;
+  68              		.loc 1 397 5 is_stmt 1 view .LVU13
+  69              		.loc 1 397 23 is_stmt 0 view .LVU14
+  70 001c 8022     		movs	r2, #128
+  71 001e 1C68     		ldr	r4, [r3]
+  72 0020 9201     		lsls	r2, r2, #6
+  73 0022 2243     		orrs	r2, r4
+  74 0024 1A60     		str	r2, [r3]
+ 398:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 399:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Wait till HSI Ready */
+ 400:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     while (RCC->CR.BIT.HSIRDY == 0U) {}
+  75              		.loc 1 400 5 is_stmt 1 view .LVU15
+  76              	.L2:
+  77              		.loc 1 400 39 view .LVU16
+  78              		.loc 1 400 31 view .LVU17
+  79              		.loc 1 400 23 is_stmt 0 view .LVU18
+  80 0026 1A68     		ldr	r2, [r3]
+  81              		.loc 1 400 31 view .LVU19
+  82 0028 5204     		lsls	r2, r2, #17
+  83 002a FCD5     		bpl	.L2
+ 401:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 402:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set HSI as PLL clock source */
+ 403:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PLLSRC = RCC_CFGR_PLLSRC_HSI;
+  84              		.loc 1 403 5 is_stmt 1 view .LVU20
+  85              		.loc 1 403 26 is_stmt 0 view .LVU21
+  86 002c 5A68     		ldr	r2, [r3, #4]
+  87 002e 254C     		ldr	r4, .L11+24
+  88 0030 2240     		ands	r2, r4
+  89 0032 5A60     		str	r2, [r3, #4]
+ 404:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 405:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifdef EXT_CRYSTAL_OSC
+ 406:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 407:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /*Unlock SYSCFG SAFR register and set XTAL1 and XTAL2 pins to oscillator mode */
+ 408:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     SYSCFG->SAFR.V32 = SYSCFG_SAFR_XTAL1_XTAL2_EXT_OSC_MODE;
+ 409:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 410:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Recommended setting for driving the crystal oscillator */
+ 411:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.HSESEL = RCC_CFGR_HSESEL_NORMAL;
+ 412:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->HSERFB = RCC_HSERFB_RFBSEL_500K;
+ 413:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 414:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Enable HSE */
+ 415:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CR.V32 |= RCC_CR_HSEON;
+ 416:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 417:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Wait till HSE ready */
+ 418:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     while (RCC->CR.V32 & RCC_CR_HSERDY == 0U) {}
+ 419:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 420:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 421:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     BASIC_vSetPLL(N_PLLXTPRE, F_PLLF, K_PLLK);
+  90              		.loc 1 421 5 is_stmt 1 view .LVU22
+  91              	.LBB10:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 10
+
+
+  92              	.LBI10:
+ 422:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 423:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* LOCK RCC */
+ 424:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC_REGS_LOCK();
+ 425:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 426:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 427:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 428:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** static void BASIC_vSetPLL(uint32_t divFactorPLL, uint32_t mulFactorPLL, uint32_t divFactorPLL2)
+  93              		.loc 1 428 13 view .LVU23
+  94              	.LVL0:
+  95              	.LBB11:
+ 429:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 430:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set PLL dividers and multiplier */
+ 431:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PLLXTPRE = (uint8_t)(divFactorPLL - PLLXTPRE_OFFSET); //PREFCLK = PLLCLKIN / N
+  96              		.loc 1 431 5 view .LVU24
+  97              		.loc 1 431 28 is_stmt 0 view .LVU25
+  98 0034 C022     		movs	r2, #192
+  99 0036 5C68     		ldr	r4, [r3, #4]
+ 100 0038 9203     		lsls	r2, r2, #14
+ 101 003a 2243     		orrs	r2, r4
+ 102 003c 5A60     		str	r2, [r3, #4]
+ 432:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PLLF = (uint8_t)(mulFactorPLL - PLLF_OFFSET);         //VCOCLK = PRECLK * F
+ 103              		.loc 1 432 5 is_stmt 1 view .LVU26
+ 104              		.loc 1 432 24 is_stmt 0 view .LVU27
+ 105 003e 5C68     		ldr	r4, [r3, #4]
+ 106 0040 214A     		ldr	r2, .L11+28
+ 107 0042 1440     		ands	r4, r2
+ 108 0044 8822     		movs	r2, #136
+ 109 0046 9202     		lsls	r2, r2, #10
+ 110 0048 2243     		orrs	r2, r4
+ 111 004a 5A60     		str	r2, [r3, #4]
+ 433:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PLLK = (uint8_t)(divFactorPLL2 - PLLK_OFFSET);        //PLLCLK = (VCOCLK / K) * (
+ 112              		.loc 1 433 5 is_stmt 1 view .LVU28
+ 113              		.loc 1 433 24 is_stmt 0 view .LVU29
+ 114 004c 5A68     		ldr	r2, [r3, #4]
+ 115 004e 1F4C     		ldr	r4, .L11+32
+ 116 0050 2240     		ands	r2, r4
+ 117 0052 5A60     		str	r2, [r3, #4]
+ 434:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 435:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifdef EXT_CRYSTAL_OSC
+ 436:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set HSE as PLL clock source */
+ 437:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PLLSRC = RCC_CFGR_PLLSRC_HSE;
+ 438:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 439:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 440:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Enable PLL clock */
+ 441:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CR.V32 |= RCC_CR_PLLON;
+ 118              		.loc 1 441 5 is_stmt 1 view .LVU30
+ 119              		.loc 1 441 17 is_stmt 0 view .LVU31
+ 120 0054 8022     		movs	r2, #128
+ 121 0056 1C68     		ldr	r4, [r3]
+ 122 0058 2243     		orrs	r2, r4
+ 123 005a 1A60     		str	r2, [r3]
+ 442:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 443:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Wait till PLL circuit ready */
+ 444:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     while ((RCC->CR.V32 & RCC_CR_PLLRDY) == 0U) {}
+ 124              		.loc 1 444 5 is_stmt 1 view .LVU32
+ 125              		.loc 1 444 25 is_stmt 0 view .LVU33
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 11
+
+
+ 126 005c 8022     		movs	r2, #128
+ 127 005e 5200     		lsls	r2, r2, #1
+ 128              	.L3:
+ 129              		.loc 1 444 50 is_stmt 1 view .LVU34
+ 130              		.loc 1 444 42 view .LVU35
+ 131              		.loc 1 444 20 is_stmt 0 view .LVU36
+ 132 0060 1C68     		ldr	r4, [r3]
+ 133              		.loc 1 444 42 view .LVU37
+ 134 0062 1442     		tst	r4, r2
+ 135 0064 FCD0     		beq	.L3
+ 445:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 446:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Switch SYSCLK to PLL */
+ 447:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CR.BIT.SW = (uint32_t)SYSTEM_CLK_SRC_PLL;
+ 136              		.loc 1 447 5 is_stmt 1 view .LVU38
+ 137              		.loc 1 447 20 is_stmt 0 view .LVU39
+ 138 0066 0722     		movs	r2, #7
+ 139 0068 1C68     		ldr	r4, [r3]
+ 140 006a 9443     		bics	r4, r2
+ 141 006c 063A     		subs	r2, r2, #6
+ 142 006e 2243     		orrs	r2, r4
+ 143 0070 1A60     		str	r2, [r3]
+ 448:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 449:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Wait for SYSCLK to switch to PLL */
+ 450:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     while (RCC->CR.BIT.SWS != (uint32_t)SYSTEM_CLK_SRC_PLL) {}
+ 144              		.loc 1 450 5 is_stmt 1 view .LVU40
+ 145              	.L4:
+ 146              		.loc 1 450 62 view .LVU41
+ 147              		.loc 1 450 28 view .LVU42
+ 148              		.loc 1 450 23 is_stmt 0 view .LVU43
+ 149 0072 1A68     		ldr	r2, [r3]
+ 150 0074 9206     		lsls	r2, r2, #26
+ 151 0076 520F     		lsrs	r2, r2, #29
+ 152              		.loc 1 450 28 view .LVU44
+ 153 0078 012A     		cmp	r2, #1
+ 154 007a FAD1     		bne	.L4
+ 451:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 452:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set AHB, APB0(PCLOCK0) and APB1(PCLOCK1) pre-scaler */
+ 453:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.HPRE = RCC_HPRE_PSC;
+ 155              		.loc 1 453 5 is_stmt 1 view .LVU45
+ 156              	.LBE11:
+ 157              	.LBE10:
+ 158              	.LBE14:
+ 159              	.LBE16:
+ 361:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* Axivion Enable Style MisraC2012-8.7 */ 
+ 160              		.loc 1 361 1 is_stmt 0 view .LVU46
+ 161              		@ sp needed
+ 162              	.LBB17:
+ 163              	.LBB15:
+ 164              	.LBB13:
+ 165              	.LBB12:
+ 166              		.loc 1 453 24 view .LVU47
+ 167 007c 0724     		movs	r4, #7
+ 168 007e 5A68     		ldr	r2, [r3, #4]
+ 169 0080 A243     		bics	r2, r4
+ 170 0082 5A60     		str	r2, [r3, #4]
+ 454:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PPRE0 = RCC_APB0_PSC;
+ 171              		.loc 1 454 5 is_stmt 1 view .LVU48
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 12
+
+
+ 172              		.loc 1 454 25 is_stmt 0 view .LVU49
+ 173 0084 3822     		movs	r2, #56
+ 174 0086 5C68     		ldr	r4, [r3, #4]
+ 175 0088 9443     		bics	r4, r2
+ 176 008a 303A     		subs	r2, r2, #48
+ 177 008c 2243     		orrs	r2, r4
+ 178 008e 5A60     		str	r2, [r3, #4]
+ 455:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     RCC->CFGR.BIT.PPRE1 = RCC_APB1_PSC;
+ 179              		.loc 1 455 5 is_stmt 1 view .LVU50
+ 180              		.loc 1 455 25 is_stmt 0 view .LVU51
+ 181 0090 5C68     		ldr	r4, [r3, #4]
+ 182 0092 0F4A     		ldr	r2, .L11+36
+ 183 0094 1440     		ands	r4, r2
+ 184 0096 4022     		movs	r2, #64
+ 185 0098 2243     		orrs	r2, r4
+ 186 009a 5A60     		str	r2, [r3, #4]
+ 187              	.LVL1:
+ 188              		.loc 1 455 25 view .LVU52
+ 189              	.LBE12:
+ 190              	.LBE13:
+ 424:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 191              		.loc 1 424 5 is_stmt 1 view .LVU53
+ 192 009c 0022     		movs	r2, #0
+ 193 009e 5A63     		str	r2, [r3, #52]
+ 194              	.LBE15:
+ 195              	.LBE17:
+ 354:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****   #endif
+ 196              		.loc 1 354 5 view .LVU54
+ 197              	.LBB18:
+ 198              	.LBI18:
+ 371:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 199              		.loc 1 371 13 view .LVU55
+ 200              	.LBB19:
+ 374:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set PRFTEN bit according to the New State value */
+ 201              		.loc 1 374 5 view .LVU56
+ 374:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set PRFTEN bit according to the New State value */
+ 202              		.loc 1 374 33 is_stmt 0 view .LVU57
+ 203 00a0 0368     		ldr	r3, [r0]
+ 374:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set PRFTEN bit according to the New State value */
+ 204              		.loc 1 374 14 view .LVU58
+ 205 00a2 0C4A     		ldr	r2, .L11+40
+ 206 00a4 1340     		ands	r3, r2
+ 207              	.LVL2:
+ 376:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Store the new value */
+ 208              		.loc 1 376 5 is_stmt 1 view .LVU59
+ 376:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Store the new value */
+ 209              		.loc 1 376 12 is_stmt 0 view .LVU60
+ 210 00a6 1943     		orrs	r1, r3
+ 211              	.LVL3:
+ 378:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 212              		.loc 1 378 5 is_stmt 1 view .LVU61
+ 378:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 213              		.loc 1 378 20 is_stmt 0 view .LVU62
+ 214 00a8 0160     		str	r1, [r0]
+ 215              	.LVL4:
+ 378:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 216              		.loc 1 378 20 view .LVU63
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 13
+
+
+ 217              	.LBE19:
+ 218              	.LBE18:
+ 361:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* Axivion Enable Style MisraC2012-8.7 */ 
+ 219              		.loc 1 361 1 view .LVU64
+ 220 00aa 10BD     		pop	{r4, pc}
+ 221              	.L12:
+ 222              		.align	2
+ 223              	.L11:
+ 224 00ac 0100A55A 		.word	1520762881
+ 225 00b0 000C0440 		.word	1074007040
+ 226 00b4 CC330000 		.word	13260
+ 227 00b8 00080440 		.word	1074006016
+ 228 00bc 0000A55A 		.word	1520762880
+ 229 00c0 00040440 		.word	1074004992
+ 230 00c4 FFFFF7FF 		.word	-524289
+ 231 00c8 FF1FFCFF 		.word	-253953
+ 232 00cc FFE3FFFF 		.word	-7169
+ 233 00d0 3FFEFFFF 		.word	-449
+ 234 00d4 FFFEFFFF 		.word	-257
+ 235              		.cfi_endproc
+ 236              	.LFE46:
+ 238              		.section	.text.BASIC_vConfigPlatform,"ax",%progbits
+ 239              		.align	1
+ 240              		.global	BASIC_vConfigPlatform
+ 241              		.syntax unified
+ 242              		.code	16
+ 243              		.thumb_func
+ 245              	BASIC_vConfigPlatform:
+ 246              	.LFB50:
+ 456:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 457:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 458:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif /* !defined(MCAL_MPCM_INCLUDED) */
+ 459:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 460:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 461:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 462:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** /******************************************************************************/
+ 463:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 464:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** void BASIC_vConfigPlatform (void)
+ 465:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** {
+ 247              		.loc 1 465 1 is_stmt 1 view -0
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 0
+ 250              		@ frame_needed = 0, uses_anonymous_args = 0
+ 466:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Clock Configuration*/
+ 467:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     BASIC_vInitPlatform();
+ 251              		.loc 1 467 5 view .LVU66
+ 465:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Clock Configuration*/
+ 252              		.loc 1 465 1 is_stmt 0 view .LVU67
+ 253 0000 10B5     		push	{r4, lr}
+ 254              	.LCFI1:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 4, -8
+ 257              		.cfi_offset 14, -4
+ 258              		.loc 1 467 5 view .LVU68
+ 259 0002 FFF7FEFF 		bl	BASIC_vInitPlatform
+ 260              	.LVL5:
+ 468:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccGk35Uf.s 			page 14
+
+
+ 469:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #ifdef APP_VARIANT
+ 470:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Here should be placed all application specific initialization */
+ 471:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     
+ 472:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* Set Priority of configurable interrupts */
+ 473:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     // setDefaultInterruptPriority();
+ 474:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     
+ 475:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     // HADC_vInit(0);
+ 476:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** 
+ 477:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     /* all other initializations */
+ 478:app/prog/ped_fw/basic/sh30f/basicMcXs.c ****     // ...
+ 479:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** #endif
+ 480:app/prog/ped_fw/basic/sh30f/basicMcXs.c **** }
+ 261              		.loc 1 480 1 view .LVU69
+ 262              		@ sp needed
+ 263 0006 10BD     		pop	{r4, pc}
+ 264              		.cfi_endproc
+ 265              	.LFE50:
+ 267              		.text
+ 268              	.Letext0:
+ 269              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 270              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 271              		.file 4 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 272              		.file 5 "common/prog/MSP/sh30f/system_sh30f9xx_sa0.h"

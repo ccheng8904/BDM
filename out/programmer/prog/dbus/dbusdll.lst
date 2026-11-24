@@ -1,0 +1,1689 @@
+
+out/programmer/prog/dbus/dbusdll.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DLL_vAddByteToCrcCalculation:
+
+00000000 <DLL_vAddByteToCrcCalculation>:
+   #define DLL_CRC_3  3
+   #define DLL_CRC_5  5
+
+   uint8_t ucLocrc; //Low CRC
+   uint8_t ucHicrc; //High CRC
+   ucHicrc = (uint8_t) DLL_uiCrc;
+   0:	4a09      	ldr	r2, [pc, #36]	; (28 <DLL_vAddByteToCrcCalculation+0x28>)
+{
+   2:	b530      	push	{r4, r5, lr}
+   ucHicrc = (uint8_t) DLL_uiCrc;
+   4:	8814      	ldrh	r4, [r2, #0]
+   ucLocrc = (uint8_t) (DLL_uiCrc >> BYTE_SIZE) ^ucByte;
+   6:	0a23      	lsrs	r3, r4, #8
+   8:	4058      	eors	r0, r3
+   ucLocrc ^= (uint8_t)(ucLocrc >> NIBBLE_SIZE);
+   a:	0901      	lsrs	r1, r0, #4
+   c:	4041      	eors	r1, r0
+   ucHicrc ^= (uint8_t)(ucLocrc << NIBBLE_SIZE);
+   ucHicrc ^= (uint8_t)(ucLocrc >> DLL_CRC_3);
+   e:	08cd      	lsrs	r5, r1, #3
+   ucHicrc ^= (uint8_t)(ucLocrc << NIBBLE_SIZE);
+  10:	010b      	lsls	r3, r1, #4
+   ucHicrc ^= (uint8_t)(ucLocrc >> DLL_CRC_3);
+  12:	406b      	eors	r3, r5
+   ucLocrc ^= (uint8_t)(ucLocrc << DLL_CRC_5);
+  14:	0148      	lsls	r0, r1, #5
+   ucHicrc ^= (uint8_t)(ucLocrc >> DLL_CRC_3);
+  16:	4063      	eors	r3, r4
+   ucLocrc ^= (uint8_t)(ucLocrc << DLL_CRC_5);
+  18:	b2c0      	uxtb	r0, r0
+  1a:	4048      	eors	r0, r1
+   DLL_uiCrc = (((uint16_t) ucHicrc) << BYTE_SIZE) | ucLocrc;
+  1c:	b2db      	uxtb	r3, r3
+  1e:	021b      	lsls	r3, r3, #8
+  20:	b2c0      	uxtb	r0, r0
+  22:	4318      	orrs	r0, r3
+  24:	8010      	strh	r0, [r2, #0]
+   return;
+}
+  26:	bd30      	pop	{r4, r5, pc}
+  28:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_bIsBusIdle:
+
+00000000 <DLL_bIsBusIdle>:
+ \b type: bool\n
+ \b range \li 0 = false
+          \li all other values = true
+*/
+static bool DLL_bIsBusIdle(void)
+{
+   0:	b510      	push	{r4, lr}
+   if ((DLL_ucStatus & DLL_STATUS_READY_TO_INITIATE_TRANSMISSION_BIT) == 0u)
+   2:	4b0d      	ldr	r3, [pc, #52]	; (38 <DLL_bIsBusIdle+0x38>)
+      }
+      return false;
+   }
+   else
+   {
+      return true;
+   4:	2001      	movs	r0, #1
+   if ((DLL_ucStatus & DLL_STATUS_READY_TO_INITIATE_TRANSMISSION_BIT) == 0u)
+   6:	781a      	ldrb	r2, [r3, #0]
+   8:	2310      	movs	r3, #16
+   a:	0011      	movs	r1, r2
+   c:	4019      	ands	r1, r3
+   e:	421a      	tst	r2, r3
+  10:	d111      	bne.n	36 <DLL_bIsBusIdle+0x36>
+      if ((DLL_ucTaskState < (uint8_t)DLL_MESSAGE_TO_SEND)) //NB! This assumes that all receive states are lower valued, if the data link layer has been transmitting a message, it is important to let the task handler the possibility to call the message confirmation function.
+  12:	4b0a      	ldr	r3, [pc, #40]	; (3c <DLL_bIsBusIdle+0x3c>)
+      return false;
+  14:	0008      	movs	r0, r1
+      if ((DLL_ucTaskState < (uint8_t)DLL_MESSAGE_TO_SEND)) //NB! This assumes that all receive states are lower valued, if the data link layer has been transmitting a message, it is important to let the task handler the possibility to call the message confirmation function.
+  16:	781b      	ldrb	r3, [r3, #0]
+  18:	2b03      	cmp	r3, #3
+  1a:	d80c      	bhi.n	36 <DLL_bIsBusIdle+0x36>
+         if ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) > (uint32_t)(DLL_ulCollisionWaitingTime + DLL_uiIdleStateDetectionTime))
+  1c:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  20:	4b07      	ldr	r3, [pc, #28]	; (40 <DLL_bIsBusIdle+0x40>)
+  22:	4a08      	ldr	r2, [pc, #32]	; (44 <DLL_bIsBusIdle+0x44>)
+  24:	681b      	ldr	r3, [r3, #0]
+  26:	1ac3      	subs	r3, r0, r3
+  28:	8810      	ldrh	r0, [r2, #0]
+  2a:	4a07      	ldr	r2, [pc, #28]	; (48 <DLL_bIsBusIdle+0x48>)
+  2c:	6812      	ldr	r2, [r2, #0]
+  2e:	1880      	adds	r0, r0, r2
+  30:	4298      	cmp	r0, r3
+  32:	4180      	sbcs	r0, r0
+  34:	4240      	negs	r0, r0
+   }
+}
+  36:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DLL_vSetupTimings:
+
+00000000 <DLL_vSetupTimings>:
+{
+   0:	b510      	push	{r4, lr}
+    uint16_t new_bit_time = DBPL_uGetUsBitTimeForBaudRate(baud);
+   2:	f7ff fffe 	bl	0 <DBPL_uGetUsBitTimeForBaudRate>
+    if(new_bit_time > 0U)
+   6:	2800      	cmp	r0, #0
+   8:	d00e      	beq.n	28 <DLL_vSetupTimings+0x28>
+        DLL_uiIdleStateDetectionTime = (uint16_t)((uint16_t)DLL_IDLE_STATE_DETECTION_TIME * DLL_uiBitTime);
+   a:	220a      	movs	r2, #10
+        DLL_uiBitTime = new_bit_time;
+   c:	4b0c      	ldr	r3, [pc, #48]	; (40 <DLL_vSetupTimings+0x40>)
+        DLL_uiIdleStateDetectionTime = (uint16_t)((uint16_t)DLL_IDLE_STATE_DETECTION_TIME * DLL_uiBitTime);
+   e:	4342      	muls	r2, r0
+        DLL_uiBitTime = new_bit_time;
+  10:	8018      	strh	r0, [r3, #0]
+        DLL_uiIdleStateDetectionTime = (uint16_t)((uint16_t)DLL_IDLE_STATE_DETECTION_TIME * DLL_uiBitTime);
+  12:	4b0c      	ldr	r3, [pc, #48]	; (44 <DLL_vSetupTimings+0x44>)
+  14:	4c0c      	ldr	r4, [pc, #48]	; (48 <DLL_vSetupTimings+0x48>)
+  16:	490d      	ldr	r1, [pc, #52]	; (4c <DLL_vSetupTimings+0x4c>)
+  18:	801a      	strh	r2, [r3, #0]
+        if(DLL_uiBitTime < DLL_BIT_TIME_CAPPED)
+  1a:	2819      	cmp	r0, #25
+  1c:	d805      	bhi.n	2a <DLL_vSetupTimings+0x2a>
+            DLL_uiAckGenerationTimeout = (uint16_t)((uint16_t)((uint16_t)DLL_ACK_GENERATION_TIMEOUT * (uint16_t)DLL_BIT_TIME_CAPPED) - (uint16_t)((uint16_t)DLL_BIT_TIME_CAPPED>>1U));
+  1e:	23dd      	movs	r3, #221	; 0xdd
+  20:	8023      	strh	r3, [r4, #0]
+            DLL_uiInterbyteTimeoutRx = (uint16_t)((uint16_t)((uint16_t)DLL_INTERBYTE_TIME_OUT * (uint16_t)DLL_BIT_TIME_CAPPED) + (uint16_t)((uint16_t)DLL_BIT_TIME_CAPPED>>1U));
+  22:	23fc      	movs	r3, #252	; 0xfc
+  24:	33ff      	adds	r3, #255	; 0xff
+            DLL_uiInterbyteTimeoutRx = (uint16_t)((uint16_t)((uint16_t)DLL_INTERBYTE_TIME_OUT * DLL_uiBitTime) + (DLL_uiBitTime>>1U));
+  26:	800b      	strh	r3, [r1, #0]
+}
+  28:	bd10      	pop	{r4, pc}
+            DLL_uiAckGenerationTimeout = (uint16_t)(((uint16_t)DLL_ACK_GENERATION_TIMEOUT * DLL_uiBitTime) - (DLL_uiBitTime>>1U));
+  2a:	2209      	movs	r2, #9
+  2c:	4342      	muls	r2, r0
+  2e:	0843      	lsrs	r3, r0, #1
+  30:	b29b      	uxth	r3, r3
+  32:	1ad2      	subs	r2, r2, r3
+  34:	8022      	strh	r2, [r4, #0]
+            DLL_uiInterbyteTimeoutRx = (uint16_t)((uint16_t)((uint16_t)DLL_INTERBYTE_TIME_OUT * DLL_uiBitTime) + (DLL_uiBitTime>>1U));
+  36:	2213      	movs	r2, #19
+  38:	4342      	muls	r2, r0
+  3a:	189b      	adds	r3, r3, r2
+  3c:	e7f3      	b.n	26 <DLL_vSetupTimings+0x26>
+  3e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DLL_uiCalcCollisionWaitingTime:
+
+00000000 <DLL_uiCalcCollisionWaitingTime>:
+   DLL_uiCollisionRandomValue = (DLL_uiCollisionRandomValue ^ DLL_RANDOM_Y) + DLL_RANDOM_Z;
+   0:	4a16      	ldr	r2, [pc, #88]	; (5c <DLL_uiCalcCollisionWaitingTime+0x5c>)
+   2:	4b17      	ldr	r3, [pc, #92]	; (60 <DLL_uiCalcCollisionWaitingTime+0x60>)
+   4:	8811      	ldrh	r1, [r2, #0]
+{
+   6:	b510      	push	{r4, lr}
+   DLL_uiCollisionRandomValue = (DLL_uiCollisionRandomValue ^ DLL_RANDOM_Y) + DLL_RANDOM_Z;
+   8:	404b      	eors	r3, r1
+   a:	4916      	ldr	r1, [pc, #88]	; (64 <DLL_uiCalcCollisionWaitingTime+0x64>)
+   c:	185b      	adds	r3, r3, r1
+   e:	b29b      	uxth	r3, r3
+  10:	8013      	strh	r3, [r2, #0]
+   switch (DLL_ucSucceedingCollisions)
+  12:	4a15      	ldr	r2, [pc, #84]	; (68 <DLL_uiCalcCollisionWaitingTime+0x68>)
+   ucCollisionFactor = (uint8_t)(DLL_uiCollisionRandomValue >> BYTE_SIZE);
+  14:	0a1b      	lsrs	r3, r3, #8
+   switch (DLL_ucSucceedingCollisions)
+  16:	7810      	ldrb	r0, [r2, #0]
+         ucCollisionFactor &= DLL_COLL_FACT_4_MORE;
+  18:	227f      	movs	r2, #127	; 0x7f
+   switch (DLL_ucSucceedingCollisions)
+  1a:	2803      	cmp	r0, #3
+  1c:	d804      	bhi.n	28 <DLL_uiCalcCollisionWaitingTime+0x28>
+  1e:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uqi>
+  22:	1002      	.short	0x1002
+  24:	1412      	.short	0x1412
+         ucCollisionFactor &= DLL_COLL_FACT_0;
+  26:	2207      	movs	r2, #7
+         ucCollisionFactor &= DLL_COLL_FACT_4_MORE;
+  28:	4013      	ands	r3, r2
+   return (uint32_t)(((uint32_t)ucCollisionFactor * (uint32_t)DLL_uiBitTime) +
+  2a:	4a10      	ldr	r2, [pc, #64]	; (6c <DLL_uiCalcCollisionWaitingTime+0x6c>)
+  2c:	8814      	ldrh	r4, [r2, #0]
+  2e:	435c      	muls	r4, r3
+           (((DBPL_bDoesAppSpecificRepetitionTimeoutApply(DLL_uiUserCode) == true) && (BAL_bIsSendingRetry() == true)) ? DLL_ConfigurationItem.ulWaitingTimeOffsetUs : 0U));
+  30:	4b0f      	ldr	r3, [pc, #60]	; (70 <DLL_uiCalcCollisionWaitingTime+0x70>)
+  32:	8818      	ldrh	r0, [r3, #0]
+  34:	f7ff fffe 	bl	0 <DBPL_bDoesAppSpecificRepetitionTimeoutApply>
+  38:	2800      	cmp	r0, #0
+  3a:	d108      	bne.n	4e <DLL_uiCalcCollisionWaitingTime+0x4e>
+  3c:	2000      	movs	r0, #0
+   return (uint32_t)(((uint32_t)ucCollisionFactor * (uint32_t)DLL_uiBitTime) +
+  3e:	1820      	adds	r0, r4, r0
+}
+  40:	bd10      	pop	{r4, pc}
+         ucCollisionFactor &= DLL_COLL_FACT_1;
+  42:	220f      	movs	r2, #15
+  44:	e7f0      	b.n	28 <DLL_uiCalcCollisionWaitingTime+0x28>
+         ucCollisionFactor &= DLL_COLL_FACT_2;
+  46:	221f      	movs	r2, #31
+  48:	e7ee      	b.n	28 <DLL_uiCalcCollisionWaitingTime+0x28>
+         ucCollisionFactor &= DLL_COLL_FACT_3;
+  4a:	223f      	movs	r2, #63	; 0x3f
+  4c:	e7ec      	b.n	28 <DLL_uiCalcCollisionWaitingTime+0x28>
+           (((DBPL_bDoesAppSpecificRepetitionTimeoutApply(DLL_uiUserCode) == true) && (BAL_bIsSendingRetry() == true)) ? DLL_ConfigurationItem.ulWaitingTimeOffsetUs : 0U));
+  4e:	f7ff fffe 	bl	0 <BAL_bIsSendingRetry>
+  52:	2800      	cmp	r0, #0
+  54:	d0f2      	beq.n	3c <DLL_uiCalcCollisionWaitingTime+0x3c>
+  56:	4b07      	ldr	r3, [pc, #28]	; (74 <DLL_uiCalcCollisionWaitingTime+0x74>)
+  58:	6858      	ldr	r0, [r3, #4]
+  5a:	e7f0      	b.n	3e <DLL_uiCalcCollisionWaitingTime+0x3e>
+  5c:	00000000 	.word	0x00000000
+  60:	00002b1b 	.word	0x00002b1b
+  64:	00003039 	.word	0x00003039
+	...
+
+Disassembly of section .text.DLL_vEnterIdleState:
+
+00000000 <DLL_vEnterIdleState>:
+{
+   0:	b510      	push	{r4, lr}
+   DLL_ulTimeStamp = DBM_ulGetCircleMicroSeconds();
+   2:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+   6:	4b06      	ldr	r3, [pc, #24]	; (20 <DLL_vEnterIdleState+0x20>)
+   8:	6018      	str	r0, [r3, #0]
+   DLL_ulCollisionWaitingTime = DLL_uiCalcCollisionWaitingTime();
+   a:	f7ff fffe 	bl	0 <DLL_vEnterIdleState>
+   DLL_ucTaskState = (uint8_t)DLL_IDLE_STATE;
+   e:	2201      	movs	r2, #1
+   DLL_ulCollisionWaitingTime = DLL_uiCalcCollisionWaitingTime();
+  10:	4b04      	ldr	r3, [pc, #16]	; (24 <DLL_vEnterIdleState+0x24>)
+  12:	6018      	str	r0, [r3, #0]
+   DLL_ucTaskState = (uint8_t)DLL_IDLE_STATE;
+  14:	4b04      	ldr	r3, [pc, #16]	; (28 <DLL_vEnterIdleState+0x28>)
+  16:	701a      	strb	r2, [r3, #0]
+   DLL_ucStatus = 0U;       //Reset Status, so that a new received message is not getting status from previous transmissions/receptions.
+  18:	2200      	movs	r2, #0
+  1a:	4b04      	ldr	r3, [pc, #16]	; (2c <DLL_vEnterIdleState+0x2c>)
+  1c:	701a      	strb	r2, [r3, #0]
+}
+  1e:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DLL_vHandleRxEvent:
+
+00000000 <DLL_vHandleRxEvent>:
+
+/*
+DLL_vHandleRxEvent(void); This function, which handles the receive interrupts, is called from HAL (hardware abstraction layer) each time a receive interrupt is released. The function defined in HAL will be replaced by this one.
+*/
+void DLL_vHandleRxEvent(void)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+
+   uint32_t uiPreviousTimestamp; //!<Copy of previous timestamp
+   uint8_t ucReceivedCharacter; //Used for keeping the character received by the UART
+   uint8_t ucDataLength; //Used for an intermediate calculation in DLL_MESSAGE_TO_RECEIVE_GET_RECIPIENT
+   uint16_t uiRegisteredMsgId; //Find out, whether it is Power Fail message
+   uiPreviousTimestamp = DLL_ulTimeStamp;
+   2:	4ebc      	ldr	r6, [pc, #752]	; (2f4 <DLL_vHandleRxEvent+0x2f4>)
+   4:	6835      	ldr	r5, [r6, #0]
+   DLL_ulTimeStamp = DBM_ulGetCircleMicroSeconds(); //Get current timestamp as soon as possible within Rx-Interrupt handler
+   6:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+   a:	6030      	str	r0, [r6, #0]
+   /* Check for erroneous receive interrupt */
+   if (DBM_UART_bIsRxError() == false) //Noise errors are ignored
+   c:	f7ff fffe 	bl	0 <DBM_UART_bIsRxError>
+  10:	2800      	cmp	r0, #0
+  12:	d000      	beq.n	16 <DLL_vHandleRxEvent+0x16>
+  14:	e1f1      	b.n	3fa <DLL_vHandleRxEvent+0x3fa>
+   {
+      ucReceivedCharacter = DBM_UART_ucGetRxData();  //Includes reset interrupt flag
+  16:	f7ff fffe 	bl	0 <DBM_UART_ucGetRxData>
+      if (DLL_ucTaskState == (uint8_t)DLL_OFFLINE)
+  1a:	4fb7      	ldr	r7, [pc, #732]	; (2f8 <DLL_vHandleRxEvent+0x2f8>)
+      ucReceivedCharacter = DBM_UART_ucGetRxData();  //Includes reset interrupt flag
+  1c:	0004      	movs	r4, r0
+      if (DLL_ucTaskState == (uint8_t)DLL_OFFLINE)
+  1e:	783a      	ldrb	r2, [r7, #0]
+  20:	2a07      	cmp	r2, #7
+  22:	d062      	beq.n	ea <DLL_vHandleRxEvent+0xea>
+      {
+         return; //Stay offline, no normal handling.
+      }
+      if (DLL_ucTaskState != (uint8_t)DLL_IDLE_STATE)
+  24:	2a01      	cmp	r2, #1
+  26:	d045      	beq.n	b4 <DLL_vHandleRxEvent+0xb4>
+      {
+         /*Check for interbyte time-out*/
+         if ((uint16_t)(DLL_ulTimeStamp - uiPreviousTimestamp) > DLL_uiInterbyteTimeoutRx)
+  28:	6833      	ldr	r3, [r6, #0]
+  2a:	49b4      	ldr	r1, [pc, #720]	; (2fc <DLL_vHandleRxEvent+0x2fc>)
+  2c:	1b5b      	subs	r3, r3, r5
+  2e:	8809      	ldrh	r1, [r1, #0]
+  30:	b29b      	uxth	r3, r3
+  32:	4299      	cmp	r1, r3
+  34:	d218      	bcs.n	68 <DLL_vHandleRxEvent+0x68>
+         {
+            //Interbyte timeout:
+#ifdef LSW_DLL_INCLUDE_STATISTICS
+            DLL_ulInterbyteTimeoutCounter++;
+#endif
+            if ((DLL_ucStatus & DLL_STATUS_MESSAGE_TRANSMISSION_BIT) != 0u)
+  36:	4bb2      	ldr	r3, [pc, #712]	; (300 <DLL_vHandleRxEvent+0x300>)
+  38:	781b      	ldrb	r3, [r3, #0]
+  3a:	069b      	lsls	r3, r3, #26
+  3c:	d51f      	bpl.n	7e <DLL_vHandleRxEvent+0x7e>
+            {
+               DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, (uint8_t)(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress) | DLL_ACK_TRANSMISSION_ABORTED), DLL_uiUserCode);
+  3e:	4eb1      	ldr	r6, [pc, #708]	; (304 <DLL_vHandleRxEvent+0x304>)
+
+/******************************************************************************/
+/* PRIVATE MACRO FUNCTION DEFINITIONS                                         */
+/******************************************************************************/
+static inline uint8_t DLL_GET_COMMUNICATION_PARTNER(uint8_t x)           {return ((uint8_t)(((x) & (uint8_t) 0xF0U) >> 4));} //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. DLL_GET_COMMUNICATION_PARTNER shifts the upper nibble down.
+static inline uint8_t DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(uint8_t x)  {return ((uint8_t)((x) & (uint8_t)0xF0U));}         //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. Unlike DLL_GET_COMMUNICATION_PARTNER, the communication partner is not shifted to the lower nibble.
+  40:	250f      	movs	r5, #15
+  42:	7830      	ldrb	r0, [r6, #0]
+  44:	4bb0      	ldr	r3, [pc, #704]	; (308 <DLL_vHandleRxEvent+0x308>)
+  46:	0001      	movs	r1, r0
+  48:	43a9      	bics	r1, r5
+  4a:	881a      	ldrh	r2, [r3, #0]
+  4c:	4329      	orrs	r1, r5
+  4e:	9301      	str	r3, [sp, #4]
+  50:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+               DLL_vMessageTransmitted((uint8_t)(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress) | DLL_ACK_TRANSMISSION_ABORTED), DLL_uiUserCode);
+  54:	0028      	movs	r0, r5
+  56:	9b01      	ldr	r3, [sp, #4]
+  58:	8819      	ldrh	r1, [r3, #0]
+  5a:	7833      	ldrb	r3, [r6, #0]
+  5c:	43ab      	bics	r3, r5
+  5e:	4318      	orrs	r0, r3
+  60:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted>
+            }
+            else
+            {
+               if (DLL_ucTaskState != (uint8_t)DLL_SEND_ACK)
+               {
+                  DLL_vEnterIdleState(); //Received byte is the first of a new reception, due to the perceived time-out.
+  64:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+#endif
+               }
+            }
+         }
+      }
+      switch (DLL_ucTaskState)
+  68:	7838      	ldrb	r0, [r7, #0]
+  6a:	3802      	subs	r0, #2
+  6c:	2804      	cmp	r0, #4
+  6e:	d821      	bhi.n	b4 <DLL_vHandleRxEvent+0xb4>
+  70:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uhi>
+  74:	0096003c 	.word	0x0096003c
+  78:	000700e7 	.word	0x000700e7
+  7c:	0180      	.short	0x0180
+               if (DLL_ucTaskState != (uint8_t)DLL_SEND_ACK)
+  7e:	2a05      	cmp	r2, #5
+  80:	d1f0      	bne.n	64 <DLL_vHandleRxEvent+0x64>
+            DLL_pucNextCharToCheck++;
+            break;
+         }
+         case (uint8_t) DLL_SEND_ACK:
+         {
+            if ((ucReceivedCharacter == DLL_tUnionCounter.ucAcknowledge) || (DLL_tUnionCounter.ucAcknowledge == (uint8_t) DLL_ACK_OK))
+  82:	4da2      	ldr	r5, [pc, #648]	; (30c <DLL_vHandleRxEvent+0x30c>)
+  84:	489e      	ldr	r0, [pc, #632]	; (300 <DLL_vHandleRxEvent+0x300>)
+  86:	7829      	ldrb	r1, [r5, #0]
+  88:	4aa1      	ldr	r2, [pc, #644]	; (310 <DLL_vHandleRxEvent+0x310>)
+  8a:	42a1      	cmp	r1, r4
+  8c:	d002      	beq.n	94 <DLL_vHandleRxEvent+0x94>
+  8e:	290a      	cmp	r1, #10
+  90:	d000      	beq.n	94 <DLL_vHandleRxEvent+0x94>
+  92:	e155      	b.n	340 <DLL_vHandleRxEvent+0x340>
+            {
+               DLL_ucSucceedingCollisions = 0U;  //Successfully transmitted(broadcast)/received a message reset the collision counter
+  94:	2300      	movs	r3, #0
+  96:	7013      	strb	r3, [r2, #0]
+               if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) != 0U)
+  98:	7803      	ldrb	r3, [r0, #0]
+  9a:	2001      	movs	r0, #1
+  9c:	4203      	tst	r3, r0
+  9e:	d100      	bne.n	a2 <DLL_vHandleRxEvent+0xa2>
+  a0:	e114      	b.n	2cc <DLL_vHandleRxEvent+0x2cc>
+               {
+                  //Broadcast, i.e. message transmission
+                  DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, DLL_tUnionCounter.ucAcknowledge, DLL_uiUserCode); //Msg completion function called with parameter: Acknowledge
+  a2:	4c99      	ldr	r4, [pc, #612]	; (308 <DLL_vHandleRxEvent+0x308>)
+  a4:	8822      	ldrh	r2, [r4, #0]
+               DLL_ulNackCounter++;
+#endif
+            }
+            if ((DLL_ucStatus & DLL_STATUS_MESSAGE_TRANSMISSION_BIT) != 0U)
+            {
+               DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, DLL_tUnionCounter.ucAcknowledge, DLL_uiUserCode); //Msg completion function called with parameter: Acknowledge
+  a6:	4b97      	ldr	r3, [pc, #604]	; (304 <DLL_vHandleRxEvent+0x304>)
+  a8:	7818      	ldrb	r0, [r3, #0]
+  aa:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+               DLL_vMessageTransmitted(DLL_tUnionCounter.ucAcknowledge, DLL_uiUserCode); //Msg completion function called with parameter: Acknowledge
+  ae:	8821      	ldrh	r1, [r4, #0]
+  b0:	7828      	ldrb	r0, [r5, #0]
+  b2:	e15c      	b.n	36e <DLL_vHandleRxEvent+0x36e>
+            if (ucReceivedCharacter >= DLL_MINIMUM_MESSAGE_LENGTH)
+  b4:	4992      	ldr	r1, [pc, #584]	; (300 <DLL_vHandleRxEvent+0x300>)
+  b6:	2c01      	cmp	r4, #1
+  b8:	d913      	bls.n	e2 <DLL_vHandleRxEvent+0xe2>
+               DLL_tUnionCounter.ucRxDataLen = ucReceivedCharacter + BUS_MESSAGE_OVERHEAD;    //The first byte of the bus identifier contains the data length of the message (not the frame), which is of course not allowed to exceed 253 bytes (253 bytes + BUS_MESSAGE_OVERHEAD = 255)!
+  ba:	4b94      	ldr	r3, [pc, #592]	; (30c <DLL_vHandleRxEvent+0x30c>)
+  bc:	1ca2      	adds	r2, r4, #2
+  be:	b2d2      	uxtb	r2, r2
+  c0:	701a      	strb	r2, [r3, #0]
+               if (DLL_tUnionCounter.ucRxDataLen > DLL_ConfigurationItem.ucInputBufferLength) //Reset DLL_ucStatus:
+  c2:	4b94      	ldr	r3, [pc, #592]	; (314 <DLL_vHandleRxEvent+0x314>)
+               DLL_vAddByteToCrcCalculation(ucReceivedCharacter); //Update calculated check sum
+  c4:	0020      	movs	r0, r4
+               if (DLL_tUnionCounter.ucRxDataLen > DLL_ConfigurationItem.ucInputBufferLength) //Reset DLL_ucStatus:
+  c6:	789b      	ldrb	r3, [r3, #2]
+  c8:	4293      	cmp	r3, r2
+  ca:	419b      	sbcs	r3, r3
+   DLL_uiCrc = DLL_CRC_INIT;
+  cc:	2200      	movs	r2, #0
+               if (DLL_tUnionCounter.ucRxDataLen > DLL_ConfigurationItem.ucInputBufferLength) //Reset DLL_ucStatus:
+  ce:	425b      	negs	r3, r3
+  d0:	005b      	lsls	r3, r3, #1
+  d2:	700b      	strb	r3, [r1, #0]
+   DLL_uiCrc = DLL_CRC_INIT;
+  d4:	4b90      	ldr	r3, [pc, #576]	; (318 <DLL_vHandleRxEvent+0x318>)
+  d6:	801a      	strh	r2, [r3, #0]
+               DLL_vAddByteToCrcCalculation(ucReceivedCharacter); //Update calculated check sum
+  d8:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+               DLL_ucTaskState = (uint8_t)DLL_MESSAGE_TO_RECEIVE_GET_RECIPIENT;
+  dc:	2302      	movs	r3, #2
+                        DLL_ucTaskState = (uint8_t) DLL_WAIT_FOR_ACK;
+  de:	703b      	strb	r3, [r7, #0]
+  e0:	e003      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                DLL_ucTaskState = (uint8_t)DLL_MESSAGE_TO_RECEIVE;
+  e2:	2303      	movs	r3, #3
+  e4:	703b      	strb	r3, [r7, #0]
+                DLL_ucStatus = DLL_STATUS_D_BUS_3_TRANSMISSION_BIT; //Reset DLL_STATUS_OVERFLOW_BIT - and set D-Bus-3 Transmission flag only.
+  e6:	333d      	adds	r3, #61	; 0x3d
+  e8:	700b      	strb	r3, [r1, #0]
+      (void)
+#endif
+      DBM_UART_ucGetRxData(); //Reset interrupt flags
+   }
+   return;
+}
+  ea:	bdf7      	pop	{r0, r1, r2, r4, r5, r6, r7, pc}
+static inline uint8_t DLL_GET_COMMUNICATION_PARTNER(uint8_t x)           {return ((uint8_t)(((x) & (uint8_t) 0xF0U) >> 4));} //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. DLL_GET_COMMUNICATION_PARTNER shifts the upper nibble down.
+  ec:	0923      	lsrs	r3, r4, #4
+            if (DLL_GET_COMMUNICATION_PARTNER(ucReceivedCharacter) == DLL_BROADCAST)
+  ee:	b2db      	uxtb	r3, r3
+  f0:	4d83      	ldr	r5, [pc, #524]	; (300 <DLL_vHandleRxEvent+0x300>)
+  f2:	2b00      	cmp	r3, #0
+  f4:	d131      	bne.n	15a <DLL_vHandleRxEvent+0x15a>
+               DLL_ucStatus |= DLL_STATUS_BROADCAST_BIT; //Set flag telling that message is broadcasted, no acknowledgement generation from the receiver.
+  f6:	782a      	ldrb	r2, [r5, #0]
+  f8:	3301      	adds	r3, #1
+  fa:	4313      	orrs	r3, r2
+  fc:	702b      	strb	r3, [r5, #0]
+            DLL_ucStatus |= DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT; //Set flag telling that message was addressed to this node
+  fe:	2308      	movs	r3, #8
+ 100:	7829      	ldrb	r1, [r5, #0]
+ 102:	430b      	orrs	r3, r1
+ 104:	702b      	strb	r3, [r5, #0]
+            DLL_ucReceivingNodeAddress = ucReceivedCharacter; //Save the used address - this is needed, for the acknowledgement generation if an alias address is used.
+ 106:	4b7f      	ldr	r3, [pc, #508]	; (304 <DLL_vHandleRxEvent+0x304>)
+ 108:	701c      	strb	r4, [r3, #0]
+            if ((DLL_ucStatus & DLL_STATUS_OVERFLOW_BIT) == 0U)
+ 10a:	078b      	lsls	r3, r1, #30
+ 10c:	d442      	bmi.n	194 <DLL_vHandleRxEvent+0x194>
+               if (DLL_tUnionCounter.ucRxDataLen > (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite))
+ 10e:	4b7f      	ldr	r3, [pc, #508]	; (30c <DLL_vHandleRxEvent+0x30c>)
+ 110:	4a80      	ldr	r2, [pc, #512]	; (314 <DLL_vHandleRxEvent+0x314>)
+ 112:	781b      	ldrb	r3, [r3, #0]
+ 114:	4881      	ldr	r0, [pc, #516]	; (31c <DLL_vHandleRxEvent+0x31c>)
+ 116:	9301      	str	r3, [sp, #4]
+ 118:	7892      	ldrb	r2, [r2, #2]
+ 11a:	7800      	ldrb	r0, [r0, #0]
+ 11c:	1a15      	subs	r5, r2, r0
+ 11e:	42ab      	cmp	r3, r5
+ 120:	dd0e      	ble.n	140 <DLL_vHandleRxEvent+0x140>
+                  if (((int16)DLL_ConfigurationItem.ucInputBufferLength - (int16)DLL_ucRxMessageToWrite) > (int16)0)
+ 122:	2d00      	cmp	r5, #0
+ 124:	dd09      	ble.n	13a <DLL_vHandleRxEvent+0x13a>
+                     DLL_ucCharactersInRxMessageBuffer += (uint8_t)(DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite);
+ 126:	4e7e      	ldr	r6, [pc, #504]	; (320 <DLL_vHandleRxEvent+0x320>)
+                     DLL_aucMessageInputBuffer[DLL_ucRxMessageToWrite] = (uint8_t) DLL_DUMMY_MESSAGE_MESG_LEN;
+ 128:	23ff      	movs	r3, #255	; 0xff
+                     DLL_ucCharactersInRxMessageBuffer += (uint8_t)(DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite);
+ 12a:	7835      	ldrb	r5, [r6, #0]
+ 12c:	46ac      	mov	ip, r5
+                     DLL_aucMessageInputBuffer[DLL_ucRxMessageToWrite] = (uint8_t) DLL_DUMMY_MESSAGE_MESG_LEN;
+ 12e:	4d7d      	ldr	r5, [pc, #500]	; (324 <DLL_vHandleRxEvent+0x324>)
+ 130:	542b      	strb	r3, [r5, r0]
+                     DLL_ucCharactersInRxMessageBuffer += (uint8_t)(DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite);
+ 132:	4663      	mov	r3, ip
+ 134:	18d5      	adds	r5, r2, r3
+ 136:	1a28      	subs	r0, r5, r0
+ 138:	7030      	strb	r0, [r6, #0]
+                  DLL_ucRxMessageToWrite = 0U;
+ 13a:	2500      	movs	r5, #0
+ 13c:	4877      	ldr	r0, [pc, #476]	; (31c <DLL_vHandleRxEvent+0x31c>)
+ 13e:	7005      	strb	r5, [r0, #0]
+               DLL_ucRxCharToWrite = 0U;
+ 140:	2500      	movs	r5, #0
+               if (DLL_ucCharactersInRxMessageBuffer > (DLL_ConfigurationItem.ucInputBufferLength - BUS_MESSAGE_OVERHEAD) )
+ 142:	4e77      	ldr	r6, [pc, #476]	; (320 <DLL_vHandleRxEvent+0x320>)
+               DLL_ucRxCharToWrite = 0U;
+ 144:	4878      	ldr	r0, [pc, #480]	; (328 <DLL_vHandleRxEvent+0x328>)
+               if (DLL_ucCharactersInRxMessageBuffer > (DLL_ConfigurationItem.ucInputBufferLength - BUS_MESSAGE_OVERHEAD) )
+ 146:	7836      	ldrb	r6, [r6, #0]
+               DLL_ucRxCharToWrite = 0U;
+ 148:	7005      	strb	r5, [r0, #0]
+               if (DLL_ucCharactersInRxMessageBuffer > (DLL_ConfigurationItem.ucInputBufferLength - BUS_MESSAGE_OVERHEAD) )
+ 14a:	1e55      	subs	r5, r2, #1
+ 14c:	42b5      	cmp	r5, r6
+ 14e:	dc13      	bgt.n	178 <DLL_vHandleRxEvent+0x178>
+                     DLL_ucStatus |= DLL_STATUS_OVERFLOW_BIT;
+ 150:	220a      	movs	r2, #10
+ 152:	4b6b      	ldr	r3, [pc, #428]	; (300 <DLL_vHandleRxEvent+0x300>)
+ 154:	430a      	orrs	r2, r1
+ 156:	701a      	strb	r2, [r3, #0]
+ 158:	e01c      	b.n	194 <DLL_vHandleRxEvent+0x194>
+               DLL_ucLastAddressWithWhichWeWereAddressed = ucReceivedCharacter; //Possibility to send response with param "SenderAddress" being the address, with which our app has been addressed last.
+ 15a:	4b74      	ldr	r3, [pc, #464]	; (32c <DLL_vHandleRxEvent+0x32c>)
+               if (DLL_bIsCurrentNode(ucReceivedCharacter)==false)
+ 15c:	0020      	movs	r0, r4
+               DLL_ucLastAddressWithWhichWeWereAddressed = ucReceivedCharacter; //Possibility to send response with param "SenderAddress" being the address, with which our app has been addressed last.
+ 15e:	701c      	strb	r4, [r3, #0]
+               if (DLL_bIsCurrentNode(ucReceivedCharacter)==false)
+ 160:	f7ff fffe 	bl	0 <DLL_bIsCurrentNode>
+ 164:	2800      	cmp	r0, #0
+ 166:	d1ca      	bne.n	fe <DLL_vHandleRxEvent+0xfe>
+                    DLL_tUnionCounter.ucRxDataLen++; //Read also Acknowledgement, which will be generated by the addressed node.
+ 168:	4a68      	ldr	r2, [pc, #416]	; (30c <DLL_vHandleRxEvent+0x30c>)
+                    DLL_ucStatus = 0U; //Reset DLL_STATUS_OVERFLOW_BIT - and as no other flags should be set at this point, all bits may be reset.
+ 16a:	7028      	strb	r0, [r5, #0]
+                    DLL_tUnionCounter.ucRxDataLen++; //Read also Acknowledgement, which will be generated by the addressed node.
+ 16c:	7813      	ldrb	r3, [r2, #0]
+ 16e:	3301      	adds	r3, #1
+ 170:	7013      	strb	r3, [r2, #0]
+                    DLL_ucTaskState = (uint8_t)DLL_MESSAGE_TO_RECEIVE;
+ 172:	2303      	movs	r3, #3
+ 174:	703b      	strb	r3, [r7, #0]
+                    break;
+ 176:	e7b8      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                  ucDataLength = (uint8_t)(DLL_tUnionCounter.ucRxDataLen - BUS_MESSAGE_OVERHEAD);
+ 178:	9b01      	ldr	r3, [sp, #4]
+                  if (ucDataLength <= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite)) //Check whether the data length is out of range
+ 17a:	4d68      	ldr	r5, [pc, #416]	; (31c <DLL_vHandleRxEvent+0x31c>)
+                  ucDataLength = (uint8_t)(DLL_tUnionCounter.ucRxDataLen - BUS_MESSAGE_OVERHEAD);
+ 17c:	3b02      	subs	r3, #2
+                  if (ucDataLength <= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite)) //Check whether the data length is out of range
+ 17e:	782d      	ldrb	r5, [r5, #0]
+                  ucDataLength = (uint8_t)(DLL_tUnionCounter.ucRxDataLen - BUS_MESSAGE_OVERHEAD);
+ 180:	b2db      	uxtb	r3, r3
+                  if (ucDataLength <= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxMessageToWrite)) //Check whether the data length is out of range
+ 182:	1b52      	subs	r2, r2, r5
+ 184:	4293      	cmp	r3, r2
+ 186:	dce3      	bgt.n	150 <DLL_vHandleRxEvent+0x150>
+                     *(&DLL_aucMessageInputBuffer[0] + DLL_ucRxMessageToWrite + DLL_ucRxCharToWrite) = (uint8_t)(DLL_tUnionCounter.ucRxDataLen - BUS_MESSAGE_OVERHEAD);
+ 188:	4a66      	ldr	r2, [pc, #408]	; (324 <DLL_vHandleRxEvent+0x324>)
+ 18a:	5553      	strb	r3, [r2, r5]
+                     *(&DLL_aucMessageInputBuffer[0] + DLL_ucRxMessageToWrite + DLL_ucRxCharToWrite) = ucReceivedCharacter;
+ 18c:	4b68      	ldr	r3, [pc, #416]	; (330 <DLL_vHandleRxEvent+0x330>)
+ 18e:	555c      	strb	r4, [r3, r5]
+                     DLL_ucRxCharToWrite++;
+ 190:	2302      	movs	r3, #2
+ 192:	7003      	strb	r3, [r0, #0]
+            DLL_ucTaskState = (uint8_t)DLL_MESSAGE_TO_RECEIVE;
+ 194:	2303      	movs	r3, #3
+ 196:	703b      	strb	r3, [r7, #0]
+                     DLL_vAddByteToCrcCalculation(ucReceivedCharacter); //Update calculated check sum
+ 198:	0020      	movs	r0, r4
+ 19a:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+ 19e:	e7a4      	b.n	ea <DLL_vHandleRxEvent+0xea>
+            if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 1a0:	250a      	movs	r5, #10
+               DLL_tUnionCounter.ucRxDataLen--;
+ 1a2:	495a      	ldr	r1, [pc, #360]	; (30c <DLL_vHandleRxEvent+0x30c>)
+            if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 1a4:	4856      	ldr	r0, [pc, #344]	; (300 <DLL_vHandleRxEvent+0x300>)
+               DLL_tUnionCounter.ucRxDataLen--;
+ 1a6:	780a      	ldrb	r2, [r1, #0]
+            if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 1a8:	7803      	ldrb	r3, [r0, #0]
+               DLL_tUnionCounter.ucRxDataLen--;
+ 1aa:	3a01      	subs	r2, #1
+ 1ac:	b2d2      	uxtb	r2, r2
+            if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 1ae:	401d      	ands	r5, r3
+               DLL_tUnionCounter.ucRxDataLen--;
+ 1b0:	700a      	strb	r2, [r1, #0]
+            if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 1b2:	2d08      	cmp	r5, #8
+ 1b4:	d134      	bne.n	220 <DLL_vHandleRxEvent+0x220>
+               if (DLL_tUnionCounter.ucRxDataLen > 1U)
+ 1b6:	2a01      	cmp	r2, #1
+ 1b8:	d914      	bls.n	1e4 <DLL_vHandleRxEvent+0x1e4>
+                  if ((DLL_ucCharactersInRxMessageBuffer + DLL_ucRxCharToWrite) >= DLL_ConfigurationItem.ucInputBufferLength)
+ 1ba:	4d5b      	ldr	r5, [pc, #364]	; (328 <DLL_vHandleRxEvent+0x328>)
+ 1bc:	4958      	ldr	r1, [pc, #352]	; (320 <DLL_vHandleRxEvent+0x320>)
+ 1be:	4e55      	ldr	r6, [pc, #340]	; (314 <DLL_vHandleRxEvent+0x314>)
+ 1c0:	782a      	ldrb	r2, [r5, #0]
+ 1c2:	7809      	ldrb	r1, [r1, #0]
+ 1c4:	78b6      	ldrb	r6, [r6, #2]
+ 1c6:	1889      	adds	r1, r1, r2
+ 1c8:	42b1      	cmp	r1, r6
+ 1ca:	db03      	blt.n	1d4 <DLL_vHandleRxEvent+0x1d4>
+                     DLL_ucStatus |= DLL_STATUS_OVERFLOW_BIT;
+ 1cc:	2202      	movs	r2, #2
+ 1ce:	4313      	orrs	r3, r2
+ 1d0:	7003      	strb	r3, [r0, #0]
+ 1d2:	e78a      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                     *(&DLL_aucMessageInputBuffer[0]+DLL_ucRxMessageToWrite + DLL_ucRxCharToWrite) = ucReceivedCharacter;
+ 1d4:	4b51      	ldr	r3, [pc, #324]	; (31c <DLL_vHandleRxEvent+0x31c>)
+ 1d6:	4953      	ldr	r1, [pc, #332]	; (324 <DLL_vHandleRxEvent+0x324>)
+ 1d8:	781b      	ldrb	r3, [r3, #0]
+ 1da:	18d3      	adds	r3, r2, r3
+                     DLL_ucRxCharToWrite++;
+ 1dc:	3201      	adds	r2, #1
+                     *(&DLL_aucMessageInputBuffer[0]+DLL_ucRxMessageToWrite + DLL_ucRxCharToWrite) = ucReceivedCharacter;
+ 1de:	54cc      	strb	r4, [r1, r3]
+                     DLL_ucRxCharToWrite++;
+ 1e0:	702a      	strb	r2, [r5, #0]
+ 1e2:	e7d9      	b.n	198 <DLL_vHandleRxEvent+0x198>
+                  if (DLL_tUnionCounter.ucRxDataLen == 0U) //Possible cases: DLL_tUnionCounter.ucRxDataLen = 1: CRC-high or DLL_tUnionCounter.ucRxDataLen = 0: crc-low
+ 1e4:	4953      	ldr	r1, [pc, #332]	; (334 <DLL_vHandleRxEvent+0x334>)
+ 1e6:	2a00      	cmp	r2, #0
+ 1e8:	d118      	bne.n	21c <DLL_vHandleRxEvent+0x21c>
+   return DLL_uiCrc;
+ 1ea:	4a4b      	ldr	r2, [pc, #300]	; (318 <DLL_vHandleRxEvent+0x318>)
+                     HSUP_LOW_BYTE(DLL_uiReceivedCrc) = ucReceivedCharacter;
+ 1ec:	700c      	strb	r4, [r1, #0]
+                     if (DLL_uiGetCalculatedCrc() == DLL_uiReceivedCrc) //Compare received check sum with calculated check sum.
+ 1ee:	880c      	ldrh	r4, [r1, #0]
+ 1f0:	8811      	ldrh	r1, [r2, #0]
+ 1f2:	2201      	movs	r2, #1
+ 1f4:	428c      	cmp	r4, r1
+ 1f6:	d10a      	bne.n	20e <DLL_vHandleRxEvent+0x20e>
+                        if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) == 0U)
+ 1f8:	0019      	movs	r1, r3
+ 1fa:	4011      	ands	r1, r2
+ 1fc:	4213      	tst	r3, r2
+ 1fe:	d10b      	bne.n	218 <DLL_vHandleRxEvent+0x218>
+                           DLL_ucSucceedingCollisions = 0U;  //Successfully received a message, reset the collision counter
+ 200:	4b43      	ldr	r3, [pc, #268]	; (310 <DLL_vHandleRxEvent+0x310>)
+ 202:	7019      	strb	r1, [r3, #0]
+                        DLL_ucTaskState = (uint8_t) DLL_SEND_ACK;
+ 204:	2305      	movs	r3, #5
+ 206:	703b      	strb	r3, [r7, #0]
+                        DBM_UART_vEnableTxEvent();
+ 208:	f7ff fffe 	bl	0 <DBM_UART_vEnableTxEvent>
+ 20c:	e76d      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                        DLL_ucStatus |= DLL_STATUS_WRONG_CRC_BIT;
+ 20e:	2104      	movs	r1, #4
+ 210:	4319      	orrs	r1, r3
+ 212:	7001      	strb	r1, [r0, #0]
+                     if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) != 0U)
+ 214:	4213      	tst	r3, r2
+ 216:	d0f5      	beq.n	204 <DLL_vHandleRxEvent+0x204>
+                        DLL_ucTaskState = (uint8_t) DLL_WAIT_FOR_ACK;
+ 218:	2306      	movs	r3, #6
+ 21a:	e760      	b.n	de <DLL_vHandleRxEvent+0xde>
+                     HSUP_HIGH_BYTE(DLL_uiReceivedCrc) = ucReceivedCharacter;
+ 21c:	704c      	strb	r4, [r1, #1]
+ 21e:	e764      	b.n	ea <DLL_vHandleRxEvent+0xea>
+               if (DLL_tUnionCounter.ucRxDataLen == 0U)
+ 220:	2a00      	cmp	r2, #0
+ 222:	d000      	beq.n	226 <DLL_vHandleRxEvent+0x226>
+ 224:	e761      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                  if ((DLL_ucStatus & DLL_STATUS_OVERFLOW_BIT) != 0U)
+ 226:	079a      	lsls	r2, r3, #30
+ 228:	d505      	bpl.n	236 <DLL_vHandleRxEvent+0x236>
+                     if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) != 0U)
+ 22a:	07da      	lsls	r2, r3, #31
+ 22c:	d4f4      	bmi.n	218 <DLL_vHandleRxEvent+0x218>
+                        if ((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U)
+ 22e:	071b      	lsls	r3, r3, #28
+ 230:	d400      	bmi.n	234 <DLL_vHandleRxEvent+0x234>
+ 232:	e75a      	b.n	ea <DLL_vHandleRxEvent+0xea>
+ 234:	e7e6      	b.n	204 <DLL_vHandleRxEvent+0x204>
+                     if ((DLL_ucStatus & DLL_STATUS_D_BUS_3_TRANSMISSION_BIT) != 0U)
+ 236:	065b      	lsls	r3, r3, #25
+ 238:	d500      	bpl.n	23c <DLL_vHandleRxEvent+0x23c>
+ 23a:	e756      	b.n	ea <DLL_vHandleRxEvent+0xea>
+                         DLL_vEnterIdleState();
+ 23c:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+ 240:	e753      	b.n	ea <DLL_vHandleRxEvent+0xea>
+            if (DLL_ucCharactersToCheck == 1U)
+ 242:	493d      	ldr	r1, [pc, #244]	; (338 <DLL_vHandleRxEvent+0x338>)
+ 244:	4d3d      	ldr	r5, [pc, #244]	; (33c <DLL_vHandleRxEvent+0x33c>)
+ 246:	780b      	ldrb	r3, [r1, #0]
+ 248:	2b01      	cmp	r3, #1
+ 24a:	d119      	bne.n	280 <DLL_vHandleRxEvent+0x280>
+               DLL_pucNextCharToCheck = &HSUP_HIGH_BYTE(DLL_uiCrc); //Point to high byte of the calculated CRC.
+ 24c:	4a32      	ldr	r2, [pc, #200]	; (318 <DLL_vHandleRxEvent+0x318>)
+ 24e:	3201      	adds	r2, #1
+                  DLL_pucNextCharToCheck = &HSUP_LOW_BYTE(DLL_uiCrc); //Point to low byte of the calculated CRC.
+ 250:	602a      	str	r2, [r5, #0]
+            if (ucReceivedCharacter == *DLL_pucNextCharToCheck)
+ 252:	682a      	ldr	r2, [r5, #0]
+ 254:	7812      	ldrb	r2, [r2, #0]
+ 256:	42a2      	cmp	r2, r4
+ 258:	d11c      	bne.n	294 <DLL_vHandleRxEvent+0x294>
+               if (DLL_ucCharactersToCheck==0u)
+ 25a:	2b00      	cmp	r3, #0
+ 25c:	d117      	bne.n	28e <DLL_vHandleRxEvent+0x28e>
+                  if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) != 0U)
+ 25e:	4b28      	ldr	r3, [pc, #160]	; (300 <DLL_vHandleRxEvent+0x300>)
+ 260:	781b      	ldrb	r3, [r3, #0]
+ 262:	07db      	lsls	r3, r3, #31
+ 264:	d510      	bpl.n	288 <DLL_vHandleRxEvent+0x288>
+                     DLL_ucTaskState = (uint8_t) DLL_SEND_ACK;
+ 266:	2305      	movs	r3, #5
+                     DLL_ucReceivingNodeAddress = (uint8_t)(DLL_ConfigurationItem.ucNodeAddress<<NIBBLE_SIZE); //Needed for acknowledgement generation.
+ 268:	4a2a      	ldr	r2, [pc, #168]	; (314 <DLL_vHandleRxEvent+0x314>)
+                     DLL_ucTaskState = (uint8_t) DLL_SEND_ACK;
+ 26a:	703b      	strb	r3, [r7, #0]
+                     DLL_ucReceivingNodeAddress = (uint8_t)(DLL_ConfigurationItem.ucNodeAddress<<NIBBLE_SIZE); //Needed for acknowledgement generation.
+ 26c:	7812      	ldrb	r2, [r2, #0]
+ 26e:	4b25      	ldr	r3, [pc, #148]	; (304 <DLL_vHandleRxEvent+0x304>)
+ 270:	0112      	lsls	r2, r2, #4
+ 272:	701a      	strb	r2, [r3, #0]
+                     DBM_UART_vEnableTxEvent();
+ 274:	f7ff fffe 	bl	0 <DBM_UART_vEnableTxEvent>
+            DLL_pucNextCharToCheck++;
+ 278:	682b      	ldr	r3, [r5, #0]
+ 27a:	3301      	adds	r3, #1
+ 27c:	602b      	str	r3, [r5, #0]
+            break;
+ 27e:	e734      	b.n	ea <DLL_vHandleRxEvent+0xea>
+               if (DLL_ucCharactersToCheck==0u)
+ 280:	2b00      	cmp	r3, #0
+ 282:	d1e6      	bne.n	252 <DLL_vHandleRxEvent+0x252>
+                  DLL_pucNextCharToCheck = &HSUP_LOW_BYTE(DLL_uiCrc); //Point to low byte of the calculated CRC.
+ 284:	4a24      	ldr	r2, [pc, #144]	; (318 <DLL_vHandleRxEvent+0x318>)
+ 286:	e7e3      	b.n	250 <DLL_vHandleRxEvent+0x250>
+                     DLL_ucTaskState = (uint8_t) DLL_WAIT_FOR_ACK;
+ 288:	2306      	movs	r3, #6
+ 28a:	703b      	strb	r3, [r7, #0]
+ 28c:	e7f4      	b.n	278 <DLL_vHandleRxEvent+0x278>
+                  DLL_ucCharactersToCheck--;
+ 28e:	3b01      	subs	r3, #1
+ 290:	700b      	strb	r3, [r1, #0]
+ 292:	e7f1      	b.n	278 <DLL_vHandleRxEvent+0x278>
+               DBM_UART_vDisableTxEvent();
+ 294:	f7ff fffe 	bl	0 <DBM_UART_vDisableTxEvent>
+   if (DLL_ucSucceedingCollisions < DLL_MAX_SUCCEEDING_COLLISIONS)
+ 298:	4a1d      	ldr	r2, [pc, #116]	; (310 <DLL_vHandleRxEvent+0x310>)
+ 29a:	7813      	ldrb	r3, [r2, #0]
+ 29c:	2bff      	cmp	r3, #255	; 0xff
+ 29e:	d001      	beq.n	2a4 <DLL_vHandleRxEvent+0x2a4>
+      DLL_ucSucceedingCollisions++;
+ 2a0:	3301      	adds	r3, #1
+ 2a2:	7013      	strb	r3, [r2, #0]
+               DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, (uint8_t)(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress) | DLL_ACK_TRANSMISSION_ABORTED), DLL_uiUserCode); //The character read back from the bus does not correspond to the sent character, notify overlying layer that the transmission will be aborted.
+ 2a4:	4e17      	ldr	r6, [pc, #92]	; (304 <DLL_vHandleRxEvent+0x304>)
+static inline uint8_t DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(uint8_t x)  {return ((uint8_t)((x) & (uint8_t)0xF0U));}         //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. Unlike DLL_GET_COMMUNICATION_PARTNER, the communication partner is not shifted to the lower nibble.
+ 2a6:	240f      	movs	r4, #15
+ 2a8:	7830      	ldrb	r0, [r6, #0]
+ 2aa:	4f17      	ldr	r7, [pc, #92]	; (308 <DLL_vHandleRxEvent+0x308>)
+ 2ac:	0001      	movs	r1, r0
+ 2ae:	43a1      	bics	r1, r4
+ 2b0:	883a      	ldrh	r2, [r7, #0]
+ 2b2:	4321      	orrs	r1, r4
+ 2b4:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+               DLL_vMessageTransmitted((uint8_t)(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress) | DLL_ACK_TRANSMISSION_ABORTED), DLL_uiUserCode); //The character read back from the bus does not correspond to the sent character, notify overlying layer that the transmission will be aborted.
+ 2b8:	0020      	movs	r0, r4
+ 2ba:	7833      	ldrb	r3, [r6, #0]
+ 2bc:	8839      	ldrh	r1, [r7, #0]
+ 2be:	43a3      	bics	r3, r4
+ 2c0:	4318      	orrs	r0, r3
+ 2c2:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted>
+               DLL_vEnterIdleState();
+ 2c6:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+ 2ca:	e7d5      	b.n	278 <DLL_vHandleRxEvent+0x278>
+                     if ((DLL_ucStatus & DLL_STATUS_OVERFLOW_BIT) == 0U)
+ 2cc:	2206      	movs	r2, #6
+ 2ce:	4213      	tst	r3, r2
+ 2d0:	d1b4      	bne.n	23c <DLL_vHandleRxEvent+0x23c>
+                        if ((DLL_ucRxCharToWrite % DLL_ALIGNMENT_BASE) != 0U)
+ 2d2:	4a15      	ldr	r2, [pc, #84]	; (328 <DLL_vHandleRxEvent+0x328>)
+ 2d4:	7813      	ldrb	r3, [r2, #0]
+ 2d6:	4203      	tst	r3, r0
+ 2d8:	d001      	beq.n	2de <DLL_vHandleRxEvent+0x2de>
+                           DLL_ucRxCharToWrite++; //align 16 bit access to even address offset.
+ 2da:	3301      	adds	r3, #1
+ 2dc:	7013      	strb	r3, [r2, #0]
+                        DLL_ucCharactersInRxMessageBuffer += DLL_ucRxCharToWrite;
+ 2de:	4910      	ldr	r1, [pc, #64]	; (320 <DLL_vHandleRxEvent+0x320>)
+ 2e0:	7813      	ldrb	r3, [r2, #0]
+ 2e2:	780a      	ldrb	r2, [r1, #0]
+ 2e4:	189a      	adds	r2, r3, r2
+ 2e6:	700a      	strb	r2, [r1, #0]
+                        DLL_ucRxMessageToWrite += DLL_ucRxCharToWrite;
+ 2e8:	4a0c      	ldr	r2, [pc, #48]	; (31c <DLL_vHandleRxEvent+0x31c>)
+ 2ea:	7811      	ldrb	r1, [r2, #0]
+ 2ec:	185b      	adds	r3, r3, r1
+ 2ee:	7013      	strb	r3, [r2, #0]
+ 2f0:	e7a4      	b.n	23c <DLL_vHandleRxEvent+0x23c>
+ 2f2:	46c0      	nop			; (mov r8, r8)
+	...
+ 330:	00000001 	.word	0x00000001
+	...
+   if (DLL_ucSucceedingCollisions < DLL_MAX_SUCCEEDING_COLLISIONS)
+ 340:	7813      	ldrb	r3, [r2, #0]
+ 342:	2bff      	cmp	r3, #255	; 0xff
+ 344:	d001      	beq.n	34a <DLL_vHandleRxEvent+0x34a>
+      DLL_ucSucceedingCollisions++;
+ 346:	3301      	adds	r3, #1
+ 348:	7013      	strb	r3, [r2, #0]
+               if ((DLL_ucStatus & DLL_STATUS_BROADCAST_BIT) != 0U)
+ 34a:	7803      	ldrb	r3, [r0, #0]
+ 34c:	07db      	lsls	r3, r3, #31
+ 34e:	d400      	bmi.n	352 <DLL_vHandleRxEvent+0x352>
+ 350:	e774      	b.n	23c <DLL_vHandleRxEvent+0x23c>
+                  DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, (uint8_t)(DLL_ConfigurationItem.ucNodeAddress << NIBBLE_SIZE), DLL_uiUserCode); //The character read back from the bus does not correspond to the sent acknowledgement.
+ 352:	4c2b      	ldr	r4, [pc, #172]	; (400 <DLL_vHandleRxEvent+0x400>)
+ 354:	4d2b      	ldr	r5, [pc, #172]	; (404 <DLL_vHandleRxEvent+0x404>)
+ 356:	7821      	ldrb	r1, [r4, #0]
+ 358:	4b2b      	ldr	r3, [pc, #172]	; (408 <DLL_vHandleRxEvent+0x408>)
+ 35a:	0109      	lsls	r1, r1, #4
+ 35c:	7818      	ldrb	r0, [r3, #0]
+ 35e:	b2c9      	uxtb	r1, r1
+ 360:	882a      	ldrh	r2, [r5, #0]
+ 362:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+                  DLL_vMessageTransmitted((uint8_t)(DLL_ConfigurationItem.ucNodeAddress << NIBBLE_SIZE), DLL_uiUserCode); //The character read back from the bus does not correspond to the sent acknowledgement.
+ 366:	7820      	ldrb	r0, [r4, #0]
+ 368:	8829      	ldrh	r1, [r5, #0]
+ 36a:	0100      	lsls	r0, r0, #4
+ 36c:	b2c0      	uxtb	r0, r0
+               DLL_vMessageTransmitted(DLL_tUnionCounter.ucAcknowledge, DLL_uiUserCode); //Msg completion function called with parameter: Acknowledge
+ 36e:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted>
+ 372:	e763      	b.n	23c <DLL_vHandleRxEvent+0x23c>
+static inline uint8_t DLL_GET_SUBSYSTEM(uint8_t x)                       {return ((uint8_t)((x) & (uint8_t)0x0FU));}         //!< Extracts the subsystem from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem.
+static inline uint8_t DLL_GET_ACKNOWLEDGE(uint8_t x)                     {return ((uint8_t)((x) & (uint8_t)0x0FU));}         //!< Extracts the acknowledgement from the acknowledgement-byte received from another communication partner. The Acknowledge-byte consists of the communication partner address in the upper nibble, and the acknowledgement in the lower nibble.
+ 374:	220f      	movs	r2, #15
+            if (DLL_GET_ACKNOWLEDGE(ucReceivedCharacter) == (uint8_t) DLL_ACK_OK)
+ 376:	0021      	movs	r1, r4
+            DLL_tUnionCounter.ucAcknowledge = ucReceivedCharacter;
+ 378:	4d24      	ldr	r5, [pc, #144]	; (40c <DLL_vHandleRxEvent+0x40c>)
+ 37a:	4e25      	ldr	r6, [pc, #148]	; (410 <DLL_vHandleRxEvent+0x410>)
+ 37c:	702c      	strb	r4, [r5, #0]
+            if (DLL_GET_ACKNOWLEDGE(ucReceivedCharacter) == (uint8_t) DLL_ACK_OK)
+ 37e:	4011      	ands	r1, r2
+ 380:	290a      	cmp	r1, #10
+ 382:	d120      	bne.n	3c6 <DLL_vHandleRxEvent+0x3c6>
+               DLL_ucStatus |= DLL_STATUS_BROADCAST_BIT; //Set flag telling that message is broadcasted, no acknowledgement generation from the receiver.
+ 384:	7833      	ldrb	r3, [r6, #0]
+               if ((DLL_ucStatus & DLL_STATUS_MESSAGE_TRANSMISSION_BIT) == 0U)
+ 386:	0698      	lsls	r0, r3, #26
+ 388:	d42e      	bmi.n	3e8 <DLL_vHandleRxEvent+0x3e8>
+                  if ((DLL_ucStatus & DLL_STATUS_WRONG_CRC_BIT) == 0U)
+ 38a:	075a      	lsls	r2, r3, #29
+ 38c:	d418      	bmi.n	3c0 <DLL_vHandleRxEvent+0x3c0>
+                     if (((DLL_ucStatus & DLL_STATUS_MESSAGE_FOR_THIS_NODE_BIT) != 0U) &&
+ 38e:	400b      	ands	r3, r1
+ 390:	2b08      	cmp	r3, #8
+ 392:	d115      	bne.n	3c0 <DLL_vHandleRxEvent+0x3c0>
+                        if ((DLL_ucRxCharToWrite % DLL_ALIGNMENT_BASE) != 0U)
+ 394:	4f1f      	ldr	r7, [pc, #124]	; (414 <DLL_vHandleRxEvent+0x414>)
+ 396:	783b      	ldrb	r3, [r7, #0]
+ 398:	07da      	lsls	r2, r3, #31
+ 39a:	d501      	bpl.n	3a0 <DLL_vHandleRxEvent+0x3a0>
+                           DLL_ucRxCharToWrite++; //align 16 bit access to even address offset.
+ 39c:	3301      	adds	r3, #1
+ 39e:	703b      	strb	r3, [r7, #0]
+                        uiRegisteredMsgId = ((((uint16_t)DLL_aucMessageInputBuffer[DLL_ucRxMessageToWrite + ((uint8_t)DLL_MSG_BYTE_ID_HI)] << 8)) | ((uint16_t)DLL_aucMessageInputBuffer[DLL_ucRxMessageToWrite + ((uint8_t)DLL_MSG_BYTE_ID_LO)]));
+ 3a0:	4c1d      	ldr	r4, [pc, #116]	; (418 <DLL_vHandleRxEvent+0x418>)
+ 3a2:	4b1e      	ldr	r3, [pc, #120]	; (41c <DLL_vHandleRxEvent+0x41c>)
+ 3a4:	7822      	ldrb	r2, [r4, #0]
+ 3a6:	189b      	adds	r3, r3, r2
+ 3a8:	789a      	ldrb	r2, [r3, #2]
+ 3aa:	78d8      	ldrb	r0, [r3, #3]
+ 3ac:	0212      	lsls	r2, r2, #8
+                        if(DBPL_bIsReceivedMessageIdPowerFail(uiRegisteredMsgId) == true)
+ 3ae:	4310      	orrs	r0, r2
+ 3b0:	f7ff fffe 	bl	0 <DBPL_bIsReceivedMessageIdPowerFail>
+ 3b4:	2800      	cmp	r0, #0
+ 3b6:	d00e      	beq.n	3d6 <DLL_vHandleRxEvent+0x3d6>
+                            DLL_ucRxCharToWrite = 0U;
+ 3b8:	2300      	movs	r3, #0
+ 3ba:	703b      	strb	r3, [r7, #0]
+                            DBPL_vPowerFailNotificationHasBeenReceived();
+ 3bc:	f7ff fffe 	bl	0 <DBPL_vPowerFailNotificationHasBeenReceived>
+               DLL_ucSucceedingCollisions = 0U;  //Successfully transmitted/received a message, reset the collision counter
+ 3c0:	2200      	movs	r2, #0
+ 3c2:	4b17      	ldr	r3, [pc, #92]	; (420 <DLL_vHandleRxEvent+0x420>)
+ 3c4:	701a      	strb	r2, [r3, #0]
+            if ((DLL_ucStatus & DLL_STATUS_MESSAGE_TRANSMISSION_BIT) != 0U)
+ 3c6:	7833      	ldrb	r3, [r6, #0]
+ 3c8:	069b      	lsls	r3, r3, #26
+ 3ca:	d400      	bmi.n	3ce <DLL_vHandleRxEvent+0x3ce>
+ 3cc:	e736      	b.n	23c <DLL_vHandleRxEvent+0x23c>
+               DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, DLL_tUnionCounter.ucAcknowledge, DLL_uiUserCode); //Msg completion function called with parameter: Acknowledge
+ 3ce:	4c0d      	ldr	r4, [pc, #52]	; (404 <DLL_vHandleRxEvent+0x404>)
+ 3d0:	7829      	ldrb	r1, [r5, #0]
+ 3d2:	8822      	ldrh	r2, [r4, #0]
+ 3d4:	e667      	b.n	a6 <DLL_vHandleRxEvent+0xa6>
+                            DLL_ucCharactersInRxMessageBuffer += DLL_ucRxCharToWrite;
+ 3d6:	4913      	ldr	r1, [pc, #76]	; (424 <DLL_vHandleRxEvent+0x424>)
+ 3d8:	783b      	ldrb	r3, [r7, #0]
+ 3da:	780a      	ldrb	r2, [r1, #0]
+ 3dc:	189a      	adds	r2, r3, r2
+ 3de:	700a      	strb	r2, [r1, #0]
+                            DLL_ucRxMessageToWrite += DLL_ucRxCharToWrite;
+ 3e0:	7822      	ldrb	r2, [r4, #0]
+ 3e2:	189b      	adds	r3, r3, r2
+ 3e4:	7023      	strb	r3, [r4, #0]
+ 3e6:	e7eb      	b.n	3c0 <DLL_vHandleRxEvent+0x3c0>
+                  uint8_t correctNodeAddress = DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress);
+ 3e8:	4b07      	ldr	r3, [pc, #28]	; (408 <DLL_vHandleRxEvent+0x408>)
+static inline uint8_t DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(uint8_t x)  {return ((uint8_t)((x) & (uint8_t)0xF0U));}         //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. Unlike DLL_GET_COMMUNICATION_PARTNER, the communication partner is not shifted to the lower nibble.
+ 3ea:	4394      	bics	r4, r2
+ 3ec:	781b      	ldrb	r3, [r3, #0]
+                  if (nodeInReceivedByte != correctNodeAddress)
+ 3ee:	b2e4      	uxtb	r4, r4
+ 3f0:	4393      	bics	r3, r2
+ 3f2:	429c      	cmp	r4, r3
+ 3f4:	d0e4      	beq.n	3c0 <DLL_vHandleRxEvent+0x3c0>
+                     DLL_tUnionCounter.ucAcknowledge = DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress); //corresponds to: DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress) | DLL_ACK_NOT_RECEIVED;
+ 3f6:	702b      	strb	r3, [r5, #0]
+ 3f8:	e7e2      	b.n	3c0 <DLL_vHandleRxEvent+0x3c0>
+      DBM_UART_ucGetRxData(); //Reset interrupt flags
+ 3fa:	f7ff fffe 	bl	0 <DBM_UART_ucGetRxData>
+ 3fe:	e674      	b.n	ea <DLL_vHandleRxEvent+0xea>
+	...
+
+Disassembly of section .text.DLL_vHandleTxEvent:
+
+00000000 <DLL_vHandleTxEvent>:
+/*
+DLL_vHandleTxEvent(void); This function, which handles the transmit interrupts, is called from HAL (hardware abstraction layer) each time a transmit interrupt is released. The function defined in HAL will be replaced by this one.
+*/
+void DLL_vHandleTxEvent(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   if (DLL_ucTaskState == (uint8_t) DLL_MESSAGE_TO_SEND)
+   2:	4b2b      	ldr	r3, [pc, #172]	; (b0 <DLL_vHandleTxEvent+0xb0>)
+   4:	781b      	ldrb	r3, [r3, #0]
+   6:	2b04      	cmp	r3, #4
+   8:	d120      	bne.n	4c <DLL_vHandleTxEvent+0x4c>
+   {
+      if (DLL_tUnionCounter.ucCharactersToWrite > 1U)
+   a:	4d2a      	ldr	r5, [pc, #168]	; (b4 <DLL_vHandleTxEvent+0xb4>)
+   c:	4c2a      	ldr	r4, [pc, #168]	; (b8 <DLL_vHandleTxEvent+0xb8>)
+   e:	782a      	ldrb	r2, [r5, #0]
+  10:	2a01      	cmp	r2, #1
+  12:	d90d      	bls.n	30 <DLL_vHandleTxEvent+0x30>
+      {
+         DBM_UART_vSetTxData(*DLL_pucNextCharToWrite);
+  14:	6823      	ldr	r3, [r4, #0]
+  16:	7818      	ldrb	r0, [r3, #0]
+  18:	f7ff fffe 	bl	0 <DBM_UART_vSetTxData>
+         DLL_vAddByteToCrcCalculation(*DLL_pucNextCharToWrite);
+  1c:	6826      	ldr	r6, [r4, #0]
+  1e:	7830      	ldrb	r0, [r6, #0]
+         //Update calculated check sum
+         //Send next character
+         DLL_pucNextCharToWrite++;
+  20:	3601      	adds	r6, #1
+         DLL_vAddByteToCrcCalculation(*DLL_pucNextCharToWrite);
+  22:	f7ff fffe 	bl	0 <DLL_vHandleTxEvent>
+         DLL_pucNextCharToWrite++;
+  26:	6026      	str	r6, [r4, #0]
+         /* Send CRC */
+         if (DLL_tUnionCounter.ucCharactersToWrite == 1U)
+         {
+            DLL_pucNextCharToWrite = &HSUP_HIGH_BYTE(DLL_uiCrc); //Point to high byte of the calculated CRC.
+            DBM_UART_vSetTxData(*DLL_pucNextCharToWrite); //Send calculated CRC - high byte
+            DLL_tUnionCounter.ucCharactersToWrite--;
+  28:	782b      	ldrb	r3, [r5, #0]
+  2a:	3b01      	subs	r3, #1
+  2c:	702b      	strb	r3, [r5, #0]
+         }
+      }
+   }
+   DBM_UART_vDisableTxEvent();   //This must be enabled again outside of the transmit interrupt (typically in the receive interrupt)
+   return;
+}
+  2e:	bd70      	pop	{r4, r5, r6, pc}
+         if (DLL_tUnionCounter.ucCharactersToWrite == 1U)
+  30:	4b22      	ldr	r3, [pc, #136]	; (bc <DLL_vHandleTxEvent+0xbc>)
+  32:	2a01      	cmp	r2, #1
+  34:	d105      	bne.n	42 <DLL_vHandleTxEvent+0x42>
+            DLL_pucNextCharToWrite = &HSUP_HIGH_BYTE(DLL_uiCrc); //Point to high byte of the calculated CRC.
+  36:	1c5a      	adds	r2, r3, #1
+            DBM_UART_vSetTxData(*DLL_pucNextCharToWrite); //Send calculated CRC - high byte
+  38:	7858      	ldrb	r0, [r3, #1]
+            DLL_pucNextCharToWrite = &HSUP_HIGH_BYTE(DLL_uiCrc); //Point to high byte of the calculated CRC.
+  3a:	6022      	str	r2, [r4, #0]
+            DBM_UART_vSetTxData(*DLL_pucNextCharToWrite); //Send calculated CRC - high byte
+  3c:	f7ff fffe 	bl	0 <DBM_UART_vSetTxData>
+  40:	e7f2      	b.n	28 <DLL_vHandleTxEvent+0x28>
+            DBM_UART_vSetTxData(*DLL_pucNextCharToWrite); //Send calculated CRC - low byte
+  42:	7818      	ldrb	r0, [r3, #0]
+            DLL_pucNextCharToWrite = &HSUP_LOW_BYTE(DLL_uiCrc);
+  44:	6023      	str	r3, [r4, #0]
+                DBM_UART_vSetTxData(DLL_tUnionCounter.ucAcknowledge);
+  46:	f7ff fffe 	bl	0 <DBM_UART_vSetTxData>
+  4a:	e02b      	b.n	a4 <DLL_vHandleTxEvent+0xa4>
+      if (DLL_ucTaskState == (uint8_t) DLL_SEND_ACK)
+  4c:	2b05      	cmp	r3, #5
+  4e:	d129      	bne.n	a4 <DLL_vHandleTxEvent+0xa4>
+         while ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) < (uint32_t) ((uint32_t)DLL_uiBitTime>>1) )
+  50:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  54:	4e1a      	ldr	r6, [pc, #104]	; (c0 <DLL_vHandleTxEvent+0xc0>)
+  56:	6833      	ldr	r3, [r6, #0]
+  58:	1ac0      	subs	r0, r0, r3
+  5a:	4b1a      	ldr	r3, [pc, #104]	; (c4 <DLL_vHandleTxEvent+0xc4>)
+  5c:	881b      	ldrh	r3, [r3, #0]
+  5e:	085b      	lsrs	r3, r3, #1
+  60:	4298      	cmp	r0, r3
+  62:	d322      	bcc.n	aa <DLL_vHandleTxEvent+0xaa>
+         if ((DLL_ucStatus & DLL_STATUS_OVERFLOW_BIT) != 0U)
+  64:	4b18      	ldr	r3, [pc, #96]	; (c8 <DLL_vHandleTxEvent+0xc8>)
+  66:	781a      	ldrb	r2, [r3, #0]
+  68:	2303      	movs	r3, #3
+  6a:	0791      	lsls	r1, r2, #30
+  6c:	d403      	bmi.n	76 <DLL_vHandleTxEvent+0x76>
+            if ((DLL_ucStatus & DLL_STATUS_WRONG_CRC_BIT) != 0U)
+  6e:	3307      	adds	r3, #7
+  70:	0752      	lsls	r2, r2, #29
+  72:	d500      	bpl.n	76 <DLL_vHandleTxEvent+0x76>
+  74:	3b03      	subs	r3, #3
+  76:	240f      	movs	r4, #15
+         DLL_tUnionCounter.ucAcknowledge |= DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress); //return addressed address.
+  78:	4a14      	ldr	r2, [pc, #80]	; (cc <DLL_vHandleTxEvent+0xcc>)
+  7a:	4d0e      	ldr	r5, [pc, #56]	; (b4 <DLL_vHandleTxEvent+0xb4>)
+  7c:	7812      	ldrb	r2, [r2, #0]
+  7e:	43a2      	bics	r2, r4
+  80:	4313      	orrs	r3, r2
+  82:	702b      	strb	r3, [r5, #0]
+         if ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) < DLL_uiAckGenerationTimeout)
+  84:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  88:	6833      	ldr	r3, [r6, #0]
+  8a:	1ac0      	subs	r0, r0, r3
+  8c:	4b10      	ldr	r3, [pc, #64]	; (d0 <DLL_vHandleTxEvent+0xd0>)
+  8e:	881b      	ldrh	r3, [r3, #0]
+  90:	4298      	cmp	r0, r3
+  92:	d207      	bcs.n	a4 <DLL_vHandleTxEvent+0xa4>
+}
+
+/**Function to see silent mode status in Dbus2.2*/
+bool DLL_isSilentMode(void)
+{
+    return DLL_bSilent;
+  94:	4b0f      	ldr	r3, [pc, #60]	; (d4 <DLL_vHandleTxEvent+0xd4>)
+            if((DLL_isSilentMode() == false) || ((DLL_tUnionCounter.ucAcknowledge & 0x0Fu) == (uint8_t) DLL_ACK_OK))
+  96:	7828      	ldrb	r0, [r5, #0]
+  98:	781b      	ldrb	r3, [r3, #0]
+  9a:	2b00      	cmp	r3, #0
+  9c:	d0d3      	beq.n	46 <DLL_vHandleTxEvent+0x46>
+  9e:	4004      	ands	r4, r0
+  a0:	2c0a      	cmp	r4, #10
+  a2:	d0d0      	beq.n	46 <DLL_vHandleTxEvent+0x46>
+   DBM_UART_vDisableTxEvent();   //This must be enabled again outside of the transmit interrupt (typically in the receive interrupt)
+  a4:	f7ff fffe 	bl	0 <DBM_UART_vDisableTxEvent>
+   return;
+  a8:	e7c1      	b.n	2e <DLL_vHandleTxEvent+0x2e>
+            HSUP_vNop();
+  aa:	46c0      	nop			; (mov r8, r8)
+  ac:	e7d0      	b.n	50 <DLL_vHandleTxEvent+0x50>
+  ae:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DLL_HandleTask:
+
+00000000 <DLL_HandleTask>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   if (DLL_ucTaskState != (uint8_t) DLL_INIT_STATE)
+   2:	4c39      	ldr	r4, [pc, #228]	; (e8 <DLL_HandleTask+0xe8>)
+   4:	7823      	ldrb	r3, [r4, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d017      	beq.n	3a <DLL_HandleTask+0x3a>
+      DBM_UART_vDisableRxEvent();
+   a:	f7ff fffe 	bl	0 <DBM_UART_vDisableRxEvent>
+   switch (DLL_ucTaskState)
+   e:	7820      	ldrb	r0, [r4, #0]
+  10:	2807      	cmp	r0, #7
+  12:	d805      	bhi.n	20 <DLL_HandleTask+0x20>
+  14:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uqi>
+  18:	25250411 	.word	0x25250411
+  1c:	0d4b4b31 	.word	0x0d4b4b31
+         if ((DLL_bIsBusIdle()) != false)
+  20:	f7ff fffe 	bl	0 <DLL_HandleTask>
+  24:	2800      	cmp	r0, #0
+  26:	d004      	beq.n	32 <DLL_HandleTask+0x32>
+            DLL_ucStatus |= DLL_STATUS_READY_TO_INITIATE_TRANSMISSION_BIT;
+  28:	2310      	movs	r3, #16
+  2a:	4a30      	ldr	r2, [pc, #192]	; (ec <DLL_HandleTask+0xec>)
+  2c:	7811      	ldrb	r1, [r2, #0]
+  2e:	430b      	orrs	r3, r1
+  30:	7013      	strb	r3, [r2, #0]
+   DBM_UART_vEnableRxEvent();
+  32:	f7ff fffe 	bl	0 <DBM_UART_vEnableRxEvent>
+}
+  36:	2001      	movs	r0, #1
+  38:	bd70      	pop	{r4, r5, r6, pc}
+   DLL_vInitDllConfig();
+  3a:	f7ff fffe 	bl	0 <DLL_vInitDllConfig>
+   DLL_uiCollisionRandomValue = DLL_RANDOM_X + (uint16_t)DLL_ConfigurationItem.ucNodeAddress;
+  3e:	492c      	ldr	r1, [pc, #176]	; (f0 <DLL_HandleTask+0xf0>)
+  40:	482c      	ldr	r0, [pc, #176]	; (f4 <DLL_HandleTask+0xf4>)
+  42:	780a      	ldrb	r2, [r1, #0]
+  44:	4b2c      	ldr	r3, [pc, #176]	; (f8 <DLL_HandleTask+0xf8>)
+  46:	1812      	adds	r2, r2, r0
+  48:	801a      	strh	r2, [r3, #0]
+   DBM_UART_vInit(DLL_ConfigurationItem.ucConfigIndex);
+  4a:	7848      	ldrb	r0, [r1, #1]
+  4c:	f7ff fffe 	bl	0 <DBM_UART_vInit>
+   DBM_UART_vEnable();
+  50:	f7ff fffe 	bl	0 <DBM_UART_vEnable>
+   DLL_vSetupSavedBaudRate();
+  54:	f7ff fffe 	bl	0 <DLL_vSetupSavedBaudRate>
+   DBM_UART_vEnableRxEvent();
+  58:	f7ff fffe 	bl	0 <DBM_UART_vEnableRxEvent>
+               DBM_UART_vDisableTxEvent();
+  5c:	f7ff fffe 	bl	0 <DBM_UART_vDisableTxEvent>
+  60:	e008      	b.n	74 <DLL_HandleTask+0x74>
+         if ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) > DLL_uiInterbyteTimeoutRx)
+  62:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  66:	4b25      	ldr	r3, [pc, #148]	; (fc <DLL_HandleTask+0xfc>)
+  68:	681b      	ldr	r3, [r3, #0]
+  6a:	1ac0      	subs	r0, r0, r3
+  6c:	4b24      	ldr	r3, [pc, #144]	; (100 <DLL_HandleTask+0x100>)
+  6e:	881b      	ldrh	r3, [r3, #0]
+  70:	4298      	cmp	r0, r3
+  72:	d9de      	bls.n	32 <DLL_HandleTask+0x32>
+            DLL_vEnterIdleState();
+  74:	f7ff fffe 	bl	0 <DLL_HandleTask>
+  78:	e7db      	b.n	32 <DLL_HandleTask+0x32>
+         if ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) > DLL_uiInterbyteTimeoutRx)
+  7a:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  7e:	4b1f      	ldr	r3, [pc, #124]	; (fc <DLL_HandleTask+0xfc>)
+  80:	681b      	ldr	r3, [r3, #0]
+  82:	1ac0      	subs	r0, r0, r3
+  84:	4b1e      	ldr	r3, [pc, #120]	; (100 <DLL_HandleTask+0x100>)
+  86:	881b      	ldrh	r3, [r3, #0]
+  88:	4298      	cmp	r0, r3
+  8a:	d9d2      	bls.n	32 <DLL_HandleTask+0x32>
+            DBM_UART_vDisableTxEvent();
+  8c:	f7ff fffe 	bl	0 <DBM_UART_vDisableTxEvent>
+            DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress), DLL_uiUserCode);
+  90:	4d1c      	ldr	r5, [pc, #112]	; (104 <DLL_HandleTask+0x104>)
+  92:	240f      	movs	r4, #15
+  94:	7828      	ldrb	r0, [r5, #0]
+  96:	4e1c      	ldr	r6, [pc, #112]	; (108 <DLL_HandleTask+0x108>)
+  98:	0001      	movs	r1, r0
+  9a:	8832      	ldrh	r2, [r6, #0]
+  9c:	43a1      	bics	r1, r4
+  9e:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+  a2:	7828      	ldrb	r0, [r5, #0]
+            DLL_vMessageTransmitted(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress), DLL_uiUserCode);
+  a4:	8831      	ldrh	r1, [r6, #0]
+  a6:	43a0      	bics	r0, r4
+  a8:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted>
+  ac:	e7e2      	b.n	74 <DLL_HandleTask+0x74>
+         if ((uint32_t)(DBM_ulGetCircleMicroSeconds() - DLL_ulTimeStamp) > DLL_uiInterbyteTimeoutRx)
+  ae:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  b2:	4b12      	ldr	r3, [pc, #72]	; (fc <DLL_HandleTask+0xfc>)
+  b4:	681b      	ldr	r3, [r3, #0]
+  b6:	1ac0      	subs	r0, r0, r3
+  b8:	4b11      	ldr	r3, [pc, #68]	; (100 <DLL_HandleTask+0x100>)
+  ba:	881b      	ldrh	r3, [r3, #0]
+  bc:	4298      	cmp	r0, r3
+  be:	d9b8      	bls.n	32 <DLL_HandleTask+0x32>
+            if ((DLL_ucStatus & DLL_STATUS_MESSAGE_TRANSMISSION_BIT) != 0U)
+  c0:	4b0a      	ldr	r3, [pc, #40]	; (ec <DLL_HandleTask+0xec>)
+  c2:	781b      	ldrb	r3, [r3, #0]
+  c4:	069b      	lsls	r3, r3, #26
+  c6:	d5d5      	bpl.n	74 <DLL_HandleTask+0x74>
+               DLL_vMessageTransmitted_UserCallback(DLL_ucReceivingNodeAddress, DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress), DLL_uiUserCode);
+  c8:	4d0e      	ldr	r5, [pc, #56]	; (104 <DLL_HandleTask+0x104>)
+  ca:	240f      	movs	r4, #15
+  cc:	7828      	ldrb	r0, [r5, #0]
+  ce:	4e0e      	ldr	r6, [pc, #56]	; (108 <DLL_HandleTask+0x108>)
+  d0:	0001      	movs	r1, r0
+  d2:	8832      	ldrh	r2, [r6, #0]
+  d4:	43a1      	bics	r1, r4
+  d6:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted_UserCallback>
+  da:	7828      	ldrb	r0, [r5, #0]
+               DLL_vMessageTransmitted(DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(DLL_ucReceivingNodeAddress), DLL_uiUserCode);
+  dc:	8831      	ldrh	r1, [r6, #0]
+  de:	43a0      	bics	r0, r4
+  e0:	f7ff fffe 	bl	0 <DLL_vMessageTransmitted>
+  e4:	e7ba      	b.n	5c <DLL_HandleTask+0x5c>
+  e6:	46c0      	nop			; (mov r8, r8)
+	...
+  f4:	00001798 	.word	0x00001798
+	...
+
+Disassembly of section .text.DLL_bIsBusReadyForTransmission:
+
+00000000 <DLL_bIsBusReadyForTransmission>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   if (DLL_ucTaskState == (uint8_t) DLL_IDLE_STATE)
+   2:	4b0c      	ldr	r3, [pc, #48]	; (34 <DLL_bIsBusReadyForTransmission+0x34>)
+   4:	781c      	ldrb	r4, [r3, #0]
+   6:	2c01      	cmp	r4, #1
+   8:	d10f      	bne.n	2a <DLL_bIsBusReadyForTransmission+0x2a>
+      if ((DLL_ucStatus & DLL_STATUS_READY_TO_INITIATE_TRANSMISSION_BIT) != 0U)
+   a:	2610      	movs	r6, #16
+   c:	4d0a      	ldr	r5, [pc, #40]	; (38 <DLL_bIsBusReadyForTransmission+0x38>)
+   e:	782b      	ldrb	r3, [r5, #0]
+  10:	4233      	tst	r3, r6
+  12:	d00a      	beq.n	2a <DLL_bIsBusReadyForTransmission+0x2a>
+         if (DBM_UART_bIsRxOnGoing() == false) //Does HAL report Idle state?
+  14:	f7ff fffe 	bl	0 <DBM_UART_bIsRxOnGoing>
+  18:	2800      	cmp	r0, #0
+  1a:	d009      	beq.n	30 <DLL_bIsBusReadyForTransmission+0x30>
+            DLL_ulTimeStamp = DBM_ulGetCircleMicroSeconds();
+  1c:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  20:	4b06      	ldr	r3, [pc, #24]	; (3c <DLL_bIsBusReadyForTransmission+0x3c>)
+  22:	6018      	str	r0, [r3, #0]
+            DLL_ucStatus &= ~DLL_STATUS_READY_TO_INITIATE_TRANSMISSION_BIT;
+  24:	782b      	ldrb	r3, [r5, #0]
+  26:	43b3      	bics	r3, r6
+  28:	702b      	strb	r3, [r5, #0]
+   if ((DLL_bIsBusIdle()) != false)
+  2a:	f7ff fffe 	bl	0 <DLL_bIsBusReadyForTransmission>
+  2e:	0004      	movs	r4, r0
+}
+  30:	0020      	movs	r0, r4
+  32:	bd70      	pop	{r4, r5, r6, pc}
+	...
+
+Disassembly of section .text.DLL_bSendMessage:
+
+00000000 <DLL_bSendMessage>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0005      	movs	r5, r0
+   4:	000f      	movs	r7, r1
+   if ((DLL_bIsBusReadyForTransmission() != false) && (DLL_isSilentMode() == false))
+   6:	f7ff fffe 	bl	0 <DLL_bSendMessage>
+   a:	1e04      	subs	r4, r0, #0
+   c:	d02d      	beq.n	6a <DLL_bSendMessage+0x6a>
+    return DLL_bSilent;
+   e:	4b1b      	ldr	r3, [pc, #108]	; (7c <DLL_bSendMessage+0x7c>)
+  10:	781b      	ldrb	r3, [r3, #0]
+   if ((DLL_bIsBusReadyForTransmission() != false) && (DLL_isSilentMode() == false))
+  12:	2b00      	cmp	r3, #0
+  14:	d12d      	bne.n	72 <DLL_bSendMessage+0x72>
+      if (DLL_ucTaskState != (uint8_t) DLL_OFFLINE)
+  16:	4e1a      	ldr	r6, [pc, #104]	; (80 <DLL_bSendMessage+0x80>)
+  18:	7832      	ldrb	r2, [r6, #0]
+  1a:	2a07      	cmp	r2, #7
+  1c:	d02b      	beq.n	76 <DLL_bSendMessage+0x76>
+         DLL_uiUserCode = uiUserCode;     //Save this parameter, and return when transmission finished
+  1e:	4a19      	ldr	r2, [pc, #100]	; (84 <DLL_bSendMessage+0x84>)
+  20:	8017      	strh	r7, [r2, #0]
+   DLL_uiCrc = DLL_CRC_INIT;
+  22:	4a19      	ldr	r2, [pc, #100]	; (88 <DLL_bSendMessage+0x88>)
+  24:	8013      	strh	r3, [r2, #0]
+         DLL_pucNextCharToWrite = (uint8_t *) ptMessageToTransmit;/*lint !e928 cast tested to work an all machines */
+  26:	4b19      	ldr	r3, [pc, #100]	; (8c <DLL_bSendMessage+0x8c>)
+         DLL_tUnionCounter.ucCharactersToWrite = ptMessageToTransmit->tBusIdentifier.ucMessageLength + (uint8_t)(BUS_MESSAGE_OVERHEAD_INCLUDING_IDENTIFIER - 1u); //Add msg.len and TA + CRC to the data
+  28:	4a19      	ldr	r2, [pc, #100]	; (90 <DLL_bSendMessage+0x90>)
+         DLL_pucNextCharToWrite = (uint8_t *) ptMessageToTransmit;/*lint !e928 cast tested to work an all machines */
+  2a:	601d      	str	r5, [r3, #0]
+         DLL_pucNextCharToCheck = (uint8_t *) ptMessageToTransmit;/*lint !e928 cast tested to work an all machines */
+  2c:	4b19      	ldr	r3, [pc, #100]	; (94 <DLL_bSendMessage+0x94>)
+  2e:	601d      	str	r5, [r3, #0]
+         DLL_tUnionCounter.ucCharactersToWrite = ptMessageToTransmit->tBusIdentifier.ucMessageLength + (uint8_t)(BUS_MESSAGE_OVERHEAD_INCLUDING_IDENTIFIER - 1u); //Add msg.len and TA + CRC to the data
+  30:	782b      	ldrb	r3, [r5, #0]
+  32:	3303      	adds	r3, #3
+  34:	b2db      	uxtb	r3, r3
+  36:	7013      	strb	r3, [r2, #0]
+         DLL_ucCharactersToCheck = DLL_tUnionCounter.ucCharactersToWrite;
+  38:	4a17      	ldr	r2, [pc, #92]	; (98 <DLL_bSendMessage+0x98>)
+  3a:	7013      	strb	r3, [r2, #0]
+         DLL_ucReceivingNodeAddress = ptMessageToTransmit->tBusIdentifier.ucTargetAddress;
+  3c:	786a      	ldrb	r2, [r5, #1]
+  3e:	4b17      	ldr	r3, [pc, #92]	; (9c <DLL_bSendMessage+0x9c>)
+  40:	701a      	strb	r2, [r3, #0]
+         DLL_ucStatus = DLL_STATUS_MESSAGE_TRANSMISSION_BIT;
+  42:	2320      	movs	r3, #32
+  44:	4a16      	ldr	r2, [pc, #88]	; (a0 <DLL_bSendMessage+0xa0>)
+  46:	7013      	strb	r3, [r2, #0]
+static inline uint8_t DLL_GET_COMMUNICATION_PARTNER(uint8_t x)           {return ((uint8_t)(((x) & (uint8_t) 0xF0U) >> 4));} //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. DLL_GET_COMMUNICATION_PARTNER shifts the upper nibble down.
+  48:	786b      	ldrb	r3, [r5, #1]
+         if (DLL_GET_COMMUNICATION_PARTNER(*(DLL_pucNextCharToWrite+1)) == DLL_BROADCAST) //Starting transmission of a new message, delete the status from previous reception/transmission, but note, whether this is a broadcast
+  4a:	091b      	lsrs	r3, r3, #4
+  4c:	d101      	bne.n	52 <DLL_bSendMessage+0x52>
+                DLL_ucStatus |= DLL_STATUS_BROADCAST_BIT;
+  4e:	3321      	adds	r3, #33	; 0x21
+  50:	7013      	strb	r3, [r2, #0]
+         if ((DBM_UART_bIsRxOnGoing())==false)
+  52:	f7ff fffe 	bl	0 <DBM_UART_bIsRxOnGoing>
+  56:	2800      	cmp	r0, #0
+  58:	d109      	bne.n	6e <DLL_bSendMessage+0x6e>
+                DLL_ulTimeStamp = DBM_ulGetCircleMicroSeconds();
+  5a:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  5e:	4b11      	ldr	r3, [pc, #68]	; (a4 <DLL_bSendMessage+0xa4>)
+  60:	6018      	str	r0, [r3, #0]
+                DLL_ucTaskState = (uint8_t) DLL_MESSAGE_TO_SEND;
+  62:	2304      	movs	r3, #4
+  64:	7033      	strb	r3, [r6, #0]
+                DBM_UART_vEnableTxEvent();
+  66:	f7ff fffe 	bl	0 <DBM_UART_vEnableTxEvent>
+}
+  6a:	0020      	movs	r0, r4
+  6c:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+            DLL_vEnterIdleState(); //Not allowed to send, because someone else just started transmitting.
+  6e:	f7ff fffe 	bl	0 <DLL_bSendMessage>
+   return false; //Not possible to send at the present stage.
+  72:	2400      	movs	r4, #0
+  74:	e7f9      	b.n	6a <DLL_bSendMessage+0x6a>
+  76:	001c      	movs	r4, r3
+  78:	e7f7      	b.n	6a <DLL_bSendMessage+0x6a>
+  7a:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DLL_bTransmitMessage:
+
+00000000 <DLL_bTransmitMessage>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	0016      	movs	r6, r2
+   4:	001c      	movs	r4, r3
+   6:	9001      	str	r0, [sp, #4]
+   8:	9100      	str	r1, [sp, #0]
+   if (DLL_bIsBusReadyForTransmission() != false)
+   a:	f7ff fffe 	bl	0 <DLL_bTransmitMessage>
+   e:	1e05      	subs	r5, r0, #0
+  10:	d046      	beq.n	a0 <DLL_bTransmitMessage+0xa0>
+      if (DLL_ucTaskState != (uint8_t) DLL_OFFLINE)
+  12:	4f26      	ldr	r7, [pc, #152]	; (ac <DLL_bTransmitMessage+0xac>)
+  14:	783b      	ldrb	r3, [r7, #0]
+  16:	2b07      	cmp	r3, #7
+  18:	d046      	beq.n	a8 <DLL_bTransmitMessage+0xa8>
+         if (ucDataLength > DLL_ucSizeOfDataBufferIn_tBusMessage)
+  1a:	1c33      	adds	r3, r6, #0
+  1c:	2e83      	cmp	r6, #131	; 0x83
+  1e:	d901      	bls.n	24 <DLL_bTransmitMessage+0x24>
+  20:	4b23      	ldr	r3, [pc, #140]	; (b0 <DLL_bTransmitMessage+0xb0>)
+  22:	781b      	ldrb	r3, [r3, #0]
+   DLL_uiCrc = DLL_CRC_INIT;
+  24:	2200      	movs	r2, #0
+  26:	b2de      	uxtb	r6, r3
+         DLL_uiUserCode = uiUserCode;     //Save this parameter, and return when transmission finished
+  28:	4b22      	ldr	r3, [pc, #136]	; (b4 <DLL_bTransmitMessage+0xb4>)
+         DLL_tMessageToSend.tBusIdentifier = tMessageID;
+  2a:	a901      	add	r1, sp, #4
+         DLL_uiUserCode = uiUserCode;     //Save this parameter, and return when transmission finished
+  2c:	801c      	strh	r4, [r3, #0]
+         DLL_tMessageToSend.tBusIdentifier = tMessageID;
+  2e:	4c22      	ldr	r4, [pc, #136]	; (b8 <DLL_bTransmitMessage+0xb8>)
+   DLL_uiCrc = DLL_CRC_INIT;
+  30:	4b22      	ldr	r3, [pc, #136]	; (bc <DLL_bTransmitMessage+0xbc>)
+         DLL_tMessageToSend.tBusIdentifier = tMessageID;
+  32:	0020      	movs	r0, r4
+   DLL_uiCrc = DLL_CRC_INIT;
+  34:	801a      	strh	r2, [r3, #0]
+         DLL_tMessageToSend.tBusIdentifier = tMessageID;
+  36:	3204      	adds	r2, #4
+  38:	f7ff fffe 	bl	0 <memcpy>
+         DLL_tMessageToSend.tBusIdentifier.ucMessageLength = ucDataLength + BUS_MESSAGE_OVERHEAD;
+  3c:	1cb3      	adds	r3, r6, #2
+         DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier = HSUP_uiProcToBigEndian(DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier); //Adapt Message ID to BigEndian format if current controller is LittleEndian.
+  3e:	78e0      	ldrb	r0, [r4, #3]
+         DLL_tMessageToSend.tBusIdentifier.ucMessageLength = ucDataLength + BUS_MESSAGE_OVERHEAD;
+  40:	7023      	strb	r3, [r4, #0]
+         DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier = HSUP_uiProcToBigEndian(DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier); //Adapt Message ID to BigEndian format if current controller is LittleEndian.
+  42:	78a3      	ldrb	r3, [r4, #2]
+  44:	0200      	lsls	r0, r0, #8
+  46:	4318      	orrs	r0, r3
+  48:	f7ff fffe 	bl	0 <HSUP_uiProcToBigEndian>
+  4c:	70a0      	strb	r0, [r4, #2]
+  4e:	0a00      	lsrs	r0, r0, #8
+         (*tServiceFunc)(ucDataLength, DLL_tMessageToSend.aucData);
+  50:	9b00      	ldr	r3, [sp, #0]
+         DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier = HSUP_uiProcToBigEndian(DLL_tMessageToSend.tBusIdentifier.tMessageIdentifier); //Adapt Message ID to BigEndian format if current controller is LittleEndian.
+  52:	70e0      	strb	r0, [r4, #3]
+         (*tServiceFunc)(ucDataLength, DLL_tMessageToSend.aucData);
+  54:	491a      	ldr	r1, [pc, #104]	; (c0 <DLL_bTransmitMessage+0xc0>)
+  56:	0030      	movs	r0, r6
+  58:	4798      	blx	r3
+         DLL_pucNextCharToCheck = DLL_pucNextCharToWrite;
+  5a:	4b1a      	ldr	r3, [pc, #104]	; (c4 <DLL_bTransmitMessage+0xc4>)
+         DLL_tUnionCounter.ucCharactersToWrite = DLL_tMessageToSend.tBusIdentifier.ucMessageLength + (uint8_t)(BUS_MESSAGE_OVERHEAD_INCLUDING_IDENTIFIER - 1u); //Add msg.len and TA + CRC to the data
+  5c:	4a1a      	ldr	r2, [pc, #104]	; (c8 <DLL_bTransmitMessage+0xc8>)
+         DLL_pucNextCharToCheck = DLL_pucNextCharToWrite;
+  5e:	601c      	str	r4, [r3, #0]
+         DLL_tUnionCounter.ucCharactersToWrite = DLL_tMessageToSend.tBusIdentifier.ucMessageLength + (uint8_t)(BUS_MESSAGE_OVERHEAD_INCLUDING_IDENTIFIER - 1u); //Add msg.len and TA + CRC to the data
+  60:	7823      	ldrb	r3, [r4, #0]
+         DLL_pucNextCharToWrite = (uint8_t *) &DLL_tMessageToSend;/*lint !e928 cast tested to work an all machines */
+  62:	4e1a      	ldr	r6, [pc, #104]	; (cc <DLL_bTransmitMessage+0xcc>)
+         DLL_tUnionCounter.ucCharactersToWrite = DLL_tMessageToSend.tBusIdentifier.ucMessageLength + (uint8_t)(BUS_MESSAGE_OVERHEAD_INCLUDING_IDENTIFIER - 1u); //Add msg.len and TA + CRC to the data
+  64:	3303      	adds	r3, #3
+  66:	b2db      	uxtb	r3, r3
+  68:	7013      	strb	r3, [r2, #0]
+         DLL_ucCharactersToCheck = DLL_tUnionCounter.ucCharactersToWrite;
+  6a:	4a19      	ldr	r2, [pc, #100]	; (d0 <DLL_bTransmitMessage+0xd0>)
+         DLL_pucNextCharToWrite = (uint8_t *) &DLL_tMessageToSend;/*lint !e928 cast tested to work an all machines */
+  6c:	6034      	str	r4, [r6, #0]
+         DLL_ucCharactersToCheck = DLL_tUnionCounter.ucCharactersToWrite;
+  6e:	7013      	strb	r3, [r2, #0]
+         DLL_ucReceivingNodeAddress = DLL_tMessageToSend.tBusIdentifier.ucTargetAddress;
+  70:	7862      	ldrb	r2, [r4, #1]
+  72:	4b18      	ldr	r3, [pc, #96]	; (d4 <DLL_bTransmitMessage+0xd4>)
+  74:	701a      	strb	r2, [r3, #0]
+         if (DBM_UART_bIsRxOnGoing()==false)
+  76:	f7ff fffe 	bl	0 <DBM_UART_bIsRxOnGoing>
+  7a:	2800      	cmp	r0, #0
+  7c:	d112      	bne.n	a4 <DLL_bTransmitMessage+0xa4>
+            DLL_ucStatus = DLL_STATUS_MESSAGE_TRANSMISSION_BIT;
+  7e:	2320      	movs	r3, #32
+  80:	4a15      	ldr	r2, [pc, #84]	; (d8 <DLL_bTransmitMessage+0xd8>)
+  82:	7013      	strb	r3, [r2, #0]
+            if (DLL_GET_COMMUNICATION_PARTNER(*(DLL_pucNextCharToWrite+1)) == DLL_BROADCAST) //Starting transmission of a new message, delete the status from previous reception/transmission, but note, whether this is a broadcast
+  84:	6833      	ldr	r3, [r6, #0]
+  86:	785b      	ldrb	r3, [r3, #1]
+  88:	091b      	lsrs	r3, r3, #4
+  8a:	d101      	bne.n	90 <DLL_bTransmitMessage+0x90>
+               DLL_ucStatus |= DLL_STATUS_BROADCAST_BIT;
+  8c:	3321      	adds	r3, #33	; 0x21
+  8e:	7013      	strb	r3, [r2, #0]
+            DLL_ulTimeStamp = DBM_ulGetCircleMicroSeconds();
+  90:	f7ff fffe 	bl	0 <DBM_ulGetCircleMicroSeconds>
+  94:	4b11      	ldr	r3, [pc, #68]	; (dc <DLL_bTransmitMessage+0xdc>)
+  96:	6018      	str	r0, [r3, #0]
+            DLL_ucTaskState = (uint8_t) DLL_MESSAGE_TO_SEND;
+  98:	2304      	movs	r3, #4
+  9a:	703b      	strb	r3, [r7, #0]
+            DBM_UART_vEnableTxEvent();
+  9c:	f7ff fffe 	bl	0 <DBM_UART_vEnableTxEvent>
+}
+  a0:	0028      	movs	r0, r5
+  a2:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+            DLL_vEnterIdleState(); //Not allowed to send, because someone else just started transmitting.
+  a4:	f7ff fffe 	bl	0 <DLL_bTransmitMessage>
+   return false; //Not possible to send at the present stage.
+  a8:	2500      	movs	r5, #0
+  aa:	e7f9      	b.n	a0 <DLL_bTransmitMessage+0xa0>
+	...
+  c0:	00000004 	.word	0x00000004
+	...
+
+Disassembly of section .text.DLL_ptReceiveMessage:
+
+00000000 <DLL_ptReceiveMessage>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   if ((DLL_ucCharactersInRxMessageBuffer) != 0U)
+   2:	4918      	ldr	r1, [pc, #96]	; (64 <DLL_ptReceiveMessage+0x64>)
+   4:	780b      	ldrb	r3, [r1, #0]
+      ptMessageToReturn = (TbusMessage *) NULL;
+   6:	1e1c      	subs	r4, r3, #0
+   if ((DLL_ucCharactersInRxMessageBuffer) != 0U)
+   8:	d025      	beq.n	56 <DLL_ptReceiveMessage+0x56>
+      if (DLL_aucMessageInputBuffer[DLL_ucRxNextCharacterToRead] == (uint8_t) DLL_DUMMY_MESSAGE_MESG_LEN)
+   a:	4d17      	ldr	r5, [pc, #92]	; (68 <DLL_ptReceiveMessage+0x68>)
+   c:	4a17      	ldr	r2, [pc, #92]	; (6c <DLL_ptReceiveMessage+0x6c>)
+   e:	782c      	ldrb	r4, [r5, #0]
+  10:	5d10      	ldrb	r0, [r2, r4]
+  12:	28ff      	cmp	r0, #255	; 0xff
+  14:	d121      	bne.n	5a <DLL_ptReceiveMessage+0x5a>
+         DLL_ucCharactersInRxMessageBuffer -= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxNextCharacterToRead); //Subtract dummy message, if present
+  16:	191b      	adds	r3, r3, r4
+         DLL_ucRxNextCharacterToRead = 0U;
+  18:	2400      	movs	r4, #0
+         DLL_ucCharactersInRxMessageBuffer -= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxNextCharacterToRead); //Subtract dummy message, if present
+  1a:	4815      	ldr	r0, [pc, #84]	; (70 <DLL_ptReceiveMessage+0x70>)
+  1c:	7880      	ldrb	r0, [r0, #2]
+         DLL_ucRxNextCharacterToRead = 0U;
+  1e:	702c      	strb	r4, [r5, #0]
+         DLL_ucCharactersInRxMessageBuffer -= (DLL_ConfigurationItem.ucInputBufferLength - DLL_ucRxNextCharacterToRead); //Subtract dummy message, if present
+  20:	1a1b      	subs	r3, r3, r0
+  22:	b2db      	uxtb	r3, r3
+  24:	700b      	strb	r3, [r1, #0]
+         if ((DLL_ucCharactersInRxMessageBuffer) != 0U)
+  26:	42a3      	cmp	r3, r4
+  28:	d003      	beq.n	32 <DLL_ptReceiveMessage+0x32>
+            ptMessageToReturn = (TbusMessage *)(&DLL_aucMessageInputBuffer[DLL_ucRxNextCharacterToRead]);/*lint !e826 !e927 !e2445 cast tested to work an all machines */
+  2a:	0014      	movs	r4, r2
+            DLL_ucDataLengthOfReceivedMessage = ptMessageToReturn->tBusIdentifier.ucMessageLength;
+  2c:	4b11      	ldr	r3, [pc, #68]	; (74 <DLL_ptReceiveMessage+0x74>)
+  2e:	7810      	ldrb	r0, [r2, #0]
+  30:	7018      	strb	r0, [r3, #0]
+      if (DLL_ucCharactersInRxMessageBuffer != 0U)
+  32:	780b      	ldrb	r3, [r1, #0]
+  34:	2b00      	cmp	r3, #0
+  36:	d00e      	beq.n	56 <DLL_ptReceiveMessage+0x56>
+         if (DLL_bLittleEndianIdAdaptation==false)
+  38:	4b0f      	ldr	r3, [pc, #60]	; (78 <DLL_ptReceiveMessage+0x78>)
+  3a:	781a      	ldrb	r2, [r3, #0]
+  3c:	2a00      	cmp	r2, #0
+  3e:	d10a      	bne.n	56 <DLL_ptReceiveMessage+0x56>
+            DLL_bLittleEndianIdAdaptation = true; //LittleEndian adaptation only once for each Message ID
+  40:	3201      	adds	r2, #1
+  42:	701a      	strb	r2, [r3, #0]
+            ptMessageToReturn->tBusIdentifier.tMessageIdentifier = HSUP_uiProcToBigEndian(ptMessageToReturn->tBusIdentifier.tMessageIdentifier);
+  44:	78e0      	ldrb	r0, [r4, #3]
+  46:	78a3      	ldrb	r3, [r4, #2]
+  48:	0200      	lsls	r0, r0, #8
+  4a:	4318      	orrs	r0, r3
+  4c:	f7ff fffe 	bl	0 <HSUP_uiProcToBigEndian>
+  50:	70a0      	strb	r0, [r4, #2]
+  52:	0a00      	lsrs	r0, r0, #8
+  54:	70e0      	strb	r0, [r4, #3]
+}
+  56:	0020      	movs	r0, r4
+  58:	bd70      	pop	{r4, r5, r6, pc}
+         DLL_ucDataLengthOfReceivedMessage = ptMessageToReturn->tBusIdentifier.ucMessageLength;
+  5a:	4b06      	ldr	r3, [pc, #24]	; (74 <DLL_ptReceiveMessage+0x74>)
+         ptMessageToReturn = (TbusMessage *)(&DLL_aucMessageInputBuffer[DLL_ucRxNextCharacterToRead]);/*lint !e826 !e927 !e2445 cast tested to work an all machines */
+  5c:	18a4      	adds	r4, r4, r2
+         DLL_ucDataLengthOfReceivedMessage = ptMessageToReturn->tBusIdentifier.ucMessageLength;
+  5e:	7018      	strb	r0, [r3, #0]
+  60:	e7e7      	b.n	32 <DLL_ptReceiveMessage+0x32>
+  62:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DLL_vReleaseDataFromReceivedMessage:
+
+00000000 <DLL_vReleaseDataFromReceivedMessage>:
+   DLL_bLittleEndianIdAdaptation = false; //The next message identifier must be adapted.
+   0:	2000      	movs	r0, #0
+{
+   2:	b510      	push	{r4, lr}
+   ucDatalength = (uint8_t)(DLL_ucDataLengthOfReceivedMessage + BUS_MESSAGE_OVERHEAD);
+   4:	4b10      	ldr	r3, [pc, #64]	; (48 <DLL_vReleaseDataFromReceivedMessage+0x48>)
+   DLL_bLittleEndianIdAdaptation = false; //The next message identifier must be adapted.
+   6:	4c11      	ldr	r4, [pc, #68]	; (4c <DLL_vReleaseDataFromReceivedMessage+0x4c>)
+   ucDatalength = (uint8_t)(DLL_ucDataLengthOfReceivedMessage + BUS_MESSAGE_OVERHEAD);
+   8:	781a      	ldrb	r2, [r3, #0]
+   DLL_bLittleEndianIdAdaptation = false; //The next message identifier must be adapted.
+   a:	7020      	strb	r0, [r4, #0]
+   ucDatalength = (uint8_t)(DLL_ucDataLengthOfReceivedMessage + BUS_MESSAGE_OVERHEAD);
+   c:	1c91      	adds	r1, r2, #2
+   e:	b2cb      	uxtb	r3, r1
+   if ((ucDatalength % DLL_ALIGNMENT_BASE) != 0U)
+  10:	07c9      	lsls	r1, r1, #31
+  12:	d501      	bpl.n	18 <DLL_vReleaseDataFromReceivedMessage+0x18>
+      ucDatalength++; //align 16 bit access to even address offset.
+  14:	3203      	adds	r2, #3
+  16:	b2d3      	uxtb	r3, r2
+   if (DLL_ucCharactersInRxMessageBuffer  >= ucDatalength)
+  18:	480d      	ldr	r0, [pc, #52]	; (50 <DLL_vReleaseDataFromReceivedMessage+0x50>)
+  1a:	4a0e      	ldr	r2, [pc, #56]	; (54 <DLL_vReleaseDataFromReceivedMessage+0x54>)
+  1c:	7801      	ldrb	r1, [r0, #0]
+  1e:	4299      	cmp	r1, r3
+  20:	d30c      	bcc.n	3c <DLL_vReleaseDataFromReceivedMessage+0x3c>
+      DLL_ucCharactersInRxMessageBuffer -= ucDatalength;
+  22:	1ac9      	subs	r1, r1, r3
+  24:	7001      	strb	r1, [r0, #0]
+      DLL_ucRxNextCharacterToRead += ucDatalength;
+  26:	7811      	ldrb	r1, [r2, #0]
+  28:	185b      	adds	r3, r3, r1
+  2a:	b2db      	uxtb	r3, r3
+      if (DLL_ucRxNextCharacterToRead >= DLL_ConfigurationItem.ucInputBufferLength)
+  2c:	490a      	ldr	r1, [pc, #40]	; (58 <DLL_vReleaseDataFromReceivedMessage+0x58>)
+      DLL_ucRxNextCharacterToRead += ucDatalength;
+  2e:	7013      	strb	r3, [r2, #0]
+      if (DLL_ucRxNextCharacterToRead >= DLL_ConfigurationItem.ucInputBufferLength)
+  30:	7889      	ldrb	r1, [r1, #2]
+  32:	4299      	cmp	r1, r3
+  34:	d801      	bhi.n	3a <DLL_vReleaseDataFromReceivedMessage+0x3a>
+         DLL_ucRxNextCharacterToRead = 0U;
+  36:	2300      	movs	r3, #0
+  38:	7013      	strb	r3, [r2, #0]
+}
+  3a:	bd10      	pop	{r4, pc}
+      DLL_ucRxNextCharacterToRead = 0U;
+  3c:	2300      	movs	r3, #0
+  3e:	7013      	strb	r3, [r2, #0]
+      DLL_ucCharactersInRxMessageBuffer = 0U;
+  40:	7003      	strb	r3, [r0, #0]
+      DLL_bLittleEndianIdAdaptation = false; //The next message identifier must be adapted.
+  42:	7023      	strb	r3, [r4, #0]
+   return;
+  44:	e7f9      	b.n	3a <DLL_vReleaseDataFromReceivedMessage+0x3a>
+  46:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DLL_ucGetMainNodeAddress:
+
+00000000 <DLL_ucGetMainNodeAddress>:
+   return DLL_ConfigurationItem.ucNodeAddress;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_ucGetMainNodeAddress+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_ucGetReceivingNodeAddress:
+
+00000000 <DLL_ucGetReceivingNodeAddress>:
+    return DLL_ucLastAddressWithWhichWeWereAddressed;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_ucGetReceivingNodeAddress+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_vGoOffline:
+
+00000000 <DLL_vGoOffline>:
+   DLL_ucTaskState = (uint8_t) DLL_OFFLINE;
+   0:	2207      	movs	r2, #7
+{
+   2:	b510      	push	{r4, lr}
+   DLL_ucTaskState = (uint8_t) DLL_OFFLINE;
+   4:	4b02      	ldr	r3, [pc, #8]	; (10 <DLL_vGoOffline+0x10>)
+   6:	701a      	strb	r2, [r3, #0]
+   DBM_UART_vDisableTxEvent();
+   8:	f7ff fffe 	bl	0 <DBM_UART_vDisableTxEvent>
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_vGoOnline:
+
+00000000 <DLL_vGoOnline>:
+{
+   0:	b510      	push	{r4, lr}
+   DLL_vEnterIdleState();
+   2:	f7ff fffe 	bl	0 <DLL_vGoOnline>
+   DBM_UART_vEnableTxEvent();
+   6:	f7ff fffe 	bl	0 <DBM_UART_vEnableTxEvent>
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DLL_vSetSilentMode:
+
+00000000 <DLL_vSetSilentMode>:
+    DLL_bSilent = true;
+   0:	2201      	movs	r2, #1
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_vSetSilentMode+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_vUnsetSilentMode:
+
+00000000 <DLL_vUnsetSilentMode>:
+    DLL_bSilent = false;
+   0:	2200      	movs	r2, #0
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_vUnsetSilentMode+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_isSilentMode:
+
+00000000 <DLL_isSilentMode>:
+    return DLL_bSilent;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_isSilentMode+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_bIsDbusCommunicating:
+
+00000000 <DLL_bIsDbusCommunicating>:
+
+/* Get Information, whether Dbus is either transmitting or receiving data, to know, if action can be started, that would disturb Dbus, such as disabling interrupts.*/
+bool DLL_bIsDbusCommunicating(void)
+{
+   0:	b510      	push	{r4, lr}
+   2:	2401      	movs	r4, #1
+    return (((DLL_ucTaskState > (uint8_t)DLL_IDLE_STATE) && (DLL_ucTaskState < (uint8_t)DLL_OFFLINE)) || (DBM_UART_bIsRxOnGoing() == true)) ? true : false;
+   4:	4b04      	ldr	r3, [pc, #16]	; (18 <DLL_bIsDbusCommunicating+0x18>)
+   6:	0020      	movs	r0, r4
+   8:	781b      	ldrb	r3, [r3, #0]
+   a:	3b02      	subs	r3, #2
+   c:	2b04      	cmp	r3, #4
+   e:	d901      	bls.n	14 <DLL_bIsDbusCommunicating+0x14>
+  10:	f7ff fffe 	bl	0 <DBM_UART_bIsRxOnGoing>
+  14:	4020      	ands	r0, r4
+}
+  16:	bd10      	pop	{r4, pc}
+  18:	00000000 	.word	0x00000000

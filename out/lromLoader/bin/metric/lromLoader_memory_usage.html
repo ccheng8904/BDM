@@ -1,0 +1,4196 @@
+﻿<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+            * {
+              margin: auto;
+              width: 1000px;
+              box-sizing: border-box;
+              text-align: center;
+              font-size: 11px;
+              font-family: Verdana;
+            }
+
+            h1 {
+              font-size: 14px;
+              margin: 20px auto;
+            }
+
+            h2 {
+              font-size: 12px;
+              margin: 20px auto;
+            }
+
+            ul.level-0 {
+            }
+
+            ul.level-1 {
+            }
+
+            li {
+              text-align: left;
+            }
+
+            table.table-1 {
+              border-spacing: 0;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              margin: auto;
+            }
+
+            thead.table-1 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-1 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-1 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-1 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+              font-weight: bold;
+            }
+
+            tbody.table-1 td {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+              text-align: right;
+            }
+
+            table.table-2 {
+              width: 800px;
+              border-spacing: 0;
+              border: 1px solid #58A0DC;
+              margin: 20px auto;
+            }
+
+            thead.table-2 th {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-2 tr:first-child {
+              background: #B4CFEC;
+              border: none;
+            }
+
+            table.table-3 {
+              width: 800px;
+              border-spacing: 0;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              margin: 20px auto;
+            }
+
+            thead.table-3 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-3 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-3 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-3 td {
+              text-align: right;
+              font-size: 10px;
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-3 td:first-child {
+
+              text-align: center;
+            }
+
+            tbody.table-3 td:last-child {
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-3 td:nth-child(2) {
+              white-space: nowrap;
+              text-align: left;
+            }
+
+            tbody.table-3 tr:last-child td {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            table.table-4 {
+              width: 1000px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border: none;
+              margin: 20px auto;
+              padding: 0;
+            }
+
+            tbody.table-4 td {
+              vertical-align: top;
+            }
+
+            table.table-5 {
+              width: 1000px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              padding: 0;
+            }
+
+            thead.table-5 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            thead.table-5 tr:first-child {
+              background: #B4CFEC;
+            }
+
+            thead.table-5 tr:nth-child(2) {
+              background: #B4CFEC;
+            }
+
+            tbody.table-5 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+              font-weight: bold;
+            }
+
+            tbody.table-5 td {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;
+              text-align: right;
+            }
+
+            table.table-6 {
+              width: 500px;
+              border-spacing: 0;
+              border-collapse: collapse;
+              border-top: 1px solid #58A0DC;
+              border-left: 1px solid #58A0DC;
+              border-right: none;
+              border-bottom: none;
+              padding: 0;
+            }
+
+            thead.table-6 tr:first-child {
+              background: #D2E2F4;
+            }
+
+            thead.table-6 tr:nth-child(2) {
+              background: #D2E2F4;
+            }
+
+            thead.table-6 th {
+              border-right: 1px solid #58A0DC;
+              border-bottom: 1px solid #58A0DC;              
+            }
+
+            tbody.table-6 td {
+              font-size: 10px;
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-6 td:first-child {
+              white-space: nowrap;
+              text-align: left;
+            }
+
+            tbody.table-6 td:last-child {
+              border-right: 1px solid #58A0DC;
+            }
+
+            tbody.table-6 td:nth-child(2) {
+              text-align: right;
+            }
+
+            tbody.table-6 td:nth-child(3) {
+              text-align: right;
+            }
+
+            tbody.table-6 tr:last-child {
+              border-bottom: 1px solid #58A0DC;
+            }
+
+            .unknownSymbol {
+              color: #FF0000;
+            }
+
+            table.legend {
+              width: 800px;
+              margin: 0 auto;
+            }
+  
+            tbody.legend td {
+              text-align: left;
+              font-size: 10px;
+            }
+
+            div {
+              text-align: center;
+            }
+        
+          </style>
+  </head>
+  <body>
+    <h1>Memory Usage Report</h1>
+    <h2>Source: E:\project\example\MD370R\out\lromLoader\bin\lromLoader.elf</h2>
+    <h2>Format: ELF/DWARF</h2>
+    <h2>Architecture: Advanced RISC Machines (ARM)</h2>
+    <h2>Generator: Maksym 3.0.2</h2>
+    <h2>
+      Contents
+    </h2>
+    <div>
+      <ul class="level-0">
+        <li><a href="#total-memory-usage">
+            Total Memory Usage
+          </a></li>
+        <li><a href="#section-list">
+            Memory Sections
+          </a></li>
+        <li><a href="#symbol-section-mapping">
+            Symbol to Section Mapping
+          </a><ul class="level-1">
+            <li><a href="#0x00000000">0x00000000 - 0x00000007</a></li>
+            <li><a href="#0x00000000">0x00000000 - 0x00000038</a></li>
+            <li><a href="#0x00000000">0x00000000 - 0x000052BA</a></li>
+            <li><a href="#0x00000F00">0x00000F00 - 0x000018DF</a></li>
+            <li><a href="#0x20000000">0x20000000 - 0x20000017</a></li>
+          </ul>
+        </li>
+        <li><a href="#module-list">
+            Modules
+          </a></li>
+        <li><a href="#symbol-module-mapping">
+            Symbol in Module Mapping
+          </a><ul class="level-1">
+            <li><a href="#E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c">E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c</a></li>
+            <li><a href="#E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c">E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c</a></li>
+            <li><a href="#E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c">E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c">E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\msup.c">E:\project\example\MD370R\common/prog/MSP/mcal\msup.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\muart.c">E:\project\example\MD370R\common/prog/MSP/mcal\muart.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c">E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c">E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c</a></li>
+            <li><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c">E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <h2 id="total-memory-usage">
+      Total Memory Usage
+    </h2>
+    <table class="table-1">
+      <thead class="table-1">
+        <tr>
+          <th></th>
+          <th colspan="3">Generic Library</th>
+          <th colspan="3">System Library</th>
+          <th colspan="3">Application</th>
+          <th colspan="3">Unknown</th>
+          <th colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+          <th>RAM</th>
+          <th>ROM</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody class="table-1">
+        <tr>
+          <td>Variables</td>
+          <td>19</td>
+          <td>192</td>
+          <td>211</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>4</td>
+          <td>28</td>
+          <td>32</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>23</td>
+          <td>220</td>
+          <td>243</td>
+        </tr>
+        <tr>
+          <td>Functions</td>
+          <td>0</td>
+          <td>1918</td>
+          <td>1918</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>100</td>
+          <td>100</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>2018</td>
+          <td>2018</td>
+        </tr>
+        <tr>
+          <td>Unknown</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>298</td>
+          <td>299</td>
+          <td>1</td>
+          <td>298</td>
+          <td>299</td>
+        </tr>
+        <tr>
+          <td>Total Size</td>
+          <td>19</td>
+          <td>2110</td>
+          <td>2129</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>4</td>
+          <td>128</td>
+          <td>132</td>
+          <td>1</td>
+          <td>298</td>
+          <td>299</td>
+          <td>24</td>
+          <td>2536</td>
+          <td>2560</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="section-list">
+      Memory Sections
+    </h2>
+    <table class="table-2">
+      <thead class="table-2">
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            Name
+          </th>
+          <th>
+            Start
+          </th>
+          <th>
+            End
+          </th>
+          <th>
+            Size
+          </th>
+          <th>
+            Flag
+          </th>
+          <th>
+            Memory
+          </th>
+        </tr>
+      </thead>
+      <tbody class="table-2">
+        <tr>
+          <td><a href="#0x00000000">1</a></td>
+          <td>.boot1</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td>8</td>
+          <td>ALLOC</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x00000000">2</a></td>
+          <td>.comment</td>
+          <td>0x00000000</td>
+          <td>0x00000038</td>
+          <td>57</td>
+          <td>0x00000030</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x00000000">3</a></td>
+          <td>.debug_str</td>
+          <td>0x00000000</td>
+          <td>0x000052BA</td>
+          <td>21179</td>
+          <td>0x00000030</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#0x00000F00">4</a></td>
+          <td>.text</td>
+          <td>0x00000F00</td>
+          <td>0x000018DF</td>
+          <td>2528</td>
+          <td>ALLOC_EXECINSTR</td>
+          <td>
+                  ROM
+                </td>
+        </tr>
+        <tr>
+          <td><a href="#0x20000000">5</a></td>
+          <td>.bss</td>
+          <td>0x20000000</td>
+          <td>0x20000017</td>
+          <td>24</td>
+          <td>WRITE_ALLOC</td>
+          <td>
+                  RAM
+                </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="legend">
+      <tbody class="legend">
+        <tr>
+          <td>
+            WRITE - The section contains data that should be writable during process execution.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            ALLOC - The section occupies memory during process execution.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            EXECINSTR - The section contains executable machine instructions.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="symbol-section-mapping">
+      Symbol to Section Mapping
+    </h2>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">1: .boot1, 0x00000000 - 0x00000007, 8 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">2: .comment, 0x00000000 - 0x00000038, 57 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000000">3: .debug_str, 0x00000000 - 0x000052BA, 21179 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>ITBL_fixedVectors</td>
+          <td>0x00000000</td>
+          <td>0x00000007</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000008</td>
+          <td>0x00000EFF</td>
+          <td>3832</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MDHD_ModuleHeader</td>
+          <td>0x00000F00</td>
+          <td>0x00000F27</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>ITBL_coreVectors</td>
+          <td>0x00000F28</td>
+          <td>0x00000F37</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000F38</td>
+          <td>0x00000F38</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>_TIM_bGetInitConfig</td>
+          <td>0x00000F39</td>
+          <td>0x00000F80</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_uiGetCircleMicroSeconds</td>
+          <td>0x00000F81</td>
+          <td>0x00000F8C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>HardFault_Handler</td>
+          <td>0x00000F8D</td>
+          <td>0x00000F9C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>NMI_Handler</td>
+          <td>0x00000F9D</td>
+          <td>0x00000FA2</td>
+          <td class="symTdSize">6</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_init</td>
+          <td>0x00000FA3</td>
+          <td>0x00000FBA</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configureOutputState</td>
+          <td>0x00000FBB</td>
+          <td>0x00000FD6</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_enablePort</td>
+          <td>0x00000FD7</td>
+          <td>0x00000FD8</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_getPort</td>
+          <td>0x00000FD9</td>
+          <td>0x00000FDC</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureOutputType</td>
+          <td>0x00000FDD</td>
+          <td>0x0000100E</td>
+          <td class="symTdSize">50</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configurePullType</td>
+          <td>0x0000100F</td>
+          <td>0x0000102E</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureMode</td>
+          <td>0x0000102F</td>
+          <td>0x0000104E</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configureSpeed</td>
+          <td>0x0000104F</td>
+          <td>0x00001074</td>
+          <td class="symTdSize">38</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureAlternateFunction</td>
+          <td>0x00001075</td>
+          <td>0x000010AC</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configure</td>
+          <td>0x000010AD</td>
+          <td>0x000010F6</td>
+          <td class="symTdSize">74</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_setPort</td>
+          <td>0x000010F7</td>
+          <td>0x000010FC</td>
+          <td class="symTdSize">6</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_resetPort</td>
+          <td>0x000010FD</td>
+          <td>0x00001104</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_isEvent</td>
+          <td>0x00001105</td>
+          <td>0x00001122</td>
+          <td class="symTdSize">30</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00001123</td>
+          <td>0x00001123</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePins</td>
+          <td>0x00001124</td>
+          <td>0x00001153</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePins</td>
+          <td>0x00001125</td>
+          <td>0x00001154</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePeriphDataBits</td>
+          <td>0x00001155</td>
+          <td>0x00001180</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePeriphStopBits</td>
+          <td>0x00001181</td>
+          <td>0x00001198</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePeriphParity</td>
+          <td>0x00001199</td>
+          <td>0x000011C0</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePeriphBaudrate</td>
+          <td>0x000011C1</td>
+          <td>0x000011FC</td>
+          <td class="symTdSize">60</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_enableClock</td>
+          <td>0x000011FD</td>
+          <td>0x0000121C</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configure</td>
+          <td>0x0000121D</td>
+          <td>0x0000124C</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_enableChannel</td>
+          <td>0x0000124D</td>
+          <td>0x0000125C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_disableChannel</td>
+          <td>0x0000125D</td>
+          <td>0x00001270</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configureBaudrate</td>
+          <td>0x00001271</td>
+          <td>0x0000128A</td>
+          <td class="symTdSize">26</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_writeDataReg</td>
+          <td>0x0000128B</td>
+          <td>0x00001292</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_readDataReg</td>
+          <td>0x00001293</td>
+          <td>0x0000129C</td>
+          <td class="symTdSize">10</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_getStatusReg</td>
+          <td>0x0000129D</td>
+          <td>0x000012A4</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_getStatusRegMaskForEvent</td>
+          <td>0x000012A5</td>
+          <td>0x000012BE</td>
+          <td class="symTdSize">26</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_getChannelError</td>
+          <td>0x000012BF</td>
+          <td>0x000012E0</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MWDT_trigger</td>
+          <td>0x000012E1</td>
+          <td>0x000012E8</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MWDT_initConfigStruct</td>
+          <td>0x000012E9</td>
+          <td>0x000012F0</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MWDT_triggerWDT</td>
+          <td>0x000012F1</td>
+          <td>0x0000131C</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MWDT_initConfigStructMWDT</td>
+          <td>0x0000131D</td>
+          <td>0x0000132C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MSUP_generateReset</td>
+          <td>0x0000132D</td>
+          <td>0x00001348</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>ITBL_vResetHandler</td>
+          <td>0x00001349</td>
+          <td>0x0000135C</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>RCC_APB0PeriphClockOnOff</td>
+          <td>0x0000135D</td>
+          <td>0x00001380</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_StructInit</td>
+          <td>0x00001381</td>
+          <td>0x0000138C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>TIM_Init</td>
+          <td>0x0000138D</td>
+          <td>0x000013B8</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_INTConfig</td>
+          <td>0x000013B9</td>
+          <td>0x000013CC</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>TIM_OnOff</td>
+          <td>0x000013CD</td>
+          <td>0x000013E0</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>Main</td>
+          <td>0x000013E1</td>
+          <td>0x000013EC</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLMLP_handleMessageLoop</td>
+          <td>0x000013ED</td>
+          <td>0x00001434</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_invalidCommand</td>
+          <td>0x00001435</td>
+          <td>0x00001440</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_setPage</td>
+          <td>0x00001441</td>
+          <td>0x00001454</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_jumpLoader</td>
+          <td>0x00001455</td>
+          <td>0x00001470</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_setBaudRate</td>
+          <td>0x00001471</td>
+          <td>0x0000148C</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_selfIdent</td>
+          <td>0x0000148D</td>
+          <td>0x000014A4</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_storeData</td>
+          <td>0x000014A5</td>
+          <td>0x000014D4</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_init</td>
+          <td>0x000014D5</td>
+          <td>0x000014D6</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000014D7</td>
+          <td>0x000014D8</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_doCommandService</td>
+          <td>0x000014D9</td>
+          <td>0x00001514</td>
+          <td class="symTdSize">60</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_receiveData</td>
+          <td>0x00001515</td>
+          <td>0x00001558</td>
+          <td class="symTdSize">68</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_receiveFrame</td>
+          <td>0x00001559</td>
+          <td>0x00001628</td>
+          <td class="symTdSize">208</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_sendByte</td>
+          <td>0x00001629</td>
+          <td>0x0000167C</td>
+          <td class="symTdSize">84</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_sendBuffer</td>
+          <td>0x0000167D</td>
+          <td>0x000016BC</td>
+          <td class="symTdSize">64</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_sendAck</td>
+          <td>0x000016BD</td>
+          <td>0x000016D0</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_setBaudrate</td>
+          <td>0x000016D1</td>
+          <td>0x000016E4</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_init</td>
+          <td>0x000016E5</td>
+          <td>0x00001724</td>
+          <td class="symTdSize">64</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>__udivsi3</td>
+          <td>0x00001725</td>
+          <td>0x0000182E</td>
+          <td class="symTdSize">266</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>__aeabi_uidiv</td>
+          <td>0x00001725</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00001725</td>
+          <td>0x00001830</td>
+          <td>268</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>__aeabi_uidivmod</td>
+          <td>0x00001831</td>
+          <td>0x00001838</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>__aeabi_ldiv0</td>
+          <td>0x00001839</td>
+          <td>0x0000183A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>__aeabi_idiv0</td>
+          <td>0x00001839</td>
+          <td>0x0000183A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000183B</td>
+          <td>0x0000183B</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MDIOA15_MUART0_TX</td>
+          <td>0x0000183C</td>
+          <td>0x00001843</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MDIOB0_MUART0_RX</td>
+          <td>0x00001844</td>
+          <td>0x0000184B</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MUART0_RX_PB0_TX_PA15</td>
+          <td>0x0000184C</td>
+          <td>0x00001857</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MDIOA</td>
+          <td>0x00001858</td>
+          <td>0x0000185F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MDIOB</td>
+          <td>0x00001860</td>
+          <td>0x00001867</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MUART0</td>
+          <td>0x00001868</td>
+          <td>0x00001877</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>mwdtCfg</td>
+          <td>0x00001878</td>
+          <td>0x0000187F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLSRV_cmdServiceTbl</td>
+          <td>0x00001880</td>
+          <td>0x000018AF</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLSRV_idString</td>
+          <td>0x000018B0</td>
+          <td>0x000018CF</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MuartHandleConfig</td>
+          <td>0x000018D0</td>
+          <td>0x000018D7</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000018D8</td>
+          <td>0x000018D8</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>_init</td>
+          <td>0x000018D9</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000018D9</td>
+          <td>0x000018DC</td>
+          <td>4</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>_fini</td>
+          <td>0x000018DD</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x00000F00">4: .text, 0x00000F00 - 0x000018DF, 2528 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>MDHD_ModuleHeader</td>
+          <td>0x00000F00</td>
+          <td>0x00000F27</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>ITBL_coreVectors</td>
+          <td>0x00000F28</td>
+          <td>0x00000F37</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00000F38</td>
+          <td>0x00000F38</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>_TIM_bGetInitConfig</td>
+          <td>0x00000F39</td>
+          <td>0x00000F80</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_uiGetCircleMicroSeconds</td>
+          <td>0x00000F81</td>
+          <td>0x00000F8C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>HardFault_Handler</td>
+          <td>0x00000F8D</td>
+          <td>0x00000F9C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>NMI_Handler</td>
+          <td>0x00000F9D</td>
+          <td>0x00000FA2</td>
+          <td class="symTdSize">6</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_init</td>
+          <td>0x00000FA3</td>
+          <td>0x00000FBA</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configureOutputState</td>
+          <td>0x00000FBB</td>
+          <td>0x00000FD6</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_enablePort</td>
+          <td>0x00000FD7</td>
+          <td>0x00000FD8</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_getPort</td>
+          <td>0x00000FD9</td>
+          <td>0x00000FDC</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureOutputType</td>
+          <td>0x00000FDD</td>
+          <td>0x0000100E</td>
+          <td class="symTdSize">50</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configurePullType</td>
+          <td>0x0000100F</td>
+          <td>0x0000102E</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureMode</td>
+          <td>0x0000102F</td>
+          <td>0x0000104E</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configureSpeed</td>
+          <td>0x0000104F</td>
+          <td>0x00001074</td>
+          <td class="symTdSize">38</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_configureAlternateFunction</td>
+          <td>0x00001075</td>
+          <td>0x000010AC</td>
+          <td class="symTdSize">56</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_configure</td>
+          <td>0x000010AD</td>
+          <td>0x000010F6</td>
+          <td class="symTdSize">74</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MDIO_setPort</td>
+          <td>0x000010F7</td>
+          <td>0x000010FC</td>
+          <td class="symTdSize">6</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MDIO_resetPort</td>
+          <td>0x000010FD</td>
+          <td>0x00001104</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_isEvent</td>
+          <td>0x00001105</td>
+          <td>0x00001122</td>
+          <td class="symTdSize">30</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00001123</td>
+          <td>0x00001123</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePins</td>
+          <td>0x00001124</td>
+          <td>0x00001153</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePins</td>
+          <td>0x00001125</td>
+          <td>0x00001154</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePeriphDataBits</td>
+          <td>0x00001155</td>
+          <td>0x00001180</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePeriphStopBits</td>
+          <td>0x00001181</td>
+          <td>0x00001198</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configurePeriphParity</td>
+          <td>0x00001199</td>
+          <td>0x000011C0</td>
+          <td class="symTdSize">40</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configurePeriphBaudrate</td>
+          <td>0x000011C1</td>
+          <td>0x000011FC</td>
+          <td class="symTdSize">60</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_enableClock</td>
+          <td>0x000011FD</td>
+          <td>0x0000121C</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_configure</td>
+          <td>0x0000121D</td>
+          <td>0x0000124C</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_enableChannel</td>
+          <td>0x0000124D</td>
+          <td>0x0000125C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_disableChannel</td>
+          <td>0x0000125D</td>
+          <td>0x00001270</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_configureBaudrate</td>
+          <td>0x00001271</td>
+          <td>0x0000128A</td>
+          <td class="symTdSize">26</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_writeDataReg</td>
+          <td>0x0000128B</td>
+          <td>0x00001292</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_readDataReg</td>
+          <td>0x00001293</td>
+          <td>0x0000129C</td>
+          <td class="symTdSize">10</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_getStatusReg</td>
+          <td>0x0000129D</td>
+          <td>0x000012A4</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MUART_getStatusRegMaskForEvent</td>
+          <td>0x000012A5</td>
+          <td>0x000012BE</td>
+          <td class="symTdSize">26</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MUART_getChannelError</td>
+          <td>0x000012BF</td>
+          <td>0x000012E0</td>
+          <td class="symTdSize">34</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MWDT_trigger</td>
+          <td>0x000012E1</td>
+          <td>0x000012E8</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MWDT_initConfigStruct</td>
+          <td>0x000012E9</td>
+          <td>0x000012F0</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MWDT_triggerWDT</td>
+          <td>0x000012F1</td>
+          <td>0x0000131C</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>MWDT_initConfigStructMWDT</td>
+          <td>0x0000131D</td>
+          <td>0x0000132C</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>MSUP_generateReset</td>
+          <td>0x0000132D</td>
+          <td>0x00001348</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>ITBL_vResetHandler</td>
+          <td>0x00001349</td>
+          <td>0x0000135C</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>RCC_APB0PeriphClockOnOff</td>
+          <td>0x0000135D</td>
+          <td>0x00001380</td>
+          <td class="symTdSize">36</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_StructInit</td>
+          <td>0x00001381</td>
+          <td>0x0000138C</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>TIM_Init</td>
+          <td>0x0000138D</td>
+          <td>0x000013B8</td>
+          <td class="symTdSize">44</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>TIM_INTConfig</td>
+          <td>0x000013B9</td>
+          <td>0x000013CC</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>TIM_OnOff</td>
+          <td>0x000013CD</td>
+          <td>0x000013E0</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>Main</td>
+          <td>0x000013E1</td>
+          <td>0x000013EC</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLMLP_handleMessageLoop</td>
+          <td>0x000013ED</td>
+          <td>0x00001434</td>
+          <td class="symTdSize">72</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_invalidCommand</td>
+          <td>0x00001435</td>
+          <td>0x00001440</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_setPage</td>
+          <td>0x00001441</td>
+          <td>0x00001454</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_jumpLoader</td>
+          <td>0x00001455</td>
+          <td>0x00001470</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_setBaudRate</td>
+          <td>0x00001471</td>
+          <td>0x0000148C</td>
+          <td class="symTdSize">28</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_selfIdent</td>
+          <td>0x0000148D</td>
+          <td>0x000014A4</td>
+          <td class="symTdSize">24</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLSRV_storeData</td>
+          <td>0x000014A5</td>
+          <td>0x000014D4</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_init</td>
+          <td>0x000014D5</td>
+          <td>0x000014D6</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000014D7</td>
+          <td>0x000014D8</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLSRV_doCommandService</td>
+          <td>0x000014D9</td>
+          <td>0x00001514</td>
+          <td class="symTdSize">60</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_receiveData</td>
+          <td>0x00001515</td>
+          <td>0x00001558</td>
+          <td class="symTdSize">68</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_receiveFrame</td>
+          <td>0x00001559</td>
+          <td>0x00001628</td>
+          <td class="symTdSize">208</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_sendByte</td>
+          <td>0x00001629</td>
+          <td>0x0000167C</td>
+          <td class="symTdSize">84</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_sendBuffer</td>
+          <td>0x0000167D</td>
+          <td>0x000016BC</td>
+          <td class="symTdSize">64</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_sendAck</td>
+          <td>0x000016BD</td>
+          <td>0x000016D0</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>BLCOM_setBaudrate</td>
+          <td>0x000016D1</td>
+          <td>0x000016E4</td>
+          <td class="symTdSize">20</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>BLCOM_init</td>
+          <td>0x000016E5</td>
+          <td>0x00001724</td>
+          <td class="symTdSize">64</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>__udivsi3</td>
+          <td>0x00001725</td>
+          <td>0x0000182E</td>
+          <td class="symTdSize">266</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>__aeabi_uidiv</td>
+          <td>0x00001725</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x00001725</td>
+          <td>0x00001830</td>
+          <td>268</td>
+        </tr>
+        <tr>
+          <td>Function</td>
+          <td>__aeabi_uidivmod</td>
+          <td>0x00001831</td>
+          <td>0x00001838</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Function</td>
+          <td>__aeabi_ldiv0</td>
+          <td>0x00001839</td>
+          <td>0x0000183A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>__aeabi_idiv0</td>
+          <td>0x00001839</td>
+          <td>0x0000183A</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x0000183B</td>
+          <td>0x0000183B</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MDIOA15_MUART0_TX</td>
+          <td>0x0000183C</td>
+          <td>0x00001843</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MDIOB0_MUART0_RX</td>
+          <td>0x00001844</td>
+          <td>0x0000184B</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MUART0_RX_PB0_TX_PA15</td>
+          <td>0x0000184C</td>
+          <td>0x00001857</td>
+          <td class="symTdSize">12</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MDIOA</td>
+          <td>0x00001858</td>
+          <td>0x0000185F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>MDIOB</td>
+          <td>0x00001860</td>
+          <td>0x00001867</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MUART0</td>
+          <td>0x00001868</td>
+          <td>0x00001877</td>
+          <td class="symTdSize">16</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>mwdtCfg</td>
+          <td>0x00001878</td>
+          <td>0x0000187F</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLSRV_cmdServiceTbl</td>
+          <td>0x00001880</td>
+          <td>0x000018AF</td>
+          <td class="symTdSize">48</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLSRV_idString</td>
+          <td>0x000018B0</td>
+          <td>0x000018CF</td>
+          <td class="symTdSize">32</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MuartHandleConfig</td>
+          <td>0x000018D0</td>
+          <td>0x000018D7</td>
+          <td class="symTdSize">8</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000018D8</td>
+          <td>0x000018D8</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2" style="color:red">
+          <td>Function</td>
+          <td>_init</td>
+          <td>0x000018D9</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+        <tr style="color:red" bgcolor="#E5E4E2">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x000018D9</td>
+          <td>0x000018DC</td>
+          <td>4</td>
+        </tr>
+        <tr style="color:red">
+          <td>Function</td>
+          <td>_fini</td>
+          <td>0x000018DD</td>
+          <td>?</td>
+          <td class="symTdSize">?</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-3">
+      <thead class="table-3">
+        <tr>
+          <th colspan="5" id="0x20000000">5: .bss, 0x20000000 - 0x20000017, 24 Bytes</th>
+        </tr>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody class="table-3">
+        <tr>
+          <td>Variable</td>
+          <td>INT_StackFrame</td>
+          <td>0x20000000</td>
+          <td>0x20000003</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>MWDT_LocalMwdtCfg</td>
+          <td>0x20000004</td>
+          <td>0x20000007</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLMLP_msgBuffer</td>
+          <td>0x20000008</td>
+          <td>0x2000000B</td>
+          <td class="symTdSize">4</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLSRV_pageAddress</td>
+          <td>0x2000000C</td>
+          <td>0x2000000D</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLCOM_checksum</td>
+          <td>0x2000000E</td>
+          <td>0x2000000E</td>
+          <td class="symTdSize">1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLCOM_firstFrameReceived</td>
+          <td>0x2000000F</td>
+          <td>0x2000000F</td>
+          <td class="symTdSize">1</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLCOM_reloadTime</td>
+          <td>0x20000010</td>
+          <td>0x20000011</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLCOM_rxErrorFlag</td>
+          <td>0x20000012</td>
+          <td>0x20000012</td>
+          <td class="symTdSize">1</td>
+        </tr>
+        <tr style="color:red">
+          <td>Unknown</td>
+          <td>Unknown</td>
+          <td>0x20000013</td>
+          <td>0x20000013</td>
+          <td>1</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td>Variable</td>
+          <td>BLCOM_timeStamp</td>
+          <td>0x20000014</td>
+          <td>0x20000015</td>
+          <td class="symTdSize">2</td>
+        </tr>
+        <tr>
+          <td>Variable</td>
+          <td>BLCOM_timer</td>
+          <td>0x20000016</td>
+          <td>0x20000017</td>
+          <td class="symTdSize">2</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="module-list">
+      Modules
+    </h2>
+    <table class="table-2">
+      <thead class="table-2">
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            File Path
+          </th>
+        </tr>
+      </thead>
+      <tbody class="table-2">
+        <tr>
+          <td><a href="#E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c">1</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c">2</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c">3</a></td>
+          <td>Application</td>
+          <td style="text-align:left">E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c">4</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c">5</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c">6</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c">7</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c">8</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">9</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c">10</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c">11</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c">12</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c">13</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\msup.c">14</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal\msup.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\muart.c">15</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal\muart.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c">16</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c</td>
+        </tr>
+        <tr>
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c">17</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c</td>
+        </tr>
+        <tr bgcolor="#E5E4E2">
+          <td><a href="#E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c">18</a></td>
+          <td>Generic</td>
+          <td style="text-align:left">E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="symbol-module-mapping">
+      Symbol to Module Mapping
+    </h2>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c">1: Application, E:\project\example\MD370R\app/prog/MSP/armCmx\int_exc_cfg.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>4</td>
+                  <td>0</td>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>4</td>
+                  <td>16</td>
+                  <td>20</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>INT_StackFrame</td>
+                  <td>0x20000000</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>HardFault_Handler</td>
+                  <td>0x00000F8D</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c">2: Application, E:\project\example\MD370R\app/prog/MSP/mcal/sh30f\mcal_channels.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MDIOA15_MUART0_TX</td>
+                  <td>0x0000183C</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIOB0_MUART0_RX</td>
+                  <td>0x00001844</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART0_RX_PB0_TX_PA15</td>
+                  <td>0x0000184C</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c">3: Application, E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f\timerMcXs.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>84</td>
+                  <td>84</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>84</td>
+                  <td>84</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>_TIM_bGetInitConfig</td>
+                  <td>0x00000F39</td>
+                  <td>72</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>TIM_uiGetCircleMicroSeconds</td>
+                  <td>0x00000F81</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c">4: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLcom.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>9</td>
+                  <td>8</td>
+                  <td>17</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>528</td>
+                  <td>528</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>9</td>
+                  <td>536</td>
+                  <td>545</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MuartHandleConfig</td>
+                  <td>0x000018D0</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_checksum</td>
+                  <td>0x2000000E</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_firstFrameReceived</td>
+                  <td>0x2000000F</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_reloadTime</td>
+                  <td>0x20000010</td>
+                  <td>2</td>
+                  <td>RAM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_rxErrorFlag</td>
+                  <td>0x20000012</td>
+                  <td>1</td>
+                  <td>RAM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_timeStamp</td>
+                  <td>0x20000014</td>
+                  <td>2</td>
+                  <td>RAM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_timer</td>
+                  <td>0x20000016</td>
+                  <td>2</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BLCOM_receiveData</td>
+                  <td>0x00001515</td>
+                  <td>68</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_receiveFrame</td>
+                  <td>0x00001559</td>
+                  <td>208</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_sendByte</td>
+                  <td>0x00001629</td>
+                  <td>84</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_sendBuffer</td>
+                  <td>0x0000167D</td>
+                  <td>64</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_sendAck</td>
+                  <td>0x000016BD</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLCOM_setBaudrate</td>
+                  <td>0x000016D1</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLCOM_init</td>
+                  <td>0x000016E5</td>
+                  <td>64</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c">5: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmain.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>12</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>12</td>
+                  <td>12</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>Main</td>
+                  <td>0x000013E1</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c">6: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLmessageLoop.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>4</td>
+                  <td>0</td>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>72</td>
+                  <td>72</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>4</td>
+                  <td>72</td>
+                  <td>76</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BLMLP_msgBuffer</td>
+                  <td>0x20000008</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BLMLP_handleMessageLoop</td>
+                  <td>0x000013ED</td>
+                  <td>72</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c">7: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootLoader\BLservices.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>2</td>
+                  <td>80</td>
+                  <td>82</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>222</td>
+                  <td>222</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>2</td>
+                  <td>302</td>
+                  <td>304</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BLSRV_cmdServiceTbl</td>
+                  <td>0x00001880</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLSRV_idString</td>
+                  <td>0x000018B0</td>
+                  <td>32</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLSRV_pageAddress</td>
+                  <td>0x2000000C</td>
+                  <td>2</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>BLSRV_invalidCommand</td>
+                  <td>0x00001435</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLSRV_setPage</td>
+                  <td>0x00001441</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLSRV_jumpLoader</td>
+                  <td>0x00001455</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLSRV_setBaudRate</td>
+                  <td>0x00001471</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLSRV_selfIdent</td>
+                  <td>0x0000148D</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLSRV_storeData</td>
+                  <td>0x000014A5</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>BLSRV_init</td>
+                  <td>0x000014D5</td>
+                  <td>2</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>BLSRV_doCommandService</td>
+                  <td>0x000014D9</td>
+                  <td>60</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c">8: Generic, E:\project\example\MD370R\common/prog/firmware_update/BootLoader\ModuleHeader.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>40</td>
+                  <td>40</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>40</td>
+                  <td>40</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MDHD_ModuleHeader</td>
+                  <td>0x00000F00</td>
+                  <td>40</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c">9: Generic, E:\project\example\MD370R\common/prog/MSP/armCmx\IntTblArmCM.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>24</td>
+                  <td>24</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>20</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>44</td>
+                  <td>44</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>ITBL_fixedVectors</td>
+                  <td>0x00000000</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>ITBL_coreVectors</td>
+                  <td>0x00000F28</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>ITBL_vResetHandler</td>
+                  <td>0x00001349</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c">10: Generic, E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mdio_mc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>302</td>
+                  <td>302</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>318</td>
+                  <td>318</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MDIOA</td>
+                  <td>0x00001858</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIOB</td>
+                  <td>0x00001860</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MDIO_enablePort</td>
+                  <td>0x00000FD7</td>
+                  <td>2</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_getPort</td>
+                  <td>0x00000FD9</td>
+                  <td>4</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MDIO_configureOutputType</td>
+                  <td>0x00000FDD</td>
+                  <td>50</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_configurePullType</td>
+                  <td>0x0000100F</td>
+                  <td>32</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MDIO_configureMode</td>
+                  <td>0x0000102F</td>
+                  <td>32</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_configureSpeed</td>
+                  <td>0x0000104F</td>
+                  <td>38</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MDIO_configureAlternateFunction</td>
+                  <td>0x00001075</td>
+                  <td>56</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_configure</td>
+                  <td>0x000010AD</td>
+                  <td>74</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MDIO_setPort</td>
+                  <td>0x000010F7</td>
+                  <td>6</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_resetPort</td>
+                  <td>0x000010FD</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c">11: Generic, E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\muart_mc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>396</td>
+                  <td>396</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>412</td>
+                  <td>412</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MUART0</td>
+                  <td>0x00001868</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MUART_configurePeriphDataBits</td>
+                  <td>0x00001155</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_configurePeriphStopBits</td>
+                  <td>0x00001181</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_configurePeriphParity</td>
+                  <td>0x00001199</td>
+                  <td>40</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_configurePeriphBaudrate</td>
+                  <td>0x000011C1</td>
+                  <td>60</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_enableClock</td>
+                  <td>0x000011FD</td>
+                  <td>32</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_configure</td>
+                  <td>0x0000121D</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_enableChannel</td>
+                  <td>0x0000124D</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_disableChannel</td>
+                  <td>0x0000125D</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_configureBaudrate</td>
+                  <td>0x00001271</td>
+                  <td>26</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_writeDataReg</td>
+                  <td>0x0000128B</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_readDataReg</td>
+                  <td>0x00001293</td>
+                  <td>10</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_getStatusReg</td>
+                  <td>0x0000129D</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>MUART_getStatusRegMaskForEvent</td>
+                  <td>0x000012A5</td>
+                  <td>26</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_getChannelError</td>
+                  <td>0x000012BF</td>
+                  <td>34</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c">12: Generic, E:\project\example\MD370R\common/prog/MSP/mcal/sh30f\mwdt_mc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>60</td>
+                  <td>60</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>4</td>
+                  <td>68</td>
+                  <td>72</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>mwdtCfg</td>
+                  <td>0x00001878</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MWDT_LocalMwdtCfg</td>
+                  <td>0x20000004</td>
+                  <td>4</td>
+                  <td>RAM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MWDT_triggerWDT</td>
+                  <td>0x000012F1</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MWDT_initConfigStructMWDT</td>
+                  <td>0x0000131D</td>
+                  <td>16</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c">13: Generic, E:\project\example\MD370R\common/prog/MSP/mcal\mdio.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>52</td>
+                  <td>52</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>52</td>
+                  <td>52</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MDIO_init</td>
+                  <td>0x00000FA3</td>
+                  <td>24</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MDIO_configureOutputState</td>
+                  <td>0x00000FBB</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal\msup.c">14: Generic, E:\project\example\MD370R\common/prog/MSP/mcal\msup.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>28</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MSUP_generateReset</td>
+                  <td>0x0000132D</td>
+                  <td>28</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal\muart.c">15: Generic, E:\project\example\MD370R\common/prog/MSP/mcal\muart.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>78</td>
+                  <td>78</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>78</td>
+                  <td>78</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MUART_isEvent</td>
+                  <td>0x00001105</td>
+                  <td>30</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MUART_configurePins</td>
+                  <td>0x00001124</td>
+                  <td>48</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c">16: Generic, E:\project\example\MD370R\common/prog/MSP/mcal\mwdt.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>16</td>
+                  <td>16</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>MWDT_trigger</td>
+                  <td>0x000012E1</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>MWDT_initConfigStruct</td>
+                  <td>0x000012E9</td>
+                  <td>8</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c">17: Generic, E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_rcc.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>36</td>
+                  <td>36</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>36</td>
+                  <td>36</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>RCC_APB0PeriphClockOnOff</td>
+                  <td>0x0000135D</td>
+                  <td>36</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-4">
+      <tbody class="table-4">
+        <tr>
+          <td colspan="2">
+            <table class="table-5">
+              <thead class="table-5">
+                <tr>
+                  <th colspan="4" id="E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c">18: Generic, E:\project\example\MD370R\common/prog/MSP/sh30f/lib\sh30f9xx_sa0_timer.c</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>RAM</th>
+                  <th>ROM</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody class="table-5">
+                <tr>
+                  <td>Variables</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Functions</td>
+                  <td>0</td>
+                  <td>96</td>
+                  <td>96</td>
+                </tr>
+                <tr>
+                  <td>Total Size</td>
+                  <td>0</td>
+                  <td>96</td>
+                  <td>96</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Variables</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6"></tbody>
+            </table>
+          </td>
+          <td>
+            <table class="table-6">
+              <thead class="table-6">
+                <tr>
+                  <th colspan="4">Functions</th>
+                </tr>
+                <tr>
+                  <th>
+              Name
+            </th>
+                  <th>
+              Location
+            </th>
+                  <th>
+              Size
+            </th>
+                  <th>
+              Memory
+            </th>
+                </tr>
+              </thead>
+              <tbody class="table-6">
+                <tr>
+                  <td>TIM_StructInit</td>
+                  <td>0x00001381</td>
+                  <td>12</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>TIM_Init</td>
+                  <td>0x0000138D</td>
+                  <td>44</td>
+                  <td>ROM</td>
+                </tr>
+                <tr>
+                  <td>TIM_INTConfig</td>
+                  <td>0x000013B9</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+                <tr bgcolor="#E5E4E2">
+                  <td>TIM_OnOff</td>
+                  <td>0x000013CD</td>
+                  <td>20</td>
+                  <td>ROM</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

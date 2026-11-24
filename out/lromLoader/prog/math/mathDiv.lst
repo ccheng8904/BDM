@@ -1,0 +1,68 @@
+
+out/lromLoader/prog/math/mathDiv.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MTDIV_div_mod:
+
+00000000 <MTDIV_div_mod>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+struct MTDIV_Result MTDIV_div_mod(uint32_t dividend, MTDIV_width_t divisor)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+  #ifdef MTDIV_WIDTH_16
+    uint32_t tmp = (uint32_t)divisor << 15u;
+    uint16_t bitmask = (uint16_t)1u << 15u;
+  #else
+    uint64_t tmp = (uint64_t)divisor << 31u;
+    uint32_t bitmask = (uint32_t)1u << 31u;
+   2:	2680      	movs	r6, #128	; 0x80
+    uint64_t tmp = (uint64_t)divisor << 31u;
+   4:	2520      	movs	r5, #32
+    struct MTDIV_Result result = {0u, 0u};
+   6:	2400      	movs	r4, #0
+    uint64_t tmp = (uint64_t)divisor << 31u;
+   8:	0853      	lsrs	r3, r2, #1
+    uint32_t bitmask = (uint32_t)1u << 31u;
+   a:	0636      	lsls	r6, r6, #24
+    uint64_t tmp = (uint64_t)divisor << 31u;
+   c:	07d2      	lsls	r2, r2, #31
+  #endif
+    
+    for(; bitmask > 0u; bitmask >>= 1u)
+    {
+        if(dividend >= tmp)
+   e:	2b00      	cmp	r3, #0
+  10:	d103      	bne.n	1a <MTDIV_div_mod+0x1a>
+  12:	428a      	cmp	r2, r1
+  14:	d801      	bhi.n	1a <MTDIV_div_mod+0x1a>
+        {
+            result.quotient += bitmask;
+  16:	19a4      	adds	r4, r4, r6
+            dividend -= (MTDIV_width_t)tmp;
+  18:	1a89      	subs	r1, r1, r2
+        }
+        tmp >>= 1u;
+  1a:	07df      	lsls	r7, r3, #31
+  1c:	0852      	lsrs	r2, r2, #1
+    for(; bitmask > 0u; bitmask >>= 1u)
+  1e:	3d01      	subs	r5, #1
+        tmp >>= 1u;
+  20:	433a      	orrs	r2, r7
+  22:	085b      	lsrs	r3, r3, #1
+    for(; bitmask > 0u; bitmask >>= 1u)
+  24:	0876      	lsrs	r6, r6, #1
+  26:	2d00      	cmp	r5, #0
+  28:	d1f1      	bne.n	e <MTDIV_div_mod+0xe>
+    result.remainder = dividend;
+    
+#endif // NO_CORE_DEVIDER
+
+    // Return quotient/remainder
+    return result;
+  2a:	6004      	str	r4, [r0, #0]
+  2c:	6041      	str	r1, [r0, #4]
+}
+  2e:	bdf0      	pop	{r4, r5, r6, r7, pc}

@@ -1,0 +1,226 @@
+
+out/lromLoader/prog/MSP/mcal/mdio.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MDIO_init:
+
+00000000 <MDIO_init>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+enum MCAL_Error MDIO_init(const struct MDIO_Channel *channel, const struct MDIO_Config *cfg)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+    
+    MDIO_enablePort(MDIO_getPort(channel));
+   6:	f7ff fffe 	bl	0 <MDIO_getPort>
+   a:	f7ff fffe 	bl	0 <MDIO_enablePort>
+    
+    MCAL_RETURN_ON_ERROR(MDIO_configure(channel, cfg));
+   e:	0029      	movs	r1, r5
+  10:	0020      	movs	r0, r4
+  12:	f7ff fffe 	bl	0 <MDIO_configure>
+    
+    return MCAL_OK;
+}
+  16:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_configureOutputState:
+
+00000000 <MDIO_configureOutputState>:
+typedef uint16_t MDIO_Pins;
+//lint -restore -e923 -e9046
+
+static inline MDIO_Pins MDIO_getPinMask(enum MDIO_Pin pin)
+{
+    uint32_t pinMask = 1UL << (uint32_t)pin;
+   0:	2301      	movs	r3, #1
+   2:	408b      	lsls	r3, r1
+
+
+void MDIO_configureOutputState(const struct MDIO_Port *port, enum MDIO_Pin pin, enum MDIO_OutputState outputState)
+{
+   4:	b510      	push	{r4, lr}
+    return (MDIO_Pins)pinMask;
+   6:	b299      	uxth	r1, r3
+    MDIO_Pins pinMask = MDIO_getPinMask(pin);
+    
+    if(outputState == MDIO_OUTPUT_STATE_LOW)
+   8:	2a01      	cmp	r2, #1
+   a:	d102      	bne.n	12 <MDIO_configureOutputState+0x12>
+    {
+        MDIO_resetPort(port, pinMask);
+   c:	f7ff fffe 	bl	0 <MDIO_resetPort>
+    }
+    else
+    {
+        // Nothing to do
+    }
+}
+  10:	bd10      	pop	{r4, pc}
+    else if(outputState == MDIO_OUTPUT_STATE_HIGH)
+  12:	2a02      	cmp	r2, #2
+  14:	d1fc      	bne.n	10 <MDIO_configureOutputState+0x10>
+        MDIO_setPort(port, pinMask);
+  16:	f7ff fffe 	bl	0 <MDIO_setPort>
+}
+  1a:	e7f9      	b.n	10 <MDIO_configureOutputState+0x10>
+
+Disassembly of section .text.MDIO_set:
+
+00000000 <MDIO_set>:
+
+
+void MDIO_set(const struct MDIO_Channel *channel)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    MDIO_Pins pinMask = MDIO_getPinMask(MDIO_getPin(channel));
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+   8:	0005      	movs	r5, r0
+    MDIO_setPort(MDIO_getPort(channel), pinMask);
+   a:	0020      	movs	r0, r4
+   c:	f7ff fffe 	bl	0 <MDIO_getPort>
+    uint32_t pinMask = 1UL << (uint32_t)pin;
+  10:	2101      	movs	r1, #1
+  12:	40a9      	lsls	r1, r5
+  14:	b289      	uxth	r1, r1
+  16:	f7ff fffe 	bl	0 <MDIO_setPort>
+}
+  1a:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_reset:
+
+00000000 <MDIO_reset>:
+
+
+void MDIO_reset(const struct MDIO_Channel *channel)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    MDIO_Pins pinMask = MDIO_getPinMask(MDIO_getPin(channel));
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+   8:	0005      	movs	r5, r0
+    MDIO_resetPort(MDIO_getPort(channel), pinMask);
+   a:	0020      	movs	r0, r4
+   c:	f7ff fffe 	bl	0 <MDIO_getPort>
+  10:	2101      	movs	r1, #1
+  12:	40a9      	lsls	r1, r5
+  14:	b289      	uxth	r1, r1
+  16:	f7ff fffe 	bl	0 <MDIO_resetPort>
+}
+  1a:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_read:
+
+00000000 <MDIO_read>:
+    MDIO_togglePort(MDIO_getPort(channel), pinMask);
+}
+
+
+bool MDIO_read(const struct MDIO_Channel *channel)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    MDIO_Pins pinMask = MDIO_getPinMask(MDIO_getPin(channel));
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+   8:	0005      	movs	r5, r0
+    return ((MDIO_readPort(MDIO_getPort(channel)) & pinMask) != 0U);
+   a:	0020      	movs	r0, r4
+   c:	f7ff fffe 	bl	0 <MDIO_getPort>
+  10:	f7ff fffe 	bl	0 <MDIO_readPort>
+  14:	2301      	movs	r3, #1
+  16:	40ab      	lsls	r3, r5
+  18:	4018      	ands	r0, r3
+  1a:	b280      	uxth	r0, r0
+  1c:	1e43      	subs	r3, r0, #1
+  1e:	4198      	sbcs	r0, r3
+  20:	b2c0      	uxtb	r0, r0
+}
+  22:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_write:
+
+00000000 <MDIO_write>:
+
+
+void MDIO_write(const struct MDIO_Channel *channel, bool pinState)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0006      	movs	r6, r0
+   6:	2401      	movs	r4, #1
+    MDIO_Pins pinMask = MDIO_getPinMask(MDIO_getPin(channel));
+   8:	f7ff fffe 	bl	0 <MDIO_getPin>
+   c:	4084      	lsls	r4, r0
+    const struct MDIO_Port *port = MDIO_getPort(channel);
+   e:	0030      	movs	r0, r6
+    return (MDIO_Pins)pinMask;
+  10:	b2a4      	uxth	r4, r4
+  12:	f7ff fffe 	bl	0 <MDIO_getPort>
+    
+    if(pinState)
+    {
+        MDIO_setPort(port, pinMask);
+  16:	0021      	movs	r1, r4
+    if(pinState)
+  18:	2d00      	cmp	r5, #0
+  1a:	d002      	beq.n	22 <MDIO_write+0x22>
+        MDIO_setPort(port, pinMask);
+  1c:	f7ff fffe 	bl	0 <MDIO_setPort>
+    }
+    else
+    {
+        MDIO_resetPort(port, pinMask);
+    }
+}
+  20:	bd70      	pop	{r4, r5, r6, pc}
+        MDIO_resetPort(port, pinMask);
+  22:	f7ff fffe 	bl	0 <MDIO_resetPort>
+}
+  26:	e7fb      	b.n	20 <MDIO_write+0x20>
+
+Disassembly of section .text.MDIO_togglePort:
+
+00000000 <MDIO_togglePort>:
+#endif
+
+
+#if !defined(MDIO_HAS_FEATURE_ATOMIC_TOGGLE)
+void MDIO_togglePort(const struct MDIO_Port *port, MDIO_Pins pinMask)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+    MDIO_writePort(port, MDIO_readPortOutput(port) ^ pinMask);
+   6:	f7ff fffe 	bl	0 <MDIO_readPortOutput>
+   a:	0001      	movs	r1, r0
+   c:	4069      	eors	r1, r5
+   e:	0020      	movs	r0, r4
+  10:	b289      	uxth	r1, r1
+  12:	f7ff fffe 	bl	0 <MDIO_writePort>
+}
+  16:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MDIO_toggle:
+
+00000000 <MDIO_toggle>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    MDIO_Pins pinMask = MDIO_getPinMask(MDIO_getPin(channel));
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+   8:	0005      	movs	r5, r0
+    MDIO_togglePort(MDIO_getPort(channel), pinMask);
+   a:	0020      	movs	r0, r4
+   c:	f7ff fffe 	bl	0 <MDIO_getPort>
+    uint32_t pinMask = 1UL << (uint32_t)pin;
+  10:	2101      	movs	r1, #1
+  12:	40a9      	lsls	r1, r5
+  14:	b289      	uxth	r1, r1
+  16:	f7ff fffe 	bl	0 <MDIO_toggle>
+}
+  1a:	bd70      	pop	{r4, r5, r6, pc}

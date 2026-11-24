@@ -1,0 +1,200 @@
+
+out/lromLoader/prog/MSP/armCmx/hsupArmCM.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.HSUP_xMirror:
+
+00000000 <HSUP_xMirror>:
+
+#if defined(CORTEX_M0) || defined(CORTEX_M0_PLUS) || defined(CORTEX_M23)
+static uint32_t HSUP_xMirror(uint32_t value, uint32_t width)
+{
+    value = __REV(value);
+    value >>= ((sizeof(uint32_t) - width) * 8);
+   0:	2204      	movs	r2, #4
+   2:	1a52      	subs	r2, r2, r1
+  \return               Reversed value
+ */
+__STATIC_FORCEINLINE uint32_t __REV(uint32_t value)
+{
+#if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
+  return __builtin_bswap32(value);
+   4:	ba03      	rev	r3, r0
+   6:	00d2      	lsls	r2, r2, #3
+   8:	40d3      	lsrs	r3, r2
+    value = ((value & 0xaaaaaaaau) >> 1u) | ((value & 0x55555555u) << 1u);
+   a:	4a0b      	ldr	r2, [pc, #44]	; (38 <HSUP_xMirror+0x38>)
+   c:	0858      	lsrs	r0, r3, #1
+   e:	4010      	ands	r0, r2
+  10:	4a0a      	ldr	r2, [pc, #40]	; (3c <HSUP_xMirror+0x3c>)
+  12:	005b      	lsls	r3, r3, #1
+  14:	4013      	ands	r3, r2
+  16:	4318      	orrs	r0, r3
+    value = ((value & 0xccccccccu) >> 2u) | ((value & 0x33333333u) << 2u);
+  18:	4a09      	ldr	r2, [pc, #36]	; (40 <HSUP_xMirror+0x40>)
+  1a:	0883      	lsrs	r3, r0, #2
+  1c:	4013      	ands	r3, r2
+  1e:	4a09      	ldr	r2, [pc, #36]	; (44 <HSUP_xMirror+0x44>)
+  20:	0080      	lsls	r0, r0, #2
+  22:	4010      	ands	r0, r2
+  24:	4303      	orrs	r3, r0
+    value = ((value & 0xf0f0f0f0u) >> 4u) | ((value & 0x0f0f0f0fu) << 4u);
+  26:	4a08      	ldr	r2, [pc, #32]	; (48 <HSUP_xMirror+0x48>)
+  28:	0918      	lsrs	r0, r3, #4
+  2a:	4010      	ands	r0, r2
+  2c:	4a07      	ldr	r2, [pc, #28]	; (4c <HSUP_xMirror+0x4c>)
+  2e:	011b      	lsls	r3, r3, #4
+  30:	4013      	ands	r3, r2
+  32:	4318      	orrs	r0, r3
+    return value;
+}
+  34:	4770      	bx	lr
+  36:	46c0      	nop			; (mov r8, r8)
+  38:	55555555 	.word	0x55555555
+  3c:	aaaaaaaa 	.word	0xaaaaaaaa
+  40:	33333333 	.word	0x33333333
+  44:	cccccccc 	.word	0xcccccccc
+  48:	0f0f0f0f 	.word	0x0f0f0f0f
+  4c:	f0f0f0f0 	.word	0xf0f0f0f0
+
+Disassembly of section .text.HSUP_vGenerateReset:
+
+00000000 <HSUP_vGenerateReset>:
+  __ASM volatile ("dsb 0xF":::"memory");
+   0:	f3bf 8f4f 	dsb	sy
+ */
+__NO_RETURN __STATIC_INLINE void __NVIC_SystemReset(void)
+{
+  __DSB();                                                          /* Ensure all outstanding memory accesses included
+                                                                       buffered write are completed before reset */
+  SCB->AIRCR  = ((0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <HSUP_vGenerateReset+0x14>)
+   6:	4a04      	ldr	r2, [pc, #16]	; (18 <HSUP_vGenerateReset+0x18>)
+   8:	60da      	str	r2, [r3, #12]
+   a:	f3bf 8f4f 	dsb	sy
+                 SCB_AIRCR_SYSRESETREQ_Msk);
+  __DSB();                                                          /* Ensure completion of memory access */
+
+  for(;;)                                                           /* wait until reset */
+  {
+    __NOP();
+   e:	46c0      	nop			; (mov r8, r8)
+  for(;;)                                                           /* wait until reset */
+  10:	e7fd      	b.n	e <HSUP_vGenerateReset+0xe>
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	e000ed00 	.word	0xe000ed00
+  18:	05fa0004 	.word	0x05fa0004
+
+Disassembly of section .text.HSUP_DelayClk:
+
+00000000 <HSUP_DelayClk>:
+    __asm__ __volatile__
+   0:	4348      	muls	r0, r1
+   2:	0940      	lsrs	r0, r0, #5
+
+00000004 <loop>:
+   4:	3801      	subs	r0, #1
+   6:	b43f      	push	{r0, r1, r2, r3, r4, r5}
+   8:	bc3f      	pop	{r0, r1, r2, r3, r4, r5}
+   a:	b43f      	push	{r0, r1, r2, r3, r4, r5}
+   c:	bc3f      	pop	{r0, r1, r2, r3, r4, r5}
+   e:	d2f9      	bcs.n	4 <loop>
+  10:	4770      	bx	lr
+
+Disassembly of section .text.HSUP_u32Mirror:
+
+00000000 <HSUP_u32Mirror>:
+
+
+uint32_t HSUP_u32Mirror(uint32_t value)
+{
+   0:	b510      	push	{r4, lr}
+    return  HSUP_xMirror( value, sizeof(value));
+   2:	2104      	movs	r1, #4
+   4:	f7ff fffe 	bl	0 <HSUP_u32Mirror>
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.HSUP_u16Mirror:
+
+00000000 <HSUP_u16Mirror>:
+
+uint16_t HSUP_u16Mirror(uint16_t value)
+{
+   0:	b510      	push	{r4, lr}
+    return (uint16_t)(HSUP_xMirror( value,sizeof(value)));
+   2:	2102      	movs	r1, #2
+   4:	f7ff fffe 	bl	0 <HSUP_u16Mirror>
+   8:	b280      	uxth	r0, r0
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.HSUP_ucMirror:
+
+00000000 <HSUP_ucMirror>:
+
+uint8_t HSUP_ucMirror(uint8_t value)
+{
+   0:	b510      	push	{r4, lr}
+    return (uint8_t)(HSUP_xMirror( value,sizeof(value)));
+   2:	2101      	movs	r1, #1
+   4:	f7ff fffe 	bl	0 <HSUP_ucMirror>
+   8:	b2c0      	uxtb	r0, r0
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.HSUP_uiBigEndianToProc:
+
+00000000 <HSUP_uiBigEndianToProc>:
+/* ===============================================================================================*/
+#if defined(__GNUC__)// GCC, armclang
+__attribute__((naked))
+uint16_t HSUP_uiBigEndianToProc(uint16_t value)
+{
+    __asm("rev16 r0, r0");
+   0:	ba40      	rev16	r0, r0
+    __asm("uxth r0, r0");
+   2:	b280      	uxth	r0, r0
+    __asm("bx lr");
+   4:	4770      	bx	lr
+
+Disassembly of section .text.HSUP_uiProcToBigEndian:
+
+00000000 <HSUP_uiProcToBigEndian>:
+
+
+__attribute__((naked))
+uint16_t HSUP_uiProcToBigEndian(uint16_t value)
+{
+    __asm("rev16 r0, r0");
+   0:	ba40      	rev16	r0, r0
+    __asm("uxth r0, r0");
+   2:	b280      	uxth	r0, r0
+    __asm("bx lr");
+   4:	4770      	bx	lr
+
+Disassembly of section .text.HSUP_ulProcToBigEndian:
+
+00000000 <HSUP_ulProcToBigEndian>:
+
+
+__attribute__((naked))
+uint32_t HSUP_ulProcToBigEndian(uint32_t value)
+{
+    __asm("rev r0, r0");
+   0:	ba00      	rev	r0, r0
+    __asm("bx lr");
+   2:	4770      	bx	lr
+
+Disassembly of section .text.HSUP_ulBigEndianToProc:
+
+00000000 <HSUP_ulBigEndianToProc>:
+}
+
+__attribute__((naked))
+uint32_t HSUP_ulBigEndianToProc(uint32_t value)
+{
+    __asm("rev r0, r0");
+   0:	ba00      	rev	r0, r0
+    __asm("bx lr");
+   2:	4770      	bx	lr

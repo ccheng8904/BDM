@@ -1,0 +1,223 @@
+
+out/programmer/prog/MSP/sh30f/int_handle_cfg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.UART0_IRQHandler:
+
+00000000 <UART0_IRQHandler>:
+/* IRQ FUNCTIONS DEFINITIONS                                                  */
+/******************************************************************************/
+
+/************************ UART ************************/
+SYMBOL_IRQ void UART0_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MUART_INCLUDED
+    MUART_IRQ_Handler(MUART0_IRQ_INDEX);
+   2:	2000      	movs	r0, #0
+   4:	f7ff fffe 	bl	0 <MUART_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.UART1_IRQHandler:
+
+00000000 <UART1_IRQHandler>:
+
+
+SYMBOL_IRQ void UART1_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MUART_INCLUDED
+    MUART_IRQ_Handler(MUART1_IRQ_INDEX);
+   2:	2001      	movs	r0, #1
+   4:	f7ff fffe 	bl	0 <MUART_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.UART2_IRQHandler:
+
+00000000 <UART2_IRQHandler>:
+
+
+SYMBOL_IRQ void UART2_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MUART_INCLUDED
+    MUART_IRQ_Handler(MUART2_IRQ_INDEX);
+   2:	2002      	movs	r0, #2
+   4:	f7ff fffe 	bl	0 <MUART_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.UART3_IRQHandler:
+
+00000000 <UART3_IRQHandler>:
+
+
+SYMBOL_IRQ void UART3_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MUART_INCLUDED
+    MUART_IRQ_Handler(MUART3_IRQ_INDEX);
+   2:	2003      	movs	r0, #3
+   4:	f7ff fffe 	bl	0 <MUART_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.TWI0_IRQHandler:
+
+00000000 <TWI0_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.PCA0_IRQHandler:
+
+00000000 <PCA0_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.PCA1_IRQHandler:
+
+00000000 <PCA1_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.PCA2_IRQHandler:
+
+00000000 <PCA2_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.PCA3_IRQHandler:
+
+00000000 <PCA3_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.SPI0_IRQHandler:
+
+00000000 <SPI0_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.SPI1_LED_IRQHandler:
+
+00000000 <SPI1_LED_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.ADC_IRQHandler:
+
+00000000 <ADC_IRQHandler>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.EXTI0_IRQHandler:
+
+00000000 <EXTI0_IRQHandler>:
+}
+
+
+/************************ EXTI ************************/
+void EXTI0_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI0_IRQ_INDEX);
+   2:	2000      	movs	r0, #0
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.EXTI1_IRQHandler:
+
+00000000 <EXTI1_IRQHandler>:
+
+
+void EXTI1_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI1_IRQ_INDEX);
+   2:	2001      	movs	r0, #1
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.EXTI2_IRQHandler:
+
+00000000 <EXTI2_IRQHandler>:
+
+
+void EXTI2_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI2_IRQ_INDEX);
+   2:	2002      	movs	r0, #2
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.EXTI3_IRQHandler:
+
+00000000 <EXTI3_IRQHandler>:
+
+
+void EXTI3_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI3_IRQ_INDEX);
+   2:	2003      	movs	r0, #3
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.EXTI9_4_IRQHandler:
+
+00000000 <EXTI9_4_IRQHandler>:
+
+
+void EXTI9_4_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI9_4_IRQ_INDEX);
+   2:	2004      	movs	r0, #4
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.EXTI15_10_IRQHandler:
+
+00000000 <EXTI15_10_IRQHandler>:
+
+
+void EXTI15_10_IRQHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  #ifdef MCAL_MEXTI_INCLUDED
+    MEXTI_IRQ_Handler(MEXTI15_10_IRQ_INDEX);
+   2:	2005      	movs	r0, #5
+   4:	f7ff fffe 	bl	0 <MEXTI_IRQ_Handler>
+  #endif
+}
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DMA_CH0_1_IRQHandler:
+
+00000000 <DMA_CH0_1_IRQHandler>:
+void DMA_CH0_1_IRQHandler(void)
+{
+  #ifdef MCAL_MDMA_INCLUDED
+    MDMA_IRQ_Handler(MDMA1_IRQ_INDEX);
+  #endif
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DMA_CH2_3_IRQHandler:
+
+00000000 <DMA_CH2_3_IRQHandler>:
+   0:	4770      	bx	lr

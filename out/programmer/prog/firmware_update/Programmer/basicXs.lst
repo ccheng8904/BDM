@@ -1,0 +1,72 @@
+
+out/programmer/prog/firmware_update/Programmer/basicXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BASIC_vUsrInitAppl:
+
+00000000 <BASIC_vUsrInitAppl>:
+#ifdef STACK_MONITOR_ENABLED
+#include "stack_monitor/stack_monitor.h"
+#endif
+
+void BASIC_vUsrInitAppl (void)
+{
+   0:	b510      	push	{r4, lr}
+  \details Enables IRQ interrupts by clearing special-purpose register PRIMASK.
+           Can only be executed in Privileged modes.
+ */
+__STATIC_FORCEINLINE void __enable_irq(void)
+{
+  __ASM volatile ("cpsie i" : : : "memory");
+   2:	b662      	cpsie	i
+   BASIC_vEnableAllInterrupts();
+
+   #ifdef UNIT_TEST
+       TM_vInit();
+   #endif
+   MAL_CMD_init();
+   4:	f7ff fffe 	bl	0 <MAL_CMD_init>
+   MAP_MemAccess_Init();
+   8:	f7ff fffe 	bl	0 <MAP_MemAccess_Init>
+}
+   c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.BASIC_vUsrSchedTasks:
+
+00000000 <BASIC_vUsrSchedTasks>:
+
+
+void BASIC_vUsrSchedTasks (void)
+{   /** delays are required to give more CPU time to ISRs */ 
+   0:	b510      	push	{r4, lr}
+    (void)TIM_bHandleTask16();
+   2:	f7ff fffe 	bl	0 <TIM_bHandleTask16>
+    (void)DLL_HandleTask();
+   6:	f7ff fffe 	bl	0 <DLL_HandleTask>
+    HSUP_vDelay(0xFFU);
+   a:	2130      	movs	r1, #48	; 0x30
+   c:	20ff      	movs	r0, #255	; 0xff
+   e:	f7ff fffe 	bl	0 <HSUP_DelayClk>
+    (void)BAL_HandleTask();
+  12:	f7ff fffe 	bl	0 <BAL_HandleTask>
+    HSUP_vDelay(0xFFU);
+  16:	2130      	movs	r1, #48	; 0x30
+  18:	20ff      	movs	r0, #255	; 0xff
+  1a:	f7ff fffe 	bl	0 <HSUP_DelayClk>
+    (void)DBPL_HandleTask();
+  1e:	f7ff fffe 	bl	0 <DBPL_HandleTask>
+    HSUP_vDelay(0xFFU);
+  22:	2130      	movs	r1, #48	; 0x30
+  24:	20ff      	movs	r0, #255	; 0xff
+  26:	f7ff fffe 	bl	0 <HSUP_DelayClk>
+    MEMDRV_schedule();
+  2a:	f7ff fffe 	bl	0 <MEMDRV_schedule>
+    HWDT_vTrigger();
+  2e:	f7ff fffe 	bl	0 <MWDT_trigger>
+    (void)PRG_bUserHandleTask(); // Handle function for user specific code
+  32:	f7ff fffe 	bl	0 <PRG_bUserHandleTask>
+#ifdef STACK_MONITOR_ENABLED
+    (void)STK_HandleTask();
+#endif
+}
+  36:	bd10      	pop	{r4, pc}

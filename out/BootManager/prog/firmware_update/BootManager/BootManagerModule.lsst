@@ -1,0 +1,1584 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BootManagerModule.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BMMOD_GetMemModuleHeader,"ax",%progbits
+  18              		.align	1
+  19              		.global	BMMOD_GetMemModuleHeader
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BMMOD_GetMemModuleHeader:
+  25              	.LVL0:
+  26              	.LFB69:
+  27              		.file 1 "common/prog/firmware_update/BootManager/BootManagerModule.c"
+   1:common/prog/firmware_update/BootManager/BootManagerModule.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+   5:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+   9:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  PROJECT          Firmware Update Boot-Manager
+  11:common/prog/firmware_update/BootManager/BootManagerModule.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  13:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  14:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootManager/BootManagerModule.c **** /** \file
+  18:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  19:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \ingroup  BootManager
+  20:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  21:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \brief    Implementation of Boot-Manager-Main
+  22:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  23:common/prog/firmware_update/BootManager/BootManagerModule.c ****  */
+  24:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  25:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  26:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  27:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include <stdint.h>
+  31:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include <stdbool.h>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 2
+
+
+  32:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/moduleAdministration.h"
+  33:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/mal_driver.h"
+  34:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "BootManagerModule.h"
+  35:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "IntTbl.h"
+  36:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "stdcrc/StdCrc.h"
+  37:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef FEATURE_FUNCTIONAL_SAFETY_ENABLED
+  38:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "FuncSafe/fSafeXS.h"
+  39:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  40:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "FuncSafe/fs_psm.h"
+  41:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/fwu_opt_bytes.h"
+  42:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/otp_mem/fwu_otp_memory.h"
+  43:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  44:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  45:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  46:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  47:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+  48:common/prog/firmware_update/BootManager/BootManagerModule.c **** static void BMMOD_LoadModule (void);
+  49:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isStdvIdEqual(const uint8_t* id1, const uint8_t* id2);
+  50:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdConsistent(void);
+  51:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdCompatible(void);
+  52:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  53:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  54:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  55:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  56:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  57:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  58:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+  59:common/prog/firmware_update/BootManager/BootManagerModule.c **** static const struct MAL_partition_s * BMMOD_partition;
+  60:common/prog/firmware_update/BootManager/BootManagerModule.c **** static const struct MAL_ModuleHeader_s * BMMOD_header;
+  61:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  62:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  63:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  64:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  65:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  66:common/prog/firmware_update/BootManager/BootManagerModule.c **** const struct MAL_ModuleHeader_s * BMMOD_GetMemModuleHeader(enum MAL_ModuleEnum module)
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+  28              		.loc 1 67 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  68:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  32              		.loc 1 68 5 view .LVU1
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  33              		.loc 1 67 1 is_stmt 0 view .LVU2
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  39              		.loc 1 67 1 view .LVU3
+  40 0002 0400     		movs	r4, r0
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  70:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+  41              		.loc 1 70 1 view .LVU4
+  42              		@ sp needed
+  68:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 3
+
+
+  43              		.loc 1 68 5 view .LVU5
+  44 0004 FFF7FEFF 		bl	MAL_initPartition
+  45              	.LVL1:
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  46              		.loc 1 69 5 is_stmt 1 view .LVU6
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  47              		.loc 1 69 12 is_stmt 0 view .LVU7
+  48 0008 2000     		movs	r0, r4
+  49 000a FFF7FEFF 		bl	MAL_GetMemModule
+  50              	.LVL2:
+  51 000e FFF7FEFF 		bl	MAL_PartitionToHeader
+  52              	.LVL3:
+  53              		.loc 1 70 1 view .LVU8
+  54 0012 10BD     		pop	{r4, pc}
+  55              		.cfi_endproc
+  56              	.LFE69:
+  58              		.section	.text.BMMOD_bInitMemoryModule,"ax",%progbits
+  59              		.align	1
+  60              		.global	BMMOD_bInitMemoryModule
+  61              		.syntax unified
+  62              		.code	16
+  63              		.thumb_func
+  65              	BMMOD_bInitMemoryModule:
+  66              	.LVL4:
+  67              	.LFB70:
+  71:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  72:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  73:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+  74:common/prog/firmware_update/BootManager/BootManagerModule.c **** bool BMMOD_bInitMemoryModule(enum MAL_ModuleEnum ModuleId)
+  75:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+  68              		.loc 1 75 1 is_stmt 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  76:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_SHARED_DATA_INITIALIZED, FSF_BM_MEMORY_MODULE_INITIALIZED
+  72              		.loc 1 76 5 view .LVU10
+  75:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_SHARED_DATA_INITIALIZED, FSF_BM_MEMORY_MODULE_INITIALIZED
+  73              		.loc 1 75 1 is_stmt 0 view .LVU11
+  74 0000 10B5     		push	{r4, lr}
+  75              	.LCFI1:
+  76              		.cfi_def_cfa_offset 8
+  77              		.cfi_offset 4, -8
+  78              		.cfi_offset 14, -4
+  79              		.loc 1 76 5 view .LVU12
+  80 0002 C021     		movs	r1, #192
+  77:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  78:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_partition = MAL_GetMemModule(ModuleId);
+  79:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+  80:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return (BMMOD_partition == NULL) ? false : true;
+  81:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+  81              		.loc 1 81 1 view .LVU13
+  82              		@ sp needed
+  75:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_SHARED_DATA_INITIALIZED, FSF_BM_MEMORY_MODULE_INITIALIZED
+  83              		.loc 1 75 1 view .LVU14
+  84 0004 0400     		movs	r4, r0
+  76:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  85              		.loc 1 76 5 view .LVU15
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 4
+
+
+  86 0006 8020     		movs	r0, #128
+  87              	.LVL5:
+  76:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  88              		.loc 1 76 5 view .LVU16
+  89 0008 8900     		lsls	r1, r1, #2
+  90 000a 8000     		lsls	r0, r0, #2
+  91 000c FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+  92              	.LVL6:
+  77:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  93              		.loc 1 77 5 is_stmt 1 view .LVU17
+  94 0010 FFF7FEFF 		bl	MAL_initPartition
+  95              	.LVL7:
+  78:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+  96              		.loc 1 78 5 view .LVU18
+  78:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+  97              		.loc 1 78 23 is_stmt 0 view .LVU19
+  98 0014 2000     		movs	r0, r4
+  99 0016 FFF7FEFF 		bl	MAL_GetMemModule
+ 100              	.LVL8:
+  78:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+ 101              		.loc 1 78 21 view .LVU20
+ 102 001a 054C     		ldr	r4, .L3
+ 103 001c 2060     		str	r0, [r4]
+  79:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return (BMMOD_partition == NULL) ? false : true;
+ 104              		.loc 1 79 5 is_stmt 1 view .LVU21
+  79:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return (BMMOD_partition == NULL) ? false : true;
+ 105              		.loc 1 79 20 is_stmt 0 view .LVU22
+ 106 001e FFF7FEFF 		bl	MAL_PartitionToHeader
+ 107              	.LVL9:
+  79:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return (BMMOD_partition == NULL) ? false : true;
+ 108              		.loc 1 79 18 view .LVU23
+ 109 0022 044B     		ldr	r3, .L3+4
+ 110 0024 1860     		str	r0, [r3]
+  80:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 111              		.loc 1 80 5 is_stmt 1 view .LVU24
+  80:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 112              		.loc 1 80 46 is_stmt 0 view .LVU25
+ 113 0026 2068     		ldr	r0, [r4]
+ 114 0028 431E     		subs	r3, r0, #1
+ 115 002a 9841     		sbcs	r0, r0, r3
+ 116 002c C0B2     		uxtb	r0, r0
+ 117              		.loc 1 81 1 view .LVU26
+ 118 002e 10BD     		pop	{r4, pc}
+ 119              	.L4:
+ 120              		.align	2
+ 121              	.L3:
+ 122 0030 00000000 		.word	.LANCHOR0
+ 123 0034 00000000 		.word	.LANCHOR1
+ 124              		.cfi_endproc
+ 125              	.LFE70:
+ 127              		.section	.text.BMMOD_startModule,"ax",%progbits
+ 128              		.align	1
+ 129              		.global	BMMOD_startModule
+ 130              		.syntax unified
+ 131              		.code	16
+ 132              		.thumb_func
+ 134              	BMMOD_startModule:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 5
+
+
+ 135              	.LFB71:
+  82:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  83:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  84:common/prog/firmware_update/BootManager/BootManagerModule.c **** void BMMOD_startModule(void)
+  85:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 136              		.loc 1 85 1 is_stmt 1 view -0
+ 137              		.cfi_startproc
+ 138              		@ args = 0, pretend = 0, frame = 0
+ 139              		@ frame_needed = 0, uses_anonymous_args = 0
+  86:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_FW_ID_VALID, FSF_BM_START_MODULE);
+ 140              		.loc 1 86 5 view .LVU28
+ 141 0000 E021     		movs	r1, #224
+ 142 0002 C020     		movs	r0, #192
+  85:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_FW_ID_VALID, FSF_BM_START_MODULE);
+ 143              		.loc 1 85 1 is_stmt 0 view .LVU29
+ 144 0004 70B5     		push	{r4, r5, r6, lr}
+ 145              	.LCFI2:
+ 146              		.cfi_def_cfa_offset 16
+ 147              		.cfi_offset 4, -16
+ 148              		.cfi_offset 5, -12
+ 149              		.cfi_offset 6, -8
+ 150              		.cfi_offset 14, -4
+ 151              		.loc 1 86 5 view .LVU30
+ 152 0006 C900     		lsls	r1, r1, #3
+ 153 0008 C000     		lsls	r0, r0, #3
+ 154 000a FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+ 155              	.LVL10:
+  87:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  88:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /* reload correct module to be started */
+  89:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+ 156              		.loc 1 89 5 is_stmt 1 view .LVU31
+ 157              		.loc 1 89 20 is_stmt 0 view .LVU32
+ 158 000e 0C4C     		ldr	r4, .L12
+ 159 0010 2068     		ldr	r0, [r4]
+ 160 0012 FFF7FEFF 		bl	MAL_PartitionToHeader
+ 161              	.LVL11:
+ 162              		.loc 1 89 18 view .LVU33
+ 163 0016 0B4B     		ldr	r3, .L12+4
+ 164              	.LBB14:
+ 165              	.LBB15:
+  90:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  91:common/prog/firmware_update/BootManager/BootManagerModule.c ****     BMMOD_LoadModule();
+  92:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  93:common/prog/firmware_update/BootManager/BootManagerModule.c ****     ITBL_StartApplication( (size_t)(uint32_t)BMMOD_header->ISRtbl_ptr); /*lint !e923 !e507 cast tes
+  94:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+  95:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  96:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  97:common/prog/firmware_update/BootManager/BootManagerModule.c **** bool BMMOD_isModuleStartable(void)
+  98:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+  99:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_MEMORY_MODULE_INITIALIZED, FSF_BM_IS_MODULE_STARTABLE);
+ 100:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 101:common/prog/firmware_update/BootManager/BootManagerModule.c ****     // check module flags
+ 102:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if( BMMOD_partition->mod_attributes & MAL_CTX_MF_EXECUTABLE )
+ 103:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 104:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return true;
+ 105:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 106:common/prog/firmware_update/BootManager/BootManagerModule.c ****     else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 6
+
+
+ 107:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 108:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return false;
+ 109:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 110:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 111:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 112:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 113:common/prog/firmware_update/BootManager/BootManagerModule.c **** bool BMMOD_isModuleFirmwareIdValid(void)
+ 114:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 115:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_INTEGRITY_OK, FSF_BM_IS_MODULE_FW_ID_VALID);
+ 116:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 117:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if (MAL_isBuildInApplication(BMMOD_partition))
+ 118:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 119:common/prog/firmware_update/BootManager/BootManagerModule.c ****         /* Only FW IDs of update-able modules need to be checked */
+ 120:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return true;
+ 121:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 122:common/prog/firmware_update/BootManager/BootManagerModule.c ****     else
+ 123:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return ((BMMOD_isFirmwareIdConsistent() && BMMOD_isFirmwareIdCompatible()) ? true : false);
+ 125:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 126:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 127:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 128:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 129:common/prog/firmware_update/BootManager/BootManagerModule.c **** bool BMMOD_isModuleIntegrityOk(void)
+ 130:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 131:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_STARTABLE, FSF_BM_IS_MODULE_INTEGRITY_OK);
+ 132:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 133:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if(FWU_isIntegCheckDisabledCalc())
+ 134:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 135:common/prog/firmware_update/BootManager/BootManagerModule.c ****         // disabled calculation
+ 136:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return true;
+ 137:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 138:common/prog/firmware_update/BootManager/BootManagerModule.c ****     else
+ 139:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 140:common/prog/firmware_update/BootManager/BootManagerModule.c ****         return MAL_isModuleIntegrityOk(BMMOD_partition);
+ 141:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 142:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 143:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 144:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+ 145:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+ 146:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 147:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+ 148:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+ 149:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 150:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* Check OTP FW ID table CRC */
+ 151:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdConsistent(void)
+ 152:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 153:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_fw_id_array  * FwIdArrayToCheck = OTP_getFirmwareIDs();
+ 154:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 155:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /* No need to check CRC if FW ID table is empty */
+ 156:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if (FwIdArrayToCheck == NULL){return true;}
+ 157:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 158:common/prog/firmware_update/BootManager/BootManagerModule.c ****     CRC_crc_t FwCrcExpected = FwIdArrayToCheck->CRC;
+ 159:common/prog/firmware_update/BootManager/BootManagerModule.c ****     // get length of checked area for CRC
+ 160:common/prog/firmware_update/BootManager/BootManagerModule.c ****     uint32_t CrcLength = (sizeof(struct MAL_fw_id_entry) * FWU_FW_ID_MAX_COUNT);
+ 161:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /*lint -save -e928 cast from pointer to pointer [MISRA 2012 Rule 11.3, required], [MISRA 2012 R
+ 162:common/prog/firmware_update/BootManager/BootManagerModule.c ****     CRC_crc_t CrcCalc = CRC_Calc(CrcLength, (const uint8_t*)FwIdArrayToCheck->entries);
+ 163:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /*lint -restore -e928*/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 7
+
+
+ 164:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return ((CrcCalc == FwCrcExpected) ? true : false);
+ 165:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 166:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 167:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 168:common/prog/firmware_update/BootManager/BootManagerModule.c **** /** check if FW IDs of all application partitions are supported */
+ 169:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdCompatible(void)
+ 170:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 171:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_fw_id_array  * FwIdArrayToCheck = OTP_getFirmwareIDs();
+ 172:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_fw_id_entry  * FwIdEntryToCheck = FwIdArrayToCheck->entries;
+ 173:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_partition_s  * partition;
+ 174:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_ModuleHeader_s  * moduleHeader;
+ 175:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 176:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /* OTP_getFirmwareIDs returns NULL when FW ID table is empty*/
+ 177:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if (FwIdArrayToCheck != NULL)
+ 178:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 179:common/prog/firmware_update/BootManager/BootManagerModule.c ****         for (uint8_t entryIndex = 0u; entryIndex < FWU_FW_ID_MAX_COUNT; entryIndex++)
+ 180:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 181:common/prog/firmware_update/BootManager/BootManagerModule.c ****             /* Check only those non-empty entries */
+ 182:common/prog/firmware_update/BootManager/BootManagerModule.c ****             if (FwIdEntryToCheck[entryIndex].mod_number != MAL_NO_MODULE)
+ 183:common/prog/firmware_update/BootManager/BootManagerModule.c ****             {
+ 184:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 /* Find corresponding partition based on moduleId of the entry */
+ 185:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 partition = MAL_GetMemModule(FwIdEntryToCheck[entryIndex].mod_number);
+ 186:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 moduleHeader = MAL_PartitionToHeader(partition);
+ 187:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 188:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 /* moduleHeader = NULL if mod_number is unknown, check only those entries with vali
+ 189:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 if (moduleHeader != NULL)
+ 190:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 {
+ 191:common/prog/firmware_update/BootManager/BootManagerModule.c ****                     if (!BMMOD_isStdvIdEqual(FwIdEntryToCheck[entryIndex].firmware_id.id, moduleHea
+ 192:common/prog/firmware_update/BootManager/BootManagerModule.c ****                     {
+ 193:common/prog/firmware_update/BootManager/BootManagerModule.c ****                         /* Compatibility check fails if FW ID from module header is inconsistent wi
+ 194:common/prog/firmware_update/BootManager/BootManagerModule.c ****                         return false;
+ 195:common/prog/firmware_update/BootManager/BootManagerModule.c ****                     }
+ 196:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 }
+ 197:common/prog/firmware_update/BootManager/BootManagerModule.c ****             }
+ 198:common/prog/firmware_update/BootManager/BootManagerModule.c ****         }
+ 199:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 200:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 201:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return true;
+ 202:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 203:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 204:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 205:common/prog/firmware_update/BootManager/BootManagerModule.c **** /** compares memory
+ 206:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \param mem1 memory block one
+ 207:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \param mem2 memory block two
+ 208:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \return true if memory is equal otherwise false
+ 209:common/prog/firmware_update/BootManager/BootManagerModule.c ****  */
+ 210:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isStdvIdEqual(const uint8_t* id1, const uint8_t* id2)
+ 211:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     for(uint8_t i=0u; i<STDV_ID_LENGTH; i++)
+ 213:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 214:common/prog/firmware_update/BootManager/BootManagerModule.c ****         if(id1[i] != id2[i]){return false;}
+ 215:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 216:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return true;
+ 217:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 218:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 219:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 220:common/prog/firmware_update/BootManager/BootManagerModule.c **** /** \brief    loads the selected module to its start address if required.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 8
+
+
+ 221:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+ 222:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \note     Expands the application to the specified load address.
+ 223:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *            If application need to be executed directly at their physical
+ 224:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *            address, the function just returns.
+ 225:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+ 226:common/prog/firmware_update/BootManager/BootManagerModule.c ****  */
+ 227:common/prog/firmware_update/BootManager/BootManagerModule.c **** static void BMMOD_LoadModule(void)
+ 228:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 229:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 230:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 231:common/prog/firmware_update/BootManager/BootManagerModule.c ****     if (BMMOD_partition->physical_start.addr != BMMOD_header->executionAddress)
+ 166              		.loc 1 231 24 view .LVU34
+ 167 0018 2268     		ldr	r2, [r4]
+ 168              		.loc 1 231 61 view .LVU35
+ 169 001a C168     		ldr	r1, [r0, #12]
+ 170              	.LBE15:
+ 171              	.LBE14:
+  89:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 172              		.loc 1 89 18 view .LVU36
+ 173 001c 1860     		str	r0, [r3]
+  91:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 174              		.loc 1 91 5 is_stmt 1 view .LVU37
+ 175              	.LBB20:
+ 176              	.LBI14:
+ 227:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 177              		.loc 1 227 13 view .LVU38
+ 178              	.LBB18:
+ 179              		.loc 1 231 5 view .LVU39
+ 180 001e 1368     		ldr	r3, [r2]
+ 181 0020 CD1A     		subs	r5, r1, r3
+ 182              		.loc 1 231 8 is_stmt 0 view .LVU40
+ 183 0022 8B42     		cmp	r3, r1
+ 184 0024 06D1     		bne	.L7
+ 185              	.L9:
+ 186              	.LBE18:
+ 187              	.LBE20:
+  93:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 188              		.loc 1 93 5 is_stmt 1 view .LVU41
+  94:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 189              		.loc 1 94 1 is_stmt 0 view .LVU42
+ 190              		@ sp needed
+  93:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 191              		.loc 1 93 5 view .LVU43
+ 192 0026 4068     		ldr	r0, [r0, #4]
+ 193 0028 FFF7FEFF 		bl	ITBL_StartApplication
+ 194              	.LVL12:
+  94:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 195              		.loc 1 94 1 view .LVU44
+ 196 002c 70BD     		pop	{r4, r5, r6, pc}
+ 197              	.LVL13:
+ 198              	.L8:
+ 199              	.LBB21:
+ 200              	.LBB19:
+ 201              	.LBB16:
+ 202              	.LBB17:
+ 232:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 233:common/prog/firmware_update/BootManager/BootManagerModule.c ****         /* load the module to RAM */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 9
+
+
+ 234:common/prog/firmware_update/BootManager/BootManagerModule.c ****         uint8_t *exePtr = (uint8_t*)BMMOD_header->executionAddress; /*lint !e923 cast tested to wor
+ 235:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 236:common/prog/firmware_update/BootManager/BootManagerModule.c ****         for(const uint8_t *ptr  =  BMMOD_partition->physical_start.ptr; /*lint !e926 cast tested to
+ 237:common/prog/firmware_update/BootManager/BootManagerModule.c ****             ptr <= (const uint8_t*)BMMOD_partition->physical_end.ptr; /*lint !e946 !e926 relational
+ 238:common/prog/firmware_update/BootManager/BootManagerModule.c ****             ptr++)
+ 239:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 240:common/prog/firmware_update/BootManager/BootManagerModule.c ****             *exePtr++ = *ptr;/*lint !e9049 misra adv. inc. comined with other operation*/
+ 203              		.loc 1 240 13 is_stmt 1 view .LVU45
+ 204              		.loc 1 240 25 is_stmt 0 view .LVU46
+ 205 002e 1978     		ldrb	r1, [r3]
+ 238:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 206              		.loc 1 238 16 view .LVU47
+ 207 0030 0133     		adds	r3, r3, #1
+ 208              	.LVL14:
+ 209              		.loc 1 240 23 view .LVU48
+ 210 0032 2170     		strb	r1, [r4]
+ 238:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 211              		.loc 1 238 16 is_stmt 1 view .LVU49
+ 212              	.LVL15:
+ 213              	.L7:
+ 237:common/prog/firmware_update/BootManager/BootManagerModule.c ****             ptr++)
+ 214              		.loc 1 237 17 is_stmt 0 view .LVU50
+ 215 0034 5168     		ldr	r1, [r2, #4]
+ 216 0036 5C19     		adds	r4, r3, r5
+ 217              	.LVL16:
+ 237:common/prog/firmware_update/BootManager/BootManagerModule.c ****             ptr++)
+ 218              		.loc 1 237 17 is_stmt 1 view .LVU51
+ 219 0038 8B42     		cmp	r3, r1
+ 220 003a F8D9     		bls	.L8
+ 221 003c F3E7     		b	.L9
+ 222              	.L13:
+ 223 003e C046     		.align	2
+ 224              	.L12:
+ 225 0040 00000000 		.word	.LANCHOR0
+ 226 0044 00000000 		.word	.LANCHOR1
+ 227              	.LBE17:
+ 228              	.LBE16:
+ 229              	.LBE19:
+ 230              	.LBE21:
+ 231              		.cfi_endproc
+ 232              	.LFE71:
+ 234              		.section	.text.BMMOD_isModuleStartable,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	BMMOD_isModuleStartable
+ 237              		.syntax unified
+ 238              		.code	16
+ 239              		.thumb_func
+ 241              	BMMOD_isModuleStartable:
+ 242              	.LFB72:
+  98:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_MEMORY_MODULE_INITIALIZED, FSF_BM_IS_MODULE_STARTABLE);
+ 243              		.loc 1 98 1 view -0
+ 244              		.cfi_startproc
+ 245              		@ args = 0, pretend = 0, frame = 0
+ 246              		@ frame_needed = 0, uses_anonymous_args = 0
+  99:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 247              		.loc 1 99 5 view .LVU53
+ 248 0000 8021     		movs	r1, #128
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 10
+
+
+ 249 0002 C020     		movs	r0, #192
+  98:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_MEMORY_MODULE_INITIALIZED, FSF_BM_IS_MODULE_STARTABLE);
+ 250              		.loc 1 98 1 is_stmt 0 view .LVU54
+ 251 0004 10B5     		push	{r4, lr}
+ 252              	.LCFI3:
+ 253              		.cfi_def_cfa_offset 8
+ 254              		.cfi_offset 4, -8
+ 255              		.cfi_offset 14, -4
+  99:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 256              		.loc 1 99 5 view .LVU55
+ 257 0006 8000     		lsls	r0, r0, #2
+ 258 0008 C900     		lsls	r1, r1, #3
+ 259 000a FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+ 260              	.LVL17:
+ 102:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 261              		.loc 1 102 5 is_stmt 1 view .LVU56
+ 110:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 262              		.loc 1 110 1 is_stmt 0 view .LVU57
+ 263              		@ sp needed
+ 102:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 264              		.loc 1 102 24 view .LVU58
+ 265 000e 034B     		ldr	r3, .L15
+ 266 0010 1B68     		ldr	r3, [r3]
+ 102:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 267              		.loc 1 102 7 view .LVU59
+ 268 0012 D87A     		ldrb	r0, [r3, #11]
+ 269 0014 C006     		lsls	r0, r0, #27
+ 110:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 270              		.loc 1 110 1 view .LVU60
+ 271 0016 C00F     		lsrs	r0, r0, #31
+ 272 0018 10BD     		pop	{r4, pc}
+ 273              	.L16:
+ 274 001a C046     		.align	2
+ 275              	.L15:
+ 276 001c 00000000 		.word	.LANCHOR0
+ 277              		.cfi_endproc
+ 278              	.LFE72:
+ 280              		.section	.text.BMMOD_isModuleFirmwareIdValid,"ax",%progbits
+ 281              		.align	1
+ 282              		.global	BMMOD_isModuleFirmwareIdValid
+ 283              		.syntax unified
+ 284              		.code	16
+ 285              		.thumb_func
+ 287              	BMMOD_isModuleFirmwareIdValid:
+ 288              	.LFB73:
+ 114:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_INTEGRITY_OK, FSF_BM_IS_MODULE_FW_ID_VALID);
+ 289              		.loc 1 114 1 is_stmt 1 view -0
+ 290              		.cfi_startproc
+ 291              		@ args = 0, pretend = 0, frame = 0
+ 292              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 293              		.loc 1 115 5 view .LVU62
+ 294 0000 C021     		movs	r1, #192
+ 295 0002 A020     		movs	r0, #160
+ 114:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_INTEGRITY_OK, FSF_BM_IS_MODULE_FW_ID_VALID);
+ 296              		.loc 1 114 1 is_stmt 0 view .LVU63
+ 297 0004 70B5     		push	{r4, r5, r6, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 11
+
+
+ 298              	.LCFI4:
+ 299              		.cfi_def_cfa_offset 16
+ 300              		.cfi_offset 4, -16
+ 301              		.cfi_offset 5, -12
+ 302              		.cfi_offset 6, -8
+ 303              		.cfi_offset 14, -4
+ 115:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 304              		.loc 1 115 5 view .LVU64
+ 305 0006 C000     		lsls	r0, r0, #3
+ 306 0008 C900     		lsls	r1, r1, #3
+ 307 000a FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+ 308              	.LVL18:
+ 117:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 309              		.loc 1 117 5 is_stmt 1 view .LVU65
+ 117:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 310              		.loc 1 117 9 is_stmt 0 view .LVU66
+ 311 000e 1A4B     		ldr	r3, .L33
+ 312 0010 1868     		ldr	r0, [r3]
+ 313 0012 FFF7FEFF 		bl	MAL_isBuildInApplication
+ 314              	.LVL19:
+ 117:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 315              		.loc 1 117 8 view .LVU67
+ 316 0016 0028     		cmp	r0, #0
+ 317 0018 08D1     		bne	.L18
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 318              		.loc 1 124 9 is_stmt 1 view .LVU68
+ 319              	.LBB32:
+ 320              	.LBI32:
+ 151:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 321              		.loc 1 151 13 view .LVU69
+ 322              	.LBB33:
+ 153:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 323              		.loc 1 153 5 view .LVU70
+ 153:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 324              		.loc 1 153 56 is_stmt 0 view .LVU71
+ 325 001a FFF7FEFF 		bl	OTP_getFirmwareIDs
+ 326              	.LVL20:
+ 327 001e 011E     		subs	r1, r0, #0
+ 328              	.LVL21:
+ 156:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 329              		.loc 1 156 5 is_stmt 1 view .LVU72
+ 156:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 330              		.loc 1 156 8 is_stmt 0 view .LVU73
+ 331 0020 05D1     		bne	.L19
+ 332              	.LVL22:
+ 333              	.L22:
+ 156:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 334              		.loc 1 156 8 view .LVU74
+ 335              	.LBE33:
+ 336              	.LBE32:
+ 337              	.LBB37:
+ 338              	.LBI37:
+ 169:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 339              		.loc 1 169 13 is_stmt 1 view .LVU75
+ 340              	.LBB38:
+ 171:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_fw_id_entry  * FwIdEntryToCheck = FwIdArrayToCheck->entries;
+ 341              		.loc 1 171 5 view .LVU76
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 12
+
+
+ 171:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_fw_id_entry  * FwIdEntryToCheck = FwIdArrayToCheck->entries;
+ 342              		.loc 1 171 56 is_stmt 0 view .LVU77
+ 343 0022 FFF7FEFF 		bl	OTP_getFirmwareIDs
+ 344              	.LVL23:
+ 172:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_partition_s  * partition;
+ 345              		.loc 1 172 5 is_stmt 1 view .LVU78
+ 173:common/prog/firmware_update/BootManager/BootManagerModule.c ****     const struct MAL_ModuleHeader_s  * moduleHeader;
+ 346              		.loc 1 173 5 view .LVU79
+ 174:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 347              		.loc 1 174 5 view .LVU80
+ 177:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 348              		.loc 1 177 5 view .LVU81
+ 177:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 349              		.loc 1 177 8 is_stmt 0 view .LVU82
+ 350 0026 0028     		cmp	r0, #0
+ 351 0028 09D1     		bne	.L20
+ 352              	.LVL24:
+ 353              	.L21:
+ 177:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 354              		.loc 1 177 8 view .LVU83
+ 355              	.LBE38:
+ 356              	.LBE37:
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 357              		.loc 1 124 91 view .LVU84
+ 358 002a 0120     		movs	r0, #1
+ 359              	.L18:
+ 126:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 360              		.loc 1 126 1 view .LVU85
+ 361              		@ sp needed
+ 362 002c 70BD     		pop	{r4, r5, r6, pc}
+ 363              	.LVL25:
+ 364              	.L19:
+ 365              	.LBB44:
+ 366              	.LBB36:
+ 158:common/prog/firmware_update/BootManager/BootManagerModule.c ****     // get length of checked area for CRC
+ 367              		.loc 1 158 5 is_stmt 1 view .LVU86
+ 158:common/prog/firmware_update/BootManager/BootManagerModule.c ****     // get length of checked area for CRC
+ 368              		.loc 1 158 15 is_stmt 0 view .LVU87
+ 369 002e 10C9     		ldmia	r1!, {r4}
+ 370              	.LVL26:
+ 160:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /*lint -save -e928 cast from pointer to pointer [MISRA 2012 Rule 11.3, required], [MISRA 2012 R
+ 371              		.loc 1 160 5 is_stmt 1 view .LVU88
+ 162:common/prog/firmware_update/BootManager/BootManagerModule.c ****     /*lint -restore -e928*/
+ 372              		.loc 1 162 5 view .LVU89
+ 373              	.LBB34:
+ 374              	.LBI34:
+ 375              		.file 2 "common/prog/ped_fw/stdcrc/StdCrc.h"
+   1:common/prog/ped_fw/stdcrc/StdCrc.h **** /*******************************************************************************
+   2:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   5:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   9:common/prog/ped_fw/stdcrc/StdCrc.h ****  *******************************************************************************
+  10:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  PROJECT          PP PED Framework
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 13
+
+
+  11:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  COMP_ABBREV      CRC
+  12:common/prog/ped_fw/stdcrc/StdCrc.h ****  ******************************************************************************/
+  13:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  14:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef STDCRC_H
+  15:common/prog/ped_fw/stdcrc/StdCrc.h **** #define STDCRC_H
+  16:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  17:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef __cplusplus
+  18:common/prog/ped_fw/stdcrc/StdCrc.h **** extern "C" {
+  19:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+  20:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  21:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  22:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  23:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  24:common/prog/ped_fw/stdcrc/StdCrc.h **** /* DOCUMENTATION                                                                                  *
+  25:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  26:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  27:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  28:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  29:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  30:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  31:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  32:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  33:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  34:common/prog/ped_fw/stdcrc/StdCrc.h **** \mainpage Common used Functions and Definitions
+  35:common/prog/ped_fw/stdcrc/StdCrc.h **** \else
+  36:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  37:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  38:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  39:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  40:common/prog/ped_fw/stdcrc/StdCrc.h **** \section intro Introduction
+  41:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  42:common/prog/ped_fw/stdcrc/StdCrc.h **** The StdCrc library provides functions for Ethernet-CRC and CCITT-CRC.\n
+  43:common/prog/ped_fw/stdcrc/StdCrc.h **** There is a generic SW-Implementation as well as implementations using a peripheral CRC.
+  44:common/prog/ped_fw/stdcrc/StdCrc.h **** The provided interfaces should be used instead of project specific solutions.
+  45:common/prog/ped_fw/stdcrc/StdCrc.h **** The HW-implementation is optimized for speed, but generic SW-implementation is more suitable for pr
+  46:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  47:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ccitt 16-Bit CCITT-CRC Interfaces
+  48:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  49:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Init( void )
+  50:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data )
+  51:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value )
+  52:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value )
+  53:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Finish( uint16_t crc )
+  54:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data )
+  55:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  56:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  57:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ethernet 32-Bit Ethernet-CRC Interfaces
+  58:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  59:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Init( void )
+  60:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data )
+  61:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value )
+  62:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Finish( uint32_t crc )
+  63:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data )
+  64:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  65:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  66:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  67:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 14
+
+
+  68:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -save -e9059 "C comment contains C++ comment"
+  69:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Codeblock with comments needed. Tested with various parsers to work correctly
+  70:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+  71:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  72:common/prog/ped_fw/stdcrc/StdCrc.h ****  /*------------------------  CRC calculation example start ------------------------
+  73:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC16 (Ethernet type) value by using HW implementation.
+  74:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  75:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC16 is possible to calculate over a specific data area by using function CRC_Ccitt_Calc(length
+  76:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+  77:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  78:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  79:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result = CRC_Ccitt_Calc(8,Pointer);
+  80:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  81:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation.
+  82:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  83:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  84:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+  85:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation and
+  86:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ccitt_Finish() after the implementation to get successful result.
+  87:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  88:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  89:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ethernet_Init();
+  90:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+  91:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+  92:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_Update(Crc16Result, SizeOf(Pointer) , Pointer);
+  93:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+  94:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+  95:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  96:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  97:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC16 byte per byte.
+  98:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation
+  99:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ccitt_Finish() after the implementation to get successful result.
+ 100:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 101:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;
+ 102:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Init();
+ 103:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+ 104:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 105:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 106:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_UpdateByte(Crc16Result, ByteVariable);
+ 107:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 108:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+ 109:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 110:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------------------------------------------------------------------
+ 111:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 112:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC32 (Ethernet type) value by using HW implementation.
+ 113:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 114:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC32 is possible to calculate over a specific data area by using function CRC_Ethernet_Calc(len
+ 115:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+ 116:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 117:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 118:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result = CRC_Ethernet_Calc(8,Pointer);
+ 119:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 120:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation. Calculation over whole flash 0x10000000 
+ 121:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 122:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 123:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+ 124:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation and
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 15
+
+
+ 125:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ethernet_Finish() after the implementation to get successful result.
+ 126:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 127:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 128:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 129:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i< required length ;i++)        // cycle over a specific memory area
+ 130:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 131:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_Update(Crc32Result, SizeOf(Pointer) , Pointer);
+ 132:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 133:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 134:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 135:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 136:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC32 byte per byte.
+ 137:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation
+ 138:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ethernet_Finish() after the implementation to get successful result.
+ 139:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 140:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;          // pointer to a specific address
+ 141:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 142:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i = 0;i< required length ;i++)    // cycle over a specific memory area 
+ 143:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 144:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 145:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_UpdateByte(Crc32Result, ByteVariable);
+ 146:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 147:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 148:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 149:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------  CRC calculation example end ------------------------*/
+ 150:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -restore -e9059 */
+ 151:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 152:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 153:common/prog/ped_fw/stdcrc/StdCrc.h **** /* INCLUDES                                                                                       *
+ 154:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 155:common/prog/ped_fw/stdcrc/StdCrc.h **** #include "bsh_stdinc.h"
+ 156:common/prog/ped_fw/stdcrc/StdCrc.h **** #include <stdint.h>
+ 157:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 158:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 159:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 160:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+ 161:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 162:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 163:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 164:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint16_t CRC_crc_t; ///< data type for platform crc
+ 165:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 166:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint32_t CRC_crc_t; ///< data type for platform crc
+ 167:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 168:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 169:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 170:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 171:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+ 172:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 173:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 174:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 175:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the CCITT CRC calculation
+ 176:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 177:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 178:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 179:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 180:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 181:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 16
+
+
+ 182:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Init( void );
+ 183:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 184:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 185:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 186:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 187:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a data block
+ 188:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 189:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 190:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 191:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 192:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 193:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 194:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 195:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 196:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 197:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 198:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 199:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 200:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 201:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 202:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data );
+ 203:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 204:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 205:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 206:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 207:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte
+ 208:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 209:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 210:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 211:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 212:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 213:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 214:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 215:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 216:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 217:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 218:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 219:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 220:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value );
+ 221:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 222:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 223:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 224:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte (optimized for speed)
+ 225:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 226:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 227:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 228:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 229:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 230:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 231:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 232:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 233:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 234:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 235:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 236:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 237:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value );
+ 238:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 17
+
+
+ 239:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 240:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 241:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 242:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the CCITT CRC calculation.
+ 243:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 244:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ccitt_UpdateByte or \ref CRC_Ccitt_Up
+ 245:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 246:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note In case of CCITT this interface does no influence the CRC.
+ 247:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 248:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 249:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 250:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 251:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 252:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 253:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Finish( uint16_t crc );
+ 254:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 255:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 256:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 257:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 258:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the CCITT CRC for the complete data block
+ 259:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 260:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 261:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 262:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 263:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 264:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 265:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data );
+ 266:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 267:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 268:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 269:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 270:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 271:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the Ethernet CRC calculation
+ 272:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 273:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 274:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 275:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 276:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 277:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 278:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Init( void );
+ 279:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 280:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 281:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 282:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 283:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 284:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 285:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 286:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 287:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 288:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 289:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 290:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 291:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 292:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 293:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 294:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 295:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 18
+
+
+ 296:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data );
+ 297:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 298:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 299:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 300:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 301:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 302:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 303:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 304:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 305:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 306:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 307:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 308:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 309:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 310:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 311:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 312:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 313:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 314:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value );
+ 315:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 316:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 317:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 318:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 319:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the Ethernet CRC calculation.
+ 320:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 321:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 322:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 323:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 324:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 325:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 326:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 327:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Finish( uint32_t crc );
+ 328:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 329:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 330:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 331:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 332:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the Ethernet CRC for the complete data block
+ 333:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 334:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 335:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 336:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 337:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 338:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 339:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 340:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data );
+ 341:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 342:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 343:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 344:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 345:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the platform CRC calculation
+ 346:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 347:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 348:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 349:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 350:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 351:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 352:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 19
+
+
+ 353:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Init( void )
+ 354:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 355:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 356:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Init();
+ 357:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 358:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Init();
+ 359:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 360:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 361:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 362:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Init( void );
+ 363:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 364:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 365:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 366:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 367:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a data block
+ 368:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 369:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 370:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 371:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 372:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 373:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 374:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 375:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 376:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 377:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 378:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 379:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 380:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 381:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 382:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 383:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data )
+ 384:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 385:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 386:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Update(crc, len, data );
+ 387:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Update(crc, len, data );
+ 389:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 390:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 391:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 392:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data );
+ 393:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 394:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 395:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 396:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 397:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a single byte
+ 398:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 399:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 400:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 401:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 402:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 403:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 404:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 405:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 406:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 407:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 408:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 409:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 20
+
+
+ 410:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 411:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value )
+ 412:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 413:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 414:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_UpdateByte(crc, value );
+ 415:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 416:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_UpdateByte(crc, value );
+ 417:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 418:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 419:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 420:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value );
+ 421:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 422:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 423:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 424:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 425:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the platform CRC calculation.
+ 426:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 427:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 428:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 429:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 430:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 431:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 432:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 433:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 434:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Finish( CRC_crc_t crc )
+ 435:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 436:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 437:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Finish( crc );
+ 438:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 439:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Finish( crc );
+ 440:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 441:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 442:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 443:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Finish( CRC_crc_t crc );
+ 444:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 445:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 446:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 447:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 448:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 449:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the platform CRC for the complete data block
+ 450:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 451:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 452:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 453:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 454:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 455:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 456:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 457:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 458:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Calc( uint32_t len, const uint8_t *data )
+ 376              		.loc 2 458 25 view .LVU90
+ 377              	.LBB35:
+ 459:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 460:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 461:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Calc(len, data );
+ 462:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 463:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Calc(len, data );
+ 378              		.loc 2 463 5 view .LVU91
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 21
+
+
+ 379              		.loc 2 463 12 is_stmt 0 view .LVU92
+ 380 0030 6420     		movs	r0, #100
+ 381              	.LVL27:
+ 382              		.loc 2 463 12 view .LVU93
+ 383 0032 FFF7FEFF 		bl	CRC_Ethernet_Calc
+ 384              	.LVL28:
+ 385              		.loc 2 463 12 view .LVU94
+ 386              	.LBE35:
+ 387              	.LBE34:
+ 164:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 388              		.loc 1 164 5 is_stmt 1 view .LVU95
+ 164:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+ 389              		.loc 1 164 5 is_stmt 0 view .LVU96
+ 390              	.LBE36:
+ 391              	.LBE44:
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 392              		.loc 1 124 91 view .LVU97
+ 393 0036 8442     		cmp	r4, r0
+ 394 0038 F3D0     		beq	.L22
+ 395              	.LVL29:
+ 396              	.L23:
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 397              		.loc 1 124 91 view .LVU98
+ 398 003a 0020     		movs	r0, #0
+ 399 003c F6E7     		b	.L18
+ 400              	.LVL30:
+ 401              	.L20:
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 402              		.loc 1 124 91 view .LVU99
+ 403 003e 051D     		adds	r5, r0, #4
+ 404 0040 6830     		adds	r0, r0, #104
+ 405              	.LVL31:
+ 124:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 406              		.loc 1 124 91 view .LVU100
+ 407 0042 0400     		movs	r4, r0
+ 408              	.LVL32:
+ 409              	.L27:
+ 410              	.LBB45:
+ 411              	.LBB43:
+ 412              	.LBB39:
+ 182:common/prog/firmware_update/BootManager/BootManagerModule.c ****             {
+ 413              		.loc 1 182 13 is_stmt 1 view .LVU101
+ 182:common/prog/firmware_update/BootManager/BootManagerModule.c ****             {
+ 414              		.loc 1 182 45 is_stmt 0 view .LVU102
+ 415 0044 2888     		ldrh	r0, [r5]
+ 182:common/prog/firmware_update/BootManager/BootManagerModule.c ****             {
+ 416              		.loc 1 182 16 view .LVU103
+ 417 0046 0D4B     		ldr	r3, .L33+4
+ 418 0048 9842     		cmp	r0, r3
+ 419 004a 11D0     		beq	.L25
+ 185:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 moduleHeader = MAL_PartitionToHeader(partition);
+ 420              		.loc 1 185 17 is_stmt 1 view .LVU104
+ 185:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 moduleHeader = MAL_PartitionToHeader(partition);
+ 421              		.loc 1 185 29 is_stmt 0 view .LVU105
+ 422 004c FFF7FEFF 		bl	MAL_GetMemModule
+ 423              	.LVL33:
+ 186:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 22
+
+
+ 424              		.loc 1 186 17 is_stmt 1 view .LVU106
+ 186:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 425              		.loc 1 186 32 is_stmt 0 view .LVU107
+ 426 0050 FFF7FEFF 		bl	MAL_PartitionToHeader
+ 427              	.LVL34:
+ 189:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 {
+ 428              		.loc 1 189 17 is_stmt 1 view .LVU108
+ 189:common/prog/firmware_update/BootManager/BootManagerModule.c ****                 {
+ 429              		.loc 1 189 20 is_stmt 0 view .LVU109
+ 430 0054 0028     		cmp	r0, #0
+ 431 0056 0BD0     		beq	.L25
+ 191:common/prog/firmware_update/BootManager/BootManagerModule.c ****                     {
+ 432              		.loc 1 191 21 is_stmt 1 view .LVU110
+ 433              	.LBB40:
+ 434              	.LBB41:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 435              		.loc 1 212 24 is_stmt 0 view .LVU111
+ 436 0058 2A00     		movs	r2, r5
+ 437 005a AB1C     		adds	r3, r5, #2
+ 438              	.LVL35:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 439              		.loc 1 212 24 view .LVU112
+ 440              	.LBE41:
+ 441              	.LBI40:
+ 210:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+ 442              		.loc 1 210 13 is_stmt 1 view .LVU113
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 443              		.loc 1 212 5 view .LVU114
+ 444              	.LBB42:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 445              		.loc 1 212 9 view .LVU115
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 446              		.loc 1 212 24 view .LVU116
+ 447 005c 1030     		adds	r0, r0, #16
+ 448              	.LVL36:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 449              		.loc 1 212 24 is_stmt 0 view .LVU117
+ 450 005e 0A32     		adds	r2, r2, #10
+ 451              	.LVL37:
+ 452              	.L26:
+ 214:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 453              		.loc 1 214 9 is_stmt 1 view .LVU118
+ 214:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 454              		.loc 1 214 11 is_stmt 0 view .LVU119
+ 455 0060 1E78     		ldrb	r6, [r3]
+ 456 0062 0178     		ldrb	r1, [r0]
+ 457 0064 8E42     		cmp	r6, r1
+ 458 0066 E8D1     		bne	.L23
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 459              		.loc 1 212 42 is_stmt 1 view .LVU120
+ 460              	.LVL38:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 461              		.loc 1 212 24 view .LVU121
+ 462 0068 0133     		adds	r3, r3, #1
+ 463              	.LVL39:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 464              		.loc 1 212 24 is_stmt 0 view .LVU122
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 23
+
+
+ 465 006a 0130     		adds	r0, r0, #1
+ 466 006c 9342     		cmp	r3, r2
+ 467 006e F7D1     		bne	.L26
+ 468              	.LVL40:
+ 469              	.L25:
+ 212:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 470              		.loc 1 212 24 view .LVU123
+ 471              	.LBE42:
+ 472              	.LBE40:
+ 179:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 473              		.loc 1 179 83 is_stmt 1 view .LVU124
+ 179:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 474              		.loc 1 179 50 view .LVU125
+ 475 0070 0A35     		adds	r5, r5, #10
+ 476              	.LVL41:
+ 179:common/prog/firmware_update/BootManager/BootManagerModule.c ****         {
+ 477              		.loc 1 179 50 is_stmt 0 view .LVU126
+ 478 0072 A542     		cmp	r5, r4
+ 479 0074 E6D1     		bne	.L27
+ 480 0076 D8E7     		b	.L21
+ 481              	.L34:
+ 482              		.align	2
+ 483              	.L33:
+ 484 0078 00000000 		.word	.LANCHOR0
+ 485 007c FFFF0000 		.word	65535
+ 486              	.LBE39:
+ 487              	.LBE43:
+ 488              	.LBE45:
+ 489              		.cfi_endproc
+ 490              	.LFE73:
+ 492              		.section	.text.BMMOD_isModuleIntegrityOk,"ax",%progbits
+ 493              		.align	1
+ 494              		.global	BMMOD_isModuleIntegrityOk
+ 495              		.syntax unified
+ 496              		.code	16
+ 497              		.thumb_func
+ 499              	BMMOD_isModuleIntegrityOk:
+ 500              	.LFB74:
+ 130:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_STARTABLE, FSF_BM_IS_MODULE_INTEGRITY_OK);
+ 501              		.loc 1 130 1 is_stmt 1 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 0
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 505              		.loc 1 131 5 view .LVU128
+ 506 0000 A021     		movs	r1, #160
+ 507 0002 8020     		movs	r0, #128
+ 130:common/prog/firmware_update/BootManager/BootManagerModule.c ****     FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_STARTABLE, FSF_BM_IS_MODULE_INTEGRITY_OK);
+ 508              		.loc 1 130 1 is_stmt 0 view .LVU129
+ 509 0004 10B5     		push	{r4, lr}
+ 510              	.LCFI5:
+ 511              		.cfi_def_cfa_offset 8
+ 512              		.cfi_offset 4, -8
+ 513              		.cfi_offset 14, -4
+ 131:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 514              		.loc 1 131 5 view .LVU130
+ 515 0006 C000     		lsls	r0, r0, #3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 24
+
+
+ 516 0008 C900     		lsls	r1, r1, #3
+ 517 000a FFF7FEFF 		bl	FSF_DoProgramCounterMonitoring
+ 518              	.LVL42:
+ 133:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 519              		.loc 1 133 5 is_stmt 1 view .LVU131
+ 520              	.LBB46:
+ 521              	.LBI46:
+ 522              		.file 3 "common/prog/firmware_update/mal/fwu_opt_bytes.h"
+   1:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /*******************************************************************************
+   2:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   5:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   9:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *******************************************************************************
+  10:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  PROJECT          Firmware Update
+  11:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  ******************************************************************************/
+  12:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  13:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  14:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifndef FIRMWAREUPDATE_H
+  15:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #define FIRMWAREUPDATE_H
+  16:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  17:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef __cplusplus
+  18:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern "C" {
+  19:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  20:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  21:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  22:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  23:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  25:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \file
+  26:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  27:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \brief    Public definitions for FWU option bytes
+  28:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  29:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  A detailed file description that may span several lines
+  30:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            and that has to be terminated by an empty line.
+  31:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  32:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  33:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  34:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  35:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  36:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* INCLUDES                                                                   */
+  37:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  38:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+  39:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+  40:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #include "firmware_update/mal/moduleAdministration.h"
+  41:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  42:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  43:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  44:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for integrity check configuration */
+  45:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_integrityConfig
+  46:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  47:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_ENABLE       = MAL_ENABLE_DEF,
+  48:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF,
+  49:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_DISABLE_CALC = MAL_DISABLE_CALC_DEF
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 25
+
+
+  50:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  51:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  52:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for compatibility check configuration */
+  53:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_compatibilityConfig
+  54:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  55:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_ENABLE       = MAL_ENABLE_DEF,
+  56:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF
+  57:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  58:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  59:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for reserved opt. byte */
+  60:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_ReservedConfig
+  61:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  62:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_RESERVED       = MAL_RESERVED_DEF
+  63:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  64:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  65:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    struct for FWU option bytes */
+  66:common/prog/firmware_update/mal/fwu_opt_bytes.h **** struct MAL_FwuOptBytes_s
+  67:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  68:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_integrityConfig      integrityConfig;     ///< Opt. byte for integrity
+  69:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_compatibilityConfig  compatibilityConfig; ///< Opt. byte for compatibility
+  70:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_ReservedConfig       reserved[2];
+  71:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  72:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  73:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  74:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern const struct MAL_FwuOptBytes_s MAL_FwuOptBytes;
+  75:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  76:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  77:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Integrity Configuration variable
+  78:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  79:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of integrityConfig variable is to enable/disable/suppress integrity checks
+  80:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            CRC calculation (FS ROM check)
+  81:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  82:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_INTEGRITY_ENABLE: integrity check is enabled
+  83:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is exec
+  84:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+  85:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+  87:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.integrityConfig;
+  89:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+  90:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  91:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Compatibility Configuration variable
+  92:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  93:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of compatibilityConfig variable is to enable/disable/suppress compatibility c
+  94:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            firmware Id validation
+  95:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  96:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_COMPATIBILITY_ENABLE: compatibility check is enabled
+  97:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_COMPATIBILITY_IGNORE_ERROR: compatibility check errors is ignored
+  98:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  99:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_compatibilityConfig MAL_getCompatibilityOpt(void)
+ 100:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 101:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.compatibilityConfig;
+ 102:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 103:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 104:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 105:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns true/false if Integrity check calculation is disabled or not
+ 106:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 26
+
+
+ 107:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  For FWU1 (WIRED_FIRMWARE_UPDATE) there is available only integrity check (CRC)
+ 108:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            There is no BootManager binary where are stored default FWU opt bytes
+ 109:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            which are used in RELEASE case.
+ 110:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            From this reason we must handle it via NDEBUG(RELEASE) switch.
+ 111:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 112:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   true:  calculation is disabled
+ 113:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            false: calculation is enabled
+ 114:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+ 115:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline bool FWU_isIntegCheckDisabledCalc(void)
+ 523              		.loc 3 115 20 view .LVU132
+ 116:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 117:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+ 118:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_DISABLE_CALC) ? true : false);
+ 524              		.loc 3 118 5 view .LVU133
+ 525              	.LBB47:
+ 526              	.LBI47:
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 527              		.loc 3 86 40 view .LVU134
+ 528              	.LBB48:
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 529              		.loc 3 88 5 view .LVU135
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 530              		.loc 3 88 27 is_stmt 0 view .LVU136
+ 531 000e 054B     		ldr	r3, .L39
+ 532              	.LBE48:
+ 533              	.LBE47:
+ 534              	.LBE46:
+ 136:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 535              		.loc 1 136 16 view .LVU137
+ 536 0010 0120     		movs	r0, #1
+ 133:common/prog/firmware_update/BootManager/BootManagerModule.c ****     {
+ 537              		.loc 1 133 7 view .LVU138
+ 538 0012 1B78     		ldrb	r3, [r3]
+ 539 0014 DC2B     		cmp	r3, #220
+ 540 0016 03D0     		beq	.L36
+ 140:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 541              		.loc 1 140 9 is_stmt 1 view .LVU139
+ 140:common/prog/firmware_update/BootManager/BootManagerModule.c ****     }
+ 542              		.loc 1 140 16 is_stmt 0 view .LVU140
+ 543 0018 034B     		ldr	r3, .L39+4
+ 544 001a 1868     		ldr	r0, [r3]
+ 545 001c FFF7FEFF 		bl	MAL_isModuleIntegrityOk
+ 546              	.LVL43:
+ 547              	.L36:
+ 142:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+ 548              		.loc 1 142 1 view .LVU141
+ 549              		@ sp needed
+ 550 0020 10BD     		pop	{r4, pc}
+ 551              	.L40:
+ 552 0022 C046     		.align	2
+ 553              	.L39:
+ 554 0024 00000000 		.word	MAL_FwuOptBytes
+ 555 0028 00000000 		.word	.LANCHOR0
+ 556              		.cfi_endproc
+ 557              	.LFE74:
+ 559              		.section	.bss.BMMOD_header,"aw",%nobits
+ 560              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccQEW59t.s 			page 27
+
+
+ 561              		.set	.LANCHOR1,. + 0
+ 564              	BMMOD_header:
+ 565 0000 00000000 		.space	4
+ 566              		.section	.bss.BMMOD_partition,"aw",%nobits
+ 567              		.align	2
+ 568              		.set	.LANCHOR0,. + 0
+ 571              	BMMOD_partition:
+ 572 0000 00000000 		.space	4
+ 573              		.text
+ 574              	.Letext0:
+ 575              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\lib\\gcc\\arm-none-eabi\\11.3.1\\i
+ 576              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 577              		.file 6 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 578              		.file 7 "common/prog/std_lib/std_version.h"
+ 579              		.file 8 "common/prog/firmware_update/version/fwu_version.h"
+ 580              		.file 9 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 581              		.file 10 "common/prog/firmware_update/mal/moduleAdministration.h"
+ 582              		.file 11 "common/prog/FuncSafe/fs_psm.h"
+ 583              		.file 12 "common/prog/MSP/armCmx/IntTblArmCM.h"
+ 584              		.file 13 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 585              		.file 14 "common/prog/firmware_update/otp_mem/fwu_otp_memory.h"

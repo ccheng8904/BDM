@@ -1,0 +1,1241 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"StdCrc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.CRC_Ccitt_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	CRC_Ccitt_Init
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	CRC_Ccitt_Init:
+  25              	.LFB57:
+  26              		.file 1 "common/prog/ped_fw/stdcrc/sh30f/StdCrc.c"
+   1:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*******************************************************************************
+   2:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *
+   5:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *
+   9:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *******************************************************************************
+  10:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *   PROJECT          PED Framework
+  11:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *   MODULE-PREFIX    CRC
+  12:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  ******************************************************************************/
+  13:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  14:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  15:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  17:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /** \file  StdCrc.c
+  18:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * 
+  19:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *  \brief Implementation of StdCrc for SH30F9X71.
+  20:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  */
+  21:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  22:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  23:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  24:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* INCLUDES                                                                   */
+  25:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  26:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include "bsh_stdinc.h"
+  27:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include <stdint.h>
+  28:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include <stdbool.h>
+  29:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include "StdCrc.h"
+  30:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include "CrcCom.h"
+  31:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #include "processor.h"
+  32:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 2
+
+
+  33:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  34:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* PRIVATE DEFINITIONS                                                        */
+  35:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  36:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #define CRC_DATA        CRC0->DR
+  37:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #define CRC_DR_BYTE    *((volatile uint8_t *)&(CRC0->DR))
+  38:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** static const uint32_t CRC_WordAlignBytes = 0x04U; ///< Alignment in bytes for a 32-Bit Word
+  39:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  40:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /** Settings for control register in CITT mode:   16bit polynomial,    no revin,            no revo
+  41:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  42:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #define CRC_CCITT_CTR_INIT                      (((uint32_t)CRC_MODE_CITT << CRC_CR_MODE_Pos)| ((ui
+  43:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  44:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /** Settings for control register in Eternet mode: 32bit polynomial,   read revin by bit,          
+  45:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  46:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** #define CRC_ETHERNET_CTR_INIT                   (((uint32_t)CRC_MODE_32 << CRC_CR_MODE_Pos) | ((uin
+  47:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  48:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  49:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* LOCAL FUNCTION DEFINITION                                                  */
+  50:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  51:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*lint -save -e9044 -e9049 -e928
+  52:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****    9044: function parameter modified (misra advisory)
+  53:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****    9049: increment/decrement operation combined with other operation (misra advisory)
+  54:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****    928:  explicit cast from 'volatile uint32_t *'to 'volatile uint8_t *'(misra advisory)
+  55:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** */
+  56:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  57:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  58:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*!
+  59:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * \brief
+  60:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * Check if an byte pointer has word alignment or not
+  61:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *
+  62:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * This interface may be used to check the alignment of a byte pointer before casting it to a word 
+  63:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * Usually is not allowed to cast a pointer to another with a stricter alignment. When this check r
+  64:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * \param[in] date: pointer to check
+  65:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  *
+  66:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  * \return true if data has word alignment
+  67:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  */
+  68:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** static bool CRC_isWordAligned(const uint8_t *data)
+  69:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+  70:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /*lint -e{923}  cast is allowed as uintptr_t can hold address of pointer (C99) */
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return ( ( (uintptr_t)data % CRC_WordAlignBytes ) == 0U ) ? (true) : (false);
+  72:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+  73:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  74:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  75:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** static void CRC_triggerWatchDogTimer(void)
+  76:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     IWDT->CLR = 0xAAAAU;
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+  79:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+  80:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  81:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  82:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  83:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /******************************************************************************/
+  84:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*Axivion Disable MisraC2012-8.7 : Routine can be declared static in primary file. */
+  85:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_Init( void )
+  86:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+  27              		.loc 1 86 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 3
+
+
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  87:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Unlock RCC registers */
+  88:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC_REGS_UNLOCK();
+  32              		.loc 1 88 5 view .LVU1
+  33 0000 074B     		ldr	r3, .L2
+  34 0002 084A     		ldr	r2, .L2+4
+  89:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+  90:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Lock RCC registers */
+  91:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC_REGS_LOCK();
+  92:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT          = CRC_CCITT_INIT;
+  35              		.loc 1 92 25 is_stmt 0 view .LVU2
+  36 0004 0848     		ldr	r0, .L2+8
+  88:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+  37              		.loc 1 88 5 view .LVU3
+  38 0006 5A63     		str	r2, [r3, #52]
+  89:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+  39              		.loc 1 89 5 is_stmt 1 view .LVU4
+  89:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+  40              		.loc 1 89 24 is_stmt 0 view .LVU5
+  41 0008 0422     		movs	r2, #4
+  93:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  94:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_CCITT_INIT;
+  95:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+  42              		.loc 1 95 1 view .LVU6
+  43              		@ sp needed
+  89:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Lock RCC registers */
+  44              		.loc 1 89 24 view .LVU7
+  45 000a 196A     		ldr	r1, [r3, #32]
+  46 000c 0A43     		orrs	r2, r1
+  47 000e 1A62     		str	r2, [r3, #32]
+  91:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT          = CRC_CCITT_INIT;
+  48              		.loc 1 91 5 is_stmt 1 view .LVU8
+  49 0010 0022     		movs	r2, #0
+  50 0012 5A63     		str	r2, [r3, #52]
+  92:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  51              		.loc 1 92 5 view .LVU9
+  92:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  52              		.loc 1 92 25 is_stmt 0 view .LVU10
+  53 0014 054B     		ldr	r3, .L2+12
+  93:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_CCITT_INIT;
+  54              		.loc 1 93 25 view .LVU11
+  55 0016 064A     		ldr	r2, .L2+16
+  92:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  56              		.loc 1 92 25 view .LVU12
+  57 0018 9860     		str	r0, [r3, #8]
+  93:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_CCITT_INIT;
+  58              		.loc 1 93 5 is_stmt 1 view .LVU13
+  93:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_CCITT_INIT;
+  59              		.loc 1 93 25 is_stmt 0 view .LVU14
+  60 001a 5A60     		str	r2, [r3, #4]
+  94:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+  61              		.loc 1 94 5 is_stmt 1 view .LVU15
+  62              		.loc 1 95 1 is_stmt 0 view .LVU16
+  63 001c 7047     		bx	lr
+  64              	.L3:
+  65 001e C046     		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 4
+
+
+  66              	.L2:
+  67 0020 00080440 		.word	1074006016
+  68 0024 CC330000 		.word	13260
+  69 0028 FFFF0000 		.word	65535
+  70 002c 00100440 		.word	1074008064
+  71 0030 01020000 		.word	513
+  72              		.cfi_endproc
+  73              	.LFE57:
+  75              		.section	.text.CRC_Ccitt_UpdateByte,"ax",%progbits
+  76              		.align	1
+  77              		.global	CRC_Ccitt_UpdateByte
+  78              		.syntax unified
+  79              		.code	16
+  80              		.thumb_func
+  82              	CRC_Ccitt_UpdateByte:
+  83              	.LVL0:
+  84              	.LFB58:
+  96:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+  97:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+  98:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value )
+  99:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+  85              		.loc 1 99 1 is_stmt 1 view -0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89              		@ link register save eliminated.
+ 100:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT = crc;
+  90              		.loc 1 100 5 view .LVU18
+  91              		.loc 1 100 16 is_stmt 0 view .LVU19
+  92 0000 034B     		ldr	r3, .L5
+ 101:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+  93              		.loc 1 101 25 view .LVU20
+  94 0002 044A     		ldr	r2, .L5+4
+ 100:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT = crc;
+  95              		.loc 1 100 16 view .LVU21
+  96 0004 9860     		str	r0, [r3, #8]
+  97              		.loc 1 101 5 is_stmt 1 view .LVU22
+  98              		.loc 1 101 25 is_stmt 0 view .LVU23
+  99 0006 5A60     		str	r2, [r3, #4]
+ 102:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_DR_BYTE = value;
+ 100              		.loc 1 102 5 is_stmt 1 view .LVU24
+ 101              		.loc 1 102 17 is_stmt 0 view .LVU25
+ 102 0008 1970     		strb	r1, [r3]
+ 103:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return (uint16_t)CRC_DATA;
+ 103              		.loc 1 103 5 is_stmt 1 view .LVU26
+ 104              		.loc 1 103 22 is_stmt 0 view .LVU27
+ 105 000a 1868     		ldr	r0, [r3]
+ 106              	.LVL1:
+ 104:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 107              		.loc 1 104 1 view .LVU28
+ 108              		@ sp needed
+ 103:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return (uint16_t)CRC_DATA;
+ 109              		.loc 1 103 12 view .LVU29
+ 110 000c 80B2     		uxth	r0, r0
+ 111              		.loc 1 104 1 view .LVU30
+ 112 000e 7047     		bx	lr
+ 113              	.L6:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 5
+
+
+ 114              		.align	2
+ 115              	.L5:
+ 116 0010 00100440 		.word	1074008064
+ 117 0014 01020000 		.word	513
+ 118              		.cfi_endproc
+ 119              	.LFE58:
+ 121              		.section	.text.CRC_Ccitt_UpdateByteFast,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	CRC_Ccitt_UpdateByteFast
+ 124              		.syntax unified
+ 125              		.code	16
+ 126              		.thumb_func
+ 128              	CRC_Ccitt_UpdateByteFast:
+ 129              	.LFB69:
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 133              		@ link register save eliminated.
+ 134 0000 034B     		ldr	r3, .L8
+ 135 0002 044A     		ldr	r2, .L8+4
+ 136 0004 9860     		str	r0, [r3, #8]
+ 137 0006 5A60     		str	r2, [r3, #4]
+ 138 0008 1970     		strb	r1, [r3]
+ 139 000a 1868     		ldr	r0, [r3]
+ 140              		@ sp needed
+ 141 000c 80B2     		uxth	r0, r0
+ 142 000e 7047     		bx	lr
+ 143              	.L9:
+ 144              		.align	2
+ 145              	.L8:
+ 146 0010 00100440 		.word	1074008064
+ 147 0014 01020000 		.word	513
+ 148              		.cfi_endproc
+ 149              	.LFE69:
+ 151              		.section	.text.CRC_Ccitt_Update,"ax",%progbits
+ 152              		.align	1
+ 153              		.global	CRC_Ccitt_Update
+ 154              		.syntax unified
+ 155              		.code	16
+ 156              		.thumb_func
+ 158              	CRC_Ccitt_Update:
+ 159              	.LVL2:
+ 160              	.LFB60:
+ 105:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 106:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 107:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* same implementation as CRC_Ccitt_UpdateByte */
+ 108:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value )
+ 109:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 110:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT = crc;
+ 111:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+ 112:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_DR_BYTE = value;
+ 113:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return (uint16_t)CRC_DATA;
+ 114:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 115:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 116:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 117:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 118:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data )
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 6
+
+
+ 119:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 161              		.loc 1 119 1 is_stmt 1 view -0
+ 162              		.cfi_startproc
+ 163              		@ args = 0, pretend = 0, frame = 0
+ 164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT = crc;
+ 165              		.loc 1 120 5 view .LVU32
+ 166              		.loc 1 120 16 is_stmt 0 view .LVU33
+ 167 0000 124B     		ldr	r3, .L15
+ 119:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT = crc;
+ 168              		.loc 1 119 1 view .LVU34
+ 169 0002 F0B5     		push	{r4, r5, r6, r7, lr}
+ 170              	.LCFI0:
+ 171              		.cfi_def_cfa_offset 20
+ 172              		.cfi_offset 4, -20
+ 173              		.cfi_offset 5, -16
+ 174              		.cfi_offset 6, -12
+ 175              		.cfi_offset 7, -8
+ 176              		.cfi_offset 14, -4
+ 177              		.loc 1 120 16 view .LVU35
+ 178 0004 9860     		str	r0, [r3, #8]
+ 121:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_CCITT_CTR_INIT;
+ 179              		.loc 1 121 5 is_stmt 1 view .LVU36
+ 180              		.loc 1 121 25 is_stmt 0 view .LVU37
+ 181 0006 1248     		ldr	r0, .L15+4
+ 182              	.LVL3:
+ 183              	.LBB13:
+ 184              	.LBB14:
+ 185              	.LBB15:
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 186              		.loc 1 77 15 view .LVU38
+ 187 0008 124D     		ldr	r5, .L15+8
+ 188              	.LBE15:
+ 189              	.LBE14:
+ 190              	.LBE13:
+ 191              		.loc 1 121 25 view .LVU39
+ 192 000a 5860     		str	r0, [r3, #4]
+ 122:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* optimised for speed by reducing branches and loop decrement*/
+ 123:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for(uint32_t length = len / sizeof(uint32_t); length > 0U; length--)
+ 193              		.loc 1 123 5 is_stmt 1 view .LVU40
+ 194              	.LBB20:
+ 195              		.loc 1 123 9 view .LVU41
+ 196              	.LVL4:
+ 197              		.loc 1 123 18 is_stmt 0 view .LVU42
+ 198 000c 8808     		lsrs	r0, r1, #2
+ 199              	.LVL5:
+ 200              		.loc 1 123 18 view .LVU43
+ 201 000e 8000     		lsls	r0, r0, #2
+ 202              	.LVL6:
+ 203              	.LBB18:
+ 204              	.LBB16:
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 205              		.loc 1 78 15 view .LVU44
+ 206 0010 114E     		ldr	r6, .L15+12
+ 207 0012 124F     		ldr	r7, .L15+16
+ 208 0014 1018     		adds	r0, r2, r0
+ 209              	.LVL7:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 7
+
+
+ 210              	.L11:
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 211              		.loc 1 78 15 view .LVU45
+ 212              	.LBE16:
+ 213              	.LBE18:
+ 214              		.loc 1 123 58 is_stmt 1 discriminator 1 view .LVU46
+ 215 0016 8242     		cmp	r2, r0
+ 216 0018 07D1     		bne	.L12
+ 217              		.loc 1 123 58 is_stmt 0 discriminator 1 view .LVU47
+ 218              	.LBE20:
+ 124:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 125:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         /* Hint: Word writing seems not to be possible with CCITT polynom */
+ 126:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_triggerWatchDogTimer();
+ 127:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 128:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 129:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 130:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 131:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 132:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 133:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Handle unaligned data at buffer end */
+ 134:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for(uint32_t length = len % sizeof(uint32_t); length > 0U; length--)
+ 219              		.loc 1 134 5 is_stmt 1 view .LVU48
+ 220              	.LBB21:
+ 221              		.loc 1 134 9 view .LVU49
+ 222              	.LVL8:
+ 223              		.loc 1 134 18 is_stmt 0 view .LVU50
+ 224 001a 0320     		movs	r0, #3
+ 225 001c 0140     		ands	r1, r0
+ 226              	.LVL9:
+ 227              		.loc 1 134 18 view .LVU51
+ 228 001e 8918     		adds	r1, r1, r2
+ 229              	.LVL10:
+ 230              	.L13:
+ 231              		.loc 1 134 58 is_stmt 1 discriminator 1 view .LVU52
+ 232 0020 8A42     		cmp	r2, r1
+ 233 0022 0FD1     		bne	.L14
+ 234              	.LBE21:
+ 135:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 136:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 137:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 138:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 139:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return (uint16_t)CRC_DATA;
+ 235              		.loc 1 139 5 view .LVU53
+ 140:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 236              		.loc 1 140 1 is_stmt 0 view .LVU54
+ 237              		@ sp needed
+ 139:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 238              		.loc 1 139 22 view .LVU55
+ 239 0024 1868     		ldr	r0, [r3]
+ 139:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 240              		.loc 1 139 12 view .LVU56
+ 241 0026 80B2     		uxth	r0, r0
+ 242              		.loc 1 140 1 view .LVU57
+ 243 0028 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 244              	.LVL11:
+ 245              	.L12:
+ 246              	.LBB22:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 8
+
+
+ 126:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 247              		.loc 1 126 9 is_stmt 1 view .LVU58
+ 248              	.LBB19:
+ 249              	.LBI14:
+  75:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 250              		.loc 1 75 13 view .LVU59
+ 251              	.LBB17:
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 252              		.loc 1 77 5 view .LVU60
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 253              		.loc 1 77 15 is_stmt 0 view .LVU61
+ 254 002a 0D4C     		ldr	r4, .L15+20
+ 255 002c 6560     		str	r5, [r4, #4]
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 256              		.loc 1 78 5 is_stmt 1 view .LVU62
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 257              		.loc 1 78 15 is_stmt 0 view .LVU63
+ 258 002e B760     		str	r7, [r6, #8]
+ 259              	.LBE17:
+ 260              	.LBE19:
+ 127:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 261              		.loc 1 127 9 is_stmt 1 view .LVU64
+ 262              	.LVL12:
+ 127:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 263              		.loc 1 127 23 is_stmt 0 view .LVU65
+ 264 0030 1478     		ldrb	r4, [r2]
+ 127:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 265              		.loc 1 127 21 view .LVU66
+ 266 0032 1C70     		strb	r4, [r3]
+ 128:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 267              		.loc 1 128 9 is_stmt 1 view .LVU67
+ 268              	.LVL13:
+ 128:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 269              		.loc 1 128 23 is_stmt 0 view .LVU68
+ 270 0034 5478     		ldrb	r4, [r2, #1]
+ 128:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 271              		.loc 1 128 21 view .LVU69
+ 272 0036 1C70     		strb	r4, [r3]
+ 129:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 273              		.loc 1 129 9 is_stmt 1 view .LVU70
+ 274              	.LVL14:
+ 129:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 275              		.loc 1 129 23 is_stmt 0 view .LVU71
+ 276 0038 9478     		ldrb	r4, [r2, #2]
+ 129:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *data++;
+ 277              		.loc 1 129 21 view .LVU72
+ 278 003a 1C70     		strb	r4, [r3]
+ 130:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 279              		.loc 1 130 9 is_stmt 1 view .LVU73
+ 280              	.LVL15:
+ 130:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 281              		.loc 1 130 23 is_stmt 0 view .LVU74
+ 282 003c D478     		ldrb	r4, [r2, #3]
+ 283 003e 0432     		adds	r2, r2, #4
+ 284              	.LVL16:
+ 130:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 285              		.loc 1 130 21 view .LVU75
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 9
+
+
+ 286 0040 1C70     		strb	r4, [r3]
+ 123:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 287              		.loc 1 123 70 is_stmt 1 view .LVU76
+ 288 0042 E8E7     		b	.L11
+ 289              	.LVL17:
+ 290              	.L14:
+ 123:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 291              		.loc 1 123 70 is_stmt 0 view .LVU77
+ 292              	.LBE22:
+ 293              	.LBB23:
+ 136:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 294              		.loc 1 136 9 is_stmt 1 discriminator 3 view .LVU78
+ 136:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 295              		.loc 1 136 23 is_stmt 0 discriminator 3 view .LVU79
+ 296 0044 1078     		ldrb	r0, [r2]
+ 297 0046 0132     		adds	r2, r2, #1
+ 298              	.LVL18:
+ 136:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 299              		.loc 1 136 21 discriminator 3 view .LVU80
+ 300 0048 1870     		strb	r0, [r3]
+ 134:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 301              		.loc 1 134 70 is_stmt 1 discriminator 3 view .LVU81
+ 302              	.LVL19:
+ 134:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 303              		.loc 1 134 70 is_stmt 0 discriminator 3 view .LVU82
+ 304 004a E9E7     		b	.L13
+ 305              	.L16:
+ 306              		.align	2
+ 307              	.L15:
+ 308 004c 00100440 		.word	1074008064
+ 309 0050 01020000 		.word	513
+ 310 0054 AAAA0000 		.word	43690
+ 311 0058 003C0040 		.word	1073757184
+ 312 005c 55550000 		.word	21845
+ 313 0060 00380040 		.word	1073756160
+ 314              	.LBE23:
+ 315              		.cfi_endproc
+ 316              	.LFE60:
+ 318              		.section	.text.CRC_Ccitt_Finish,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	CRC_Ccitt_Finish
+ 321              		.syntax unified
+ 322              		.code	16
+ 323              		.thumb_func
+ 325              	CRC_Ccitt_Finish:
+ 326              	.LVL20:
+ 327              	.LFB61:
+ 141:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /* Axivion Enable Style MisraC2012-8.7 */ 
+ 142:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 143:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 144:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 145:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 146:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_Finish( uint16_t crc )
+ 147:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 328              		.loc 1 147 1 is_stmt 1 view -0
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 10
+
+
+ 331              		@ frame_needed = 0, uses_anonymous_args = 0
+ 332              		@ link register save eliminated.
+ 148:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return crc; // nothing to do for CCITT CRC
+ 333              		.loc 1 148 5 view .LVU84
+ 149:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 334              		.loc 1 149 1 is_stmt 0 view .LVU85
+ 335              		@ sp needed
+ 336 0000 7047     		bx	lr
+ 337              		.cfi_endproc
+ 338              	.LFE61:
+ 340              		.section	.text.CRC_Ccitt_Calc,"ax",%progbits
+ 341              		.align	1
+ 342              		.global	CRC_Ccitt_Calc
+ 343              		.syntax unified
+ 344              		.code	16
+ 345              		.thumb_func
+ 347              	CRC_Ccitt_Calc:
+ 348              	.LVL21:
+ 349              	.LFB62:
+ 150:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 151:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 152:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data )
+ 153:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 350              		.loc 1 153 1 is_stmt 1 view -0
+ 351              		.cfi_startproc
+ 352              		@ args = 0, pretend = 0, frame = 0
+ 353              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint16_t crc;
+ 354              		.loc 1 154 5 view .LVU87
+ 155:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 156:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ccitt_Init();
+ 355              		.loc 1 156 5 view .LVU88
+ 153:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint16_t crc;
+ 356              		.loc 1 153 1 is_stmt 0 view .LVU89
+ 357 0000 70B5     		push	{r4, r5, r6, lr}
+ 358              	.LCFI1:
+ 359              		.cfi_def_cfa_offset 16
+ 360              		.cfi_offset 4, -16
+ 361              		.cfi_offset 5, -12
+ 362              		.cfi_offset 6, -8
+ 363              		.cfi_offset 14, -4
+ 153:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint16_t crc;
+ 364              		.loc 1 153 1 view .LVU90
+ 365 0002 0D00     		movs	r5, r1
+ 157:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ccitt_Update( crc, len, data );
+ 158:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     // Hint: CRC_Ccitt_Finish not required for CCITT
+ 159:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return crc;
+ 160:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 366              		.loc 1 160 1 view .LVU91
+ 367              		@ sp needed
+ 153:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint16_t crc;
+ 368              		.loc 1 153 1 view .LVU92
+ 369 0004 0400     		movs	r4, r0
+ 156:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ccitt_Update( crc, len, data );
+ 370              		.loc 1 156 11 view .LVU93
+ 371 0006 FFF7FEFF 		bl	CRC_Ccitt_Init
+ 372              	.LVL22:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 11
+
+
+ 157:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ccitt_Update( crc, len, data );
+ 373              		.loc 1 157 5 is_stmt 1 view .LVU94
+ 157:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ccitt_Update( crc, len, data );
+ 374              		.loc 1 157 11 is_stmt 0 view .LVU95
+ 375 000a 2A00     		movs	r2, r5
+ 376 000c 2100     		movs	r1, r4
+ 377 000e FFF7FEFF 		bl	CRC_Ccitt_Update
+ 378              	.LVL23:
+ 159:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 379              		.loc 1 159 5 is_stmt 1 view .LVU96
+ 380              	.LVL24:
+ 381              	.LVL25:
+ 382              		.loc 1 160 1 is_stmt 0 view .LVU97
+ 383 0012 70BD     		pop	{r4, r5, r6, pc}
+ 384              		.cfi_endproc
+ 385              	.LFE62:
+ 387              		.section	.text.CRC_Ethernet_Init,"ax",%progbits
+ 388              		.align	1
+ 389              		.global	CRC_Ethernet_Init
+ 390              		.syntax unified
+ 391              		.code	16
+ 392              		.thumb_func
+ 394              	CRC_Ethernet_Init:
+ 395              	.LFB63:
+ 161:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 162:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 163:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*************************** Ethernet Interfaces *****************************/
+ 164:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 165:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint32_t CRC_Ethernet_Init( void )
+ 166:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 396              		.loc 1 166 1 is_stmt 1 view -0
+ 397              		.cfi_startproc
+ 398              		@ args = 0, pretend = 0, frame = 0
+ 399              		@ frame_needed = 0, uses_anonymous_args = 0
+ 400              		@ link register save eliminated.
+ 167:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Unlock RCC registers */
+ 168:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC_REGS_UNLOCK();
+ 401              		.loc 1 168 5 view .LVU99
+ 402 0000 074B     		ldr	r3, .L20
+ 403 0002 084A     		ldr	r2, .L20+4
+ 169:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+ 170:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Lock RCC registers */
+ 171:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC_REGS_LOCK();
+ 172:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT          = CRC_ETHERNET_INIT;
+ 404              		.loc 1 172 25 is_stmt 0 view .LVU100
+ 405 0004 0120     		movs	r0, #1
+ 173:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 174:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_ETHERNET_INIT;
+ 175:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 406              		.loc 1 175 1 view .LVU101
+ 407              		@ sp needed
+ 168:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+ 408              		.loc 1 168 5 view .LVU102
+ 409 0006 5A63     		str	r2, [r3, #52]
+ 169:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+ 410              		.loc 1 169 5 is_stmt 1 view .LVU103
+ 169:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     RCC->AHBENR.V32    |= (uint32_t)RCC_AHB_CRC;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 12
+
+
+ 411              		.loc 1 169 24 is_stmt 0 view .LVU104
+ 412 0008 0422     		movs	r2, #4
+ 413 000a 196A     		ldr	r1, [r3, #32]
+ 172:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 414              		.loc 1 172 25 view .LVU105
+ 415 000c 4042     		rsbs	r0, r0, #0
+ 169:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* Lock RCC registers */
+ 416              		.loc 1 169 24 view .LVU106
+ 417 000e 0A43     		orrs	r2, r1
+ 418 0010 1A62     		str	r2, [r3, #32]
+ 171:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT          = CRC_ETHERNET_INIT;
+ 419              		.loc 1 171 5 is_stmt 1 view .LVU107
+ 420 0012 0022     		movs	r2, #0
+ 421 0014 5A63     		str	r2, [r3, #52]
+ 172:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 422              		.loc 1 172 5 view .LVU108
+ 172:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 423              		.loc 1 172 25 is_stmt 0 view .LVU109
+ 424 0016 044B     		ldr	r3, .L20+8
+ 173:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_ETHERNET_INIT;
+ 425              		.loc 1 173 25 view .LVU110
+ 426 0018 044A     		ldr	r2, .L20+12
+ 172:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 427              		.loc 1 172 25 view .LVU111
+ 428 001a 9860     		str	r0, [r3, #8]
+ 173:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_ETHERNET_INIT;
+ 429              		.loc 1 173 5 is_stmt 1 view .LVU112
+ 173:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_ETHERNET_INIT;
+ 430              		.loc 1 173 25 is_stmt 0 view .LVU113
+ 431 001c 5A60     		str	r2, [r3, #4]
+ 174:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 432              		.loc 1 174 5 is_stmt 1 view .LVU114
+ 433              		.loc 1 175 1 is_stmt 0 view .LVU115
+ 434 001e 7047     		bx	lr
+ 435              	.L21:
+ 436              		.align	2
+ 437              	.L20:
+ 438 0020 00080440 		.word	1074006016
+ 439 0024 CC330000 		.word	13260
+ 440 0028 00100440 		.word	1074008064
+ 441 002c 01C80000 		.word	51201
+ 442              		.cfi_endproc
+ 443              	.LFE63:
+ 445              		.section	.text.CRC_Ethernet_UpdateByte,"ax",%progbits
+ 446              		.align	1
+ 447              		.global	CRC_Ethernet_UpdateByte
+ 448              		.syntax unified
+ 449              		.code	16
+ 450              		.thumb_func
+ 452              	CRC_Ethernet_UpdateByte:
+ 453              	.LVL26:
+ 454              	.LFB64:
+ 176:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 177:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 178:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value )
+ 179:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** { 
+ 455              		.loc 1 179 1 is_stmt 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 13
+
+
+ 456              		.cfi_startproc
+ 457              		@ args = 0, pretend = 0, frame = 0
+ 458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 459              		@ link register save eliminated.
+ 180:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  /* The following two lines would be required, if another CRC is calculated in parallel
+ 181:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     it will crash. Omitted to make the HW calculation not slower than a SW CRC!
+ 182:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     Compare implementation CRC_Ethernet_Update()
+ 183:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_INIT = crc;
+ 184:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_INIT = CRC_DR;
+ 185:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****  */
+ 186:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     (void)crc;
+ 460              		.loc 1 186 5 view .LVU117
+ 187:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_DR_BYTE = value;
+ 461              		.loc 1 187 5 view .LVU118
+ 462              		.loc 1 187 17 is_stmt 0 view .LVU119
+ 463 0000 014B     		ldr	r3, .L23
+ 188:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_DATA;
+ 189:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 464              		.loc 1 189 1 view .LVU120
+ 465              		@ sp needed
+ 187:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC_DR_BYTE = value;
+ 466              		.loc 1 187 17 view .LVU121
+ 467 0002 1970     		strb	r1, [r3]
+ 188:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_DATA;
+ 468              		.loc 1 188 5 is_stmt 1 view .LVU122
+ 188:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_DATA;
+ 469              		.loc 1 188 12 is_stmt 0 view .LVU123
+ 470 0004 1868     		ldr	r0, [r3]
+ 471              	.LVL27:
+ 472              		.loc 1 189 1 view .LVU124
+ 473 0006 7047     		bx	lr
+ 474              	.L24:
+ 475              		.align	2
+ 476              	.L23:
+ 477 0008 00100440 		.word	1074008064
+ 478              		.cfi_endproc
+ 479              	.LFE64:
+ 481              		.section	.text.CRC_Ethernet_Update,"ax",%progbits
+ 482              		.align	1
+ 483              		.global	CRC_Ethernet_Update
+ 484              		.syntax unified
+ 485              		.code	16
+ 486              		.thumb_func
+ 488              	CRC_Ethernet_Update:
+ 489              	.LVL28:
+ 490              	.LFB65:
+ 190:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 191:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 192:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data )
+ 193:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 491              		.loc 1 193 1 is_stmt 1 view -0
+ 492              		.cfi_startproc
+ 493              		@ args = 0, pretend = 0, frame = 8
+ 494              		@ frame_needed = 0, uses_anonymous_args = 0
+ 194:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     const uint8_t  *byte_ptr = data;
+ 495              		.loc 1 194 5 view .LVU126
+ 195:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     const uint32_t *word_ptr;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 14
+
+
+ 496              		.loc 1 195 5 view .LVU127
+ 196:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     
+ 197:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint32_t crc_reverse = 0;
+ 497              		.loc 1 197 5 view .LVU128
+ 198:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for(uint32_t i = 0U; i < 32U; i++)
+ 498              		.loc 1 198 5 view .LVU129
+ 499              	.LBB31:
+ 500              		.loc 1 198 9 view .LVU130
+ 501              		.loc 1 198 28 view .LVU131
+ 502              		.loc 1 198 18 is_stmt 0 view .LVU132
+ 503 0000 0023     		movs	r3, #0
+ 504              	.LBE31:
+ 193:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     const uint8_t  *byte_ptr = data;
+ 505              		.loc 1 193 1 view .LVU133
+ 506 0002 F7B5     		push	{r0, r1, r2, r4, r5, r6, r7, lr}
+ 507              	.LCFI2:
+ 508              		.cfi_def_cfa_offset 32
+ 509              		.cfi_offset 0, -32
+ 510              		.cfi_offset 1, -28
+ 511              		.cfi_offset 2, -24
+ 512              		.cfi_offset 4, -20
+ 513              		.cfi_offset 5, -16
+ 514              		.cfi_offset 6, -12
+ 515              		.cfi_offset 7, -8
+ 516              		.cfi_offset 14, -4
+ 517              	.LBB32:
+ 199:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 200:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         if((crc >> i) & 0x01U)
+ 201:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         {
+ 202:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****             crc_reverse |= ((uint32_t)1 << (31U - i));
+ 518              		.loc 1 202 41 view .LVU134
+ 519 0004 8026     		movs	r6, #128
+ 520              	.LBE32:
+ 197:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for(uint32_t i = 0U; i < 32U; i++)
+ 521              		.loc 1 197 14 view .LVU135
+ 522 0006 1C00     		movs	r4, r3
+ 523              	.LBB33:
+ 200:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         {
+ 524              		.loc 1 200 23 view .LVU136
+ 525 0008 0125     		movs	r5, #1
+ 526              		.loc 1 202 41 view .LVU137
+ 527 000a 3606     		lsls	r6, r6, #24
+ 528              	.LVL29:
+ 529              	.L27:
+ 200:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         {
+ 530              		.loc 1 200 9 is_stmt 1 view .LVU138
+ 200:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         {
+ 531              		.loc 1 200 17 is_stmt 0 view .LVU139
+ 532 000c 0700     		movs	r7, r0
+ 533 000e DF40     		lsrs	r7, r7, r3
+ 200:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         {
+ 534              		.loc 1 200 11 view .LVU140
+ 535 0010 2F42     		tst	r7, r5
+ 536 0012 02D0     		beq	.L26
+ 537              		.loc 1 202 13 is_stmt 1 view .LVU141
+ 538              		.loc 1 202 41 is_stmt 0 view .LVU142
+ 539 0014 3700     		movs	r7, r6
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 15
+
+
+ 540 0016 DF40     		lsrs	r7, r7, r3
+ 541              		.loc 1 202 25 view .LVU143
+ 542 0018 3C43     		orrs	r4, r7
+ 543              	.LVL30:
+ 544              	.L26:
+ 198:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 545              		.loc 1 198 36 is_stmt 1 discriminator 2 view .LVU144
+ 546 001a 0133     		adds	r3, r3, #1
+ 547              	.LVL31:
+ 198:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 548              		.loc 1 198 28 discriminator 2 view .LVU145
+ 549 001c 202B     		cmp	r3, #32
+ 550 001e F5D1     		bne	.L27
+ 198:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 551              		.loc 1 198 28 is_stmt 0 discriminator 2 view .LVU146
+ 552              	.LBE33:
+ 203:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         }
+ 204:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 205:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->INIT          = crc_reverse;
+ 553              		.loc 1 205 5 is_stmt 1 view .LVU147
+ 554              		.loc 1 205 25 is_stmt 0 view .LVU148
+ 555 0020 154B     		ldr	r3, .L42
+ 556              	.LVL32:
+ 206:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 557              		.loc 1 206 25 view .LVU149
+ 558 0022 1648     		ldr	r0, .L42+4
+ 559              	.LVL33:
+ 205:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     CRC0->CR.V32        = CRC_ETHERNET_CTR_INIT;
+ 560              		.loc 1 205 25 view .LVU150
+ 561 0024 9C60     		str	r4, [r3, #8]
+ 562              		.loc 1 206 5 is_stmt 1 view .LVU151
+ 563              		.loc 1 206 25 is_stmt 0 view .LVU152
+ 564 0026 5860     		str	r0, [r3, #4]
+ 207:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 208:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     while ( ( CRC_isWordAligned(byte_ptr) == false ) && ( len > 0U ) )
+ 565              		.loc 1 208 5 is_stmt 1 view .LVU153
+ 566              	.LBB34:
+ 567              	.LBB35:
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 568              		.loc 1 71 32 is_stmt 0 view .LVU154
+ 569 0028 0320     		movs	r0, #3
+ 570              	.LVL34:
+ 571              	.L28:
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 572              		.loc 1 71 32 view .LVU155
+ 573 002a 0192     		str	r2, [sp, #4]
+ 574              	.LVL35:
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 575              		.loc 1 71 32 view .LVU156
+ 576              	.LBE35:
+ 577              	.LBE34:
+ 578              		.loc 1 208 54 is_stmt 1 view .LVU157
+ 579              	.LBB37:
+ 580              	.LBI34:
+  68:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 581              		.loc 1 68 13 view .LVU158
+ 582              	.LBB36:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 16
+
+
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 583              		.loc 1 71 5 view .LVU159
+  71:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 584              		.loc 1 71 5 is_stmt 0 view .LVU160
+ 585              	.LBE36:
+ 586              	.LBE37:
+ 587              		.loc 1 208 54 view .LVU161
+ 588 002c 0242     		tst	r2, r0
+ 589 002e 01D0     		beq	.L29
+ 590              	.LVL36:
+ 591              		.loc 1 208 54 discriminator 1 view .LVU162
+ 592 0030 0029     		cmp	r1, #0
+ 593 0032 0FD1     		bne	.L30
+ 594              	.L29:
+ 209:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // handled unaligned start of buffer (maximal 3 bytes)
+ 210:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *byte_ptr++;
+ 211:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         len--;
+ 212:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 213:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 214:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /* cast is allowed as buffer start is aligned (checked by CRC_isWordAligned()) */
+ 215:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     word_ptr = (const uint32_t*)byte_ptr; /*lint !e927 */
+ 595              		.loc 1 215 5 is_stmt 1 view .LVU163
+ 596              	.LVL37:
+ 216:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 217:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for (uint32_t length = len / CRC_WordAlignBytes; length > 0U; length--)
+ 597              		.loc 1 217 5 view .LVU164
+ 598              	.LBB38:
+ 599              		.loc 1 217 10 view .LVU165
+ 600              		.loc 1 217 19 is_stmt 0 view .LVU166
+ 601 0034 8808     		lsrs	r0, r1, #2
+ 602              	.LVL38:
+ 603              		.loc 1 217 19 view .LVU167
+ 604 0036 0400     		movs	r4, r0
+ 605              	.LBB39:
+ 606              	.LBB40:
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 607              		.loc 1 77 15 view .LVU168
+ 608 0038 114D     		ldr	r5, .L42+8
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 609              		.loc 1 78 15 view .LVU169
+ 610 003a 124F     		ldr	r7, .L42+12
+ 611              	.LVL39:
+ 612              	.L31:
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 613              		.loc 1 78 15 view .LVU170
+ 614              	.LBE40:
+ 615              	.LBE39:
+ 616              		.loc 1 217 61 is_stmt 1 discriminator 1 view .LVU171
+ 617 003c 002C     		cmp	r4, #0
+ 618 003e 0ED1     		bne	.L32
+ 619              		.loc 1 217 61 is_stmt 0 discriminator 1 view .LVU172
+ 620              	.LBE38:
+ 218:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // in this loop is done the main work
+ 219:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_triggerWatchDogTimer();
+ 220:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DATA = *word_ptr++;
+ 221:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 222:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     /*lint -e{928}  cast is OK as alignment of word is stricter than pointer of byte */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 17
+
+
+ 223:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     byte_ptr = (const uint8_t*)word_ptr;
+ 621              		.loc 1 223 5 is_stmt 1 view .LVU173
+ 622              	.LVL40:
+ 224:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 225:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     for (uint32_t length = len % CRC_WordAlignBytes; length > 0U; length--)
+ 623              		.loc 1 225 5 view .LVU174
+ 624              	.LBB45:
+ 625              		.loc 1 225 10 view .LVU175
+ 626              		.loc 1 225 10 is_stmt 0 view .LVU176
+ 627 0040 019A     		ldr	r2, [sp, #4]
+ 628              	.LVL41:
+ 629              		.loc 1 225 10 view .LVU177
+ 630 0042 8000     		lsls	r0, r0, #2
+ 631              	.LVL42:
+ 632              		.loc 1 225 10 view .LVU178
+ 633 0044 1018     		adds	r0, r2, r0
+ 634              	.LVL43:
+ 635              		.loc 1 225 19 view .LVU179
+ 636 0046 0322     		movs	r2, #3
+ 637 0048 1140     		ands	r1, r2
+ 638              	.LVL44:
+ 639              		.loc 1 225 19 view .LVU180
+ 640 004a 0918     		adds	r1, r1, r0
+ 641              	.LVL45:
+ 642              	.L33:
+ 643              		.loc 1 225 61 is_stmt 1 discriminator 1 view .LVU181
+ 644 004c 8842     		cmp	r0, r1
+ 645 004e 0ED1     		bne	.L34
+ 646              		.loc 1 225 61 is_stmt 0 discriminator 1 view .LVU182
+ 647              	.LBE45:
+ 226:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 227:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DR_BYTE = *byte_ptr++;
+ 228:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 229:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 230:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_DATA;
+ 648              		.loc 1 230 5 is_stmt 1 view .LVU183
+ 231:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 649              		.loc 1 231 1 is_stmt 0 view .LVU184
+ 650              		@ sp needed
+ 230:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 651              		.loc 1 230 12 view .LVU185
+ 652 0050 1868     		ldr	r0, [r3]
+ 653              	.LVL46:
+ 654              	.LVL47:
+ 655              		.loc 1 231 1 view .LVU186
+ 656 0052 FEBD     		pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+ 657              	.LVL48:
+ 658              	.L30:
+ 210:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         len--;
+ 659              		.loc 1 210 9 is_stmt 1 view .LVU187
+ 210:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         len--;
+ 660              		.loc 1 210 23 is_stmt 0 view .LVU188
+ 661 0054 1478     		ldrb	r4, [r2]
+ 211:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 662              		.loc 1 211 12 view .LVU189
+ 663 0056 0139     		subs	r1, r1, #1
+ 664              	.LVL49:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 18
+
+
+ 210:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         len--;
+ 665              		.loc 1 210 21 view .LVU190
+ 666 0058 1C70     		strb	r4, [r3]
+ 211:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 667              		.loc 1 211 9 is_stmt 1 view .LVU191
+ 668              	.LVL50:
+ 211:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 669              		.loc 1 211 9 is_stmt 0 view .LVU192
+ 670 005a 0132     		adds	r2, r2, #1
+ 671              	.LVL51:
+ 211:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 672              		.loc 1 211 9 view .LVU193
+ 673 005c E5E7     		b	.L28
+ 674              	.LVL52:
+ 675              	.L32:
+ 676              	.LBB46:
+ 219:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****         CRC_DATA = *word_ptr++;
+ 677              		.loc 1 219 9 is_stmt 1 view .LVU194
+ 678              	.LBB43:
+ 679              	.LBI39:
+  75:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 680              		.loc 1 75 13 view .LVU195
+ 681              	.LBB41:
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 682              		.loc 1 77 5 view .LVU196
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 683              		.loc 1 77 15 is_stmt 0 view .LVU197
+ 684 005e 0A4E     		ldr	r6, .L42+16
+ 685              	.LBE41:
+ 686              	.LBE43:
+ 217:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // in this loop is done the main work
+ 687              		.loc 1 217 73 view .LVU198
+ 688 0060 013C     		subs	r4, r4, #1
+ 689              	.LVL53:
+ 690              	.LBB44:
+ 691              	.LBB42:
+  77:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     WWDT->CLR = 0x5555U;
+ 692              		.loc 1 77 15 view .LVU199
+ 693 0062 6E60     		str	r6, [r5, #4]
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 694              		.loc 1 78 5 is_stmt 1 view .LVU200
+  78:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 695              		.loc 1 78 15 is_stmt 0 view .LVU201
+ 696 0064 094E     		ldr	r6, .L42+20
+ 697 0066 B760     		str	r7, [r6, #8]
+ 698              	.LBE42:
+ 699              	.LBE44:
+ 220:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 700              		.loc 1 220 9 is_stmt 1 view .LVU202
+ 701              	.LVL54:
+ 220:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 702              		.loc 1 220 20 is_stmt 0 view .LVU203
+ 703 0068 40CA     		ldmia	r2!, {r6}
+ 704              	.LVL55:
+ 220:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 705              		.loc 1 220 18 view .LVU204
+ 706 006a 1E60     		str	r6, [r3]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 19
+
+
+ 217:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // in this loop is done the main work
+ 707              		.loc 1 217 73 is_stmt 1 view .LVU205
+ 708              	.LVL56:
+ 217:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // in this loop is done the main work
+ 709              		.loc 1 217 73 is_stmt 0 view .LVU206
+ 710 006c E6E7     		b	.L31
+ 711              	.LVL57:
+ 712              	.L34:
+ 217:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {   // in this loop is done the main work
+ 713              		.loc 1 217 73 view .LVU207
+ 714              	.LBE46:
+ 715              	.LBB47:
+ 227:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 716              		.loc 1 227 9 is_stmt 1 discriminator 3 view .LVU208
+ 227:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 717              		.loc 1 227 23 is_stmt 0 discriminator 3 view .LVU209
+ 718 006e 0278     		ldrb	r2, [r0]
+ 719 0070 0130     		adds	r0, r0, #1
+ 720              	.LVL58:
+ 227:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     }
+ 721              		.loc 1 227 21 discriminator 3 view .LVU210
+ 722 0072 1A70     		strb	r2, [r3]
+ 225:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 723              		.loc 1 225 73 is_stmt 1 discriminator 3 view .LVU211
+ 225:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     {
+ 724              		.loc 1 225 73 is_stmt 0 discriminator 3 view .LVU212
+ 725 0074 EAE7     		b	.L33
+ 726              	.L43:
+ 727 0076 C046     		.align	2
+ 728              	.L42:
+ 729 0078 00100440 		.word	1074008064
+ 730 007c 01C80000 		.word	51201
+ 731 0080 00380040 		.word	1073756160
+ 732 0084 55550000 		.word	21845
+ 733 0088 AAAA0000 		.word	43690
+ 734 008c 003C0040 		.word	1073757184
+ 735              	.LBE47:
+ 736              		.cfi_endproc
+ 737              	.LFE65:
+ 739              		.section	.text.CRC_Ethernet_Finish,"ax",%progbits
+ 740              		.align	1
+ 741              		.global	CRC_Ethernet_Finish
+ 742              		.syntax unified
+ 743              		.code	16
+ 744              		.thumb_func
+ 746              	CRC_Ethernet_Finish:
+ 747              	.LVL59:
+ 748              	.LFB66:
+ 232:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 233:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 234:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint32_t CRC_Ethernet_Finish( uint32_t crc )
+ 235:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 749              		.loc 1 235 1 is_stmt 1 view -0
+ 750              		.cfi_startproc
+ 751              		@ args = 0, pretend = 0, frame = 0
+ 752              		@ frame_needed = 0, uses_anonymous_args = 0
+ 753              		@ link register save eliminated.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 20
+
+
+ 236:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return crc ^ CRC_ETHERNET_XOR_OUT;
+ 754              		.loc 1 236 5 view .LVU214
+ 755              		.loc 1 236 16 is_stmt 0 view .LVU215
+ 756 0000 C043     		mvns	r0, r0
+ 757              	.LVL60:
+ 237:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 758              		.loc 1 237 1 view .LVU216
+ 759              		@ sp needed
+ 760 0002 7047     		bx	lr
+ 761              		.cfi_endproc
+ 762              	.LFE66:
+ 764              		.section	.text.CRC_Ethernet_Calc,"ax",%progbits
+ 765              		.align	1
+ 766              		.global	CRC_Ethernet_Calc
+ 767              		.syntax unified
+ 768              		.code	16
+ 769              		.thumb_func
+ 771              	CRC_Ethernet_Calc:
+ 772              	.LVL61:
+ 773              	.LFB67:
+ 238:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 239:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** /*****************************************************************************/
+ 240:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data )
+ 241:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 774              		.loc 1 241 1 is_stmt 1 view -0
+ 775              		.cfi_startproc
+ 776              		@ args = 0, pretend = 0, frame = 0
+ 777              		@ frame_needed = 0, uses_anonymous_args = 0
+ 242:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint32_t crc;
+ 778              		.loc 1 242 5 view .LVU218
+ 243:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** 
+ 244:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ethernet_Init();
+ 779              		.loc 1 244 5 view .LVU219
+ 241:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint32_t crc;
+ 780              		.loc 1 241 1 is_stmt 0 view .LVU220
+ 781 0000 70B5     		push	{r4, r5, r6, lr}
+ 782              	.LCFI3:
+ 783              		.cfi_def_cfa_offset 16
+ 784              		.cfi_offset 4, -16
+ 785              		.cfi_offset 5, -12
+ 786              		.cfi_offset 6, -8
+ 787              		.cfi_offset 14, -4
+ 241:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint32_t crc;
+ 788              		.loc 1 241 1 view .LVU221
+ 789 0002 0D00     		movs	r5, r1
+ 245:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ethernet_Update( crc, len, data );
+ 246:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     return CRC_Ethernet_Finish( crc );
+ 247:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 790              		.loc 1 247 1 view .LVU222
+ 791              		@ sp needed
+ 241:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     uint32_t crc;
+ 792              		.loc 1 241 1 view .LVU223
+ 793 0004 0400     		movs	r4, r0
+ 244:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ethernet_Update( crc, len, data );
+ 794              		.loc 1 244 11 view .LVU224
+ 795 0006 FFF7FEFF 		bl	CRC_Ethernet_Init
+ 796              	.LVL62:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccop6QWk.s 			page 21
+
+
+ 245:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ethernet_Update( crc, len, data );
+ 797              		.loc 1 245 5 is_stmt 1 view .LVU225
+ 245:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c ****     crc = CRC_Ethernet_Update( crc, len, data );
+ 798              		.loc 1 245 11 is_stmt 0 view .LVU226
+ 799 000a 2A00     		movs	r2, r5
+ 800 000c 2100     		movs	r1, r4
+ 801 000e FFF7FEFF 		bl	CRC_Ethernet_Update
+ 802              	.LVL63:
+ 246:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 803              		.loc 1 246 5 is_stmt 1 view .LVU227
+ 804              	.LBB48:
+ 805              	.LBI48:
+ 234:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** {
+ 806              		.loc 1 234 10 view .LVU228
+ 807              	.LBB49:
+ 236:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 808              		.loc 1 236 5 view .LVU229
+ 236:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 809              		.loc 1 236 16 is_stmt 0 view .LVU230
+ 810 0012 C043     		mvns	r0, r0
+ 811              	.LVL64:
+ 812              	.LVL65:
+ 813              	.LVL66:
+ 236:common/prog/ped_fw/stdcrc/sh30f/StdCrc.c **** }
+ 814              		.loc 1 236 16 view .LVU231
+ 815              	.LBE49:
+ 816              	.LBE48:
+ 817              		.loc 1 247 1 view .LVU232
+ 818 0014 70BD     		pop	{r4, r5, r6, pc}
+ 819              		.cfi_endproc
+ 820              	.LFE67:
+ 822              		.text
+ 823              	.Letext0:
+ 824              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 825              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 826              		.file 4 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 827              		.file 5 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.h"
+ 828              		.file 6 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_crc.h"

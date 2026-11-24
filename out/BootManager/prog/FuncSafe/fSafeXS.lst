@@ -1,0 +1,358 @@
+
+out/BootManager/prog/FuncSafe/fSafeXS.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._FSF_pucReadROMData:
+
+00000000 <_FSF_pucReadROMData>:
+*/
+uint8_t *_FSF_pucReadROMData(uint8_t *pSrc, uint16_t ui16length)
+{
+    (void)ui16length;
+    return pSrc;
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_bDefaultPreconditionTRUE:
+
+00000000 <_FSF_bDefaultPreconditionTRUE>:
+{
+#ifdef TH_FSCOM
+    TH_FSFP_PushOutPar(TP_FSF_bDefaultPreconditionTRUE);
+#endif
+    return true;
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vDefaultOneTimeCheck:
+
+00000000 <_FSF_vDefaultOneTimeCheck>:
+void _FSF_vDefaultOneTimeCheck(void)
+{
+#ifdef TH_FSCOM
+    TH_FSFP_PushOutPar(TP_FSF_vDefaultOneTimeCheck);
+#endif
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_bIsROMReady:
+
+00000000 <_FSF_bIsROMReady>:
+bool _FSF_bIsROMReady(uint8_t *pData, uint16_t ui16length)
+{
+    (void)*pData;
+    (void)ui16length;
+    return true;
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vStartUpRomCrcCheck:
+
+00000000 <FSF_vStartUpRomCrcCheck>:
+ *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is executed
+ *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+ */
+static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+{
+    return MAL_FwuOptBytes.integrityConfig;
+   0:	4b08      	ldr	r3, [pc, #32]	; (24 <FSF_vStartUpRomCrcCheck+0x24>)
+
+    \note       Overloading is not designed here,as this is up to an
+   application. \n
+*/
+void FSF_vStartUpRomCrcCheck(void)
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+   4:	781c      	ldrb	r4, [r3, #0]
+#if defined(FUNCTIONAL_SAFETY_ROM_CHECK_ACTIVE) && (defined(VARIANT_BOOTMANAGER) || defined(WIRED_FIRMWARE_UPDATE))
+    if(!FWU_isIntegCheckDisabledCalc())
+   6:	2cdc      	cmp	r4, #220	; 0xdc
+   8:	d00a      	beq.n	20 <FSF_vStartUpRomCrcCheck+0x20>
+    {
+        /* BootManager or romLoader */
+        #if defined(WIRED_FIRMWARE_UPDATE) || defined(VARIANT_BOOTMANAGER)
+            uint32_t blCrcExpected  = *((uint32_t*)(FS_BL_CRC_ADR));
+   a:	4807      	ldr	r0, [pc, #28]	; (28 <FSF_vStartUpRomCrcCheck+0x28>)
+            uint32_t blCrcLength = (uint32_t)((FS_BL_END_ADR - FS_BL_START_ADR) + 1u);
+            const uint8_t *blCrcData = (const uint8_t *)FS_BL_START_ADR;
+            uint32_t blCrcCalc;
+
+            blCrcCalc = CRC_Ethernet_Calc(blCrcLength, blCrcData);
+   c:	2100      	movs	r1, #0
+            uint32_t blCrcExpected  = *((uint32_t*)(FS_BL_CRC_ADR));
+   e:	6805      	ldr	r5, [r0, #0]
+            blCrcCalc = CRC_Ethernet_Calc(blCrcLength, blCrcData);
+  10:	f7ff fffe 	bl	0 <CRC_Ethernet_Calc>
+
+            if (blCrcCalc != blCrcExpected)
+  14:	4285      	cmp	r5, r0
+  16:	d003      	beq.n	20 <FSF_vStartUpRomCrcCheck+0x20>
+            {
+                if(!FWU_isIntegCheckErrorIgnored())
+  18:	2c1e      	cmp	r4, #30
+  1a:	d001      	beq.n	20 <FSF_vStartUpRomCrcCheck+0x20>
+                {
+                    FSF_vReportFatal();
+  1c:	f7ff fffe 	bl	0 <FSF_vReportFatal>
+                }
+            }
+        #endif
+    }
+#endif
+}
+  20:	bd70      	pop	{r4, r5, r6, pc}
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	00000000 	.word	0x00000000
+  28:	00000efc 	.word	0x00000efc
+
+Disassembly of section .text._FSF_vApplicationStartUp:
+
+00000000 <_FSF_vApplicationStartUp>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_pucGetStackPointer:
+
+00000000 <_FSF_pucGetStackPointer>:
+ */
+__STATIC_FORCEINLINE uint32_t __get_MSP(void)
+{
+  uint32_t result;
+
+  __ASM volatile ("MRS %0, msp" : "=r" (result) );
+   0:	f3ef 8008 	mrs	r0, MSP
+}
+   4:	4770      	bx	lr
+
+Disassembly of section .text._FSF_ucGetStackCount:
+
+00000000 <_FSF_ucGetStackCount>:
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vRamOpercheck:
+
+00000000 <FSF_vRamOpercheck>:
+    if ((pucRAM >= &(FSF_arMarchDataBuffer[0])) &&
+   0:	4b08      	ldr	r3, [pc, #32]	; (24 <FSF_vRamOpercheck+0x24>)
+{
+   2:	b510      	push	{r4, lr}
+    if ((pucRAM >= &(FSF_arMarchDataBuffer[0])) &&
+   4:	4298      	cmp	r0, r3
+   6:	d309      	bcc.n	1c <FSF_vRamOpercheck+0x1c>
+   8:	331f      	adds	r3, #31
+   a:	4298      	cmp	r0, r3
+   c:	d806      	bhi.n	1c <FSF_vRamOpercheck+0x1c>
+        result = FSF_tRunTimeRamBufferCheckMarchC((uint32_t *)pucRAM); //lint !e926 !e927 !e2445 explicit cast from pointer to pointer
+   e:	f7ff fffe 	bl	0 <FSF_tRunTimeRamBufferCheckMarchC>
+    if (result != FSF_RAM_TESK_OK)
+  12:	2800      	cmp	r0, #0
+  14:	d001      	beq.n	1a <FSF_vRamOpercheck+0x1a>
+        FSF_vRam_OperationalException();
+  16:	f7ff fffe 	bl	0 <FSF_vRam_OperationalException>
+}
+  1a:	bd10      	pop	{r4, pc}
+        result = FSF_tRunTimeRamCheckMarchC((uint32_t *)pucRAM,        //lint !e926 !e927 !e2445 explicit cast from pointer to pointer
+  1c:	f7ff fffe 	bl	0 <FSF_tRunTimeRamCheckMarchC>
+  20:	e7f7      	b.n	12 <FSF_vRamOpercheck+0x12>
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	00000000 	.word	0x00000000
+
+Disassembly of section .text.FSF_u32GetNumberOfRamSegments:
+
+00000000 <FSF_u32GetNumberOfRamSegments>:
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vApplicationErrorNotify:
+
+00000000 <_FSF_vApplicationErrorNotify>:
+        HSUP_vNop();
+   0:	46c0      	nop			; (mov r8, r8)
+    for(;;)
+   2:	e7fd      	b.n	0 <_FSF_vApplicationErrorNotify>
+
+Disassembly of section .text._FSF_vTriggerExtWatchdog:
+
+00000000 <_FSF_vTriggerExtWatchdog>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_bReadExtWatchdog:
+
+00000000 <_FSF_bReadExtWatchdog>:
+    if (FSF_ucTaskState == (uint8_t)FSF_STATE_STARTED)
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <_FSF_bReadExtWatchdog+0x10>)
+   2:	7818      	ldrb	r0, [r3, #0]
+   4:	3802      	subs	r0, #2
+   6:	1e43      	subs	r3, r0, #1
+   8:	4198      	sbcs	r0, r3
+}
+   a:	b2c0      	uxtb	r0, r0
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text._FSF_vTriggerInternalWatchdog:
+
+00000000 <_FSF_vTriggerInternalWatchdog>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vReportFatal:
+
+00000000 <_FSF_vReportFatal>:
+        HSUP_vNop();
+   0:	46c0      	nop			; (mov r8, r8)
+        _FSF_vTriggerInternalWatchdog(); //lint !e522 !e523 Highest operation, function '_FSF_vTriggerInternalWatchdog', lacks side-effects
+   2:	e7fd      	b.n	0 <_FSF_vReportFatal>
+
+Disassembly of section .text._FSF_bIsROMAtOnceAllowed:
+
+00000000 <_FSF_bIsROMAtOnceAllowed>:
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vNotifyROMCheckComplete:
+
+00000000 <_FSF_vNotifyROMCheckComplete>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_bIsROMAtOnce:
+
+00000000 <_FSF_bIsROMAtOnce>:
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text._FSF_bCheckINTduringROMCheck:
+
+00000000 <_FSF_bCheckINTduringROMCheck>:
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vIsrEntryConf:
+
+00000000 <FSF_vIsrEntryConf>:
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vIsrExitConf:
+
+00000000 <FSF_vIsrExitConf>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vIsrShortEntryConf:
+
+00000000 <FSF_vIsrShortEntryConf>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vIsrClearConf:
+
+00000000 <FSF_vIsrClearConf>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.FSF_vIsrClearShortConf:
+
+00000000 <FSF_vIsrClearShortConf>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vDoWhenPieceRamCheckStarted:
+
+00000000 <_FSF_vDoWhenPieceRamCheckStarted>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_vDoWhenPieceRamCheckFinished:
+
+00000000 <_FSF_vDoWhenPieceRamCheckFinished>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text._FSF_RAM_CON_vDoCheckInFsComModule:
+
+00000000 <_FSF_RAM_CON_vDoCheckInFsComModule>:
+{
+   0:	b510      	push	{r4, lr}
+        _FSF_RAM_CON_vFsComModuleCheckByMirror();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vFsComModuleCheckByMirror>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vDoUpdateCheckInFsComModule:
+
+00000000 <_FSF_RAM_CON_vDoUpdateCheckInFsComModule>:
+{
+   0:	b510      	push	{r4, lr}
+        _FSF_RAM_CON_vFsComModuleUpdateCheckByMirror();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vFsComModuleUpdateCheckByMirror>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vSetErrCounter:
+
+00000000 <_FSF_RAM_CON_vSetErrCounter>:
+{
+   0:	b510      	push	{r4, lr}
+        _FSF_RAM_CON_vSetErrCntByMirror();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vSetErrCntByMirror>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vDoCheckInRomModule:
+
+00000000 <_FSF_RAM_CON_vDoCheckInRomModule>:
+{
+   0:	b510      	push	{r4, lr}
+        _FSF_RAM_CON_vRomModuleCheckByMirror();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vRomModuleCheckByMirror>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vDoUpdateCheckInRomModule:
+
+00000000 <_FSF_RAM_CON_vDoUpdateCheckInRomModule>:
+{
+   0:	b510      	push	{r4, lr}
+        _FSF_RAM_CON_vRomModuleUpdateCheckByMirror();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vRomModuleUpdateCheckByMirror>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.uiCalculateCRC32:
+
+00000000 <uiCalculateCRC32>:
+{
+   0:	000b      	movs	r3, r1
+   2:	b510      	push	{r4, lr}
+                                (uint32_t)(ui16length * sizeof(uint32_t)),
+   4:	0091      	lsls	r1, r2, #2
+    return (CRC_Ethernet_Update(CRC32Value,
+   6:	001a      	movs	r2, r3
+   8:	f7ff fffe 	bl	0 <CRC_Ethernet_Update>
+}
+   c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_ui32ResetCrcCalculation:
+
+00000000 <_FSF_ui32ResetCrcCalculation>:
+{
+   0:	b510      	push	{r4, lr}
+    return CRC_Ethernet_Init();
+   2:	f7ff fffe 	bl	0 <CRC_Ethernet_Init>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_ui32FinalizeCrcCalculation:
+
+00000000 <_FSF_ui32FinalizeCrcCalculation>:
+{
+   0:	b510      	push	{r4, lr}
+    return CRC_Ethernet_Finish(crc);
+   2:	f7ff fffe 	bl	0 <CRC_Ethernet_Finish>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vSetApplicationSafeState:
+
+00000000 <FSF_vSetApplicationSafeState>:
+   0:	4770      	bx	lr

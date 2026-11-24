@@ -1,0 +1,561 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"std_callback.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.STDCB_InitCallback,"ax",%progbits
+  18              		.align	1
+  19              		.global	STDCB_InitCallback
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	STDCB_InitCallback:
+  25              	.LVL0:
+  26              	.LFB2:
+  27              		.file 1 "common/prog/std_lib/std_callback.c"
+   1:common/prog/std_lib/std_callback.c **** /*******************************************************************************
+   2:common/prog/std_lib/std_callback.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/std_lib/std_callback.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/std_lib/std_callback.c ****  *
+   5:common/prog/std_lib/std_callback.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/std_lib/std_callback.c ****  *  are protected by international copyright laws.
+   7:common/prog/std_lib/std_callback.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/std_lib/std_callback.c ****  *
+   9:common/prog/std_lib/std_callback.c ****  *******************************************************************************
+  10:common/prog/std_lib/std_callback.c ****  *  PROJECT          Generic SW
+  11:common/prog/std_lib/std_callback.c ****  *  COMP_ABBREV      STDCB
+  12:common/prog/std_lib/std_callback.c ****  ******************************************************************************/
+  13:common/prog/std_lib/std_callback.c **** 
+  14:common/prog/std_lib/std_callback.c **** 
+  15:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  16:common/prog/std_lib/std_callback.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  18:common/prog/std_lib/std_callback.c **** /** \file
+  19:common/prog/std_lib/std_callback.c ****  *
+  20:common/prog/std_lib/std_callback.c ****  *  \ingroup  standardLibrary
+  21:common/prog/std_lib/std_callback.c ****  *
+  22:common/prog/std_lib/std_callback.c ****  *  \brief    Public definitions and declarations for unit STDCB.
+  23:common/prog/std_lib/std_callback.c ****  *
+  24:common/prog/std_lib/std_callback.c ****  *  \details  Standard callback library for adding, removing and executing of
+  25:common/prog/std_lib/std_callback.c ****  *            callback functions. All callbacks are defined by STDCB_Callback
+  26:common/prog/std_lib/std_callback.c ****  *            structure and arranged in linked list. When executing callbacks,
+  27:common/prog/std_lib/std_callback.c ****  *            only those callback functions are executed, that have enabled
+  28:common/prog/std_lib/std_callback.c ****  *            specific event by event mask in callback structure. This allows 
+  29:common/prog/std_lib/std_callback.c ****  *            attaching multiple callbacks to one callbacks list, where each 
+  30:common/prog/std_lib/std_callback.c ****  *            callbacks responds to different event (e.g. received / transmitted
+  31:common/prog/std_lib/std_callback.c ****  *            data or error event).
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 2
+
+
+  32:common/prog/std_lib/std_callback.c ****  */
+  33:common/prog/std_lib/std_callback.c **** 
+  34:common/prog/std_lib/std_callback.c **** 
+  35:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  36:common/prog/std_lib/std_callback.c **** /* INCLUDES                                                                   */
+  37:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  38:common/prog/std_lib/std_callback.c **** #include "bsh_stdinc.h"
+  39:common/prog/std_lib/std_callback.c **** #include "std_callback.h"
+  40:common/prog/std_lib/std_callback.c **** //#include <assert.h>       // Assert is currently disabled, due to lint issues
+  41:common/prog/std_lib/std_callback.c **** 
+  42:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  43:common/prog/std_lib/std_callback.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  44:common/prog/std_lib/std_callback.c **** /******************************************************************************/
+  45:common/prog/std_lib/std_callback.c **** 
+  46:common/prog/std_lib/std_callback.c **** 
+  47:common/prog/std_lib/std_callback.c **** int32_t STDCB_InitCallback(struct STDCB_Callback *cbPtr, STDCB_CallbackFunction_t funcPtr, void *ob
+  48:common/prog/std_lib/std_callback.c **** {
+  28              		.loc 1 48 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  49:common/prog/std_lib/std_callback.c ****     //assert(cbPtr == NULL);
+  50:common/prog/std_lib/std_callback.c ****     
+  51:common/prog/std_lib/std_callback.c ****     cbPtr->functionPtr = funcPtr;
+  32              		.loc 1 51 5 view .LVU1
+  48:common/prog/std_lib/std_callback.c ****     //assert(cbPtr == NULL);
+  33              		.loc 1 48 1 is_stmt 0 view .LVU2
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  48:common/prog/std_lib/std_callback.c ****     //assert(cbPtr == NULL);
+  39              		.loc 1 48 1 view .LVU3
+  40 0002 0400     		movs	r4, r0
+  52:common/prog/std_lib/std_callback.c ****     cbPtr->objectPtr = objPtr;
+  53:common/prog/std_lib/std_callback.c ****     cbPtr->eventMask = eventMask;
+  54:common/prog/std_lib/std_callback.c ****     cbPtr->_nextCallback = NULL;
+  55:common/prog/std_lib/std_callback.c ****     
+  56:common/prog/std_lib/std_callback.c ****     return 0;
+  57:common/prog/std_lib/std_callback.c **** }
+  41              		.loc 1 57 1 view .LVU4
+  42              		@ sp needed
+  51:common/prog/std_lib/std_callback.c ****     cbPtr->objectPtr = objPtr;
+  43              		.loc 1 51 24 view .LVU5
+  44 0004 0160     		str	r1, [r0]
+  52:common/prog/std_lib/std_callback.c ****     cbPtr->objectPtr = objPtr;
+  45              		.loc 1 52 5 is_stmt 1 view .LVU6
+  52:common/prog/std_lib/std_callback.c ****     cbPtr->objectPtr = objPtr;
+  46              		.loc 1 52 22 is_stmt 0 view .LVU7
+  47 0006 4260     		str	r2, [r0, #4]
+  53:common/prog/std_lib/std_callback.c ****     cbPtr->_nextCallback = NULL;
+  48              		.loc 1 53 5 is_stmt 1 view .LVU8
+  53:common/prog/std_lib/std_callback.c ****     cbPtr->_nextCallback = NULL;
+  49              		.loc 1 53 22 is_stmt 0 view .LVU9
+  50 0008 8360     		str	r3, [r0, #8]
+  54:common/prog/std_lib/std_callback.c ****     
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 3
+
+
+  51              		.loc 1 54 5 is_stmt 1 view .LVU10
+  54:common/prog/std_lib/std_callback.c ****     
+  52              		.loc 1 54 26 is_stmt 0 view .LVU11
+  53 000a 0020     		movs	r0, #0
+  54              	.LVL1:
+  54:common/prog/std_lib/std_callback.c ****     
+  55              		.loc 1 54 26 view .LVU12
+  56 000c E060     		str	r0, [r4, #12]
+  56:common/prog/std_lib/std_callback.c **** }
+  57              		.loc 1 56 5 is_stmt 1 view .LVU13
+  58              	.LVL2:
+  59              		.loc 1 57 1 is_stmt 0 view .LVU14
+  60 000e 10BD     		pop	{r4, pc}
+  61              		.cfi_endproc
+  62              	.LFE2:
+  64              		.section	.text.STDCB_AttachCallback,"ax",%progbits
+  65              		.align	1
+  66              		.global	STDCB_AttachCallback
+  67              		.syntax unified
+  68              		.code	16
+  69              		.thumb_func
+  71              	STDCB_AttachCallback:
+  72              	.LVL3:
+  73              	.LFB3:
+  58:common/prog/std_lib/std_callback.c **** 
+  59:common/prog/std_lib/std_callback.c **** 
+  60:common/prog/std_lib/std_callback.c **** int32_t STDCB_AttachCallback(struct STDCB_Callback **cbList, struct STDCB_Callback *cbPtr)
+  61:common/prog/std_lib/std_callback.c **** {
+  74              		.loc 1 61 1 is_stmt 1 view -0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  78              		@ link register save eliminated.
+  62:common/prog/std_lib/std_callback.c ****     //assert(cbList == NULL);
+  63:common/prog/std_lib/std_callback.c ****     //assert(cbPtr == NULL);
+  64:common/prog/std_lib/std_callback.c ****     //assert(!IS_ROM_AREA(cbPtr));
+  65:common/prog/std_lib/std_callback.c ****     //assert(!IS_STACK_AREA(cbPtr));
+  66:common/prog/std_lib/std_callback.c ****     
+  67:common/prog/std_lib/std_callback.c ****     struct STDCB_Callback *cb = NULL;
+  79              		.loc 1 67 5 view .LVU16
+  68:common/prog/std_lib/std_callback.c ****     
+  69:common/prog/std_lib/std_callback.c ****     if(cbPtr != NULL)
+  80              		.loc 1 69 5 view .LVU17
+  61:common/prog/std_lib/std_callback.c ****     //assert(cbList == NULL);
+  81              		.loc 1 61 1 is_stmt 0 view .LVU18
+  82 0000 0300     		movs	r3, r0
+  70:common/prog/std_lib/std_callback.c ****     {
+  71:common/prog/std_lib/std_callback.c ****         // Chceck if cbList is NULL - when asserts are disabled
+  72:common/prog/std_lib/std_callback.c ****         if(cbList == NULL)
+  73:common/prog/std_lib/std_callback.c ****         {
+  74:common/prog/std_lib/std_callback.c ****             return -1;
+  75:common/prog/std_lib/std_callback.c ****         }
+  76:common/prog/std_lib/std_callback.c ****         // Check first member of array
+  77:common/prog/std_lib/std_callback.c ****         else if(*cbList == NULL)
+  78:common/prog/std_lib/std_callback.c ****         {
+  79:common/prog/std_lib/std_callback.c ****             *cbList = cbPtr;
+  80:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 4
+
+
+  81:common/prog/std_lib/std_callback.c ****         }
+  82:common/prog/std_lib/std_callback.c ****         else
+  83:common/prog/std_lib/std_callback.c ****         {
+  84:common/prog/std_lib/std_callback.c ****             // Get firs callback pointer from list
+  85:common/prog/std_lib/std_callback.c ****             cb = *cbList;
+  86:common/prog/std_lib/std_callback.c ****             while(cb->_nextCallback != NULL)
+  87:common/prog/std_lib/std_callback.c ****             {
+  88:common/prog/std_lib/std_callback.c ****                 // Check for same callback pointer
+  89:common/prog/std_lib/std_callback.c ****                 if(cb == cbPtr)
+  90:common/prog/std_lib/std_callback.c ****                 {
+  91:common/prog/std_lib/std_callback.c ****                     return 0;
+  92:common/prog/std_lib/std_callback.c ****                 }
+  93:common/prog/std_lib/std_callback.c ****                 // Set next callback pointer
+  94:common/prog/std_lib/std_callback.c ****                 cb = cb->_nextCallback;
+  95:common/prog/std_lib/std_callback.c ****             }
+  96:common/prog/std_lib/std_callback.c ****             
+  97:common/prog/std_lib/std_callback.c ****             cb->_nextCallback = cbPtr;
+  98:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+  99:common/prog/std_lib/std_callback.c ****         }
+ 100:common/prog/std_lib/std_callback.c ****     }
+ 101:common/prog/std_lib/std_callback.c ****     
+ 102:common/prog/std_lib/std_callback.c ****     return 0;
+  83              		.loc 1 102 12 view .LVU19
+  84 0002 081E     		subs	r0, r1, #0
+  85              	.LVL4:
+  69:common/prog/std_lib/std_callback.c ****     {
+  86              		.loc 1 69 7 view .LVU20
+  87 0004 06D0     		beq	.L2
+  72:common/prog/std_lib/std_callback.c ****         {
+  88              		.loc 1 72 9 is_stmt 1 view .LVU21
+  72:common/prog/std_lib/std_callback.c ****         {
+  89              		.loc 1 72 11 is_stmt 0 view .LVU22
+  90 0006 002B     		cmp	r3, #0
+  91 0008 0DD0     		beq	.L7
+  77:common/prog/std_lib/std_callback.c ****         {
+  92              		.loc 1 77 14 is_stmt 1 view .LVU23
+  77:common/prog/std_lib/std_callback.c ****         {
+  93              		.loc 1 77 17 is_stmt 0 view .LVU24
+  94 000a 1868     		ldr	r0, [r3]
+  77:common/prog/std_lib/std_callback.c ****         {
+  95              		.loc 1 77 16 view .LVU25
+  96 000c 0028     		cmp	r0, #0
+  97 000e 04D1     		bne	.L4
+  79:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+  98              		.loc 1 79 13 is_stmt 1 view .LVU26
+  79:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+  99              		.loc 1 79 21 is_stmt 0 view .LVU27
+ 100 0010 1960     		str	r1, [r3]
+  80:common/prog/std_lib/std_callback.c ****         }
+ 101              		.loc 1 80 13 is_stmt 1 view .LVU28
+ 102              	.LVL5:
+ 103              	.L10:
+  98:common/prog/std_lib/std_callback.c ****         }
+ 104              		.loc 1 98 13 view .LVU29
+  98:common/prog/std_lib/std_callback.c ****         }
+ 105              		.loc 1 98 34 is_stmt 0 view .LVU30
+ 106 0012 C860     		str	r0, [r1, #12]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 5
+
+
+ 107              	.L2:
+ 103:common/prog/std_lib/std_callback.c **** }
+ 108              		.loc 1 103 1 view .LVU31
+ 109              		@ sp needed
+ 110 0014 7047     		bx	lr
+ 111              	.LVL6:
+ 112              	.L5:
+  89:common/prog/std_lib/std_callback.c ****                 {
+ 113              		.loc 1 89 17 is_stmt 1 view .LVU32
+  89:common/prog/std_lib/std_callback.c ****                 {
+ 114              		.loc 1 89 19 is_stmt 0 view .LVU33
+ 115 0016 8B42     		cmp	r3, r1
+ 116 0018 08D0     		beq	.L8
+ 117              	.LVL7:
+ 118              	.L4:
+  86:common/prog/std_lib/std_callback.c ****             {
+ 119              		.loc 1 86 37 is_stmt 1 view .LVU34
+ 120 001a 0300     		movs	r3, r0
+  86:common/prog/std_lib/std_callback.c ****             {
+ 121              		.loc 1 86 21 is_stmt 0 view .LVU35
+ 122 001c C068     		ldr	r0, [r0, #12]
+ 123              	.LVL8:
+  86:common/prog/std_lib/std_callback.c ****             {
+ 124              		.loc 1 86 37 view .LVU36
+ 125 001e 0028     		cmp	r0, #0
+ 126 0020 F9D1     		bne	.L5
+  97:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+ 127              		.loc 1 97 13 is_stmt 1 view .LVU37
+  97:common/prog/std_lib/std_callback.c ****             cbPtr->_nextCallback = NULL;
+ 128              		.loc 1 97 31 is_stmt 0 view .LVU38
+ 129 0022 D960     		str	r1, [r3, #12]
+ 130 0024 F5E7     		b	.L10
+ 131              	.LVL9:
+ 132              	.L7:
+  74:common/prog/std_lib/std_callback.c ****         }
+ 133              		.loc 1 74 20 view .LVU39
+ 134 0026 0120     		movs	r0, #1
+ 135              	.LVL10:
+  74:common/prog/std_lib/std_callback.c ****         }
+ 136              		.loc 1 74 20 view .LVU40
+ 137 0028 4042     		rsbs	r0, r0, #0
+ 138 002a F3E7     		b	.L2
+ 139              	.LVL11:
+ 140              	.L8:
+ 102:common/prog/std_lib/std_callback.c **** }
+ 141              		.loc 1 102 12 view .LVU41
+ 142 002c 0020     		movs	r0, #0
+ 143 002e F1E7     		b	.L2
+ 144              		.cfi_endproc
+ 145              	.LFE3:
+ 147              		.section	.text.STDCB_DetachCallback,"ax",%progbits
+ 148              		.align	1
+ 149              		.global	STDCB_DetachCallback
+ 150              		.syntax unified
+ 151              		.code	16
+ 152              		.thumb_func
+ 154              	STDCB_DetachCallback:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 6
+
+
+ 155              	.LVL12:
+ 156              	.LFB4:
+ 104:common/prog/std_lib/std_callback.c **** 
+ 105:common/prog/std_lib/std_callback.c **** 
+ 106:common/prog/std_lib/std_callback.c **** int32_t STDCB_DetachCallback(struct STDCB_Callback **cbList, const struct STDCB_Callback *cbPtr)
+ 107:common/prog/std_lib/std_callback.c **** {
+ 157              		.loc 1 107 1 is_stmt 1 view -0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161              		@ link register save eliminated.
+ 108:common/prog/std_lib/std_callback.c ****     //assert(cbList);
+ 109:common/prog/std_lib/std_callback.c ****     //assert(cbPtr);
+ 110:common/prog/std_lib/std_callback.c ****     
+ 111:common/prog/std_lib/std_callback.c ****     struct STDCB_Callback *cb = NULL;
+ 162              		.loc 1 111 5 view .LVU43
+ 112:common/prog/std_lib/std_callback.c ****     struct STDCB_Callback *cbToRm = NULL;
+ 163              		.loc 1 112 5 view .LVU44
+ 113:common/prog/std_lib/std_callback.c ****     
+ 114:common/prog/std_lib/std_callback.c ****     // Chceck if cbList is NULL - when asserts are disabled
+ 115:common/prog/std_lib/std_callback.c ****     if(cbList == NULL)
+ 164              		.loc 1 115 5 view .LVU45
+ 107:common/prog/std_lib/std_callback.c ****     //assert(cbList);
+ 165              		.loc 1 107 1 is_stmt 0 view .LVU46
+ 166 0000 031E     		subs	r3, r0, #0
+ 167              		.loc 1 115 7 view .LVU47
+ 168 0002 10D0     		beq	.L16
+ 116:common/prog/std_lib/std_callback.c ****     {
+ 117:common/prog/std_lib/std_callback.c ****         return -1;
+ 118:common/prog/std_lib/std_callback.c ****     }
+ 119:common/prog/std_lib/std_callback.c ****     // Check first member of array
+ 120:common/prog/std_lib/std_callback.c ****     else if(*cbList == cbPtr)
+ 169              		.loc 1 120 10 is_stmt 1 view .LVU48
+ 170              		.loc 1 120 13 is_stmt 0 view .LVU49
+ 171 0004 0268     		ldr	r2, [r0]
+ 172              		.loc 1 120 12 view .LVU50
+ 173 0006 8A42     		cmp	r2, r1
+ 174 0008 02D1     		bne	.L13
+ 121:common/prog/std_lib/std_callback.c ****     {
+ 122:common/prog/std_lib/std_callback.c ****         *cbList = NULL;
+ 175              		.loc 1 122 9 is_stmt 1 view .LVU51
+ 176              		.loc 1 122 17 is_stmt 0 view .LVU52
+ 177 000a 0020     		movs	r0, #0
+ 178              	.LVL13:
+ 179              		.loc 1 122 17 view .LVU53
+ 180 000c 1860     		str	r0, [r3]
+ 181              	.LVL14:
+ 182              	.L11:
+ 123:common/prog/std_lib/std_callback.c ****     }
+ 124:common/prog/std_lib/std_callback.c ****     else
+ 125:common/prog/std_lib/std_callback.c ****     {
+ 126:common/prog/std_lib/std_callback.c ****         // Get firs callback pointer from list
+ 127:common/prog/std_lib/std_callback.c ****         cb = *cbList;
+ 128:common/prog/std_lib/std_callback.c ****         while(cb->_nextCallback != NULL)
+ 129:common/prog/std_lib/std_callback.c ****         {
+ 130:common/prog/std_lib/std_callback.c ****             // Check if it is callback to detach
+ 131:common/prog/std_lib/std_callback.c ****             if(cb->_nextCallback == cbPtr)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 7
+
+
+ 132:common/prog/std_lib/std_callback.c ****             {
+ 133:common/prog/std_lib/std_callback.c ****                 cbToRm = cb->_nextCallback;
+ 134:common/prog/std_lib/std_callback.c ****                 cb->_nextCallback = cbToRm->_nextCallback;
+ 135:common/prog/std_lib/std_callback.c ****                 cbToRm->_nextCallback = NULL;
+ 136:common/prog/std_lib/std_callback.c ****                 break;
+ 137:common/prog/std_lib/std_callback.c ****             }
+ 138:common/prog/std_lib/std_callback.c ****         }
+ 139:common/prog/std_lib/std_callback.c ****     }
+ 140:common/prog/std_lib/std_callback.c ****     
+ 141:common/prog/std_lib/std_callback.c ****     return 0;
+ 142:common/prog/std_lib/std_callback.c **** }
+ 183              		.loc 1 142 1 view .LVU54
+ 184              		@ sp needed
+ 185 000e 7047     		bx	lr
+ 186              	.LVL15:
+ 187              	.L13:
+ 128:common/prog/std_lib/std_callback.c ****         {
+ 188              		.loc 1 128 17 view .LVU55
+ 189 0010 D068     		ldr	r0, [r2, #12]
+ 190              	.LVL16:
+ 191              	.L14:
+ 128:common/prog/std_lib/std_callback.c ****         {
+ 192              		.loc 1 128 33 is_stmt 1 view .LVU56
+ 193 0012 0028     		cmp	r0, #0
+ 194 0014 FBD0     		beq	.L11
+ 131:common/prog/std_lib/std_callback.c ****             {
+ 195              		.loc 1 131 13 view .LVU57
+ 131:common/prog/std_lib/std_callback.c ****             {
+ 196              		.loc 1 131 15 is_stmt 0 view .LVU58
+ 197 0016 8842     		cmp	r0, r1
+ 198 0018 FBD1     		bne	.L14
+ 133:common/prog/std_lib/std_callback.c ****                 cb->_nextCallback = cbToRm->_nextCallback;
+ 199              		.loc 1 133 17 is_stmt 1 view .LVU59
+ 200              	.LVL17:
+ 134:common/prog/std_lib/std_callback.c ****                 cbToRm->_nextCallback = NULL;
+ 201              		.loc 1 134 17 view .LVU60
+ 134:common/prog/std_lib/std_callback.c ****                 cbToRm->_nextCallback = NULL;
+ 202              		.loc 1 134 43 is_stmt 0 view .LVU61
+ 203 001a C368     		ldr	r3, [r0, #12]
+ 204              	.LVL18:
+ 134:common/prog/std_lib/std_callback.c ****                 cbToRm->_nextCallback = NULL;
+ 205              		.loc 1 134 35 view .LVU62
+ 206 001c D360     		str	r3, [r2, #12]
+ 135:common/prog/std_lib/std_callback.c ****                 break;
+ 207              		.loc 1 135 17 is_stmt 1 view .LVU63
+ 135:common/prog/std_lib/std_callback.c ****                 break;
+ 208              		.loc 1 135 39 is_stmt 0 view .LVU64
+ 209 001e 0023     		movs	r3, #0
+ 210 0020 C360     		str	r3, [r0, #12]
+ 136:common/prog/std_lib/std_callback.c ****             }
+ 211              		.loc 1 136 17 is_stmt 1 view .LVU65
+ 141:common/prog/std_lib/std_callback.c **** }
+ 212              		.loc 1 141 12 is_stmt 0 view .LVU66
+ 213 0022 1800     		movs	r0, r3
+ 214              	.LVL19:
+ 136:common/prog/std_lib/std_callback.c ****             }
+ 215              		.loc 1 136 17 view .LVU67
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 8
+
+
+ 216 0024 F3E7     		b	.L11
+ 217              	.LVL20:
+ 218              	.L16:
+ 117:common/prog/std_lib/std_callback.c ****     }
+ 219              		.loc 1 117 16 view .LVU68
+ 220 0026 0120     		movs	r0, #1
+ 221              	.LVL21:
+ 117:common/prog/std_lib/std_callback.c ****     }
+ 222              		.loc 1 117 16 view .LVU69
+ 223 0028 4042     		rsbs	r0, r0, #0
+ 224 002a F0E7     		b	.L11
+ 225              		.cfi_endproc
+ 226              	.LFE4:
+ 228              		.section	.text.STDCB_ExecuteCallbacks,"ax",%progbits
+ 229              		.align	1
+ 230              		.global	STDCB_ExecuteCallbacks
+ 231              		.syntax unified
+ 232              		.code	16
+ 233              		.thumb_func
+ 235              	STDCB_ExecuteCallbacks:
+ 236              	.LVL22:
+ 237              	.LFB5:
+ 143:common/prog/std_lib/std_callback.c **** 
+ 144:common/prog/std_lib/std_callback.c **** 
+ 145:common/prog/std_lib/std_callback.c **** int32_t STDCB_ExecuteCallbacks(const struct STDCB_Callback *cbPtr, uint32_t eventFlags, int32_t eve
+ 146:common/prog/std_lib/std_callback.c **** {
+ 238              		.loc 1 146 1 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147:common/prog/std_lib/std_callback.c ****     //assert(cbPtr);
+ 148:common/prog/std_lib/std_callback.c ****     
+ 149:common/prog/std_lib/std_callback.c ****     int32_t retVal = 0;
+ 242              		.loc 1 149 5 view .LVU71
+ 150:common/prog/std_lib/std_callback.c ****     uint32_t ef;
+ 243              		.loc 1 150 5 view .LVU72
+ 151:common/prog/std_lib/std_callback.c ****     
+ 152:common/prog/std_lib/std_callback.c ****     if(eventFlags != 0U)
+ 244              		.loc 1 152 5 view .LVU73
+ 146:common/prog/std_lib/std_callback.c ****     //assert(cbPtr);
+ 245              		.loc 1 146 1 is_stmt 0 view .LVU74
+ 246 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 247              	.LCFI1:
+ 248              		.cfi_def_cfa_offset 24
+ 249              		.cfi_offset 3, -24
+ 250              		.cfi_offset 4, -20
+ 251              		.cfi_offset 5, -16
+ 252              		.cfi_offset 6, -12
+ 253              		.cfi_offset 7, -8
+ 254              		.cfi_offset 14, -4
+ 146:common/prog/std_lib/std_callback.c ****     //assert(cbPtr);
+ 255              		.loc 1 146 1 view .LVU75
+ 256 0002 0400     		movs	r4, r0
+ 257 0004 0D00     		movs	r5, r1
+ 258 0006 1700     		movs	r7, r2
+ 149:common/prog/std_lib/std_callback.c ****     uint32_t ef;
+ 259              		.loc 1 149 13 view .LVU76
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 9
+
+
+ 260 0008 0E1E     		subs	r6, r1, #0
+ 261              		.loc 1 152 7 view .LVU77
+ 262 000a 10D0     		beq	.L18
+ 149:common/prog/std_lib/std_callback.c ****     uint32_t ef;
+ 263              		.loc 1 149 13 view .LVU78
+ 264 000c 0026     		movs	r6, #0
+ 265 000e 0CE0     		b	.L19
+ 266              	.LVL23:
+ 267              	.L22:
+ 153:common/prog/std_lib/std_callback.c ****     {
+ 154:common/prog/std_lib/std_callback.c ****         while(cbPtr != NULL)
+ 155:common/prog/std_lib/std_callback.c ****         {
+ 156:common/prog/std_lib/std_callback.c ****             ef = eventFlags & cbPtr->eventMask;
+ 268              		.loc 1 156 13 is_stmt 1 view .LVU79
+ 269              		.loc 1 156 16 is_stmt 0 view .LVU80
+ 270 0010 A368     		ldr	r3, [r4, #8]
+ 271 0012 1900     		movs	r1, r3
+ 272 0014 2940     		ands	r1, r5
+ 273              	.LVL24:
+ 157:common/prog/std_lib/std_callback.c ****             if((ef != 0U) && (cbPtr->functionPtr != NULL))
+ 274              		.loc 1 157 13 is_stmt 1 view .LVU81
+ 275              		.loc 1 157 15 is_stmt 0 view .LVU82
+ 276 0016 2B42     		tst	r3, r5
+ 277 0018 06D0     		beq	.L21
+ 278              		.loc 1 157 36 discriminator 1 view .LVU83
+ 279 001a 2368     		ldr	r3, [r4]
+ 280              		.loc 1 157 27 discriminator 1 view .LVU84
+ 281 001c 002B     		cmp	r3, #0
+ 282 001e 03D0     		beq	.L21
+ 158:common/prog/std_lib/std_callback.c ****             {
+ 159:common/prog/std_lib/std_callback.c ****                 /*lint -e{9027} Tested to work correctly on Cortex-M devices */
+ 160:common/prog/std_lib/std_callback.c ****                 retVal |= (int32_t)cbPtr->functionPtr(cbPtr->objectPtr, ef, eventData);
+ 283              		.loc 1 160 17 is_stmt 1 view .LVU85
+ 284              		.loc 1 160 36 is_stmt 0 view .LVU86
+ 285 0020 3A00     		movs	r2, r7
+ 286 0022 6068     		ldr	r0, [r4, #4]
+ 287 0024 9847     		blx	r3
+ 288              	.LVL25:
+ 289              		.loc 1 160 24 view .LVU87
+ 290 0026 0643     		orrs	r6, r0
+ 291              	.LVL26:
+ 292              	.L21:
+ 161:common/prog/std_lib/std_callback.c ****             }
+ 162:common/prog/std_lib/std_callback.c ****             cbPtr = cbPtr->_nextCallback;
+ 293              		.loc 1 162 13 is_stmt 1 view .LVU88
+ 294              		.loc 1 162 19 is_stmt 0 view .LVU89
+ 295 0028 E468     		ldr	r4, [r4, #12]
+ 296              	.LVL27:
+ 297              	.L19:
+ 154:common/prog/std_lib/std_callback.c ****         {
+ 298              		.loc 1 154 21 is_stmt 1 view .LVU90
+ 299 002a 002C     		cmp	r4, #0
+ 300 002c F0D1     		bne	.L22
+ 301              	.LVL28:
+ 302              	.L18:
+ 163:common/prog/std_lib/std_callback.c ****         }
+ 164:common/prog/std_lib/std_callback.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccuzF6ne.s 			page 10
+
+
+ 165:common/prog/std_lib/std_callback.c ****     
+ 166:common/prog/std_lib/std_callback.c ****     return retVal;
+ 167:common/prog/std_lib/std_callback.c **** }
+ 303              		.loc 1 167 1 is_stmt 0 view .LVU91
+ 304              		@ sp needed
+ 305 002e 3000     		movs	r0, r6
+ 306              	.LVL29:
+ 307              	.LVL30:
+ 308              	.LVL31:
+ 309              		.loc 1 167 1 view .LVU92
+ 310 0030 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 311              		.cfi_endproc
+ 312              	.LFE5:
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 317              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 318              		.file 4 "common/prog/std_lib/std_callback.h"

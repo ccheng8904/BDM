@@ -1,0 +1,566 @@
+
+out/BootManager/prog/FuncSafe/fsIsr.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FSF_ucIsrHandleTask:
+
+00000000 <FSF_ucIsrHandleTask>:
+}
+
+/* external function definitions ***********************************************************************/
+
+uint8_t FSF_ucIsrHandleTask(void)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b087      	sub	sp, #28
+    Get current value of circulating timer (in pieces of 256 micro-seconds)
+=======================================================*/
+#ifdef TH_FSCOM
+   ucTime = (uint8_t)TH_FSF_Circle256MicroSeconds;  // when in test harness mode, read this from variable content
+#else
+   ucTime = (uint8_t)(TIM_uiGetCircleMicroSeconds()>>8); //read high byte of circulating timer (1Tick = 256us)
+   4:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+#endif
+
+/*=======================================================
+    Did the circulating timer cross zero since last call (i.e. 65536us elapsed)?
+=======================================================*/
+   if (bCalcTimerCrossed65ms == false)
+   8:	4c74      	ldr	r4, [pc, #464]	; (1dc <FSF_ucIsrHandleTask+0x1dc>)
+   ucTime = (uint8_t)(TIM_uiGetCircleMicroSeconds()>>8); //read high byte of circulating timer (1Tick = 256us)
+   a:	0a00      	lsrs	r0, r0, #8
+   c:	b2c3      	uxtb	r3, r0
+   e:	9304      	str	r3, [sp, #16]
+   if (bCalcTimerCrossed65ms == false)
+  10:	7823      	ldrb	r3, [r4, #0]
+  12:	2b00      	cmp	r3, #0
+  14:	d000      	beq.n	18 <FSF_ucIsrHandleTask+0x18>
+  16:	e0d7      	b.n	1c8 <FSF_ucIsrHandleTask+0x1c8>
+   {
+      if (ucIsrLastTimerValue > ucTime)
+  18:	4a71      	ldr	r2, [pc, #452]	; (1e0 <FSF_ucIsrHandleTask+0x1e0>)
+  1a:	9904      	ldr	r1, [sp, #16]
+  1c:	7812      	ldrb	r2, [r2, #0]
+  1e:	428a      	cmp	r2, r1
+  20:	d922      	bls.n	68 <FSF_ucIsrHandleTask+0x68>
+         TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Disabled);
+#else
+         HSUP_vDisableInt();
+#endif
+         //  Get the actual values accessed at asynchronous level
+         ucActTimeOverflow  = ucTimeOverflow;
+  22:	4e70      	ldr	r6, [pc, #448]	; (1e4 <FSF_ucIsrHandleTask+0x1e4>)
+         ucActCountOverflow = ucCountOverflow;
+  24:	4d70      	ldr	r5, [pc, #448]	; (1e8 <FSF_ucIsrHandleTask+0x1e8>)
+         ucActTimeOverflow  = ucTimeOverflow;
+  26:	7830      	ldrb	r0, [r6, #0]
+         ucActCountOverflow = ucCountOverflow;
+  28:	782a      	ldrb	r2, [r5, #0]
+         HSUP_vEnableInt();
+#endif
+         //  End of PCA: CR_001-16-02-2007
+
+         // Increase the number of 65ms packets elapsed
+         for(uint32_t i = 0; i < (uint8_t)FS_ISR_NUMBER_OF_LARGE_ISR; i++)
+  2a:	4970      	ldr	r1, [pc, #448]	; (1ec <FSF_ucIsrHandleTask+0x1ec>)
+         {
+            uiIsrTimer[i]++;
+  2c:	880f      	ldrh	r7, [r1, #0]
+         for(uint32_t i = 0; i < (uint8_t)FS_ISR_NUMBER_OF_LARGE_ISR; i++)
+  2e:	3301      	adds	r3, #1
+            uiIsrTimer[i]++;
+  30:	3701      	adds	r7, #1
+  32:	800f      	strh	r7, [r1, #0]
+         for(uint32_t i = 0; i < (uint8_t)FS_ISR_NUMBER_OF_LARGE_ISR; i++)
+  34:	3102      	adds	r1, #2
+  36:	2b04      	cmp	r3, #4
+  38:	d1f8      	bne.n	2c <FSF_ucIsrHandleTask+0x2c>
+         }
+         
+         for(uint32_t i = 0; i < (uint8_t)FS_ISR_NUMBER_OF_SHORT_ISR; i++)
+         {
+            uiShortIsrTimer[i]++;
+  3a:	496d      	ldr	r1, [pc, #436]	; (1f0 <FSF_ucIsrHandleTask+0x1f0>)
+  3c:	880b      	ldrh	r3, [r1, #0]
+  3e:	3301      	adds	r3, #1
+  40:	800b      	strh	r3, [r1, #0]
+         }
+
+         bCalcTimerCrossed65ms   = true;
+  42:	2301      	movs	r3, #1
+  44:	7023      	strb	r3, [r4, #0]
+
+         //  PCA: CR_001-16-02-2007
+         //  Care has to be taken concerning initialisation: bSynchronisedWithCirculatingTimer set true means,
+         //  the ISR task handler is in sync, otherwise handling an overflow conditions are not allowed!
+         if((ucActTimeOverflow != (uint8_t)NO_ISR_TIME_OVERFLOW) && (bSynchronisedWithCirculatingTimer == true))
+  46:	4b6b      	ldr	r3, [pc, #428]	; (1f4 <FSF_ucIsrHandleTask+0x1f4>)
+  48:	781b      	ldrb	r3, [r3, #0]
+  4a:	28ff      	cmp	r0, #255	; 0xff
+  4c:	d01e      	beq.n	8c <FSF_ucIsrHandleTask+0x8c>
+  4e:	2b00      	cmp	r3, #0
+  50:	d100      	bne.n	54 <FSF_ucIsrHandleTask+0x54>
+  52:	e0b9      	b.n	1c8 <FSF_ucIsrHandleTask+0x1c8>
+         {
+            // Latency overflow. Report error!
+            FSF_vReportError((uint8_t)FSF_ISR_LATENCY_CHECK,(uint8_t)FSF_ERR_LATENCY_ERROR,ucActTimeOverflow);
+  54:	0002      	movs	r2, r0
+  56:	210b      	movs	r1, #11
+  58:	2005      	movs	r0, #5
+         else
+         {
+            if((ucActCountOverflow != (uint8_t)NO_ISR_COUNT_OVERFLOW) && (bSynchronisedWithCirculatingTimer == true))
+            {
+               // Interrupts count overflow! Report error!
+               FSF_vReportError((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MAX_FREQ_ERROR,ucActCountOverflow);
+  5a:	f7ff fffe 	bl	0 <FSF_vReportError>
+            TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Disabled);
+#else
+            HSUP_vDisableInt();
+#endif
+            // Reset the time overflow flag
+            ucTimeOverflow = (uint8_t)(NO_ISR_TIME_OVERFLOW);
+  5e:	23ff      	movs	r3, #255	; 0xff
+  60:	7033      	strb	r3, [r6, #0]
+
+            // Reset the count overflow
+            ucCountOverflow = (uint8_t)(NO_ISR_COUNT_OVERFLOW);
+  62:	702b      	strb	r3, [r5, #0]
+            TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Enabled);
+#else
+            HSUP_vEnableInt();
+#endif
+            // Reset the elapsed indicator, so we signal only one error at a time
+            bCalcTimerCrossed65ms = false;
+  64:	2300      	movs	r3, #0
+  66:	7023      	strb	r3, [r4, #0]
+      TH_FSFP_PushOutPar(TP_FSF_ISR_Timer_less_then_65ms);
+#endif
+   }
+
+   // Save current time to compare
+   ucIsrLastTimerValue = ucTime;
+  68:	4b5d      	ldr	r3, [pc, #372]	; (1e0 <FSF_ucIsrHandleTask+0x1e0>)
+  6a:	9a04      	ldr	r2, [sp, #16]
+   - time elapsed until next scheduling (latency between scheduling cycles)
+   - the number of interrupts to be expected (min. frequency)
+   - the limit of interrupts allowed (max. frequency)
+   */
+
+   FSF_vReportOnGoing((uint8_t)FSF_ISR_CHECK);
+  6c:	2004      	movs	r0, #4
+   ucIsrLastTimerValue = ucTime;
+  6e:	701a      	strb	r2, [r3, #0]
+   FSF_vReportOnGoing((uint8_t)FSF_ISR_CHECK);
+  70:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   FSF_vReportOnGoing((uint8_t)FSF_ISR_LATENCY_CHECK);
+  74:	2005      	movs	r0, #5
+  76:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   FSF_vReportOnGoing((uint8_t)FSF_ISR_MIN_FREQUENCY_CHECK);
+  7a:	2006      	movs	r0, #6
+  7c:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   FSF_vReportOnGoing((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK);
+  80:	2007      	movs	r0, #7
+  82:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+
+   return TASK_INITIALISED;
+}
+  86:	2001      	movs	r0, #1
+  88:	b007      	add	sp, #28
+  8a:	bdf0      	pop	{r4, r5, r6, r7, pc}
+            if((ucActCountOverflow != (uint8_t)NO_ISR_COUNT_OVERFLOW) && (bSynchronisedWithCirculatingTimer == true))
+  8c:	2aff      	cmp	r2, #255	; 0xff
+  8e:	d100      	bne.n	92 <FSF_ucIsrHandleTask+0x92>
+  90:	e09a      	b.n	1c8 <FSF_ucIsrHandleTask+0x1c8>
+  92:	2b00      	cmp	r3, #0
+  94:	d100      	bne.n	98 <FSF_ucIsrHandleTask+0x98>
+  96:	e097      	b.n	1c8 <FSF_ucIsrHandleTask+0x1c8>
+               FSF_vReportError((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MAX_FREQ_ERROR,ucActCountOverflow);
+  98:	210c      	movs	r1, #12
+  9a:	2007      	movs	r0, #7
+  9c:	e7dd      	b.n	5a <FSF_ucIsrHandleTask+0x5a>
+      if ((pShortIsrCtrl->ucControl & (uint8_t)(FS_ISR_MINIMUM_CHECK)) != (uint8_t)0)
+  9e:	2404      	movs	r4, #4
+  a0:	4227      	tst	r7, r4
+  a2:	d00a      	beq.n	ba <FSF_ucIsrHandleTask+0xba>
+         if (uiCount < pShortIsrCtrl->uiLimitMinFrequency)
+  a4:	8857      	ldrh	r7, [r2, #2]
+  a6:	42b7      	cmp	r7, r6
+  a8:	d907      	bls.n	ba <FSF_ucIsrHandleTask+0xba>
+            FSF_vReportError((uint8_t)FSF_ISR_MIN_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MIN_FREQ_ERROR,(uint8_t)(ucIsrId + FSF_ucNumberOfInterrupts));
+  aa:	4a53      	ldr	r2, [pc, #332]	; (1f8 <FSF_ucIsrHandleTask+0x1f8>)
+  ac:	210d      	movs	r1, #13
+  ae:	7812      	ldrb	r2, [r2, #0]
+  b0:	2006      	movs	r0, #6
+  b2:	189a      	adds	r2, r3, r2
+  b4:	b2d2      	uxtb	r2, r2
+  b6:	e01f      	b.n	f8 <FSF_ucIsrHandleTask+0xf8>
+            FSF_auiShortIsrCount[ucIsrId] = 0;
+  b8:	800d      	strh	r5, [r1, #0]
+      for (ucIsrId = 0;ucIsrId < FSF_ucNumberOfShortInterrupts; ucIsrId++, pShortIsrCtrl++)//lint !e9049 !e9008 !e415 : comma operator used [MISRA 2012 Rule 12.3, advisory]
+  ba:	3301      	adds	r3, #1
+  bc:	b2db      	uxtb	r3, r3
+  be:	3208      	adds	r2, #8
+  c0:	3102      	adds	r1, #2
+  c2:	3002      	adds	r0, #2
+  c4:	9c00      	ldr	r4, [sp, #0]
+  c6:	429c      	cmp	r4, r3
+  c8:	d018      	beq.n	fc <FSF_ucIsrHandleTask+0xfc>
+         if (bSynchronisedWithCirculatingTimer != false)
+  ca:	2d00      	cmp	r5, #0
+  cc:	d0f4      	beq.n	b8 <FSF_ucIsrHandleTask+0xb8>
+   if (uiShortIsrTimer[ucIsrId] >= pShortIsrCtrl->uiCycleTime)
+  ce:	8807      	ldrh	r7, [r0, #0]
+  d0:	8896      	ldrh	r6, [r2, #4]
+  d2:	42b7      	cmp	r7, r6
+  d4:	d3f1      	bcc.n	ba <FSF_ucIsrHandleTask+0xba>
+      uiShortIsrTimer[ucIsrId] = 0u;
+  d6:	2400      	movs	r4, #0
+      if ((pShortIsrCtrl->ucControl & (uint8_t)(FS_ISR_MAXIMUM_CHECK)) != (uint8_t)0)
+  d8:	7997      	ldrb	r7, [r2, #6]
+      uiCount = FSF_auiShortIsrCount[ucIsrId];
+  da:	880e      	ldrh	r6, [r1, #0]
+      uiShortIsrTimer[ucIsrId] = 0u;
+  dc:	8004      	strh	r4, [r0, #0]
+      FSF_auiShortIsrCount[ucIsrId] = 0;
+  de:	800c      	strh	r4, [r1, #0]
+      if ((pShortIsrCtrl->ucControl & (uint8_t)(FS_ISR_MAXIMUM_CHECK)) != (uint8_t)0)
+  e0:	3402      	adds	r4, #2
+  e2:	4227      	tst	r7, r4
+  e4:	d0db      	beq.n	9e <FSF_ucIsrHandleTask+0x9e>
+         if (uiCount >= pShortIsrCtrl->uiLimitMaxFrequency)
+  e6:	8814      	ldrh	r4, [r2, #0]
+  e8:	42b4      	cmp	r4, r6
+  ea:	d8d8      	bhi.n	9e <FSF_ucIsrHandleTask+0x9e>
+            FSF_vReportError((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MAX_FREQ_ERROR,(uint8_t)(ucIsrId + FSF_ucNumberOfInterrupts));
+  ec:	210c      	movs	r1, #12
+  ee:	2007      	movs	r0, #7
+  f0:	4a41      	ldr	r2, [pc, #260]	; (1f8 <FSF_ucIsrHandleTask+0x1f8>)
+  f2:	7812      	ldrb	r2, [r2, #0]
+  f4:	189a      	adds	r2, r3, r2
+  f6:	b2d2      	uxtb	r2, r2
+            FSF_vReportError((uint8_t)FSF_ISR_MIN_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MIN_FREQ_ERROR,(uint8_t)(ucIsrId + FSF_ucNumberOfInterrupts));
+  f8:	f7ff fffe 	bl	0 <FSF_vReportError>
+         if (bSynchronisedWithCirculatingTimer != false)
+  fc:	2400      	movs	r4, #0
+      for (ucIsrId = 0; ucIsrId < FSF_ucNumberOfInterrupts; ucIsrId++,pIsrCtrl++)//lint !e9049 !e9008 : comma operator used [MISRA 2012 Rule 12.3, advisory]
+  fe:	4b3e      	ldr	r3, [pc, #248]	; (1f8 <FSF_ucIsrHandleTask+0x1f8>)
+ 100:	4f3e      	ldr	r7, [pc, #248]	; (1fc <FSF_ucIsrHandleTask+0x1fc>)
+ 102:	781b      	ldrb	r3, [r3, #0]
+ 104:	4e3e      	ldr	r6, [pc, #248]	; (200 <FSF_ucIsrHandleTask+0x200>)
+ 106:	9305      	str	r3, [sp, #20]
+         if (bSynchronisedWithCirculatingTimer != false)
+ 108:	4b3a      	ldr	r3, [pc, #232]	; (1f4 <FSF_ucIsrHandleTask+0x1f4>)
+ 10a:	4d3e      	ldr	r5, [pc, #248]	; (204 <FSF_ucIsrHandleTask+0x204>)
+ 10c:	781b      	ldrb	r3, [r3, #0]
+ 10e:	9302      	str	r3, [sp, #8]
+ 110:	4b36      	ldr	r3, [pc, #216]	; (1ec <FSF_ucIsrHandleTask+0x1ec>)
+ 112:	9300      	str	r3, [sp, #0]
+      for (ucIsrId = 0; ucIsrId < FSF_ucNumberOfInterrupts; ucIsrId++,pIsrCtrl++)//lint !e9049 !e9008 : comma operator used [MISRA 2012 Rule 12.3, advisory]
+ 114:	9b05      	ldr	r3, [sp, #20]
+ 116:	42a3      	cmp	r3, r4
+ 118:	d023      	beq.n	162 <FSF_ucIsrHandleTask+0x162>
+         if (bSynchronisedWithCirculatingTimer != false)
+ 11a:	9b02      	ldr	r3, [sp, #8]
+ 11c:	2b00      	cmp	r3, #0
+ 11e:	d047      	beq.n	1b0 <FSF_ucIsrHandleTask+0x1b0>
+   if (uiIsrTimer[ucIsrId] >= pIsrCtrl->uiCycleTime)
+ 120:	9b00      	ldr	r3, [sp, #0]
+ 122:	881a      	ldrh	r2, [r3, #0]
+ 124:	88eb      	ldrh	r3, [r5, #6]
+ 126:	429a      	cmp	r2, r3
+ 128:	d345      	bcc.n	1b6 <FSF_ucIsrHandleTask+0x1b6>
+      uiIsrTimer[ucIsrId] = 0u;
+ 12a:	2300      	movs	r3, #0
+ 12c:	9a00      	ldr	r2, [sp, #0]
+      uint16_t    uiTime = FSF_auiIsrTime[ucIsrId];   //cumulative latency of current interrupt
+ 12e:	8838      	ldrh	r0, [r7, #0]
+      uiIsrTimer[ucIsrId] = 0u;
+ 130:	8013      	strh	r3, [r2, #0]
+      uint16_t    uiCount = FSF_auiIsrCount[ucIsrId]; //number of occurred events of current interrupt
+ 132:	8832      	ldrh	r2, [r6, #0]
+      FSF_auiIsrTime[ucIsrId] = 0u;
+ 134:	803b      	strh	r3, [r7, #0]
+      uint16_t    uiCount = FSF_auiIsrCount[ucIsrId]; //number of occurred events of current interrupt
+ 136:	9201      	str	r2, [sp, #4]
+      if ((pIsrCtrl->ucControl & (uint8_t)(FS_ISR_LATENCY_CHECK)) != (uint8_t)0)
+ 138:	2201      	movs	r2, #1
+      FSF_auiIsrCount[ucIsrId] = 0u;
+ 13a:	8033      	strh	r3, [r6, #0]
+      if ((pIsrCtrl->ucControl & (uint8_t)(FS_ISR_LATENCY_CHECK)) != (uint8_t)0)
+ 13c:	7a2b      	ldrb	r3, [r5, #8]
+ 13e:	9303      	str	r3, [sp, #12]
+ 140:	4213      	tst	r3, r2
+ 142:	d01d      	beq.n	180 <FSF_ucIsrHandleTask+0x180>
+         if (uiCount != (uint16_t)0)
+ 144:	9b01      	ldr	r3, [sp, #4]
+ 146:	2b00      	cmp	r3, #0
+ 148:	d01a      	beq.n	180 <FSF_ucIsrHandleTask+0x180>
+            if ((uiTime/uiCount) > pIsrCtrl->uiLimitLatency)
+ 14a:	0019      	movs	r1, r3
+ 14c:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+ 150:	882b      	ldrh	r3, [r5, #0]
+ 152:	b280      	uxth	r0, r0
+ 154:	4283      	cmp	r3, r0
+ 156:	d213      	bcs.n	180 <FSF_ucIsrHandleTask+0x180>
+               FSF_vReportError((uint8_t)FSF_ISR_LATENCY_CHECK,(uint8_t)FSF_ERR_LATENCY_ERROR,ucIsrId);
+ 158:	0022      	movs	r2, r4
+ 15a:	210b      	movs	r1, #11
+ 15c:	2005      	movs	r0, #5
+            FSF_vReportError((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MAX_FREQ_ERROR,ucIsrId);
+ 15e:	f7ff fffe 	bl	0 <FSF_vReportError>
+      if (bSynchronisedWithCirculatingTimer == false)
+ 162:	4a24      	ldr	r2, [pc, #144]	; (1f4 <FSF_ucIsrHandleTask+0x1f4>)
+ 164:	7813      	ldrb	r3, [r2, #0]
+ 166:	2b00      	cmp	r3, #0
+ 168:	d104      	bne.n	174 <FSF_ucIsrHandleTask+0x174>
+         ucTimeOverflow = (uint8_t)(NO_ISR_TIME_OVERFLOW);
+ 16a:	21ff      	movs	r1, #255	; 0xff
+ 16c:	4b1d      	ldr	r3, [pc, #116]	; (1e4 <FSF_ucIsrHandleTask+0x1e4>)
+ 16e:	7019      	strb	r1, [r3, #0]
+         ucCountOverflow = (uint8_t)(NO_ISR_COUNT_OVERFLOW);
+ 170:	4b1d      	ldr	r3, [pc, #116]	; (1e8 <FSF_ucIsrHandleTask+0x1e8>)
+ 172:	7019      	strb	r1, [r3, #0]
+      bCalcTimerCrossed65ms               = false;
+ 174:	2100      	movs	r1, #0
+ 176:	4b19      	ldr	r3, [pc, #100]	; (1dc <FSF_ucIsrHandleTask+0x1dc>)
+ 178:	7019      	strb	r1, [r3, #0]
+      bSynchronisedWithCirculatingTimer   = true;
+ 17a:	2301      	movs	r3, #1
+ 17c:	7013      	strb	r3, [r2, #0]
+ 17e:	e773      	b.n	68 <FSF_ucIsrHandleTask+0x68>
+      if ((pIsrCtrl->ucControl & (uint8_t)(FS_ISR_MAXIMUM_CHECK)) != (uint8_t)0)
+ 180:	2202      	movs	r2, #2
+ 182:	9b03      	ldr	r3, [sp, #12]
+ 184:	4213      	tst	r3, r2
+ 186:	d007      	beq.n	198 <FSF_ucIsrHandleTask+0x198>
+         if (uiCount >= pIsrCtrl->uiLimitMaxFrequency)
+ 188:	886b      	ldrh	r3, [r5, #2]
+ 18a:	9a01      	ldr	r2, [sp, #4]
+ 18c:	4293      	cmp	r3, r2
+ 18e:	d803      	bhi.n	198 <FSF_ucIsrHandleTask+0x198>
+            FSF_vReportError((uint8_t)FSF_ISR_MAX_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MAX_FREQ_ERROR,ucIsrId);
+ 190:	0022      	movs	r2, r4
+ 192:	210c      	movs	r1, #12
+ 194:	2007      	movs	r0, #7
+ 196:	e7e2      	b.n	15e <FSF_ucIsrHandleTask+0x15e>
+      if ((pIsrCtrl->ucControl & (uint8_t)(FS_ISR_MINIMUM_CHECK)) != (uint8_t)0)
+ 198:	2204      	movs	r2, #4
+ 19a:	9b03      	ldr	r3, [sp, #12]
+ 19c:	4213      	tst	r3, r2
+ 19e:	d00a      	beq.n	1b6 <FSF_ucIsrHandleTask+0x1b6>
+         if (uiCount < pIsrCtrl->uiLimitMinFrequency)
+ 1a0:	88ab      	ldrh	r3, [r5, #4]
+ 1a2:	9a01      	ldr	r2, [sp, #4]
+ 1a4:	4293      	cmp	r3, r2
+ 1a6:	d906      	bls.n	1b6 <FSF_ucIsrHandleTask+0x1b6>
+            FSF_vReportError((uint8_t)FSF_ISR_MIN_FREQUENCY_CHECK,(uint8_t)FSF_ERR_MIN_FREQ_ERROR,ucIsrId);
+ 1a8:	0022      	movs	r2, r4
+ 1aa:	210d      	movs	r1, #13
+ 1ac:	2006      	movs	r0, #6
+ 1ae:	e7d6      	b.n	15e <FSF_ucIsrHandleTask+0x15e>
+            FSF_auiIsrTime[ucIsrId] = 0;
+ 1b0:	9b02      	ldr	r3, [sp, #8]
+ 1b2:	803b      	strh	r3, [r7, #0]
+            FSF_auiIsrCount[ucIsrId] = 0;
+ 1b4:	8033      	strh	r3, [r6, #0]
+      for (ucIsrId = 0; ucIsrId < FSF_ucNumberOfInterrupts; ucIsrId++,pIsrCtrl++)//lint !e9049 !e9008 : comma operator used [MISRA 2012 Rule 12.3, advisory]
+ 1b6:	9b00      	ldr	r3, [sp, #0]
+ 1b8:	3401      	adds	r4, #1
+ 1ba:	3302      	adds	r3, #2
+ 1bc:	b2e4      	uxtb	r4, r4
+ 1be:	350a      	adds	r5, #10
+ 1c0:	3702      	adds	r7, #2
+ 1c2:	3602      	adds	r6, #2
+ 1c4:	9300      	str	r3, [sp, #0]
+ 1c6:	e7a5      	b.n	114 <FSF_ucIsrHandleTask+0x114>
+      for (ucIsrId = 0;ucIsrId < FSF_ucNumberOfShortInterrupts; ucIsrId++, pShortIsrCtrl++)//lint !e9049 !e9008 !e415 : comma operator used [MISRA 2012 Rule 12.3, advisory]
+ 1c8:	4b0f      	ldr	r3, [pc, #60]	; (208 <FSF_ucIsrHandleTask+0x208>)
+ 1ca:	4910      	ldr	r1, [pc, #64]	; (20c <FSF_ucIsrHandleTask+0x20c>)
+ 1cc:	781b      	ldrb	r3, [r3, #0]
+ 1ce:	4808      	ldr	r0, [pc, #32]	; (1f0 <FSF_ucIsrHandleTask+0x1f0>)
+ 1d0:	9300      	str	r3, [sp, #0]
+         if (bSynchronisedWithCirculatingTimer != false)
+ 1d2:	4b08      	ldr	r3, [pc, #32]	; (1f4 <FSF_ucIsrHandleTask+0x1f4>)
+ 1d4:	4a0e      	ldr	r2, [pc, #56]	; (210 <FSF_ucIsrHandleTask+0x210>)
+ 1d6:	781d      	ldrb	r5, [r3, #0]
+ 1d8:	2300      	movs	r3, #0
+ 1da:	e773      	b.n	c4 <FSF_ucIsrHandleTask+0xc4>
+	...
+
+Disassembly of section .text.FSF_vIsrDoEntry:
+
+00000000 <FSF_vIsrDoEntry>:
+//  Test harness entry point
+void vIsrDoEntry(uint8_t ucIsrId)
+#endif
+{
+   //  Does the user wants to check anything?
+   if ((FSF_atIsrCntrTbl[ucIsrId].ucControl & (uint8_t)(FS_ISR_CONTROL_ALL)) != (uint8_t)0)
+   0:	220a      	movs	r2, #10
+   2:	4342      	muls	r2, r0
+   4:	4b0a      	ldr	r3, [pc, #40]	; (30 <FSF_vIsrDoEntry+0x30>)
+{
+   6:	b510      	push	{r4, lr}
+   if ((FSF_atIsrCntrTbl[ucIsrId].ucControl & (uint8_t)(FS_ISR_CONTROL_ALL)) != (uint8_t)0)
+   8:	189b      	adds	r3, r3, r2
+   a:	7a1b      	ldrb	r3, [r3, #8]
+   c:	075b      	lsls	r3, r3, #29
+   e:	d00d      	beq.n	2c <FSF_vIsrDoEntry+0x2c>
+   {
+      FSF_auiIsrCount[ucIsrId]++;
+  10:	4a08      	ldr	r2, [pc, #32]	; (34 <FSF_vIsrDoEntry+0x34>)
+  12:	0041      	lsls	r1, r0, #1
+  14:	5a8b      	ldrh	r3, [r1, r2]
+  16:	3301      	adds	r3, #1
+  18:	b29b      	uxth	r3, r3
+  1a:	528b      	strh	r3, [r1, r2]
+      if (FSF_auiIsrCount[ucIsrId] == 0u)
+  1c:	2b00      	cmp	r3, #0
+  1e:	d101      	bne.n	24 <FSF_vIsrDoEntry+0x24>
+      {
+         //  PCA: CR_001-16-02-2007
+
+         // Interrupts count overflow! Report error!
+         ucCountOverflow = ucIsrId;
+  20:	4b05      	ldr	r3, [pc, #20]	; (38 <FSF_vIsrDoEntry+0x38>)
+  22:	7018      	strb	r0, [r3, #0]
+    Get current value of circulating timer
+======================================================================*/
+#ifdef TH_FSCOM
+      uiIsrTimeStamp = (uint16_t)TH_FSF_CircleMicroSeconds;
+#else
+      uiIsrTimeStamp = TIM_uiGetCircleMicroSeconds();
+  24:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+  28:	4b04      	ldr	r3, [pc, #16]	; (3c <FSF_vIsrDoEntry+0x3c>)
+  2a:	8018      	strh	r0, [r3, #0]
+    Memorize entry of ISR
+======================================================================*/
+#ifdef FSF_ISRCONFIG
+   FSF_vIsrEntryConf(ucIsrId);
+#endif
+}
+  2c:	bd10      	pop	{r4, pc}
+  2e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.FSF_vIsrDoExit:
+
+00000000 <FSF_vIsrDoExit>:
+void FSF_vIsrDoExit(uint8_t ucIsrId)
+#else
+//  Test harness entry point
+void vIsrDoExit(uint8_t ucIsrId)
+#endif
+{
+   0:	b537      	push	{r0, r1, r2, r4, r5, lr}
+   //  Does the user wants to do the latency check?
+   if ((FSF_atIsrCntrTbl[ucIsrId].ucControl & (uint8_t)(FS_ISR_LATENCY_CHECK)) != (uint8_t)0)
+   2:	220a      	movs	r2, #10
+   4:	4342      	muls	r2, r0
+   6:	4b0f      	ldr	r3, [pc, #60]	; (44 <FSF_vIsrDoExit+0x44>)
+{
+   8:	0004      	movs	r4, r0
+   if ((FSF_atIsrCntrTbl[ucIsrId].ucControl & (uint8_t)(FS_ISR_LATENCY_CHECK)) != (uint8_t)0)
+   a:	189b      	adds	r3, r3, r2
+   c:	7a1b      	ldrb	r3, [r3, #8]
+   e:	07db      	lsls	r3, r3, #31
+  10:	d514      	bpl.n	3c <FSF_vIsrDoExit+0x3c>
+   {
+      uint16_t uiTime;
+      volatile uint8_t ucIdx = ucIsrId;
+  12:	466b      	mov	r3, sp
+  14:	1ddd      	adds	r5, r3, #7
+  16:	71d8      	strb	r0, [r3, #7]
+    Compute the cumulative latency
+======================================================================*/
+#ifdef TH_FSCOM
+      uiTime = FSF_auiIsrTime[ucIdx] + (uint16_t)(TH_FSF_CircleMicroSeconds - uiIsrTimeStamp);  //calculate cumulative latency
+#else
+      uint16_t uiCircleMicroSeconds = TIM_uiGetCircleMicroSeconds();
+  18:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+  1c:	0003      	movs	r3, r0
+      uiTime = FSF_auiIsrTime[ucIdx] + (uint16_t)(uiCircleMicroSeconds - uiIsrTimeStamp);  //calculate cumulative latency
+  1e:	7829      	ldrb	r1, [r5, #0]
+  20:	4a09      	ldr	r2, [pc, #36]	; (48 <FSF_vIsrDoExit+0x48>)
+  22:	480a      	ldr	r0, [pc, #40]	; (4c <FSF_vIsrDoExit+0x4c>)
+  24:	0049      	lsls	r1, r1, #1
+  26:	8800      	ldrh	r0, [r0, #0]
+  28:	5a89      	ldrh	r1, [r1, r2]
+  2a:	1a09      	subs	r1, r1, r0
+  2c:	185b      	adds	r3, r3, r1
+#endif
+
+      if (uiTime < FSF_auiIsrTime[ucIsrId])
+  2e:	0061      	lsls	r1, r4, #1
+  30:	5a88      	ldrh	r0, [r1, r2]
+      uiTime = FSF_auiIsrTime[ucIdx] + (uint16_t)(uiCircleMicroSeconds - uiIsrTimeStamp);  //calculate cumulative latency
+  32:	b29b      	uxth	r3, r3
+      if (uiTime < FSF_auiIsrTime[ucIsrId])
+  34:	4298      	cmp	r0, r3
+  36:	d902      	bls.n	3e <FSF_vIsrDoExit+0x3e>
+      {
+         //  PCA: CR_001-16-02-2007
+         // Latency overflow. Report error!
+         ucTimeOverflow = ucIsrId;
+  38:	4b05      	ldr	r3, [pc, #20]	; (50 <FSF_vIsrDoExit+0x50>)
+  3a:	701c      	strb	r4, [r3, #0]
+    Memorize exit of ISR
+======================================================================*/
+#ifdef FSF_ISRCONFIG
+   FSF_vIsrExitConf(ucIsrId);
+#endif
+}
+  3c:	bd37      	pop	{r0, r1, r2, r4, r5, pc}
+         FSF_auiIsrTime[ucIsrId] = uiTime;
+  3e:	528b      	strh	r3, [r1, r2]
+}
+  40:	e7fc      	b.n	3c <FSF_vIsrDoExit+0x3c>
+  42:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.FSF_vIsrDoShortEntry:
+
+00000000 <FSF_vIsrDoShortEntry>:
+//  Test harness entry point
+void vIsrDoShortEntry(uint8_t ucIsrShortId)
+#endif
+{
+   // Does the user wants to check anything?
+   if ((FSF_atIsrShortCntrTbl[ucIsrShortId].ucControl & (uint8_t)(FS_ISR_CONTROL_SHORT)) != (uint8_t)0)
+   0:	4b0a      	ldr	r3, [pc, #40]	; (2c <FSF_vIsrDoShortEntry+0x2c>)
+   2:	00c2      	lsls	r2, r0, #3
+   4:	189b      	adds	r3, r3, r2
+   6:	799a      	ldrb	r2, [r3, #6]
+   8:	2306      	movs	r3, #6
+   a:	421a      	tst	r2, r3
+   c:	d00c      	beq.n	28 <FSF_vIsrDoShortEntry+0x28>
+   {
+      FSF_auiShortIsrCount[ucIsrShortId]++;
+   e:	4a08      	ldr	r2, [pc, #32]	; (30 <FSF_vIsrDoShortEntry+0x30>)
+  10:	0041      	lsls	r1, r0, #1
+  12:	5a8b      	ldrh	r3, [r1, r2]
+  14:	3301      	adds	r3, #1
+  16:	b29b      	uxth	r3, r3
+  18:	528b      	strh	r3, [r1, r2]
+      if (FSF_auiShortIsrCount[ucIsrShortId] == 0u)
+  1a:	2b00      	cmp	r3, #0
+  1c:	d104      	bne.n	28 <FSF_vIsrDoShortEntry+0x28>
+      {
+         //  PCA: CR_001-16-02-2007
+         // Interrupt count overflow! Report error!
+         ucCountOverflow = (uint8_t)(ucIsrShortId + FSF_ucNumberOfInterrupts);
+  1e:	4a05      	ldr	r2, [pc, #20]	; (34 <FSF_vIsrDoShortEntry+0x34>)
+  20:	4b05      	ldr	r3, [pc, #20]	; (38 <FSF_vIsrDoShortEntry+0x38>)
+  22:	7812      	ldrb	r2, [r2, #0]
+  24:	1880      	adds	r0, r0, r2
+  26:	7018      	strb	r0, [r3, #0]
+    Memorize entry of short ISR
+======================================================================*/
+#ifdef FSF_ISRCONFIG
+   FSF_vIsrShortEntryConf(ucIsrShortId);
+#endif
+}
+  28:	4770      	bx	lr
+  2a:	46c0      	nop			; (mov r8, r8)
+	...

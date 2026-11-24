@@ -1,0 +1,390 @@
+
+out/BootManager/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.TIM_Reset:
+
+00000000 <TIM_Reset>:
+void TIM_Reset(TIMER_TypeDef *TIMx)
+{
+    /* Check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    if (TIMx == TIM0)
+   0:	4b09      	ldr	r3, [pc, #36]	; (28 <TIM_Reset+0x28>)
+{
+   2:	b510      	push	{r4, lr}
+    if (TIMx == TIM0)
+   4:	4298      	cmp	r0, r3
+   6:	d103      	bne.n	10 <TIM_Reset+0x10>
+    {
+        RCC_APB0PeriphReset(RCC_APB0_TIM0);
+   8:	2001      	movs	r0, #1
+    {
+        RCC_APB0PeriphReset(RCC_APB0_TIM2);
+    }
+    else
+    {
+        RCC_APB0PeriphReset(RCC_APB0_TIM3);
+   a:	f7ff fffe 	bl	0 <RCC_APB0PeriphReset>
+    }
+}
+   e:	bd10      	pop	{r4, pc}
+    else if (TIMx == TIM1)
+  10:	4b06      	ldr	r3, [pc, #24]	; (2c <TIM_Reset+0x2c>)
+  12:	4298      	cmp	r0, r3
+  14:	d101      	bne.n	1a <TIM_Reset+0x1a>
+        RCC_APB0PeriphReset(RCC_APB0_TIM1);
+  16:	2002      	movs	r0, #2
+  18:	e7f7      	b.n	a <TIM_Reset+0xa>
+    else if (TIMx == TIM2)
+  1a:	4b05      	ldr	r3, [pc, #20]	; (30 <TIM_Reset+0x30>)
+  1c:	4298      	cmp	r0, r3
+  1e:	d101      	bne.n	24 <TIM_Reset+0x24>
+        RCC_APB0PeriphReset(RCC_APB0_TIM2);
+  20:	2004      	movs	r0, #4
+  22:	e7f2      	b.n	a <TIM_Reset+0xa>
+        RCC_APB0PeriphReset(RCC_APB0_TIM3);
+  24:	2008      	movs	r0, #8
+  26:	e7f0      	b.n	a <TIM_Reset+0xa>
+  28:	40000400 	.word	0x40000400
+  2c:	40000800 	.word	0x40000800
+  30:	40000c00 	.word	0x40000c00
+
+Disassembly of section .text.TIM_StructInit:
+
+00000000 <TIM_StructInit>:
+  *         structure which will be initialized.
+  * @retval None
+  */
+void TIM_StructInit(TIM_InitTypeDef *TIM_InitStruct)
+{
+    TIM_InitStruct->TIM_Prescaler = 0x00;
+   0:	2300      	movs	r3, #0
+   2:	6003      	str	r3, [r0, #0]
+    TIM_InitStruct->TIM_Period    = 0x00;
+   4:	6043      	str	r3, [r0, #4]
+    TIM_InitStruct->TIM_CLKSource = TIM_CLKSource_PCLK;
+   6:	6083      	str	r3, [r0, #8]
+    TIM_InitStruct->TIM_OPMode    = TIM_OPMode_Continue;
+    TIM_InitStruct->TIM_TCMode    = TIM_TCMode_Disable;
+   8:	60c3      	str	r3, [r0, #12]
+    TIM_InitStruct->TIM_ECFFilter = TIM_FLITER_TIMER_NONE;
+}
+   a:	4770      	bx	lr
+
+Disassembly of section .text.TIM_Init:
+
+00000000 <TIM_Init>:
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_TIM_CLK_SOURCE(TIM_InitStruct->TIM_CLKSource));
+    assert_param(IS_TIM_OP_MODE(TIM_InitStruct->TIM_OPMode));
+
+    TIMx->PSQ = TIM_InitStruct->TIM_Prescaler;
+   0:	680b      	ldr	r3, [r1, #0]
+{
+   2:	b510      	push	{r4, lr}
+    TIMx->PSQ = TIM_InitStruct->TIM_Prescaler;
+   4:	60c3      	str	r3, [r0, #12]
+    TIMx->TPR = TIM_InitStruct->TIM_Period;
+   6:	684b      	ldr	r3, [r1, #4]
+
+    TIMx->CR.V32 &= ~(TIM_CR_CLKS_Msk | TIM_CR_OPM_Msk | TIM_CR_TC_Msk | TIM_CR_ECF_Msk);
+   8:	4a07      	ldr	r2, [pc, #28]	; (28 <TIM_Init+0x28>)
+    TIMx->TPR = TIM_InitStruct->TIM_Period;
+   a:	6083      	str	r3, [r0, #8]
+    TIMx->CR.V32 &= ~(TIM_CR_CLKS_Msk | TIM_CR_OPM_Msk | TIM_CR_TC_Msk | TIM_CR_ECF_Msk);
+   c:	6803      	ldr	r3, [r0, #0]
+   e:	4013      	ands	r3, r2
+  10:	6003      	str	r3, [r0, #0]
+    TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+                    | TIM_InitStruct->TIM_TCMode | TIM_InitStruct->TIM_ECFFilter;
+  12:	894c      	ldrh	r4, [r1, #10]
+  14:	890b      	ldrh	r3, [r1, #8]
+    TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+  16:	6802      	ldr	r2, [r0, #0]
+                    | TIM_InitStruct->TIM_TCMode | TIM_InitStruct->TIM_ECFFilter;
+  18:	4323      	orrs	r3, r4
+  1a:	898c      	ldrh	r4, [r1, #12]
+  1c:	89c9      	ldrh	r1, [r1, #14]
+  1e:	4323      	orrs	r3, r4
+  20:	430b      	orrs	r3, r1
+    TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+  22:	4313      	orrs	r3, r2
+  24:	6003      	str	r3, [r0, #0]
+}
+  26:	bd10      	pop	{r4, pc}
+  28:	ffffcbc7 	.word	0xffffcbc7
+
+Disassembly of section .text.TIM_INTConfig:
+
+00000000 <TIM_INTConfig>:
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	2380      	movs	r3, #128	; 0x80
+    {
+        TIMx->CR.V32 |= TIM_CR_IE_Msk;
+   2:	6802      	ldr	r2, [r0, #0]
+    if (NewState != SH_DISABLE)
+   4:	2900      	cmp	r1, #0
+   6:	d002      	beq.n	e <TIM_INTConfig+0xe>
+        TIMx->CR.V32 |= TIM_CR_IE_Msk;
+   8:	4313      	orrs	r3, r2
+   a:	6003      	str	r3, [r0, #0]
+    }
+    else
+    {
+        TIMx->CR.V32 &= (~TIM_CR_IE_Msk);
+    }
+}
+   c:	4770      	bx	lr
+        TIMx->CR.V32 &= (~TIM_CR_IE_Msk);
+   e:	439a      	bics	r2, r3
+  10:	6002      	str	r2, [r0, #0]
+}
+  12:	e7fb      	b.n	c <TIM_INTConfig+0xc>
+
+Disassembly of section .text.TIM_OnOff:
+
+00000000 <TIM_OnOff>:
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_CMD_STATE(OnOffState));
+
+    if (OnOffState != SH_OFF)
+   0:	2301      	movs	r3, #1
+    {
+        TIMx->CR.V32 |= TIM_CR_STR_Msk;
+   2:	6802      	ldr	r2, [r0, #0]
+    if (OnOffState != SH_OFF)
+   4:	2900      	cmp	r1, #0
+   6:	d002      	beq.n	e <TIM_OnOff+0xe>
+        TIMx->CR.V32 |= TIM_CR_STR_Msk;
+   8:	4313      	orrs	r3, r2
+   a:	6003      	str	r3, [r0, #0]
+    }
+    else
+    {
+        TIMx->CR.V32 &= (~TIM_CR_STR_Msk);
+    }
+}
+   c:	4770      	bx	lr
+        TIMx->CR.V32 &= (~TIM_CR_STR_Msk);
+   e:	439a      	bics	r2, r3
+  10:	6002      	str	r2, [r0, #0]
+}
+  12:	e7fb      	b.n	c <TIM_OnOff+0xc>
+
+Disassembly of section .text.TIM_OutPutConfig:
+
+00000000 <TIM_OutPutConfig>:
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	2900      	cmp	r1, #0
+   2:	d005      	beq.n	10 <TIM_OutPutConfig+0x10>
+    {
+        TIMx->CR.V32 |= TIM_CR_TC_Msk;
+   4:	2380      	movs	r3, #128	; 0x80
+   6:	6802      	ldr	r2, [r0, #0]
+   8:	00db      	lsls	r3, r3, #3
+   a:	4313      	orrs	r3, r2
+    }
+    else
+    {
+        TIMx->CR.V32 &= ~TIM_CR_TC_Msk;
+   c:	6003      	str	r3, [r0, #0]
+    }
+}
+   e:	4770      	bx	lr
+        TIMx->CR.V32 &= ~TIM_CR_TC_Msk;
+  10:	6803      	ldr	r3, [r0, #0]
+  12:	4a01      	ldr	r2, [pc, #4]	; (18 <TIM_OutPutConfig+0x18>)
+  14:	4013      	ands	r3, r2
+  16:	e7f9      	b.n	c <TIM_OutPutConfig+0xc>
+  18:	fffffbff 	.word	0xfffffbff
+
+Disassembly of section .text.TIM_CM0EventTrigger:
+
+00000000 <TIM_CM0EventTrigger>:
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	2900      	cmp	r1, #0
+   2:	d005      	beq.n	10 <TIM_CM0EventTrigger+0x10>
+
+    {
+        TIMx->CR.V32 |= TIM_CR_ETEN_Msk;
+   4:	2380      	movs	r3, #128	; 0x80
+   6:	6802      	ldr	r2, [r0, #0]
+   8:	009b      	lsls	r3, r3, #2
+   a:	4313      	orrs	r3, r2
+    }
+    else
+    {
+        TIMx->CR.V32 &= ~TIM_CR_ETEN_Msk;
+   c:	6003      	str	r3, [r0, #0]
+    }
+}
+   e:	4770      	bx	lr
+        TIMx->CR.V32 &= ~TIM_CR_ETEN_Msk;
+  10:	6803      	ldr	r3, [r0, #0]
+  12:	4a01      	ldr	r2, [pc, #4]	; (18 <TIM_CM0EventTrigger+0x18>)
+  14:	4013      	ands	r3, r2
+  16:	e7f9      	b.n	c <TIM_CM0EventTrigger+0xc>
+  18:	fffffdff 	.word	0xfffffdff
+
+Disassembly of section .text.TIM_ExtPeripheralsTrigger:
+
+00000000 <TIM_ExtPeripheralsTrigger>:
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	2900      	cmp	r1, #0
+   2:	d005      	beq.n	10 <TIM_ExtPeripheralsTrigger+0x10>
+
+    {
+        TIMx->CR.V32 |= TIM_CR_TRIGEN_Msk;
+   4:	2380      	movs	r3, #128	; 0x80
+   6:	6802      	ldr	r2, [r0, #0]
+   8:	005b      	lsls	r3, r3, #1
+   a:	4313      	orrs	r3, r2
+    }
+    else
+    {
+        TIMx->CR.V32 &= ~TIM_CR_TRIGEN_Msk;
+   c:	6003      	str	r3, [r0, #0]
+    }
+}
+   e:	4770      	bx	lr
+        TIMx->CR.V32 &= ~TIM_CR_TRIGEN_Msk;
+  10:	6803      	ldr	r3, [r0, #0]
+  12:	4a01      	ldr	r2, [pc, #4]	; (18 <TIM_ExtPeripheralsTrigger+0x18>)
+  14:	4013      	ands	r3, r2
+  16:	e7f9      	b.n	c <TIM_ExtPeripheralsTrigger+0xc>
+  18:	fffffeff 	.word	0xfffffeff
+
+Disassembly of section .text.TIM_GetFlagStatus:
+
+00000000 <TIM_GetFlagStatus>:
+    else
+    {
+        bitStatus = SH_RESET;
+    }
+
+    return bitStatus;
+   0:	2301      	movs	r3, #1
+    if ((TIMx->TIMINTF.V32 & TIM_TIMINTF_TF_Msk) != SH_RESET)
+   2:	6900      	ldr	r0, [r0, #16]
+    return bitStatus;
+   4:	4018      	ands	r0, r3
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.TIM_ClearFlag:
+
+00000000 <TIM_ClearFlag>:
+void TIM_ClearFlag(TIMER_TypeDef *TIMx)
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    TIMx->TIMINTF.V32 = TIM_TIMINTF_TFC_Msk;
+   0:	2380      	movs	r3, #128	; 0x80
+   2:	025b      	lsls	r3, r3, #9
+   4:	6103      	str	r3, [r0, #16]
+}
+   6:	4770      	bx	lr
+
+Disassembly of section .text.TIM_GetCounter:
+
+00000000 <TIM_GetCounter>:
+{
+
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    return TIMx->TCNT;
+   0:	6840      	ldr	r0, [r0, #4]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.TIM_GetPrescaler:
+
+00000000 <TIM_GetPrescaler>:
+uint32_t TIM_GetPrescaler(TIMER_TypeDef *TIMx)
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    return TIMx->PSQ;
+   0:	68c0      	ldr	r0, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.TIM_GetPeriod:
+
+00000000 <TIM_GetPeriod>:
+uint32_t TIM_GetPeriod(TIMER_TypeDef *TIMx)
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    return TIMx->TPR;
+   0:	6880      	ldr	r0, [r0, #8]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.TIM_SetCounter:
+
+00000000 <TIM_SetCounter>:
+{
+
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    TIMx->TCNT = Counter;
+   0:	6041      	str	r1, [r0, #4]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.TIM_SetPrescaler:
+
+00000000 <TIM_SetPrescaler>:
+void TIM_SetPrescaler(TIMER_TypeDef *TIMx, uint32_t Prescaler)
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    TIMx->PSQ = Prescaler;
+   0:	60c1      	str	r1, [r0, #12]
+}
+   2:	4770      	bx	lr
+
+Disassembly of section .text.TIM_SetPeriod:
+
+00000000 <TIM_SetPeriod>:
+void TIM_SetPeriod(TIMER_TypeDef *TIMx, uint32_t Period)
+{
+    /* check the parameters */
+    assert_param(IS_TIM_ALL_PERIPH(TIMx));
+
+    TIMx->TPR = Period;
+   0:	6081      	str	r1, [r0, #8]
+}
+   2:	4770      	bx	lr

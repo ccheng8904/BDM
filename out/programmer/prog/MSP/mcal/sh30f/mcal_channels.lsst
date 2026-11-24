@@ -1,0 +1,3571 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mcal_channels.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	MUART3_RX_PC6_TX_PC7
+  18              		.global	MUART3_RX_PC6_TX_PC6
+  19              		.global	MUART3_RX_PC6_TX_PC5
+  20              		.global	MUART3_RX_PC6_TX_PB2
+  21              		.global	MUART3_RX_PC5_TX_PC7
+  22              		.global	MUART3_RX_PC5_TX_PC6
+  23              		.global	MUART3_RX_PC5_TX_PC5
+  24              		.global	MUART3_RX_PC5_TX_PB2
+  25              		.global	MUART3_RX_PB3_TX_PC7
+  26              		.global	MUART3_RX_PB3_TX_PC6
+  27              		.global	MUART3_RX_PB3_TX_PC5
+  28              		.global	MUART3_RX_PB3_TX_PB2
+  29              		.global	MUART2_RX_PD9_TX_PD10
+  30              		.global	MUART2_RX_PD9_TX_PD8
+  31              		.global	MUART2_RX_PD9_TX_PC11
+  32              		.global	MUART2_RX_PD9_TX_PC10
+  33              		.global	MUART2_RX_PD9_TX_PB14
+  34              		.global	MUART2_RX_PD9_TX_PB12
+  35              		.global	MUART2_RX_PD7_TX_PD10
+  36              		.global	MUART2_RX_PD7_TX_PD8
+  37              		.global	MUART2_RX_PD7_TX_PC11
+  38              		.global	MUART2_RX_PD7_TX_PC10
+  39              		.global	MUART2_RX_PD7_TX_PB14
+  40              		.global	MUART2_RX_PD7_TX_PB12
+  41              		.global	MUART2_RX_PC11_TX_PD10
+  42              		.global	MUART2_RX_PC11_TX_PD8
+  43              		.global	MUART2_RX_PC11_TX_PC11
+  44              		.global	MUART2_RX_PC11_TX_PC10
+  45              		.global	MUART2_RX_PC11_TX_PB14
+  46              		.global	MUART2_RX_PC11_TX_PB12
+  47              		.global	MUART2_RX_PC10_TX_PD10
+  48              		.global	MUART2_RX_PC10_TX_PD8
+  49              		.global	MUART2_RX_PC10_TX_PC11
+  50              		.global	MUART2_RX_PC10_TX_PC10
+  51              		.global	MUART2_RX_PC10_TX_PB14
+  52              		.global	MUART2_RX_PC10_TX_PB12
+  53              		.global	MUART2_RX_PB13_TX_PD10
+  54              		.global	MUART2_RX_PB13_TX_PD8
+  55              		.global	MUART2_RX_PB13_TX_PC11
+  56              		.global	MUART2_RX_PB13_TX_PC10
+  57              		.global	MUART2_RX_PB13_TX_PB14
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 2
+
+
+  58              		.global	MUART2_RX_PB13_TX_PB12
+  59              		.global	MUART1_RX_PD3_TX_PD3
+  60              		.global	MUART1_RX_PD3_TX_PD2
+  61              		.global	MUART1_RX_PD3_TX_PC9
+  62              		.global	MUART1_RX_PD3_TX_PC8
+  63              		.global	MUART1_RX_PD3_TX_PA10
+  64              		.global	MUART1_RX_PD3_TX_PA9
+  65              		.global	MUART1_RX_PD2_TX_PD3
+  66              		.global	MUART1_RX_PD2_TX_PD2
+  67              		.global	MUART1_RX_PD2_TX_PC9
+  68              		.global	MUART1_RX_PD2_TX_PC8
+  69              		.global	MUART1_RX_PD2_TX_PA10
+  70              		.global	MUART1_RX_PD2_TX_PA9
+  71              		.global	MUART1_RX_PC9_TX_PD3
+  72              		.global	MUART1_RX_PC9_TX_PD2
+  73              		.global	MUART1_RX_PC9_TX_PC9
+  74              		.global	MUART1_RX_PC9_TX_PC8
+  75              		.global	MUART1_RX_PC9_TX_PA10
+  76              		.global	MUART1_RX_PC9_TX_PA9
+  77              		.global	MUART1_RX_PC8_TX_PD3
+  78              		.global	MUART1_RX_PC8_TX_PD2
+  79              		.global	MUART1_RX_PC8_TX_PC9
+  80              		.global	MUART1_RX_PC8_TX_PC8
+  81              		.global	MUART1_RX_PC8_TX_PA10
+  82              		.global	MUART1_RX_PC8_TX_PA9
+  83              		.global	MUART1_RX_PA10_TX_PD3
+  84              		.global	MUART1_RX_PA10_TX_PD2
+  85              		.global	MUART1_RX_PA10_TX_PC9
+  86              		.global	MUART1_RX_PA10_TX_PC8
+  87              		.global	MUART1_RX_PA10_TX_PA10
+  88              		.global	MUART1_RX_PA10_TX_PA9
+  89              		.global	MUART1_RX_PA9_TX_PD3
+  90              		.global	MUART1_RX_PA9_TX_PD2
+  91              		.global	MUART1_RX_PA9_TX_PC9
+  92              		.global	MUART1_RX_PA9_TX_PC8
+  93              		.global	MUART1_RX_PA9_TX_PA10
+  94              		.global	MUART1_RX_PA9_TX_PA9
+  95              		.global	MUART0_RX_PD1_TX_PD1
+  96              		.global	MUART0_RX_PD1_TX_PD0
+  97              		.global	MUART0_RX_PD1_TX_PC4
+  98              		.global	MUART0_RX_PD1_TX_PC3
+  99              		.global	MUART0_RX_PD1_TX_PB0
+ 100              		.global	MUART0_RX_PD1_TX_PA15
+ 101              		.global	MUART0_RX_PD0_TX_PD1
+ 102              		.global	MUART0_RX_PD0_TX_PD0
+ 103              		.global	MUART0_RX_PD0_TX_PC4
+ 104              		.global	MUART0_RX_PD0_TX_PC3
+ 105              		.global	MUART0_RX_PD0_TX_PB0
+ 106              		.global	MUART0_RX_PD0_TX_PA15
+ 107              		.global	MUART0_RX_PC4_TX_PD1
+ 108              		.global	MUART0_RX_PC4_TX_PD0
+ 109              		.global	MUART0_RX_PC4_TX_PC4
+ 110              		.global	MUART0_RX_PC4_TX_PC3
+ 111              		.global	MUART0_RX_PC4_TX_PB0
+ 112              		.global	MUART0_RX_PC4_TX_PA15
+ 113              		.global	MUART0_RX_PC3_TX_PD1
+ 114              		.global	MUART0_RX_PC3_TX_PD0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 3
+
+
+ 115              		.global	MUART0_RX_PC3_TX_PC4
+ 116              		.global	MUART0_RX_PC3_TX_PC3
+ 117              		.global	MUART0_RX_PC3_TX_PB0
+ 118              		.global	MUART0_RX_PC3_TX_PA15
+ 119              		.global	MUART0_RX_PB0_TX_PD1
+ 120              		.global	MUART0_RX_PB0_TX_PD0
+ 121              		.global	MUART0_RX_PB0_TX_PC4
+ 122              		.global	MUART0_RX_PB0_TX_PC3
+ 123              		.global	MUART0_RX_PB0_TX_PB0
+ 124              		.global	MUART0_RX_PB0_TX_PA15
+ 125              		.global	MUART0_RX_PA15_TX_PD1
+ 126              		.global	MUART0_RX_PA15_TX_PD0
+ 127              		.global	MUART0_RX_PA15_TX_PC4
+ 128              		.global	MUART0_RX_PA15_TX_PC3
+ 129              		.global	MUART0_RX_PA15_TX_PB0
+ 130              		.global	MUART0_RX_PA15_TX_PA15
+ 131              		.global	MEXTID12
+ 132              		.global	MEXTID11
+ 133              		.global	MEXTID10
+ 134              		.global	MEXTID9
+ 135              		.global	MEXTID8
+ 136              		.global	MEXTID7
+ 137              		.global	MEXTID6
+ 138              		.global	MEXTID5
+ 139              		.global	MEXTID4
+ 140              		.global	MEXTID3
+ 141              		.global	MEXTID2
+ 142              		.global	MEXTID1
+ 143              		.global	MEXTID0
+ 144              		.global	MEXTIC15
+ 145              		.global	MEXTIC14
+ 146              		.global	MEXTIC13
+ 147              		.global	MEXTIC12
+ 148              		.global	MEXTIC11
+ 149              		.global	MEXTIC10
+ 150              		.global	MEXTIC9
+ 151              		.global	MEXTIC8
+ 152              		.global	MEXTIC7
+ 153              		.global	MEXTIC6
+ 154              		.global	MEXTIC5
+ 155              		.global	MEXTIC4
+ 156              		.global	MEXTIC3
+ 157              		.global	MEXTIC2
+ 158              		.global	MEXTIC1
+ 159              		.global	MEXTIC0
+ 160              		.global	MEXTIB15
+ 161              		.global	MEXTIB14
+ 162              		.global	MEXTIB13
+ 163              		.global	MEXTIB12
+ 164              		.global	MEXTIB11
+ 165              		.global	MEXTIB10
+ 166              		.global	MEXTIB9
+ 167              		.global	MEXTIB8
+ 168              		.global	MEXTIB7
+ 169              		.global	MEXTIB6
+ 170              		.global	MEXTIB5
+ 171              		.global	MEXTIB4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 4
+
+
+ 172              		.global	MEXTIB3
+ 173              		.global	MEXTIB2
+ 174              		.global	MEXTIB1
+ 175              		.global	MEXTIB0
+ 176              		.global	MEXTIA15
+ 177              		.global	MEXTIA14
+ 178              		.global	MEXTIA13
+ 179              		.global	MEXTIA12
+ 180              		.global	MEXTIA11
+ 181              		.global	MEXTIA10
+ 182              		.global	MEXTIA9
+ 183              		.global	MEXTIA8
+ 184              		.global	MEXTIA7
+ 185              		.global	MEXTIA6
+ 186              		.global	MEXTIA5
+ 187              		.global	MEXTIA4
+ 188              		.global	MEXTIA3
+ 189              		.global	MEXTIA2
+ 190              		.global	MEXTIA1
+ 191              		.global	MEXTIA0
+ 192              		.global	MDIOD12_MADC0_AN26
+ 193              		.global	MDIOD11_MADC0_AN25
+ 194              		.global	MDIOD10_MUART2_TX
+ 195              		.global	MDIOD10_MADC0_AN24
+ 196              		.global	MDIOD9_MUART2_RX
+ 197              		.global	MDIOD9_MADC0_AN23
+ 198              		.global	MDIOD8_MSPI1_MISO
+ 199              		.global	MDIOD8_MUART2_TX
+ 200              		.global	MDIOD8_MTIM3_CH0
+ 201              		.global	MDIOD8_MADC0_AN16
+ 202              		.global	MDIOD7_MI2C0_SDA
+ 203              		.global	MDIOD7_MSPI1_MOSI
+ 204              		.global	MDIOD7_MUART2_RX
+ 205              		.global	MDIOD7_MTIM2_CH0
+ 206              		.global	MDIOD7_MADC0_AN15
+ 207              		.global	MDIOD6_MI2C0_SCL
+ 208              		.global	MDIOD6_MSPI1_SCK
+ 209              		.global	MDIOD6_MTIM1_CH0
+ 210              		.global	MDIOD5_MSPI1_SS
+ 211              		.global	MDIOD5_MTIM0_CH0
+ 212              		.global	MDIOD4_MADC0_AN14
+ 213              		.global	MDIOD3_MUART1_RX
+ 214              		.global	MDIOD3_MUART1_TX
+ 215              		.global	MDIOD3_MTIM_PCA2_CH1
+ 216              		.global	MDIOD3_MADC0_AN13
+ 217              		.global	MDIOD2_MUART1_RX
+ 218              		.global	MDIOD2_MUART1_TX
+ 219              		.global	MDIOD2_MTIM_PCA2_CH0
+ 220              		.global	MDIOD2_MADC0_AN12
+ 221              		.global	MDIOD1_MUART0_RX
+ 222              		.global	MDIOD1_MUART0_TX
+ 223              		.global	MDIOD1_MTIM_PCA2_ECI
+ 224              		.global	MDIOD1_MADC0_AN11
+ 225              		.global	MDIOD0_MUART0_RX
+ 226              		.global	MDIOD0_MUART0_TX
+ 227              		.global	MDIOD0_MADC0_AN10
+ 228              		.global	MDIOC15_MI2C0_SDA
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 5
+
+
+ 229              		.global	MDIOC15_MI2C0_SCL
+ 230              		.global	MDIOC15_MTIM_PCA1_ECI
+ 231              		.global	MDIOC15_MADC0_AN9
+ 232              		.global	MDIOC14_MI2C0_SDA
+ 233              		.global	MDIOC14_MI2C0_SCL
+ 234              		.global	MDIOC14_MTIM_PCA1_CH1
+ 235              		.global	MDIOC14_MADC0_AN8
+ 236              		.global	MDIOC13_MI2C0_SDA
+ 237              		.global	MDIOC13_MI2C0_SCL
+ 238              		.global	MDIOC13_MTIM_PCA1_CH0
+ 239              		.global	MDIOC13_MADC0_AN7
+ 240              		.global	MDIOC12_MI2C0_SDA
+ 241              		.global	MDIOC12_MI2C0_SCL
+ 242              		.global	MDIOC12_MTIM_PCA2_ECI
+ 243              		.global	MDIOC12_MTIM_PCA2_CH0
+ 244              		.global	MDIOC12_MADC0_AN6
+ 245              		.global	MDIOC11_MSPI0_SS
+ 246              		.global	MDIOC11_MUART2_RX
+ 247              		.global	MDIOC11_MUART2_TX
+ 248              		.global	MDIOC11_MTIM_PCA2_ECI
+ 249              		.global	MDIOC11_MTIM_PCA2_CH1
+ 250              		.global	MDIOC11_MADC0_AN22
+ 251              		.global	MDIOC10_MI2C0_SCL
+ 252              		.global	MDIOC10_MSPI0_SCK
+ 253              		.global	MDIOC10_MUART2_RX
+ 254              		.global	MDIOC10_MUART2_TX
+ 255              		.global	MDIOC10_MTIM3_CH0
+ 256              		.global	MDIOC10_MTIM_PCA2_CH0
+ 257              		.global	MDIOC10_MADC0_AN21
+ 258              		.global	MDIOC9_MI2C0_SDA
+ 259              		.global	MDIOC9_MSPI0_MOSI
+ 260              		.global	MDIOC9_MUART1_RX
+ 261              		.global	MDIOC9_MUART1_TX
+ 262              		.global	MDIOC9_MTIM2_CH0
+ 263              		.global	MDIOC9_MTIM_PCA3_CH0
+ 264              		.global	MDIOC8_MSPI0_MISO
+ 265              		.global	MDIOC8_MUART1_RX
+ 266              		.global	MDIOC8_MUART1_TX
+ 267              		.global	MDIOC8_MTIM1_CH0
+ 268              		.global	MDIOC8_MTIM_PCA3_CH1
+ 269              		.global	MDIOC7_MI2C0_SDA
+ 270              		.global	MDIOC7_MSPI1_MISO
+ 271              		.global	MDIOC7_MUART3_TX
+ 272              		.global	MDIOC7_MTIM_PCA3_ECI
+ 273              		.global	MDIOC6_MI2C0_SDA
+ 274              		.global	MDIOC6_MI2C0_SCL
+ 275              		.global	MDIOC6_MSPI1_MOSI
+ 276              		.global	MDIOC6_MUART3_RX
+ 277              		.global	MDIOC6_MUART3_TX
+ 278              		.global	MDIOC6_MTIM0_CH0
+ 279              		.global	MDIOC6_MTIM_PCA2_CH1
+ 280              		.global	MDIOC5_MI2C0_SCL
+ 281              		.global	MDIOC5_MSPI1_SCK
+ 282              		.global	MDIOC5_MUART3_RX
+ 283              		.global	MDIOC5_MUART3_TX
+ 284              		.global	MDIOC5_MTIM_PCA0_ECI
+ 285              		.global	MDIOC5_MTIM_PCA0_CH0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 6
+
+
+ 286              		.global	MDIOC4_MSPI0_MOSI
+ 287              		.global	MDIOC4_MUART0_RX
+ 288              		.global	MDIOC4_MUART0_TX
+ 289              		.global	MDIOC4_MTIM0_CH0
+ 290              		.global	MDIOC3_MSPI0_MISO
+ 291              		.global	MDIOC3_MUART0_RX
+ 292              		.global	MDIOC3_MUART0_TX
+ 293              		.global	MDIOC3_MTIM1_CH0
+ 294              		.global	MDIOC2_MSPI0_SCK
+ 295              		.global	MDIOC1_MSPI0_SS
+ 296              		.global	MDIOC0_MTIM2_CH0
+ 297              		.global	MDIOB15_MSPI1_SS
+ 298              		.global	MDIOB15_MTIM3_CH0
+ 299              		.global	MDIOB14_MSPI1_MISO
+ 300              		.global	MDIOB14_MUART2_TX
+ 301              		.global	MDIOB13_MI2C0_SDA
+ 302              		.global	MDIOB13_MI2C0_SCL
+ 303              		.global	MDIOB13_MSPI0_MOSI
+ 304              		.global	MDIOB13_MSPI1_MOSI
+ 305              		.global	MDIOB13_MUART2_RX
+ 306              		.global	MDIOB12_MI2C0_SDA
+ 307              		.global	MDIOB12_MI2C0_SCL
+ 308              		.global	MDIOB12_MSPI0_MISO
+ 309              		.global	MDIOB12_MSPI1_SCK
+ 310              		.global	MDIOB12_MUART2_TX
+ 311              		.global	MDIOB11_MSPI1_SS
+ 312              		.global	MDIOB11_MTIM3_CH0
+ 313              		.global	MDIOB10_MSPI0_SS
+ 314              		.global	MDIOB10_MTIM2_CH0
+ 315              		.global	MDIOB9_MI2C0_SCL
+ 316              		.global	MDIOB9_MSPI0_SCK
+ 317              		.global	MDIOB9_MTIM_PCA1_CH1
+ 318              		.global	MDIOB8_MI2C0_SDA
+ 319              		.global	MDIOB8_MSPI0_MOSI
+ 320              		.global	MDIOB8_MTIM_PCA1_ECI
+ 321              		.global	MDIOB8_MTIM_PCA0_CH1
+ 322              		.global	MDIOB8_MADC0_AN5
+ 323              		.global	MDIOB7_MSPI0_SS
+ 324              		.global	MDIOB7_MSPI0_MISO
+ 325              		.global	MDIOB7_MTIM_PCA0_ECI
+ 326              		.global	MDIOB7_MTIM_PCA0_CH1
+ 327              		.global	MDIOB7_MADC0_AN4
+ 328              		.global	MDIOB6_MSPI1_MISO
+ 329              		.global	MDIOB6_MTIM_PCA1_ECI
+ 330              		.global	MDIOB6_MTIM_PCA0_CH0
+ 331              		.global	MDIOB5_MI2C0_SDA
+ 332              		.global	MDIOB5_MSPI1_MOSI
+ 333              		.global	MDIOB5_MTIM_PCA1_CH1
+ 334              		.global	MDIOB4_MI2C0_SCL
+ 335              		.global	MDIOB4_MSPI1_SCK
+ 336              		.global	MDIOB4_MTIM_PCA1_CH0
+ 337              		.global	MDIOB3_MSPI1_SS
+ 338              		.global	MDIOB3_MUART3_RX
+ 339              		.global	MDIOB3_MTIM1_CH0
+ 340              		.global	MDIOB2_MUART3_TX
+ 341              		.global	MDIOB2_MTIM0_CH0
+ 342              		.global	MDIOB1_MTIM3_CH0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 7
+
+
+ 343              		.global	MDIOB1_MTIM_PCA1_CH0
+ 344              		.global	MDIOB0_MUART0_RX
+ 345              		.global	MDIOB0_MUART0_TX
+ 346              		.global	MDIOA15_MUART0_RX
+ 347              		.global	MDIOA15_MUART0_TX
+ 348              		.global	MDIOA14_MI2C0_SDA
+ 349              		.global	MDIOA14_MADC0_AN20
+ 350              		.global	MDIOA13_MI2C0_SCL
+ 351              		.global	MDIOA13_MADC0_AN19
+ 352              		.global	MDIOA12_MTIM2_CH0
+ 353              		.global	MDIOA12_MADC0_AN18
+ 354              		.global	MDIOA11_MTIM1_CH0
+ 355              		.global	MDIOA11_MADC0_AN17
+ 356              		.global	MDIOA10_MUART1_RX
+ 357              		.global	MDIOA10_MUART1_TX
+ 358              		.global	MDIOA10_MTIM_PCA3_CH1
+ 359              		.global	MDIOA9_MUART1_RX
+ 360              		.global	MDIOA9_MUART1_TX
+ 361              		.global	MDIOA9_MTIM_PCA3_ECI
+ 362              		.global	MDIOA9_MTIM_PCA3_CH0
+ 363              		.global	MDIOA6_MTIM_PCA3_CH0
+ 364              		.global	MDIOA5_MI2C0_SDA
+ 365              		.global	MDIOA5_MI2C0_SCL
+ 366              		.global	MDIOA5_MTIM_PCA3_ECI
+ 367              		.global	MDIOA4_MI2C0_SDA
+ 368              		.global	MDIOA4_MI2C0_SCL
+ 369              		.global	MDIOA4_MTIM0_CH0
+ 370              		.global	MDIOA4_MTIM_PCA0_ECI
+ 371              		.global	MDIOA4_MADC0_AN3
+ 372              		.global	MDIOA3_MTIM3_CH0
+ 373              		.global	MDIOA2_MTIM2_CH0
+ 374              		.global	MDIOA2_MTIM_PCA3_CH1
+ 375              		.global	MDIOA2_MADC0_AN2
+ 376              		.global	MDIOA1_MTIM1_CH0
+ 377              		.global	MDIOA1_MTIM_PCA0_CH1
+ 378              		.global	MDIOA1_MADC0_AN1
+ 379              		.global	MDIOA0_MTIM0_CH0
+ 380              		.global	MDIOA0_MTIM_PCA0_CH0
+ 381              		.global	MDIOA0_MADC0_AN0
+ 382              		.global	MDIOD12
+ 383              		.global	MDIOD11
+ 384              		.global	MDIOD10
+ 385              		.global	MDIOD9
+ 386              		.global	MDIOD8
+ 387              		.global	MDIOD7
+ 388              		.global	MDIOD6
+ 389              		.global	MDIOD5
+ 390              		.global	MDIOD4
+ 391              		.global	MDIOD3
+ 392              		.global	MDIOD2
+ 393              		.global	MDIOD1
+ 394              		.global	MDIOD0
+ 395              		.global	MDIOC15
+ 396              		.global	MDIOC14
+ 397              		.global	MDIOC13
+ 398              		.global	MDIOC12
+ 399              		.global	MDIOC11
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 8
+
+
+ 400              		.global	MDIOC10
+ 401              		.global	MDIOC9
+ 402              		.global	MDIOC8
+ 403              		.global	MDIOC7
+ 404              		.global	MDIOC6
+ 405              		.global	MDIOC5
+ 406              		.global	MDIOC4
+ 407              		.global	MDIOC3
+ 408              		.global	MDIOC2
+ 409              		.global	MDIOC1
+ 410              		.global	MDIOC0
+ 411              		.global	MDIOB15
+ 412              		.global	MDIOB14
+ 413              		.global	MDIOB13
+ 414              		.global	MDIOB12
+ 415              		.global	MDIOB11
+ 416              		.global	MDIOB10
+ 417              		.global	MDIOB9
+ 418              		.global	MDIOB8
+ 419              		.global	MDIOB7
+ 420              		.global	MDIOB6
+ 421              		.global	MDIOB5
+ 422              		.global	MDIOB4
+ 423              		.global	MDIOB3
+ 424              		.global	MDIOB2
+ 425              		.global	MDIOB1
+ 426              		.global	MDIOB0
+ 427              		.global	MDIOA15
+ 428              		.global	MDIOA14
+ 429              		.global	MDIOA13
+ 430              		.global	MDIOA12
+ 431              		.global	MDIOA11
+ 432              		.global	MDIOA10
+ 433              		.global	MDIOA9
+ 434              		.global	MDIOA8
+ 435              		.global	MDIOA7
+ 436              		.global	MDIOA6
+ 437              		.global	MDIOA5
+ 438              		.global	MDIOA4
+ 439              		.global	MDIOA3
+ 440              		.global	MDIOA2
+ 441              		.global	MDIOA1
+ 442              		.global	MDIOA0
+ 443              		.section	.rodata.MDIOA0,"a"
+ 444              		.align	2
+ 447              	MDIOA0:
+ 448 0000 00000000 		.word	MDIOA
+ 449 0004 00       		.byte	0
+ 450 0005 01       		.byte	1
+ 451 0006 00       		.byte	0
+ 452 0007 00       		.space	1
+ 453              		.section	.rodata.MDIOA0_MADC0_AN0,"a"
+ 454              		.align	2
+ 457              	MDIOA0_MADC0_AN0:
+ 458 0000 00000000 		.word	MDIOA
+ 459 0004 00       		.byte	0
+ 460 0005 02       		.byte	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 9
+
+
+ 461 0006 00       		.byte	0
+ 462 0007 00       		.space	1
+ 463              		.section	.rodata.MDIOA0_MTIM0_CH0,"a"
+ 464              		.align	2
+ 467              	MDIOA0_MTIM0_CH0:
+ 468 0000 00000000 		.word	MDIOA
+ 469 0004 00       		.byte	0
+ 470 0005 05       		.byte	5
+ 471 0006 00       		.byte	0
+ 472 0007 00       		.space	1
+ 473              		.section	.rodata.MDIOA0_MTIM_PCA0_CH0,"a"
+ 474              		.align	2
+ 477              	MDIOA0_MTIM_PCA0_CH0:
+ 478 0000 00000000 		.word	MDIOA
+ 479 0004 00       		.byte	0
+ 480 0005 04       		.byte	4
+ 481 0006 00       		.byte	0
+ 482 0007 00       		.space	1
+ 483              		.section	.rodata.MDIOA1,"a"
+ 484              		.align	2
+ 487              	MDIOA1:
+ 488 0000 00000000 		.word	MDIOA
+ 489 0004 01       		.byte	1
+ 490 0005 01       		.byte	1
+ 491 0006 00       		.byte	0
+ 492 0007 00       		.space	1
+ 493              		.section	.rodata.MDIOA10,"a"
+ 494              		.align	2
+ 497              	MDIOA10:
+ 498 0000 00000000 		.word	MDIOA
+ 499 0004 0A       		.byte	10
+ 500 0005 01       		.byte	1
+ 501 0006 00       		.byte	0
+ 502 0007 00       		.space	1
+ 503              		.section	.rodata.MDIOA10_MTIM_PCA3_CH1,"a"
+ 504              		.align	2
+ 507              	MDIOA10_MTIM_PCA3_CH1:
+ 508 0000 00000000 		.word	MDIOA
+ 509 0004 0A       		.byte	10
+ 510 0005 02       		.byte	2
+ 511 0006 00       		.byte	0
+ 512 0007 00       		.space	1
+ 513              		.section	.rodata.MDIOA10_MUART1_RX,"a"
+ 514              		.align	2
+ 517              	MDIOA10_MUART1_RX:
+ 518 0000 00000000 		.word	MDIOA
+ 519 0004 0A       		.byte	10
+ 520 0005 04       		.byte	4
+ 521 0006 00       		.byte	0
+ 522 0007 00       		.space	1
+ 523              		.section	.rodata.MDIOA10_MUART1_TX,"a"
+ 524              		.align	2
+ 527              	MDIOA10_MUART1_TX:
+ 528 0000 00000000 		.word	MDIOA
+ 529 0004 0A       		.byte	10
+ 530 0005 03       		.byte	3
+ 531 0006 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 10
+
+
+ 532 0007 00       		.space	1
+ 533              		.section	.rodata.MDIOA11,"a"
+ 534              		.align	2
+ 537              	MDIOA11:
+ 538 0000 00000000 		.word	MDIOA
+ 539 0004 0B       		.byte	11
+ 540 0005 01       		.byte	1
+ 541 0006 00       		.byte	0
+ 542 0007 00       		.space	1
+ 543              		.section	.rodata.MDIOA11_MADC0_AN17,"a"
+ 544              		.align	2
+ 547              	MDIOA11_MADC0_AN17:
+ 548 0000 00000000 		.word	MDIOA
+ 549 0004 0B       		.byte	11
+ 550 0005 02       		.byte	2
+ 551 0006 00       		.byte	0
+ 552 0007 00       		.space	1
+ 553              		.section	.rodata.MDIOA11_MTIM1_CH0,"a"
+ 554              		.align	2
+ 557              	MDIOA11_MTIM1_CH0:
+ 558 0000 00000000 		.word	MDIOA
+ 559 0004 0B       		.byte	11
+ 560 0005 03       		.byte	3
+ 561 0006 00       		.byte	0
+ 562 0007 00       		.space	1
+ 563              		.section	.rodata.MDIOA12,"a"
+ 564              		.align	2
+ 567              	MDIOA12:
+ 568 0000 00000000 		.word	MDIOA
+ 569 0004 0C       		.byte	12
+ 570 0005 01       		.byte	1
+ 571 0006 00       		.byte	0
+ 572 0007 00       		.space	1
+ 573              		.section	.rodata.MDIOA12_MADC0_AN18,"a"
+ 574              		.align	2
+ 577              	MDIOA12_MADC0_AN18:
+ 578 0000 00000000 		.word	MDIOA
+ 579 0004 0C       		.byte	12
+ 580 0005 02       		.byte	2
+ 581 0006 00       		.byte	0
+ 582 0007 00       		.space	1
+ 583              		.section	.rodata.MDIOA12_MTIM2_CH0,"a"
+ 584              		.align	2
+ 587              	MDIOA12_MTIM2_CH0:
+ 588 0000 00000000 		.word	MDIOA
+ 589 0004 0C       		.byte	12
+ 590 0005 03       		.byte	3
+ 591 0006 00       		.byte	0
+ 592 0007 00       		.space	1
+ 593              		.section	.rodata.MDIOA13,"a"
+ 594              		.align	2
+ 597              	MDIOA13:
+ 598 0000 00000000 		.word	MDIOA
+ 599 0004 0D       		.byte	13
+ 600 0005 01       		.byte	1
+ 601 0006 00       		.byte	0
+ 602 0007 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 11
+
+
+ 603              		.section	.rodata.MDIOA13_MADC0_AN19,"a"
+ 604              		.align	2
+ 607              	MDIOA13_MADC0_AN19:
+ 608 0000 00000000 		.word	MDIOA
+ 609 0004 0D       		.byte	13
+ 610 0005 02       		.byte	2
+ 611 0006 00       		.byte	0
+ 612 0007 00       		.space	1
+ 613              		.section	.rodata.MDIOA13_MI2C0_SCL,"a"
+ 614              		.align	2
+ 617              	MDIOA13_MI2C0_SCL:
+ 618 0000 00000000 		.word	MDIOA
+ 619 0004 0D       		.byte	13
+ 620 0005 05       		.byte	5
+ 621 0006 00       		.byte	0
+ 622 0007 00       		.space	1
+ 623              		.section	.rodata.MDIOA14,"a"
+ 624              		.align	2
+ 627              	MDIOA14:
+ 628 0000 00000000 		.word	MDIOA
+ 629 0004 0E       		.byte	14
+ 630 0005 01       		.byte	1
+ 631 0006 00       		.byte	0
+ 632 0007 00       		.space	1
+ 633              		.section	.rodata.MDIOA14_MADC0_AN20,"a"
+ 634              		.align	2
+ 637              	MDIOA14_MADC0_AN20:
+ 638 0000 00000000 		.word	MDIOA
+ 639 0004 0E       		.byte	14
+ 640 0005 02       		.byte	2
+ 641 0006 00       		.byte	0
+ 642 0007 00       		.space	1
+ 643              		.section	.rodata.MDIOA14_MI2C0_SDA,"a"
+ 644              		.align	2
+ 647              	MDIOA14_MI2C0_SDA:
+ 648 0000 00000000 		.word	MDIOA
+ 649 0004 0E       		.byte	14
+ 650 0005 05       		.byte	5
+ 651 0006 00       		.byte	0
+ 652 0007 00       		.space	1
+ 653              		.section	.rodata.MDIOA15,"a"
+ 654              		.align	2
+ 657              	MDIOA15:
+ 658 0000 00000000 		.word	MDIOA
+ 659 0004 0F       		.byte	15
+ 660 0005 01       		.byte	1
+ 661 0006 00       		.byte	0
+ 662 0007 00       		.space	1
+ 663              		.section	.rodata.MDIOA15_MUART0_RX,"a"
+ 664              		.align	2
+ 667              	MDIOA15_MUART0_RX:
+ 668 0000 00000000 		.word	MDIOA
+ 669 0004 0F       		.byte	15
+ 670 0005 05       		.byte	5
+ 671 0006 00       		.byte	0
+ 672 0007 00       		.space	1
+ 673              		.section	.rodata.MDIOA15_MUART0_TX,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 12
+
+
+ 674              		.align	2
+ 677              	MDIOA15_MUART0_TX:
+ 678 0000 00000000 		.word	MDIOA
+ 679 0004 0F       		.byte	15
+ 680 0005 04       		.byte	4
+ 681 0006 00       		.byte	0
+ 682 0007 00       		.space	1
+ 683              		.section	.rodata.MDIOA1_MADC0_AN1,"a"
+ 684              		.align	2
+ 687              	MDIOA1_MADC0_AN1:
+ 688 0000 00000000 		.word	MDIOA
+ 689 0004 01       		.byte	1
+ 690 0005 02       		.byte	2
+ 691 0006 00       		.byte	0
+ 692 0007 00       		.space	1
+ 693              		.section	.rodata.MDIOA1_MTIM1_CH0,"a"
+ 694              		.align	2
+ 697              	MDIOA1_MTIM1_CH0:
+ 698 0000 00000000 		.word	MDIOA
+ 699 0004 01       		.byte	1
+ 700 0005 04       		.byte	4
+ 701 0006 00       		.byte	0
+ 702 0007 00       		.space	1
+ 703              		.section	.rodata.MDIOA1_MTIM_PCA0_CH1,"a"
+ 704              		.align	2
+ 707              	MDIOA1_MTIM_PCA0_CH1:
+ 708 0000 00000000 		.word	MDIOA
+ 709 0004 01       		.byte	1
+ 710 0005 03       		.byte	3
+ 711 0006 00       		.byte	0
+ 712 0007 00       		.space	1
+ 713              		.section	.rodata.MDIOA2,"a"
+ 714              		.align	2
+ 717              	MDIOA2:
+ 718 0000 00000000 		.word	MDIOA
+ 719 0004 02       		.byte	2
+ 720 0005 01       		.byte	1
+ 721 0006 00       		.byte	0
+ 722 0007 00       		.space	1
+ 723              		.section	.rodata.MDIOA2_MADC0_AN2,"a"
+ 724              		.align	2
+ 727              	MDIOA2_MADC0_AN2:
+ 728 0000 00000000 		.word	MDIOA
+ 729 0004 02       		.byte	2
+ 730 0005 02       		.byte	2
+ 731 0006 00       		.byte	0
+ 732 0007 00       		.space	1
+ 733              		.section	.rodata.MDIOA2_MTIM2_CH0,"a"
+ 734              		.align	2
+ 737              	MDIOA2_MTIM2_CH0:
+ 738 0000 00000000 		.word	MDIOA
+ 739 0004 02       		.byte	2
+ 740 0005 04       		.byte	4
+ 741 0006 00       		.byte	0
+ 742 0007 00       		.space	1
+ 743              		.section	.rodata.MDIOA2_MTIM_PCA3_CH1,"a"
+ 744              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 13
+
+
+ 747              	MDIOA2_MTIM_PCA3_CH1:
+ 748 0000 00000000 		.word	MDIOA
+ 749 0004 02       		.byte	2
+ 750 0005 03       		.byte	3
+ 751 0006 00       		.byte	0
+ 752 0007 00       		.space	1
+ 753              		.section	.rodata.MDIOA3,"a"
+ 754              		.align	2
+ 757              	MDIOA3:
+ 758 0000 00000000 		.word	MDIOA
+ 759 0004 03       		.byte	3
+ 760 0005 01       		.byte	1
+ 761 0006 00       		.byte	0
+ 762 0007 00       		.space	1
+ 763              		.section	.rodata.MDIOA3_MTIM3_CH0,"a"
+ 764              		.align	2
+ 767              	MDIOA3_MTIM3_CH0:
+ 768 0000 00000000 		.word	MDIOA
+ 769 0004 03       		.byte	3
+ 770 0005 02       		.byte	2
+ 771 0006 00       		.byte	0
+ 772 0007 00       		.space	1
+ 773              		.section	.rodata.MDIOA4,"a"
+ 774              		.align	2
+ 777              	MDIOA4:
+ 778 0000 00000000 		.word	MDIOA
+ 779 0004 04       		.byte	4
+ 780 0005 01       		.byte	1
+ 781 0006 00       		.byte	0
+ 782 0007 00       		.space	1
+ 783              		.section	.rodata.MDIOA4_MADC0_AN3,"a"
+ 784              		.align	2
+ 787              	MDIOA4_MADC0_AN3:
+ 788 0000 00000000 		.word	MDIOA
+ 789 0004 04       		.byte	4
+ 790 0005 02       		.byte	2
+ 791 0006 00       		.byte	0
+ 792 0007 00       		.space	1
+ 793              		.section	.rodata.MDIOA4_MI2C0_SCL,"a"
+ 794              		.align	2
+ 797              	MDIOA4_MI2C0_SCL:
+ 798 0000 00000000 		.word	MDIOA
+ 799 0004 04       		.byte	4
+ 800 0005 06       		.byte	6
+ 801 0006 00       		.byte	0
+ 802 0007 00       		.space	1
+ 803              		.section	.rodata.MDIOA4_MI2C0_SDA,"a"
+ 804              		.align	2
+ 807              	MDIOA4_MI2C0_SDA:
+ 808 0000 00000000 		.word	MDIOA
+ 809 0004 04       		.byte	4
+ 810 0005 07       		.byte	7
+ 811 0006 00       		.byte	0
+ 812 0007 00       		.space	1
+ 813              		.section	.rodata.MDIOA4_MTIM0_CH0,"a"
+ 814              		.align	2
+ 817              	MDIOA4_MTIM0_CH0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 14
+
+
+ 818 0000 00000000 		.word	MDIOA
+ 819 0004 04       		.byte	4
+ 820 0005 04       		.byte	4
+ 821 0006 00       		.byte	0
+ 822 0007 00       		.space	1
+ 823              		.section	.rodata.MDIOA4_MTIM_PCA0_ECI,"a"
+ 824              		.align	2
+ 827              	MDIOA4_MTIM_PCA0_ECI:
+ 828 0000 00000000 		.word	MDIOA
+ 829 0004 04       		.byte	4
+ 830 0005 03       		.byte	3
+ 831 0006 00       		.byte	0
+ 832 0007 00       		.space	1
+ 833              		.section	.rodata.MDIOA5,"a"
+ 834              		.align	2
+ 837              	MDIOA5:
+ 838 0000 00000000 		.word	MDIOA
+ 839 0004 05       		.byte	5
+ 840 0005 01       		.byte	1
+ 841 0006 00       		.byte	0
+ 842 0007 00       		.space	1
+ 843              		.section	.rodata.MDIOA5_MI2C0_SCL,"a"
+ 844              		.align	2
+ 847              	MDIOA5_MI2C0_SCL:
+ 848 0000 00000000 		.word	MDIOA
+ 849 0004 05       		.byte	5
+ 850 0005 04       		.byte	4
+ 851 0006 00       		.byte	0
+ 852 0007 00       		.space	1
+ 853              		.section	.rodata.MDIOA5_MI2C0_SDA,"a"
+ 854              		.align	2
+ 857              	MDIOA5_MI2C0_SDA:
+ 858 0000 00000000 		.word	MDIOA
+ 859 0004 05       		.byte	5
+ 860 0005 05       		.byte	5
+ 861 0006 00       		.byte	0
+ 862 0007 00       		.space	1
+ 863              		.section	.rodata.MDIOA5_MTIM_PCA3_ECI,"a"
+ 864              		.align	2
+ 867              	MDIOA5_MTIM_PCA3_ECI:
+ 868 0000 00000000 		.word	MDIOA
+ 869 0004 05       		.byte	5
+ 870 0005 02       		.byte	2
+ 871 0006 00       		.byte	0
+ 872 0007 00       		.space	1
+ 873              		.section	.rodata.MDIOA6,"a"
+ 874              		.align	2
+ 877              	MDIOA6:
+ 878 0000 00000000 		.word	MDIOA
+ 879 0004 06       		.byte	6
+ 880 0005 01       		.byte	1
+ 881 0006 00       		.byte	0
+ 882 0007 00       		.space	1
+ 883              		.section	.rodata.MDIOA6_MTIM_PCA3_CH0,"a"
+ 884              		.align	2
+ 887              	MDIOA6_MTIM_PCA3_CH0:
+ 888 0000 00000000 		.word	MDIOA
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 15
+
+
+ 889 0004 06       		.byte	6
+ 890 0005 02       		.byte	2
+ 891 0006 00       		.byte	0
+ 892 0007 00       		.space	1
+ 893              		.section	.rodata.MDIOA7,"a"
+ 894              		.align	2
+ 897              	MDIOA7:
+ 898 0000 00000000 		.word	MDIOA
+ 899 0004 07       		.byte	7
+ 900 0005 01       		.byte	1
+ 901 0006 00       		.byte	0
+ 902 0007 00       		.space	1
+ 903              		.section	.rodata.MDIOA8,"a"
+ 904              		.align	2
+ 907              	MDIOA8:
+ 908 0000 00000000 		.word	MDIOA
+ 909 0004 08       		.byte	8
+ 910 0005 01       		.byte	1
+ 911 0006 00       		.byte	0
+ 912 0007 00       		.space	1
+ 913              		.section	.rodata.MDIOA9,"a"
+ 914              		.align	2
+ 917              	MDIOA9:
+ 918 0000 00000000 		.word	MDIOA
+ 919 0004 09       		.byte	9
+ 920 0005 01       		.byte	1
+ 921 0006 00       		.byte	0
+ 922 0007 00       		.space	1
+ 923              		.section	.rodata.MDIOA9_MTIM_PCA3_CH0,"a"
+ 924              		.align	2
+ 927              	MDIOA9_MTIM_PCA3_CH0:
+ 928 0000 00000000 		.word	MDIOA
+ 929 0004 09       		.byte	9
+ 930 0005 02       		.byte	2
+ 931 0006 00       		.byte	0
+ 932 0007 00       		.space	1
+ 933              		.section	.rodata.MDIOA9_MTIM_PCA3_ECI,"a"
+ 934              		.align	2
+ 937              	MDIOA9_MTIM_PCA3_ECI:
+ 938 0000 00000000 		.word	MDIOA
+ 939 0004 09       		.byte	9
+ 940 0005 03       		.byte	3
+ 941 0006 00       		.byte	0
+ 942 0007 00       		.space	1
+ 943              		.section	.rodata.MDIOA9_MUART1_RX,"a"
+ 944              		.align	2
+ 947              	MDIOA9_MUART1_RX:
+ 948 0000 00000000 		.word	MDIOA
+ 949 0004 09       		.byte	9
+ 950 0005 05       		.byte	5
+ 951 0006 00       		.byte	0
+ 952 0007 00       		.space	1
+ 953              		.section	.rodata.MDIOA9_MUART1_TX,"a"
+ 954              		.align	2
+ 957              	MDIOA9_MUART1_TX:
+ 958 0000 00000000 		.word	MDIOA
+ 959 0004 09       		.byte	9
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 16
+
+
+ 960 0005 04       		.byte	4
+ 961 0006 00       		.byte	0
+ 962 0007 00       		.space	1
+ 963              		.section	.rodata.MDIOB0,"a"
+ 964              		.align	2
+ 967              	MDIOB0:
+ 968 0000 00000000 		.word	MDIOB
+ 969 0004 00       		.byte	0
+ 970 0005 01       		.byte	1
+ 971 0006 00       		.byte	0
+ 972 0007 00       		.space	1
+ 973              		.section	.rodata.MDIOB0_MUART0_RX,"a"
+ 974              		.align	2
+ 977              	MDIOB0_MUART0_RX:
+ 978 0000 00000000 		.word	MDIOB
+ 979 0004 00       		.byte	0
+ 980 0005 05       		.byte	5
+ 981 0006 00       		.byte	0
+ 982 0007 00       		.space	1
+ 983              		.section	.rodata.MDIOB0_MUART0_TX,"a"
+ 984              		.align	2
+ 987              	MDIOB0_MUART0_TX:
+ 988 0000 00000000 		.word	MDIOB
+ 989 0004 00       		.byte	0
+ 990 0005 04       		.byte	4
+ 991 0006 00       		.byte	0
+ 992 0007 00       		.space	1
+ 993              		.section	.rodata.MDIOB1,"a"
+ 994              		.align	2
+ 997              	MDIOB1:
+ 998 0000 00000000 		.word	MDIOB
+ 999 0004 01       		.byte	1
+ 1000 0005 01       		.byte	1
+ 1001 0006 00       		.byte	0
+ 1002 0007 00       		.space	1
+ 1003              		.section	.rodata.MDIOB10,"a"
+ 1004              		.align	2
+ 1007              	MDIOB10:
+ 1008 0000 00000000 		.word	MDIOB
+ 1009 0004 0A       		.byte	10
+ 1010 0005 01       		.byte	1
+ 1011 0006 00       		.byte	0
+ 1012 0007 00       		.space	1
+ 1013              		.section	.rodata.MDIOB10_MSPI0_SS,"a"
+ 1014              		.align	2
+ 1017              	MDIOB10_MSPI0_SS:
+ 1018 0000 00000000 		.word	MDIOB
+ 1019 0004 0A       		.byte	10
+ 1020 0005 05       		.byte	5
+ 1021 0006 00       		.byte	0
+ 1022 0007 00       		.space	1
+ 1023              		.section	.rodata.MDIOB10_MTIM2_CH0,"a"
+ 1024              		.align	2
+ 1027              	MDIOB10_MTIM2_CH0:
+ 1028 0000 00000000 		.word	MDIOB
+ 1029 0004 0A       		.byte	10
+ 1030 0005 04       		.byte	4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 17
+
+
+ 1031 0006 00       		.byte	0
+ 1032 0007 00       		.space	1
+ 1033              		.section	.rodata.MDIOB11,"a"
+ 1034              		.align	2
+ 1037              	MDIOB11:
+ 1038 0000 00000000 		.word	MDIOB
+ 1039 0004 0B       		.byte	11
+ 1040 0005 01       		.byte	1
+ 1041 0006 00       		.byte	0
+ 1042 0007 00       		.space	1
+ 1043              		.section	.rodata.MDIOB11_MSPI1_SS,"a"
+ 1044              		.align	2
+ 1047              	MDIOB11_MSPI1_SS:
+ 1048 0000 00000000 		.word	MDIOB
+ 1049 0004 0B       		.byte	11
+ 1050 0005 05       		.byte	5
+ 1051 0006 00       		.byte	0
+ 1052 0007 00       		.space	1
+ 1053              		.section	.rodata.MDIOB11_MTIM3_CH0,"a"
+ 1054              		.align	2
+ 1057              	MDIOB11_MTIM3_CH0:
+ 1058 0000 00000000 		.word	MDIOB
+ 1059 0004 0B       		.byte	11
+ 1060 0005 04       		.byte	4
+ 1061 0006 00       		.byte	0
+ 1062 0007 00       		.space	1
+ 1063              		.section	.rodata.MDIOB12,"a"
+ 1064              		.align	2
+ 1067              	MDIOB12:
+ 1068 0000 00000000 		.word	MDIOB
+ 1069 0004 0C       		.byte	12
+ 1070 0005 01       		.byte	1
+ 1071 0006 00       		.byte	0
+ 1072 0007 00       		.space	1
+ 1073              		.section	.rodata.MDIOB12_MI2C0_SCL,"a"
+ 1074              		.align	2
+ 1077              	MDIOB12_MI2C0_SCL:
+ 1078 0000 00000000 		.word	MDIOB
+ 1079 0004 0C       		.byte	12
+ 1080 0005 08       		.byte	8
+ 1081 0006 00       		.byte	0
+ 1082 0007 00       		.space	1
+ 1083              		.section	.rodata.MDIOB12_MI2C0_SDA,"a"
+ 1084              		.align	2
+ 1087              	MDIOB12_MI2C0_SDA:
+ 1088 0000 00000000 		.word	MDIOB
+ 1089 0004 0C       		.byte	12
+ 1090 0005 09       		.byte	9
+ 1091 0006 00       		.byte	0
+ 1092 0007 00       		.space	1
+ 1093              		.section	.rodata.MDIOB12_MSPI0_MISO,"a"
+ 1094              		.align	2
+ 1097              	MDIOB12_MSPI0_MISO:
+ 1098 0000 00000000 		.word	MDIOB
+ 1099 0004 0C       		.byte	12
+ 1100 0005 07       		.byte	7
+ 1101 0006 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 18
+
+
+ 1102 0007 00       		.space	1
+ 1103              		.section	.rodata.MDIOB12_MSPI1_SCK,"a"
+ 1104              		.align	2
+ 1107              	MDIOB12_MSPI1_SCK:
+ 1108 0000 00000000 		.word	MDIOB
+ 1109 0004 0C       		.byte	12
+ 1110 0005 06       		.byte	6
+ 1111 0006 00       		.byte	0
+ 1112 0007 00       		.space	1
+ 1113              		.section	.rodata.MDIOB12_MUART2_TX,"a"
+ 1114              		.align	2
+ 1117              	MDIOB12_MUART2_TX:
+ 1118 0000 00000000 		.word	MDIOB
+ 1119 0004 0C       		.byte	12
+ 1120 0005 05       		.byte	5
+ 1121 0006 00       		.byte	0
+ 1122 0007 00       		.space	1
+ 1123              		.section	.rodata.MDIOB13,"a"
+ 1124              		.align	2
+ 1127              	MDIOB13:
+ 1128 0000 00000000 		.word	MDIOB
+ 1129 0004 0D       		.byte	13
+ 1130 0005 01       		.byte	1
+ 1131 0006 00       		.byte	0
+ 1132 0007 00       		.space	1
+ 1133              		.section	.rodata.MDIOB13_MI2C0_SCL,"a"
+ 1134              		.align	2
+ 1137              	MDIOB13_MI2C0_SCL:
+ 1138 0000 00000000 		.word	MDIOB
+ 1139 0004 0D       		.byte	13
+ 1140 0005 08       		.byte	8
+ 1141 0006 00       		.byte	0
+ 1142 0007 00       		.space	1
+ 1143              		.section	.rodata.MDIOB13_MI2C0_SDA,"a"
+ 1144              		.align	2
+ 1147              	MDIOB13_MI2C0_SDA:
+ 1148 0000 00000000 		.word	MDIOB
+ 1149 0004 0D       		.byte	13
+ 1150 0005 09       		.byte	9
+ 1151 0006 00       		.byte	0
+ 1152 0007 00       		.space	1
+ 1153              		.section	.rodata.MDIOB13_MSPI0_MOSI,"a"
+ 1154              		.align	2
+ 1157              	MDIOB13_MSPI0_MOSI:
+ 1158 0000 00000000 		.word	MDIOB
+ 1159 0004 0D       		.byte	13
+ 1160 0005 07       		.byte	7
+ 1161 0006 00       		.byte	0
+ 1162 0007 00       		.space	1
+ 1163              		.section	.rodata.MDIOB13_MSPI1_MOSI,"a"
+ 1164              		.align	2
+ 1167              	MDIOB13_MSPI1_MOSI:
+ 1168 0000 00000000 		.word	MDIOB
+ 1169 0004 0D       		.byte	13
+ 1170 0005 06       		.byte	6
+ 1171 0006 00       		.byte	0
+ 1172 0007 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 19
+
+
+ 1173              		.section	.rodata.MDIOB13_MUART2_RX,"a"
+ 1174              		.align	2
+ 1177              	MDIOB13_MUART2_RX:
+ 1178 0000 00000000 		.word	MDIOB
+ 1179 0004 0D       		.byte	13
+ 1180 0005 05       		.byte	5
+ 1181 0006 00       		.byte	0
+ 1182 0007 00       		.space	1
+ 1183              		.section	.rodata.MDIOB14,"a"
+ 1184              		.align	2
+ 1187              	MDIOB14:
+ 1188 0000 00000000 		.word	MDIOB
+ 1189 0004 0E       		.byte	14
+ 1190 0005 01       		.byte	1
+ 1191 0006 00       		.byte	0
+ 1192 0007 00       		.space	1
+ 1193              		.section	.rodata.MDIOB14_MSPI1_MISO,"a"
+ 1194              		.align	2
+ 1197              	MDIOB14_MSPI1_MISO:
+ 1198 0000 00000000 		.word	MDIOB
+ 1199 0004 0E       		.byte	14
+ 1200 0005 06       		.byte	6
+ 1201 0006 00       		.byte	0
+ 1202 0007 00       		.space	1
+ 1203              		.section	.rodata.MDIOB14_MUART2_TX,"a"
+ 1204              		.align	2
+ 1207              	MDIOB14_MUART2_TX:
+ 1208 0000 00000000 		.word	MDIOB
+ 1209 0004 0E       		.byte	14
+ 1210 0005 05       		.byte	5
+ 1211 0006 00       		.byte	0
+ 1212 0007 00       		.space	1
+ 1213              		.section	.rodata.MDIOB15,"a"
+ 1214              		.align	2
+ 1217              	MDIOB15:
+ 1218 0000 00000000 		.word	MDIOB
+ 1219 0004 0F       		.byte	15
+ 1220 0005 01       		.byte	1
+ 1221 0006 00       		.byte	0
+ 1222 0007 00       		.space	1
+ 1223              		.section	.rodata.MDIOB15_MSPI1_SS,"a"
+ 1224              		.align	2
+ 1227              	MDIOB15_MSPI1_SS:
+ 1228 0000 00000000 		.word	MDIOB
+ 1229 0004 0F       		.byte	15
+ 1230 0005 05       		.byte	5
+ 1231 0006 00       		.byte	0
+ 1232 0007 00       		.space	1
+ 1233              		.section	.rodata.MDIOB15_MTIM3_CH0,"a"
+ 1234              		.align	2
+ 1237              	MDIOB15_MTIM3_CH0:
+ 1238 0000 00000000 		.word	MDIOB
+ 1239 0004 0F       		.byte	15
+ 1240 0005 04       		.byte	4
+ 1241 0006 00       		.byte	0
+ 1242 0007 00       		.space	1
+ 1243              		.section	.rodata.MDIOB1_MTIM3_CH0,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 20
+
+
+ 1244              		.align	2
+ 1247              	MDIOB1_MTIM3_CH0:
+ 1248 0000 00000000 		.word	MDIOB
+ 1249 0004 01       		.byte	1
+ 1250 0005 04       		.byte	4
+ 1251 0006 00       		.byte	0
+ 1252 0007 00       		.space	1
+ 1253              		.section	.rodata.MDIOB1_MTIM_PCA1_CH0,"a"
+ 1254              		.align	2
+ 1257              	MDIOB1_MTIM_PCA1_CH0:
+ 1258 0000 00000000 		.word	MDIOB
+ 1259 0004 01       		.byte	1
+ 1260 0005 03       		.byte	3
+ 1261 0006 00       		.byte	0
+ 1262 0007 00       		.space	1
+ 1263              		.section	.rodata.MDIOB2,"a"
+ 1264              		.align	2
+ 1267              	MDIOB2:
+ 1268 0000 00000000 		.word	MDIOB
+ 1269 0004 02       		.byte	2
+ 1270 0005 01       		.byte	1
+ 1271 0006 00       		.byte	0
+ 1272 0007 00       		.space	1
+ 1273              		.section	.rodata.MDIOB2_MTIM0_CH0,"a"
+ 1274              		.align	2
+ 1277              	MDIOB2_MTIM0_CH0:
+ 1278 0000 00000000 		.word	MDIOB
+ 1279 0004 02       		.byte	2
+ 1280 0005 05       		.byte	5
+ 1281 0006 00       		.byte	0
+ 1282 0007 00       		.space	1
+ 1283              		.section	.rodata.MDIOB2_MUART3_TX,"a"
+ 1284              		.align	2
+ 1287              	MDIOB2_MUART3_TX:
+ 1288 0000 00000000 		.word	MDIOB
+ 1289 0004 02       		.byte	2
+ 1290 0005 06       		.byte	6
+ 1291 0006 00       		.byte	0
+ 1292 0007 00       		.space	1
+ 1293              		.section	.rodata.MDIOB3,"a"
+ 1294              		.align	2
+ 1297              	MDIOB3:
+ 1298 0000 00000000 		.word	MDIOB
+ 1299 0004 03       		.byte	3
+ 1300 0005 01       		.byte	1
+ 1301 0006 00       		.byte	0
+ 1302 0007 00       		.space	1
+ 1303              		.section	.rodata.MDIOB3_MSPI1_SS,"a"
+ 1304              		.align	2
+ 1307              	MDIOB3_MSPI1_SS:
+ 1308 0000 00000000 		.word	MDIOB
+ 1309 0004 03       		.byte	3
+ 1310 0005 07       		.byte	7
+ 1311 0006 00       		.byte	0
+ 1312 0007 00       		.space	1
+ 1313              		.section	.rodata.MDIOB3_MTIM1_CH0,"a"
+ 1314              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 21
+
+
+ 1317              	MDIOB3_MTIM1_CH0:
+ 1318 0000 00000000 		.word	MDIOB
+ 1319 0004 03       		.byte	3
+ 1320 0005 05       		.byte	5
+ 1321 0006 00       		.byte	0
+ 1322 0007 00       		.space	1
+ 1323              		.section	.rodata.MDIOB3_MUART3_RX,"a"
+ 1324              		.align	2
+ 1327              	MDIOB3_MUART3_RX:
+ 1328 0000 00000000 		.word	MDIOB
+ 1329 0004 03       		.byte	3
+ 1330 0005 06       		.byte	6
+ 1331 0006 00       		.byte	0
+ 1332 0007 00       		.space	1
+ 1333              		.section	.rodata.MDIOB4,"a"
+ 1334              		.align	2
+ 1337              	MDIOB4:
+ 1338 0000 00000000 		.word	MDIOB
+ 1339 0004 04       		.byte	4
+ 1340 0005 01       		.byte	1
+ 1341 0006 00       		.byte	0
+ 1342 0007 00       		.space	1
+ 1343              		.section	.rodata.MDIOB4_MI2C0_SCL,"a"
+ 1344              		.align	2
+ 1347              	MDIOB4_MI2C0_SCL:
+ 1348 0000 00000000 		.word	MDIOB
+ 1349 0004 04       		.byte	4
+ 1350 0005 07       		.byte	7
+ 1351 0006 00       		.byte	0
+ 1352 0007 00       		.space	1
+ 1353              		.section	.rodata.MDIOB4_MSPI1_SCK,"a"
+ 1354              		.align	2
+ 1357              	MDIOB4_MSPI1_SCK:
+ 1358 0000 00000000 		.word	MDIOB
+ 1359 0004 04       		.byte	4
+ 1360 0005 06       		.byte	6
+ 1361 0006 00       		.byte	0
+ 1362 0007 00       		.space	1
+ 1363              		.section	.rodata.MDIOB4_MTIM_PCA1_CH0,"a"
+ 1364              		.align	2
+ 1367              	MDIOB4_MTIM_PCA1_CH0:
+ 1368 0000 00000000 		.word	MDIOB
+ 1369 0004 04       		.byte	4
+ 1370 0005 05       		.byte	5
+ 1371 0006 00       		.byte	0
+ 1372 0007 00       		.space	1
+ 1373              		.section	.rodata.MDIOB5,"a"
+ 1374              		.align	2
+ 1377              	MDIOB5:
+ 1378 0000 00000000 		.word	MDIOB
+ 1379 0004 05       		.byte	5
+ 1380 0005 01       		.byte	1
+ 1381 0006 00       		.byte	0
+ 1382 0007 00       		.space	1
+ 1383              		.section	.rodata.MDIOB5_MI2C0_SDA,"a"
+ 1384              		.align	2
+ 1387              	MDIOB5_MI2C0_SDA:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 22
+
+
+ 1388 0000 00000000 		.word	MDIOB
+ 1389 0004 05       		.byte	5
+ 1390 0005 07       		.byte	7
+ 1391 0006 00       		.byte	0
+ 1392 0007 00       		.space	1
+ 1393              		.section	.rodata.MDIOB5_MSPI1_MOSI,"a"
+ 1394              		.align	2
+ 1397              	MDIOB5_MSPI1_MOSI:
+ 1398 0000 00000000 		.word	MDIOB
+ 1399 0004 05       		.byte	5
+ 1400 0005 06       		.byte	6
+ 1401 0006 00       		.byte	0
+ 1402 0007 00       		.space	1
+ 1403              		.section	.rodata.MDIOB5_MTIM_PCA1_CH1,"a"
+ 1404              		.align	2
+ 1407              	MDIOB5_MTIM_PCA1_CH1:
+ 1408 0000 00000000 		.word	MDIOB
+ 1409 0004 05       		.byte	5
+ 1410 0005 05       		.byte	5
+ 1411 0006 00       		.byte	0
+ 1412 0007 00       		.space	1
+ 1413              		.section	.rodata.MDIOB6,"a"
+ 1414              		.align	2
+ 1417              	MDIOB6:
+ 1418 0000 00000000 		.word	MDIOB
+ 1419 0004 06       		.byte	6
+ 1420 0005 01       		.byte	1
+ 1421 0006 00       		.byte	0
+ 1422 0007 00       		.space	1
+ 1423              		.section	.rodata.MDIOB6_MSPI1_MISO,"a"
+ 1424              		.align	2
+ 1427              	MDIOB6_MSPI1_MISO:
+ 1428 0000 00000000 		.word	MDIOB
+ 1429 0004 06       		.byte	6
+ 1430 0005 07       		.byte	7
+ 1431 0006 00       		.byte	0
+ 1432 0007 00       		.space	1
+ 1433              		.section	.rodata.MDIOB6_MTIM_PCA0_CH0,"a"
+ 1434              		.align	2
+ 1437              	MDIOB6_MTIM_PCA0_CH0:
+ 1438 0000 00000000 		.word	MDIOB
+ 1439 0004 06       		.byte	6
+ 1440 0005 05       		.byte	5
+ 1441 0006 00       		.byte	0
+ 1442 0007 00       		.space	1
+ 1443              		.section	.rodata.MDIOB6_MTIM_PCA1_ECI,"a"
+ 1444              		.align	2
+ 1447              	MDIOB6_MTIM_PCA1_ECI:
+ 1448 0000 00000000 		.word	MDIOB
+ 1449 0004 06       		.byte	6
+ 1450 0005 06       		.byte	6
+ 1451 0006 00       		.byte	0
+ 1452 0007 00       		.space	1
+ 1453              		.section	.rodata.MDIOB7,"a"
+ 1454              		.align	2
+ 1457              	MDIOB7:
+ 1458 0000 00000000 		.word	MDIOB
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 23
+
+
+ 1459 0004 07       		.byte	7
+ 1460 0005 01       		.byte	1
+ 1461 0006 00       		.byte	0
+ 1462 0007 00       		.space	1
+ 1463              		.section	.rodata.MDIOB7_MADC0_AN4,"a"
+ 1464              		.align	2
+ 1467              	MDIOB7_MADC0_AN4:
+ 1468 0000 00000000 		.word	MDIOB
+ 1469 0004 07       		.byte	7
+ 1470 0005 02       		.byte	2
+ 1471 0006 00       		.byte	0
+ 1472 0007 00       		.space	1
+ 1473              		.section	.rodata.MDIOB7_MSPI0_MISO,"a"
+ 1474              		.align	2
+ 1477              	MDIOB7_MSPI0_MISO:
+ 1478 0000 00000000 		.word	MDIOB
+ 1479 0004 07       		.byte	7
+ 1480 0005 08       		.byte	8
+ 1481 0006 00       		.byte	0
+ 1482 0007 00       		.space	1
+ 1483              		.section	.rodata.MDIOB7_MSPI0_SS,"a"
+ 1484              		.align	2
+ 1487              	MDIOB7_MSPI0_SS:
+ 1488 0000 00000000 		.word	MDIOB
+ 1489 0004 07       		.byte	7
+ 1490 0005 09       		.byte	9
+ 1491 0006 00       		.byte	0
+ 1492 0007 00       		.space	1
+ 1493              		.section	.rodata.MDIOB7_MTIM_PCA0_CH1,"a"
+ 1494              		.align	2
+ 1497              	MDIOB7_MTIM_PCA0_CH1:
+ 1498 0000 00000000 		.word	MDIOB
+ 1499 0004 07       		.byte	7
+ 1500 0005 06       		.byte	6
+ 1501 0006 00       		.byte	0
+ 1502 0007 00       		.space	1
+ 1503              		.section	.rodata.MDIOB7_MTIM_PCA0_ECI,"a"
+ 1504              		.align	2
+ 1507              	MDIOB7_MTIM_PCA0_ECI:
+ 1508 0000 00000000 		.word	MDIOB
+ 1509 0004 07       		.byte	7
+ 1510 0005 07       		.byte	7
+ 1511 0006 00       		.byte	0
+ 1512 0007 00       		.space	1
+ 1513              		.section	.rodata.MDIOB8,"a"
+ 1514              		.align	2
+ 1517              	MDIOB8:
+ 1518 0000 00000000 		.word	MDIOB
+ 1519 0004 08       		.byte	8
+ 1520 0005 01       		.byte	1
+ 1521 0006 00       		.byte	0
+ 1522 0007 00       		.space	1
+ 1523              		.section	.rodata.MDIOB8_MADC0_AN5,"a"
+ 1524              		.align	2
+ 1527              	MDIOB8_MADC0_AN5:
+ 1528 0000 00000000 		.word	MDIOB
+ 1529 0004 08       		.byte	8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 24
+
+
+ 1530 0005 02       		.byte	2
+ 1531 0006 00       		.byte	0
+ 1532 0007 00       		.space	1
+ 1533              		.section	.rodata.MDIOB8_MI2C0_SDA,"a"
+ 1534              		.align	2
+ 1537              	MDIOB8_MI2C0_SDA:
+ 1538 0000 00000000 		.word	MDIOB
+ 1539 0004 08       		.byte	8
+ 1540 0005 09       		.byte	9
+ 1541 0006 00       		.byte	0
+ 1542 0007 00       		.space	1
+ 1543              		.section	.rodata.MDIOB8_MSPI0_MOSI,"a"
+ 1544              		.align	2
+ 1547              	MDIOB8_MSPI0_MOSI:
+ 1548 0000 00000000 		.word	MDIOB
+ 1549 0004 08       		.byte	8
+ 1550 0005 08       		.byte	8
+ 1551 0006 00       		.byte	0
+ 1552 0007 00       		.space	1
+ 1553              		.section	.rodata.MDIOB8_MTIM_PCA0_CH1,"a"
+ 1554              		.align	2
+ 1557              	MDIOB8_MTIM_PCA0_CH1:
+ 1558 0000 00000000 		.word	MDIOB
+ 1559 0004 08       		.byte	8
+ 1560 0005 06       		.byte	6
+ 1561 0006 00       		.byte	0
+ 1562 0007 00       		.space	1
+ 1563              		.section	.rodata.MDIOB8_MTIM_PCA1_ECI,"a"
+ 1564              		.align	2
+ 1567              	MDIOB8_MTIM_PCA1_ECI:
+ 1568 0000 00000000 		.word	MDIOB
+ 1569 0004 08       		.byte	8
+ 1570 0005 07       		.byte	7
+ 1571 0006 00       		.byte	0
+ 1572 0007 00       		.space	1
+ 1573              		.section	.rodata.MDIOB9,"a"
+ 1574              		.align	2
+ 1577              	MDIOB9:
+ 1578 0000 00000000 		.word	MDIOB
+ 1579 0004 09       		.byte	9
+ 1580 0005 01       		.byte	1
+ 1581 0006 00       		.byte	0
+ 1582 0007 00       		.space	1
+ 1583              		.section	.rodata.MDIOB9_MI2C0_SCL,"a"
+ 1584              		.align	2
+ 1587              	MDIOB9_MI2C0_SCL:
+ 1588 0000 00000000 		.word	MDIOB
+ 1589 0004 09       		.byte	9
+ 1590 0005 08       		.byte	8
+ 1591 0006 00       		.byte	0
+ 1592 0007 00       		.space	1
+ 1593              		.section	.rodata.MDIOB9_MSPI0_SCK,"a"
+ 1594              		.align	2
+ 1597              	MDIOB9_MSPI0_SCK:
+ 1598 0000 00000000 		.word	MDIOB
+ 1599 0004 09       		.byte	9
+ 1600 0005 07       		.byte	7
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 25
+
+
+ 1601 0006 00       		.byte	0
+ 1602 0007 00       		.space	1
+ 1603              		.section	.rodata.MDIOB9_MTIM_PCA1_CH1,"a"
+ 1604              		.align	2
+ 1607              	MDIOB9_MTIM_PCA1_CH1:
+ 1608 0000 00000000 		.word	MDIOB
+ 1609 0004 09       		.byte	9
+ 1610 0005 05       		.byte	5
+ 1611 0006 00       		.byte	0
+ 1612 0007 00       		.space	1
+ 1613              		.section	.rodata.MDIOC0,"a"
+ 1614              		.align	2
+ 1617              	MDIOC0:
+ 1618 0000 00000000 		.word	MDIOC
+ 1619 0004 00       		.byte	0
+ 1620 0005 01       		.byte	1
+ 1621 0006 00       		.byte	0
+ 1622 0007 00       		.space	1
+ 1623              		.section	.rodata.MDIOC0_MTIM2_CH0,"a"
+ 1624              		.align	2
+ 1627              	MDIOC0_MTIM2_CH0:
+ 1628 0000 00000000 		.word	MDIOC
+ 1629 0004 00       		.byte	0
+ 1630 0005 04       		.byte	4
+ 1631 0006 00       		.byte	0
+ 1632 0007 00       		.space	1
+ 1633              		.section	.rodata.MDIOC1,"a"
+ 1634              		.align	2
+ 1637              	MDIOC1:
+ 1638 0000 00000000 		.word	MDIOC
+ 1639 0004 01       		.byte	1
+ 1640 0005 01       		.byte	1
+ 1641 0006 00       		.byte	0
+ 1642 0007 00       		.space	1
+ 1643              		.section	.rodata.MDIOC10,"a"
+ 1644              		.align	2
+ 1647              	MDIOC10:
+ 1648 0000 00000000 		.word	MDIOC
+ 1649 0004 0A       		.byte	10
+ 1650 0005 01       		.byte	1
+ 1651 0006 00       		.byte	0
+ 1652 0007 00       		.space	1
+ 1653              		.section	.rodata.MDIOC10_MADC0_AN21,"a"
+ 1654              		.align	2
+ 1657              	MDIOC10_MADC0_AN21:
+ 1658 0000 00000000 		.word	MDIOC
+ 1659 0004 0A       		.byte	10
+ 1660 0005 02       		.byte	2
+ 1661 0006 00       		.byte	0
+ 1662 0007 00       		.space	1
+ 1663              		.section	.rodata.MDIOC10_MI2C0_SCL,"a"
+ 1664              		.align	2
+ 1667              	MDIOC10_MI2C0_SCL:
+ 1668 0000 00000000 		.word	MDIOC
+ 1669 0004 0A       		.byte	10
+ 1670 0005 09       		.byte	9
+ 1671 0006 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 26
+
+
+ 1672 0007 00       		.space	1
+ 1673              		.section	.rodata.MDIOC10_MSPI0_SCK,"a"
+ 1674              		.align	2
+ 1677              	MDIOC10_MSPI0_SCK:
+ 1678 0000 00000000 		.word	MDIOC
+ 1679 0004 0A       		.byte	10
+ 1680 0005 08       		.byte	8
+ 1681 0006 00       		.byte	0
+ 1682 0007 00       		.space	1
+ 1683              		.section	.rodata.MDIOC10_MTIM3_CH0,"a"
+ 1684              		.align	2
+ 1687              	MDIOC10_MTIM3_CH0:
+ 1688 0000 00000000 		.word	MDIOC
+ 1689 0004 0A       		.byte	10
+ 1690 0005 05       		.byte	5
+ 1691 0006 00       		.byte	0
+ 1692 0007 00       		.space	1
+ 1693              		.section	.rodata.MDIOC10_MTIM_PCA2_CH0,"a"
+ 1694              		.align	2
+ 1697              	MDIOC10_MTIM_PCA2_CH0:
+ 1698 0000 00000000 		.word	MDIOC
+ 1699 0004 0A       		.byte	10
+ 1700 0005 04       		.byte	4
+ 1701 0006 00       		.byte	0
+ 1702 0007 00       		.space	1
+ 1703              		.section	.rodata.MDIOC10_MUART2_RX,"a"
+ 1704              		.align	2
+ 1707              	MDIOC10_MUART2_RX:
+ 1708 0000 00000000 		.word	MDIOC
+ 1709 0004 0A       		.byte	10
+ 1710 0005 07       		.byte	7
+ 1711 0006 00       		.byte	0
+ 1712 0007 00       		.space	1
+ 1713              		.section	.rodata.MDIOC10_MUART2_TX,"a"
+ 1714              		.align	2
+ 1717              	MDIOC10_MUART2_TX:
+ 1718 0000 00000000 		.word	MDIOC
+ 1719 0004 0A       		.byte	10
+ 1720 0005 06       		.byte	6
+ 1721 0006 00       		.byte	0
+ 1722 0007 00       		.space	1
+ 1723              		.section	.rodata.MDIOC11,"a"
+ 1724              		.align	2
+ 1727              	MDIOC11:
+ 1728 0000 00000000 		.word	MDIOC
+ 1729 0004 0B       		.byte	11
+ 1730 0005 01       		.byte	1
+ 1731 0006 00       		.byte	0
+ 1732 0007 00       		.space	1
+ 1733              		.section	.rodata.MDIOC11_MADC0_AN22,"a"
+ 1734              		.align	2
+ 1737              	MDIOC11_MADC0_AN22:
+ 1738 0000 00000000 		.word	MDIOC
+ 1739 0004 0B       		.byte	11
+ 1740 0005 02       		.byte	2
+ 1741 0006 00       		.byte	0
+ 1742 0007 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 27
+
+
+ 1743              		.section	.rodata.MDIOC11_MSPI0_SS,"a"
+ 1744              		.align	2
+ 1747              	MDIOC11_MSPI0_SS:
+ 1748 0000 00000000 		.word	MDIOC
+ 1749 0004 0B       		.byte	11
+ 1750 0005 08       		.byte	8
+ 1751 0006 00       		.byte	0
+ 1752 0007 00       		.space	1
+ 1753              		.section	.rodata.MDIOC11_MTIM_PCA2_CH1,"a"
+ 1754              		.align	2
+ 1757              	MDIOC11_MTIM_PCA2_CH1:
+ 1758 0000 00000000 		.word	MDIOC
+ 1759 0004 0B       		.byte	11
+ 1760 0005 04       		.byte	4
+ 1761 0006 00       		.byte	0
+ 1762 0007 00       		.space	1
+ 1763              		.section	.rodata.MDIOC11_MTIM_PCA2_ECI,"a"
+ 1764              		.align	2
+ 1767              	MDIOC11_MTIM_PCA2_ECI:
+ 1768 0000 00000000 		.word	MDIOC
+ 1769 0004 0B       		.byte	11
+ 1770 0005 05       		.byte	5
+ 1771 0006 00       		.byte	0
+ 1772 0007 00       		.space	1
+ 1773              		.section	.rodata.MDIOC11_MUART2_RX,"a"
+ 1774              		.align	2
+ 1777              	MDIOC11_MUART2_RX:
+ 1778 0000 00000000 		.word	MDIOC
+ 1779 0004 0B       		.byte	11
+ 1780 0005 07       		.byte	7
+ 1781 0006 00       		.byte	0
+ 1782 0007 00       		.space	1
+ 1783              		.section	.rodata.MDIOC11_MUART2_TX,"a"
+ 1784              		.align	2
+ 1787              	MDIOC11_MUART2_TX:
+ 1788 0000 00000000 		.word	MDIOC
+ 1789 0004 0B       		.byte	11
+ 1790 0005 06       		.byte	6
+ 1791 0006 00       		.byte	0
+ 1792 0007 00       		.space	1
+ 1793              		.section	.rodata.MDIOC12,"a"
+ 1794              		.align	2
+ 1797              	MDIOC12:
+ 1798 0000 00000000 		.word	MDIOC
+ 1799 0004 0C       		.byte	12
+ 1800 0005 01       		.byte	1
+ 1801 0006 00       		.byte	0
+ 1802 0007 00       		.space	1
+ 1803              		.section	.rodata.MDIOC12_MADC0_AN6,"a"
+ 1804              		.align	2
+ 1807              	MDIOC12_MADC0_AN6:
+ 1808 0000 00000000 		.word	MDIOC
+ 1809 0004 0C       		.byte	12
+ 1810 0005 02       		.byte	2
+ 1811 0006 00       		.byte	0
+ 1812 0007 00       		.space	1
+ 1813              		.section	.rodata.MDIOC12_MI2C0_SCL,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 28
+
+
+ 1814              		.align	2
+ 1817              	MDIOC12_MI2C0_SCL:
+ 1818 0000 00000000 		.word	MDIOC
+ 1819 0004 0C       		.byte	12
+ 1820 0005 06       		.byte	6
+ 1821 0006 00       		.byte	0
+ 1822 0007 00       		.space	1
+ 1823              		.section	.rodata.MDIOC12_MI2C0_SDA,"a"
+ 1824              		.align	2
+ 1827              	MDIOC12_MI2C0_SDA:
+ 1828 0000 00000000 		.word	MDIOC
+ 1829 0004 0C       		.byte	12
+ 1830 0005 07       		.byte	7
+ 1831 0006 00       		.byte	0
+ 1832 0007 00       		.space	1
+ 1833              		.section	.rodata.MDIOC12_MTIM_PCA2_CH0,"a"
+ 1834              		.align	2
+ 1837              	MDIOC12_MTIM_PCA2_CH0:
+ 1838 0000 00000000 		.word	MDIOC
+ 1839 0004 0C       		.byte	12
+ 1840 0005 04       		.byte	4
+ 1841 0006 00       		.byte	0
+ 1842 0007 00       		.space	1
+ 1843              		.section	.rodata.MDIOC12_MTIM_PCA2_ECI,"a"
+ 1844              		.align	2
+ 1847              	MDIOC12_MTIM_PCA2_ECI:
+ 1848 0000 00000000 		.word	MDIOC
+ 1849 0004 0C       		.byte	12
+ 1850 0005 05       		.byte	5
+ 1851 0006 00       		.byte	0
+ 1852 0007 00       		.space	1
+ 1853              		.section	.rodata.MDIOC13,"a"
+ 1854              		.align	2
+ 1857              	MDIOC13:
+ 1858 0000 00000000 		.word	MDIOC
+ 1859 0004 0D       		.byte	13
+ 1860 0005 01       		.byte	1
+ 1861 0006 00       		.byte	0
+ 1862 0007 00       		.space	1
+ 1863              		.section	.rodata.MDIOC13_MADC0_AN7,"a"
+ 1864              		.align	2
+ 1867              	MDIOC13_MADC0_AN7:
+ 1868 0000 00000000 		.word	MDIOC
+ 1869 0004 0D       		.byte	13
+ 1870 0005 02       		.byte	2
+ 1871 0006 00       		.byte	0
+ 1872 0007 00       		.space	1
+ 1873              		.section	.rodata.MDIOC13_MI2C0_SCL,"a"
+ 1874              		.align	2
+ 1877              	MDIOC13_MI2C0_SCL:
+ 1878 0000 00000000 		.word	MDIOC
+ 1879 0004 0D       		.byte	13
+ 1880 0005 06       		.byte	6
+ 1881 0006 00       		.byte	0
+ 1882 0007 00       		.space	1
+ 1883              		.section	.rodata.MDIOC13_MI2C0_SDA,"a"
+ 1884              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 29
+
+
+ 1887              	MDIOC13_MI2C0_SDA:
+ 1888 0000 00000000 		.word	MDIOC
+ 1889 0004 0D       		.byte	13
+ 1890 0005 07       		.byte	7
+ 1891 0006 00       		.byte	0
+ 1892 0007 00       		.space	1
+ 1893              		.section	.rodata.MDIOC13_MTIM_PCA1_CH0,"a"
+ 1894              		.align	2
+ 1897              	MDIOC13_MTIM_PCA1_CH0:
+ 1898 0000 00000000 		.word	MDIOC
+ 1899 0004 0D       		.byte	13
+ 1900 0005 04       		.byte	4
+ 1901 0006 00       		.byte	0
+ 1902 0007 00       		.space	1
+ 1903              		.section	.rodata.MDIOC14,"a"
+ 1904              		.align	2
+ 1907              	MDIOC14:
+ 1908 0000 00000000 		.word	MDIOC
+ 1909 0004 0E       		.byte	14
+ 1910 0005 01       		.byte	1
+ 1911 0006 00       		.byte	0
+ 1912 0007 00       		.space	1
+ 1913              		.section	.rodata.MDIOC14_MADC0_AN8,"a"
+ 1914              		.align	2
+ 1917              	MDIOC14_MADC0_AN8:
+ 1918 0000 00000000 		.word	MDIOC
+ 1919 0004 0E       		.byte	14
+ 1920 0005 02       		.byte	2
+ 1921 0006 00       		.byte	0
+ 1922 0007 00       		.space	1
+ 1923              		.section	.rodata.MDIOC14_MI2C0_SCL,"a"
+ 1924              		.align	2
+ 1927              	MDIOC14_MI2C0_SCL:
+ 1928 0000 00000000 		.word	MDIOC
+ 1929 0004 0E       		.byte	14
+ 1930 0005 06       		.byte	6
+ 1931 0006 00       		.byte	0
+ 1932 0007 00       		.space	1
+ 1933              		.section	.rodata.MDIOC14_MI2C0_SDA,"a"
+ 1934              		.align	2
+ 1937              	MDIOC14_MI2C0_SDA:
+ 1938 0000 00000000 		.word	MDIOC
+ 1939 0004 0E       		.byte	14
+ 1940 0005 07       		.byte	7
+ 1941 0006 00       		.byte	0
+ 1942 0007 00       		.space	1
+ 1943              		.section	.rodata.MDIOC14_MTIM_PCA1_CH1,"a"
+ 1944              		.align	2
+ 1947              	MDIOC14_MTIM_PCA1_CH1:
+ 1948 0000 00000000 		.word	MDIOC
+ 1949 0004 0E       		.byte	14
+ 1950 0005 04       		.byte	4
+ 1951 0006 00       		.byte	0
+ 1952 0007 00       		.space	1
+ 1953              		.section	.rodata.MDIOC15,"a"
+ 1954              		.align	2
+ 1957              	MDIOC15:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 30
+
+
+ 1958 0000 00000000 		.word	MDIOC
+ 1959 0004 0F       		.byte	15
+ 1960 0005 01       		.byte	1
+ 1961 0006 00       		.byte	0
+ 1962 0007 00       		.space	1
+ 1963              		.section	.rodata.MDIOC15_MADC0_AN9,"a"
+ 1964              		.align	2
+ 1967              	MDIOC15_MADC0_AN9:
+ 1968 0000 00000000 		.word	MDIOC
+ 1969 0004 0F       		.byte	15
+ 1970 0005 02       		.byte	2
+ 1971 0006 00       		.byte	0
+ 1972 0007 00       		.space	1
+ 1973              		.section	.rodata.MDIOC15_MI2C0_SCL,"a"
+ 1974              		.align	2
+ 1977              	MDIOC15_MI2C0_SCL:
+ 1978 0000 00000000 		.word	MDIOC
+ 1979 0004 0F       		.byte	15
+ 1980 0005 06       		.byte	6
+ 1981 0006 00       		.byte	0
+ 1982 0007 00       		.space	1
+ 1983              		.section	.rodata.MDIOC15_MI2C0_SDA,"a"
+ 1984              		.align	2
+ 1987              	MDIOC15_MI2C0_SDA:
+ 1988 0000 00000000 		.word	MDIOC
+ 1989 0004 0F       		.byte	15
+ 1990 0005 07       		.byte	7
+ 1991 0006 00       		.byte	0
+ 1992 0007 00       		.space	1
+ 1993              		.section	.rodata.MDIOC15_MTIM_PCA1_ECI,"a"
+ 1994              		.align	2
+ 1997              	MDIOC15_MTIM_PCA1_ECI:
+ 1998 0000 00000000 		.word	MDIOC
+ 1999 0004 0F       		.byte	15
+ 2000 0005 04       		.byte	4
+ 2001 0006 00       		.byte	0
+ 2002 0007 00       		.space	1
+ 2003              		.section	.rodata.MDIOC1_MSPI0_SS,"a"
+ 2004              		.align	2
+ 2007              	MDIOC1_MSPI0_SS:
+ 2008 0000 00000000 		.word	MDIOC
+ 2009 0004 01       		.byte	1
+ 2010 0005 05       		.byte	5
+ 2011 0006 00       		.byte	0
+ 2012 0007 00       		.space	1
+ 2013              		.section	.rodata.MDIOC2,"a"
+ 2014              		.align	2
+ 2017              	MDIOC2:
+ 2018 0000 00000000 		.word	MDIOC
+ 2019 0004 02       		.byte	2
+ 2020 0005 01       		.byte	1
+ 2021 0006 00       		.byte	0
+ 2022 0007 00       		.space	1
+ 2023              		.section	.rodata.MDIOC2_MSPI0_SCK,"a"
+ 2024              		.align	2
+ 2027              	MDIOC2_MSPI0_SCK:
+ 2028 0000 00000000 		.word	MDIOC
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 31
+
+
+ 2029 0004 02       		.byte	2
+ 2030 0005 04       		.byte	4
+ 2031 0006 00       		.byte	0
+ 2032 0007 00       		.space	1
+ 2033              		.section	.rodata.MDIOC3,"a"
+ 2034              		.align	2
+ 2037              	MDIOC3:
+ 2038 0000 00000000 		.word	MDIOC
+ 2039 0004 03       		.byte	3
+ 2040 0005 01       		.byte	1
+ 2041 0006 00       		.byte	0
+ 2042 0007 00       		.space	1
+ 2043              		.section	.rodata.MDIOC3_MSPI0_MISO,"a"
+ 2044              		.align	2
+ 2047              	MDIOC3_MSPI0_MISO:
+ 2048 0000 00000000 		.word	MDIOC
+ 2049 0004 03       		.byte	3
+ 2050 0005 07       		.byte	7
+ 2051 0006 00       		.byte	0
+ 2052 0007 00       		.space	1
+ 2053              		.section	.rodata.MDIOC3_MTIM1_CH0,"a"
+ 2054              		.align	2
+ 2057              	MDIOC3_MTIM1_CH0:
+ 2058 0000 00000000 		.word	MDIOC
+ 2059 0004 03       		.byte	3
+ 2060 0005 03       		.byte	3
+ 2061 0006 00       		.byte	0
+ 2062 0007 00       		.space	1
+ 2063              		.section	.rodata.MDIOC3_MUART0_RX,"a"
+ 2064              		.align	2
+ 2067              	MDIOC3_MUART0_RX:
+ 2068 0000 00000000 		.word	MDIOC
+ 2069 0004 03       		.byte	3
+ 2070 0005 06       		.byte	6
+ 2071 0006 00       		.byte	0
+ 2072 0007 00       		.space	1
+ 2073              		.section	.rodata.MDIOC3_MUART0_TX,"a"
+ 2074              		.align	2
+ 2077              	MDIOC3_MUART0_TX:
+ 2078 0000 00000000 		.word	MDIOC
+ 2079 0004 03       		.byte	3
+ 2080 0005 05       		.byte	5
+ 2081 0006 00       		.byte	0
+ 2082 0007 00       		.space	1
+ 2083              		.section	.rodata.MDIOC4,"a"
+ 2084              		.align	2
+ 2087              	MDIOC4:
+ 2088 0000 00000000 		.word	MDIOC
+ 2089 0004 04       		.byte	4
+ 2090 0005 01       		.byte	1
+ 2091 0006 00       		.byte	0
+ 2092 0007 00       		.space	1
+ 2093              		.section	.rodata.MDIOC4_MSPI0_MOSI,"a"
+ 2094              		.align	2
+ 2097              	MDIOC4_MSPI0_MOSI:
+ 2098 0000 00000000 		.word	MDIOC
+ 2099 0004 04       		.byte	4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 32
+
+
+ 2100 0005 07       		.byte	7
+ 2101 0006 00       		.byte	0
+ 2102 0007 00       		.space	1
+ 2103              		.section	.rodata.MDIOC4_MTIM0_CH0,"a"
+ 2104              		.align	2
+ 2107              	MDIOC4_MTIM0_CH0:
+ 2108 0000 00000000 		.word	MDIOC
+ 2109 0004 04       		.byte	4
+ 2110 0005 03       		.byte	3
+ 2111 0006 00       		.byte	0
+ 2112 0007 00       		.space	1
+ 2113              		.section	.rodata.MDIOC4_MUART0_RX,"a"
+ 2114              		.align	2
+ 2117              	MDIOC4_MUART0_RX:
+ 2118 0000 00000000 		.word	MDIOC
+ 2119 0004 04       		.byte	4
+ 2120 0005 06       		.byte	6
+ 2121 0006 00       		.byte	0
+ 2122 0007 00       		.space	1
+ 2123              		.section	.rodata.MDIOC4_MUART0_TX,"a"
+ 2124              		.align	2
+ 2127              	MDIOC4_MUART0_TX:
+ 2128 0000 00000000 		.word	MDIOC
+ 2129 0004 04       		.byte	4
+ 2130 0005 05       		.byte	5
+ 2131 0006 00       		.byte	0
+ 2132 0007 00       		.space	1
+ 2133              		.section	.rodata.MDIOC5,"a"
+ 2134              		.align	2
+ 2137              	MDIOC5:
+ 2138 0000 00000000 		.word	MDIOC
+ 2139 0004 05       		.byte	5
+ 2140 0005 01       		.byte	1
+ 2141 0006 00       		.byte	0
+ 2142 0007 00       		.space	1
+ 2143              		.section	.rodata.MDIOC5_MI2C0_SCL,"a"
+ 2144              		.align	2
+ 2147              	MDIOC5_MI2C0_SCL:
+ 2148 0000 00000000 		.word	MDIOC
+ 2149 0004 05       		.byte	5
+ 2150 0005 08       		.byte	8
+ 2151 0006 00       		.byte	0
+ 2152 0007 00       		.space	1
+ 2153              		.section	.rodata.MDIOC5_MSPI1_SCK,"a"
+ 2154              		.align	2
+ 2157              	MDIOC5_MSPI1_SCK:
+ 2158 0000 00000000 		.word	MDIOC
+ 2159 0004 05       		.byte	5
+ 2160 0005 07       		.byte	7
+ 2161 0006 00       		.byte	0
+ 2162 0007 00       		.space	1
+ 2163              		.section	.rodata.MDIOC5_MTIM_PCA0_CH0,"a"
+ 2164              		.align	2
+ 2167              	MDIOC5_MTIM_PCA0_CH0:
+ 2168 0000 00000000 		.word	MDIOC
+ 2169 0004 05       		.byte	5
+ 2170 0005 03       		.byte	3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 33
+
+
+ 2171 0006 00       		.byte	0
+ 2172 0007 00       		.space	1
+ 2173              		.section	.rodata.MDIOC5_MTIM_PCA0_ECI,"a"
+ 2174              		.align	2
+ 2177              	MDIOC5_MTIM_PCA0_ECI:
+ 2178 0000 00000000 		.word	MDIOC
+ 2179 0004 05       		.byte	5
+ 2180 0005 04       		.byte	4
+ 2181 0006 00       		.byte	0
+ 2182 0007 00       		.space	1
+ 2183              		.section	.rodata.MDIOC5_MUART3_RX,"a"
+ 2184              		.align	2
+ 2187              	MDIOC5_MUART3_RX:
+ 2188 0000 00000000 		.word	MDIOC
+ 2189 0004 05       		.byte	5
+ 2190 0005 06       		.byte	6
+ 2191 0006 00       		.byte	0
+ 2192 0007 00       		.space	1
+ 2193              		.section	.rodata.MDIOC5_MUART3_TX,"a"
+ 2194              		.align	2
+ 2197              	MDIOC5_MUART3_TX:
+ 2198 0000 00000000 		.word	MDIOC
+ 2199 0004 05       		.byte	5
+ 2200 0005 05       		.byte	5
+ 2201 0006 00       		.byte	0
+ 2202 0007 00       		.space	1
+ 2203              		.section	.rodata.MDIOC6,"a"
+ 2204              		.align	2
+ 2207              	MDIOC6:
+ 2208 0000 00000000 		.word	MDIOC
+ 2209 0004 06       		.byte	6
+ 2210 0005 01       		.byte	1
+ 2211 0006 00       		.byte	0
+ 2212 0007 00       		.space	1
+ 2213              		.section	.rodata.MDIOC6_MI2C0_SCL,"a"
+ 2214              		.align	2
+ 2217              	MDIOC6_MI2C0_SCL:
+ 2218 0000 00000000 		.word	MDIOC
+ 2219 0004 06       		.byte	6
+ 2220 0005 08       		.byte	8
+ 2221 0006 00       		.byte	0
+ 2222 0007 00       		.space	1
+ 2223              		.section	.rodata.MDIOC6_MI2C0_SDA,"a"
+ 2224              		.align	2
+ 2227              	MDIOC6_MI2C0_SDA:
+ 2228 0000 00000000 		.word	MDIOC
+ 2229 0004 06       		.byte	6
+ 2230 0005 09       		.byte	9
+ 2231 0006 00       		.byte	0
+ 2232 0007 00       		.space	1
+ 2233              		.section	.rodata.MDIOC6_MSPI1_MOSI,"a"
+ 2234              		.align	2
+ 2237              	MDIOC6_MSPI1_MOSI:
+ 2238 0000 00000000 		.word	MDIOC
+ 2239 0004 06       		.byte	6
+ 2240 0005 07       		.byte	7
+ 2241 0006 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 34
+
+
+ 2242 0007 00       		.space	1
+ 2243              		.section	.rodata.MDIOC6_MTIM0_CH0,"a"
+ 2244              		.align	2
+ 2247              	MDIOC6_MTIM0_CH0:
+ 2248 0000 00000000 		.word	MDIOC
+ 2249 0004 06       		.byte	6
+ 2250 0005 04       		.byte	4
+ 2251 0006 00       		.byte	0
+ 2252 0007 00       		.space	1
+ 2253              		.section	.rodata.MDIOC6_MTIM_PCA2_CH1,"a"
+ 2254              		.align	2
+ 2257              	MDIOC6_MTIM_PCA2_CH1:
+ 2258 0000 00000000 		.word	MDIOC
+ 2259 0004 06       		.byte	6
+ 2260 0005 03       		.byte	3
+ 2261 0006 00       		.byte	0
+ 2262 0007 00       		.space	1
+ 2263              		.section	.rodata.MDIOC6_MUART3_RX,"a"
+ 2264              		.align	2
+ 2267              	MDIOC6_MUART3_RX:
+ 2268 0000 00000000 		.word	MDIOC
+ 2269 0004 06       		.byte	6
+ 2270 0005 06       		.byte	6
+ 2271 0006 00       		.byte	0
+ 2272 0007 00       		.space	1
+ 2273              		.section	.rodata.MDIOC6_MUART3_TX,"a"
+ 2274              		.align	2
+ 2277              	MDIOC6_MUART3_TX:
+ 2278 0000 00000000 		.word	MDIOC
+ 2279 0004 06       		.byte	6
+ 2280 0005 05       		.byte	5
+ 2281 0006 00       		.byte	0
+ 2282 0007 00       		.space	1
+ 2283              		.section	.rodata.MDIOC7,"a"
+ 2284              		.align	2
+ 2287              	MDIOC7:
+ 2288 0000 00000000 		.word	MDIOC
+ 2289 0004 07       		.byte	7
+ 2290 0005 01       		.byte	1
+ 2291 0006 00       		.byte	0
+ 2292 0007 00       		.space	1
+ 2293              		.section	.rodata.MDIOC7_MI2C0_SDA,"a"
+ 2294              		.align	2
+ 2297              	MDIOC7_MI2C0_SDA:
+ 2298 0000 00000000 		.word	MDIOC
+ 2299 0004 07       		.byte	7
+ 2300 0005 07       		.byte	7
+ 2301 0006 00       		.byte	0
+ 2302 0007 00       		.space	1
+ 2303              		.section	.rodata.MDIOC7_MSPI1_MISO,"a"
+ 2304              		.align	2
+ 2307              	MDIOC7_MSPI1_MISO:
+ 2308 0000 00000000 		.word	MDIOC
+ 2309 0004 07       		.byte	7
+ 2310 0005 06       		.byte	6
+ 2311 0006 00       		.byte	0
+ 2312 0007 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 35
+
+
+ 2313              		.section	.rodata.MDIOC7_MTIM_PCA3_ECI,"a"
+ 2314              		.align	2
+ 2317              	MDIOC7_MTIM_PCA3_ECI:
+ 2318 0000 00000000 		.word	MDIOC
+ 2319 0004 07       		.byte	7
+ 2320 0005 03       		.byte	3
+ 2321 0006 00       		.byte	0
+ 2322 0007 00       		.space	1
+ 2323              		.section	.rodata.MDIOC7_MUART3_TX,"a"
+ 2324              		.align	2
+ 2327              	MDIOC7_MUART3_TX:
+ 2328 0000 00000000 		.word	MDIOC
+ 2329 0004 07       		.byte	7
+ 2330 0005 05       		.byte	5
+ 2331 0006 00       		.byte	0
+ 2332 0007 00       		.space	1
+ 2333              		.section	.rodata.MDIOC8,"a"
+ 2334              		.align	2
+ 2337              	MDIOC8:
+ 2338 0000 00000000 		.word	MDIOC
+ 2339 0004 08       		.byte	8
+ 2340 0005 01       		.byte	1
+ 2341 0006 00       		.byte	0
+ 2342 0007 00       		.space	1
+ 2343              		.section	.rodata.MDIOC8_MSPI0_MISO,"a"
+ 2344              		.align	2
+ 2347              	MDIOC8_MSPI0_MISO:
+ 2348 0000 00000000 		.word	MDIOC
+ 2349 0004 08       		.byte	8
+ 2350 0005 08       		.byte	8
+ 2351 0006 00       		.byte	0
+ 2352 0007 00       		.space	1
+ 2353              		.section	.rodata.MDIOC8_MTIM1_CH0,"a"
+ 2354              		.align	2
+ 2357              	MDIOC8_MTIM1_CH0:
+ 2358 0000 00000000 		.word	MDIOC
+ 2359 0004 08       		.byte	8
+ 2360 0005 04       		.byte	4
+ 2361 0006 00       		.byte	0
+ 2362 0007 00       		.space	1
+ 2363              		.section	.rodata.MDIOC8_MTIM_PCA3_CH1,"a"
+ 2364              		.align	2
+ 2367              	MDIOC8_MTIM_PCA3_CH1:
+ 2368 0000 00000000 		.word	MDIOC
+ 2369 0004 08       		.byte	8
+ 2370 0005 03       		.byte	3
+ 2371 0006 00       		.byte	0
+ 2372 0007 00       		.space	1
+ 2373              		.section	.rodata.MDIOC8_MUART1_RX,"a"
+ 2374              		.align	2
+ 2377              	MDIOC8_MUART1_RX:
+ 2378 0000 00000000 		.word	MDIOC
+ 2379 0004 08       		.byte	8
+ 2380 0005 07       		.byte	7
+ 2381 0006 00       		.byte	0
+ 2382 0007 00       		.space	1
+ 2383              		.section	.rodata.MDIOC8_MUART1_TX,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 36
+
+
+ 2384              		.align	2
+ 2387              	MDIOC8_MUART1_TX:
+ 2388 0000 00000000 		.word	MDIOC
+ 2389 0004 08       		.byte	8
+ 2390 0005 06       		.byte	6
+ 2391 0006 00       		.byte	0
+ 2392 0007 00       		.space	1
+ 2393              		.section	.rodata.MDIOC9,"a"
+ 2394              		.align	2
+ 2397              	MDIOC9:
+ 2398 0000 00000000 		.word	MDIOC
+ 2399 0004 09       		.byte	9
+ 2400 0005 01       		.byte	1
+ 2401 0006 00       		.byte	0
+ 2402 0007 00       		.space	1
+ 2403              		.section	.rodata.MDIOC9_MI2C0_SDA,"a"
+ 2404              		.align	2
+ 2407              	MDIOC9_MI2C0_SDA:
+ 2408 0000 00000000 		.word	MDIOC
+ 2409 0004 09       		.byte	9
+ 2410 0005 08       		.byte	8
+ 2411 0006 00       		.byte	0
+ 2412 0007 00       		.space	1
+ 2413              		.section	.rodata.MDIOC9_MSPI0_MOSI,"a"
+ 2414              		.align	2
+ 2417              	MDIOC9_MSPI0_MOSI:
+ 2418 0000 00000000 		.word	MDIOC
+ 2419 0004 09       		.byte	9
+ 2420 0005 07       		.byte	7
+ 2421 0006 00       		.byte	0
+ 2422 0007 00       		.space	1
+ 2423              		.section	.rodata.MDIOC9_MTIM2_CH0,"a"
+ 2424              		.align	2
+ 2427              	MDIOC9_MTIM2_CH0:
+ 2428 0000 00000000 		.word	MDIOC
+ 2429 0004 09       		.byte	9
+ 2430 0005 04       		.byte	4
+ 2431 0006 00       		.byte	0
+ 2432 0007 00       		.space	1
+ 2433              		.section	.rodata.MDIOC9_MTIM_PCA3_CH0,"a"
+ 2434              		.align	2
+ 2437              	MDIOC9_MTIM_PCA3_CH0:
+ 2438 0000 00000000 		.word	MDIOC
+ 2439 0004 09       		.byte	9
+ 2440 0005 03       		.byte	3
+ 2441 0006 00       		.byte	0
+ 2442 0007 00       		.space	1
+ 2443              		.section	.rodata.MDIOC9_MUART1_RX,"a"
+ 2444              		.align	2
+ 2447              	MDIOC9_MUART1_RX:
+ 2448 0000 00000000 		.word	MDIOC
+ 2449 0004 09       		.byte	9
+ 2450 0005 06       		.byte	6
+ 2451 0006 00       		.byte	0
+ 2452 0007 00       		.space	1
+ 2453              		.section	.rodata.MDIOC9_MUART1_TX,"a"
+ 2454              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 37
+
+
+ 2457              	MDIOC9_MUART1_TX:
+ 2458 0000 00000000 		.word	MDIOC
+ 2459 0004 09       		.byte	9
+ 2460 0005 05       		.byte	5
+ 2461 0006 00       		.byte	0
+ 2462 0007 00       		.space	1
+ 2463              		.section	.rodata.MDIOD0,"a"
+ 2464              		.align	2
+ 2467              	MDIOD0:
+ 2468 0000 00000000 		.word	MDIOD
+ 2469 0004 00       		.byte	0
+ 2470 0005 01       		.byte	1
+ 2471 0006 00       		.byte	0
+ 2472 0007 00       		.space	1
+ 2473              		.section	.rodata.MDIOD0_MADC0_AN10,"a"
+ 2474              		.align	2
+ 2477              	MDIOD0_MADC0_AN10:
+ 2478 0000 00000000 		.word	MDIOD
+ 2479 0004 00       		.byte	0
+ 2480 0005 02       		.byte	2
+ 2481 0006 00       		.byte	0
+ 2482 0007 00       		.space	1
+ 2483              		.section	.rodata.MDIOD0_MUART0_RX,"a"
+ 2484              		.align	2
+ 2487              	MDIOD0_MUART0_RX:
+ 2488 0000 00000000 		.word	MDIOD
+ 2489 0004 00       		.byte	0
+ 2490 0005 06       		.byte	6
+ 2491 0006 00       		.byte	0
+ 2492 0007 00       		.space	1
+ 2493              		.section	.rodata.MDIOD0_MUART0_TX,"a"
+ 2494              		.align	2
+ 2497              	MDIOD0_MUART0_TX:
+ 2498 0000 00000000 		.word	MDIOD
+ 2499 0004 00       		.byte	0
+ 2500 0005 05       		.byte	5
+ 2501 0006 00       		.byte	0
+ 2502 0007 00       		.space	1
+ 2503              		.section	.rodata.MDIOD1,"a"
+ 2504              		.align	2
+ 2507              	MDIOD1:
+ 2508 0000 00000000 		.word	MDIOD
+ 2509 0004 01       		.byte	1
+ 2510 0005 01       		.byte	1
+ 2511 0006 00       		.byte	0
+ 2512 0007 00       		.space	1
+ 2513              		.section	.rodata.MDIOD10,"a"
+ 2514              		.align	2
+ 2517              	MDIOD10:
+ 2518 0000 00000000 		.word	MDIOD
+ 2519 0004 0A       		.byte	10
+ 2520 0005 01       		.byte	1
+ 2521 0006 00       		.byte	0
+ 2522 0007 00       		.space	1
+ 2523              		.section	.rodata.MDIOD10_MADC0_AN24,"a"
+ 2524              		.align	2
+ 2527              	MDIOD10_MADC0_AN24:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 38
+
+
+ 2528 0000 00000000 		.word	MDIOD
+ 2529 0004 0A       		.byte	10
+ 2530 0005 02       		.byte	2
+ 2531 0006 00       		.byte	0
+ 2532 0007 00       		.space	1
+ 2533              		.section	.rodata.MDIOD10_MUART2_TX,"a"
+ 2534              		.align	2
+ 2537              	MDIOD10_MUART2_TX:
+ 2538 0000 00000000 		.word	MDIOD
+ 2539 0004 0A       		.byte	10
+ 2540 0005 05       		.byte	5
+ 2541 0006 00       		.byte	0
+ 2542 0007 00       		.space	1
+ 2543              		.section	.rodata.MDIOD11,"a"
+ 2544              		.align	2
+ 2547              	MDIOD11:
+ 2548 0000 00000000 		.word	MDIOD
+ 2549 0004 0B       		.byte	11
+ 2550 0005 01       		.byte	1
+ 2551 0006 00       		.byte	0
+ 2552 0007 00       		.space	1
+ 2553              		.section	.rodata.MDIOD11_MADC0_AN25,"a"
+ 2554              		.align	2
+ 2557              	MDIOD11_MADC0_AN25:
+ 2558 0000 00000000 		.word	MDIOD
+ 2559 0004 0B       		.byte	11
+ 2560 0005 02       		.byte	2
+ 2561 0006 00       		.byte	0
+ 2562 0007 00       		.space	1
+ 2563              		.section	.rodata.MDIOD12,"a"
+ 2564              		.align	2
+ 2567              	MDIOD12:
+ 2568 0000 00000000 		.word	MDIOD
+ 2569 0004 0C       		.byte	12
+ 2570 0005 01       		.byte	1
+ 2571 0006 00       		.byte	0
+ 2572 0007 00       		.space	1
+ 2573              		.section	.rodata.MDIOD12_MADC0_AN26,"a"
+ 2574              		.align	2
+ 2577              	MDIOD12_MADC0_AN26:
+ 2578 0000 00000000 		.word	MDIOD
+ 2579 0004 0C       		.byte	12
+ 2580 0005 02       		.byte	2
+ 2581 0006 00       		.byte	0
+ 2582 0007 00       		.space	1
+ 2583              		.section	.rodata.MDIOD1_MADC0_AN11,"a"
+ 2584              		.align	2
+ 2587              	MDIOD1_MADC0_AN11:
+ 2588 0000 00000000 		.word	MDIOD
+ 2589 0004 01       		.byte	1
+ 2590 0005 02       		.byte	2
+ 2591 0006 00       		.byte	0
+ 2592 0007 00       		.space	1
+ 2593              		.section	.rodata.MDIOD1_MTIM_PCA2_ECI,"a"
+ 2594              		.align	2
+ 2597              	MDIOD1_MTIM_PCA2_ECI:
+ 2598 0000 00000000 		.word	MDIOD
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 39
+
+
+ 2599 0004 01       		.byte	1
+ 2600 0005 04       		.byte	4
+ 2601 0006 00       		.byte	0
+ 2602 0007 00       		.space	1
+ 2603              		.section	.rodata.MDIOD1_MUART0_RX,"a"
+ 2604              		.align	2
+ 2607              	MDIOD1_MUART0_RX:
+ 2608 0000 00000000 		.word	MDIOD
+ 2609 0004 01       		.byte	1
+ 2610 0005 07       		.byte	7
+ 2611 0006 00       		.byte	0
+ 2612 0007 00       		.space	1
+ 2613              		.section	.rodata.MDIOD1_MUART0_TX,"a"
+ 2614              		.align	2
+ 2617              	MDIOD1_MUART0_TX:
+ 2618 0000 00000000 		.word	MDIOD
+ 2619 0004 01       		.byte	1
+ 2620 0005 06       		.byte	6
+ 2621 0006 00       		.byte	0
+ 2622 0007 00       		.space	1
+ 2623              		.section	.rodata.MDIOD2,"a"
+ 2624              		.align	2
+ 2627              	MDIOD2:
+ 2628 0000 00000000 		.word	MDIOD
+ 2629 0004 02       		.byte	2
+ 2630 0005 01       		.byte	1
+ 2631 0006 00       		.byte	0
+ 2632 0007 00       		.space	1
+ 2633              		.section	.rodata.MDIOD2_MADC0_AN12,"a"
+ 2634              		.align	2
+ 2637              	MDIOD2_MADC0_AN12:
+ 2638 0000 00000000 		.word	MDIOD
+ 2639 0004 02       		.byte	2
+ 2640 0005 02       		.byte	2
+ 2641 0006 00       		.byte	0
+ 2642 0007 00       		.space	1
+ 2643              		.section	.rodata.MDIOD2_MTIM_PCA2_CH0,"a"
+ 2644              		.align	2
+ 2647              	MDIOD2_MTIM_PCA2_CH0:
+ 2648 0000 00000000 		.word	MDIOD
+ 2649 0004 02       		.byte	2
+ 2650 0005 04       		.byte	4
+ 2651 0006 00       		.byte	0
+ 2652 0007 00       		.space	1
+ 2653              		.section	.rodata.MDIOD2_MUART1_RX,"a"
+ 2654              		.align	2
+ 2657              	MDIOD2_MUART1_RX:
+ 2658 0000 00000000 		.word	MDIOD
+ 2659 0004 02       		.byte	2
+ 2660 0005 07       		.byte	7
+ 2661 0006 00       		.byte	0
+ 2662 0007 00       		.space	1
+ 2663              		.section	.rodata.MDIOD2_MUART1_TX,"a"
+ 2664              		.align	2
+ 2667              	MDIOD2_MUART1_TX:
+ 2668 0000 00000000 		.word	MDIOD
+ 2669 0004 02       		.byte	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 40
+
+
+ 2670 0005 06       		.byte	6
+ 2671 0006 00       		.byte	0
+ 2672 0007 00       		.space	1
+ 2673              		.section	.rodata.MDIOD3,"a"
+ 2674              		.align	2
+ 2677              	MDIOD3:
+ 2678 0000 00000000 		.word	MDIOD
+ 2679 0004 03       		.byte	3
+ 2680 0005 01       		.byte	1
+ 2681 0006 00       		.byte	0
+ 2682 0007 00       		.space	1
+ 2683              		.section	.rodata.MDIOD3_MADC0_AN13,"a"
+ 2684              		.align	2
+ 2687              	MDIOD3_MADC0_AN13:
+ 2688 0000 00000000 		.word	MDIOD
+ 2689 0004 03       		.byte	3
+ 2690 0005 02       		.byte	2
+ 2691 0006 00       		.byte	0
+ 2692 0007 00       		.space	1
+ 2693              		.section	.rodata.MDIOD3_MTIM_PCA2_CH1,"a"
+ 2694              		.align	2
+ 2697              	MDIOD3_MTIM_PCA2_CH1:
+ 2698 0000 00000000 		.word	MDIOD
+ 2699 0004 03       		.byte	3
+ 2700 0005 04       		.byte	4
+ 2701 0006 00       		.byte	0
+ 2702 0007 00       		.space	1
+ 2703              		.section	.rodata.MDIOD3_MUART1_RX,"a"
+ 2704              		.align	2
+ 2707              	MDIOD3_MUART1_RX:
+ 2708 0000 00000000 		.word	MDIOD
+ 2709 0004 03       		.byte	3
+ 2710 0005 07       		.byte	7
+ 2711 0006 00       		.byte	0
+ 2712 0007 00       		.space	1
+ 2713              		.section	.rodata.MDIOD3_MUART1_TX,"a"
+ 2714              		.align	2
+ 2717              	MDIOD3_MUART1_TX:
+ 2718 0000 00000000 		.word	MDIOD
+ 2719 0004 03       		.byte	3
+ 2720 0005 06       		.byte	6
+ 2721 0006 00       		.byte	0
+ 2722 0007 00       		.space	1
+ 2723              		.section	.rodata.MDIOD4,"a"
+ 2724              		.align	2
+ 2727              	MDIOD4:
+ 2728 0000 00000000 		.word	MDIOD
+ 2729 0004 04       		.byte	4
+ 2730 0005 01       		.byte	1
+ 2731 0006 00       		.byte	0
+ 2732 0007 00       		.space	1
+ 2733              		.section	.rodata.MDIOD4_MADC0_AN14,"a"
+ 2734              		.align	2
+ 2737              	MDIOD4_MADC0_AN14:
+ 2738 0000 00000000 		.word	MDIOD
+ 2739 0004 04       		.byte	4
+ 2740 0005 02       		.byte	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 41
+
+
+ 2741 0006 00       		.byte	0
+ 2742 0007 00       		.space	1
+ 2743              		.section	.rodata.MDIOD5,"a"
+ 2744              		.align	2
+ 2747              	MDIOD5:
+ 2748 0000 00000000 		.word	MDIOD
+ 2749 0004 05       		.byte	5
+ 2750 0005 01       		.byte	1
+ 2751 0006 00       		.byte	0
+ 2752 0007 00       		.space	1
+ 2753              		.section	.rodata.MDIOD5_MSPI1_SS,"a"
+ 2754              		.align	2
+ 2757              	MDIOD5_MSPI1_SS:
+ 2758 0000 00000000 		.word	MDIOD
+ 2759 0004 05       		.byte	5
+ 2760 0005 04       		.byte	4
+ 2761 0006 00       		.byte	0
+ 2762 0007 00       		.space	1
+ 2763              		.section	.rodata.MDIOD5_MTIM0_CH0,"a"
+ 2764              		.align	2
+ 2767              	MDIOD5_MTIM0_CH0:
+ 2768 0000 00000000 		.word	MDIOD
+ 2769 0004 05       		.byte	5
+ 2770 0005 02       		.byte	2
+ 2771 0006 00       		.byte	0
+ 2772 0007 00       		.space	1
+ 2773              		.section	.rodata.MDIOD6,"a"
+ 2774              		.align	2
+ 2777              	MDIOD6:
+ 2778 0000 00000000 		.word	MDIOD
+ 2779 0004 06       		.byte	6
+ 2780 0005 01       		.byte	1
+ 2781 0006 00       		.byte	0
+ 2782 0007 00       		.space	1
+ 2783              		.section	.rodata.MDIOD6_MI2C0_SCL,"a"
+ 2784              		.align	2
+ 2787              	MDIOD6_MI2C0_SCL:
+ 2788 0000 00000000 		.word	MDIOD
+ 2789 0004 06       		.byte	6
+ 2790 0005 04       		.byte	4
+ 2791 0006 00       		.byte	0
+ 2792 0007 00       		.space	1
+ 2793              		.section	.rodata.MDIOD6_MSPI1_SCK,"a"
+ 2794              		.align	2
+ 2797              	MDIOD6_MSPI1_SCK:
+ 2798 0000 00000000 		.word	MDIOD
+ 2799 0004 06       		.byte	6
+ 2800 0005 03       		.byte	3
+ 2801 0006 00       		.byte	0
+ 2802 0007 00       		.space	1
+ 2803              		.section	.rodata.MDIOD6_MTIM1_CH0,"a"
+ 2804              		.align	2
+ 2807              	MDIOD6_MTIM1_CH0:
+ 2808 0000 00000000 		.word	MDIOD
+ 2809 0004 06       		.byte	6
+ 2810 0005 02       		.byte	2
+ 2811 0006 00       		.byte	0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 42
+
+
+ 2812 0007 00       		.space	1
+ 2813              		.section	.rodata.MDIOD7,"a"
+ 2814              		.align	2
+ 2817              	MDIOD7:
+ 2818 0000 00000000 		.word	MDIOD
+ 2819 0004 07       		.byte	7
+ 2820 0005 01       		.byte	1
+ 2821 0006 00       		.byte	0
+ 2822 0007 00       		.space	1
+ 2823              		.section	.rodata.MDIOD7_MADC0_AN15,"a"
+ 2824              		.align	2
+ 2827              	MDIOD7_MADC0_AN15:
+ 2828 0000 00000000 		.word	MDIOD
+ 2829 0004 07       		.byte	7
+ 2830 0005 02       		.byte	2
+ 2831 0006 00       		.byte	0
+ 2832 0007 00       		.space	1
+ 2833              		.section	.rodata.MDIOD7_MI2C0_SDA,"a"
+ 2834              		.align	2
+ 2837              	MDIOD7_MI2C0_SDA:
+ 2838 0000 00000000 		.word	MDIOD
+ 2839 0004 07       		.byte	7
+ 2840 0005 06       		.byte	6
+ 2841 0006 00       		.byte	0
+ 2842 0007 00       		.space	1
+ 2843              		.section	.rodata.MDIOD7_MSPI1_MOSI,"a"
+ 2844              		.align	2
+ 2847              	MDIOD7_MSPI1_MOSI:
+ 2848 0000 00000000 		.word	MDIOD
+ 2849 0004 07       		.byte	7
+ 2850 0005 05       		.byte	5
+ 2851 0006 00       		.byte	0
+ 2852 0007 00       		.space	1
+ 2853              		.section	.rodata.MDIOD7_MTIM2_CH0,"a"
+ 2854              		.align	2
+ 2857              	MDIOD7_MTIM2_CH0:
+ 2858 0000 00000000 		.word	MDIOD
+ 2859 0004 07       		.byte	7
+ 2860 0005 03       		.byte	3
+ 2861 0006 00       		.byte	0
+ 2862 0007 00       		.space	1
+ 2863              		.section	.rodata.MDIOD7_MUART2_RX,"a"
+ 2864              		.align	2
+ 2867              	MDIOD7_MUART2_RX:
+ 2868 0000 00000000 		.word	MDIOD
+ 2869 0004 07       		.byte	7
+ 2870 0005 04       		.byte	4
+ 2871 0006 00       		.byte	0
+ 2872 0007 00       		.space	1
+ 2873              		.section	.rodata.MDIOD8,"a"
+ 2874              		.align	2
+ 2877              	MDIOD8:
+ 2878 0000 00000000 		.word	MDIOD
+ 2879 0004 08       		.byte	8
+ 2880 0005 01       		.byte	1
+ 2881 0006 00       		.byte	0
+ 2882 0007 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 43
+
+
+ 2883              		.section	.rodata.MDIOD8_MADC0_AN16,"a"
+ 2884              		.align	2
+ 2887              	MDIOD8_MADC0_AN16:
+ 2888 0000 00000000 		.word	MDIOD
+ 2889 0004 08       		.byte	8
+ 2890 0005 02       		.byte	2
+ 2891 0006 00       		.byte	0
+ 2892 0007 00       		.space	1
+ 2893              		.section	.rodata.MDIOD8_MSPI1_MISO,"a"
+ 2894              		.align	2
+ 2897              	MDIOD8_MSPI1_MISO:
+ 2898 0000 00000000 		.word	MDIOD
+ 2899 0004 08       		.byte	8
+ 2900 0005 05       		.byte	5
+ 2901 0006 00       		.byte	0
+ 2902 0007 00       		.space	1
+ 2903              		.section	.rodata.MDIOD8_MTIM3_CH0,"a"
+ 2904              		.align	2
+ 2907              	MDIOD8_MTIM3_CH0:
+ 2908 0000 00000000 		.word	MDIOD
+ 2909 0004 08       		.byte	8
+ 2910 0005 03       		.byte	3
+ 2911 0006 00       		.byte	0
+ 2912 0007 00       		.space	1
+ 2913              		.section	.rodata.MDIOD8_MUART2_TX,"a"
+ 2914              		.align	2
+ 2917              	MDIOD8_MUART2_TX:
+ 2918 0000 00000000 		.word	MDIOD
+ 2919 0004 08       		.byte	8
+ 2920 0005 04       		.byte	4
+ 2921 0006 00       		.byte	0
+ 2922 0007 00       		.space	1
+ 2923              		.section	.rodata.MDIOD9,"a"
+ 2924              		.align	2
+ 2927              	MDIOD9:
+ 2928 0000 00000000 		.word	MDIOD
+ 2929 0004 09       		.byte	9
+ 2930 0005 01       		.byte	1
+ 2931 0006 00       		.byte	0
+ 2932 0007 00       		.space	1
+ 2933              		.section	.rodata.MDIOD9_MADC0_AN23,"a"
+ 2934              		.align	2
+ 2937              	MDIOD9_MADC0_AN23:
+ 2938 0000 00000000 		.word	MDIOD
+ 2939 0004 09       		.byte	9
+ 2940 0005 02       		.byte	2
+ 2941 0006 00       		.byte	0
+ 2942 0007 00       		.space	1
+ 2943              		.section	.rodata.MDIOD9_MUART2_RX,"a"
+ 2944              		.align	2
+ 2947              	MDIOD9_MUART2_RX:
+ 2948 0000 00000000 		.word	MDIOD
+ 2949 0004 09       		.byte	9
+ 2950 0005 05       		.byte	5
+ 2951 0006 00       		.byte	0
+ 2952 0007 00       		.space	1
+ 2953              		.section	.rodata.MEXTIA0,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 44
+
+
+ 2954              		.align	2
+ 2957              	MEXTIA0:
+ 2958 0000 00000000 		.word	MDIOA0
+ 2959              		.section	.rodata.MEXTIA1,"a"
+ 2960              		.align	2
+ 2963              	MEXTIA1:
+ 2964 0000 00000000 		.word	MDIOA1
+ 2965              		.section	.rodata.MEXTIA10,"a"
+ 2966              		.align	2
+ 2969              	MEXTIA10:
+ 2970 0000 00000000 		.word	MDIOA10
+ 2971              		.section	.rodata.MEXTIA11,"a"
+ 2972              		.align	2
+ 2975              	MEXTIA11:
+ 2976 0000 00000000 		.word	MDIOA11
+ 2977              		.section	.rodata.MEXTIA12,"a"
+ 2978              		.align	2
+ 2981              	MEXTIA12:
+ 2982 0000 00000000 		.word	MDIOA12
+ 2983              		.section	.rodata.MEXTIA13,"a"
+ 2984              		.align	2
+ 2987              	MEXTIA13:
+ 2988 0000 00000000 		.word	MDIOA13
+ 2989              		.section	.rodata.MEXTIA14,"a"
+ 2990              		.align	2
+ 2993              	MEXTIA14:
+ 2994 0000 00000000 		.word	MDIOA14
+ 2995              		.section	.rodata.MEXTIA15,"a"
+ 2996              		.align	2
+ 2999              	MEXTIA15:
+ 3000 0000 00000000 		.word	MDIOA15
+ 3001              		.section	.rodata.MEXTIA2,"a"
+ 3002              		.align	2
+ 3005              	MEXTIA2:
+ 3006 0000 00000000 		.word	MDIOA2
+ 3007              		.section	.rodata.MEXTIA3,"a"
+ 3008              		.align	2
+ 3011              	MEXTIA3:
+ 3012 0000 00000000 		.word	MDIOA3
+ 3013              		.section	.rodata.MEXTIA4,"a"
+ 3014              		.align	2
+ 3017              	MEXTIA4:
+ 3018 0000 00000000 		.word	MDIOA4
+ 3019              		.section	.rodata.MEXTIA5,"a"
+ 3020              		.align	2
+ 3023              	MEXTIA5:
+ 3024 0000 00000000 		.word	MDIOA5
+ 3025              		.section	.rodata.MEXTIA6,"a"
+ 3026              		.align	2
+ 3029              	MEXTIA6:
+ 3030 0000 00000000 		.word	MDIOA6
+ 3031              		.section	.rodata.MEXTIA7,"a"
+ 3032              		.align	2
+ 3035              	MEXTIA7:
+ 3036 0000 00000000 		.word	MDIOA7
+ 3037              		.section	.rodata.MEXTIA8,"a"
+ 3038              		.align	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 45
+
+
+ 3041              	MEXTIA8:
+ 3042 0000 00000000 		.word	MDIOA8
+ 3043              		.section	.rodata.MEXTIA9,"a"
+ 3044              		.align	2
+ 3047              	MEXTIA9:
+ 3048 0000 00000000 		.word	MDIOA9
+ 3049              		.section	.rodata.MEXTIB0,"a"
+ 3050              		.align	2
+ 3053              	MEXTIB0:
+ 3054 0000 00000000 		.word	MDIOB0
+ 3055              		.section	.rodata.MEXTIB1,"a"
+ 3056              		.align	2
+ 3059              	MEXTIB1:
+ 3060 0000 00000000 		.word	MDIOB1
+ 3061              		.section	.rodata.MEXTIB10,"a"
+ 3062              		.align	2
+ 3065              	MEXTIB10:
+ 3066 0000 00000000 		.word	MDIOB10
+ 3067              		.section	.rodata.MEXTIB11,"a"
+ 3068              		.align	2
+ 3071              	MEXTIB11:
+ 3072 0000 00000000 		.word	MDIOB11
+ 3073              		.section	.rodata.MEXTIB12,"a"
+ 3074              		.align	2
+ 3077              	MEXTIB12:
+ 3078 0000 00000000 		.word	MDIOB12
+ 3079              		.section	.rodata.MEXTIB13,"a"
+ 3080              		.align	2
+ 3083              	MEXTIB13:
+ 3084 0000 00000000 		.word	MDIOB13
+ 3085              		.section	.rodata.MEXTIB14,"a"
+ 3086              		.align	2
+ 3089              	MEXTIB14:
+ 3090 0000 00000000 		.word	MDIOB14
+ 3091              		.section	.rodata.MEXTIB15,"a"
+ 3092              		.align	2
+ 3095              	MEXTIB15:
+ 3096 0000 00000000 		.word	MDIOB15
+ 3097              		.section	.rodata.MEXTIB2,"a"
+ 3098              		.align	2
+ 3101              	MEXTIB2:
+ 3102 0000 00000000 		.word	MDIOB2
+ 3103              		.section	.rodata.MEXTIB3,"a"
+ 3104              		.align	2
+ 3107              	MEXTIB3:
+ 3108 0000 00000000 		.word	MDIOB3
+ 3109              		.section	.rodata.MEXTIB4,"a"
+ 3110              		.align	2
+ 3113              	MEXTIB4:
+ 3114 0000 00000000 		.word	MDIOB4
+ 3115              		.section	.rodata.MEXTIB5,"a"
+ 3116              		.align	2
+ 3119              	MEXTIB5:
+ 3120 0000 00000000 		.word	MDIOB5
+ 3121              		.section	.rodata.MEXTIB6,"a"
+ 3122              		.align	2
+ 3125              	MEXTIB6:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 46
+
+
+ 3126 0000 00000000 		.word	MDIOB6
+ 3127              		.section	.rodata.MEXTIB7,"a"
+ 3128              		.align	2
+ 3131              	MEXTIB7:
+ 3132 0000 00000000 		.word	MDIOB7
+ 3133              		.section	.rodata.MEXTIB8,"a"
+ 3134              		.align	2
+ 3137              	MEXTIB8:
+ 3138 0000 00000000 		.word	MDIOB8
+ 3139              		.section	.rodata.MEXTIB9,"a"
+ 3140              		.align	2
+ 3143              	MEXTIB9:
+ 3144 0000 00000000 		.word	MDIOB9
+ 3145              		.section	.rodata.MEXTIC0,"a"
+ 3146              		.align	2
+ 3149              	MEXTIC0:
+ 3150 0000 00000000 		.word	MDIOC0
+ 3151              		.section	.rodata.MEXTIC1,"a"
+ 3152              		.align	2
+ 3155              	MEXTIC1:
+ 3156 0000 00000000 		.word	MDIOC1
+ 3157              		.section	.rodata.MEXTIC10,"a"
+ 3158              		.align	2
+ 3161              	MEXTIC10:
+ 3162 0000 00000000 		.word	MDIOC10
+ 3163              		.section	.rodata.MEXTIC11,"a"
+ 3164              		.align	2
+ 3167              	MEXTIC11:
+ 3168 0000 00000000 		.word	MDIOC11
+ 3169              		.section	.rodata.MEXTIC12,"a"
+ 3170              		.align	2
+ 3173              	MEXTIC12:
+ 3174 0000 00000000 		.word	MDIOC12
+ 3175              		.section	.rodata.MEXTIC13,"a"
+ 3176              		.align	2
+ 3179              	MEXTIC13:
+ 3180 0000 00000000 		.word	MDIOC13
+ 3181              		.section	.rodata.MEXTIC14,"a"
+ 3182              		.align	2
+ 3185              	MEXTIC14:
+ 3186 0000 00000000 		.word	MDIOC14
+ 3187              		.section	.rodata.MEXTIC15,"a"
+ 3188              		.align	2
+ 3191              	MEXTIC15:
+ 3192 0000 00000000 		.word	MDIOC15
+ 3193              		.section	.rodata.MEXTIC2,"a"
+ 3194              		.align	2
+ 3197              	MEXTIC2:
+ 3198 0000 00000000 		.word	MDIOC2
+ 3199              		.section	.rodata.MEXTIC3,"a"
+ 3200              		.align	2
+ 3203              	MEXTIC3:
+ 3204 0000 00000000 		.word	MDIOC3
+ 3205              		.section	.rodata.MEXTIC4,"a"
+ 3206              		.align	2
+ 3209              	MEXTIC4:
+ 3210 0000 00000000 		.word	MDIOC4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 47
+
+
+ 3211              		.section	.rodata.MEXTIC5,"a"
+ 3212              		.align	2
+ 3215              	MEXTIC5:
+ 3216 0000 00000000 		.word	MDIOC5
+ 3217              		.section	.rodata.MEXTIC6,"a"
+ 3218              		.align	2
+ 3221              	MEXTIC6:
+ 3222 0000 00000000 		.word	MDIOC6
+ 3223              		.section	.rodata.MEXTIC7,"a"
+ 3224              		.align	2
+ 3227              	MEXTIC7:
+ 3228 0000 00000000 		.word	MDIOC7
+ 3229              		.section	.rodata.MEXTIC8,"a"
+ 3230              		.align	2
+ 3233              	MEXTIC8:
+ 3234 0000 00000000 		.word	MDIOC8
+ 3235              		.section	.rodata.MEXTIC9,"a"
+ 3236              		.align	2
+ 3239              	MEXTIC9:
+ 3240 0000 00000000 		.word	MDIOC9
+ 3241              		.section	.rodata.MEXTID0,"a"
+ 3242              		.align	2
+ 3245              	MEXTID0:
+ 3246 0000 00000000 		.word	MDIOD0
+ 3247              		.section	.rodata.MEXTID1,"a"
+ 3248              		.align	2
+ 3251              	MEXTID1:
+ 3252 0000 00000000 		.word	MDIOD1
+ 3253              		.section	.rodata.MEXTID10,"a"
+ 3254              		.align	2
+ 3257              	MEXTID10:
+ 3258 0000 00000000 		.word	MDIOD10
+ 3259              		.section	.rodata.MEXTID11,"a"
+ 3260              		.align	2
+ 3263              	MEXTID11:
+ 3264 0000 00000000 		.word	MDIOD11
+ 3265              		.section	.rodata.MEXTID12,"a"
+ 3266              		.align	2
+ 3269              	MEXTID12:
+ 3270 0000 00000000 		.word	MDIOD12
+ 3271              		.section	.rodata.MEXTID2,"a"
+ 3272              		.align	2
+ 3275              	MEXTID2:
+ 3276 0000 00000000 		.word	MDIOD2
+ 3277              		.section	.rodata.MEXTID3,"a"
+ 3278              		.align	2
+ 3281              	MEXTID3:
+ 3282 0000 00000000 		.word	MDIOD3
+ 3283              		.section	.rodata.MEXTID4,"a"
+ 3284              		.align	2
+ 3287              	MEXTID4:
+ 3288 0000 00000000 		.word	MDIOD4
+ 3289              		.section	.rodata.MEXTID5,"a"
+ 3290              		.align	2
+ 3293              	MEXTID5:
+ 3294 0000 00000000 		.word	MDIOD5
+ 3295              		.section	.rodata.MEXTID6,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 48
+
+
+ 3296              		.align	2
+ 3299              	MEXTID6:
+ 3300 0000 00000000 		.word	MDIOD6
+ 3301              		.section	.rodata.MEXTID7,"a"
+ 3302              		.align	2
+ 3305              	MEXTID7:
+ 3306 0000 00000000 		.word	MDIOD7
+ 3307              		.section	.rodata.MEXTID8,"a"
+ 3308              		.align	2
+ 3311              	MEXTID8:
+ 3312 0000 00000000 		.word	MDIOD8
+ 3313              		.section	.rodata.MEXTID9,"a"
+ 3314              		.align	2
+ 3317              	MEXTID9:
+ 3318 0000 00000000 		.word	MDIOD9
+ 3319              		.section	.rodata.MUART0_RX_PA15_TX_PA15,"a"
+ 3320              		.align	2
+ 3323              	MUART0_RX_PA15_TX_PA15:
+ 3324 0000 00000000 		.word	MUART0
+ 3325 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3326 0008 00000000 		.word	MDIOA15_MUART0_TX
+ 3327              		.section	.rodata.MUART0_RX_PA15_TX_PB0,"a"
+ 3328              		.align	2
+ 3331              	MUART0_RX_PA15_TX_PB0:
+ 3332 0000 00000000 		.word	MUART0
+ 3333 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3334 0008 00000000 		.word	MDIOB0_MUART0_TX
+ 3335              		.section	.rodata.MUART0_RX_PA15_TX_PC3,"a"
+ 3336              		.align	2
+ 3339              	MUART0_RX_PA15_TX_PC3:
+ 3340 0000 00000000 		.word	MUART0
+ 3341 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3342 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3343              		.section	.rodata.MUART0_RX_PA15_TX_PC4,"a"
+ 3344              		.align	2
+ 3347              	MUART0_RX_PA15_TX_PC4:
+ 3348 0000 00000000 		.word	MUART0
+ 3349 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3350 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3351              		.section	.rodata.MUART0_RX_PA15_TX_PD0,"a"
+ 3352              		.align	2
+ 3355              	MUART0_RX_PA15_TX_PD0:
+ 3356 0000 00000000 		.word	MUART0
+ 3357 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3358 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3359              		.section	.rodata.MUART0_RX_PA15_TX_PD1,"a"
+ 3360              		.align	2
+ 3363              	MUART0_RX_PA15_TX_PD1:
+ 3364 0000 00000000 		.word	MUART0
+ 3365 0004 00000000 		.word	MDIOA15_MUART0_RX
+ 3366 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3367              		.section	.rodata.MUART0_RX_PB0_TX_PA15,"a"
+ 3368              		.align	2
+ 3371              	MUART0_RX_PB0_TX_PA15:
+ 3372 0000 00000000 		.word	MUART0
+ 3373 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3374 0008 00000000 		.word	MDIOA15_MUART0_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 49
+
+
+ 3375              		.section	.rodata.MUART0_RX_PB0_TX_PB0,"a"
+ 3376              		.align	2
+ 3379              	MUART0_RX_PB0_TX_PB0:
+ 3380 0000 00000000 		.word	MUART0
+ 3381 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3382 0008 00000000 		.word	MDIOB0_MUART0_TX
+ 3383              		.section	.rodata.MUART0_RX_PB0_TX_PC3,"a"
+ 3384              		.align	2
+ 3387              	MUART0_RX_PB0_TX_PC3:
+ 3388 0000 00000000 		.word	MUART0
+ 3389 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3390 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3391              		.section	.rodata.MUART0_RX_PB0_TX_PC4,"a"
+ 3392              		.align	2
+ 3395              	MUART0_RX_PB0_TX_PC4:
+ 3396 0000 00000000 		.word	MUART0
+ 3397 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3398 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3399              		.section	.rodata.MUART0_RX_PB0_TX_PD0,"a"
+ 3400              		.align	2
+ 3403              	MUART0_RX_PB0_TX_PD0:
+ 3404 0000 00000000 		.word	MUART0
+ 3405 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3406 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3407              		.section	.rodata.MUART0_RX_PB0_TX_PD1,"a"
+ 3408              		.align	2
+ 3411              	MUART0_RX_PB0_TX_PD1:
+ 3412 0000 00000000 		.word	MUART0
+ 3413 0004 00000000 		.word	MDIOB0_MUART0_RX
+ 3414 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3415              		.section	.rodata.MUART0_RX_PC3_TX_PA15,"a"
+ 3416              		.align	2
+ 3419              	MUART0_RX_PC3_TX_PA15:
+ 3420 0000 00000000 		.word	MUART0
+ 3421 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3422 0008 00000000 		.word	MDIOA15_MUART0_TX
+ 3423              		.section	.rodata.MUART0_RX_PC3_TX_PB0,"a"
+ 3424              		.align	2
+ 3427              	MUART0_RX_PC3_TX_PB0:
+ 3428 0000 00000000 		.word	MUART0
+ 3429 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3430 0008 00000000 		.word	MDIOB0_MUART0_TX
+ 3431              		.section	.rodata.MUART0_RX_PC3_TX_PC3,"a"
+ 3432              		.align	2
+ 3435              	MUART0_RX_PC3_TX_PC3:
+ 3436 0000 00000000 		.word	MUART0
+ 3437 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3438 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3439              		.section	.rodata.MUART0_RX_PC3_TX_PC4,"a"
+ 3440              		.align	2
+ 3443              	MUART0_RX_PC3_TX_PC4:
+ 3444 0000 00000000 		.word	MUART0
+ 3445 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3446 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3447              		.section	.rodata.MUART0_RX_PC3_TX_PD0,"a"
+ 3448              		.align	2
+ 3451              	MUART0_RX_PC3_TX_PD0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 50
+
+
+ 3452 0000 00000000 		.word	MUART0
+ 3453 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3454 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3455              		.section	.rodata.MUART0_RX_PC3_TX_PD1,"a"
+ 3456              		.align	2
+ 3459              	MUART0_RX_PC3_TX_PD1:
+ 3460 0000 00000000 		.word	MUART0
+ 3461 0004 00000000 		.word	MDIOC3_MUART0_RX
+ 3462 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3463              		.section	.rodata.MUART0_RX_PC4_TX_PA15,"a"
+ 3464              		.align	2
+ 3467              	MUART0_RX_PC4_TX_PA15:
+ 3468 0000 00000000 		.word	MUART0
+ 3469 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3470 0008 00000000 		.word	MDIOA15_MUART0_TX
+ 3471              		.section	.rodata.MUART0_RX_PC4_TX_PB0,"a"
+ 3472              		.align	2
+ 3475              	MUART0_RX_PC4_TX_PB0:
+ 3476 0000 00000000 		.word	MUART0
+ 3477 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3478 0008 00000000 		.word	MDIOB0_MUART0_TX
+ 3479              		.section	.rodata.MUART0_RX_PC4_TX_PC3,"a"
+ 3480              		.align	2
+ 3483              	MUART0_RX_PC4_TX_PC3:
+ 3484 0000 00000000 		.word	MUART0
+ 3485 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3486 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3487              		.section	.rodata.MUART0_RX_PC4_TX_PC4,"a"
+ 3488              		.align	2
+ 3491              	MUART0_RX_PC4_TX_PC4:
+ 3492 0000 00000000 		.word	MUART0
+ 3493 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3494 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3495              		.section	.rodata.MUART0_RX_PC4_TX_PD0,"a"
+ 3496              		.align	2
+ 3499              	MUART0_RX_PC4_TX_PD0:
+ 3500 0000 00000000 		.word	MUART0
+ 3501 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3502 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3503              		.section	.rodata.MUART0_RX_PC4_TX_PD1,"a"
+ 3504              		.align	2
+ 3507              	MUART0_RX_PC4_TX_PD1:
+ 3508 0000 00000000 		.word	MUART0
+ 3509 0004 00000000 		.word	MDIOC4_MUART0_RX
+ 3510 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3511              		.section	.rodata.MUART0_RX_PD0_TX_PA15,"a"
+ 3512              		.align	2
+ 3515              	MUART0_RX_PD0_TX_PA15:
+ 3516 0000 00000000 		.word	MUART0
+ 3517 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3518 0008 00000000 		.word	MDIOA15_MUART0_TX
+ 3519              		.section	.rodata.MUART0_RX_PD0_TX_PB0,"a"
+ 3520              		.align	2
+ 3523              	MUART0_RX_PD0_TX_PB0:
+ 3524 0000 00000000 		.word	MUART0
+ 3525 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3526 0008 00000000 		.word	MDIOB0_MUART0_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 51
+
+
+ 3527              		.section	.rodata.MUART0_RX_PD0_TX_PC3,"a"
+ 3528              		.align	2
+ 3531              	MUART0_RX_PD0_TX_PC3:
+ 3532 0000 00000000 		.word	MUART0
+ 3533 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3534 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3535              		.section	.rodata.MUART0_RX_PD0_TX_PC4,"a"
+ 3536              		.align	2
+ 3539              	MUART0_RX_PD0_TX_PC4:
+ 3540 0000 00000000 		.word	MUART0
+ 3541 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3542 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3543              		.section	.rodata.MUART0_RX_PD0_TX_PD0,"a"
+ 3544              		.align	2
+ 3547              	MUART0_RX_PD0_TX_PD0:
+ 3548 0000 00000000 		.word	MUART0
+ 3549 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3550 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3551              		.section	.rodata.MUART0_RX_PD0_TX_PD1,"a"
+ 3552              		.align	2
+ 3555              	MUART0_RX_PD0_TX_PD1:
+ 3556 0000 00000000 		.word	MUART0
+ 3557 0004 00000000 		.word	MDIOD0_MUART0_RX
+ 3558 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3559              		.section	.rodata.MUART0_RX_PD1_TX_PA15,"a"
+ 3560              		.align	2
+ 3563              	MUART0_RX_PD1_TX_PA15:
+ 3564 0000 00000000 		.word	MUART0
+ 3565 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3566 0008 00000000 		.word	MDIOA15_MUART0_TX
+ 3567              		.section	.rodata.MUART0_RX_PD1_TX_PB0,"a"
+ 3568              		.align	2
+ 3571              	MUART0_RX_PD1_TX_PB0:
+ 3572 0000 00000000 		.word	MUART0
+ 3573 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3574 0008 00000000 		.word	MDIOB0_MUART0_TX
+ 3575              		.section	.rodata.MUART0_RX_PD1_TX_PC3,"a"
+ 3576              		.align	2
+ 3579              	MUART0_RX_PD1_TX_PC3:
+ 3580 0000 00000000 		.word	MUART0
+ 3581 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3582 0008 00000000 		.word	MDIOC3_MUART0_TX
+ 3583              		.section	.rodata.MUART0_RX_PD1_TX_PC4,"a"
+ 3584              		.align	2
+ 3587              	MUART0_RX_PD1_TX_PC4:
+ 3588 0000 00000000 		.word	MUART0
+ 3589 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3590 0008 00000000 		.word	MDIOC4_MUART0_TX
+ 3591              		.section	.rodata.MUART0_RX_PD1_TX_PD0,"a"
+ 3592              		.align	2
+ 3595              	MUART0_RX_PD1_TX_PD0:
+ 3596 0000 00000000 		.word	MUART0
+ 3597 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3598 0008 00000000 		.word	MDIOD0_MUART0_TX
+ 3599              		.section	.rodata.MUART0_RX_PD1_TX_PD1,"a"
+ 3600              		.align	2
+ 3603              	MUART0_RX_PD1_TX_PD1:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 52
+
+
+ 3604 0000 00000000 		.word	MUART0
+ 3605 0004 00000000 		.word	MDIOD1_MUART0_RX
+ 3606 0008 00000000 		.word	MDIOD1_MUART0_TX
+ 3607              		.section	.rodata.MUART1_RX_PA10_TX_PA10,"a"
+ 3608              		.align	2
+ 3611              	MUART1_RX_PA10_TX_PA10:
+ 3612 0000 00000000 		.word	MUART1
+ 3613 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3614 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3615              		.section	.rodata.MUART1_RX_PA10_TX_PA9,"a"
+ 3616              		.align	2
+ 3619              	MUART1_RX_PA10_TX_PA9:
+ 3620 0000 00000000 		.word	MUART1
+ 3621 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3622 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3623              		.section	.rodata.MUART1_RX_PA10_TX_PC8,"a"
+ 3624              		.align	2
+ 3627              	MUART1_RX_PA10_TX_PC8:
+ 3628 0000 00000000 		.word	MUART1
+ 3629 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3630 0008 00000000 		.word	MDIOC8_MUART1_TX
+ 3631              		.section	.rodata.MUART1_RX_PA10_TX_PC9,"a"
+ 3632              		.align	2
+ 3635              	MUART1_RX_PA10_TX_PC9:
+ 3636 0000 00000000 		.word	MUART1
+ 3637 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3638 0008 00000000 		.word	MDIOC9_MUART1_TX
+ 3639              		.section	.rodata.MUART1_RX_PA10_TX_PD2,"a"
+ 3640              		.align	2
+ 3643              	MUART1_RX_PA10_TX_PD2:
+ 3644 0000 00000000 		.word	MUART1
+ 3645 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3646 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3647              		.section	.rodata.MUART1_RX_PA10_TX_PD3,"a"
+ 3648              		.align	2
+ 3651              	MUART1_RX_PA10_TX_PD3:
+ 3652 0000 00000000 		.word	MUART1
+ 3653 0004 00000000 		.word	MDIOA10_MUART1_RX
+ 3654 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3655              		.section	.rodata.MUART1_RX_PA9_TX_PA10,"a"
+ 3656              		.align	2
+ 3659              	MUART1_RX_PA9_TX_PA10:
+ 3660 0000 00000000 		.word	MUART1
+ 3661 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3662 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3663              		.section	.rodata.MUART1_RX_PA9_TX_PA9,"a"
+ 3664              		.align	2
+ 3667              	MUART1_RX_PA9_TX_PA9:
+ 3668 0000 00000000 		.word	MUART1
+ 3669 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3670 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3671              		.section	.rodata.MUART1_RX_PA9_TX_PC8,"a"
+ 3672              		.align	2
+ 3675              	MUART1_RX_PA9_TX_PC8:
+ 3676 0000 00000000 		.word	MUART1
+ 3677 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3678 0008 00000000 		.word	MDIOC8_MUART1_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 53
+
+
+ 3679              		.section	.rodata.MUART1_RX_PA9_TX_PC9,"a"
+ 3680              		.align	2
+ 3683              	MUART1_RX_PA9_TX_PC9:
+ 3684 0000 00000000 		.word	MUART1
+ 3685 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3686 0008 00000000 		.word	MDIOC9_MUART1_TX
+ 3687              		.section	.rodata.MUART1_RX_PA9_TX_PD2,"a"
+ 3688              		.align	2
+ 3691              	MUART1_RX_PA9_TX_PD2:
+ 3692 0000 00000000 		.word	MUART1
+ 3693 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3694 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3695              		.section	.rodata.MUART1_RX_PA9_TX_PD3,"a"
+ 3696              		.align	2
+ 3699              	MUART1_RX_PA9_TX_PD3:
+ 3700 0000 00000000 		.word	MUART1
+ 3701 0004 00000000 		.word	MDIOA9_MUART1_RX
+ 3702 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3703              		.section	.rodata.MUART1_RX_PC8_TX_PA10,"a"
+ 3704              		.align	2
+ 3707              	MUART1_RX_PC8_TX_PA10:
+ 3708 0000 00000000 		.word	MUART1
+ 3709 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3710 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3711              		.section	.rodata.MUART1_RX_PC8_TX_PA9,"a"
+ 3712              		.align	2
+ 3715              	MUART1_RX_PC8_TX_PA9:
+ 3716 0000 00000000 		.word	MUART1
+ 3717 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3718 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3719              		.section	.rodata.MUART1_RX_PC8_TX_PC8,"a"
+ 3720              		.align	2
+ 3723              	MUART1_RX_PC8_TX_PC8:
+ 3724 0000 00000000 		.word	MUART1
+ 3725 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3726 0008 00000000 		.word	MDIOC8_MUART1_TX
+ 3727              		.section	.rodata.MUART1_RX_PC8_TX_PC9,"a"
+ 3728              		.align	2
+ 3731              	MUART1_RX_PC8_TX_PC9:
+ 3732 0000 00000000 		.word	MUART1
+ 3733 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3734 0008 00000000 		.word	MDIOC9_MUART1_TX
+ 3735              		.section	.rodata.MUART1_RX_PC8_TX_PD2,"a"
+ 3736              		.align	2
+ 3739              	MUART1_RX_PC8_TX_PD2:
+ 3740 0000 00000000 		.word	MUART1
+ 3741 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3742 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3743              		.section	.rodata.MUART1_RX_PC8_TX_PD3,"a"
+ 3744              		.align	2
+ 3747              	MUART1_RX_PC8_TX_PD3:
+ 3748 0000 00000000 		.word	MUART1
+ 3749 0004 00000000 		.word	MDIOC8_MUART1_RX
+ 3750 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3751              		.section	.rodata.MUART1_RX_PC9_TX_PA10,"a"
+ 3752              		.align	2
+ 3755              	MUART1_RX_PC9_TX_PA10:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 54
+
+
+ 3756 0000 00000000 		.word	MUART1
+ 3757 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3758 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3759              		.section	.rodata.MUART1_RX_PC9_TX_PA9,"a"
+ 3760              		.align	2
+ 3763              	MUART1_RX_PC9_TX_PA9:
+ 3764 0000 00000000 		.word	MUART1
+ 3765 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3766 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3767              		.section	.rodata.MUART1_RX_PC9_TX_PC8,"a"
+ 3768              		.align	2
+ 3771              	MUART1_RX_PC9_TX_PC8:
+ 3772 0000 00000000 		.word	MUART1
+ 3773 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3774 0008 00000000 		.word	MDIOC8_MUART1_TX
+ 3775              		.section	.rodata.MUART1_RX_PC9_TX_PC9,"a"
+ 3776              		.align	2
+ 3779              	MUART1_RX_PC9_TX_PC9:
+ 3780 0000 00000000 		.word	MUART1
+ 3781 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3782 0008 00000000 		.word	MDIOC9_MUART1_TX
+ 3783              		.section	.rodata.MUART1_RX_PC9_TX_PD2,"a"
+ 3784              		.align	2
+ 3787              	MUART1_RX_PC9_TX_PD2:
+ 3788 0000 00000000 		.word	MUART1
+ 3789 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3790 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3791              		.section	.rodata.MUART1_RX_PC9_TX_PD3,"a"
+ 3792              		.align	2
+ 3795              	MUART1_RX_PC9_TX_PD3:
+ 3796 0000 00000000 		.word	MUART1
+ 3797 0004 00000000 		.word	MDIOC9_MUART1_RX
+ 3798 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3799              		.section	.rodata.MUART1_RX_PD2_TX_PA10,"a"
+ 3800              		.align	2
+ 3803              	MUART1_RX_PD2_TX_PA10:
+ 3804 0000 00000000 		.word	MUART1
+ 3805 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3806 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3807              		.section	.rodata.MUART1_RX_PD2_TX_PA9,"a"
+ 3808              		.align	2
+ 3811              	MUART1_RX_PD2_TX_PA9:
+ 3812 0000 00000000 		.word	MUART1
+ 3813 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3814 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3815              		.section	.rodata.MUART1_RX_PD2_TX_PC8,"a"
+ 3816              		.align	2
+ 3819              	MUART1_RX_PD2_TX_PC8:
+ 3820 0000 00000000 		.word	MUART1
+ 3821 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3822 0008 00000000 		.word	MDIOC8_MUART1_TX
+ 3823              		.section	.rodata.MUART1_RX_PD2_TX_PC9,"a"
+ 3824              		.align	2
+ 3827              	MUART1_RX_PD2_TX_PC9:
+ 3828 0000 00000000 		.word	MUART1
+ 3829 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3830 0008 00000000 		.word	MDIOC9_MUART1_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 55
+
+
+ 3831              		.section	.rodata.MUART1_RX_PD2_TX_PD2,"a"
+ 3832              		.align	2
+ 3835              	MUART1_RX_PD2_TX_PD2:
+ 3836 0000 00000000 		.word	MUART1
+ 3837 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3838 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3839              		.section	.rodata.MUART1_RX_PD2_TX_PD3,"a"
+ 3840              		.align	2
+ 3843              	MUART1_RX_PD2_TX_PD3:
+ 3844 0000 00000000 		.word	MUART1
+ 3845 0004 00000000 		.word	MDIOD2_MUART1_RX
+ 3846 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3847              		.section	.rodata.MUART1_RX_PD3_TX_PA10,"a"
+ 3848              		.align	2
+ 3851              	MUART1_RX_PD3_TX_PA10:
+ 3852 0000 00000000 		.word	MUART1
+ 3853 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3854 0008 00000000 		.word	MDIOA10_MUART1_TX
+ 3855              		.section	.rodata.MUART1_RX_PD3_TX_PA9,"a"
+ 3856              		.align	2
+ 3859              	MUART1_RX_PD3_TX_PA9:
+ 3860 0000 00000000 		.word	MUART1
+ 3861 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3862 0008 00000000 		.word	MDIOA9_MUART1_TX
+ 3863              		.section	.rodata.MUART1_RX_PD3_TX_PC8,"a"
+ 3864              		.align	2
+ 3867              	MUART1_RX_PD3_TX_PC8:
+ 3868 0000 00000000 		.word	MUART1
+ 3869 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3870 0008 00000000 		.word	MDIOC8_MUART1_TX
+ 3871              		.section	.rodata.MUART1_RX_PD3_TX_PC9,"a"
+ 3872              		.align	2
+ 3875              	MUART1_RX_PD3_TX_PC9:
+ 3876 0000 00000000 		.word	MUART1
+ 3877 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3878 0008 00000000 		.word	MDIOC9_MUART1_TX
+ 3879              		.section	.rodata.MUART1_RX_PD3_TX_PD2,"a"
+ 3880              		.align	2
+ 3883              	MUART1_RX_PD3_TX_PD2:
+ 3884 0000 00000000 		.word	MUART1
+ 3885 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3886 0008 00000000 		.word	MDIOD2_MUART1_TX
+ 3887              		.section	.rodata.MUART1_RX_PD3_TX_PD3,"a"
+ 3888              		.align	2
+ 3891              	MUART1_RX_PD3_TX_PD3:
+ 3892 0000 00000000 		.word	MUART1
+ 3893 0004 00000000 		.word	MDIOD3_MUART1_RX
+ 3894 0008 00000000 		.word	MDIOD3_MUART1_TX
+ 3895              		.section	.rodata.MUART2_RX_PB13_TX_PB12,"a"
+ 3896              		.align	2
+ 3899              	MUART2_RX_PB13_TX_PB12:
+ 3900 0000 00000000 		.word	MUART2
+ 3901 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3902 0008 00000000 		.word	MDIOB12_MUART2_TX
+ 3903              		.section	.rodata.MUART2_RX_PB13_TX_PB14,"a"
+ 3904              		.align	2
+ 3907              	MUART2_RX_PB13_TX_PB14:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 56
+
+
+ 3908 0000 00000000 		.word	MUART2
+ 3909 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3910 0008 00000000 		.word	MDIOB14_MUART2_TX
+ 3911              		.section	.rodata.MUART2_RX_PB13_TX_PC10,"a"
+ 3912              		.align	2
+ 3915              	MUART2_RX_PB13_TX_PC10:
+ 3916 0000 00000000 		.word	MUART2
+ 3917 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3918 0008 00000000 		.word	MDIOC10_MUART2_TX
+ 3919              		.section	.rodata.MUART2_RX_PB13_TX_PC11,"a"
+ 3920              		.align	2
+ 3923              	MUART2_RX_PB13_TX_PC11:
+ 3924 0000 00000000 		.word	MUART2
+ 3925 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3926 0008 00000000 		.word	MDIOC11_MUART2_TX
+ 3927              		.section	.rodata.MUART2_RX_PB13_TX_PD10,"a"
+ 3928              		.align	2
+ 3931              	MUART2_RX_PB13_TX_PD10:
+ 3932 0000 00000000 		.word	MUART2
+ 3933 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3934 0008 00000000 		.word	MDIOD10_MUART2_TX
+ 3935              		.section	.rodata.MUART2_RX_PB13_TX_PD8,"a"
+ 3936              		.align	2
+ 3939              	MUART2_RX_PB13_TX_PD8:
+ 3940 0000 00000000 		.word	MUART2
+ 3941 0004 00000000 		.word	MDIOB13_MUART2_RX
+ 3942 0008 00000000 		.word	MDIOD8_MUART2_TX
+ 3943              		.section	.rodata.MUART2_RX_PC10_TX_PB12,"a"
+ 3944              		.align	2
+ 3947              	MUART2_RX_PC10_TX_PB12:
+ 3948 0000 00000000 		.word	MUART2
+ 3949 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3950 0008 00000000 		.word	MDIOB12_MUART2_TX
+ 3951              		.section	.rodata.MUART2_RX_PC10_TX_PB14,"a"
+ 3952              		.align	2
+ 3955              	MUART2_RX_PC10_TX_PB14:
+ 3956 0000 00000000 		.word	MUART2
+ 3957 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3958 0008 00000000 		.word	MDIOB14_MUART2_TX
+ 3959              		.section	.rodata.MUART2_RX_PC10_TX_PC10,"a"
+ 3960              		.align	2
+ 3963              	MUART2_RX_PC10_TX_PC10:
+ 3964 0000 00000000 		.word	MUART2
+ 3965 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3966 0008 00000000 		.word	MDIOC10_MUART2_TX
+ 3967              		.section	.rodata.MUART2_RX_PC10_TX_PC11,"a"
+ 3968              		.align	2
+ 3971              	MUART2_RX_PC10_TX_PC11:
+ 3972 0000 00000000 		.word	MUART2
+ 3973 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3974 0008 00000000 		.word	MDIOC11_MUART2_TX
+ 3975              		.section	.rodata.MUART2_RX_PC10_TX_PD10,"a"
+ 3976              		.align	2
+ 3979              	MUART2_RX_PC10_TX_PD10:
+ 3980 0000 00000000 		.word	MUART2
+ 3981 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3982 0008 00000000 		.word	MDIOD10_MUART2_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 57
+
+
+ 3983              		.section	.rodata.MUART2_RX_PC10_TX_PD8,"a"
+ 3984              		.align	2
+ 3987              	MUART2_RX_PC10_TX_PD8:
+ 3988 0000 00000000 		.word	MUART2
+ 3989 0004 00000000 		.word	MDIOC10_MUART2_RX
+ 3990 0008 00000000 		.word	MDIOD8_MUART2_TX
+ 3991              		.section	.rodata.MUART2_RX_PC11_TX_PB12,"a"
+ 3992              		.align	2
+ 3995              	MUART2_RX_PC11_TX_PB12:
+ 3996 0000 00000000 		.word	MUART2
+ 3997 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 3998 0008 00000000 		.word	MDIOB12_MUART2_TX
+ 3999              		.section	.rodata.MUART2_RX_PC11_TX_PB14,"a"
+ 4000              		.align	2
+ 4003              	MUART2_RX_PC11_TX_PB14:
+ 4004 0000 00000000 		.word	MUART2
+ 4005 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 4006 0008 00000000 		.word	MDIOB14_MUART2_TX
+ 4007              		.section	.rodata.MUART2_RX_PC11_TX_PC10,"a"
+ 4008              		.align	2
+ 4011              	MUART2_RX_PC11_TX_PC10:
+ 4012 0000 00000000 		.word	MUART2
+ 4013 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 4014 0008 00000000 		.word	MDIOC10_MUART2_TX
+ 4015              		.section	.rodata.MUART2_RX_PC11_TX_PC11,"a"
+ 4016              		.align	2
+ 4019              	MUART2_RX_PC11_TX_PC11:
+ 4020 0000 00000000 		.word	MUART2
+ 4021 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 4022 0008 00000000 		.word	MDIOC11_MUART2_TX
+ 4023              		.section	.rodata.MUART2_RX_PC11_TX_PD10,"a"
+ 4024              		.align	2
+ 4027              	MUART2_RX_PC11_TX_PD10:
+ 4028 0000 00000000 		.word	MUART2
+ 4029 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 4030 0008 00000000 		.word	MDIOD10_MUART2_TX
+ 4031              		.section	.rodata.MUART2_RX_PC11_TX_PD8,"a"
+ 4032              		.align	2
+ 4035              	MUART2_RX_PC11_TX_PD8:
+ 4036 0000 00000000 		.word	MUART2
+ 4037 0004 00000000 		.word	MDIOC11_MUART2_RX
+ 4038 0008 00000000 		.word	MDIOD8_MUART2_TX
+ 4039              		.section	.rodata.MUART2_RX_PD7_TX_PB12,"a"
+ 4040              		.align	2
+ 4043              	MUART2_RX_PD7_TX_PB12:
+ 4044 0000 00000000 		.word	MUART2
+ 4045 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4046 0008 00000000 		.word	MDIOB12_MUART2_TX
+ 4047              		.section	.rodata.MUART2_RX_PD7_TX_PB14,"a"
+ 4048              		.align	2
+ 4051              	MUART2_RX_PD7_TX_PB14:
+ 4052 0000 00000000 		.word	MUART2
+ 4053 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4054 0008 00000000 		.word	MDIOB14_MUART2_TX
+ 4055              		.section	.rodata.MUART2_RX_PD7_TX_PC10,"a"
+ 4056              		.align	2
+ 4059              	MUART2_RX_PD7_TX_PC10:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 58
+
+
+ 4060 0000 00000000 		.word	MUART2
+ 4061 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4062 0008 00000000 		.word	MDIOC10_MUART2_TX
+ 4063              		.section	.rodata.MUART2_RX_PD7_TX_PC11,"a"
+ 4064              		.align	2
+ 4067              	MUART2_RX_PD7_TX_PC11:
+ 4068 0000 00000000 		.word	MUART2
+ 4069 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4070 0008 00000000 		.word	MDIOC11_MUART2_TX
+ 4071              		.section	.rodata.MUART2_RX_PD7_TX_PD10,"a"
+ 4072              		.align	2
+ 4075              	MUART2_RX_PD7_TX_PD10:
+ 4076 0000 00000000 		.word	MUART2
+ 4077 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4078 0008 00000000 		.word	MDIOD10_MUART2_TX
+ 4079              		.section	.rodata.MUART2_RX_PD7_TX_PD8,"a"
+ 4080              		.align	2
+ 4083              	MUART2_RX_PD7_TX_PD8:
+ 4084 0000 00000000 		.word	MUART2
+ 4085 0004 00000000 		.word	MDIOD7_MUART2_RX
+ 4086 0008 00000000 		.word	MDIOD8_MUART2_TX
+ 4087              		.section	.rodata.MUART2_RX_PD9_TX_PB12,"a"
+ 4088              		.align	2
+ 4091              	MUART2_RX_PD9_TX_PB12:
+ 4092 0000 00000000 		.word	MUART2
+ 4093 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4094 0008 00000000 		.word	MDIOB12_MUART2_TX
+ 4095              		.section	.rodata.MUART2_RX_PD9_TX_PB14,"a"
+ 4096              		.align	2
+ 4099              	MUART2_RX_PD9_TX_PB14:
+ 4100 0000 00000000 		.word	MUART2
+ 4101 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4102 0008 00000000 		.word	MDIOB14_MUART2_TX
+ 4103              		.section	.rodata.MUART2_RX_PD9_TX_PC10,"a"
+ 4104              		.align	2
+ 4107              	MUART2_RX_PD9_TX_PC10:
+ 4108 0000 00000000 		.word	MUART2
+ 4109 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4110 0008 00000000 		.word	MDIOC10_MUART2_TX
+ 4111              		.section	.rodata.MUART2_RX_PD9_TX_PC11,"a"
+ 4112              		.align	2
+ 4115              	MUART2_RX_PD9_TX_PC11:
+ 4116 0000 00000000 		.word	MUART2
+ 4117 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4118 0008 00000000 		.word	MDIOC11_MUART2_TX
+ 4119              		.section	.rodata.MUART2_RX_PD9_TX_PD10,"a"
+ 4120              		.align	2
+ 4123              	MUART2_RX_PD9_TX_PD10:
+ 4124 0000 00000000 		.word	MUART2
+ 4125 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4126 0008 00000000 		.word	MDIOD10_MUART2_TX
+ 4127              		.section	.rodata.MUART2_RX_PD9_TX_PD8,"a"
+ 4128              		.align	2
+ 4131              	MUART2_RX_PD9_TX_PD8:
+ 4132 0000 00000000 		.word	MUART2
+ 4133 0004 00000000 		.word	MDIOD9_MUART2_RX
+ 4134 0008 00000000 		.word	MDIOD8_MUART2_TX
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 59
+
+
+ 4135              		.section	.rodata.MUART3_RX_PB3_TX_PB2,"a"
+ 4136              		.align	2
+ 4139              	MUART3_RX_PB3_TX_PB2:
+ 4140 0000 00000000 		.word	MUART3
+ 4141 0004 00000000 		.word	MDIOB3_MUART3_RX
+ 4142 0008 00000000 		.word	MDIOB2_MUART3_TX
+ 4143              		.section	.rodata.MUART3_RX_PB3_TX_PC5,"a"
+ 4144              		.align	2
+ 4147              	MUART3_RX_PB3_TX_PC5:
+ 4148 0000 00000000 		.word	MUART3
+ 4149 0004 00000000 		.word	MDIOB3_MUART3_RX
+ 4150 0008 00000000 		.word	MDIOC5_MUART3_TX
+ 4151              		.section	.rodata.MUART3_RX_PB3_TX_PC6,"a"
+ 4152              		.align	2
+ 4155              	MUART3_RX_PB3_TX_PC6:
+ 4156 0000 00000000 		.word	MUART3
+ 4157 0004 00000000 		.word	MDIOB3_MUART3_RX
+ 4158 0008 00000000 		.word	MDIOC6_MUART3_TX
+ 4159              		.section	.rodata.MUART3_RX_PB3_TX_PC7,"a"
+ 4160              		.align	2
+ 4163              	MUART3_RX_PB3_TX_PC7:
+ 4164 0000 00000000 		.word	MUART3
+ 4165 0004 00000000 		.word	MDIOB3_MUART3_RX
+ 4166 0008 00000000 		.word	MDIOC7_MUART3_TX
+ 4167              		.section	.rodata.MUART3_RX_PC5_TX_PB2,"a"
+ 4168              		.align	2
+ 4171              	MUART3_RX_PC5_TX_PB2:
+ 4172 0000 00000000 		.word	MUART3
+ 4173 0004 00000000 		.word	MDIOC5_MUART3_RX
+ 4174 0008 00000000 		.word	MDIOB2_MUART3_TX
+ 4175              		.section	.rodata.MUART3_RX_PC5_TX_PC5,"a"
+ 4176              		.align	2
+ 4179              	MUART3_RX_PC5_TX_PC5:
+ 4180 0000 00000000 		.word	MUART3
+ 4181 0004 00000000 		.word	MDIOC5_MUART3_RX
+ 4182 0008 00000000 		.word	MDIOC5_MUART3_TX
+ 4183              		.section	.rodata.MUART3_RX_PC5_TX_PC6,"a"
+ 4184              		.align	2
+ 4187              	MUART3_RX_PC5_TX_PC6:
+ 4188 0000 00000000 		.word	MUART3
+ 4189 0004 00000000 		.word	MDIOC5_MUART3_RX
+ 4190 0008 00000000 		.word	MDIOC6_MUART3_TX
+ 4191              		.section	.rodata.MUART3_RX_PC5_TX_PC7,"a"
+ 4192              		.align	2
+ 4195              	MUART3_RX_PC5_TX_PC7:
+ 4196 0000 00000000 		.word	MUART3
+ 4197 0004 00000000 		.word	MDIOC5_MUART3_RX
+ 4198 0008 00000000 		.word	MDIOC7_MUART3_TX
+ 4199              		.section	.rodata.MUART3_RX_PC6_TX_PB2,"a"
+ 4200              		.align	2
+ 4203              	MUART3_RX_PC6_TX_PB2:
+ 4204 0000 00000000 		.word	MUART3
+ 4205 0004 00000000 		.word	MDIOC6_MUART3_RX
+ 4206 0008 00000000 		.word	MDIOB2_MUART3_TX
+ 4207              		.section	.rodata.MUART3_RX_PC6_TX_PC5,"a"
+ 4208              		.align	2
+ 4211              	MUART3_RX_PC6_TX_PC5:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7RPJIW.s 			page 60
+
+
+ 4212 0000 00000000 		.word	MUART3
+ 4213 0004 00000000 		.word	MDIOC6_MUART3_RX
+ 4214 0008 00000000 		.word	MDIOC5_MUART3_TX
+ 4215              		.section	.rodata.MUART3_RX_PC6_TX_PC6,"a"
+ 4216              		.align	2
+ 4219              	MUART3_RX_PC6_TX_PC6:
+ 4220 0000 00000000 		.word	MUART3
+ 4221 0004 00000000 		.word	MDIOC6_MUART3_RX
+ 4222 0008 00000000 		.word	MDIOC6_MUART3_TX
+ 4223              		.section	.rodata.MUART3_RX_PC6_TX_PC7,"a"
+ 4224              		.align	2
+ 4227              	MUART3_RX_PC6_TX_PC7:
+ 4228 0000 00000000 		.word	MUART3
+ 4229 0004 00000000 		.word	MDIOC6_MUART3_RX
+ 4230 0008 00000000 		.word	MDIOC7_MUART3_TX
+ 4231              		.text
+ 4232              	.Letext0:
+ 4233              		.file 1 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 4234              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 4235              		.file 3 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 4236              		.file 4 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 4237              		.file 5 "common/prog/MSP/mcal/mdio_types.h"
+ 4238              		.file 6 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 4239              		.file 7 "common/prog/MSP/mcal/msup.h"
+ 4240              		.file 8 "common/prog/MSP/mcal/sh30f/muart_mc.h"
+ 4241              		.file 9 "common/prog/MSP/mcal/sh30f/mexti_mc.h"
+ 4242              		.file 10 "app/prog/MSP/mcal/sh30f/mcal_channels.h"
+ 4243              		.file 11 "app/prog/MSP/mcal/sh30f/mcal_channels.c"

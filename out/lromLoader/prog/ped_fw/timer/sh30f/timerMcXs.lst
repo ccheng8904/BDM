@@ -1,0 +1,82 @@
+
+out/lromLoader/prog/ped_fw/timer/sh30f/timerMcXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._TIM_bGetInitConfig:
+
+00000000 <_TIM_bGetInitConfig>:
+
+// Used TIMER 0
+
+
+BOOL _TIM_bGetInitConfig(void)
+{
+   0:	b51f      	push	{r0, r1, r2, r3, r4, lr}
+    #else
+    timer_psc= PCLOCK - 1U;          //calculation without MPCM
+    #endif
+
+    TIM_InitTypeDef TIM_InitStructure;
+    TIM_StructInit(&TIM_InitStructure);
+   2:	4668      	mov	r0, sp
+   4:	f7ff fffe 	bl	0 <TIM_StructInit>
+    RCC_APB0PeriphClockOnOff(RCC_APB0_TIM0, SH_ON);
+   8:	2101      	movs	r1, #1
+   a:	0008      	movs	r0, r1
+   c:	f7ff fffe 	bl	0 <RCC_APB0PeriphClockOnOff>
+    TIM_InitStructure.TIM_Prescaler = timer_psc;
+  10:	2317      	movs	r3, #23
+  12:	9300      	str	r3, [sp, #0]
+    TIM_InitStructure.TIM_Period = 65535U;
+  14:	4b0a      	ldr	r3, [pc, #40]	; (40 <_TIM_bGetInitConfig+0x40>)
+    TIM_InitStructure.TIM_CLKSource = TIM_CLKSource_PCLK;
+    TIM_InitStructure.TIM_OPMode = TIM_OPMode_Continue;
+    TIM_InitStructure.TIM_TCMode = TIM_TCMode_Disable;
+    TIM_InitStructure.TIM_ECFFilter = TIM_FLITER_TIMER_NONE;
+    TIM_Init(TIM0, &TIM_InitStructure);
+  16:	4c0b      	ldr	r4, [pc, #44]	; (44 <_TIM_bGetInitConfig+0x44>)
+    TIM_InitStructure.TIM_Period = 65535U;
+  18:	9301      	str	r3, [sp, #4]
+    TIM_InitStructure.TIM_CLKSource = TIM_CLKSource_PCLK;
+  1a:	2300      	movs	r3, #0
+    TIM_Init(TIM0, &TIM_InitStructure);
+  1c:	4669      	mov	r1, sp
+  1e:	0020      	movs	r0, r4
+    TIM_InitStructure.TIM_CLKSource = TIM_CLKSource_PCLK;
+  20:	9302      	str	r3, [sp, #8]
+    TIM_InitStructure.TIM_TCMode = TIM_TCMode_Disable;
+  22:	9303      	str	r3, [sp, #12]
+    TIM_Init(TIM0, &TIM_InitStructure);
+  24:	f7ff fffe 	bl	0 <TIM_Init>
+    TIM_INTConfig(TIM0, SH_ENABLE);
+  28:	0020      	movs	r0, r4
+  2a:	2101      	movs	r1, #1
+  2c:	f7ff fffe 	bl	0 <TIM_INTConfig>
+    TIM_OnOff(TIM0, SH_ON);
+  30:	0020      	movs	r0, r4
+  32:	2101      	movs	r1, #1
+  34:	f7ff fffe 	bl	0 <TIM_OnOff>
+
+    return TRUE;
+}
+  38:	2001      	movs	r0, #1
+  3a:	b004      	add	sp, #16
+  3c:	bd10      	pop	{r4, pc}
+  3e:	46c0      	nop			; (mov r8, r8)
+  40:	0000ffff 	.word	0x0000ffff
+  44:	40000400 	.word	0x40000400
+
+Disassembly of section .text.TIM_uiGetCircleMicroSeconds:
+
+00000000 <TIM_uiGetCircleMicroSeconds>:
+
+// Axivion Next Line MisraC2012-8.3: Return type at definition differs from type at declaration
+uint16_t TIM_uiGetCircleMicroSeconds(void)
+{
+    return (uint16_t) (TIM0->TCNT);
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <TIM_uiGetCircleMicroSeconds+0x8>)
+   2:	6858      	ldr	r0, [r3, #4]
+   4:	b280      	uxth	r0, r0
+}
+   6:	4770      	bx	lr
+   8:	40000400 	.word	0x40000400

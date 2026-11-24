@@ -1,0 +1,1478 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"sh30f9xx_sa0_syscfg.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SYSCFG_BODInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	SYSCFG_BODInit
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	SYSCFG_BODInit:
+  25              	.LVL0:
+  26              	.LFB45:
+  27              		.file 1 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c"
+   1:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+   2:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   ******************************************************************************
+   3:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @file    sh30f9xx_sa0_syscfg.c
+   4:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @author  sinowealth
+   5:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @version V1.1.0
+   6:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @date    2020-12-16  
+   7:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         
+   9:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *  @verbatim
+  10:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  11:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          ===================================================================
+  12:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *                                   How to use this driver
+  13:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          ===================================================================
+  14:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  15:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *  @endverbatim
+  16:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  17:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   ******************************************************************************
+  18:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @attention
+  19:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  20:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * SINOWEALTH IS SUPPLYING THIS SOFTWARE FOR USE EXCLUSIVELY SH_ON SINOWEALTH'S 
+  21:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * MICROCONTROLLER PRODUCTS. IT IS PROTECTED UNDER APPLICABLE COPYRIGHT LAWS. 
+  22:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * THIS SOFTWARE IS FOR GUIDANCE IN ORDER TO SAVE TIME. AS A RESULT, SINOWEALTH 
+  23:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES 
+  24:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT OF SUCH FIRMWARE AND/OR
+  25:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION CONTAINED HEREIN IN 
+  26:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * CONNECTION WITH THEIR PRODUCTS.
+  27:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  28:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * <h2><center>&copy; COPYRIGHT 2020 Sinowealth</center></h2>
+  29:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *
+  30:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   ******************************************************************************
+  31:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 2
+
+
+  32:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  33:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Includes ------------------------------------------------------------------*/
+  34:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** #include "sh30f9xx_sa0_syscfg.h"
+  35:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  36:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @addtogroup SH30F9xx_sa0_libcfg_StdLib_Driver
+  37:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+  38:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  39:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  
+  40:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_MODULE SYSCFG 
+  41:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief SYSCFG driver modules
+  42:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+  43:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  44:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  45:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private typedef -----------------------------------------------------------*/
+  46:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private define ------------------------------------------------------------*/
+  47:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private macro -------------------------------------------------------------*/
+  48:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private variables ---------------------------------------------------------*/
+  49:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private function prototypes -----------------------------------------------*/
+  50:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /* Private functions ---------------------------------------------------------*/
+  51:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  52:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Private_Functions
+  53:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+  54:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  55:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  56:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Group1 BOD Configuration and function
+  57:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *  @brief    BOD Configuration and function
+  58:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *
+  59:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @verbatim    
+  60:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================
+  61:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****                       BOD Configuration and function
+  62:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================  
+  63:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****    
+  64:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @endverbatim
+  65:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+  66:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  67:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  68:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+  69:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Initialize BOD mode and voltage threshold.
+  70:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SYSCFG_BOD_Mode: Specifie the BOD mode.
+  71:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be a value of @ref SYSCFGBODMode_Type.
+  72:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SYSCFG_BOD_Level: Specifie the BOD voltage threshold.
+  73:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be a value of @ref SYSCFGBODLevel_Type.
+  74:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+  75:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  76:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_BODInit(SYSCFGBODMode_Type SYSCFG_BOD_Mode, SYSCFGBODLevel_Type SYSCFG_BOD_Level)
+  77:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+  28              		.loc 1 77 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  78:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+  32              		.loc 1 78 5 view .LVU1
+  79:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  80:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+  81:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_BOD_MODE(SYSCFG_BOD_Mode));
+  33              		.loc 1 81 5 view .LVU2
+  82:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_BOD_LEVEL(SYSCFG_BOD_Level));
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 3
+
+
+  34              		.loc 1 82 5 view .LVU3
+  83:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_BODMD_Msk | SYSCFG_PWRCR_VBOD_Msk);
+  35              		.loc 1 84 5 view .LVU4
+  77:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+  36              		.loc 1 77 1 is_stmt 0 view .LVU5
+  37 0000 10B5     		push	{r4, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 8
+  40              		.cfi_offset 4, -8
+  41              		.cfi_offset 14, -4
+  42              		.loc 1 84 23 view .LVU6
+  43 0002 6F24     		movs	r4, #111
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp = ((uint32_t)SYSCFG_BOD_Mode << 5) | (uint32_t)SYSCFG_BOD_Level;
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 |= temp;
+  88:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+  44              		.loc 1 88 1 view .LVU7
+  45              		@ sp needed
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  46              		.loc 1 84 23 view .LVU8
+  47 0004 044B     		ldr	r3, .L2
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 |= temp;
+  48              		.loc 1 86 39 view .LVU9
+  49 0006 4001     		lsls	r0, r0, #5
+  50              	.LVL1:
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  51              		.loc 1 84 23 view .LVU10
+  52 0008 1A68     		ldr	r2, [r3]
+  53 000a A243     		bics	r2, r4
+  54 000c 1A60     		str	r2, [r3]
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 |= temp;
+  55              		.loc 1 86 5 is_stmt 1 view .LVU11
+  56              	.LVL2:
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+  57              		.loc 1 87 5 view .LVU12
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+  58              		.loc 1 87 23 is_stmt 0 view .LVU13
+  59 000e 1A68     		ldr	r2, [r3]
+  60 0010 1143     		orrs	r1, r2
+  61              	.LVL3:
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+  62              		.loc 1 87 23 view .LVU14
+  63 0012 0843     		orrs	r0, r1
+  64 0014 1860     		str	r0, [r3]
+  65              		.loc 1 88 1 view .LVU15
+  66 0016 10BD     		pop	{r4, pc}
+  67              	.L3:
+  68              		.align	2
+  69              	.L2:
+  70 0018 00040440 		.word	1074004992
+  71              		.cfi_endproc
+  72              	.LFE45:
+  74              		.section	.text.SYSCFG_BODINTConfig,"ax",%progbits
+  75              		.align	1
+  76              		.global	SYSCFG_BODINTConfig
+  77              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 4
+
+
+  78              		.code	16
+  79              		.thumb_func
+  81              	SYSCFG_BODINTConfig:
+  82              	.LVL4:
+  83              	.LFB46:
+  89:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+  90:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+  91:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enable or disable the specified BOD interrupt.
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  NewState: New state of BOD interrupt.
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+  94:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          @arg SH_ENABLE  
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          @arg SH_DISABLE 
+  96:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+  97:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+  98:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_BODINTConfig(FunctionalState NewState)
+  99:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+  84              		.loc 1 99 1 is_stmt 1 view -0
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 0
+  87              		@ frame_needed = 0, uses_anonymous_args = 0
+  88              		@ link register save eliminated.
+ 100:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+  89              		.loc 1 101 5 view .LVU17
+ 102:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 103:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+  90              		.loc 1 103 5 view .LVU18
+  91 0000 054B     		ldr	r3, .L7
+  92 0002 8022     		movs	r2, #128
+ 104:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 105:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_BODIE_Msk;
+  93              		.loc 1 105 27 is_stmt 0 view .LVU19
+  94 0004 1968     		ldr	r1, [r3]
+ 103:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+  95              		.loc 1 103 8 view .LVU20
+  96 0006 0028     		cmp	r0, #0
+  97 0008 02D0     		beq	.L5
+  98              		.loc 1 105 9 is_stmt 1 view .LVU21
+  99              		.loc 1 105 27 is_stmt 0 view .LVU22
+ 100 000a 0A43     		orrs	r2, r1
+ 101 000c 1A60     		str	r2, [r3]
+ 102              	.L4:
+ 106:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 107:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 108:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 109:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODIE_Msk;
+ 110:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 103              		.loc 1 111 1 view .LVU23
+ 104              		@ sp needed
+ 105 000e 7047     		bx	lr
+ 106              	.L5:
+ 109:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 107              		.loc 1 109 9 is_stmt 1 view .LVU24
+ 109:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 108              		.loc 1 109 27 is_stmt 0 view .LVU25
+ 109 0010 9143     		bics	r1, r2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 5
+
+
+ 110 0012 1960     		str	r1, [r3]
+ 111              		.loc 1 111 1 view .LVU26
+ 112 0014 FBE7     		b	.L4
+ 113              	.L8:
+ 114 0016 C046     		.align	2
+ 115              	.L7:
+ 116 0018 00040440 		.word	1074004992
+ 117              		.cfi_endproc
+ 118              	.LFE46:
+ 120              		.section	.text.SYSCFG_VLVRInit,"ax",%progbits
+ 121              		.align	1
+ 122              		.global	SYSCFG_VLVRInit
+ 123              		.syntax unified
+ 124              		.code	16
+ 125              		.thumb_func
+ 127              	SYSCFG_VLVRInit:
+ 128              	.LVL5:
+ 129              	.LFB47:
+ 112:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 113:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Initialize LVR voltage threshold.
+ 114:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SYSCFG_VLVR_LEVEL_Type: Specifie the LVR voltage threshold.
+ 115:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be a value of @ref SYSCFG_VLVR_LEVEL_Type.
+ 116:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 118:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_VLVRInit(SYSCFG_VLVR_LEVEL_Type SYSCFG_VLVR_Level)
+ 119:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 130              		.loc 1 119 1 is_stmt 1 view -0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 0
+ 133              		@ frame_needed = 0, uses_anonymous_args = 0
+ 134              		@ link register save eliminated.
+ 120:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 135              		.loc 1 120 5 view .LVU28
+ 121:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 122:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_VLVR_LEVEL(SYSCFG_VLVR_Level));
+ 136              		.loc 1 122 5 view .LVU29
+ 123:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_VLVR_Msk);
+ 137              		.loc 1 124 5 view .LVU30
+ 138              		.loc 1 124 23 is_stmt 0 view .LVU31
+ 139 0000 044B     		ldr	r3, .L10
+ 140 0002 0549     		ldr	r1, .L10+4
+ 141 0004 1A68     		ldr	r2, [r3]
+ 125:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 126:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp = ((uint32_t)SYSCFG_VLVR_Level << 9);
+ 142              		.loc 1 126 10 view .LVU32
+ 143 0006 4002     		lsls	r0, r0, #9
+ 144              	.LVL6:
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 145              		.loc 1 124 23 view .LVU33
+ 146 0008 0A40     		ands	r2, r1
+ 147 000a 1A60     		str	r2, [r3]
+ 148              		.loc 1 126 5 is_stmt 1 view .LVU34
+ 149              	.LVL7:
+ 127:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 |= temp;
+ 150              		.loc 1 127 5 view .LVU35
+ 151              		.loc 1 127 23 is_stmt 0 view .LVU36
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 6
+
+
+ 152 000c 1A68     		ldr	r2, [r3]
+ 128:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 153              		.loc 1 128 1 view .LVU37
+ 154              		@ sp needed
+ 127:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRCR.V32 |= temp;
+ 155              		.loc 1 127 23 view .LVU38
+ 156 000e 1043     		orrs	r0, r2
+ 157 0010 1860     		str	r0, [r3]
+ 158              		.loc 1 128 1 view .LVU39
+ 159 0012 7047     		bx	lr
+ 160              	.L11:
+ 161              		.align	2
+ 162              	.L10:
+ 163 0014 00040440 		.word	1074004992
+ 164 0018 FFF9FFFF 		.word	-1537
+ 165              		.cfi_endproc
+ 166              	.LFE47:
+ 168              		.section	.text.SYSCFG_VLVRConfig,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	SYSCFG_VLVRConfig
+ 171              		.syntax unified
+ 172              		.code	16
+ 173              		.thumb_func
+ 175              	SYSCFG_VLVRConfig:
+ 176              	.LVL8:
+ 177              	.LFB48:
+ 129:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 130:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enable or disable the specified LVR function.
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  NewState: New state of LVR function.
+ 133:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 134:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          @arg SH_ENABLE  
+ 135:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          @arg SH_DISABLE 
+ 136:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 137:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 138:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_VLVRConfig(FunctionalState NewState)
+ 139:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 178              		.loc 1 139 1 is_stmt 1 view -0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		@ link register save eliminated.
+ 140:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 141:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 183              		.loc 1 141 5 view .LVU41
+ 142:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 143:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+ 184              		.loc 1 143 5 view .LVU42
+ 185 0000 064B     		ldr	r3, .L16
+ 186              		.loc 1 143 8 is_stmt 0 view .LVU43
+ 187 0002 0028     		cmp	r0, #0
+ 188 0004 05D0     		beq	.L13
+ 144:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 145:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_LVREN_Msk;
+ 189              		.loc 1 145 9 is_stmt 1 view .LVU44
+ 190              		.loc 1 145 27 is_stmt 0 view .LVU45
+ 191 0006 8022     		movs	r2, #128
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 7
+
+
+ 192 0008 1968     		ldr	r1, [r3]
+ 193 000a 1201     		lsls	r2, r2, #4
+ 194 000c 0A43     		orrs	r2, r1
+ 195              	.L15:
+ 146:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 147:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 148:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_LVREN_Msk;
+ 196              		.loc 1 149 27 view .LVU46
+ 197 000e 1A60     		str	r2, [r3]
+ 150:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 151:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 198              		.loc 1 151 1 view .LVU47
+ 199              		@ sp needed
+ 200 0010 7047     		bx	lr
+ 201              	.L13:
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 202              		.loc 1 149 9 is_stmt 1 view .LVU48
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 203              		.loc 1 149 27 is_stmt 0 view .LVU49
+ 204 0012 1A68     		ldr	r2, [r3]
+ 205 0014 0249     		ldr	r1, .L16+4
+ 206 0016 0A40     		ands	r2, r1
+ 207 0018 F9E7     		b	.L15
+ 208              	.L17:
+ 209 001a C046     		.align	2
+ 210              	.L16:
+ 211 001c 00040440 		.word	1074004992
+ 212 0020 FFF7FFFF 		.word	-2049
+ 213              		.cfi_endproc
+ 214              	.LFE48:
+ 216              		.section	.text.SYSCFG_BODOnOff,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	SYSCFG_BODOnOff
+ 219              		.syntax unified
+ 220              		.code	16
+ 221              		.thumb_func
+ 223              	SYSCFG_BODOnOff:
+ 224              	.LVL9:
+ 225              	.LFB49:
+ 152:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 153:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 154:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Open or close BOD module.
+ 155:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  OnOffState: state of the BOD
+ 156:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can one of the following values:
+ 157:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_ON   
+ 158:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_OFF  
+ 159:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 160:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 161:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_BODOnOff(CmdState OnOffState)
+ 162:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 226              		.loc 1 162 1 is_stmt 1 view -0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230              		@ link register save eliminated.
+ 163:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 8
+
+
+ 164:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 231              		.loc 1 164 5 view .LVU51
+ 165:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 166:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (OnOffState != SH_OFF)
+ 232              		.loc 1 166 5 view .LVU52
+ 233 0000 064B     		ldr	r3, .L22
+ 234              		.loc 1 166 8 is_stmt 0 view .LVU53
+ 235 0002 0028     		cmp	r0, #0
+ 236 0004 05D0     		beq	.L19
+ 167:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 168:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_BODEN_Msk;
+ 237              		.loc 1 168 9 is_stmt 1 view .LVU54
+ 238              		.loc 1 168 27 is_stmt 0 view .LVU55
+ 239 0006 8022     		movs	r2, #128
+ 240 0008 1968     		ldr	r1, [r3]
+ 241 000a 5200     		lsls	r2, r2, #1
+ 242 000c 0A43     		orrs	r2, r1
+ 243              	.L21:
+ 169:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 170:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 171:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 172:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODEN_Msk;
+ 244              		.loc 1 172 27 view .LVU56
+ 245 000e 1A60     		str	r2, [r3]
+ 173:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 174:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 246              		.loc 1 174 1 view .LVU57
+ 247              		@ sp needed
+ 248 0010 7047     		bx	lr
+ 249              	.L19:
+ 172:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 250              		.loc 1 172 9 is_stmt 1 view .LVU58
+ 172:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 251              		.loc 1 172 27 is_stmt 0 view .LVU59
+ 252 0012 1A68     		ldr	r2, [r3]
+ 253 0014 0249     		ldr	r1, .L22+4
+ 254 0016 0A40     		ands	r2, r1
+ 255 0018 F9E7     		b	.L21
+ 256              	.L23:
+ 257 001a C046     		.align	2
+ 258              	.L22:
+ 259 001c 00040440 		.word	1074004992
+ 260 0020 FFFEFFFF 		.word	-257
+ 261              		.cfi_endproc
+ 262              	.LFE49:
+ 264              		.section	.text.SYSCFG_BODGetFlagStatus,"ax",%progbits
+ 265              		.align	1
+ 266              		.global	SYSCFG_BODGetFlagStatus
+ 267              		.syntax unified
+ 268              		.code	16
+ 269              		.thumb_func
+ 271              	SYSCFG_BODGetFlagStatus:
+ 272              	.LVL10:
+ 273              	.LFB50:
+ 175:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 176:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 177:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Check whether the specified BOD flag is set or not.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 9
+
+
+ 178:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  BOD_Flag: specifies the flag to check.
+ 179:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 180:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_BOD_FLAG_BODIF: BOD interrupt pending flag.
+ 181:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_BOD_FLAG_BODF: BOD output flag.
+ 182:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval New state of BOD Flag(SH_SET or RESET).
+ 183:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 184:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** FlagStatus SYSCFG_BODGetFlagStatus(uint8_t BOD_Flag)
+ 185:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 274              		.loc 1 185 1 is_stmt 1 view -0
+ 275              		.cfi_startproc
+ 276              		@ args = 0, pretend = 0, frame = 0
+ 277              		@ frame_needed = 0, uses_anonymous_args = 0
+ 278              		@ link register save eliminated.
+ 186:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     FlagStatus bitStatus;
+ 279              		.loc 1 186 5 view .LVU61
+ 187:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 188:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 189:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_BOD_FLAG(BOD_Flag));
+ 280              		.loc 1 189 5 view .LVU62
+ 190:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if ((SYSCFG->PWRSR.V32 & BOD_Flag) != SH_RESET)
+ 281              		.loc 1 191 5 view .LVU63
+ 282              		.loc 1 191 23 is_stmt 0 view .LVU64
+ 283 0000 034B     		ldr	r3, .L25
+ 192:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 193:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         bitStatus = SH_SET;
+ 194:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 195:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 196:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 197:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         bitStatus = SH_RESET;
+ 198:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 199:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 200:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     return bitStatus;
+ 201:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 284              		.loc 1 201 1 view .LVU65
+ 285              		@ sp needed
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 286              		.loc 1 191 23 view .LVU66
+ 287 0002 5B68     		ldr	r3, [r3, #4]
+ 288              	.LVL11:
+ 200:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 289              		.loc 1 200 5 is_stmt 1 view .LVU67
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 290              		.loc 1 191 28 is_stmt 0 view .LVU68
+ 291 0004 0340     		ands	r3, r0
+ 292              	.LVL12:
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 293              		.loc 1 191 8 view .LVU69
+ 294 0006 5A1E     		subs	r2, r3, #1
+ 295 0008 9341     		sbcs	r3, r3, r2
+ 200:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 296              		.loc 1 200 12 view .LVU70
+ 297 000a D8B2     		uxtb	r0, r3
+ 298              	.LVL13:
+ 299              		.loc 1 201 1 view .LVU71
+ 300 000c 7047     		bx	lr
+ 301              	.L26:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 10
+
+
+ 302 000e C046     		.align	2
+ 303              	.L25:
+ 304 0010 00040440 		.word	1074004992
+ 305              		.cfi_endproc
+ 306              	.LFE50:
+ 308              		.section	.text.SYSCFG_BODIntClearFlag,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	SYSCFG_BODIntClearFlag
+ 311              		.syntax unified
+ 312              		.code	16
+ 313              		.thumb_func
+ 315              	SYSCFG_BODIntClearFlag:
+ 316              	.LFB51:
+ 202:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 203:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 204:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Clear BOD pending bit.
+ 205:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  None
+ 206:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 207:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 208:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_BODIntClearFlag(void)
+ 209:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 317              		.loc 1 209 1 is_stmt 1 view -0
+ 318              		.cfi_startproc
+ 319              		@ args = 0, pretend = 0, frame = 0
+ 320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 321              		@ link register save eliminated.
+ 210:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Clear BODIF bit */
+ 211:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->PWRSR.V32 &= ~SYSCFG_PWRSR_BODIF_Msk;
+ 322              		.loc 1 211 5 view .LVU73
+ 323              		.loc 1 211 23 is_stmt 0 view .LVU74
+ 324 0000 0121     		movs	r1, #1
+ 212:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 325              		.loc 1 212 1 view .LVU75
+ 326              		@ sp needed
+ 211:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 327              		.loc 1 211 23 view .LVU76
+ 328 0002 024A     		ldr	r2, .L28
+ 329 0004 5368     		ldr	r3, [r2, #4]
+ 330 0006 8B43     		bics	r3, r1
+ 331 0008 5360     		str	r3, [r2, #4]
+ 332              		.loc 1 212 1 view .LVU77
+ 333 000a 7047     		bx	lr
+ 334              	.L29:
+ 335              		.align	2
+ 336              	.L28:
+ 337 000c 00040440 		.word	1074004992
+ 338              		.cfi_endproc
+ 339              	.LFE51:
+ 341              		.section	.text.SYSCFG_EnterSLEEPMode,"ax",%progbits
+ 342              		.align	1
+ 343              		.global	SYSCFG_EnterSLEEPMode
+ 344              		.syntax unified
+ 345              		.code	16
+ 346              		.thumb_func
+ 348              	SYSCFG_EnterSLEEPMode:
+ 349              	.LVL14:
+ 350              	.LFB52:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 11
+
+
+ 213:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 214:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 215:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @}
+ 216:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 217:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 218:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Group2 NMI trigger source configuration
+ 219:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *  @brief    NMI trigger source configuration
+ 220:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *
+ 221:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @verbatim    
+ 222:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================
+ 223:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****                       NMI trigger source configuration
+ 224:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================  
+ 225:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****    
+ 226:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @endverbatim
+ 227:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+ 228:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 229:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 230:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 231:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enters SLEEP mode.
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SYSCFG_SLEEPEntry: specifies if SLEEP mode in entered with WFI or WFE instruction.
+ 233:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 234:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_SLEEPEntry_WFI: enter STOP mode with WFI instruction
+ 235:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_SLEEPEntry_WFE: enter STOP mode with WFE instruction
+ 236:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 237:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 238:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_EnterSLEEPMode(uint8_t SYSCFG_SLEEPEntry)
+ 239:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 351              		.loc 1 239 1 is_stmt 1 view -0
+ 352              		.cfi_startproc
+ 353              		@ args = 0, pretend = 0, frame = 0
+ 354              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355              		@ link register save eliminated.
+ 240:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 241:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_SLEEP_ENTRY(SYSCFG_SLEEPEntry));
+ 356              		.loc 1 241 5 view .LVU79
+ 242:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 243:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Select SLEEP mode entry */
+ 244:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (SYSCFG_SLEEPEntry == SYSCFG_SLEEPEntry_WFI)
+ 357              		.loc 1 244 5 view .LVU80
+ 358              		.loc 1 244 8 is_stmt 0 view .LVU81
+ 359 0000 0028     		cmp	r0, #0
+ 360 0002 01D1     		bne	.L31
+ 245:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 246:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         /* Request Wait For Interrupt */
+ 247:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFI();
+ 361              		.loc 1 247 9 is_stmt 1 view .LVU82
+ 362              		.syntax divided
+ 363              	@ 247 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 364 0004 30BF     		wfi
+ 365              	@ 0 "" 2
+ 366              		.thumb
+ 367              		.syntax unified
+ 368              	.L30:
+ 248:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 249:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 250:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 251:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         /* Request Wait For Event */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 12
+
+
+ 252:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __SEV();
+ 253:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 254:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 255:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 256:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 369              		.loc 1 256 1 is_stmt 0 view .LVU83
+ 370              		@ sp needed
+ 371 0006 7047     		bx	lr
+ 372              	.L31:
+ 252:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 373              		.loc 1 252 9 is_stmt 1 view .LVU84
+ 374              		.syntax divided
+ 375              	@ 252 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 376 0008 40BF     		sev
+ 377              	@ 0 "" 2
+ 253:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 378              		.loc 1 253 9 view .LVU85
+ 379              	@ 253 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 380 000a 20BF     		wfe
+ 381              	@ 0 "" 2
+ 254:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 382              		.loc 1 254 9 view .LVU86
+ 383              	@ 254 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 384 000c 20BF     		wfe
+ 385              	@ 0 "" 2
+ 386              		.loc 1 256 1 is_stmt 0 view .LVU87
+ 387              		.thumb
+ 388              		.syntax unified
+ 389 000e FAE7     		b	.L30
+ 390              		.cfi_endproc
+ 391              	.LFE52:
+ 393              		.section	.text.SYSCFG_EnterSTOPMode,"ax",%progbits
+ 394              		.align	1
+ 395              		.global	SYSCFG_EnterSTOPMode
+ 396              		.syntax unified
+ 397              		.code	16
+ 398              		.thumb_func
+ 400              	SYSCFG_EnterSTOPMode:
+ 401              	.LVL15:
+ 402              	.LFB53:
+ 257:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 258:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 259:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enters STOP mode.
+ 260:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *   
+ 261:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @note   In Stop mode, all I/O pins keep the same state as in Run mode.
+ 262:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @note   When exiting Stop mode by issuing an interrupt or a wakeup event, 
+ 263:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         the HSI RC oscillator is selected as system clock.
+ 264:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SYSCFG_STOPEntry: specifies if STOP mode in entered with WFI or WFE instruction.
+ 265:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 266:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_STOPEntry_WFI: enter STOP mode with WFI instruction
+ 267:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_STOPEntry_WFE: enter STOP mode with WFE instruction
+ 268:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 269:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 270:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_EnterSTOPMode(uint8_t SYSCFG_STOPEntry)
+ 271:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 403              		.loc 1 271 1 is_stmt 1 view -0
+ 404              		.cfi_startproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 13
+
+
+ 405              		@ args = 0, pretend = 0, frame = 0
+ 406              		@ frame_needed = 0, uses_anonymous_args = 0
+ 407              		@ link register save eliminated.
+ 272:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 273:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_SLOP_ENTRY(SYSCFG_STOPEntry));
+ 408              		.loc 1 273 5 view .LVU89
+ 274:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 275:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Set SLEEPDEEP bit of Cortex System Control Register */
+ 276:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+ 409              		.loc 1 276 5 view .LVU90
+ 410              		.loc 1 276 14 is_stmt 0 view .LVU91
+ 411 0000 0422     		movs	r2, #4
+ 412 0002 084B     		ldr	r3, .L36
+ 413 0004 1969     		ldr	r1, [r3, #16]
+ 414 0006 0A43     		orrs	r2, r1
+ 415 0008 1A61     		str	r2, [r3, #16]
+ 277:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 278:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Select STOP mode entry */
+ 279:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (SYSCFG_STOPEntry == SYSCFG_STOPEntry_WFI)
+ 416              		.loc 1 279 5 is_stmt 1 view .LVU92
+ 417              		.loc 1 279 8 is_stmt 0 view .LVU93
+ 418 000a 0028     		cmp	r0, #0
+ 419 000c 05D1     		bne	.L34
+ 280:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 281:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         /* Request Wait For Interrupt */
+ 282:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFI();
+ 420              		.loc 1 282 9 is_stmt 1 view .LVU94
+ 421              		.syntax divided
+ 422              	@ 282 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 423 000e 30BF     		wfi
+ 424              	@ 0 "" 2
+ 425              		.thumb
+ 426              		.syntax unified
+ 427              	.L35:
+ 283:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 284:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 285:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 286:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         /* Request Wait For Event */
+ 287:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __SEV();
+ 288:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();		
+ 289:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 290:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 291:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Reset SLEEPDEEP bit of Cortex System Control Register */
+ 292:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SCB->SCR &= (uint32_t) ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);
+ 428              		.loc 1 292 5 view .LVU95
+ 293:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 429              		.loc 1 293 1 is_stmt 0 view .LVU96
+ 430              		@ sp needed
+ 292:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 431              		.loc 1 292 14 view .LVU97
+ 432 0010 0421     		movs	r1, #4
+ 433 0012 1A69     		ldr	r2, [r3, #16]
+ 434 0014 8A43     		bics	r2, r1
+ 435 0016 1A61     		str	r2, [r3, #16]
+ 436              		.loc 1 293 1 view .LVU98
+ 437 0018 7047     		bx	lr
+ 438              	.L34:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 14
+
+
+ 287:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();		
+ 439              		.loc 1 287 9 is_stmt 1 view .LVU99
+ 440              		.syntax divided
+ 441              	@ 287 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 442 001a 40BF     		sev
+ 443              	@ 0 "" 2
+ 288:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         __WFE();
+ 444              		.loc 1 288 9 view .LVU100
+ 445              	@ 288 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 446 001c 20BF     		wfe
+ 447              	@ 0 "" 2
+ 289:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 448              		.loc 1 289 9 view .LVU101
+ 449              	@ 289 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c" 1
+ 450 001e 20BF     		wfe
+ 451              	@ 0 "" 2
+ 452              		.thumb
+ 453              		.syntax unified
+ 454 0020 F6E7     		b	.L35
+ 455              	.L37:
+ 456 0022 C046     		.align	2
+ 457              	.L36:
+ 458 0024 00ED00E0 		.word	-536810240
+ 459              		.cfi_endproc
+ 460              	.LFE53:
+ 462              		.section	.text.SYSCFG_NMIInterruptTriggerConfig,"ax",%progbits
+ 463              		.align	1
+ 464              		.global	SYSCFG_NMIInterruptTriggerConfig
+ 465              		.syntax unified
+ 466              		.code	16
+ 467              		.thumb_func
+ 469              	SYSCFG_NMIInterruptTriggerConfig:
+ 470              	.LVL16:
+ 471              	.LFB54:
+ 294:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 295:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 296:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Configure NMI interrupt trigger source.
+ 297:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  TriggerSource: Specifie NMI interrupt trigger source.
+ 298:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         This parameter can be any combination of the following values:
+ 299:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_NMI_TRIGGER_CSM: CSM trigger NMI interrupt.
+ 300:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_NMI_TRIGGER_BOD: BOD trigger NMI interrupt.
+ 301:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_NMI_TRIGGER_EXTI0: EXTI0 trigger NMI interrupt. 
+ 302:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  FunctionalState: New state of NMI interrupt trigger source.
+ 303:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         This parameter can be any combination of the following values:
+ 304:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_ENABLE
+ 305:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_DISABLE
+ 306:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 307:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 308:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_NMIInterruptTriggerConfig(uint16_t TriggerSource, FunctionalState NewState)
+ 309:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 472              		.loc 1 309 1 view -0
+ 473              		.cfi_startproc
+ 474              		@ args = 0, pretend = 0, frame = 0
+ 475              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 476              		.loc 1 310 5 view .LVU103
+ 311:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 15
+
+
+ 312:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 313:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_NMI_TRIGGER_SOURCE(TriggerSource));
+ 477              		.loc 1 313 5 view .LVU104
+ 314:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 478              		.loc 1 314 5 view .LVU105
+ 315:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 316:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp = SYSCFG->SAFR.V32 & (uint32_t)0x0000FFFF;
+ 479              		.loc 1 316 5 view .LVU106
+ 309:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 480              		.loc 1 309 1 is_stmt 0 view .LVU107
+ 481 0000 10B5     		push	{r4, lr}
+ 482              	.LCFI1:
+ 483              		.cfi_def_cfa_offset 8
+ 484              		.cfi_offset 4, -8
+ 485              		.cfi_offset 14, -4
+ 486              		.loc 1 316 24 view .LVU108
+ 487 0002 064C     		ldr	r4, .L42
+ 488 0004 064B     		ldr	r3, .L42+4
+ 489 0006 A268     		ldr	r2, [r4, #8]
+ 490              		.loc 1 316 10 view .LVU109
+ 491 0008 92B2     		uxth	r2, r2
+ 492              	.LVL17:
+ 317:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 318:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+ 493              		.loc 1 318 5 is_stmt 1 view .LVU110
+ 494              		.loc 1 318 8 is_stmt 0 view .LVU111
+ 495 000a 0029     		cmp	r1, #0
+ 496 000c 03D0     		beq	.L39
+ 319:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 320:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp |= ((uint32_t)0x5AA5 << 16) | TriggerSource;
+ 497              		.loc 1 320 9 is_stmt 1 view .LVU112
+ 498              		.loc 1 320 14 is_stmt 0 view .LVU113
+ 499 000e 1043     		orrs	r0, r2
+ 500              	.LVL18:
+ 501              		.loc 1 320 14 view .LVU114
+ 502 0010 0343     		orrs	r3, r0
+ 503              	.LVL19:
+ 321:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SAFR.V32 = temp;
+ 504              		.loc 1 321 9 is_stmt 1 view .LVU115
+ 505              	.L41:
+ 322:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 323:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 324:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 325:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp &= ~TriggerSource;
+ 326:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp |= ((uint32_t)0x5AA5 << 16);
+ 327:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SAFR.V32 = temp;
+ 506              		.loc 1 327 9 view .LVU116
+ 507              		.loc 1 327 26 is_stmt 0 view .LVU117
+ 508 0012 A360     		str	r3, [r4, #8]
+ 328:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 329:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 509              		.loc 1 329 1 view .LVU118
+ 510              		@ sp needed
+ 511 0014 10BD     		pop	{r4, pc}
+ 512              	.LVL20:
+ 513              	.L39:
+ 325:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp |= ((uint32_t)0x5AA5 << 16);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 16
+
+
+ 514              		.loc 1 325 9 is_stmt 1 view .LVU119
+ 325:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp |= ((uint32_t)0x5AA5 << 16);
+ 515              		.loc 1 325 14 is_stmt 0 view .LVU120
+ 516 0016 8243     		bics	r2, r0
+ 517              	.LVL21:
+ 326:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SAFR.V32 = temp;
+ 518              		.loc 1 326 9 is_stmt 1 view .LVU121
+ 326:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SAFR.V32 = temp;
+ 519              		.loc 1 326 14 is_stmt 0 view .LVU122
+ 520 0018 1343     		orrs	r3, r2
+ 521 001a FAE7     		b	.L41
+ 522              	.L43:
+ 523              		.align	2
+ 524              	.L42:
+ 525 001c 00040440 		.word	1074004992
+ 526 0020 0000A55A 		.word	1520762880
+ 527              		.cfi_endproc
+ 528              	.LFE54:
+ 530              		.section	.text.SYSCFG_SWJPinConfig,"ax",%progbits
+ 531              		.align	1
+ 532              		.global	SYSCFG_SWJPinConfig
+ 533              		.syntax unified
+ 534              		.code	16
+ 535              		.thumb_func
+ 537              	SYSCFG_SWJPinConfig:
+ 538              	.LVL22:
+ 539              	.LFB55:
+ 330:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 331:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 332:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @}
+ 333:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 334:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 335:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Group3 Special Pin configuration
+ 336:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *  @brief    Special Pin configuration
+ 337:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *
+ 338:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @verbatim    
+ 339:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================
+ 340:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****                       Special Pin configuration
+ 341:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================  
+ 342:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****    
+ 343:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @endverbatim
+ 344:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+ 345:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 346:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 347:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 348:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Specifie SWJ pin alternate function.
+ 349:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SWJPin_Mode: specifie the value for SWJ pin mode.
+ 350:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the @ref SYSCFG_SWJCFG_Type enum values:
+ 351:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_SWJ_All_Function
+ 352:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SYSCFG_SWD_CLOSE_PinRemap
+ 353:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 354:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 355:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_SWJPinConfig(SYSCFG_SWJCFG_Type SWJPin_Mode)
+ 356:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 540              		.loc 1 356 1 is_stmt 1 view -0
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 17
+
+
+ 543              		@ frame_needed = 0, uses_anonymous_args = 0
+ 544              		@ link register save eliminated.
+ 357:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 545              		.loc 1 357 5 view .LVU124
+ 358:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 359:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 360:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_SWJ_PIN_MODE(SWJPin_Mode));
+ 546              		.loc 1 360 5 view .LVU125
+ 361:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp = SYSCFG->SAFR.V32 & (~SYSCFG_SAFR_SWJCFG_Msk);
+ 547              		.loc 1 362 5 view .LVU126
+ 548              		.loc 1 362 10 is_stmt 0 view .LVU127
+ 549 0000 2021     		movs	r1, #32
+ 363:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp |= (uint32_t)(SWJPin_Mode << 5);
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 366:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 550              		.loc 1 366 1 view .LVU128
+ 551              		@ sp needed
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 552              		.loc 1 362 24 view .LVU129
+ 553 0002 044A     		ldr	r2, .L45
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 554              		.loc 1 364 36 view .LVU130
+ 555 0004 4001     		lsls	r0, r0, #5
+ 556              	.LVL23:
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 557              		.loc 1 362 24 view .LVU131
+ 558 0006 9368     		ldr	r3, [r2, #8]
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 559              		.loc 1 362 10 view .LVU132
+ 560 0008 8B43     		bics	r3, r1
+ 561              	.LVL24:
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 562              		.loc 1 364 5 is_stmt 1 view .LVU133
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 563              		.loc 1 365 5 view .LVU134
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 564              		.loc 1 364 10 is_stmt 0 view .LVU135
+ 565 000a 1843     		orrs	r0, r3
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 566              		.loc 1 365 49 view .LVU136
+ 567 000c 024B     		ldr	r3, .L45+4
+ 568 000e 0343     		orrs	r3, r0
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 569              		.loc 1 365 22 view .LVU137
+ 570 0010 9360     		str	r3, [r2, #8]
+ 571              		.loc 1 366 1 view .LVU138
+ 572 0012 7047     		bx	lr
+ 573              	.L46:
+ 574              		.align	2
+ 575              	.L45:
+ 576 0014 00040440 		.word	1074004992
+ 577 0018 0000A55A 		.word	1520762880
+ 578              		.cfi_endproc
+ 579              	.LFE55:
+ 581              		.section	.text.SYSCFG_OSCPinConfig,"ax",%progbits
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 18
+
+
+ 582              		.align	1
+ 583              		.global	SYSCFG_OSCPinConfig
+ 584              		.syntax unified
+ 585              		.code	16
+ 586              		.thumb_func
+ 588              	SYSCFG_OSCPinConfig:
+ 589              	.LVL25:
+ 590              	.LFB56:
+ 367:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 368:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 369:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Specifie XTAL pin And XTALX alternate
+ 370:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  OSCPin_Mode: specifie the value for XTAL pin mode.
+ 371:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         This parameter can be one of the @ref SYSCFG_OSCPin_Type enum values:
+ 372:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         @arg SYSCFG_OSC_GPIO
+ 373:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         @arg SYSCFG_OSC_HCrystal
+ 374:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         @arg SYSCFG_OSC_ExtClock
+ 375:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         @arg SYSCFG_OSC_LCrystal
+ 376:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 377:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 378:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_OSCPinConfig(SYSCFG_OSCPin_Type OSCPin_Mode)
+ 379:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 591              		.loc 1 379 1 is_stmt 1 view -0
+ 592              		.cfi_startproc
+ 593              		@ args = 0, pretend = 0, frame = 0
+ 594              		@ frame_needed = 0, uses_anonymous_args = 0
+ 595              		@ link register save eliminated.
+ 380:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 596              		.loc 1 380 5 view .LVU140
+ 381:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 382:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameter */
+ 383:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_OSC_PIN_MODE(OSCPin_Mode));
+ 597              		.loc 1 383 5 view .LVU141
+ 384:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 385:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp = SYSCFG->SAFR.V32 & (~SYSCFG_SAFR_OSCCFG_Msk);
+ 598              		.loc 1 385 5 view .LVU142
+ 599              		.loc 1 385 10 is_stmt 0 view .LVU143
+ 600 0000 0321     		movs	r1, #3
+ 386:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 387:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     temp |= (uint32_t)OSCPin_Mode;
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 389:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 601              		.loc 1 389 1 view .LVU144
+ 602              		@ sp needed
+ 385:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 603              		.loc 1 385 24 view .LVU145
+ 604 0002 044A     		ldr	r2, .L48
+ 605 0004 9368     		ldr	r3, [r2, #8]
+ 385:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 606              		.loc 1 385 10 view .LVU146
+ 607 0006 8B43     		bics	r3, r1
+ 608              	.LVL26:
+ 387:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 609              		.loc 1 387 5 is_stmt 1 view .LVU147
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 610              		.loc 1 388 5 view .LVU148
+ 387:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 611              		.loc 1 387 10 is_stmt 0 view .LVU149
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 19
+
+
+ 612 0008 0343     		orrs	r3, r0
+ 613              	.LVL27:
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 614              		.loc 1 388 49 view .LVU150
+ 615 000a 0348     		ldr	r0, .L48+4
+ 616              	.LVL28:
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 617              		.loc 1 388 49 view .LVU151
+ 618 000c 1843     		orrs	r0, r3
+ 388:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 619              		.loc 1 388 22 view .LVU152
+ 620 000e 9060     		str	r0, [r2, #8]
+ 621              		.loc 1 389 1 view .LVU153
+ 622 0010 7047     		bx	lr
+ 623              	.L49:
+ 624 0012 C046     		.align	2
+ 625              	.L48:
+ 626 0014 00040440 		.word	1074004992
+ 627 0018 0000A55A 		.word	1520762880
+ 628              		.cfi_endproc
+ 629              	.LFE56:
+ 631              		.section	.text.SYSCFG_SRAMLockConfig,"ax",%progbits
+ 632              		.align	1
+ 633              		.global	SYSCFG_SRAMLockConfig
+ 634              		.syntax unified
+ 635              		.code	16
+ 636              		.thumb_func
+ 638              	SYSCFG_SRAMLockConfig:
+ 639              	.LVL29:
+ 640              	.LFB57:
+ 390:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 391:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 392:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @}
+ 393:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 394:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 395:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Group4 SRAM Lock configuration
+ 396:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *  @brief    SRAM Lock configuration
+ 397:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *
+ 398:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @verbatim    
+ 399:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================
+ 400:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****                       SRAM sector lock configuration
+ 401:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================  
+ 402:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****    
+ 403:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @endverbatim
+ 404:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+ 405:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 406:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 407:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 408:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Lock or unlock SRAM sectors.
+ 409:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  SectorNum: specifie SRAM sectors to be locked or unlocked.
+ 410:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be any combination of the following values:
+ 411:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_0
+ 412:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_1
+ 413:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_2
+ 414:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_3
+ 415:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_4
+ 416:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 20
+
+
+ 417:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_6
+ 418:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_7
+ 419:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_8 
+ 420:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_9 
+ 421:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_10
+ 422:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_11
+ 423:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_12
+ 424:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_13
+ 425:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_14
+ 426:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SRAM_Sector_15
+ 427:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  NewState: new state of selected SRAM sectors.
+ 428:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 429:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_ENABLE  to lock the selected sectors
+ 430:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_DISABLE to unlock the selected sectors
+ 431:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 432:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 433:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_SRAMLockConfig(uint8_t SectorNum, FunctionalState NewState)
+ 434:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 641              		.loc 1 434 1 is_stmt 1 view -0
+ 642              		.cfi_startproc
+ 643              		@ args = 0, pretend = 0, frame = 0
+ 644              		@ frame_needed = 0, uses_anonymous_args = 0
+ 645              		@ link register save eliminated.
+ 435:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 646              		.loc 1 435 5 view .LVU155
+ 436:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 437:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 438:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_SYSCFG_SRAM_SECTOR(SectorNum));
+ 647              		.loc 1 438 5 view .LVU156
+ 439:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 648              		.loc 1 439 5 view .LVU157
+ 440:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 441:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+ 649              		.loc 1 441 5 view .LVU158
+ 650 0000 064A     		ldr	r2, .L54
+ 651 0002 074B     		ldr	r3, .L54+4
+ 652              		.loc 1 441 8 is_stmt 0 view .LVU159
+ 653 0004 0029     		cmp	r1, #0
+ 654 0006 04D0     		beq	.L51
+ 442:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 443:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SRAMLOCK.V32 |= ((uint32_t)0x5AA5 << 16) | SectorNum;
+ 655              		.loc 1 443 9 is_stmt 1 view .LVU160
+ 656              		.loc 1 443 30 is_stmt 0 view .LVU161
+ 657 0008 D168     		ldr	r1, [r2, #12]
+ 658              	.LVL30:
+ 659              		.loc 1 443 30 view .LVU162
+ 660 000a 0843     		orrs	r0, r1
+ 661              	.LVL31:
+ 662              		.loc 1 443 30 view .LVU163
+ 663 000c 0343     		orrs	r3, r0
+ 664              	.LVL32:
+ 665              	.L53:
+ 444:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 445:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 446:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 447:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp = SYSCFG->SRAMLOCK.V32 & (~SectorNum);
+ 448:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 21
+
+
+ 666              		.loc 1 448 30 view .LVU164
+ 667 000e D360     		str	r3, [r2, #12]
+ 449:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 450:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 668              		.loc 1 450 1 view .LVU165
+ 669              		@ sp needed
+ 670 0010 7047     		bx	lr
+ 671              	.LVL33:
+ 672              	.L51:
+ 447:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 673              		.loc 1 447 9 is_stmt 1 view .LVU166
+ 447:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 674              		.loc 1 447 32 is_stmt 0 view .LVU167
+ 675 0012 D168     		ldr	r1, [r2, #12]
+ 676              	.LVL34:
+ 448:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 677              		.loc 1 448 9 is_stmt 1 view .LVU168
+ 447:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 678              		.loc 1 447 14 is_stmt 0 view .LVU169
+ 679 0014 8143     		bics	r1, r0
+ 680              	.LVL35:
+ 448:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 681              		.loc 1 448 57 view .LVU170
+ 682 0016 0B43     		orrs	r3, r1
+ 683 0018 F9E7     		b	.L53
+ 684              	.L55:
+ 685 001a C046     		.align	2
+ 686              	.L54:
+ 687 001c 00040440 		.word	1074004992
+ 688 0020 0000A55A 		.word	1520762880
+ 689              		.cfi_endproc
+ 690              	.LFE57:
+ 692              		.section	.text.SYSCFG_DBGPeriphConfig,"ax",%progbits
+ 693              		.align	1
+ 694              		.global	SYSCFG_DBGPeriphConfig
+ 695              		.syntax unified
+ 696              		.code	16
+ 697              		.thumb_func
+ 699              	SYSCFG_DBGPeriphConfig:
+ 700              	.LVL36:
+ 701              	.LFB58:
+ 451:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 452:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 453:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @}
+ 454:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 455:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 456:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /** @defgroup SYSCFG_Group5 Debug mode stop peripherals
+ 457:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *  @brief    Debug mode stop peripherals
+ 458:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  *
+ 459:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @verbatim    
+ 460:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================
+ 461:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****                       Debug mode peripherals clock configuration
+ 462:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****  ===============================================================================  
+ 463:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****    
+ 464:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** @endverbatim
+ 465:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @{
+ 466:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 22
+
+
+ 467:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 468:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 469:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enable or disable peripherals clock in debug mode.
+ 470:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  DBG_Periph: specifie peripherals to be enable or disable.
+ 471:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be any combination of the following values:
+ 472:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_HLV
+ 473:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_LCD  
+ 474:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_LED  
+ 475:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_DMA  
+ 476:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_IWDT 
+ 477:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_WWDT 
+ 478:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_PCA  
+ 479:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_TIM  
+ 480:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_PWM  
+ 481:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_UART 
+ 482:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_SPI  
+ 483:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg DBG_Periph_TWI  
+ 484:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  NewState: new state of the selected peripherals.
+ 485:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 486:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_ENABLE
+ 487:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *            @arg SH_DISABLE
+ 488:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 489:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 490:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_DBGPeriphConfig(uint16_t DBG_Periph, FunctionalState NewState)
+ 491:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 702              		.loc 1 491 1 is_stmt 1 view -0
+ 703              		.cfi_startproc
+ 704              		@ args = 0, pretend = 0, frame = 0
+ 705              		@ frame_needed = 0, uses_anonymous_args = 0
+ 706              		@ link register save eliminated.
+ 492:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 707              		.loc 1 492 5 view .LVU172
+ 493:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 494:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 495:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_DBG_PERIPH(DBG_Periph));
+ 708              		.loc 1 495 5 view .LVU173
+ 496:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 709              		.loc 1 496 5 view .LVU174
+ 497:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 498:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+ 710              		.loc 1 498 5 view .LVU175
+ 711 0000 064A     		ldr	r2, .L60
+ 712 0002 074B     		ldr	r3, .L60+4
+ 713              		.loc 1 498 8 is_stmt 0 view .LVU176
+ 714 0004 0029     		cmp	r1, #0
+ 715 0006 04D0     		beq	.L57
+ 499:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 500:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 |= ((uint32_t)0x5AA5 << 16) | DBG_Periph;
+ 716              		.loc 1 500 9 is_stmt 1 view .LVU177
+ 717              		.loc 1 500 27 is_stmt 0 view .LVU178
+ 718 0008 1169     		ldr	r1, [r2, #16]
+ 719              	.LVL37:
+ 720              		.loc 1 500 27 view .LVU179
+ 721 000a 0843     		orrs	r0, r1
+ 722              	.LVL38:
+ 723              		.loc 1 500 27 view .LVU180
+ 724 000c 0343     		orrs	r3, r0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 23
+
+
+ 725              	.LVL39:
+ 726              	.L59:
+ 501:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 502:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 503:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 504:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp = SYSCFG->DBGCR.V32 & (~DBG_Periph);
+ 505:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 727              		.loc 1 505 27 view .LVU181
+ 728 000e 1361     		str	r3, [r2, #16]
+ 506:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 507:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 729              		.loc 1 507 1 view .LVU182
+ 730              		@ sp needed
+ 731 0010 7047     		bx	lr
+ 732              	.LVL40:
+ 733              	.L57:
+ 504:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 734              		.loc 1 504 9 is_stmt 1 view .LVU183
+ 504:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 735              		.loc 1 504 29 is_stmt 0 view .LVU184
+ 736 0012 1169     		ldr	r1, [r2, #16]
+ 737              	.LVL41:
+ 505:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 738              		.loc 1 505 9 is_stmt 1 view .LVU185
+ 504:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 739              		.loc 1 504 14 is_stmt 0 view .LVU186
+ 740 0014 8143     		bics	r1, r0
+ 741              	.LVL42:
+ 505:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 742              		.loc 1 505 54 view .LVU187
+ 743 0016 0B43     		orrs	r3, r1
+ 744 0018 F9E7     		b	.L59
+ 745              	.L61:
+ 746 001a C046     		.align	2
+ 747              	.L60:
+ 748 001c 00040440 		.word	1074004992
+ 749 0020 0000A55A 		.word	1520762880
+ 750              		.cfi_endproc
+ 751              	.LFE58:
+ 753              		.section	.text.SYSCFG_DBGLowPowerConfig,"ax",%progbits
+ 754              		.align	1
+ 755              		.global	SYSCFG_DBGLowPowerConfig
+ 756              		.syntax unified
+ 757              		.code	16
+ 758              		.thumb_func
+ 760              	SYSCFG_DBGLowPowerConfig:
+ 761              	.LFB62:
+ 762              		.cfi_startproc
+ 763              		@ args = 0, pretend = 0, frame = 0
+ 764              		@ frame_needed = 0, uses_anonymous_args = 0
+ 765 0000 10B5     		push	{r4, lr}
+ 766              	.LCFI2:
+ 767              		.cfi_def_cfa_offset 8
+ 768              		.cfi_offset 4, -8
+ 769              		.cfi_offset 14, -4
+ 770 0002 FFF7FEFF 		bl	SYSCFG_DBGPeriphConfig
+ 771              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 24
+
+
+ 772 0006 10BD     		pop	{r4, pc}
+ 773              		.cfi_endproc
+ 774              	.LFE62:
+ 776              		.section	.text.SYSCFG_GPIOBCRConfig,"ax",%progbits
+ 777              		.align	1
+ 778              		.global	SYSCFG_GPIOBCRConfig
+ 779              		.syntax unified
+ 780              		.code	16
+ 781              		.thumb_func
+ 783              	SYSCFG_GPIOBCRConfig:
+ 784              	.LVL43:
+ 785              	.LFB60:
+ 508:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 509:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 510:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  Enable or disable low power clock in debug mode.
+ 511:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  LowPowerMode: specifie low power mode clock to be enable or disable.
+ 512:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be any combination of the following values:
+ 513:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg DBG_LOWPOWER_SLEEP
+ 514:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg DBG_LOWPOWER_STOP
+ 515:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  NewState: new state of the low power mode clock.
+ 516:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *          This parameter can be one of the following values:
+ 517:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg SH_ENABLE
+ 518:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg SH_DISABLE
+ 519:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 520:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 521:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_DBGLowPowerConfig(uint16_t LowPowerMode, FunctionalState NewState)
+ 522:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 523:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     uint32_t temp = 0;
+ 524:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 525:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 526:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_DBG_LOWPOWER_MODE(LowPowerMode));
+ 527:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 528:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 529:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     if (NewState != SH_DISABLE)
+ 530:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 531:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 |= ((uint32_t)0x5AA5 << 16) | (uint32_t)LowPowerMode;
+ 532:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 533:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     else
+ 534:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     {
+ 535:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         temp = SYSCFG->DBGCR.V32 & (~LowPowerMode);
+ 536:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****         SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+ 537:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     }
+ 538:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 539:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 540:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** /**
+ 541:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @brief  GPIO module mount bus configuration register.
+ 542:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @param  GPIOB_Clock_Source: GPIO module mount bus select bit.
+ 543:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *         This parameter can be one of the following values:
+ 544:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg GPIOB_MODULE_CLOCK_IN_SCIOB
+ 545:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   *           @arg GPIOB_MODULE_CLOCK_IN_AHB
+ 546:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   * @retval None
+ 547:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****   */
+ 548:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** void SYSCFG_GPIOBCRConfig(uint8_t GPIOB_Clock_Source)
+ 549:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** {
+ 786              		.loc 1 549 1 is_stmt 1 view -0
+ 787              		.cfi_startproc
+ 788              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczSTKKI.s 			page 25
+
+
+ 789              		@ frame_needed = 0, uses_anonymous_args = 0
+ 790              		@ link register save eliminated.
+ 550:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     /* Check the parameters */
+ 551:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     assert_param(IS_GPIOB_CLOCK_SOURCE(GPIOB_Clock_Source));
+ 791              		.loc 1 551 5 view .LVU189
+ 552:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** 
+ 553:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c ****     SYSCFG->GPIOBCR.V32 = ((uint32_t)0x5AA5 << 16) | GPIOB_Clock_Source;
+ 792              		.loc 1 553 5 view .LVU190
+ 793              		.loc 1 553 52 is_stmt 0 view .LVU191
+ 794 0000 024B     		ldr	r3, .L64
+ 795              		.loc 1 553 25 view .LVU192
+ 796 0002 034A     		ldr	r2, .L64+4
+ 797              		.loc 1 553 52 view .LVU193
+ 798 0004 0343     		orrs	r3, r0
+ 799              		.loc 1 553 25 view .LVU194
+ 800 0006 5361     		str	r3, [r2, #20]
+ 554:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.c **** }
+ 801              		.loc 1 554 1 view .LVU195
+ 802              		@ sp needed
+ 803 0008 7047     		bx	lr
+ 804              	.L65:
+ 805 000a C046     		.align	2
+ 806              	.L64:
+ 807 000c 0000A55A 		.word	1520762880
+ 808 0010 00040440 		.word	1074004992
+ 809              		.cfi_endproc
+ 810              	.LFE60:
+ 812              		.text
+ 813              	.Letext0:
+ 814              		.file 2 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_libcfg.h"
+ 815              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 816              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 817              		.file 5 "common/prog/MSP/CMSIS/core_cm0plus.h"
+ 818              		.file 6 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 819              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.h"

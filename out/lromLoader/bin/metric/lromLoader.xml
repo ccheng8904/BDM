@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Metric Generator="Maksym" Version="3.0.2" Library="E:\project\example\MD370R\common\tools\maksym\3.0.2\dwarf_keil_mid0028.dll" Origin="E:\project\example\MD370R\out\lromLoader\bin\lromLoader.elf" Created="Wed Nov 18 17:06:03 2026" Encoding="little_endian" FileFormat="ELF/DWARF" Architecture="Advanced RISC Machines (ARM)">
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/firmware_update/BootLoader" Name="ModuleHeader.c" CUSource="Generic">
+		<Variable Name="MDHD_ModuleHeader" Location="0x00000F00" Size="0x28" Access="RO" Memory="ROM"></Variable>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x28" GenericRamFunction="0x0" GenericRomFunction="0x0" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f" Name="timerMcXs.c" CUSource="Application">
+		<Function Name="TIM_uiGetCircleMicroSeconds" Location="0x00000F81" Size="0xC" Access="RO" Memory="ROM"></Function>
+		<Function Name="_TIM_bGetInitConfig" Location="0x00000F39" Size="0x48" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x0" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x54" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\app/prog/MSP/armCmx" Name="int_exc_cfg.c" CUSource="Application">
+		<Variable Name="INT_StackFrame" Location="0x20000000" Size="0x4" Access="RW_RO" Memory="RAM"></Variable>
+		<Function Name="HardFault_Handler" Location="0x00000F8D" Size="0x10" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x0" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x4" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x10" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\app/prog/MSP/mcal/sh30f" Name="mcal_channels.c" CUSource="Application">
+		<Variable Name="MDIOA15_MUART0_TX" Location="0x0000183C" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Variable Name="MDIOB0_MUART0_RX" Location="0x00001844" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Variable Name="MUART0_RX_PB0_TX_PA15" Location="0x0000184C" Size="0xC" Access="RO" Memory="ROM"></Variable>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x0" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x1C" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal" Name="mdio.c" CUSource="Generic">
+		<Function Name="MDIO_configureOutputState" Location="0x00000FBB" Size="0x1C" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_init" Location="0x00000FA3" Size="0x18" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x34" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f" Name="mdio_mc.c" CUSource="Generic">
+		<Variable Name="MDIOA" Location="0x00001858" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Variable Name="MDIOB" Location="0x00001860" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Function Name="MDIO_resetPort" Location="0x000010FD" Size="0x8" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_setPort" Location="0x000010F7" Size="0x6" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configure" Location="0x000010AD" Size="0x4A" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configureSpeed" Location="0x0000104F" Size="0x26" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configureMode" Location="0x0000102F" Size="0x20" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configurePullType" Location="0x0000100F" Size="0x20" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configureOutputType" Location="0x00000FDD" Size="0x32" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_enablePort" Location="0x00000FD7" Size="0x2" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_getPort" Location="0x00000FD9" Size="0x4" Access="RO" Memory="ROM"></Function>
+		<Function Name="MDIO_configureAlternateFunction" Location="0x00001075" Size="0x38" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x10" GenericRamFunction="0x0" GenericRomFunction="0x12E" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal" Name="muart.c" CUSource="Generic">
+		<Function Name="MUART_configurePins" Location="0x00001124" Size="0x30" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_isEvent" Location="0x00001105" Size="0x1E" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x4E" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f" Name="muart_mc.c" CUSource="Generic">
+		<Variable Name="MUART0" Location="0x00001868" Size="0x10" Access="RO" Memory="ROM"></Variable>
+		<Function Name="MUART_getChannelError" Location="0x000012BF" Size="0x22" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_getStatusRegMaskForEvent" Location="0x000012A5" Size="0x1A" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_readDataReg" Location="0x00001293" Size="0xA" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_writeDataReg" Location="0x0000128B" Size="0x8" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_disableChannel" Location="0x0000125D" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_enableChannel" Location="0x0000124D" Size="0x10" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configureBaudrate" Location="0x00001271" Size="0x1A" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configure" Location="0x0000121D" Size="0x30" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_enableClock" Location="0x000011FD" Size="0x20" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configurePeriphBaudrate" Location="0x000011C1" Size="0x3C" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configurePeriphParity" Location="0x00001199" Size="0x28" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configurePeriphStopBits" Location="0x00001181" Size="0x18" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configurePeriphDataBits" Location="0x00001155" Size="0x2C" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_getStatusReg" Location="0x0000129D" Size="0x8" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x10" GenericRamFunction="0x0" GenericRomFunction="0x18C" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal" Name="mwdt.c" CUSource="Generic">
+		<Function Name="MWDT_initConfigStruct" Location="0x000012E9" Size="0x8" Access="RO" Memory="ROM"></Function>
+		<Function Name="MWDT_trigger" Location="0x000012E1" Size="0x8" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x10" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal/sh30f" Name="mwdt_mc.c" CUSource="Generic">
+		<Variable Name="MWDT_LocalMwdtCfg" Location="0x20000004" Size="0x4" Access="RW_RO" Memory="RAM"></Variable>
+		<Function Name="MWDT_initConfigStructMWDT" Location="0x0000131D" Size="0x10" Access="RO" Memory="ROM"></Function>
+		<Variable Name="mwdtCfg" Location="0x00001878" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Function Name="MWDT_triggerWDT" Location="0x000012F1" Size="0x2C" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x4" GenericRomVariable="0x8" GenericRamFunction="0x0" GenericRomFunction="0x3C" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/mcal" Name="msup.c" CUSource="Generic">
+		<Function Name="MSUP_generateReset" Location="0x0000132D" Size="0x1C" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x1C" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/armCmx" Name="IntTblArmCM.c" CUSource="Generic">
+		<Variable Name="ITBL_fixedVectors" Location="0x00000000" Size="0x8" Access="RO_RW" Memory="ROM"></Variable>
+		<Variable Name="ITBL_coreVectors" Location="0x00000F28" Size="0x10" Access="RO_RW" Memory="ROM"></Variable>
+		<Function Name="ITBL_vResetHandler" Location="0x00001349" Size="0x14" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x18" GenericRamFunction="0x0" GenericRomFunction="0x14" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/sh30f/lib" Name="sh30f9xx_sa0_rcc.c" CUSource="Generic">
+		<Function Name="RCC_APB0PeriphClockOnOff" Location="0x0000135D" Size="0x24" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x24" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/MSP/sh30f/lib" Name="sh30f9xx_sa0_timer.c" CUSource="Generic">
+		<Function Name="TIM_OnOff" Location="0x000013CD" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="TIM_INTConfig" Location="0x000013B9" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="TIM_Init" Location="0x0000138D" Size="0x2C" Access="RO" Memory="ROM"></Function>
+		<Function Name="TIM_StructInit" Location="0x00001381" Size="0xC" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x60" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/firmware_update/BootLoader" Name="BLmain.c" CUSource="Generic">
+		<Function Name="Main" Location="0x000013E1" Size="0xC" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x0" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0xC" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/firmware_update/BootLoader" Name="BLmessageLoop.c" CUSource="Generic">
+		<Variable Name="BLMLP_msgBuffer" Location="0x20000008" Size="0x4" Access="RW" Memory="RAM"></Variable>
+		<Function Name="BLMLP_handleMessageLoop" Location="0x000013ED" Size="0x48" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x4" GenericRomVariable="0x0" GenericRamFunction="0x0" GenericRomFunction="0x48" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/firmware_update/BootLoader" Name="BLservices.c" CUSource="Generic">
+		<Variable Name="BLSRV_idString" Location="0x000018B0" Size="0x20" Access="RO" Memory="ROM"></Variable>
+		<Variable Name="BLSRV_cmdServiceTbl" Location="0x00001880" Size="0x30" Access="RO" Memory="ROM"></Variable>
+		<Variable Name="BLSRV_pageAddress" Location="0x2000000C" Size="0x2" Access="RW" Memory="RAM"></Variable>
+		<Function Name="BLSRV_storeData" Location="0x000014A5" Size="0x30" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_jumpLoader" Location="0x00001455" Size="0x1C" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_selfIdent" Location="0x0000148D" Size="0x18" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_setBaudRate" Location="0x00001471" Size="0x1C" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_invalidCommand" Location="0x00001435" Size="0xC" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_setPage" Location="0x00001441" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_doCommandService" Location="0x000014D9" Size="0x3C" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLSRV_init" Location="0x000014D5" Size="0x2" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x2" GenericRomVariable="0x50" GenericRamFunction="0x0" GenericRomFunction="0xDE" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<CompilationUnit Path="E:\project\example\MD370R\common/prog/firmware_update/BootLoader" Name="BLcom.c" CUSource="Generic">
+		<Variable Name="BLCOM_rxErrorFlag" Location="0x20000012" Size="0x1" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="BLCOM_firstFrameReceived" Location="0x2000000F" Size="0x1" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="BLCOM_checksum" Location="0x2000000E" Size="0x1" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="BLCOM_timer" Location="0x20000016" Size="0x2" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="BLCOM_reloadTime" Location="0x20000010" Size="0x2" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="BLCOM_timeStamp" Location="0x20000014" Size="0x2" Access="RW" Memory="RAM"></Variable>
+		<Variable Name="MuartHandleConfig" Location="0x000018D0" Size="0x8" Access="RO" Memory="ROM"></Variable>
+		<Function Name="BLCOM_receiveData" Location="0x00001515" Size="0x44" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_init" Location="0x000016E5" Size="0x40" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_setBaudrate" Location="0x000016D1" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_sendAck" Location="0x000016BD" Size="0x14" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_sendBuffer" Location="0x0000167D" Size="0x40" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_sendByte" Location="0x00001629" Size="0x54" Access="RO" Memory="ROM"></Function>
+		<Function Name="BLCOM_receiveFrame" Location="0x00001559" Size="0xD0" Access="RO" Memory="ROM"></Function>
+	<Size GenericRamVariable="0x9" GenericRomVariable="0x8" GenericRamFunction="0x0" GenericRomFunction="0x210" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x0" ApplicationRomVariable="0x0" ApplicationRamFunction="0x0" ApplicationRomFunction="0x0" 	></Size>
+	</CompilationUnit>
+	<Size GenericRamVariable="0x13" GenericRomVariable="0xC0" GenericRamFunction="0x0" GenericRomFunction="0x77E" 	SystemRamVariable="0x0" SystemRomVariable="0x0" SystemRamFunction="0x0" SystemRomFunction="0x0" 	ApplicationRamVariable="0x4" ApplicationRomVariable="0x1C" ApplicationRamFunction="0x0" ApplicationRomFunction="0x64" 	></Size>
+	<CompilationUnit Path="" Name="" CUSource="Unknown">
+		<Function Name="NMI_Handler" Location="0x00000F9D" Size="0x6" Access="RO" Memory="ROM"></Function>
+		<Function Name="__udivsi3" Location="0x00001725" Size="0x10A" Access="RO" Memory="ROM"></Function>
+		<Function Name="_init" Location="0x000018D9" Size="0x0" Access="RO" Memory="ROM"></Function>
+		<Function Name="__aeabi_ldiv0" Location="0x00001839" Size="0x2" Access="RO" Memory="ROM"></Function>
+		<Function Name="__aeabi_uidiv" Location="0x00001725" Size="0x0" Access="RO" Memory="ROM"></Function>
+		<Function Name="_fini" Location="0x000018DD" Size="0x0" Access="RO" Memory="ROM"></Function>
+		<Function Name="__aeabi_uidivmod" Location="0x00001831" Size="0x8" Access="RO" Memory="ROM"></Function>
+		<Function Name="__aeabi_idiv0" Location="0x00001839" Size="0x2" Access="RO" Memory="ROM"></Function>
+		<Function Name="MUART_configurePins" Location="0x00001125" Size="0x30" Access="RO" Memory="ROM"></Function>
+	</CompilationUnit>
+	<Segments>
+		<Segment Type="LOAD" Location="0x00000000" Size="0x8" Access="RO"></Segment>
+		<Segment Type="LOAD" Location="0x00000F00" Size="0x9E0" Access="RX"></Segment>
+		<Segment Type="LOAD" Location="0x20000000" Size="0x18" Access="RW"></Segment>
+	</Segments>
+	<Sections>
+		<Section Idx="1" Name=".boot1" Type="PROGBITS" Location="0x00000000" Size="0x8" Flag="ALLOC"></Section>
+		<Section Idx="2" Name=".text" Type="PROGBITS" Location="0x00000F00" Size="0x9E0" Flag="ALLOC_EXECINSTR"></Section>
+		<Section Idx="3" Name=".bss" Type="NOBITS" Location="0x20000000" Size="0x18" Flag="WRITE_ALLOC"></Section>
+		<Section Idx="5" Name=".comment" Type="PROGBITS" Location="0x00000000" Size="0x39" Flag="0x00000030"></Section>
+		<Section Idx="10" Name=".debug_str" Type="PROGBITS" Location="0x00000000" Size="0x52BB" Flag="0x00000030"></Section>
+	</Sections>
+</Metric>

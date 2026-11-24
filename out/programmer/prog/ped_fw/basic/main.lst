@@ -1,0 +1,26 @@
+
+out/programmer/prog/ped_fw/basic/main.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.startup.main:
+
+00000000 <main>:
+     -# BASIC_vConfigPlatform()
+     -# BASIC_vUsrInitAppl()
+     -# BASIC_vUsrSchedTasks()
+*/
+int main(void) //lint !e970 main must return int
+{
+   0:	b510      	push	{r4, lr}
+  #ifndef NO_PLATFORM_INIT
+    BASIC_vConfigPlatform();        /* Configure Platform */
+  #endif
+    BASIC_vUsrInitAppl();           /* Initialize User Application */
+   2:	f7ff fffe 	bl	0 <BASIC_vUsrInitAppl>
+
+    for (;;)
+    {
+        BASIC_vUsrSchedTasks();     /* Schedule User Tasks */
+   6:	f7ff fffe 	bl	0 <BASIC_vUsrSchedTasks>
+    for (;;)
+   a:	e7fc      	b.n	6 <main+0x6>

@@ -1,0 +1,272 @@
+
+out/BootManager/prog/FuncSafe/fsRam.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FSF_vRam_OneTimeCheck:
+
+00000000 <FSF_vRam_OneTimeCheck>:
+#pragma CODE_SEG NON_BANKED
+#endif
+
+// The RAM One-time check handler
+void FSF_vRam_OneTimeCheck(void)
+{
+   0:	b510      	push	{r4, lr}
+#ifdef TH_FSCOM
+   TH_FSFP_PushOutPar(TP_FSF_vRam_OneTimeCheck);
+#else
+   FSF_vRamcheck(FSF_atRamSegments, FSF_u32GetNumberOfRamSegments(), 0u);
+   2:	f7ff fffe 	bl	0 <FSF_u32GetNumberOfRamSegments>
+   6:	4b03      	ldr	r3, [pc, #12]	; (14 <FSF_vRam_OneTimeCheck+0x14>)
+   8:	0001      	movs	r1, r0
+   a:	2200      	movs	r2, #0
+   c:	0018      	movs	r0, r3
+   e:	f7ff fffe 	bl	0 <FSF_vRamcheck>
+#endif
+}
+  12:	bd10      	pop	{r4, pc}
+  14:	00000000 	.word	0x00000000
+
+Disassembly of section .text.FSF_ucRamHandleTask:
+
+00000000 <FSF_ucRamHandleTask>:
+
+// The RAM operational check handler
+uint8_t FSF_ucRamHandleTask(void)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+/*======================================================================
+    The operational RAM check
+======================================================================*/
+#ifdef OPERATIONAL_RAM_CHECK
+   switch (FSF_ucRamTaskState)
+   2:	4c3d      	ldr	r4, [pc, #244]	; (f8 <FSF_ucRamHandleTask+0xf8>)
+   4:	7820      	ldrb	r0, [r4, #0]
+   6:	2803      	cmp	r0, #3
+   8:	d900      	bls.n	c <FSF_ucRamHandleTask+0xc>
+   a:	e06f      	b.n	ec <FSF_ucRamHandleTask+0xec>
+   c:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uqi>
+  10:	5d482002 	.word	0x5d482002
+          //  excluded from operational checking, it is checked separately at this point.
+
+          // **************************************************************************
+          //             Check the data exchange buffer. (Data is not saved)
+          // **************************************************************************
+          vRamOpercheck( FSF_arMarchDataBuffer,
+  14:	4b39      	ldr	r3, [pc, #228]	; (fc <FSF_ucRamHandleTask+0xfc>)
+  16:	781a      	ldrb	r2, [r3, #0]
+                                  &FSF_arMarchDataBuffer[MARCHBUFLENGTH/2],
+          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+          //  REFERENCE - ISO-6.3.3.2 Semantics
+          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+                                  FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+  18:	4b39      	ldr	r3, [pc, #228]	; (100 <FSF_ucRamHandleTask+0x100>)
+  1a:	0052      	lsls	r2, r2, #1
+  1c:	5cd5      	ldrb	r5, [r2, r3]
+                                  FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+  1e:	189b      	adds	r3, r3, r2
+  20:	785e      	ldrb	r6, [r3, #1]
+   _FSF_vDoWhenPieceRamCheckStarted();
+  22:	f7ff fffe 	bl	0 <_FSF_vDoWhenPieceRamCheckStarted>
+   FSF_vRamOpercheck(pucRAM,pucDEXBuffer,ucPatNoInv,ucPatInv);
+  26:	0033      	movs	r3, r6
+  28:	002a      	movs	r2, r5
+  2a:	4936      	ldr	r1, [pc, #216]	; (104 <FSF_ucRamHandleTask+0x104>)
+  2c:	4836      	ldr	r0, [pc, #216]	; (108 <FSF_ucRamHandleTask+0x108>)
+  2e:	f7ff fffe 	bl	0 <FSF_vRamOpercheck>
+   _FSF_vDoWhenPieceRamCheckFinished();
+  32:	f7ff fffe 	bl	0 <_FSF_vDoWhenPieceRamCheckFinished>
+
+          //  Start with the first RAM address
+          FSF_pucActualRAMAddress = FSF_atRamSegments[0].pucStartSeg;
+  36:	4a35      	ldr	r2, [pc, #212]	; (10c <FSF_ucRamHandleTask+0x10c>)
+  38:	4b35      	ldr	r3, [pc, #212]	; (110 <FSF_ucRamHandleTask+0x110>)
+  3a:	6811      	ldr	r1, [r2, #0]
+  3c:	6019      	str	r1, [r3, #0]
+
+         //  Start with the first RAM address
+         FSF_pucActualRAMAddress = FSF_atRamSegments[0].pucStartSeg;
+#endif
+         //  Start with the first segment from the segment table.
+         FSF_ucActualRAMIdx      = (uint8_t)0;
+  3e:	2100      	movs	r1, #0
+  40:	4b34      	ldr	r3, [pc, #208]	; (114 <FSF_ucRamHandleTask+0x114>)
+  42:	7019      	strb	r1, [r3, #0]
+         /*Note 9016 Pointer arithmetic not allowed MisraC2012 18.4 [advisory] : required here */
+         /*lint -save -e9016 */
+         // We must exclude RAMCONT_EXCLUDED_DATA for RAM1
+         if(FSF_ucActualRAMIdx == 0u) // RAM1
+         {
+            FSF_pucEndAdrRamSeg = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - (COUNT_OF_TESTED_BYTES + RAMCONT_EXCLUDED_DATA_SIZE);
+  44:	6853      	ldr	r3, [r2, #4]
+  46:	4934      	ldr	r1, [pc, #208]	; (118 <FSF_ucRamHandleTask+0x118>)
+  48:	3b57      	subs	r3, #87	; 0x57
+         }
+         else
+         {
+            //  Set up the next RAM address
+            FSF_pucActualRAMAddress = FSF_atRamSegments[FSF_ucActualRAMIdx].pucStartSeg;
+            FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_OF_TESTED_BYTES;
+  4a:	600b      	str	r3, [r1, #0]
+            //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+#ifdef TH_FSCOM
+            TH_FSFP_PushOutPar(TP_FSF_RAM_Segment_changed);
+            TH_FSFP_PushOutPar(FSF_ucActualRAMIdx);
+#endif
+            FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_ONGOING;
+  4c:	2301      	movs	r3, #1
+  4e:	e006      	b.n	5e <FSF_ucRamHandleTask+0x5e>
+          if ( FSF_pucActualRAMAddress > FSF_pucEndAdrRamSeg )           /*lint !e946 Relational or subtract operator applied to pointers */
+  50:	4d2f      	ldr	r5, [pc, #188]	; (110 <FSF_ucRamHandleTask+0x110>)
+  52:	4b31      	ldr	r3, [pc, #196]	; (118 <FSF_ucRamHandleTask+0x118>)
+  54:	682e      	ldr	r6, [r5, #0]
+  56:	681b      	ldr	r3, [r3, #0]
+  58:	429e      	cmp	r6, r3
+  5a:	d905      	bls.n	68 <FSF_ucRamHandleTask+0x68>
+                FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_CHANGE_SEGMENT;
+  5c:	2302      	movs	r3, #2
+            FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_FINISH;
+  5e:	7023      	strb	r3, [r4, #0]
+   FSF_vReportOnGoing((uint8_t)FSF_RAM_TEST);
+  60:	2001      	movs	r0, #1
+  62:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   {
+      //  Signal ongoing work
+      vRAMCheckOngoing();
+   }
+#endif
+   return  (uint8_t)TASK_INITIALISED;
+  66:	e03f      	b.n	e8 <FSF_ucRamHandleTask+0xe8>
+                vRamOpercheck( FSF_pucActualRAMAddress, FSF_arMarchDataBuffer,
+  68:	4b24      	ldr	r3, [pc, #144]	; (fc <FSF_ucRamHandleTask+0xfc>)
+  6a:	781a      	ldrb	r2, [r3, #0]
+                               FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+  6c:	4b24      	ldr	r3, [pc, #144]	; (100 <FSF_ucRamHandleTask+0x100>)
+  6e:	0052      	lsls	r2, r2, #1
+  70:	5cd1      	ldrb	r1, [r2, r3]
+                               FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+  72:	189b      	adds	r3, r3, r2
+  74:	785f      	ldrb	r7, [r3, #1]
+                               FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+  76:	9101      	str	r1, [sp, #4]
+   _FSF_vDoWhenPieceRamCheckStarted();
+  78:	f7ff fffe 	bl	0 <_FSF_vDoWhenPieceRamCheckStarted>
+   FSF_vRamOpercheck(pucRAM,pucDEXBuffer,ucPatNoInv,ucPatInv);
+  7c:	003b      	movs	r3, r7
+  7e:	9a01      	ldr	r2, [sp, #4]
+  80:	0030      	movs	r0, r6
+  82:	4921      	ldr	r1, [pc, #132]	; (108 <FSF_ucRamHandleTask+0x108>)
+  84:	f7ff fffe 	bl	0 <FSF_vRamOpercheck>
+   _FSF_vDoWhenPieceRamCheckFinished();
+  88:	f7ff fffe 	bl	0 <_FSF_vDoWhenPieceRamCheckFinished>
+                FSF_pucActualRAMAddress += (int16_t)FSF_atRamModule.ucBufferLength - 1;
+  8c:	4b23      	ldr	r3, [pc, #140]	; (11c <FSF_ucRamHandleTask+0x11c>)
+  8e:	781a      	ldrb	r2, [r3, #0]
+  90:	682b      	ldr	r3, [r5, #0]
+  92:	3a01      	subs	r2, #1
+  94:	189b      	adds	r3, r3, r2
+  96:	602b      	str	r3, [r5, #0]
+   if (FSF_ucRamTaskState == (uint8_t)FSF_RAM_CHECK_RESTART)
+  98:	7823      	ldrb	r3, [r4, #0]
+  9a:	2b00      	cmp	r3, #0
+  9c:	d021      	beq.n	e2 <FSF_ucRamHandleTask+0xe2>
+  9e:	e7df      	b.n	60 <FSF_ucRamHandleTask+0x60>
+         FSF_ucActualRAMIdx++;
+  a0:	4a1c      	ldr	r2, [pc, #112]	; (114 <FSF_ucRamHandleTask+0x114>)
+  a2:	7813      	ldrb	r3, [r2, #0]
+  a4:	3301      	adds	r3, #1
+  a6:	b2db      	uxtb	r3, r3
+  a8:	7013      	strb	r3, [r2, #0]
+         if (FSF_ucActualRAMIdx >= FSF_atRamModule.ucSegmentCount)
+  aa:	4a1c      	ldr	r2, [pc, #112]	; (11c <FSF_ucRamHandleTask+0x11c>)
+  ac:	7852      	ldrb	r2, [r2, #1]
+  ae:	429a      	cmp	r2, r3
+  b0:	d801      	bhi.n	b6 <FSF_ucRamHandleTask+0xb6>
+            FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_FINISH;
+  b2:	2303      	movs	r3, #3
+  b4:	e7d3      	b.n	5e <FSF_ucRamHandleTask+0x5e>
+            FSF_pucActualRAMAddress = FSF_atRamSegments[FSF_ucActualRAMIdx].pucStartSeg;
+  b6:	4a15      	ldr	r2, [pc, #84]	; (10c <FSF_ucRamHandleTask+0x10c>)
+  b8:	00db      	lsls	r3, r3, #3
+  ba:	5898      	ldr	r0, [r3, r2]
+            FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_OF_TESTED_BYTES;
+  bc:	18d2      	adds	r2, r2, r3
+            FSF_pucActualRAMAddress = FSF_atRamSegments[FSF_ucActualRAMIdx].pucStartSeg;
+  be:	4914      	ldr	r1, [pc, #80]	; (110 <FSF_ucRamHandleTask+0x110>)
+            FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_OF_TESTED_BYTES;
+  c0:	6853      	ldr	r3, [r2, #4]
+            FSF_pucActualRAMAddress = FSF_atRamSegments[FSF_ucActualRAMIdx].pucStartSeg;
+  c2:	6008      	str	r0, [r1, #0]
+            FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_OF_TESTED_BYTES;
+  c4:	3b17      	subs	r3, #23
+  c6:	4914      	ldr	r1, [pc, #80]	; (118 <FSF_ucRamHandleTask+0x118>)
+  c8:	e7bf      	b.n	4a <FSF_ucRamHandleTask+0x4a>
+         FSF_ucPatternIdx++;
+  ca:	4a0c      	ldr	r2, [pc, #48]	; (fc <FSF_ucRamHandleTask+0xfc>)
+         if (FSF_ucPatternIdx >= FSF_atRamModule.ucPatternCount)
+  cc:	4913      	ldr	r1, [pc, #76]	; (11c <FSF_ucRamHandleTask+0x11c>)
+         FSF_ucPatternIdx++;
+  ce:	7813      	ldrb	r3, [r2, #0]
+         if (FSF_ucPatternIdx >= FSF_atRamModule.ucPatternCount)
+  d0:	7888      	ldrb	r0, [r1, #2]
+         FSF_ucPatternIdx++;
+  d2:	3301      	adds	r3, #1
+  d4:	b2db      	uxtb	r3, r3
+  d6:	2100      	movs	r1, #0
+  d8:	7013      	strb	r3, [r2, #0]
+         if (FSF_ucPatternIdx >= FSF_atRamModule.ucPatternCount)
+  da:	4298      	cmp	r0, r3
+  dc:	d800      	bhi.n	e0 <FSF_ucRamHandleTask+0xe0>
+            FSF_ucPatternIdx = (uint8_t)0;
+  de:	7011      	strb	r1, [r2, #0]
+         FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_RESTART;
+  e0:	7021      	strb	r1, [r4, #0]
+   FSF_vReportSuccess((uint8_t)FSF_RAM_TEST);
+  e2:	2001      	movs	r0, #1
+  e4:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+}
+  e8:	2001      	movs	r0, #1
+  ea:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+         FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_INVALID_STATE,(uint8_t)0);
+  ec:	2200      	movs	r2, #0
+  ee:	2107      	movs	r1, #7
+  f0:	2001      	movs	r0, #1
+  f2:	f7ff fffe 	bl	0 <FSF_vReportError>
+         break;
+  f6:	e7cf      	b.n	98 <FSF_ucRamHandleTask+0x98>
+	...
+ 104:	00000010 	.word	0x00000010
+	...
+
+Disassembly of section .text.FSF_vRam_OperationalException:
+
+00000000 <FSF_vRam_OperationalException>:
+    Operational Exception
+=====================================================================================*/
+#ifdef OPERATIONAL_RAM_CHECK
+// The RAM Operational Exception
+void FSF_vRam_OperationalException(void)
+{
+   0:	b510      	push	{r4, lr}
+   FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_FATAL_EXCEPTION,(uint8_t)0);
+   2:	2200      	movs	r2, #0
+   4:	2102      	movs	r1, #2
+   6:	2001      	movs	r0, #1
+   8:	f7ff fffe 	bl	0 <FSF_vReportError>
+}
+   c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vRam_FatalException:
+
+00000000 <FSF_vRam_FatalException>:
+/*=====================================================================================
+    Fatal Exception
+=====================================================================================*/
+// The RAM Fatal Exception
+void FSF_vRam_FatalException(void)
+{
+   0:	b510      	push	{r4, lr}
+   FSF_vReportFatal();
+   2:	f7ff fffe 	bl	0 <FSF_vReportFatal>
+}
+   6:	bd10      	pop	{r4, pc}

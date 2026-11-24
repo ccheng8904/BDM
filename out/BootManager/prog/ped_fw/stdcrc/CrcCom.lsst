@@ -1,0 +1,878 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"CrcCom.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.CRC_CcittCalcByte8BitMachine,"ax",%progbits
+  18              		.align	1
+  19              		.global	CRC_CcittCalcByte8BitMachine
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	CRC_CcittCalcByte8BitMachine:
+  25              	.LVL0:
+  26              	.LFB5:
+  27              		.file 1 "common/prog/ped_fw/stdcrc/CrcCom.c"
+   1:common/prog/ped_fw/stdcrc/CrcCom.c **** /*******************************************************************************
+   2:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/stdcrc/CrcCom.c ****  *
+   5:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/stdcrc/CrcCom.c ****  *
+   9:common/prog/ped_fw/stdcrc/CrcCom.c ****  *******************************************************************************
+  10:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  PROJECT          PP PED Framework
+  11:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  COMP_ABBREV      CRC
+  12:common/prog/ped_fw/stdcrc/CrcCom.c ****  ******************************************************************************/
+  13:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  14:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  15:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  16:common/prog/ped_fw/stdcrc/CrcCom.c **** /* DOCUMENTATION                                                                                  *
+  17:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  18:common/prog/ped_fw/stdcrc/CrcCom.c **** /** \file
+  19:common/prog/ped_fw/stdcrc/CrcCom.c ****  *  \brief Implementation of CrcCom.
+  20:common/prog/ped_fw/stdcrc/CrcCom.c ****  *
+  21:common/prog/ped_fw/stdcrc/CrcCom.c ****  *   Common support functions and look-up-tables for the CRCs CCITT and Ethernet.
+  22:common/prog/ped_fw/stdcrc/CrcCom.c ****  */
+  23:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  24:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  25:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  26:common/prog/ped_fw/stdcrc/CrcCom.c **** /* INCLUDES                                                                                       *
+  27:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  28:common/prog/ped_fw/stdcrc/CrcCom.c **** #include "bsh_stdinc.h"
+  29:common/prog/ped_fw/stdcrc/CrcCom.c **** #include <stdint.h>
+  30:common/prog/ped_fw/stdcrc/CrcCom.c **** #include "CrcCom.h"
+  31:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 2
+
+
+  32:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  33:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  34:common/prog/ped_fw/stdcrc/CrcCom.c **** /* LOCAL (CONST) VARIABLE DEFINITIONS                                                             *
+  35:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+  36:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  37:common/prog/ped_fw/stdcrc/CrcCom.c **** const uint16_t CRC_CCITT_LookUpTable[CRC_TABLE_SIZE]=
+  38:common/prog/ped_fw/stdcrc/CrcCom.c **** {
+  39:common/prog/ped_fw/stdcrc/CrcCom.c ****      0x0000U, 0x1021U, 0x2042U, 0x3063U, 0x4084U, 0x50A5U, 0x60C6U, 0x70E7U,
+  40:common/prog/ped_fw/stdcrc/CrcCom.c ****      0x8108U, 0x9129U, 0xA14AU, 0xB16BU, 0xC18CU, 0xD1ADU, 0xE1CEU, 0xF1EFU
+  41:common/prog/ped_fw/stdcrc/CrcCom.c **** };
+  42:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  43:common/prog/ped_fw/stdcrc/CrcCom.c **** const uint32_t CRC_Ethernet_LookUpTable[CRC_TABLE_SIZE]=
+  44:common/prog/ped_fw/stdcrc/CrcCom.c **** {
+  45:common/prog/ped_fw/stdcrc/CrcCom.c ****    0x00000000U, 0x1DB71064U, 0x3B6E20C8U, 0x26D930ACU, 0x76DC4190U, 0x6B6B51F4U, 0x4DB26158U, 0x500
+  46:common/prog/ped_fw/stdcrc/CrcCom.c ****    0xEDB88320U, 0xF00F9344U, 0xD6D6A3E8U, 0xCB61B38CU, 0x9B64C2B0U, 0x86D3D2D4U, 0xA00AE278U, 0xBDB
+  47:common/prog/ped_fw/stdcrc/CrcCom.c **** };
+  48:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  49:common/prog/ped_fw/stdcrc/CrcCom.c **** const uint16_t CRC_CCITT_LookUpTableFast[CRC_TABLE_SIZE_LONG]=
+  50:common/prog/ped_fw/stdcrc/CrcCom.c **** {
+  51:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x0000U, 0x1021U, 0x2042U, 0x3063U, 0x4084U, 0x50A5U, 0x60C6U, 0x70E7U,
+  52:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x8108U, 0x9129U, 0xA14AU, 0xB16BU, 0xC18CU, 0xD1ADU, 0xE1CEU, 0xF1EFU,
+  53:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x1231U, 0x0210U, 0x3273U, 0x2252U, 0x52B5U, 0x4294U, 0x72F7U, 0x62D6U,
+  54:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x9339U, 0x8318U, 0xB37BU, 0xA35AU, 0xD3BDU, 0xC39CU, 0xF3FFU, 0xE3DEU,
+  55:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x2462U, 0x3443U, 0x0420U, 0x1401U, 0x64E6U, 0x74C7U, 0x44A4U, 0x5485U,
+  56:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xA56AU, 0xB54BU, 0x8528U, 0x9509U, 0xE5EEU, 0xF5CFU, 0xC5ACU, 0xD58DU,
+  57:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x3653U, 0x2672U, 0x1611U, 0x0630U, 0x76D7U, 0x66F6U, 0x5695U, 0x46B4U,
+  58:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xB75BU, 0xA77AU, 0x9719U, 0x8738U, 0xF7DFU, 0xE7FEU, 0xD79DU, 0xC7BCU,
+  59:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x48C4U, 0x58E5U, 0x6886U, 0x78A7U, 0x0840U, 0x1861U, 0x2802U, 0x3823U,
+  60:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xC9CCU, 0xD9EDU, 0xE98EU, 0xF9AFU, 0x8948U, 0x9969U, 0xA90AU, 0xB92BU,
+  61:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x5AF5U, 0x4AD4U, 0x7AB7U, 0x6A96U, 0x1A71U, 0x0A50U, 0x3A33U, 0x2A12U,
+  62:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xDBFDU, 0xCBDCU, 0xFBBFU, 0xEB9EU, 0x9B79U, 0x8B58U, 0xBB3BU, 0xAB1AU,
+  63:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x6CA6U, 0x7C87U, 0x4CE4U, 0x5CC5U, 0x2C22U, 0x3C03U, 0x0C60U, 0x1C41U,
+  64:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xEDAEU, 0xFD8FU, 0xCDECU, 0xDDCDU, 0xAD2AU, 0xBD0BU, 0x8D68U, 0x9D49U,
+  65:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x7E97U, 0x6EB6U, 0x5ED5U, 0x4EF4U, 0x3E13U, 0x2E32U, 0x1E51U, 0x0E70U,
+  66:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xFF9FU, 0xEFBEU, 0xDFDDU, 0xCFFCU, 0xBF1BU, 0xAF3AU, 0x9F59U, 0x8F78U,
+  67:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x9188U, 0x81A9U, 0xB1CAU, 0xA1EBU, 0xD10CU, 0xC12DU, 0xF14EU, 0xE16FU,
+  68:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x1080U, 0x00A1U, 0x30C2U, 0x20E3U, 0x5004U, 0x4025U, 0x7046U, 0x6067U,
+  69:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x83B9U, 0x9398U, 0xA3FBU, 0xB3DAU, 0xC33DU, 0xD31CU, 0xE37FU, 0xF35EU,
+  70:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x02B1U, 0x1290U, 0x22F3U, 0x32D2U, 0x4235U, 0x5214U, 0x6277U, 0x7256U,
+  71:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xB5EAU, 0xA5CBU, 0x95A8U, 0x8589U, 0xF56EU, 0xE54FU, 0xD52CU, 0xC50DU,
+  72:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x34E2U, 0x24C3U, 0x14A0U, 0x0481U, 0x7466U, 0x6447U, 0x5424U, 0x4405U,
+  73:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xA7DBU, 0xB7FAU, 0x8799U, 0x97B8U, 0xE75FU, 0xF77EU, 0xC71DU, 0xD73CU,
+  74:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x26D3U, 0x36F2U, 0x0691U, 0x16B0U, 0x6657U, 0x7676U, 0x4615U, 0x5634U,
+  75:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xD94CU, 0xC96DU, 0xF90EU, 0xE92FU, 0x99C8U, 0x89E9U, 0xB98AU, 0xA9ABU,
+  76:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x5844U, 0x4865U, 0x7806U, 0x6827U, 0x18C0U, 0x08E1U, 0x3882U, 0x28A3U,
+  77:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xCB7DU, 0xDB5CU, 0xEB3FU, 0xFB1EU, 0x8BF9U, 0x9BD8U, 0xABBBU, 0xBB9AU,
+  78:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x4A75U, 0x5A54U, 0x6A37U, 0x7A16U, 0x0AF1U, 0x1AD0U, 0x2AB3U, 0x3A92U,
+  79:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xFD2EU, 0xED0FU, 0xDD6CU, 0xCD4DU, 0xBDAAU, 0xAD8BU, 0x9DE8U, 0x8DC9U,
+  80:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x7C26U, 0x6C07U, 0x5C64U, 0x4C45U, 0x3CA2U, 0x2C83U, 0x1CE0U, 0x0CC1U,
+  81:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xEF1FU, 0xFF3EU, 0xCF5DU, 0xDF7CU, 0xAF9BU, 0xBFBAU, 0x8FD9U, 0x9FF8U,
+  82:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x6E17U, 0x7E36U, 0x4E55U, 0x5E74U, 0x2E93U, 0x3EB2U, 0x0ED1U, 0x1EF0U
+  83:common/prog/ped_fw/stdcrc/CrcCom.c ****     };
+  84:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  85:common/prog/ped_fw/stdcrc/CrcCom.c **** const uint32_t CRC_Ethernet_LookUpTableFast[CRC_TABLE_SIZE_LONG]=
+  86:common/prog/ped_fw/stdcrc/CrcCom.c **** {
+  87:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x00000000U, 0x77073096U, 0xEE0E612CU, 0x990951BAU,
+  88:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x076DC419U, 0x706AF48FU, 0xE963A535U, 0x9E6495A3U,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 3
+
+
+  89:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x0EDB8832U, 0x79DCB8A4U, 0xE0D5E91EU, 0x97D2D988U,
+  90:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x09B64C2BU, 0x7EB17CBDU, 0xE7B82D07U, 0x90BF1D91U,
+  91:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x1DB71064U, 0x6AB020F2U, 0xF3B97148U, 0x84BE41DEU,
+  92:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x1ADAD47DU, 0x6DDDE4EBU, 0xF4D4B551U, 0x83D385C7U,
+  93:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x136C9856U, 0x646BA8C0U, 0xFD62F97AU, 0x8A65C9ECU,
+  94:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x14015C4FU, 0x63066CD9U, 0xFA0F3D63U, 0x8D080DF5U,
+  95:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x3B6E20C8U, 0x4C69105EU, 0xD56041E4U, 0xA2677172U,
+  96:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x3C03E4D1U, 0x4B04D447U, 0xD20D85FDU, 0xA50AB56BU,
+  97:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x35B5A8FAU, 0x42B2986CU, 0xDBBBC9D6U, 0xACBCF940U,
+  98:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x32D86CE3U, 0x45DF5C75U, 0xDCD60DCFU, 0xABD13D59U,
+  99:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x26D930ACU, 0x51DE003AU, 0xC8D75180U, 0xBFD06116U,
+ 100:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x21B4F4B5U, 0x56B3C423U, 0xCFBA9599U, 0xB8BDA50FU,
+ 101:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x2802B89EU, 0x5F058808U, 0xC60CD9B2U, 0xB10BE924U,
+ 102:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x2F6F7C87U, 0x58684C11U, 0xC1611DABU, 0xB6662D3DU,
+ 103:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x76DC4190U, 0x01DB7106U, 0x98D220BCU, 0xEFD5102AU,
+ 104:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x71B18589U, 0x06B6B51FU, 0x9FBFE4A5U, 0xE8B8D433U,
+ 105:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x7807C9A2U, 0x0F00F934U, 0x9609A88EU, 0xE10E9818U,
+ 106:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x7F6A0DBBU, 0x086D3D2DU, 0x91646C97U, 0xE6635C01U,
+ 107:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x6B6B51F4U, 0x1C6C6162U, 0x856530D8U, 0xF262004EU,
+ 108:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x6C0695EDU, 0x1B01A57BU, 0x8208F4C1U, 0xF50FC457U,
+ 109:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x65B0D9C6U, 0x12B7E950U, 0x8BBEB8EAU, 0xFCB9887CU,
+ 110:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x62DD1DDFU, 0x15DA2D49U, 0x8CD37CF3U, 0xFBD44C65U,
+ 111:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x4DB26158U, 0x3AB551CEU, 0xA3BC0074U, 0xD4BB30E2U,
+ 112:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x4ADFA541U, 0x3DD895D7U, 0xA4D1C46DU, 0xD3D6F4FBU,
+ 113:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x4369E96AU, 0x346ED9FCU, 0xAD678846U, 0xDA60B8D0U,
+ 114:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x44042D73U, 0x33031DE5U, 0xAA0A4C5FU, 0xDD0D7CC9U,
+ 115:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x5005713CU, 0x270241AAU, 0xBE0B1010U, 0xC90C2086U,
+ 116:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x5768B525U, 0x206F85B3U, 0xB966D409U, 0xCE61E49FU,
+ 117:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x5EDEF90EU, 0x29D9C998U, 0xB0D09822U, 0xC7D7A8B4U,
+ 118:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x59B33D17U, 0x2EB40D81U, 0xB7BD5C3BU, 0xC0BA6CADU,
+ 119:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xEDB88320U, 0x9ABFB3B6U, 0x03B6E20CU, 0x74B1D29AU,
+ 120:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xEAD54739U, 0x9DD277AFU, 0x04DB2615U, 0x73DC1683U,
+ 121:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xE3630B12U, 0x94643B84U, 0x0D6D6A3EU, 0x7A6A5AA8U,
+ 122:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xE40ECF0BU, 0x9309FF9DU, 0x0A00AE27U, 0x7D079EB1U,
+ 123:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xF00F9344U, 0x8708A3D2U, 0x1E01F268U, 0x6906C2FEU,
+ 124:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xF762575DU, 0x806567CBU, 0x196C3671U, 0x6E6B06E7U,
+ 125:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xFED41B76U, 0x89D32BE0U, 0x10DA7A5AU, 0x67DD4ACCU,
+ 126:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xF9B9DF6FU, 0x8EBEEFF9U, 0x17B7BE43U, 0x60B08ED5U,
+ 127:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xD6D6A3E8U, 0xA1D1937EU, 0x38D8C2C4U, 0x4FDFF252U,
+ 128:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xD1BB67F1U, 0xA6BC5767U, 0x3FB506DDU, 0x48B2364BU,
+ 129:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xD80D2BDAU, 0xAF0A1B4CU, 0x36034AF6U, 0x41047A60U,
+ 130:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xDF60EFC3U, 0xA867DF55U, 0x316E8EEFU, 0x4669BE79U,
+ 131:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xCB61B38CU, 0xBC66831AU, 0x256FD2A0U, 0x5268E236U,
+ 132:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xCC0C7795U, 0xBB0B4703U, 0x220216B9U, 0x5505262FU,
+ 133:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xC5BA3BBEU, 0xB2BD0B28U, 0x2BB45A92U, 0x5CB36A04U,
+ 134:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xC2D7FFA7U, 0xB5D0CF31U, 0x2CD99E8BU, 0x5BDEAE1DU,
+ 135:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x9B64C2B0U, 0xEC63F226U, 0x756AA39CU, 0x026D930AU,
+ 136:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x9C0906A9U, 0xEB0E363FU, 0x72076785U, 0x05005713U,
+ 137:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x95BF4A82U, 0xE2B87A14U, 0x7BB12BAEU, 0x0CB61B38U,
+ 138:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x92D28E9BU, 0xE5D5BE0DU, 0x7CDCEFB7U, 0x0BDBDF21U,
+ 139:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x86D3D2D4U, 0xF1D4E242U, 0x68DDB3F8U, 0x1FDA836EU,
+ 140:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x81BE16CDU, 0xF6B9265BU, 0x6FB077E1U, 0x18B74777U,
+ 141:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x88085AE6U, 0xFF0F6A70U, 0x66063BCAU, 0x11010B5CU,
+ 142:common/prog/ped_fw/stdcrc/CrcCom.c ****         0x8F659EFFU, 0xF862AE69U, 0x616BFFD3U, 0x166CCF45U,
+ 143:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xA00AE278U, 0xD70DD2EEU, 0x4E048354U, 0x3903B3C2U,
+ 144:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xA7672661U, 0xD06016F7U, 0x4969474DU, 0x3E6E77DBU,
+ 145:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xAED16A4AU, 0xD9D65ADCU, 0x40DF0B66U, 0x37D83BF0U,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 4
+
+
+ 146:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xA9BCAE53U, 0xDEBB9EC5U, 0x47B2CF7FU, 0x30B5FFE9U,
+ 147:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xBDBDF21CU, 0xCABAC28AU, 0x53B39330U, 0x24B4A3A6U,
+ 148:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xBAD03605U, 0xCDD70693U, 0x54DE5729U, 0x23D967BFU,
+ 149:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xB3667A2EU, 0xC4614AB8U, 0x5D681B02U, 0x2A6F2B94U,
+ 150:common/prog/ped_fw/stdcrc/CrcCom.c ****         0xB40BBE37U, 0xC30C8EA1U, 0x5A05DF1BU, 0x2D02EF8DU
+ 151:common/prog/ped_fw/stdcrc/CrcCom.c ****     };
+ 152:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 153:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+ 154:common/prog/ped_fw/stdcrc/CrcCom.c **** /* LOCAL FUNCTION DEFINITIONS                                                                     *
+ 155:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+ 156:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 157:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 158:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 159:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+ 160:common/prog/ped_fw/stdcrc/CrcCom.c **** /* GLOBAL FUNCTION DEFINITIONS                                                                    *
+ 161:common/prog/ped_fw/stdcrc/CrcCom.c **** /**************************************************************************************************
+ 162:common/prog/ped_fw/stdcrc/CrcCom.c **** uint16_t CRC_CcittCalcByte8BitMachine( uint16_t crc, uint8_t value )
+ 163:common/prog/ped_fw/stdcrc/CrcCom.c **** {
+  28              		.loc 1 163 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ 164:common/prog/ped_fw/stdcrc/CrcCom.c ****    uint8_t LoCrc; //Low CRC
+  32              		.loc 1 164 4 view .LVU1
+ 165:common/prog/ped_fw/stdcrc/CrcCom.c ****    uint8_t HiCrc; //High CRC
+  33              		.loc 1 165 4 view .LVU2
+ 166:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 167:common/prog/ped_fw/stdcrc/CrcCom.c ****    HiCrc  =  (uint8_t)(crc       );
+  34              		.loc 1 167 4 view .LVU3
+ 168:common/prog/ped_fw/stdcrc/CrcCom.c ****    LoCrc  =  (uint8_t)(crc   >> 8U) ^ value;
+  35              		.loc 1 168 4 view .LVU4
+ 163:common/prog/ped_fw/stdcrc/CrcCom.c ****    uint8_t LoCrc; //Low CRC
+  36              		.loc 1 163 1 is_stmt 0 view .LVU5
+  37 0000 0200     		movs	r2, r0
+  38              		.loc 1 168 14 view .LVU6
+  39 0002 030A     		lsrs	r3, r0, #8
+  40              		.loc 1 168 11 view .LVU7
+  41 0004 4B40     		eors	r3, r1
+  42              	.LVL1:
+ 169:common/prog/ped_fw/stdcrc/CrcCom.c ****    LoCrc ^=           (LoCrc >> 4U);
+  43              		.loc 1 169 4 is_stmt 1 view .LVU8
+  44              		.loc 1 169 10 is_stmt 0 view .LVU9
+  45 0006 1909     		lsrs	r1, r3, #4
+  46              	.LVL2:
+  47              		.loc 1 169 10 view .LVU10
+  48 0008 5940     		eors	r1, r3
+  49              	.LVL3:
+ 170:common/prog/ped_fw/stdcrc/CrcCom.c ****    HiCrc ^=  (uint8_t)(LoCrc << 4U);
+  50              		.loc 1 170 4 is_stmt 1 view .LVU11
+ 171:common/prog/ped_fw/stdcrc/CrcCom.c ****    HiCrc ^=           (LoCrc >> 3U);
+  51              		.loc 1 171 4 view .LVU12
+ 172:common/prog/ped_fw/stdcrc/CrcCom.c ****    LoCrc ^=  (uint8_t)(LoCrc << 5U);
+  52              		.loc 1 172 4 view .LVU13
+ 163:common/prog/ped_fw/stdcrc/CrcCom.c ****    uint8_t LoCrc; //Low CRC
+  53              		.loc 1 163 1 is_stmt 0 view .LVU14
+  54 000a 10B5     		push	{r4, lr}
+  55              	.LCFI0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 5
+
+
+  56              		.cfi_def_cfa_offset 8
+  57              		.cfi_offset 4, -8
+  58              		.cfi_offset 14, -4
+ 170:common/prog/ped_fw/stdcrc/CrcCom.c ****    HiCrc ^=           (LoCrc >> 3U);
+  59              		.loc 1 170 14 view .LVU15
+  60 000c 0B01     		lsls	r3, r1, #4
+ 171:common/prog/ped_fw/stdcrc/CrcCom.c ****    LoCrc ^=  (uint8_t)(LoCrc << 5U);
+  61              		.loc 1 171 10 view .LVU16
+  62 000e CC08     		lsrs	r4, r1, #3
+  63              		.loc 1 172 14 view .LVU17
+  64 0010 4801     		lsls	r0, r1, #5
+  65              	.LVL4:
+ 171:common/prog/ped_fw/stdcrc/CrcCom.c ****    LoCrc ^=  (uint8_t)(LoCrc << 5U);
+  66              		.loc 1 171 10 view .LVU18
+  67 0012 6340     		eors	r3, r4
+  68 0014 5340     		eors	r3, r2
+  69              		.loc 1 172 14 view .LVU19
+  70 0016 C0B2     		uxtb	r0, r0
+  71              	.LVL5:
+ 173:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 174:common/prog/ped_fw/stdcrc/CrcCom.c ****    return ((uint16_t)HiCrc << 8U) | LoCrc;
+  72              		.loc 1 174 4 is_stmt 1 view .LVU20
+ 172:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+  73              		.loc 1 172 10 is_stmt 0 view .LVU21
+  74 0018 4840     		eors	r0, r1
+  75              	.LVL6:
+  76              		.loc 1 174 12 view .LVU22
+  77 001a DBB2     		uxtb	r3, r3
+  78              		.loc 1 174 28 view .LVU23
+  79 001c 1B02     		lsls	r3, r3, #8
+  80              		.loc 1 174 35 view .LVU24
+  81 001e C0B2     		uxtb	r0, r0
+  82 0020 1843     		orrs	r0, r3
+ 175:common/prog/ped_fw/stdcrc/CrcCom.c **** 
+ 176:common/prog/ped_fw/stdcrc/CrcCom.c **** }
+  83              		.loc 1 176 1 view .LVU25
+  84              		@ sp needed
+  85 0022 10BD     		pop	{r4, pc}
+  86              		.cfi_endproc
+  87              	.LFE5:
+  89              		.global	CRC_Ethernet_LookUpTableFast
+  90              		.global	CRC_CCITT_LookUpTableFast
+  91              		.global	CRC_Ethernet_LookUpTable
+  92              		.global	CRC_CCITT_LookUpTable
+  93              		.section	.rodata.CRC_CCITT_LookUpTable,"a"
+  94              		.align	1
+  97              	CRC_CCITT_LookUpTable:
+  98 0000 0000     		.short	0
+  99 0002 2110     		.short	4129
+ 100 0004 4220     		.short	8258
+ 101 0006 6330     		.short	12387
+ 102 0008 8440     		.short	16516
+ 103 000a A550     		.short	20645
+ 104 000c C660     		.short	24774
+ 105 000e E770     		.short	28903
+ 106 0010 0881     		.short	-32504
+ 107 0012 2991     		.short	-28375
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 6
+
+
+ 108 0014 4AA1     		.short	-24246
+ 109 0016 6BB1     		.short	-20117
+ 110 0018 8CC1     		.short	-15988
+ 111 001a ADD1     		.short	-11859
+ 112 001c CEE1     		.short	-7730
+ 113 001e EFF1     		.short	-3601
+ 114              		.section	.rodata.CRC_CCITT_LookUpTableFast,"a"
+ 115              		.align	1
+ 118              	CRC_CCITT_LookUpTableFast:
+ 119 0000 0000     		.short	0
+ 120 0002 2110     		.short	4129
+ 121 0004 4220     		.short	8258
+ 122 0006 6330     		.short	12387
+ 123 0008 8440     		.short	16516
+ 124 000a A550     		.short	20645
+ 125 000c C660     		.short	24774
+ 126 000e E770     		.short	28903
+ 127 0010 0881     		.short	-32504
+ 128 0012 2991     		.short	-28375
+ 129 0014 4AA1     		.short	-24246
+ 130 0016 6BB1     		.short	-20117
+ 131 0018 8CC1     		.short	-15988
+ 132 001a ADD1     		.short	-11859
+ 133 001c CEE1     		.short	-7730
+ 134 001e EFF1     		.short	-3601
+ 135 0020 3112     		.short	4657
+ 136 0022 1002     		.short	528
+ 137 0024 7332     		.short	12915
+ 138 0026 5222     		.short	8786
+ 139 0028 B552     		.short	21173
+ 140 002a 9442     		.short	17044
+ 141 002c F772     		.short	29431
+ 142 002e D662     		.short	25302
+ 143 0030 3993     		.short	-27847
+ 144 0032 1883     		.short	-31976
+ 145 0034 7BB3     		.short	-19589
+ 146 0036 5AA3     		.short	-23718
+ 147 0038 BDD3     		.short	-11331
+ 148 003a 9CC3     		.short	-15460
+ 149 003c FFF3     		.short	-3073
+ 150 003e DEE3     		.short	-7202
+ 151 0040 6224     		.short	9314
+ 152 0042 4334     		.short	13379
+ 153 0044 2004     		.short	1056
+ 154 0046 0114     		.short	5121
+ 155 0048 E664     		.short	25830
+ 156 004a C774     		.short	29895
+ 157 004c A444     		.short	17572
+ 158 004e 8554     		.short	21637
+ 159 0050 6AA5     		.short	-23190
+ 160 0052 4BB5     		.short	-19125
+ 161 0054 2885     		.short	-31448
+ 162 0056 0995     		.short	-27383
+ 163 0058 EEE5     		.short	-6674
+ 164 005a CFF5     		.short	-2609
+ 165 005c ACC5     		.short	-14932
+ 166 005e 8DD5     		.short	-10867
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 7
+
+
+ 167 0060 5336     		.short	13907
+ 168 0062 7226     		.short	9842
+ 169 0064 1116     		.short	5649
+ 170 0066 3006     		.short	1584
+ 171 0068 D776     		.short	30423
+ 172 006a F666     		.short	26358
+ 173 006c 9556     		.short	22165
+ 174 006e B446     		.short	18100
+ 175 0070 5BB7     		.short	-18597
+ 176 0072 7AA7     		.short	-22662
+ 177 0074 1997     		.short	-26855
+ 178 0076 3887     		.short	-30920
+ 179 0078 DFF7     		.short	-2081
+ 180 007a FEE7     		.short	-6146
+ 181 007c 9DD7     		.short	-10339
+ 182 007e BCC7     		.short	-14404
+ 183 0080 C448     		.short	18628
+ 184 0082 E558     		.short	22757
+ 185 0084 8668     		.short	26758
+ 186 0086 A778     		.short	30887
+ 187 0088 4008     		.short	2112
+ 188 008a 6118     		.short	6241
+ 189 008c 0228     		.short	10242
+ 190 008e 2338     		.short	14371
+ 191 0090 CCC9     		.short	-13876
+ 192 0092 EDD9     		.short	-9747
+ 193 0094 8EE9     		.short	-5746
+ 194 0096 AFF9     		.short	-1617
+ 195 0098 4889     		.short	-30392
+ 196 009a 6999     		.short	-26263
+ 197 009c 0AA9     		.short	-22262
+ 198 009e 2BB9     		.short	-18133
+ 199 00a0 F55A     		.short	23285
+ 200 00a2 D44A     		.short	19156
+ 201 00a4 B77A     		.short	31415
+ 202 00a6 966A     		.short	27286
+ 203 00a8 711A     		.short	6769
+ 204 00aa 500A     		.short	2640
+ 205 00ac 333A     		.short	14899
+ 206 00ae 122A     		.short	10770
+ 207 00b0 FDDB     		.short	-9219
+ 208 00b2 DCCB     		.short	-13348
+ 209 00b4 BFFB     		.short	-1089
+ 210 00b6 9EEB     		.short	-5218
+ 211 00b8 799B     		.short	-25735
+ 212 00ba 588B     		.short	-29864
+ 213 00bc 3BBB     		.short	-17605
+ 214 00be 1AAB     		.short	-21734
+ 215 00c0 A66C     		.short	27814
+ 216 00c2 877C     		.short	31879
+ 217 00c4 E44C     		.short	19684
+ 218 00c6 C55C     		.short	23749
+ 219 00c8 222C     		.short	11298
+ 220 00ca 033C     		.short	15363
+ 221 00cc 600C     		.short	3168
+ 222 00ce 411C     		.short	7233
+ 223 00d0 AEED     		.short	-4690
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 8
+
+
+ 224 00d2 8FFD     		.short	-625
+ 225 00d4 ECCD     		.short	-12820
+ 226 00d6 CDDD     		.short	-8755
+ 227 00d8 2AAD     		.short	-21206
+ 228 00da 0BBD     		.short	-17141
+ 229 00dc 688D     		.short	-29336
+ 230 00de 499D     		.short	-25271
+ 231 00e0 977E     		.short	32407
+ 232 00e2 B66E     		.short	28342
+ 233 00e4 D55E     		.short	24277
+ 234 00e6 F44E     		.short	20212
+ 235 00e8 133E     		.short	15891
+ 236 00ea 322E     		.short	11826
+ 237 00ec 511E     		.short	7761
+ 238 00ee 700E     		.short	3696
+ 239 00f0 9FFF     		.short	-97
+ 240 00f2 BEEF     		.short	-4162
+ 241 00f4 DDDF     		.short	-8227
+ 242 00f6 FCCF     		.short	-12292
+ 243 00f8 1BBF     		.short	-16613
+ 244 00fa 3AAF     		.short	-20678
+ 245 00fc 599F     		.short	-24743
+ 246 00fe 788F     		.short	-28808
+ 247 0100 8891     		.short	-28280
+ 248 0102 A981     		.short	-32343
+ 249 0104 CAB1     		.short	-20022
+ 250 0106 EBA1     		.short	-24085
+ 251 0108 0CD1     		.short	-12020
+ 252 010a 2DC1     		.short	-16083
+ 253 010c 4EF1     		.short	-3762
+ 254 010e 6FE1     		.short	-7825
+ 255 0110 8010     		.short	4224
+ 256 0112 A100     		.short	161
+ 257 0114 C230     		.short	12482
+ 258 0116 E320     		.short	8419
+ 259 0118 0450     		.short	20484
+ 260 011a 2540     		.short	16421
+ 261 011c 4670     		.short	28742
+ 262 011e 6760     		.short	24679
+ 263 0120 B983     		.short	-31815
+ 264 0122 9893     		.short	-27752
+ 265 0124 FBA3     		.short	-23557
+ 266 0126 DAB3     		.short	-19494
+ 267 0128 3DC3     		.short	-15555
+ 268 012a 1CD3     		.short	-11492
+ 269 012c 7FE3     		.short	-7297
+ 270 012e 5EF3     		.short	-3234
+ 271 0130 B102     		.short	689
+ 272 0132 9012     		.short	4752
+ 273 0134 F322     		.short	8947
+ 274 0136 D232     		.short	13010
+ 275 0138 3542     		.short	16949
+ 276 013a 1452     		.short	21012
+ 277 013c 7762     		.short	25207
+ 278 013e 5672     		.short	29270
+ 279 0140 EAB5     		.short	-18966
+ 280 0142 CBA5     		.short	-23093
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 9
+
+
+ 281 0144 A895     		.short	-27224
+ 282 0146 8985     		.short	-31351
+ 283 0148 6EF5     		.short	-2706
+ 284 014a 4FE5     		.short	-6833
+ 285 014c 2CD5     		.short	-10964
+ 286 014e 0DC5     		.short	-15091
+ 287 0150 E234     		.short	13538
+ 288 0152 C324     		.short	9411
+ 289 0154 A014     		.short	5280
+ 290 0156 8104     		.short	1153
+ 291 0158 6674     		.short	29798
+ 292 015a 4764     		.short	25671
+ 293 015c 2454     		.short	21540
+ 294 015e 0544     		.short	17413
+ 295 0160 DBA7     		.short	-22565
+ 296 0162 FAB7     		.short	-18438
+ 297 0164 9987     		.short	-30823
+ 298 0166 B897     		.short	-26696
+ 299 0168 5FE7     		.short	-6305
+ 300 016a 7EF7     		.short	-2178
+ 301 016c 1DC7     		.short	-14563
+ 302 016e 3CD7     		.short	-10436
+ 303 0170 D326     		.short	9939
+ 304 0172 F236     		.short	14066
+ 305 0174 9106     		.short	1681
+ 306 0176 B016     		.short	5808
+ 307 0178 5766     		.short	26199
+ 308 017a 7676     		.short	30326
+ 309 017c 1546     		.short	17941
+ 310 017e 3456     		.short	22068
+ 311 0180 4CD9     		.short	-9908
+ 312 0182 6DC9     		.short	-13971
+ 313 0184 0EF9     		.short	-1778
+ 314 0186 2FE9     		.short	-5841
+ 315 0188 C899     		.short	-26168
+ 316 018a E989     		.short	-30231
+ 317 018c 8AB9     		.short	-18038
+ 318 018e ABA9     		.short	-22101
+ 319 0190 4458     		.short	22596
+ 320 0192 6548     		.short	18533
+ 321 0194 0678     		.short	30726
+ 322 0196 2768     		.short	26663
+ 323 0198 C018     		.short	6336
+ 324 019a E108     		.short	2273
+ 325 019c 8238     		.short	14466
+ 326 019e A328     		.short	10403
+ 327 01a0 7DCB     		.short	-13443
+ 328 01a2 5CDB     		.short	-9380
+ 329 01a4 3FEB     		.short	-5313
+ 330 01a6 1EFB     		.short	-1250
+ 331 01a8 F98B     		.short	-29703
+ 332 01aa D89B     		.short	-25640
+ 333 01ac BBAB     		.short	-21573
+ 334 01ae 9ABB     		.short	-17510
+ 335 01b0 754A     		.short	19061
+ 336 01b2 545A     		.short	23124
+ 337 01b4 376A     		.short	27191
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 10
+
+
+ 338 01b6 167A     		.short	31254
+ 339 01b8 F10A     		.short	2801
+ 340 01ba D01A     		.short	6864
+ 341 01bc B32A     		.short	10931
+ 342 01be 923A     		.short	14994
+ 343 01c0 2EFD     		.short	-722
+ 344 01c2 0FED     		.short	-4849
+ 345 01c4 6CDD     		.short	-8852
+ 346 01c6 4DCD     		.short	-12979
+ 347 01c8 AABD     		.short	-16982
+ 348 01ca 8BAD     		.short	-21109
+ 349 01cc E89D     		.short	-25112
+ 350 01ce C98D     		.short	-29239
+ 351 01d0 267C     		.short	31782
+ 352 01d2 076C     		.short	27655
+ 353 01d4 645C     		.short	23652
+ 354 01d6 454C     		.short	19525
+ 355 01d8 A23C     		.short	15522
+ 356 01da 832C     		.short	11395
+ 357 01dc E01C     		.short	7392
+ 358 01de C10C     		.short	3265
+ 359 01e0 1FEF     		.short	-4321
+ 360 01e2 3EFF     		.short	-194
+ 361 01e4 5DCF     		.short	-12451
+ 362 01e6 7CDF     		.short	-8324
+ 363 01e8 9BAF     		.short	-20581
+ 364 01ea BABF     		.short	-16454
+ 365 01ec D98F     		.short	-28711
+ 366 01ee F89F     		.short	-24584
+ 367 01f0 176E     		.short	28183
+ 368 01f2 367E     		.short	32310
+ 369 01f4 554E     		.short	20053
+ 370 01f6 745E     		.short	24180
+ 371 01f8 932E     		.short	11923
+ 372 01fa B23E     		.short	16050
+ 373 01fc D10E     		.short	3793
+ 374 01fe F01E     		.short	7920
+ 375              		.section	.rodata.CRC_Ethernet_LookUpTable,"a"
+ 376              		.align	2
+ 379              	CRC_Ethernet_LookUpTable:
+ 380 0000 00000000 		.word	0
+ 381 0004 6410B71D 		.word	498536548
+ 382 0008 C8206E3B 		.word	997073096
+ 383 000c AC30D926 		.word	651767980
+ 384 0010 9041DC76 		.word	1994146192
+ 385 0014 F4516B6B 		.word	1802195444
+ 386 0018 5861B24D 		.word	1303535960
+ 387 001c 3C710550 		.word	1342533948
+ 388 0020 2083B8ED 		.word	-306674912
+ 389 0024 44930FF0 		.word	-267414716
+ 390 0028 E8A3D6D6 		.word	-690576408
+ 391 002c 8CB361CB 		.word	-882789492
+ 392 0030 B0C2649B 		.word	-1687895376
+ 393 0034 D4D2D386 		.word	-2032938284
+ 394 0038 78E20AA0 		.word	-1609899400
+ 395 003c 1CF2BDBD 		.word	-1111625188
+ 396              		.section	.rodata.CRC_Ethernet_LookUpTableFast,"a"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 11
+
+
+ 397              		.align	2
+ 400              	CRC_Ethernet_LookUpTableFast:
+ 401 0000 00000000 		.word	0
+ 402 0004 96300777 		.word	1996959894
+ 403 0008 2C610EEE 		.word	-301047508
+ 404 000c BA510999 		.word	-1727442502
+ 405 0010 19C46D07 		.word	124634137
+ 406 0014 8FF46A70 		.word	1886057615
+ 407 0018 35A563E9 		.word	-379345611
+ 408 001c A395649E 		.word	-1637575261
+ 409 0020 3288DB0E 		.word	249268274
+ 410 0024 A4B8DC79 		.word	2044508324
+ 411 0028 1EE9D5E0 		.word	-522852066
+ 412 002c 88D9D297 		.word	-1747789432
+ 413 0030 2B4CB609 		.word	162941995
+ 414 0034 BD7CB17E 		.word	2125561021
+ 415 0038 072DB8E7 		.word	-407360249
+ 416 003c 911DBF90 		.word	-1866523247
+ 417 0040 6410B71D 		.word	498536548
+ 418 0044 F220B06A 		.word	1789927666
+ 419 0048 4871B9F3 		.word	-205950648
+ 420 004c DE41BE84 		.word	-2067906082
+ 421 0050 7DD4DA1A 		.word	450548861
+ 422 0054 EBE4DD6D 		.word	1843258603
+ 423 0058 51B5D4F4 		.word	-187386543
+ 424 005c C785D383 		.word	-2083289657
+ 425 0060 56986C13 		.word	325883990
+ 426 0064 C0A86B64 		.word	1684777152
+ 427 0068 7AF962FD 		.word	-43845254
+ 428 006c ECC9658A 		.word	-1973040660
+ 429 0070 4F5C0114 		.word	335633487
+ 430 0074 D96C0663 		.word	1661365465
+ 431 0078 633D0FFA 		.word	-99664541
+ 432 007c F50D088D 		.word	-1928851979
+ 433 0080 C8206E3B 		.word	997073096
+ 434 0084 5E10694C 		.word	1281953886
+ 435 0088 E44160D5 		.word	-715111964
+ 436 008c 727167A2 		.word	-1570279054
+ 437 0090 D1E4033C 		.word	1006888145
+ 438 0094 47D4044B 		.word	1258607687
+ 439 0098 FD850DD2 		.word	-770865667
+ 440 009c 6BB50AA5 		.word	-1526024853
+ 441 00a0 FAA8B535 		.word	901097722
+ 442 00a4 6C98B242 		.word	1119000684
+ 443 00a8 D6C9BBDB 		.word	-608450090
+ 444 00ac 40F9BCAC 		.word	-1396901568
+ 445 00b0 E36CD832 		.word	853044451
+ 446 00b4 755CDF45 		.word	1172266101
+ 447 00b8 CF0DD6DC 		.word	-589951537
+ 448 00bc 593DD1AB 		.word	-1412350631
+ 449 00c0 AC30D926 		.word	651767980
+ 450 00c4 3A00DE51 		.word	1373503546
+ 451 00c8 8051D7C8 		.word	-925412992
+ 452 00cc 1661D0BF 		.word	-1076862698
+ 453 00d0 B5F4B421 		.word	565507253
+ 454 00d4 23C4B356 		.word	1454621731
+ 455 00d8 9995BACF 		.word	-809855591
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 12
+
+
+ 456 00dc 0FA5BDB8 		.word	-1195530993
+ 457 00e0 9EB80228 		.word	671266974
+ 458 00e4 0888055F 		.word	1594198024
+ 459 00e8 B2D90CC6 		.word	-972236366
+ 460 00ec 24E90BB1 		.word	-1324619484
+ 461 00f0 877C6F2F 		.word	795835527
+ 462 00f4 114C6858 		.word	1483230225
+ 463 00f8 AB1D61C1 		.word	-1050600021
+ 464 00fc 3D2D66B6 		.word	-1234817731
+ 465 0100 9041DC76 		.word	1994146192
+ 466 0104 0671DB01 		.word	31158534
+ 467 0108 BC20D298 		.word	-1731059524
+ 468 010c 2A10D5EF 		.word	-271249366
+ 469 0110 8985B171 		.word	1907459465
+ 470 0114 1FB5B606 		.word	112637215
+ 471 0118 A5E4BF9F 		.word	-1614814043
+ 472 011c 33D4B8E8 		.word	-390540237
+ 473 0120 A2C90778 		.word	2013776290
+ 474 0124 34F9000F 		.word	251722036
+ 475 0128 8EA80996 		.word	-1777751922
+ 476 012c 18980EE1 		.word	-519137256
+ 477 0130 BB0D6A7F 		.word	2137656763
+ 478 0134 2D3D6D08 		.word	141376813
+ 479 0138 976C6491 		.word	-1855689577
+ 480 013c 015C63E6 		.word	-429695999
+ 481 0140 F4516B6B 		.word	1802195444
+ 482 0144 62616C1C 		.word	476864866
+ 483 0148 D8306585 		.word	-2056965928
+ 484 014c 4E0062F2 		.word	-228458418
+ 485 0150 ED95066C 		.word	1812370925
+ 486 0154 7BA5011B 		.word	453092731
+ 487 0158 C1F40882 		.word	-2113342271
+ 488 015c 57C40FF5 		.word	-183516073
+ 489 0160 C6D9B065 		.word	1706088902
+ 490 0164 50E9B712 		.word	314042704
+ 491 0168 EAB8BE8B 		.word	-1950435094
+ 492 016c 7C88B9FC 		.word	-54949764
+ 493 0170 DF1DDD62 		.word	1658658271
+ 494 0174 492DDA15 		.word	366619977
+ 495 0178 F37CD38C 		.word	-1932296973
+ 496 017c 654CD4FB 		.word	-69972891
+ 497 0180 5861B24D 		.word	1303535960
+ 498 0184 CE51B53A 		.word	984961486
+ 499 0188 7400BCA3 		.word	-1547960204
+ 500 018c E230BBD4 		.word	-725929758
+ 501 0190 41A5DF4A 		.word	1256170817
+ 502 0194 D795D83D 		.word	1037604311
+ 503 0198 6DC4D1A4 		.word	-1529756563
+ 504 019c FBF4D6D3 		.word	-740887301
+ 505 01a0 6AE96943 		.word	1131014506
+ 506 01a4 FCD96E34 		.word	879679996
+ 507 01a8 468867AD 		.word	-1385723834
+ 508 01ac D0B860DA 		.word	-631195440
+ 509 01b0 732D0444 		.word	1141124467
+ 510 01b4 E51D0333 		.word	855842277
+ 511 01b8 5F4C0AAA 		.word	-1442165665
+ 512 01bc C97C0DDD 		.word	-586318647
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 13
+
+
+ 513 01c0 3C710550 		.word	1342533948
+ 514 01c4 AA410227 		.word	654459306
+ 515 01c8 10100BBE 		.word	-1106571248
+ 516 01cc 86200CC9 		.word	-921952122
+ 517 01d0 25B56857 		.word	1466479909
+ 518 01d4 B3856F20 		.word	544179635
+ 519 01d8 09D466B9 		.word	-1184443383
+ 520 01dc 9FE461CE 		.word	-832445281
+ 521 01e0 0EF9DE5E 		.word	1591671054
+ 522 01e4 98C9D929 		.word	702138776
+ 523 01e8 2298D0B0 		.word	-1328506846
+ 524 01ec B4A8D7C7 		.word	-942167884
+ 525 01f0 173DB359 		.word	1504918807
+ 526 01f4 810DB42E 		.word	783551873
+ 527 01f8 3B5CBDB7 		.word	-1212326853
+ 528 01fc AD6CBAC0 		.word	-1061524307
+ 529 0200 2083B8ED 		.word	-306674912
+ 530 0204 B6B3BF9A 		.word	-1698712650
+ 531 0208 0CE2B603 		.word	62317068
+ 532 020c 9AD2B174 		.word	1957810842
+ 533 0210 3947D5EA 		.word	-355121351
+ 534 0214 AF77D29D 		.word	-1647151185
+ 535 0218 1526DB04 		.word	81470997
+ 536 021c 8316DC73 		.word	1943803523
+ 537 0220 120B63E3 		.word	-480048366
+ 538 0224 843B6494 		.word	-1805370492
+ 539 0228 3E6A6D0D 		.word	225274430
+ 540 022c A85A6A7A 		.word	2053790376
+ 541 0230 0BCF0EE4 		.word	-468791541
+ 542 0234 9DFF0993 		.word	-1828061283
+ 543 0238 27AE000A 		.word	167816743
+ 544 023c B19E077D 		.word	2097651377
+ 545 0240 44930FF0 		.word	-267414716
+ 546 0244 D2A30887 		.word	-2029476910
+ 547 0248 68F2011E 		.word	503444072
+ 548 024c FEC20669 		.word	1762050814
+ 549 0250 5D5762F7 		.word	-144550051
+ 550 0254 CB676580 		.word	-2140837941
+ 551 0258 71366C19 		.word	426522225
+ 552 025c E7066B6E 		.word	1852507879
+ 553 0260 761BD4FE 		.word	-19653770
+ 554 0264 E02BD389 		.word	-1982649376
+ 555 0268 5A7ADA10 		.word	282753626
+ 556 026c CC4ADD67 		.word	1742555852
+ 557 0270 6FDFB9F9 		.word	-105259153
+ 558 0274 F9EFBE8E 		.word	-1900089351
+ 559 0278 43BEB717 		.word	397917763
+ 560 027c D58EB060 		.word	1622183637
+ 561 0280 E8A3D6D6 		.word	-690576408
+ 562 0284 7E93D1A1 		.word	-1580100738
+ 563 0288 C4C2D838 		.word	953729732
+ 564 028c 52F2DF4F 		.word	1340076626
+ 565 0290 F167BBD1 		.word	-776247311
+ 566 0294 6757BCA6 		.word	-1497606297
+ 567 0298 DD06B53F 		.word	1068828381
+ 568 029c 4B36B248 		.word	1219638859
+ 569 02a0 DA2B0DD8 		.word	-670225446
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 14
+
+
+ 570 02a4 4C1B0AAF 		.word	-1358292148
+ 571 02a8 F64A0336 		.word	906185462
+ 572 02ac 607A0441 		.word	1090812512
+ 573 02b0 C3EF60DF 		.word	-547295293
+ 574 02b4 55DF67A8 		.word	-1469587627
+ 575 02b8 EF8E6E31 		.word	829329135
+ 576 02bc 79BE6946 		.word	1181335161
+ 577 02c0 8CB361CB 		.word	-882789492
+ 578 02c4 1A8366BC 		.word	-1134132454
+ 579 02c8 A0D26F25 		.word	628085408
+ 580 02cc 36E26852 		.word	1382605366
+ 581 02d0 95770CCC 		.word	-871598187
+ 582 02d4 03470BBB 		.word	-1156888829
+ 583 02d8 B9160222 		.word	570562233
+ 584 02dc 2F260555 		.word	1426400815
+ 585 02e0 BE3BBAC5 		.word	-977650754
+ 586 02e4 280BBDB2 		.word	-1296233688
+ 587 02e8 925AB42B 		.word	733239954
+ 588 02ec 046AB35C 		.word	1555261956
+ 589 02f0 A7FFD7C2 		.word	-1026031705
+ 590 02f4 31CFD0B5 		.word	-1244606671
+ 591 02f8 8B9ED92C 		.word	752459403
+ 592 02fc 1DAEDE5B 		.word	1541320221
+ 593 0300 B0C2649B 		.word	-1687895376
+ 594 0304 26F263EC 		.word	-328994266
+ 595 0308 9CA36A75 		.word	1969922972
+ 596 030c 0A936D02 		.word	40735498
+ 597 0310 A906099C 		.word	-1677130071
+ 598 0314 3F360EEB 		.word	-351390145
+ 599 0318 85670772 		.word	1913087877
+ 600 031c 13570005 		.word	83908371
+ 601 0320 824ABF95 		.word	-1782625662
+ 602 0324 147AB8E2 		.word	-491226604
+ 603 0328 AE2BB17B 		.word	2075208622
+ 604 032c 381BB60C 		.word	213261112
+ 605 0330 9B8ED292 		.word	-1831694693
+ 606 0334 0DBED5E5 		.word	-438977011
+ 607 0338 B7EFDC7C 		.word	2094854071
+ 608 033c 21DFDB0B 		.word	198958881
+ 609 0340 D4D2D386 		.word	-2032938284
+ 610 0344 42E2D4F1 		.word	-237706686
+ 611 0348 F8B3DD68 		.word	1759359992
+ 612 034c 6E83DA1F 		.word	534414190
+ 613 0350 CD16BE81 		.word	-2118248755
+ 614 0354 5B26B9F6 		.word	-155638181
+ 615 0358 E177B06F 		.word	1873836001
+ 616 035c 7747B718 		.word	414664567
+ 617 0360 E65A0888 		.word	-2012718362
+ 618 0364 706A0FFF 		.word	-15766928
+ 619 0368 CA3B0666 		.word	1711684554
+ 620 036c 5C0B0111 		.word	285281116
+ 621 0370 FF9E658F 		.word	-1889165569
+ 622 0374 69AE62F8 		.word	-127750551
+ 623 0378 D3FF6B61 		.word	1634467795
+ 624 037c 45CF6C16 		.word	376229701
+ 625 0380 78E20AA0 		.word	-1609899400
+ 626 0384 EED20DD7 		.word	-686959890
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6KG6YB.s 			page 15
+
+
+ 627 0388 5483044E 		.word	1308918612
+ 628 038c C2B30339 		.word	956543938
+ 629 0390 612667A7 		.word	-1486412191
+ 630 0394 F71660D0 		.word	-799009033
+ 631 0398 4D476949 		.word	1231636301
+ 632 039c DB776E3E 		.word	1047427035
+ 633 03a0 4A6AD1AE 		.word	-1362007478
+ 634 03a4 DC5AD6D9 		.word	-640263460
+ 635 03a8 660BDF40 		.word	1088359270
+ 636 03ac F03BD837 		.word	936918000
+ 637 03b0 53AEBCA9 		.word	-1447252397
+ 638 03b4 C59EBBDE 		.word	-558129467
+ 639 03b8 7FCFB247 		.word	1202900863
+ 640 03bc E9FFB530 		.word	817233897
+ 641 03c0 1CF2BDBD 		.word	-1111625188
+ 642 03c4 8AC2BACA 		.word	-893730166
+ 643 03c8 3093B353 		.word	1404277552
+ 644 03cc A6A3B424 		.word	615818150
+ 645 03d0 0536D0BA 		.word	-1160759803
+ 646 03d4 9306D7CD 		.word	-841546093
+ 647 03d8 2957DE54 		.word	1423857449
+ 648 03dc BF67D923 		.word	601450431
+ 649 03e0 2E7A66B3 		.word	-1285129682
+ 650 03e4 B84A61C4 		.word	-1000256840
+ 651 03e8 021B685D 		.word	1567103746
+ 652 03ec 942B6F2A 		.word	711928724
+ 653 03f0 37BE0BB4 		.word	-1274298825
+ 654 03f4 A18E0CC3 		.word	-1022587231
+ 655 03f8 1BDF055A 		.word	1510334235
+ 656 03fc 8DEF022D 		.word	755167117
+ 657              		.text
+ 658              	.Letext0:
+ 659              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 660              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 661              		.file 4 "common/prog/ped_fw/stdcrc/CrcCom.h"

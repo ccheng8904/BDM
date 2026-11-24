@@ -1,0 +1,2518 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fsRom.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.uiSetupNextROMAddress,"ax",%progbits
+  18              		.align	1
+  19              		.global	uiSetupNextROMAddress
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	uiSetupNextROMAddress:
+  25              	.LVL0:
+  26              	.LFB69:
+  27              		.file 1 "common/prog/FuncSafe/fsRom.c"
+   1:common/prog/FuncSafe/fsRom.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/fsRom.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/fsRom.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/fsRom.c ****  *
+   5:common/prog/FuncSafe/fsRom.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/fsRom.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/fsRom.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/fsRom.c ****  *
+   9:common/prog/FuncSafe/fsRom.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/fsRom.c ****  *  PROJECT          SW_LIB
+  11:common/prog/FuncSafe/fsRom.c ****  *  COMP_ABBREV      FSF_ROM
+  12:common/prog/FuncSafe/fsRom.c ****  ******************************************************************************/
+  13:common/prog/FuncSafe/fsRom.c **** 
+  14:common/prog/FuncSafe/fsRom.c **** /******************************************************************************/
+  15:common/prog/FuncSafe/fsRom.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/FuncSafe/fsRom.c **** /******************************************************************************/
+  17:common/prog/FuncSafe/fsRom.c **** /** \file fsRom.c
+  18:common/prog/FuncSafe/fsRom.c ****  *
+  19:common/prog/FuncSafe/fsRom.c ****  *  \ingroup  <DOXY_GROUP_FSF_ROM>
+  20:common/prog/FuncSafe/fsRom.c ****  *
+  21:common/prog/FuncSafe/fsRom.c ****  *  \brief    Implementation of package fsRom of library functional safety. This module continuous 
+  22:common/prog/FuncSafe/fsRom.c ****  *
+  23:common/prog/FuncSafe/fsRom.c ****  *  \details  \n
+  24:common/prog/FuncSafe/fsRom.c **** <b>Functional Safety ROM CRC-16 Supervision Component - Top-Level Design </b>
+  25:common/prog/FuncSafe/fsRom.c **** \n
+  26:common/prog/FuncSafe/fsRom.c **** \n
+  27:common/prog/FuncSafe/fsRom.c **** \li<b>Package Model </b>\n
+  28:common/prog/FuncSafe/fsRom.c **** \image html Package_Rom.jpg
+  29:common/prog/FuncSafe/fsRom.c **** \n
+  30:common/prog/FuncSafe/fsRom.c **** <b>Description </b>\n
+  31:common/prog/FuncSafe/fsRom.c **** The fsRom package provides the parts outlined in the model. In order to save space, there are diffe
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 2
+
+
+  32:common/prog/FuncSafe/fsRom.c **** depending what Rom modules exist and if some the modules are connected by means of I2C, or comparab
+  33:common/prog/FuncSafe/fsRom.c **** By compilation switch, the Rom task handler may run either in the usual operating mode or in test h
+  34:common/prog/FuncSafe/fsRom.c **** running in the usual operating mode, the test harness part will not be linked to the package. When 
+  35:common/prog/FuncSafe/fsRom.c **** harness mode, separate data parts are provided, so the real Rom area is separated from being manipu
+  36:common/prog/FuncSafe/fsRom.c **** test server will be able to change it.
+  37:common/prog/FuncSafe/fsRom.c **** \n
+  38:common/prog/FuncSafe/fsRom.c **** <b>Rationale </b>\n
+  39:common/prog/FuncSafe/fsRom.c **** Test generation requires some ROM (flash memory) parts to be changed and restored again. This is  n
+  40:common/prog/FuncSafe/fsRom.c **** \n
+  41:common/prog/FuncSafe/fsRom.c **** \n
+  42:common/prog/FuncSafe/fsRom.c **** \n
+  43:common/prog/FuncSafe/fsRom.c **** \li<b>State Model </b>\n
+  44:common/prog/FuncSafe/fsRom.c **** \image html StateModel_Rom.jpg
+  45:common/prog/FuncSafe/fsRom.c **** \n
+  46:common/prog/FuncSafe/fsRom.c **** <b>Description </b>\n
+  47:common/prog/FuncSafe/fsRom.c **** Before checking the Rom, the Rom task handlers work area must be initialised correctly. This happen
+  48:common/prog/FuncSafe/fsRom.c **** Rom task handler gets called and every time a full Rom check has been completed. After this initial
+  49:common/prog/FuncSafe/fsRom.c **** handler transitions into the state "FSF_ROM_CHECK_ONGOING" and starts walking through the Rom space
+  50:common/prog/FuncSafe/fsRom.c **** transitions back into state "FSF_ROM_CHECK_RESTART" and the process restarts again.
+  51:common/prog/FuncSafe/fsRom.c **** \n
+  52:common/prog/FuncSafe/fsRom.c **** <b>Rationale </b>\n
+  53:common/prog/FuncSafe/fsRom.c **** None
+  54:common/prog/FuncSafe/fsRom.c **** \n
+  55:common/prog/FuncSafe/fsRom.c **** \n
+  56:common/prog/FuncSafe/fsRom.c **** \n
+  57:common/prog/FuncSafe/fsRom.c **** \li<b>Scenario: Rom Supervision </b>\n
+  58:common/prog/FuncSafe/fsRom.c **** \image html SequenceChart_RomSupervision.jpg
+  59:common/prog/FuncSafe/fsRom.c **** \n
+  60:common/prog/FuncSafe/fsRom.c **** <b>Description </b>\n
+  61:common/prog/FuncSafe/fsRom.c **** There is not that much to explain on this scenario.
+  62:common/prog/FuncSafe/fsRom.c **** \n
+  63:common/prog/FuncSafe/fsRom.c **** <b>Rationale </b>\n
+  64:common/prog/FuncSafe/fsRom.c **** None
+  65:common/prog/FuncSafe/fsRom.c **** \n
+  66:common/prog/FuncSafe/fsRom.c **** \n
+  67:common/prog/FuncSafe/fsRom.c **** \n
+  68:common/prog/FuncSafe/fsRom.c **** \li<b>Input Document Reference(s) </b>\n
+  69:common/prog/FuncSafe/fsRom.c **** \n
+  70:common/prog/FuncSafe/fsRom.c **** <TABLE style="text-align: center">
+  71:common/prog/FuncSafe/fsRom.c **** <TR style="background-color:rgb(255,255,206)">
+  72:common/prog/FuncSafe/fsRom.c **** <TD>Reference</TD>
+  73:common/prog/FuncSafe/fsRom.c **** <TD>Ducument Title</TD>
+  74:common/prog/FuncSafe/fsRom.c **** <TD>Document Reference Name/Number</TD>
+  75:common/prog/FuncSafe/fsRom.c **** <TD>Version</TD>
+  76:common/prog/FuncSafe/fsRom.c **** <TD>Status</TD>
+  77:common/prog/FuncSafe/fsRom.c **** <TD>Release Date</TD>
+  78:common/prog/FuncSafe/fsRom.c **** </TR>
+  79:common/prog/FuncSafe/fsRom.c **** <TR>
+  80:common/prog/FuncSafe/fsRom.c **** <TD> [1] </TD>
+  81:common/prog/FuncSafe/fsRom.c **** <TD> Functional Safety Software Design document </TD>
+  82:common/prog/FuncSafe/fsRom.c **** <TD> FuncSafeSWSpec.pdf / 5560 0000003770 </TD>
+  83:common/prog/FuncSafe/fsRom.c **** <TD> Version 2.0 </TD>
+  84:common/prog/FuncSafe/fsRom.c **** <TD> Proposed </TD>
+  85:common/prog/FuncSafe/fsRom.c **** <TD> 08.05.2008 </TD>
+  86:common/prog/FuncSafe/fsRom.c **** </TR>
+  87:common/prog/FuncSafe/fsRom.c **** <TR>
+  88:common/prog/FuncSafe/fsRom.c **** <TD> [2] </TD>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 3
+
+
+  89:common/prog/FuncSafe/fsRom.c **** <TD> Generic Functional Safety Software Specification</TD>
+  90:common/prog/FuncSafe/fsRom.c **** <TD> GenericFuncSafeSpec.pdf / 5560 0000007751 </TD>
+  91:common/prog/FuncSafe/fsRom.c **** <TD> Version 2.0 </TD>
+  92:common/prog/FuncSafe/fsRom.c **** <TD> Proposed </TD>
+  93:common/prog/FuncSafe/fsRom.c **** <TD> 08.05.2008 </TD>
+  94:common/prog/FuncSafe/fsRom.c **** </TR>
+  95:common/prog/FuncSafe/fsRom.c **** </TABLE>
+  96:common/prog/FuncSafe/fsRom.c **** \n
+  97:common/prog/FuncSafe/fsRom.c **** */
+  98:common/prog/FuncSafe/fsRom.c **** #include "bsh_stdinc.h"
+  99:common/prog/FuncSafe/fsRom.c **** #include "LibTypes.h"
+ 100:common/prog/FuncSafe/fsRom.c **** #include "fSafe.h"
+ 101:common/prog/FuncSafe/fsRom.c **** #include "FuncSafe/fSafeXS.h"
+ 102:common/prog/FuncSafe/fsRom.c **** #include "FuncSafe/fspriv.h"
+ 103:common/prog/FuncSafe/fsRom.c **** #include "utility/utility.h"
+ 104:common/prog/FuncSafe/fsRom.c **** #include "hsup.h"
+ 105:common/prog/FuncSafe/fsRom.c **** #include "FuncSafe/fsramcon.h"
+ 106:common/prog/FuncSafe/fsRom.c **** #include "processor.h"
+ 107:common/prog/FuncSafe/fsRom.c **** 
+ 108:common/prog/FuncSafe/fsRom.c **** /* Local macros ***********************************************************************************
+ 109:common/prog/FuncSafe/fsRom.c **** 
+ 110:common/prog/FuncSafe/fsRom.c **** /* Local type definitions *************************************************************************
+ 111:common/prog/FuncSafe/fsRom.c **** 
+ 112:common/prog/FuncSafe/fsRom.c **** /* Local prototypes *******************************************************************************
+ 113:common/prog/FuncSafe/fsRom.c **** 
+ 114:common/prog/FuncSafe/fsRom.c **** STATIC  bool    bIsROMAtOnce        (void);
+ 115:common/prog/FuncSafe/fsRom.c **** STATIC  void    vFinalizeROMCheck   (void);
+ 116:common/prog/FuncSafe/fsRom.c **** STATIC  void    vROMCheckSuccessfullyCompleted (void);
+ 117:common/prog/FuncSafe/fsRom.c **** 
+ 118:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 119:common/prog/FuncSafe/fsRom.c **** STATIC  uint32_t  ui32InitializeCRCValue (void);
+ 120:common/prog/FuncSafe/fsRom.c **** #else
+ 121:common/prog/FuncSafe/fsRom.c **** STATIC  uint16_t  ui16InitializeCRCValue (void);
+ 122:common/prog/FuncSafe/fsRom.c **** #endif
+ 123:common/prog/FuncSafe/fsRom.c **** 
+ 124:common/prog/FuncSafe/fsRom.c **** STATIC  void    vROMCheckOngoing     (void);
+ 125:common/prog/FuncSafe/fsRom.c **** 
+ 126:common/prog/FuncSafe/fsRom.c **** #ifndef FSF_CRC_32_BIT
+ 127:common/prog/FuncSafe/fsRom.c **** /*STATIC*/  uint16_t  uiCalculateCRC  (uint16_t CRC16Value, FSTH_CONST uint8_t *pData, uint16_t ui1
+ 128:common/prog/FuncSafe/fsRom.c **** #endif
+ 129:common/prog/FuncSafe/fsRom.c **** uint32_t  uiSetupNextROMAddress   (uint16_t ui16length);
+ 130:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t   ucInitialiseROMChannel  (void);
+ 131:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t   ucInternalROMTask       (void);
+ 132:common/prog/FuncSafe/fsRom.c **** STATIC  bool      bExtIsROMReady          (uint8_t *pucData, uint16_t ui16length);
+ 133:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t*  pucExtROMRead           (uint8_t *pucData, uint16_t ui16length);
+ 134:common/prog/FuncSafe/fsRom.c **** STATIC  bool      bIsROMAtOnceAllowed     (void);
+ 135:common/prog/FuncSafe/fsRom.c **** STATIC  bool      bCheckINTduringROMCheck (void);
+ 136:common/prog/FuncSafe/fsRom.c **** 
+ 137:common/prog/FuncSafe/fsRom.c **** /* RAM/ROM Variable definitions *******************************************************************
+ 138:common/prog/FuncSafe/fsRom.c **** 
+ 139:common/prog/FuncSafe/fsRom.c **** /*=====================================================================================
+ 140:common/prog/FuncSafe/fsRom.c ****     ROM Channel Work Area
+ 141:common/prog/FuncSafe/fsRom.c **** =====================================================================================*/
+ 142:common/prog/FuncSafe/fsRom.c **** 
+ 143:common/prog/FuncSafe/fsRom.c **** #if defined(TH_FSCOM)
+ 144:common/prog/FuncSafe/fsRom.c **** 
+ 145:common/prog/FuncSafe/fsRom.c **** //  Configuration array:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 4
+
+
+ 146:common/prog/FuncSafe/fsRom.c **** //  ROMConfig[0]    ROMConfig[1]            Meaning
+ 147:common/prog/FuncSafe/fsRom.c **** //  0               0                       Small ROM with Indirect ROM Access -> not used
+ 148:common/prog/FuncSafe/fsRom.c **** //  0               1                       Small ROM with Direct ROM Access -> not used
+ 149:common/prog/FuncSafe/fsRom.c **** //  1               0                       Large ROM with Indirect ROM Access
+ 150:common/prog/FuncSafe/fsRom.c **** //  1               1                       Large ROM with Direct ROM Access -> not used
+ 151:common/prog/FuncSafe/fsRom.c **** 
+ 152:common/prog/FuncSafe/fsRom.c **** const uint8_t ROMConfig[2] =
+ 153:common/prog/FuncSafe/fsRom.c **** {
+ 154:common/prog/FuncSafe/fsRom.c **** (uint8_t)1,
+ 155:common/prog/FuncSafe/fsRom.c **** (uint8_t)0,
+ 156:common/prog/FuncSafe/fsRom.c **** };
+ 157:common/prog/FuncSafe/fsRom.c **** #endif
+ 158:common/prog/FuncSafe/fsRom.c **** 
+ 159:common/prog/FuncSafe/fsRom.c **** /**
+ 160:common/prog/FuncSafe/fsRom.c **** ROM Channel State and work area
+ 161:common/prog/FuncSafe/fsRom.c **** */
+ 162:common/prog/FuncSafe/fsRom.c **** 
+ 163:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 164:common/prog/FuncSafe/fsRom.c ****     Large ROM Model
+ 165:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 166:common/prog/FuncSafe/fsRom.c **** // definition of the memory block for RAM Consistency check
+ 167:common/prog/FuncSafe/fsRom.c **** typedef struct _TFS_ROM_RamConBlock {
+ 168:common/prog/FuncSafe/fsRom.c ****     uint8_t  ucROMTState;               //!< State of ROM ch.
+ 169:common/prog/FuncSafe/fsRom.c ****     uint8_t  ucROMIdx;                  //!< ROM Mod. Index
+ 170:common/prog/FuncSafe/fsRom.c ****     uint8_t  ucSegIdx;                  //!< ROM Seg. Index
+ 171:common/prog/FuncSafe/fsRom.c ****     uint8_t *pucRomPtr;                 //!< ROM Data
+ 172:common/prog/FuncSafe/fsRom.c ****     uint32_t uiROMDLen;                 //!< ROM Data length
+ 173:common/prog/FuncSafe/fsRom.c ****     T_ROM_Module  FSTH_CONST *patRom;   //!< ROM Module ref.
+ 174:common/prog/FuncSafe/fsRom.c ****     T_ROM_Segment FSTH_CONST *patSeg;   //!< ROM Segment ref.
+ 175:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 176:common/prog/FuncSafe/fsRom.c ****     uint32_t ui32Crc;                   //!< CRC Value
+ 177:common/prog/FuncSafe/fsRom.c **** #else
+ 178:common/prog/FuncSafe/fsRom.c ****     uint16_t uiCrc;                     //!< CRC Value
+ 179:common/prog/FuncSafe/fsRom.c **** #endif
+ 180:common/prog/FuncSafe/fsRom.c **** }TFS_ROM_RamConBlock;
+ 181:common/prog/FuncSafe/fsRom.c **** 
+ 182:common/prog/FuncSafe/fsRom.c **** __ALIGNED(4) STATIC TFS_ROM_RamConBlock FS_ROM_RamConBlock;
+ 183:common/prog/FuncSafe/fsRom.c **** __ALIGNED(4) STATIC TFS_ROM_RamConBlock FS_ROM_RamConBlockMirror;
+ 184:common/prog/FuncSafe/fsRom.c **** __ALIGNED(4) STATIC uint8_t FS_ROM_ucCheckValueRamConBlock; ///< Holds current consistency check va
+ 185:common/prog/FuncSafe/fsRom.c **** STATIC bool FS_ROM_bIsRamConInitDone = false; ///< Flag to check if mirror area is already initiali
+ 186:common/prog/FuncSafe/fsRom.c **** 
+ 187:common/prog/FuncSafe/fsRom.c **** //  This is in order to monitor correct work of the ROM channel.
+ 188:common/prog/FuncSafe/fsRom.c **** //lint -e551
+ 189:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t   ucROMCheckCycleCount  = (uint8_t)0;
+ 190:common/prog/FuncSafe/fsRom.c **** 
+ 191:common/prog/FuncSafe/fsRom.c **** /**
+ 192:common/prog/FuncSafe/fsRom.c **** ROM Channel Test Harness
+ 193:common/prog/FuncSafe/fsRom.c **** */
+ 194:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 195:common/prog/FuncSafe/fsRom.c ****     Large ROM Model
+ 196:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 197:common/prog/FuncSafe/fsRom.c **** #if defined(TH_FSCOM)
+ 198:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 199:common/prog/FuncSafe/fsRom.c ****     /**  CRC-32 Test Patterns:
+ 200:common/prog/FuncSafe/fsRom.c ****     0-Pattern, 1-Pattern, Text-Pattern, each in one separate segment
+ 201:common/prog/FuncSafe/fsRom.c ****     */
+ 202:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 5
+
+
+ 203:common/prog/FuncSafe/fsRom.c ****     __ALIGNED(4) FSTH_CONST   uint8_t FSF_CRC_P0[]            = "0000000000000000000000000000000000
+ 204:common/prog/FuncSafe/fsRom.c ****     __ALIGNED(4) FSTH_CONST   uint8_t FSF_CRC_P1[]            = "1111111111111111111111111111111111
+ 205:common/prog/FuncSafe/fsRom.c ****     __ALIGNED(4) FSTH_CONST   uint8_t FSF_CRC_P2[]            = "The quick brown fox jumps over the
+ 206:common/prog/FuncSafe/fsRom.c ****     //FSTH_CONST   uint32_t FSF_uiCRCTable[2]       = {0xE2F481B8,0x41B8C5CA};
+ 207:common/prog/FuncSafe/fsRom.c ****     FSTH_CONST   uint32_t FSF_uiCRCTable[2]       = {0x41B8C5CAu,0xD81E0E94u};
+ 208:common/prog/FuncSafe/fsRom.c ****     FSTH_CONST   uint8_t  FSF_ucRomModuleCount    = (uint8_t)2;
+ 209:common/prog/FuncSafe/fsRom.c **** 
+ 210:common/prog/FuncSafe/fsRom.c **** 
+ 211:common/prog/FuncSafe/fsRom.c ****     /** Test Segment Tables
+ 212:common/prog/FuncSafe/fsRom.c ****     */
+ 213:common/prog/FuncSafe/fsRom.c ****     FSTH_CONST   T_ROM_Segment   FSF_atRomSeg_0 []  = { {FSF_CRC_P0,(FSF_CRC_P0 + (sizeof(FSF_CRC_P
+ 214:common/prog/FuncSafe/fsRom.c ****                                                    {FSF_CRC_P1,(FSF_CRC_P1 + (sizeof(FSF_CRC_P1)-2)
+ 215:common/prog/FuncSafe/fsRom.c **** 
+ 216:common/prog/FuncSafe/fsRom.c ****     FSTH_CONST   T_ROM_Segment   FSF_atRomSeg_1 []  = { {FSF_CRC_P2,(FSF_CRC_P2 + (sizeof(FSF_CRC_P
+ 217:common/prog/FuncSafe/fsRom.c **** 
+ 218:common/prog/FuncSafe/fsRom.c ****     FSTH_CONST   T_ROM_Module    FSF_atRomModules[]  = { {FSF_atRomSeg_0,
+ 219:common/prog/FuncSafe/fsRom.c ****                                                    (uint8_t)2, (uint16_t)3,
+ 220:common/prog/FuncSafe/fsRom.c ****                                                    _FSF_pucReadROMData,
+ 221:common/prog/FuncSafe/fsRom.c ****                                                    _FSF_bIsROMReady, (uint32_t*)&FSF_uiCRCTable[0]}
+ 222:common/prog/FuncSafe/fsRom.c **** 
+ 223:common/prog/FuncSafe/fsRom.c ****                                                    {FSF_atRomSeg_1,
+ 224:common/prog/FuncSafe/fsRom.c ****                                                    (uint8_t)1, (uint16_t)2,
+ 225:common/prog/FuncSafe/fsRom.c ****                                                    _FSF_pucReadROMData,
+ 226:common/prog/FuncSafe/fsRom.c ****                                                    _FSF_bIsROMReady, (uint32_t*)&FSF_uiCRCTable[1]}
+ 227:common/prog/FuncSafe/fsRom.c **** 
+ 228:common/prog/FuncSafe/fsRom.c ****     STATIC bool TH_FSCOM_bIsROMReady            = true;   //!< Grant access to ROM
+ 229:common/prog/FuncSafe/fsRom.c ****     STATIC bool TH_FSCOM_bIsROMAtOnceAllowed    = true;   //!< Enable ROM check at once
+ 230:common/prog/FuncSafe/fsRom.c ****     STATIC bool TH_FSF_bCheckINTduringROMCheck  = true;   //!< Maintain INT's while checking
+ 231:common/prog/FuncSafe/fsRom.c **** 
+ 232:common/prog/FuncSafe/fsRom.c **** #else
+ 233:common/prog/FuncSafe/fsRom.c ****     /**  CRC-16 Test Patterns:
+ 234:common/prog/FuncSafe/fsRom.c ****     0-Pattern, 1-Pattern, Text-Pattern, each in one separate segment
+ 235:common/prog/FuncSafe/fsRom.c ****     */
+ 236:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   uint8_t   FSF_CRC_P0[]            = "000000000000000000000000000000000000";
+ 237:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   uint8_t   FSF_CRC_P1[]            = "11111111111111111111111111111111111111111
+ 238:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   uint8_t   FSF_CRC_P2[]            = "The quick brown fox jumps over the lazy d
+ 239:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   uint16_t  FSF_uiCRCTable[2]       = {0x5686,0xF0C8};
+ 240:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   uint8_t   FSF_ucRomModuleCount    = (uint8_t)2;
+ 241:common/prog/FuncSafe/fsRom.c **** 
+ 242:common/prog/FuncSafe/fsRom.c **** 
+ 243:common/prog/FuncSafe/fsRom.c ****         /** Test Segment Tables
+ 244:common/prog/FuncSafe/fsRom.c ****         */
+ 245:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   T_ROM_Segment   FSF_atRomSeg_0 []  = { {FSF_CRC_P0,(FSF_CRC_P0 + (sizeof(FSF_C
+ 246:common/prog/FuncSafe/fsRom.c ****                                                        {FSF_CRC_P1,(FSF_CRC_P1 + (sizeof(FSF_CRC_P1
+ 247:common/prog/FuncSafe/fsRom.c **** 
+ 248:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   T_ROM_Segment   FSF_atRomSeg_1 []  = { {FSF_CRC_P2,(FSF_CRC_P2 + (sizeof(FSF_C
+ 249:common/prog/FuncSafe/fsRom.c **** 
+ 250:common/prog/FuncSafe/fsRom.c ****         FSTH_CONST   T_ROM_Module    FSF_atRomModules[]  = { {FSF_atRomSeg_0,
+ 251:common/prog/FuncSafe/fsRom.c ****                                                        (uint8_t)2, (uint16_t)13,
+ 252:common/prog/FuncSafe/fsRom.c ****                                                        _FSF_pucReadROMData,
+ 253:common/prog/FuncSafe/fsRom.c ****                                                        _FSF_bIsROMReady, &FSF_uiCRCTable[0]},
+ 254:common/prog/FuncSafe/fsRom.c **** 
+ 255:common/prog/FuncSafe/fsRom.c ****                                                        {FSF_atRomSeg_1,
+ 256:common/prog/FuncSafe/fsRom.c ****                                                        (uint8_t)1, (uint16_t)9,
+ 257:common/prog/FuncSafe/fsRom.c ****                                                        _FSF_pucReadROMData,
+ 258:common/prog/FuncSafe/fsRom.c ****                                                        _FSF_bIsROMReady, &FSF_uiCRCTable[1]}};
+ 259:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 6
+
+
+ 260:common/prog/FuncSafe/fsRom.c ****         STATIC bool TH_FSCOM_bIsROMReady            = true;   //!< Grant access to ROM
+ 261:common/prog/FuncSafe/fsRom.c ****         STATIC bool TH_FSCOM_bIsROMAtOnceAllowed    = true;   //!< Enable ROM check at once
+ 262:common/prog/FuncSafe/fsRom.c ****         STATIC bool TH_FSF_bCheckINTduringROMCheck  = true;   //!< Maintain INT's while checking
+ 263:common/prog/FuncSafe/fsRom.c **** #endif //#ifdef FSF_CRC_32_BIT
+ 264:common/prog/FuncSafe/fsRom.c **** #endif //#if defined(TH_FSCOM)
+ 265:common/prog/FuncSafe/fsRom.c **** 
+ 266:common/prog/FuncSafe/fsRom.c **** /* static function definitions ********************************************************************
+ 267:common/prog/FuncSafe/fsRom.c **** 
+ 268:common/prog/FuncSafe/fsRom.c **** /*=====================================================================================
+ 269:common/prog/FuncSafe/fsRom.c ****     Large ROM Model
+ 270:common/prog/FuncSafe/fsRom.c **** =====================================================================================*/
+ 271:common/prog/FuncSafe/fsRom.c **** 
+ 272:common/prog/FuncSafe/fsRom.c ****         /** Setup the next ROM address.
+ 273:common/prog/FuncSafe/fsRom.c ****     Move on to the next ROM address. This handler directly changes the ROM channels work area. \n
+ 274:common/prog/FuncSafe/fsRom.c ****     Note:   the parameter passed describes the space of ROM already checked!! In order to make \n
+ 275:common/prog/FuncSafe/fsRom.c ****             sure the segment boundaries will be matched exactly, on return this procedure will \n
+ 276:common/prog/FuncSafe/fsRom.c ****             return the space left to be checked. Returning 0 means, no space left to be checked. \n
+ 277:common/prog/FuncSafe/fsRom.c **** 
+ 278:common/prog/FuncSafe/fsRom.c ****     \param      uint16_t  length of data actually calculated \n\n
+ 279:common/prog/FuncSafe/fsRom.c **** 
+ 280:common/prog/FuncSafe/fsRom.c ****     \return     uint16_t  space left to check inside actual segment. Some cases to distinguish:
+ 281:common/prog/FuncSafe/fsRom.c ****                         return value == length:     end of the ROM has not yet been reached. \n
+ 282:common/prog/FuncSafe/fsRom.c ****                         0 < return value < length:  end of ROM has been reached. \n
+ 283:common/prog/FuncSafe/fsRom.c ****                         return value == 0:          no more data to be checked \n
+ 284:common/prog/FuncSafe/fsRom.c **** 
+ 285:common/prog/FuncSafe/fsRom.c ****     \pre        Called only at operational time. \n
+ 286:common/prog/FuncSafe/fsRom.c ****     \post       ROM channel work area updated, if necessary \n
+ 287:common/prog/FuncSafe/fsRom.c **** */
+ 288:common/prog/FuncSafe/fsRom.c **** uint32_t  uiSetupNextROMAddress   (uint16_t ui16length)
+ 289:common/prog/FuncSafe/fsRom.c **** {
+  28              		.loc 1 289 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290:common/prog/FuncSafe/fsRom.c ****    bool    bSegChanged     = false;
+  32              		.loc 1 290 4 view .LVU1
+ 291:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 292:common/prog/FuncSafe/fsRom.c ****     uint32_t ui32StoredCrc;
+  33              		.loc 1 292 5 view .LVU2
+ 293:common/prog/FuncSafe/fsRom.c **** #else
+ 294:common/prog/FuncSafe/fsRom.c ****     uint16_t uiStoredCrc;
+ 295:common/prog/FuncSafe/fsRom.c **** #endif
+ 296:common/prog/FuncSafe/fsRom.c **** 
+ 297:common/prog/FuncSafe/fsRom.c ****    //  Add the size of data already checked and determine the space left inside the actual segment
+ 298:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 299:common/prog/FuncSafe/fsRom.c ****    FS_ROM_RamConBlock.pucRomPtr  += ui16length*sizeof(uint32_t);/*lint !e9016 "Pointer arithmetic n
+  34              		.loc 1 299 4 view .LVU3
+ 289:common/prog/FuncSafe/fsRom.c ****    bool    bSegChanged     = false;
+  35              		.loc 1 289 1 is_stmt 0 view .LVU4
+  36 0000 70B5     		push	{r4, r5, r6, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 4, -16
+  40              		.cfi_offset 5, -12
+  41              		.cfi_offset 6, -8
+  42              		.cfi_offset 14, -4
+  43              		.loc 1 299 34 view .LVU5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 7
+
+
+  44 0002 244C     		ldr	r4, .L14
+  45              		.loc 1 299 47 view .LVU6
+  46 0004 8200     		lsls	r2, r0, #2
+  47              		.loc 1 299 34 view .LVU7
+  48 0006 6368     		ldr	r3, [r4, #4]
+ 300:common/prog/FuncSafe/fsRom.c **** #else
+ 301:common/prog/FuncSafe/fsRom.c ****    FS_ROM_RamConBlock.pucRomPtr  += ui16length;
+ 302:common/prog/FuncSafe/fsRom.c **** #endif
+ 303:common/prog/FuncSafe/fsRom.c ****    //  Msg(4:0488) Performing pointer arithmetic.
+ 304:common/prog/FuncSafe/fsRom.c ****    //  MISRA-C:2004 Rule 17.4 <next>
+ 305:common/prog/FuncSafe/fsRom.c ****    //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 306:common/prog/FuncSafe/fsRom.c **** 
+ 307:common/prog/FuncSafe/fsRom.c ****    FS_ROM_RamConBlock.uiROMDLen  -= ui16length;
+  49              		.loc 1 307 34 view .LVU8
+  50 0008 A568     		ldr	r5, [r4, #8]
+ 299:common/prog/FuncSafe/fsRom.c **** #else
+  51              		.loc 1 299 34 view .LVU9
+  52 000a 9B18     		adds	r3, r3, r2
+  53              		.loc 1 307 34 view .LVU10
+  54 000c 2D1A     		subs	r5, r5, r0
+ 299:common/prog/FuncSafe/fsRom.c **** #else
+  55              		.loc 1 299 34 view .LVU11
+  56 000e 6360     		str	r3, [r4, #4]
+  57              		.loc 1 307 4 is_stmt 1 view .LVU12
+  58              		.loc 1 307 34 is_stmt 0 view .LVU13
+  59 0010 A560     		str	r5, [r4, #8]
+ 308:common/prog/FuncSafe/fsRom.c ****    //  Has this ROM segment been checked?
+ 309:common/prog/FuncSafe/fsRom.c ****    if (FS_ROM_RamConBlock.uiROMDLen == 0u)
+  60              		.loc 1 309 4 is_stmt 1 view .LVU14
+  61              		.loc 1 309 7 is_stmt 0 view .LVU15
+  62 0012 38D1     		bne	.L3
+ 310:common/prog/FuncSafe/fsRom.c ****    {
+ 311:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ucSegIdx++; // Next ROM Segment
+  63              		.loc 1 311 7 is_stmt 1 view .LVU16
+  64              		.loc 1 311 34 is_stmt 0 view .LVU17
+  65 0014 A378     		ldrb	r3, [r4, #2]
+ 312:common/prog/FuncSafe/fsRom.c **** 
+ 313:common/prog/FuncSafe/fsRom.c ****       if (FS_ROM_RamConBlock.ucSegIdx >= FS_ROM_RamConBlock.patRom->ucSegmentCount)
+  66              		.loc 1 313 67 view .LVU18
+  67 0016 E268     		ldr	r2, [r4, #12]
+ 311:common/prog/FuncSafe/fsRom.c **** 
+  68              		.loc 1 311 34 view .LVU19
+  69 0018 0133     		adds	r3, r3, #1
+  70 001a DBB2     		uxtb	r3, r3
+  71 001c A370     		strb	r3, [r4, #2]
+  72              		.loc 1 313 7 is_stmt 1 view .LVU20
+  73              		.loc 1 313 10 is_stmt 0 view .LVU21
+  74 001e 1279     		ldrb	r2, [r2, #4]
+  75 0020 9A42     		cmp	r2, r3
+  76 0022 32D8     		bhi	.L4
+ 314:common/prog/FuncSafe/fsRom.c ****       {
+ 315:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 316:common/prog/FuncSafe/fsRom.c ****          //  REFERENCE - ISO-6.3.3.2 Semantics
+ 317:common/prog/FuncSafe/fsRom.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 318:common/prog/FuncSafe/fsRom.c **** 
+ 319:common/prog/FuncSafe/fsRom.c ****          //  Before move on to the next ROM module, the CRC-16 value from
+ 320:common/prog/FuncSafe/fsRom.c ****          //  the current ROM module need to be checked
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 8
+
+
+ 321:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 322:common/prog/FuncSafe/fsRom.c ****           FS_ROM_RamConBlock.ui32Crc = _FSF_ui32FinalizeCrcCalculation(FS_ROM_RamConBlock.ui32Crc);
+  77              		.loc 1 322 11 is_stmt 1 view .LVU22
+  78              		.loc 1 322 40 is_stmt 0 view .LVU23
+  79 0024 6069     		ldr	r0, [r4, #20]
+  80              	.LVL1:
+  81              		.loc 1 322 40 view .LVU24
+  82 0026 FFF7FEFF 		bl	_FSF_ui32FinalizeCrcCalculation
+  83              	.LVL2:
+ 323:common/prog/FuncSafe/fsRom.c ****           ui32StoredCrc = *(FS_ROM_RamConBlock.patRom->pui32CRCValue);
+  84              		.loc 1 323 54 view .LVU25
+  85 002a E368     		ldr	r3, [r4, #12]
+ 322:common/prog/FuncSafe/fsRom.c ****           ui32StoredCrc = *(FS_ROM_RamConBlock.patRom->pui32CRCValue);
+  86              		.loc 1 322 38 view .LVU26
+  87 002c 6061     		str	r0, [r4, #20]
+  88              		.loc 1 323 11 is_stmt 1 view .LVU27
+  89              	.LVL3:
+ 324:common/prog/FuncSafe/fsRom.c ****          if (FS_ROM_RamConBlock.ui32Crc != ui32StoredCrc)
+  90              		.loc 1 324 10 view .LVU28
+ 323:common/prog/FuncSafe/fsRom.c ****           ui32StoredCrc = *(FS_ROM_RamConBlock.patRom->pui32CRCValue);
+  91              		.loc 1 323 25 is_stmt 0 view .LVU29
+  92 002e 1B69     		ldr	r3, [r3, #16]
+  93              	.LVL4:
+  94              		.loc 1 324 13 view .LVU30
+  95 0030 1B68     		ldr	r3, [r3]
+  96              	.LVL5:
+  97              		.loc 1 324 13 view .LVU31
+  98 0032 9842     		cmp	r0, r3
+  99 0034 0AD0     		beq	.L5
+ 325:common/prog/FuncSafe/fsRom.c **** #else//#ifdef FSF_CRC_32_BIT
+ 326:common/prog/FuncSafe/fsRom.c ****          uiStoredCrc = *(FS_ROM_RamConBlock.patRom->pui16CRCValue);
+ 327:common/prog/FuncSafe/fsRom.c ****          if (FS_ROM_RamConBlock.uiCrc != uiStoredCrc)
+ 328:common/prog/FuncSafe/fsRom.c **** #endif//#ifdef FSF_CRC_32_BIT
+ 329:common/prog/FuncSafe/fsRom.c **** 
+ 330:common/prog/FuncSafe/fsRom.c ****          {
+ 331:common/prog/FuncSafe/fsRom.c ****             // Rom check is always success (Error is ignored)
+ 332:common/prog/FuncSafe/fsRom.c ****              if(!FWU_isIntegCheckDisabledCalc() && !FWU_isIntegCheckErrorIgnored())
+ 100              		.loc 1 332 14 is_stmt 1 view .LVU32
+ 101              	.LBB38:
+ 102              	.LBI38:
+ 103              		.file 2 "common/prog/firmware_update/mal/fwu_opt_bytes.h"
+   1:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /*******************************************************************************
+   2:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   5:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+   9:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *******************************************************************************
+  10:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  PROJECT          Firmware Update
+  11:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  ******************************************************************************/
+  12:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  13:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  14:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifndef FIRMWAREUPDATE_H
+  15:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #define FIRMWAREUPDATE_H
+  16:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 9
+
+
+  17:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef __cplusplus
+  18:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern "C" {
+  19:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  20:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  21:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  22:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  23:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  25:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \file
+  26:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  27:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \brief    Public definitions for FWU option bytes
+  28:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  29:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  A detailed file description that may span several lines
+  30:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            and that has to be terminated by an empty line.
+  31:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  32:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  33:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  34:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  35:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  36:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /* INCLUDES                                                                   */
+  37:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /******************************************************************************/
+  38:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #include "firmware_update/BootManager/BootManagerSharedData.h"
+  39:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+  40:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     #include "firmware_update/mal/moduleAdministration.h"
+  41:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #endif
+  42:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  43:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  44:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for integrity check configuration */
+  45:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_integrityConfig
+  46:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  47:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_ENABLE       = MAL_ENABLE_DEF,
+  48:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF,
+  49:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_INTEGRITY_DISABLE_CALC = MAL_DISABLE_CALC_DEF
+  50:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  51:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  52:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for compatibility check configuration */
+  53:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_compatibilityConfig
+  54:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  55:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_ENABLE       = MAL_ENABLE_DEF,
+  56:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_COMPATIBILITY_IGNORE_ERROR = MAL_IGNORE_ERROR_DEF
+  57:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  58:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  59:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief struct for reserved opt. byte */
+  60:common/prog/firmware_update/mal/fwu_opt_bytes.h **** enum MAL_ReservedConfig
+  61:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  62:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     MAL_RESERVED       = MAL_RESERVED_DEF
+  63:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  64:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  65:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    struct for FWU option bytes */
+  66:common/prog/firmware_update/mal/fwu_opt_bytes.h **** struct MAL_FwuOptBytes_s
+  67:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  68:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_integrityConfig      integrityConfig;     ///< Opt. byte for integrity
+  69:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_compatibilityConfig  compatibilityConfig; ///< Opt. byte for compatibility
+  70:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     enum MAL_ReservedConfig       reserved[2];
+  71:common/prog/firmware_update/mal/fwu_opt_bytes.h **** };
+  72:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  73:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 10
+
+
+  74:common/prog/firmware_update/mal/fwu_opt_bytes.h **** extern const struct MAL_FwuOptBytes_s MAL_FwuOptBytes;
+  75:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  76:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  77:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Integrity Configuration variable
+  78:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  79:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of integrityConfig variable is to enable/disable/suppress integrity checks
+  80:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            CRC calculation (FS ROM check)
+  81:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  82:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_INTEGRITY_ENABLE: integrity check is enabled
+  83:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is exec
+  84:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+  85:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+  87:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.integrityConfig;
+  89:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+  90:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+  91:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns the Compatibility Configuration variable
+  92:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  93:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  Purpose of compatibilityConfig variable is to enable/disable/suppress compatibility c
+  94:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            firmware Id validation
+  95:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+  96:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   MAL_COMPATIBILITY_ENABLE: compatibility check is enabled
+  97:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            MAL_COMPATIBILITY_IGNORE_ERROR: compatibility check errors is ignored
+  98:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+  99:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline enum MAL_compatibilityConfig MAL_getCompatibilityOpt(void)
+ 100:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 101:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return MAL_FwuOptBytes.compatibilityConfig;
+ 102:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 103:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 104:common/prog/firmware_update/mal/fwu_opt_bytes.h **** 
+ 105:common/prog/firmware_update/mal/fwu_opt_bytes.h **** /** \brief    returns true/false if Integrity check calculation is disabled or not
+ 106:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 107:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \details  For FWU1 (WIRED_FIRMWARE_UPDATE) there is available only integrity check (CRC)
+ 108:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            There is no BootManager binary where are stored default FWU opt bytes
+ 109:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            which are used in RELEASE case.
+ 110:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            From this reason we must handle it via NDEBUG(RELEASE) switch.
+ 111:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *
+ 112:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *  \return   true:  calculation is disabled
+ 113:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  *            false: calculation is enabled
+ 114:common/prog/firmware_update/mal/fwu_opt_bytes.h ****  */
+ 115:common/prog/firmware_update/mal/fwu_opt_bytes.h **** static inline bool FWU_isIntegCheckDisabledCalc(void)
+ 104              		.loc 2 115 20 view .LVU33
+ 116:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 117:common/prog/firmware_update/mal/fwu_opt_bytes.h **** #ifdef REMOTE_FIRMWARE_UPDATE
+ 118:common/prog/firmware_update/mal/fwu_opt_bytes.h ****     return ((MAL_getIntegrityOpt() == MAL_INTEGRITY_DISABLE_CALC) ? true : false);
+ 105              		.loc 2 118 5 view .LVU34
+ 106              	.LBB39:
+ 107              	.LBI39:
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 108              		.loc 2 86 40 view .LVU35
+ 109              	.LBB40:
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 110              		.loc 2 88 5 view .LVU36
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 111              		.loc 2 88 27 is_stmt 0 view .LVU37
+ 112 0036 184B     		ldr	r3, .L14+4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 11
+
+
+ 113              	.LVL6:
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 114              		.loc 2 88 27 view .LVU38
+ 115 0038 1B78     		ldrb	r3, [r3]
+ 116              	.LBE40:
+ 117              	.LBE39:
+ 118              	.LBE38:
+ 119              		.loc 1 332 16 view .LVU39
+ 120 003a DC2B     		cmp	r3, #220
+ 121 003c 06D0     		beq	.L5
+ 122              		.loc 1 332 49 view .LVU40
+ 123 003e 1E2B     		cmp	r3, #30
+ 124 0040 04D0     		beq	.L5
+ 333:common/prog/FuncSafe/fsRom.c ****              {
+ 334:common/prog/FuncSafe/fsRom.c ****                  FSF_vReportError((uint8_t)FSF_ROM_TEST, FSF_ROM_CRC_ERROR,(uint8_t)FS_ROM_RamConBl
+ 125              		.loc 1 334 18 is_stmt 1 view .LVU41
+ 126 0042 2900     		movs	r1, r5
+ 127 0044 0220     		movs	r0, #2
+ 128 0046 6278     		ldrb	r2, [r4, #1]
+ 129 0048 FFF7FEFF 		bl	FSF_vReportError
+ 130              	.LVL7:
+ 131              	.L5:
+ 335:common/prog/FuncSafe/fsRom.c ****              }
+ 336:common/prog/FuncSafe/fsRom.c ****          }
+ 337:common/prog/FuncSafe/fsRom.c **** 
+ 338:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.ucROMIdx++; // Next ROM Module
+ 132              		.loc 1 338 10 view .LVU42
+ 133              		.loc 1 338 37 is_stmt 0 view .LVU43
+ 134 004c 6378     		ldrb	r3, [r4, #1]
+ 339:common/prog/FuncSafe/fsRom.c ****          if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+ 135              		.loc 1 339 42 view .LVU44
+ 136 004e 134A     		ldr	r2, .L14+8
+ 338:common/prog/FuncSafe/fsRom.c ****          if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+ 137              		.loc 1 338 37 view .LVU45
+ 138 0050 0133     		adds	r3, r3, #1
+ 139              		.loc 1 339 13 view .LVU46
+ 140 0052 1278     		ldrb	r2, [r2]
+ 338:common/prog/FuncSafe/fsRom.c ****          if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+ 141              		.loc 1 338 37 view .LVU47
+ 142 0054 DBB2     		uxtb	r3, r3
+ 143 0056 6370     		strb	r3, [r4, #1]
+ 144              		.loc 1 339 10 is_stmt 1 view .LVU48
+ 145              		.loc 1 339 13 is_stmt 0 view .LVU49
+ 146 0058 9A42     		cmp	r2, r3
+ 147 005a 14D9     		bls	.L3
+ 340:common/prog/FuncSafe/fsRom.c ****          {
+ 341:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.patRom++;
+ 148              		.loc 1 341 13 is_stmt 1 view .LVU50
+ 149              		.loc 1 341 31 is_stmt 0 view .LVU51
+ 150 005c E368     		ldr	r3, [r4, #12]
+ 151              		.loc 1 341 38 view .LVU52
+ 152 005e 1A00     		movs	r2, r3
+ 342:common/prog/FuncSafe/fsRom.c ****             //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 343:common/prog/FuncSafe/fsRom.c ****             //  Msg(4:0489) Increment or decrement operation performed on pointer.
+ 344:common/prog/FuncSafe/fsRom.c ****             //  MISRA-C:2004 Rule 17.4 <next>
+ 345:common/prog/FuncSafe/fsRom.c ****             //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 346:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 12
+
+
+ 347:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.patSeg          = FS_ROM_RamConBlock.patRom->patSegment;
+ 153              		.loc 1 347 48 view .LVU53
+ 154 0060 5B69     		ldr	r3, [r3, #20]
+ 341:common/prog/FuncSafe/fsRom.c ****             //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 155              		.loc 1 341 38 view .LVU54
+ 156 0062 1432     		adds	r2, r2, #20
+ 157              		.loc 1 347 48 view .LVU55
+ 158 0064 2361     		str	r3, [r4, #16]
+ 348:common/prog/FuncSafe/fsRom.c ****             //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 349:common/prog/FuncSafe/fsRom.c ****             //  REFERENCE - ISO-6.3.3.2 Semantics
+ 350:common/prog/FuncSafe/fsRom.c ****             //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 351:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 352:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.ui32Crc           = (uint32_t)FSF_CRC_INIT;
+ 159              		.loc 1 352 50 view .LVU56
+ 160 0066 0123     		movs	r3, #1
+ 161 0068 5B42     		rsbs	r3, r3, #0
+ 162 006a 6361     		str	r3, [r4, #20]
+ 341:common/prog/FuncSafe/fsRom.c ****             //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 163              		.loc 1 341 38 view .LVU57
+ 164 006c E260     		str	r2, [r4, #12]
+ 347:common/prog/FuncSafe/fsRom.c ****             //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 165              		.loc 1 347 13 is_stmt 1 view .LVU58
+ 166              		.loc 1 352 13 view .LVU59
+ 353:common/prog/FuncSafe/fsRom.c ****             // Reset CRC calculation was moved into Xs file, because lib user now can select crc
+ 354:common/prog/FuncSafe/fsRom.c ****             // calculation type (SW/HW/...)
+ 355:common/prog/FuncSafe/fsRom.c ****             (void)_FSF_ui32ResetCrcCalculation();
+ 167              		.loc 1 355 13 view .LVU60
+ 168              		.loc 1 355 19 is_stmt 0 view .LVU61
+ 169 006e FFF7FEFF 		bl	_FSF_ui32ResetCrcCalculation
+ 170              	.LVL8:
+ 356:common/prog/FuncSafe/fsRom.c **** #else
+ 357:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.uiCrc           = (uint16_t)FSF_CRC_INIT;
+ 358:common/prog/FuncSafe/fsRom.c **** #endif
+ 359:common/prog/FuncSafe/fsRom.c ****             bSegChanged     = true;
+ 171              		.loc 1 359 13 is_stmt 1 view .LVU62
+ 360:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.ucSegIdx        = (uint8_t)0;
+ 172              		.loc 1 360 13 view .LVU63
+ 173              		.loc 1 360 48 is_stmt 0 view .LVU64
+ 174 0072 0023     		movs	r3, #0
+ 175 0074 A370     		strb	r3, [r4, #2]
+ 361:common/prog/FuncSafe/fsRom.c **** 
+ 362:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM Module changed"
+ 363:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 364:common/prog/FuncSafe/fsRom.c ****             TH_FSFP_PushOutPar(TP_FSF_ROM_Module_Changed);
+ 365:common/prog/FuncSafe/fsRom.c **** #endif
+ 366:common/prog/FuncSafe/fsRom.c ****          }
+ 367:common/prog/FuncSafe/fsRom.c ****       }
+ 368:common/prog/FuncSafe/fsRom.c ****       else
+ 369:common/prog/FuncSafe/fsRom.c ****       {
+ 370:common/prog/FuncSafe/fsRom.c ****          // Next ROM segment
+ 371:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.patSeg++;
+ 372:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 373:common/prog/FuncSafe/fsRom.c ****          //  Msg(4:0489) Increment or decrement operation performed on pointer.
+ 374:common/prog/FuncSafe/fsRom.c ****          //  MISRA-C:2004 Rule 17.4
+ 375:common/prog/FuncSafe/fsRom.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 376:common/prog/FuncSafe/fsRom.c **** 
+ 377:common/prog/FuncSafe/fsRom.c ****          bSegChanged = true;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 13
+
+
+ 378:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM Segment changed"
+ 379:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 380:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Segment_Changed);
+ 381:common/prog/FuncSafe/fsRom.c **** #endif
+ 382:common/prog/FuncSafe/fsRom.c ****       }
+ 383:common/prog/FuncSafe/fsRom.c ****       if (bSegChanged != false)
+ 176              		.loc 1 383 7 is_stmt 1 view .LVU65
+ 177              	.L7:
+ 384:common/prog/FuncSafe/fsRom.c ****       {
+ 385:common/prog/FuncSafe/fsRom.c ****          // Segment has changed
+ 386:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.pucRomPtr      = FS_ROM_RamConBlock.patSeg->pucStartSeg;
+ 178              		.loc 1 386 10 view .LVU66
+ 179              		.loc 1 386 64 is_stmt 0 view .LVU67
+ 180 0076 2369     		ldr	r3, [r4, #16]
+ 181              		.loc 1 386 71 view .LVU68
+ 182 0078 1A68     		ldr	r2, [r3]
+ 387:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 388:common/prog/FuncSafe/fsRom.c ****          //  REFERENCE - ISO-6.3.3.2 Semantics
+ 389:common/prog/FuncSafe/fsRom.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 390:common/prog/FuncSafe/fsRom.c ****          /*lint -save -e946 -e947 -e9029 tested to work correctly */
+ 391:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 392:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.uiROMDLen      = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamCo
+ 183              		.loc 1 392 86 view .LVU69
+ 184 007a 5B68     		ldr	r3, [r3, #4]
+ 386:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 185              		.loc 1 386 44 view .LVU70
+ 186 007c 6260     		str	r2, [r4, #4]
+ 187              		.loc 1 392 10 is_stmt 1 view .LVU71
+ 188              		.loc 1 392 86 is_stmt 0 view .LVU72
+ 189 007e 9B1A     		subs	r3, r3, r2
+ 190              		.loc 1 392 118 view .LVU73
+ 191 0080 0133     		adds	r3, r3, #1
+ 192              		.loc 1 392 124 view .LVU74
+ 193 0082 9B08     		lsrs	r3, r3, #2
+ 194              		.loc 1 392 44 view .LVU75
+ 195 0084 A360     		str	r3, [r4, #8]
+ 196              	.LVL9:
+ 197              	.L3:
+ 393:common/prog/FuncSafe/fsRom.c **** #else
+ 394:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.uiROMDLen      = (((FS_ROM_RamConBlock.patSeg->pucEndSeg) - FS_ROM_RamC
+ 395:common/prog/FuncSafe/fsRom.c ****          //  Msg(4:0488) Performing pointer arithmetic.
+ 396:common/prog/FuncSafe/fsRom.c ****          //  MISRA-C:2004 Rule 17.4 <next>
+ 397:common/prog/FuncSafe/fsRom.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 398:common/prog/FuncSafe/fsRom.c ****          //  Computing distances of locations assumed to be legal pointer operation.
+ 399:common/prog/FuncSafe/fsRom.c **** #endif
+ 400:common/prog/FuncSafe/fsRom.c ****          /*lint -restore -e946 -e947 -e9029 */
+ 401:common/prog/FuncSafe/fsRom.c ****       }
+ 402:common/prog/FuncSafe/fsRom.c ****    }
+ 403:common/prog/FuncSafe/fsRom.c **** 
+ 404:common/prog/FuncSafe/fsRom.c ****    return FS_ROM_RamConBlock.uiROMDLen;
+ 198              		.loc 1 404 4 is_stmt 1 view .LVU76
+ 199              		.loc 1 404 29 is_stmt 0 view .LVU77
+ 200 0086 A068     		ldr	r0, [r4, #8]
+ 405:common/prog/FuncSafe/fsRom.c **** }
+ 201              		.loc 1 405 1 view .LVU78
+ 202              		@ sp needed
+ 203 0088 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 14
+
+
+ 204              	.LVL10:
+ 205              	.L4:
+ 371:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 206              		.loc 1 371 10 is_stmt 1 view .LVU79
+ 371:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+ 207              		.loc 1 371 35 is_stmt 0 view .LVU80
+ 208 008a 2369     		ldr	r3, [r4, #16]
+ 209 008c 0833     		adds	r3, r3, #8
+ 210 008e 2361     		str	r3, [r4, #16]
+ 377:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM Segment changed"
+ 211              		.loc 1 377 10 is_stmt 1 view .LVU81
+ 212              	.LVL11:
+ 383:common/prog/FuncSafe/fsRom.c ****       {
+ 213              		.loc 1 383 7 view .LVU82
+ 214 0090 F1E7     		b	.L7
+ 215              	.L15:
+ 216 0092 C046     		.align	2
+ 217              	.L14:
+ 218 0094 00000000 		.word	.LANCHOR0
+ 219 0098 00000000 		.word	MAL_FwuOptBytes
+ 220 009c 00000000 		.word	FSF_ucRomModuleCount
+ 221              		.cfi_endproc
+ 222              	.LFE69:
+ 224              		.section	.text.ucInternalROMTask,"ax",%progbits
+ 225              		.align	1
+ 226              		.syntax unified
+ 227              		.code	16
+ 228              		.thumb_func
+ 230              	ucInternalROMTask:
+ 231              	.LFB71:
+ 406:common/prog/FuncSafe/fsRom.c **** 
+ 407:common/prog/FuncSafe/fsRom.c **** /** Initialise the ROM channels work area.
+ 408:common/prog/FuncSafe/fsRom.c **** 
+ 409:common/prog/FuncSafe/fsRom.c ****     \return     uint8_t   FSF_ROM_CHECK_ONGOING, if ROM exists. FSF_ROM_CHECK_RESTART otherwise.
+ 410:common/prog/FuncSafe/fsRom.c **** 
+ 411:common/prog/FuncSafe/fsRom.c ****     \pre        Called only at operational time. \n
+ 412:common/prog/FuncSafe/fsRom.c ****     \post       ROM channel work area updated \n
+ 413:common/prog/FuncSafe/fsRom.c **** */
+ 414:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t   ucInitialiseROMChannel  (void)
+ 415:common/prog/FuncSafe/fsRom.c **** {
+ 416:common/prog/FuncSafe/fsRom.c ****    if(FSF_ucRomModuleCount != (uint8_t)0)
+ 417:common/prog/FuncSafe/fsRom.c ****    {
+ 418:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ucROMIdx      = (uint8_t)0;                         //!< First ROM Mod. In
+ 419:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ucSegIdx      = (uint8_t)0;                         //!< First ROM Seg. In
+ 420:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patRom        = (T_ROM_Module FSTH_CONST *)(&FSF_atRomModules[0]); /*lint 
+ 421:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< 
+ 422:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< 
+ 423:common/prog/FuncSafe/fsRom.c **** 
+ 424:common/prog/FuncSafe/fsRom.c ****       /*lint -save -e946 -e947 -e9029 tested to work correctly */
+ 425:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.uiROMDLen     = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamConBlo
+ 427:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 428:common/prog/FuncSafe/fsRom.c ****       /* Reset CRC generator */
+ 429:common/prog/FuncSafe/fsRom.c ****       // Reset CRC calculation was moved into Xs file, because lib user now can select crc
+ 430:common/prog/FuncSafe/fsRom.c ****       // calculation type (SW/HW/...)
+ 431:common/prog/FuncSafe/fsRom.c ****       (void)_FSF_ui32ResetCrcCalculation();
+ 432:common/prog/FuncSafe/fsRom.c **** #else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 15
+
+
+ 433:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.uiROMDLen     = (((FS_ROM_RamConBlock.patSeg->pucEndSeg) - FS_ROM_RamConBl
+ 434:common/prog/FuncSafe/fsRom.c ****       //  Msg(4:0488) Performing pointer arithmetic.
+ 435:common/prog/FuncSafe/fsRom.c ****       //  MISRA-C:2004 Rule 17.4 <next>
+ 436:common/prog/FuncSafe/fsRom.c ****       //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 437:common/prog/FuncSafe/fsRom.c ****       //  Computing distances of locations assumed to be legal pointer operation.
+ 438:common/prog/FuncSafe/fsRom.c **** 
+ 439:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.uiCrc         = ui16InitializeCRCValue();         //!< CRC Initial value
+ 440:common/prog/FuncSafe/fsRom.c **** #endif
+ 441:common/prog/FuncSafe/fsRom.c ****       /*lint -restore -e946 -e947 -e9029 */
+ 442:common/prog/FuncSafe/fsRom.c **** 
+ 443:common/prog/FuncSafe/fsRom.c ****       return (uint8_t)FSF_ROM_CHECK_ONGOING;
+ 444:common/prog/FuncSafe/fsRom.c ****    }
+ 445:common/prog/FuncSafe/fsRom.c ****    else
+ 446:common/prog/FuncSafe/fsRom.c ****    {
+ 447:common/prog/FuncSafe/fsRom.c ****       return (uint8_t)FSF_ROM_CHECK_RESTART;
+ 448:common/prog/FuncSafe/fsRom.c ****    }
+ 449:common/prog/FuncSafe/fsRom.c **** }
+ 450:common/prog/FuncSafe/fsRom.c **** 
+ 451:common/prog/FuncSafe/fsRom.c **** 
+ 452:common/prog/FuncSafe/fsRom.c **** //  ROM Indirect Access
+ 453:common/prog/FuncSafe/fsRom.c **** STATIC  uint8_t   ucInternalROMTask   (void)
+ 454:common/prog/FuncSafe/fsRom.c **** {
+ 232              		.loc 1 454 1 view -0
+ 233              		.cfi_startproc
+ 234              		@ args = 0, pretend = 0, frame = 0
+ 235              		@ frame_needed = 0, uses_anonymous_args = 0
+ 455:common/prog/FuncSafe/fsRom.c ****    if (FSF_ucRomModuleCount == 0u)
+ 236              		.loc 1 455 4 view .LVU84
+ 454:common/prog/FuncSafe/fsRom.c ****    if (FSF_ucRomModuleCount == 0u)
+ 237              		.loc 1 454 1 is_stmt 0 view .LVU85
+ 238 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 239              	.LCFI1:
+ 240              		.cfi_def_cfa_offset 24
+ 241              		.cfi_offset 3, -24
+ 242              		.cfi_offset 4, -20
+ 243              		.cfi_offset 5, -16
+ 244              		.cfi_offset 6, -12
+ 245              		.cfi_offset 7, -8
+ 246              		.cfi_offset 14, -4
+ 247              		.loc 1 455 29 view .LVU86
+ 248 0002 324B     		ldr	r3, .L29
+ 249 0004 1D78     		ldrb	r5, [r3]
+ 250              		.loc 1 455 7 view .LVU87
+ 251 0006 002D     		cmp	r5, #0
+ 252 0008 1ED0     		beq	.L17
+ 456:common/prog/FuncSafe/fsRom.c ****    {
+ 457:common/prog/FuncSafe/fsRom.c **** //  Testpoint "No ROM Configuration"
+ 458:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 459:common/prog/FuncSafe/fsRom.c ****       TH_FSFP_PushOutPar(TP_FSF_ROM_No_Configuration);
+ 460:common/prog/FuncSafe/fsRom.c **** #endif
+ 461:common/prog/FuncSafe/fsRom.c ****       //  Return this value in order not to run into an indefinite loop.
+ 462:common/prog/FuncSafe/fsRom.c ****       return  (uint8_t)TASK_NOT_INITIALISED;
+ 463:common/prog/FuncSafe/fsRom.c ****    }
+ 464:common/prog/FuncSafe/fsRom.c ****    switch (FS_ROM_RamConBlock.ucROMTState)
+ 253              		.loc 1 464 4 is_stmt 1 view .LVU88
+ 254              		.loc 1 464 30 is_stmt 0 view .LVU89
+ 255 000a 314C     		ldr	r4, .L29+4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 16
+
+
+ 256 000c 2578     		ldrb	r5, [r4]
+ 257              		.loc 1 464 4 view .LVU90
+ 258 000e 012D     		cmp	r5, #1
+ 259 0010 1CD0     		beq	.L18
+ 260 0012 022D     		cmp	r5, #2
+ 261 0014 4ED0     		beq	.L19
+ 262 0016 002D     		cmp	r5, #0
+ 263 0018 51D1     		bne	.L20
+ 465:common/prog/FuncSafe/fsRom.c ****    {
+ 466:common/prog/FuncSafe/fsRom.c ****       case (uint8_t)FSF_ROM_CHECK_RESTART:
+ 467:common/prog/FuncSafe/fsRom.c ****       {
+ 468:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 469:common/prog/FuncSafe/fsRom.c ****     ROM Check Restart
+ 470:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 471:common/prog/FuncSafe/fsRom.c ****          //  Report ongoing. The ROM channel is about to start
+ 472:common/prog/FuncSafe/fsRom.c ****          vROMCheckOngoing();
+ 264              		.loc 1 472 10 is_stmt 1 view .LVU91
+ 265              	.LBB62:
+ 266              	.LBI62:
+ 473:common/prog/FuncSafe/fsRom.c ****          //  (Re-)Initialise the ROM channel (again)
+ 474:common/prog/FuncSafe/fsRom.c ****          FS_ROM_RamConBlock.ucROMTState = ucInitialiseROMChannel();
+ 475:common/prog/FuncSafe/fsRom.c ****          //  Restart the ROM check again and again and ..
+ 476:common/prog/FuncSafe/fsRom.c **** 
+ 477:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM check restart"
+ 478:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 479:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Restart);
+ 480:common/prog/FuncSafe/fsRom.c **** #endif
+ 481:common/prog/FuncSafe/fsRom.c ****          break;
+ 482:common/prog/FuncSafe/fsRom.c ****       }
+ 483:common/prog/FuncSafe/fsRom.c ****       case (uint8_t)FSF_ROM_CHECK_ONGOING:
+ 484:common/prog/FuncSafe/fsRom.c ****       {
+ 485:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 486:common/prog/FuncSafe/fsRom.c ****     ROM Check Ongoing
+ 487:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 488:common/prog/FuncSafe/fsRom.c ****          uint16_t ui16Partlen = FS_ROM_RamConBlock.patRom->ui16CycleBytesCount;
+ 489:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 490:common/prog/FuncSafe/fsRom.c ****          //  REFERENCE - ISO-6.3.3.2 Semantics
+ 491:common/prog/FuncSafe/fsRom.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 492:common/prog/FuncSafe/fsRom.c **** 
+ 493:common/prog/FuncSafe/fsRom.c ****          //  Make sure, the rest of data does not exceed the segment boundary
+ 494:common/prog/FuncSafe/fsRom.c ****          if (ui16Partlen > FS_ROM_RamConBlock.uiROMDLen)
+ 495:common/prog/FuncSafe/fsRom.c ****          {
+ 496:common/prog/FuncSafe/fsRom.c ****             ui16Partlen = (uint16_t)FS_ROM_RamConBlock.uiROMDLen;
+ 497:common/prog/FuncSafe/fsRom.c ****          }
+ 498:common/prog/FuncSafe/fsRom.c **** 
+ 499:common/prog/FuncSafe/fsRom.c ****          //  Report ongoing, even for ROM parts that are not ready for
+ 500:common/prog/FuncSafe/fsRom.c ****          //  access. If such type of ROM remains unaccessable, the ROM
+ 501:common/prog/FuncSafe/fsRom.c ****          //  channel will fail as soon as the check cycle time has elapsed.
+ 502:common/prog/FuncSafe/fsRom.c ****          vROMCheckOngoing();
+ 503:common/prog/FuncSafe/fsRom.c ****          //  ROM parts must be accessible before checking. Otherwise,
+ 504:common/prog/FuncSafe/fsRom.c ****          //  suspend the actual check cycle. Do not move on to the next
+ 505:common/prog/FuncSafe/fsRom.c ****          //  ROM data.
+ 506:common/prog/FuncSafe/fsRom.c ****          if (bExtIsROMReady(FS_ROM_RamConBlock.pucRomPtr,ui16Partlen) != false)
+ 507:common/prog/FuncSafe/fsRom.c ****          {
+ 508:common/prog/FuncSafe/fsRom.c ****             //  Calculate a partial data area
+ 509:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 510:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.ui32Crc = uiCalculateCRC32  (FS_ROM_RamConBlock.ui32Crc, (FSTH_CONST
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 17
+
+
+ 511:common/prog/FuncSafe/fsRom.c **** #else
+ 512:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.uiCrc = uiCalculateCRC  (FS_ROM_RamConBlock.uiCrc, (FSTH_CONST uint8
+ 513:common/prog/FuncSafe/fsRom.c **** #endif
+ 514:common/prog/FuncSafe/fsRom.c **** 
+ 515:common/prog/FuncSafe/fsRom.c ****             //  Calculate the next ROM data area
+ 516:common/prog/FuncSafe/fsRom.c ****             FS_ROM_RamConBlock.uiROMDLen = uiSetupNextROMAddress (ui16Partlen);
+ 517:common/prog/FuncSafe/fsRom.c ****             //  The space left is returned. If 0 (zero), all ROM modules have
+ 518:common/prog/FuncSafe/fsRom.c ****             //  been checked. So, restart the check again.
+ 519:common/prog/FuncSafe/fsRom.c ****             if (FS_ROM_RamConBlock.uiROMDLen == 0u)
+ 520:common/prog/FuncSafe/fsRom.c ****             {
+ 521:common/prog/FuncSafe/fsRom.c ****                //  The ROM channel has completed one full ROM check.
+ 522:common/prog/FuncSafe/fsRom.c ****                vFinalizeROMCheck();
+ 523:common/prog/FuncSafe/fsRom.c ****                //  Some configurations want to check the ROM space only once.
+ 524:common/prog/FuncSafe/fsRom.c ****                if (bIsROMAtOnce() != false)
+ 525:common/prog/FuncSafe/fsRom.c ****                {
+ 526:common/prog/FuncSafe/fsRom.c ****                   //  ROM check has finished
+ 527:common/prog/FuncSafe/fsRom.c ****                   FS_ROM_RamConBlock.ucROMTState = (uint8_t)FSF_ROM_CHECK_FINISH;
+ 528:common/prog/FuncSafe/fsRom.c ****                }
+ 529:common/prog/FuncSafe/fsRom.c ****                else
+ 530:common/prog/FuncSafe/fsRom.c ****                {
+ 531:common/prog/FuncSafe/fsRom.c ****                   // Re-Initialise the work area (again)
+ 532:common/prog/FuncSafe/fsRom.c ****                   FS_ROM_RamConBlock.ucROMTState = (uint8_t)FSF_ROM_CHECK_RESTART;
+ 533:common/prog/FuncSafe/fsRom.c ****                }
+ 534:common/prog/FuncSafe/fsRom.c ****             }
+ 535:common/prog/FuncSafe/fsRom.c ****          }
+ 536:common/prog/FuncSafe/fsRom.c ****          else
+ 537:common/prog/FuncSafe/fsRom.c ****          {
+ 538:common/prog/FuncSafe/fsRom.c **** 
+ 539:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM not ready"
+ 540:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 541:common/prog/FuncSafe/fsRom.c ****             TH_FSFP_PushOutPar(TP_FSF_ROM_Not_Ready);
+ 542:common/prog/FuncSafe/fsRom.c **** #endif
+ 543:common/prog/FuncSafe/fsRom.c ****          }
+ 544:common/prog/FuncSafe/fsRom.c ****          break;
+ 545:common/prog/FuncSafe/fsRom.c ****       }
+ 546:common/prog/FuncSafe/fsRom.c ****       case (uint8_t)FSF_ROM_CHECK_FINISH:
+ 547:common/prog/FuncSafe/fsRom.c ****       {
+ 548:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 549:common/prog/FuncSafe/fsRom.c ****     ROM Check Finished
+ 550:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 551:common/prog/FuncSafe/fsRom.c ****          //  Report success. The ROM channel has completed one full ROM check.
+ 552:common/prog/FuncSafe/fsRom.c ****          vROMCheckSuccessfullyCompleted ();
+ 553:common/prog/FuncSafe/fsRom.c ****          break;
+ 554:common/prog/FuncSafe/fsRom.c ****       }
+ 555:common/prog/FuncSafe/fsRom.c ****       default:
+ 556:common/prog/FuncSafe/fsRom.c ****       {
+ 557:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 558:common/prog/FuncSafe/fsRom.c ****     Report Error due to invalid state
+ 559:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 560:common/prog/FuncSafe/fsRom.c ****          FSF_vReportError((uint8_t)FSF_ROM_TEST,(uint8_t)FSF_ERR_INVALID_STATE,(uint8_t)0);
+ 561:common/prog/FuncSafe/fsRom.c ****          break;
+ 562:common/prog/FuncSafe/fsRom.c ****       }
+ 563:common/prog/FuncSafe/fsRom.c ****    }
+ 564:common/prog/FuncSafe/fsRom.c **** 
+ 565:common/prog/FuncSafe/fsRom.c ****    return  (uint8_t)TASK_INITIALISED;
+ 566:common/prog/FuncSafe/fsRom.c **** }
+ 567:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 18
+
+
+ 568:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 569:common/prog/FuncSafe/fsRom.c ****     Stub Interface Implementations
+ 570:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 571:common/prog/FuncSafe/fsRom.c **** /** This wrapper function separate the test harness from overloaded application.
+ 572:common/prog/FuncSafe/fsRom.c **** 
+ 573:common/prog/FuncSafe/fsRom.c ****     \pre       patROM must be valid!\n
+ 574:common/prog/FuncSafe/fsRom.c **** */
+ 575:common/prog/FuncSafe/fsRom.c **** STATIC  bool    bExtIsROMReady (uint8_t *pucData, uint16_t ui16length)
+ 576:common/prog/FuncSafe/fsRom.c **** {
+ 577:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM Ready"
+ 578:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 579:common/prog/FuncSafe/fsRom.c ****    TH_FSFP_PushOutPar(TP_FSF_ROM_Is_Ready);
+ 580:common/prog/FuncSafe/fsRom.c ****    return TH_FSCOM_bIsROMReady;
+ 581:common/prog/FuncSafe/fsRom.c **** #else
+ 582:common/prog/FuncSafe/fsRom.c ****    return  FS_ROM_RamConBlock.patRom->pfROMReady(pucData,ui16length);
+ 583:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 584:common/prog/FuncSafe/fsRom.c ****    //  REFERENCE - ISO-6.3.3.2 Semantics
+ 585:common/prog/FuncSafe/fsRom.c ****    //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 586:common/prog/FuncSafe/fsRom.c **** #endif
+ 587:common/prog/FuncSafe/fsRom.c **** }
+ 588:common/prog/FuncSafe/fsRom.c **** 
+ 589:common/prog/FuncSafe/fsRom.c **** /** This wrapper function separate the test harness from overloaded application.
+ 590:common/prog/FuncSafe/fsRom.c **** 
+ 591:common/prog/FuncSafe/fsRom.c ****     \pre       patROM must be valid!\n
+ 592:common/prog/FuncSafe/fsRom.c **** */
+ 593:common/prog/FuncSafe/fsRom.c **** 
+ 594:common/prog/FuncSafe/fsRom.c **** STATIC uint8_t*  pucExtROMRead (uint8_t *pucData, uint16_t ui16length)
+ 595:common/prog/FuncSafe/fsRom.c **** {
+ 596:common/prog/FuncSafe/fsRom.c **** //  Testpoint "ROM Data read"
+ 597:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 598:common/prog/FuncSafe/fsRom.c ****    TH_FSFP_PushOutPar(TP_FSF_ROM_Data_Read);
+ 599:common/prog/FuncSafe/fsRom.c **** #endif
+ 600:common/prog/FuncSafe/fsRom.c ****    return  FS_ROM_RamConBlock.patRom->pfROMRead(pucData,ui16length);
+ 601:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 602:common/prog/FuncSafe/fsRom.c ****    //  REFERENCE - ISO-6.3.3.2 Semantics
+ 603:common/prog/FuncSafe/fsRom.c ****    //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 604:common/prog/FuncSafe/fsRom.c **** }
+ 605:common/prog/FuncSafe/fsRom.c **** 
+ 606:common/prog/FuncSafe/fsRom.c **** /** Check, if ROM at once is possible to start.
+ 607:common/prog/FuncSafe/fsRom.c ****     Default implementation for checking the ROM check ready state. \n
+ 608:common/prog/FuncSafe/fsRom.c **** 
+ 609:common/prog/FuncSafe/fsRom.c ****     \param      none
+ 610:common/prog/FuncSafe/fsRom.c **** 
+ 611:common/prog/FuncSafe/fsRom.c ****     \return     bool        true, if the ROM check may start, false otherwise.\n\n
+ 612:common/prog/FuncSafe/fsRom.c **** 
+ 613:common/prog/FuncSafe/fsRom.c ****     \pre        Called only at operational time. Called each time BEFORE start of check\n
+ 614:common/prog/FuncSafe/fsRom.c ****     \post       If false is returned, the currect check cycle is supended and resumed again \n
+ 615:common/prog/FuncSafe/fsRom.c ****                 when dispatched the next time.\n\n
+ 616:common/prog/FuncSafe/fsRom.c **** 
+ 617:common/prog/FuncSafe/fsRom.c ****     \note       Overloading is not designed here, as this is up to an application. \n
+ 618:common/prog/FuncSafe/fsRom.c **** */
+ 619:common/prog/FuncSafe/fsRom.c **** 
+ 620:common/prog/FuncSafe/fsRom.c **** STATIC  bool    bIsROMAtOnceAllowed     (void)
+ 621:common/prog/FuncSafe/fsRom.c **** {
+ 622:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 623:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Allowed"
+ 624:common/prog/FuncSafe/fsRom.c ****    TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Allowed);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 19
+
+
+ 625:common/prog/FuncSafe/fsRom.c **** 
+ 626:common/prog/FuncSafe/fsRom.c ****    return TH_FSCOM_bIsROMAtOnceAllowed;
+ 627:common/prog/FuncSafe/fsRom.c **** #else
+ 628:common/prog/FuncSafe/fsRom.c ****    return _FSF_bIsROMAtOnceAllowed();
+ 629:common/prog/FuncSafe/fsRom.c **** #endif
+ 630:common/prog/FuncSafe/fsRom.c **** }
+ 631:common/prog/FuncSafe/fsRom.c **** 
+ 632:common/prog/FuncSafe/fsRom.c **** /** Check, if ROM get checked at once or piece by piece.
+ 633:common/prog/FuncSafe/fsRom.c ****     Default implementation for getting the type of ROM check. \n
+ 634:common/prog/FuncSafe/fsRom.c **** 
+ 635:common/prog/FuncSafe/fsRom.c ****     \param      none
+ 636:common/prog/FuncSafe/fsRom.c **** 
+ 637:common/prog/FuncSafe/fsRom.c ****     \return     bool        true, if the ROM get checked at once, false otherwise.\n\n
+ 638:common/prog/FuncSafe/fsRom.c **** 
+ 639:common/prog/FuncSafe/fsRom.c ****     \pre        Called only at operational time. \n
+ 640:common/prog/FuncSafe/fsRom.c **** 
+ 641:common/prog/FuncSafe/fsRom.c ****     \note       Overloading is not designed here, as this is up to an application. \n
+ 642:common/prog/FuncSafe/fsRom.c **** */
+ 643:common/prog/FuncSafe/fsRom.c **** 
+ 644:common/prog/FuncSafe/fsRom.c **** STATIC  bool    bIsROMAtOnce     (void)
+ 645:common/prog/FuncSafe/fsRom.c **** {
+ 646:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 647:common/prog/FuncSafe/fsRom.c ****    return TH_FSF_bROM_At_Once;
+ 648:common/prog/FuncSafe/fsRom.c **** #else
+ 649:common/prog/FuncSafe/fsRom.c ****    return _FSF_bIsROMAtOnce();
+ 650:common/prog/FuncSafe/fsRom.c **** #endif
+ 651:common/prog/FuncSafe/fsRom.c **** }
+ 652:common/prog/FuncSafe/fsRom.c **** 
+ 653:common/prog/FuncSafe/fsRom.c **** /** Finalize the actual ROM check cycle
+ 654:common/prog/FuncSafe/fsRom.c ****     This function is called once a ROM check cycle has completed successfully. \n
+ 655:common/prog/FuncSafe/fsRom.c **** 
+ 656:common/prog/FuncSafe/fsRom.c ****     \param      none
+ 657:common/prog/FuncSafe/fsRom.c **** 
+ 658:common/prog/FuncSafe/fsRom.c ****     \pre        The state of the ROM channel changes into state success. \n
+ 659:common/prog/FuncSafe/fsRom.c **** */
+ 660:common/prog/FuncSafe/fsRom.c **** STATIC  void    vFinalizeROMCheck     (void)
+ 661:common/prog/FuncSafe/fsRom.c **** {
+ 662:common/prog/FuncSafe/fsRom.c ****    //  Report success. The ROM channel has completed one full ROM check.
+ 663:common/prog/FuncSafe/fsRom.c ****    vROMCheckSuccessfullyCompleted ();
+ 664:common/prog/FuncSafe/fsRom.c ****    //  Notify the application on completion of one ROM check cycle
+ 665:common/prog/FuncSafe/fsRom.c ****    _FSF_vNotifyROMCheckComplete();
+ 666:common/prog/FuncSafe/fsRom.c ****    //  Increase the check cycle counter
+ 667:common/prog/FuncSafe/fsRom.c ****    ucROMCheckCycleCount++;
+ 668:common/prog/FuncSafe/fsRom.c **** 
+ 669:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Finished"
+ 670:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 671:common/prog/FuncSafe/fsRom.c ****    TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Finished);
+ 672:common/prog/FuncSafe/fsRom.c **** #endif
+ 673:common/prog/FuncSafe/fsRom.c **** }
+ 674:common/prog/FuncSafe/fsRom.c **** 
+ 675:common/prog/FuncSafe/fsRom.c **** /** ROM Check successfully completed
+ 676:common/prog/FuncSafe/fsRom.c ****     This function is called if a ROM check cycle has completed successfully. \n
+ 677:common/prog/FuncSafe/fsRom.c **** 
+ 678:common/prog/FuncSafe/fsRom.c ****     \param      none
+ 679:common/prog/FuncSafe/fsRom.c **** 
+ 680:common/prog/FuncSafe/fsRom.c ****     \pre        none. \n
+ 681:common/prog/FuncSafe/fsRom.c **** */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 20
+
+
+ 682:common/prog/FuncSafe/fsRom.c **** STATIC  void    vROMCheckSuccessfullyCompleted     (void)
+ 683:common/prog/FuncSafe/fsRom.c **** {
+ 684:common/prog/FuncSafe/fsRom.c **** #ifdef SYSTEMTEST_F15
+ 685:common/prog/FuncSafe/fsRom.c ****    //  System Test Case F15: The ROM channel remains in state idle (no ongoing, no success)
+ 686:common/prog/FuncSafe/fsRom.c ****    return;
+ 687:common/prog/FuncSafe/fsRom.c **** #endif
+ 688:common/prog/FuncSafe/fsRom.c **** #ifdef SYSTEMTEST_F19
+ 689:common/prog/FuncSafe/fsRom.c ****    //  System Test Case F19: The ROM channel does not complete a check (no success)
+ 690:common/prog/FuncSafe/fsRom.c ****    FSF_vReportOnGoing((uint8_t)FSF_ROM_TEST);
+ 691:common/prog/FuncSafe/fsRom.c **** 
+ 692:common/prog/FuncSafe/fsRom.c ****    return;
+ 693:common/prog/FuncSafe/fsRom.c **** #endif
+ 694:common/prog/FuncSafe/fsRom.c **** #ifdef SYSTEMTEST_F16
+ 695:common/prog/FuncSafe/fsRom.c ****    //  System Test Case F16: Use wrong channel identifier.
+ 696:common/prog/FuncSafe/fsRom.c ****    FSF_vReportSuccess((uint8_t)255);
+ 697:common/prog/FuncSafe/fsRom.c **** 
+ 698:common/prog/FuncSafe/fsRom.c ****    return;
+ 699:common/prog/FuncSafe/fsRom.c **** #endif
+ 700:common/prog/FuncSafe/fsRom.c **** 
+ 701:common/prog/FuncSafe/fsRom.c ****    //  Report success. The ROM channel has completed one full ROM check.
+ 702:common/prog/FuncSafe/fsRom.c ****    FSF_vReportSuccess((uint8_t)FSF_ROM_TEST);
+ 703:common/prog/FuncSafe/fsRom.c **** }
+ 704:common/prog/FuncSafe/fsRom.c **** 
+ 705:common/prog/FuncSafe/fsRom.c **** /** ROM Check Ongoing
+ 706:common/prog/FuncSafe/fsRom.c ****     This function is called if a ROM check cycle is ongoing. \n
+ 707:common/prog/FuncSafe/fsRom.c **** 
+ 708:common/prog/FuncSafe/fsRom.c ****     \param      none
+ 709:common/prog/FuncSafe/fsRom.c **** 
+ 710:common/prog/FuncSafe/fsRom.c ****     \pre        none. \n
+ 711:common/prog/FuncSafe/fsRom.c **** */
+ 712:common/prog/FuncSafe/fsRom.c **** STATIC  void    vROMCheckOngoing     (void)
+ 267              		.loc 1 712 17 view .LVU92
+ 268              	.LBB63:
+ 713:common/prog/FuncSafe/fsRom.c **** {
+ 714:common/prog/FuncSafe/fsRom.c **** #ifndef SYSTEMTEST_F15
+ 715:common/prog/FuncSafe/fsRom.c ****    //  Report ongoing ROM check.
+ 716:common/prog/FuncSafe/fsRom.c ****    FSF_vReportOnGoing((uint8_t)FSF_ROM_TEST);
+ 269              		.loc 1 716 4 view .LVU93
+ 270 001a 0220     		movs	r0, #2
+ 271 001c FFF7FEFF 		bl	FSF_vReportOnGoing
+ 272              	.LVL12:
+ 273              	.LBE63:
+ 274              	.LBE62:
+ 474:common/prog/FuncSafe/fsRom.c ****          //  Restart the ROM check again and again and ..
+ 275              		.loc 1 474 10 view .LVU94
+ 276              	.LBB64:
+ 277              	.LBI64:
+ 414:common/prog/FuncSafe/fsRom.c **** {
+ 278              		.loc 1 414 19 view .LVU95
+ 279              	.LBB65:
+ 416:common/prog/FuncSafe/fsRom.c ****    {
+ 280              		.loc 1 416 4 view .LVU96
+ 418:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ucSegIdx      = (uint8_t)0;                         //!< First ROM Seg. In
+ 281              		.loc 1 418 7 view .LVU97
+ 420:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< 
+ 282              		.loc 1 420 40 is_stmt 0 view .LVU98
+ 283 0020 2C4B     		ldr	r3, .L29+8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 21
+
+
+ 418:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ucSegIdx      = (uint8_t)0;                         //!< First ROM Seg. In
+ 284              		.loc 1 418 40 view .LVU99
+ 285 0022 6570     		strb	r5, [r4, #1]
+ 419:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patRom        = (T_ROM_Module FSTH_CONST *)(&FSF_atRomModules[0]); /*lint 
+ 286              		.loc 1 419 7 is_stmt 1 view .LVU100
+ 420:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< 
+ 287              		.loc 1 420 40 is_stmt 0 view .LVU101
+ 288 0024 E360     		str	r3, [r4, #12]
+ 421:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< 
+ 289              		.loc 1 421 67 view .LVU102
+ 290 0026 1B68     		ldr	r3, [r3]
+ 419:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patRom        = (T_ROM_Module FSTH_CONST *)(&FSF_atRomModules[0]); /*lint 
+ 291              		.loc 1 419 40 view .LVU103
+ 292 0028 A570     		strb	r5, [r4, #2]
+ 420:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< 
+ 293              		.loc 1 420 7 is_stmt 1 view .LVU104
+ 421:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< 
+ 294              		.loc 1 421 7 view .LVU105
+ 422:common/prog/FuncSafe/fsRom.c **** 
+ 295              		.loc 1 422 67 is_stmt 0 view .LVU106
+ 296 002a 1A68     		ldr	r2, [r3]
+ 421:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< 
+ 297              		.loc 1 421 40 view .LVU107
+ 298 002c 2361     		str	r3, [r4, #16]
+ 422:common/prog/FuncSafe/fsRom.c **** 
+ 299              		.loc 1 422 7 is_stmt 1 view .LVU108
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 300              		.loc 1 426 82 is_stmt 0 view .LVU109
+ 301 002e 5B68     		ldr	r3, [r3, #4]
+ 302              	.LBE65:
+ 303              	.LBE64:
+ 474:common/prog/FuncSafe/fsRom.c ****          //  Restart the ROM check again and again and ..
+ 304              		.loc 1 474 41 view .LVU110
+ 305 0030 0135     		adds	r5, r5, #1
+ 306              	.LBB67:
+ 307              	.LBB66:
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 308              		.loc 1 426 82 view .LVU111
+ 309 0032 9B1A     		subs	r3, r3, r2
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 310              		.loc 1 426 114 view .LVU112
+ 311 0034 0133     		adds	r3, r3, #1
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 312              		.loc 1 426 120 view .LVU113
+ 313 0036 9B08     		lsrs	r3, r3, #2
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 314              		.loc 1 426 40 view .LVU114
+ 315 0038 A360     		str	r3, [r4, #8]
+ 427:common/prog/FuncSafe/fsRom.c ****       /* Reset CRC generator */
+ 316              		.loc 1 427 41 view .LVU115
+ 317 003a 0123     		movs	r3, #1
+ 318 003c 5B42     		rsbs	r3, r3, #0
+ 422:common/prog/FuncSafe/fsRom.c **** 
+ 319              		.loc 1 422 40 view .LVU116
+ 320 003e 6260     		str	r2, [r4, #4]
+ 426:common/prog/FuncSafe/fsRom.c ****       FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+ 321              		.loc 1 426 7 is_stmt 1 view .LVU117
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 22
+
+
+ 427:common/prog/FuncSafe/fsRom.c ****       /* Reset CRC generator */
+ 322              		.loc 1 427 7 view .LVU118
+ 427:common/prog/FuncSafe/fsRom.c ****       /* Reset CRC generator */
+ 323              		.loc 1 427 41 is_stmt 0 view .LVU119
+ 324 0040 6361     		str	r3, [r4, #20]
+ 431:common/prog/FuncSafe/fsRom.c **** #else
+ 325              		.loc 1 431 7 is_stmt 1 view .LVU120
+ 431:common/prog/FuncSafe/fsRom.c **** #else
+ 326              		.loc 1 431 13 is_stmt 0 view .LVU121
+ 327 0042 FFF7FEFF 		bl	_FSF_ui32ResetCrcCalculation
+ 328              	.LVL13:
+ 443:common/prog/FuncSafe/fsRom.c ****    }
+ 329              		.loc 1 443 7 is_stmt 1 view .LVU122
+ 330              	.LBE66:
+ 331              	.LBE67:
+ 474:common/prog/FuncSafe/fsRom.c ****          //  Restart the ROM check again and again and ..
+ 332              		.loc 1 474 41 is_stmt 0 view .LVU123
+ 333 0046 2570     		strb	r5, [r4]
+ 481:common/prog/FuncSafe/fsRom.c ****       }
+ 334              		.loc 1 481 10 is_stmt 1 view .LVU124
+ 335              	.L17:
+ 566:common/prog/FuncSafe/fsRom.c **** 
+ 336              		.loc 1 566 1 is_stmt 0 view .LVU125
+ 337 0048 2800     		movs	r0, r5
+ 338              		@ sp needed
+ 339 004a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 340              	.L18:
+ 341              	.LBB68:
+ 342              	.LBI68:
+ 453:common/prog/FuncSafe/fsRom.c **** {
+ 343              		.loc 1 453 19 is_stmt 1 view .LVU126
+ 344              	.LBB69:
+ 488:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 345              		.loc 1 488 10 view .LVU127
+ 488:common/prog/FuncSafe/fsRom.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 346              		.loc 1 488 19 is_stmt 0 view .LVU128
+ 347 004c E368     		ldr	r3, [r4, #12]
+ 348 004e DE88     		ldrh	r6, [r3, #6]
+ 349              	.LVL14:
+ 494:common/prog/FuncSafe/fsRom.c ****          {
+ 350              		.loc 1 494 10 is_stmt 1 view .LVU129
+ 494:common/prog/FuncSafe/fsRom.c ****          {
+ 351              		.loc 1 494 46 is_stmt 0 view .LVU130
+ 352 0050 A368     		ldr	r3, [r4, #8]
+ 494:common/prog/FuncSafe/fsRom.c ****          {
+ 353              		.loc 1 494 13 view .LVU131
+ 354 0052 9E42     		cmp	r6, r3
+ 355 0054 00D9     		bls	.L21
+ 496:common/prog/FuncSafe/fsRom.c ****          }
+ 356              		.loc 1 496 13 is_stmt 1 view .LVU132
+ 496:common/prog/FuncSafe/fsRom.c ****          }
+ 357              		.loc 1 496 25 is_stmt 0 view .LVU133
+ 358 0056 9EB2     		uxth	r6, r3
+ 359              	.LVL15:
+ 360              	.L21:
+ 502:common/prog/FuncSafe/fsRom.c ****          //  ROM parts must be accessible before checking. Otherwise,
+ 361              		.loc 1 502 10 is_stmt 1 view .LVU134
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 23
+
+
+ 362              	.LBB70:
+ 363              	.LBI70:
+ 712:common/prog/FuncSafe/fsRom.c **** {
+ 364              		.loc 1 712 17 view .LVU135
+ 365              	.LBB71:
+ 366              		.loc 1 716 4 view .LVU136
+ 367 0058 0220     		movs	r0, #2
+ 368 005a FFF7FEFF 		bl	FSF_vReportOnGoing
+ 369              	.LVL16:
+ 370              	.LBE71:
+ 371              	.LBE70:
+ 506:common/prog/FuncSafe/fsRom.c ****          {
+ 372              		.loc 1 506 10 view .LVU137
+ 373              	.LBB72:
+ 374              	.LBI72:
+ 575:common/prog/FuncSafe/fsRom.c **** {
+ 375              		.loc 1 575 17 view .LVU138
+ 376              	.LBB73:
+ 582:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 377              		.loc 1 582 4 view .LVU139
+ 582:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 378              		.loc 1 582 37 is_stmt 0 view .LVU140
+ 379 005e E368     		ldr	r3, [r4, #12]
+ 582:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 380              		.loc 1 582 12 view .LVU141
+ 381 0060 3100     		movs	r1, r6
+ 382 0062 DB68     		ldr	r3, [r3, #12]
+ 383 0064 6068     		ldr	r0, [r4, #4]
+ 384 0066 9847     		blx	r3
+ 385              	.LVL17:
+ 582:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 386              		.loc 1 582 12 view .LVU142
+ 387              	.LBE73:
+ 388              	.LBE72:
+ 506:common/prog/FuncSafe/fsRom.c ****          {
+ 389              		.loc 1 506 13 view .LVU143
+ 390 0068 0028     		cmp	r0, #0
+ 391 006a EDD0     		beq	.L17
+ 510:common/prog/FuncSafe/fsRom.c **** #else
+ 392              		.loc 1 510 13 is_stmt 1 view .LVU144
+ 393              	.LBB74:
+ 394              	.LBB75:
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 395              		.loc 1 600 37 is_stmt 0 view .LVU145
+ 396 006c E368     		ldr	r3, [r4, #12]
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 397              		.loc 1 600 12 view .LVU146
+ 398 006e 3100     		movs	r1, r6
+ 399 0070 9B68     		ldr	r3, [r3, #8]
+ 400 0072 6068     		ldr	r0, [r4, #4]
+ 401              	.LBE75:
+ 402              	.LBE74:
+ 510:common/prog/FuncSafe/fsRom.c **** #else
+ 403              		.loc 1 510 42 view .LVU147
+ 404 0074 6769     		ldr	r7, [r4, #20]
+ 405              	.LVL18:
+ 406              	.LBB78:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 24
+
+
+ 407              	.LBI74:
+ 594:common/prog/FuncSafe/fsRom.c **** {
+ 408              		.loc 1 594 18 is_stmt 1 view .LVU148
+ 409              	.LBB76:
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 410              		.loc 1 600 4 view .LVU149
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 411              		.loc 1 600 12 is_stmt 0 view .LVU150
+ 412 0076 9847     		blx	r3
+ 413              	.LVL19:
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 414              		.loc 1 600 12 view .LVU151
+ 415              	.LBE76:
+ 416              	.LBE78:
+ 510:common/prog/FuncSafe/fsRom.c **** #else
+ 417              		.loc 1 510 42 view .LVU152
+ 418 0078 3200     		movs	r2, r6
+ 419              	.LBB79:
+ 420              	.LBB77:
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 421              		.loc 1 600 12 view .LVU153
+ 422 007a 0100     		movs	r1, r0
+ 423              	.LVL20:
+ 600:common/prog/FuncSafe/fsRom.c ****    //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 424              		.loc 1 600 12 view .LVU154
+ 425              	.LBE77:
+ 426              	.LBE79:
+ 510:common/prog/FuncSafe/fsRom.c **** #else
+ 427              		.loc 1 510 42 view .LVU155
+ 428 007c 3800     		movs	r0, r7
+ 429 007e FFF7FEFF 		bl	uiCalculateCRC32
+ 430              	.LVL21:
+ 510:common/prog/FuncSafe/fsRom.c **** #else
+ 431              		.loc 1 510 40 view .LVU156
+ 432 0082 6061     		str	r0, [r4, #20]
+ 516:common/prog/FuncSafe/fsRom.c ****             //  The space left is returned. If 0 (zero), all ROM modules have
+ 433              		.loc 1 516 13 is_stmt 1 view .LVU157
+ 516:common/prog/FuncSafe/fsRom.c ****             //  The space left is returned. If 0 (zero), all ROM modules have
+ 434              		.loc 1 516 44 is_stmt 0 view .LVU158
+ 435 0084 3000     		movs	r0, r6
+ 436 0086 FFF7FEFF 		bl	uiSetupNextROMAddress
+ 437              	.LVL22:
+ 516:common/prog/FuncSafe/fsRom.c ****             //  The space left is returned. If 0 (zero), all ROM modules have
+ 438              		.loc 1 516 42 view .LVU159
+ 439 008a A060     		str	r0, [r4, #8]
+ 519:common/prog/FuncSafe/fsRom.c ****             {
+ 440              		.loc 1 519 13 is_stmt 1 view .LVU160
+ 519:common/prog/FuncSafe/fsRom.c ****             {
+ 441              		.loc 1 519 16 is_stmt 0 view .LVU161
+ 442 008c 0028     		cmp	r0, #0
+ 443 008e DBD1     		bne	.L17
+ 522:common/prog/FuncSafe/fsRom.c ****                //  Some configurations want to check the ROM space only once.
+ 444              		.loc 1 522 16 is_stmt 1 view .LVU162
+ 445              	.LBB80:
+ 446              	.LBI80:
+ 660:common/prog/FuncSafe/fsRom.c **** {
+ 447              		.loc 1 660 17 view .LVU163
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 25
+
+
+ 448              	.LBB81:
+ 663:common/prog/FuncSafe/fsRom.c ****    //  Notify the application on completion of one ROM check cycle
+ 449              		.loc 1 663 4 view .LVU164
+ 450              	.LBB82:
+ 451              	.LBI82:
+ 682:common/prog/FuncSafe/fsRom.c **** {
+ 452              		.loc 1 682 17 view .LVU165
+ 453              	.LBB83:
+ 702:common/prog/FuncSafe/fsRom.c **** }
+ 454              		.loc 1 702 4 view .LVU166
+ 455 0090 0230     		adds	r0, r0, #2
+ 456 0092 FFF7FEFF 		bl	FSF_vReportSuccess
+ 457              	.LVL23:
+ 458              	.LBE83:
+ 459              	.LBE82:
+ 665:common/prog/FuncSafe/fsRom.c ****    //  Increase the check cycle counter
+ 460              		.loc 1 665 4 view .LVU167
+ 461 0096 FFF7FEFF 		bl	_FSF_vNotifyROMCheckComplete
+ 462              	.LVL24:
+ 667:common/prog/FuncSafe/fsRom.c **** 
+ 463              		.loc 1 667 4 view .LVU168
+ 667:common/prog/FuncSafe/fsRom.c **** 
+ 464              		.loc 1 667 24 is_stmt 0 view .LVU169
+ 465 009a 0F4A     		ldr	r2, .L29+12
+ 466 009c 1378     		ldrb	r3, [r2]
+ 467 009e 0133     		adds	r3, r3, #1
+ 468 00a0 1370     		strb	r3, [r2]
+ 469              	.LBE81:
+ 470              	.LBE80:
+ 524:common/prog/FuncSafe/fsRom.c ****                {
+ 471              		.loc 1 524 16 is_stmt 1 view .LVU170
+ 472              	.LBB84:
+ 473              	.LBI84:
+ 644:common/prog/FuncSafe/fsRom.c **** {
+ 474              		.loc 1 644 17 view .LVU171
+ 475              	.LBB85:
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 476              		.loc 1 649 4 view .LVU172
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 477              		.loc 1 649 11 is_stmt 0 view .LVU173
+ 478 00a2 FFF7FEFF 		bl	_FSF_bIsROMAtOnce
+ 479              	.LVL25:
+ 480              	.LBE85:
+ 481              	.LBE84:
+ 524:common/prog/FuncSafe/fsRom.c ****                {
+ 482              		.loc 1 524 19 view .LVU174
+ 483 00a6 0028     		cmp	r0, #0
+ 484 00a8 02D0     		beq	.L24
+ 527:common/prog/FuncSafe/fsRom.c ****                }
+ 485              		.loc 1 527 19 is_stmt 1 view .LVU175
+ 527:common/prog/FuncSafe/fsRom.c ****                }
+ 486              		.loc 1 527 50 is_stmt 0 view .LVU176
+ 487 00aa 0223     		movs	r3, #2
+ 488 00ac 2370     		strb	r3, [r4]
+ 489 00ae CBE7     		b	.L17
+ 490              	.L24:
+ 532:common/prog/FuncSafe/fsRom.c ****                }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 26
+
+
+ 491              		.loc 1 532 19 is_stmt 1 view .LVU177
+ 532:common/prog/FuncSafe/fsRom.c ****                }
+ 492              		.loc 1 532 50 is_stmt 0 view .LVU178
+ 493 00b0 2070     		strb	r0, [r4]
+ 494 00b2 C9E7     		b	.L17
+ 495              	.LVL26:
+ 496              	.L19:
+ 532:common/prog/FuncSafe/fsRom.c ****                }
+ 497              		.loc 1 532 50 view .LVU179
+ 498              	.LBE69:
+ 499              	.LBE68:
+ 552:common/prog/FuncSafe/fsRom.c ****          break;
+ 500              		.loc 1 552 10 is_stmt 1 view .LVU180
+ 501              	.LBB86:
+ 502              	.LBI86:
+ 682:common/prog/FuncSafe/fsRom.c **** {
+ 503              		.loc 1 682 17 view .LVU181
+ 504              	.LBB87:
+ 702:common/prog/FuncSafe/fsRom.c **** }
+ 505              		.loc 1 702 4 view .LVU182
+ 506 00b4 2800     		movs	r0, r5
+ 507 00b6 FFF7FEFF 		bl	FSF_vReportSuccess
+ 508              	.LVL27:
+ 509              	.L28:
+ 510              	.LBE87:
+ 511              	.LBE86:
+ 561:common/prog/FuncSafe/fsRom.c ****       }
+ 512              		.loc 1 561 10 view .LVU183
+ 565:common/prog/FuncSafe/fsRom.c **** }
+ 513              		.loc 1 565 12 is_stmt 0 view .LVU184
+ 514 00ba 0125     		movs	r5, #1
+ 561:common/prog/FuncSafe/fsRom.c ****       }
+ 515              		.loc 1 561 10 view .LVU185
+ 516 00bc C4E7     		b	.L17
+ 517              	.L20:
+ 560:common/prog/FuncSafe/fsRom.c ****          break;
+ 518              		.loc 1 560 10 is_stmt 1 view .LVU186
+ 519 00be 0022     		movs	r2, #0
+ 520 00c0 0721     		movs	r1, #7
+ 521 00c2 0220     		movs	r0, #2
+ 522 00c4 FFF7FEFF 		bl	FSF_vReportError
+ 523              	.LVL28:
+ 524 00c8 F7E7     		b	.L28
+ 525              	.L30:
+ 526 00ca C046     		.align	2
+ 527              	.L29:
+ 528 00cc 00000000 		.word	FSF_ucRomModuleCount
+ 529 00d0 00000000 		.word	.LANCHOR0
+ 530 00d4 00000000 		.word	FSF_atRomModules
+ 531 00d8 00000000 		.word	.LANCHOR1
+ 532              		.cfi_endproc
+ 533              	.LFE71:
+ 535              		.section	.text.FSF_ucRomHandleTask,"ax",%progbits
+ 536              		.align	1
+ 537              		.global	FSF_ucRomHandleTask
+ 538              		.syntax unified
+ 539              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 27
+
+
+ 540              		.thumb_func
+ 542              	FSF_ucRomHandleTask:
+ 543              	.LFB81:
+ 717:common/prog/FuncSafe/fsRom.c **** #else
+ 718:common/prog/FuncSafe/fsRom.c ****    //  System Test Case F15
+ 719:common/prog/FuncSafe/fsRom.c ****    //  The ROM channel is not ongoin
+ 720:common/prog/FuncSafe/fsRom.c **** #endif
+ 721:common/prog/FuncSafe/fsRom.c **** }
+ 722:common/prog/FuncSafe/fsRom.c **** 
+ 723:common/prog/FuncSafe/fsRom.c **** /** Return the CRC initialisation value
+ 724:common/prog/FuncSafe/fsRom.c ****     This function return the CRC initialization value. \n
+ 725:common/prog/FuncSafe/fsRom.c **** 
+ 726:common/prog/FuncSafe/fsRom.c ****     \return     the 16Bit-CRC value. \n
+ 727:common/prog/FuncSafe/fsRom.c **** 
+ 728:common/prog/FuncSafe/fsRom.c ****     \pre        none. \n
+ 729:common/prog/FuncSafe/fsRom.c **** */
+ 730:common/prog/FuncSafe/fsRom.c **** #ifdef FSF_CRC_32_BIT
+ 731:common/prog/FuncSafe/fsRom.c **** STATIC  uint32_t    ui32InitializeCRCValue (void)
+ 732:common/prog/FuncSafe/fsRom.c **** {
+ 733:common/prog/FuncSafe/fsRom.c **** #ifdef SYSTEMTEST_F20
+ 734:common/prog/FuncSafe/fsRom.c ****    return (uint32_t)(FSF_CRC_INIT + 1);
+ 735:common/prog/FuncSafe/fsRom.c **** #else
+ 736:common/prog/FuncSafe/fsRom.c **** 
+ 737:common/prog/FuncSafe/fsRom.c ****    return (uint32_t)FSF_CRC_INIT;
+ 738:common/prog/FuncSafe/fsRom.c **** #endif
+ 739:common/prog/FuncSafe/fsRom.c **** }
+ 740:common/prog/FuncSafe/fsRom.c **** #else
+ 741:common/prog/FuncSafe/fsRom.c **** STATIC  uint16_t ui16InitializeCRCValue (void)
+ 742:common/prog/FuncSafe/fsRom.c **** {
+ 743:common/prog/FuncSafe/fsRom.c **** #ifdef SYSTEMTEST_F20
+ 744:common/prog/FuncSafe/fsRom.c ****    return (uint16_t)(FSF_CRC_INIT + 1);
+ 745:common/prog/FuncSafe/fsRom.c **** #else
+ 746:common/prog/FuncSafe/fsRom.c **** 
+ 747:common/prog/FuncSafe/fsRom.c ****    return (uint16_t)FSF_CRC_INIT;
+ 748:common/prog/FuncSafe/fsRom.c **** #endif
+ 749:common/prog/FuncSafe/fsRom.c **** }
+ 750:common/prog/FuncSafe/fsRom.c **** #endif
+ 751:common/prog/FuncSafe/fsRom.c **** 
+ 752:common/prog/FuncSafe/fsRom.c **** 
+ 753:common/prog/FuncSafe/fsRom.c **** /** While checking the ROM at once, this interface decides if interrupts get maintained or not.
+ 754:common/prog/FuncSafe/fsRom.c ****     This is mainly intended due to performance reasons. While checking the ROM without maintaining
+ 755:common/prog/FuncSafe/fsRom.c ****     the interrupts, some overflow conditions may occurre. Otherwise, maintaining a huge number of
+ 756:common/prog/FuncSafe/fsRom.c ****     interrupt sources is time consuming, hence it will lengthen the whole ROM check time. So, by
+ 757:common/prog/FuncSafe/fsRom.c ****     this interface, the user has the ability to decide whether to maintain the interrupts or not.
+ 758:common/prog/FuncSafe/fsRom.c ****     The ROM channel internally provide this interface and it returns true by default. This interfac
+ 759:common/prog/FuncSafe/fsRom.c ****     may be overloaded, if necessary. As an example: if interrupts need to be  maintained at least
+ 760:common/prog/FuncSafe/fsRom.c ****     once every second, and checking the whole ROM space at once takes only half a second, in that
+ 761:common/prog/FuncSafe/fsRom.c ****     case there is no need to maintain the interrupt sources while checking.\n
+ 762:common/prog/FuncSafe/fsRom.c **** 
+ 763:common/prog/FuncSafe/fsRom.c ****     \param      none\n
+ 764:common/prog/FuncSafe/fsRom.c ****     \return     true, if interrupts have to maintain, false otherwise.
+ 765:common/prog/FuncSafe/fsRom.c **** 
+ 766:common/prog/FuncSafe/fsRom.c ****     \pre        Called only at operational time.\n
+ 767:common/prog/FuncSafe/fsRom.c **** 
+ 768:common/prog/FuncSafe/fsRom.c ****     \note       Overloading is not designed here, as this is up to an application. \n
+ 769:common/prog/FuncSafe/fsRom.c **** */
+ 770:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 28
+
+
+ 771:common/prog/FuncSafe/fsRom.c **** STATIC  bool    bCheckINTduringROMCheck     (void)
+ 772:common/prog/FuncSafe/fsRom.c **** {
+ 773:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 774:common/prog/FuncSafe/fsRom.c ****    return   TH_FSF_bCheckINTduringROMCheck;
+ 775:common/prog/FuncSafe/fsRom.c **** #else
+ 776:common/prog/FuncSafe/fsRom.c ****    return  _FSF_bCheckINTduringROMCheck();
+ 777:common/prog/FuncSafe/fsRom.c **** #endif
+ 778:common/prog/FuncSafe/fsRom.c **** }
+ 779:common/prog/FuncSafe/fsRom.c **** 
+ 780:common/prog/FuncSafe/fsRom.c **** /* exported function definitions ******************************************************************
+ 781:common/prog/FuncSafe/fsRom.c **** 
+ 782:common/prog/FuncSafe/fsRom.c **** /** Schedule ROM Channel.
+ 783:common/prog/FuncSafe/fsRom.c ****    By this handler, the ROM channel is scheduled on a regular base.
+ 784:common/prog/FuncSafe/fsRom.c **** 
+ 785:common/prog/FuncSafe/fsRom.c ****    \return     uint8_t  TASK_NOT_INITIALISED:   ROM channel check not started yet or restarted\n
+ 786:common/prog/FuncSafe/fsRom.c ****                         TASK_INITIALISED:       ROM channel check cycle completed\n
+ 787:common/prog/FuncSafe/fsRom.c **** 
+ 788:common/prog/FuncSafe/fsRom.c ****     \pre        FSCOM runs in its operational state\n
+ 789:common/prog/FuncSafe/fsRom.c ****     \post       Partial ROM data checked.
+ 790:common/prog/FuncSafe/fsRom.c **** */
+ 791:common/prog/FuncSafe/fsRom.c **** uint8_t FSF_ucRomHandleTask(void)
+ 792:common/prog/FuncSafe/fsRom.c **** {
+ 544              		.loc 1 792 1 view -0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 0
+ 547              		@ frame_needed = 0, uses_anonymous_args = 0
+ 793:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 548              		.loc 1 793 4 view .LVU188
+ 549              	.LVL29:
+ 794:common/prog/FuncSafe/fsRom.c **** 
+ 795:common/prog/FuncSafe/fsRom.c ****    if(FWU_isIntegCheckDisabledCalc())
+ 550              		.loc 1 795 4 view .LVU189
+ 551              	.LBB103:
+ 552              	.LBI103:
+ 115:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 553              		.loc 2 115 20 view .LVU190
+ 554              		.loc 2 118 5 view .LVU191
+ 555              	.LBB104:
+ 556              	.LBI104:
+  86:common/prog/firmware_update/mal/fwu_opt_bytes.h **** {
+ 557              		.loc 2 86 40 view .LVU192
+ 558              	.LBB105:
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 559              		.loc 2 88 5 view .LVU193
+  88:common/prog/firmware_update/mal/fwu_opt_bytes.h **** }
+ 560              		.loc 2 88 27 is_stmt 0 view .LVU194
+ 561 0000 1E4B     		ldr	r3, .L56
+ 562              	.LBE105:
+ 563              	.LBE104:
+ 564              	.LBE103:
+ 792:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 565              		.loc 1 792 1 view .LVU195
+ 566 0002 70B5     		push	{r4, r5, r6, lr}
+ 567              	.LCFI2:
+ 568              		.cfi_def_cfa_offset 16
+ 569              		.cfi_offset 4, -16
+ 570              		.cfi_offset 5, -12
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 29
+
+
+ 571              		.cfi_offset 6, -8
+ 572              		.cfi_offset 14, -4
+ 573              		.loc 1 795 6 view .LVU196
+ 574 0004 1B78     		ldrb	r3, [r3]
+ 575 0006 DC2B     		cmp	r3, #220
+ 576 0008 05D1     		bne	.L32
+ 577              	.L35:
+ 796:common/prog/FuncSafe/fsRom.c ****    {
+ 797:common/prog/FuncSafe/fsRom.c ****        vROMCheckSuccessfullyCompleted();
+ 578              		.loc 1 797 8 is_stmt 1 view .LVU197
+ 579              	.LBB106:
+ 580              	.LBI106:
+ 682:common/prog/FuncSafe/fsRom.c **** {
+ 581              		.loc 1 682 17 view .LVU198
+ 582              	.LBB107:
+ 702:common/prog/FuncSafe/fsRom.c **** }
+ 583              		.loc 1 702 4 view .LVU199
+ 584 000a 0220     		movs	r0, #2
+ 585 000c FFF7FEFF 		bl	FSF_vReportSuccess
+ 586              	.LVL30:
+ 587              	.LBE107:
+ 588              	.LBE106:
+ 798:common/prog/FuncSafe/fsRom.c ****        return ucRetVal;
+ 589              		.loc 1 798 15 is_stmt 0 view .LVU200
+ 590 0010 0124     		movs	r4, #1
+ 591              	.LVL31:
+ 592              	.L33:
+ 799:common/prog/FuncSafe/fsRom.c ****    }
+ 800:common/prog/FuncSafe/fsRom.c ****    _FSF_RAM_CON_vDoCheckInRomModule();
+ 801:common/prog/FuncSafe/fsRom.c **** 
+ 802:common/prog/FuncSafe/fsRom.c ****    //  Ask the application, if the ROM check is allowed to start. Do it only once per full check!
+ 803:common/prog/FuncSafe/fsRom.c ****    //  Thus, the application is asked in state FSF_ROM_CHECK_RESTART. In case of refusal, do not
+ 804:common/prog/FuncSafe/fsRom.c ****    //  start so the state of the channel remains unchanged. Instaed ask the application again.
+ 805:common/prog/FuncSafe/fsRom.c ****    if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_RESTART)
+ 806:common/prog/FuncSafe/fsRom.c ****    {
+ 807:common/prog/FuncSafe/fsRom.c ****       if (bIsROMAtOnceAllowed() == false)
+ 808:common/prog/FuncSafe/fsRom.c ****       {
+ 809:common/prog/FuncSafe/fsRom.c ****          //  Notify to the generic that the ROM channel is keeping alive. Otherwise, an idle error
+ 810:common/prog/FuncSafe/fsRom.c ****          //  get created by the channel itself.
+ 811:common/prog/FuncSafe/fsRom.c ****          //  PCA, 04/07/2006: do not signal ongoing work, if the ROM check is not allowed actually,
+ 812:common/prog/FuncSafe/fsRom.c ****          //  this would produce a check completion overdue error. Instaed, signal succes.
+ 813:common/prog/FuncSafe/fsRom.c ****          vROMCheckSuccessfullyCompleted();
+ 814:common/prog/FuncSafe/fsRom.c **** 
+ 815:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Refused"
+ 816:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 817:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Refused);
+ 818:common/prog/FuncSafe/fsRom.c **** #endif
+ 819:common/prog/FuncSafe/fsRom.c ****          //no secure data touched --> no calculation of checksum
+ 820:common/prog/FuncSafe/fsRom.c ****          return (uint8_t)TASK_INITIALISED;
+ 821:common/prog/FuncSafe/fsRom.c ****       }
+ 822:common/prog/FuncSafe/fsRom.c ****    }
+ 823:common/prog/FuncSafe/fsRom.c ****    if (bIsROMAtOnce() == false)
+ 824:common/prog/FuncSafe/fsRom.c ****    {
+ 825:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 826:common/prog/FuncSafe/fsRom.c ****     Check the ROM piece by piece
+ 827:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 828:common/prog/FuncSafe/fsRom.c ****       /** If the ROM space is checked piece by piece, the internal ROM task handler get called cont
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 30
+
+
+ 829:common/prog/FuncSafe/fsRom.c ****       */
+ 830:common/prog/FuncSafe/fsRom.c **** 
+ 831:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Fragmented"
+ 832:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 833:common/prog/FuncSafe/fsRom.c ****       //  Does the ROM check restart (again)?
+ 834:common/prog/FuncSafe/fsRom.c ****       if (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+ 835:common/prog/FuncSafe/fsRom.c ****       {
+ 836:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Fragmented);
+ 837:common/prog/FuncSafe/fsRom.c ****       }
+ 838:common/prog/FuncSafe/fsRom.c **** #endif
+ 839:common/prog/FuncSafe/fsRom.c ****       ucRetVal = ucInternalROMTask ();
+ 840:common/prog/FuncSafe/fsRom.c ****    }
+ 841:common/prog/FuncSafe/fsRom.c ****    else
+ 842:common/prog/FuncSafe/fsRom.c ****    {
+ 843:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 844:common/prog/FuncSafe/fsRom.c ****     Check the ROM at once
+ 845:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 846:common/prog/FuncSafe/fsRom.c ****       /** If the ROM space has to be checked at once, the internal ROM task handler get called only
+ 847:common/prog/FuncSafe/fsRom.c ****           If this check completes successfully, this result is notified to FSCOM.
+ 848:common/prog/FuncSafe/fsRom.c ****       */
+ 849:common/prog/FuncSafe/fsRom.c ****       //  ROM check completed?
+ 850:common/prog/FuncSafe/fsRom.c ****       if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_FINISH)
+ 851:common/prog/FuncSafe/fsRom.c ****       {
+ 852:common/prog/FuncSafe/fsRom.c ****          ucRetVal = ucInternalROMTask ();
+ 853:common/prog/FuncSafe/fsRom.c ****       }
+ 854:common/prog/FuncSafe/fsRom.c ****       else
+ 855:common/prog/FuncSafe/fsRom.c ****       {
+ 856:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_At_Once"
+ 857:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 858:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_At_Once);
+ 859:common/prog/FuncSafe/fsRom.c **** #endif
+ 860:common/prog/FuncSafe/fsRom.c ****          if (bCheckINTduringROMCheck() == false)
+ 861:common/prog/FuncSafe/fsRom.c ****          {
+ 862:common/prog/FuncSafe/fsRom.c ****             //  Interrupt maintenance is not wanted while checking the ROM, So, do it only
+ 863:common/prog/FuncSafe/fsRom.c ****             //  once before start
+ 864:common/prog/FuncSafe/fsRom.c ****             (void)FSF_ucIsrHandleTask ();
+ 865:common/prog/FuncSafe/fsRom.c ****          }
+ 866:common/prog/FuncSafe/fsRom.c ****          //  Loop until the whole ROM space is checked.
+ 867:common/prog/FuncSafe/fsRom.c ****          while (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+ 868:common/prog/FuncSafe/fsRom.c ****          {
+ 869:common/prog/FuncSafe/fsRom.c ****             ucRetVal = ucInternalROMTask ();
+ 870:common/prog/FuncSafe/fsRom.c **** 
+ 871:common/prog/FuncSafe/fsRom.c ****             //  Avoid problems concerning the internal watchdog
+ 872:common/prog/FuncSafe/fsRom.c ****             vExtTriggerInternalWatchdog();
+ 873:common/prog/FuncSafe/fsRom.c **** 
+ 874:common/prog/FuncSafe/fsRom.c ****             //  DO NOT TRIGGER THE EXTERNAL WATCHDOG AT THIS MOMENT IN TIME AS THIS WOULD CHANGE TH
+ 875:common/prog/FuncSafe/fsRom.c ****             if (ucRetVal != (uint8_t)TASK_NOT_INITIALISED)
+ 876:common/prog/FuncSafe/fsRom.c ****             {
+ 877:common/prog/FuncSafe/fsRom.c ****                if (bCheckINTduringROMCheck() == true)
+ 878:common/prog/FuncSafe/fsRom.c ****                {
+ 879:common/prog/FuncSafe/fsRom.c ****                   //  Call the Isr Handle Task. This is in order to avoid event overflow!
+ 880:common/prog/FuncSafe/fsRom.c ****                   ucRetVal = FSF_ucIsrHandleTask ();
+ 881:common/prog/FuncSafe/fsRom.c ****                }
+ 882:common/prog/FuncSafe/fsRom.c ****             }
+ 883:common/prog/FuncSafe/fsRom.c ****             if (ucRetVal == (uint8_t)TASK_NOT_INITIALISED)
+ 884:common/prog/FuncSafe/fsRom.c ****             {
+ 885:common/prog/FuncSafe/fsRom.c ****                break;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 31
+
+
+ 886:common/prog/FuncSafe/fsRom.c ****                //  Msg(2:0769) This break statement terminates an iteration statement.
+ 887:common/prog/FuncSafe/fsRom.c ****                //  PCA comment: desired state and better readable in X32, code tested and reviewed 
+ 888:common/prog/FuncSafe/fsRom.c ****             }
+ 889:common/prog/FuncSafe/fsRom.c ****          }
+ 890:common/prog/FuncSafe/fsRom.c ****       }
+ 891:common/prog/FuncSafe/fsRom.c ****    }
+ 892:common/prog/FuncSafe/fsRom.c **** 
+ 893:common/prog/FuncSafe/fsRom.c ****    /* calc new checksum at exit of task handler */
+ 894:common/prog/FuncSafe/fsRom.c ****    _FSF_RAM_CON_vDoUpdateCheckInRomModule();
+ 895:common/prog/FuncSafe/fsRom.c **** 
+ 896:common/prog/FuncSafe/fsRom.c ****    return ucRetVal;
+ 897:common/prog/FuncSafe/fsRom.c **** }
+ 593              		.loc 1 897 1 view .LVU201
+ 594              		@ sp needed
+ 595 0012 2000     		movs	r0, r4
+ 596 0014 70BD     		pop	{r4, r5, r6, pc}
+ 597              	.LVL32:
+ 598              	.L32:
+ 800:common/prog/FuncSafe/fsRom.c **** 
+ 599              		.loc 1 800 4 is_stmt 1 view .LVU202
+ 600 0016 FFF7FEFF 		bl	_FSF_RAM_CON_vDoCheckInRomModule
+ 601              	.LVL33:
+ 805:common/prog/FuncSafe/fsRom.c ****    {
+ 602              		.loc 1 805 4 view .LVU203
+ 805:common/prog/FuncSafe/fsRom.c ****    {
+ 603              		.loc 1 805 26 is_stmt 0 view .LVU204
+ 604 001a 194D     		ldr	r5, .L56+4
+ 805:common/prog/FuncSafe/fsRom.c ****    {
+ 605              		.loc 1 805 7 view .LVU205
+ 606 001c 2B78     		ldrb	r3, [r5]
+ 607 001e 002B     		cmp	r3, #0
+ 608 0020 03D1     		bne	.L34
+ 807:common/prog/FuncSafe/fsRom.c ****       {
+ 609              		.loc 1 807 7 is_stmt 1 view .LVU206
+ 610              	.LBB108:
+ 611              	.LBI108:
+ 620:common/prog/FuncSafe/fsRom.c **** {
+ 612              		.loc 1 620 17 view .LVU207
+ 613              	.LBB109:
+ 628:common/prog/FuncSafe/fsRom.c **** #endif
+ 614              		.loc 1 628 4 view .LVU208
+ 628:common/prog/FuncSafe/fsRom.c **** #endif
+ 615              		.loc 1 628 11 is_stmt 0 view .LVU209
+ 616 0022 FFF7FEFF 		bl	_FSF_bIsROMAtOnceAllowed
+ 617              	.LVL34:
+ 618              	.LBE109:
+ 619              	.LBE108:
+ 807:common/prog/FuncSafe/fsRom.c ****       {
+ 620              		.loc 1 807 10 view .LVU210
+ 621 0026 0028     		cmp	r0, #0
+ 622 0028 EFD0     		beq	.L35
+ 623              	.L34:
+ 823:common/prog/FuncSafe/fsRom.c ****    {
+ 624              		.loc 1 823 4 is_stmt 1 view .LVU211
+ 625              	.LBB110:
+ 626              	.LBI110:
+ 644:common/prog/FuncSafe/fsRom.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 32
+
+
+ 627              		.loc 1 644 17 view .LVU212
+ 628              	.LBB111:
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 629              		.loc 1 649 4 view .LVU213
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 630              		.loc 1 649 11 is_stmt 0 view .LVU214
+ 631 002a FFF7FEFF 		bl	_FSF_bIsROMAtOnce
+ 632              	.LVL35:
+ 633              	.LBE111:
+ 634              	.LBE110:
+ 823:common/prog/FuncSafe/fsRom.c ****    {
+ 635              		.loc 1 823 7 view .LVU215
+ 636 002e 0028     		cmp	r0, #0
+ 637 0030 05D1     		bne	.L36
+ 638              	.L38:
+ 839:common/prog/FuncSafe/fsRom.c ****    }
+ 639              		.loc 1 839 7 is_stmt 1 view .LVU216
+ 839:common/prog/FuncSafe/fsRom.c ****    }
+ 640              		.loc 1 839 18 is_stmt 0 view .LVU217
+ 641 0032 FFF7FEFF 		bl	ucInternalROMTask
+ 642              	.LVL36:
+ 643 0036 0400     		movs	r4, r0
+ 644              	.LVL37:
+ 645              	.L37:
+ 894:common/prog/FuncSafe/fsRom.c **** 
+ 646              		.loc 1 894 4 is_stmt 1 view .LVU218
+ 647 0038 FFF7FEFF 		bl	_FSF_RAM_CON_vDoUpdateCheckInRomModule
+ 648              	.LVL38:
+ 896:common/prog/FuncSafe/fsRom.c **** }
+ 649              		.loc 1 896 4 view .LVU219
+ 896:common/prog/FuncSafe/fsRom.c **** }
+ 650              		.loc 1 896 11 is_stmt 0 view .LVU220
+ 651 003c E9E7     		b	.L33
+ 652              	.LVL39:
+ 653              	.L36:
+ 850:common/prog/FuncSafe/fsRom.c ****       {
+ 654              		.loc 1 850 7 is_stmt 1 view .LVU221
+ 850:common/prog/FuncSafe/fsRom.c ****       {
+ 655              		.loc 1 850 10 is_stmt 0 view .LVU222
+ 656 003e 2B78     		ldrb	r3, [r5]
+ 657 0040 022B     		cmp	r3, #2
+ 658 0042 F6D0     		beq	.L38
+ 860:common/prog/FuncSafe/fsRom.c ****          {
+ 659              		.loc 1 860 10 is_stmt 1 view .LVU223
+ 660              	.LBB112:
+ 661              	.LBI112:
+ 771:common/prog/FuncSafe/fsRom.c **** {
+ 662              		.loc 1 771 17 view .LVU224
+ 663              	.LBB113:
+ 776:common/prog/FuncSafe/fsRom.c **** #endif
+ 664              		.loc 1 776 4 view .LVU225
+ 776:common/prog/FuncSafe/fsRom.c **** #endif
+ 665              		.loc 1 776 12 is_stmt 0 view .LVU226
+ 666 0044 FFF7FEFF 		bl	_FSF_bCheckINTduringROMCheck
+ 667              	.LVL40:
+ 668              	.LBE113:
+ 669              	.LBE112:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 33
+
+
+ 860:common/prog/FuncSafe/fsRom.c ****          {
+ 670              		.loc 1 860 13 view .LVU227
+ 671 0048 0028     		cmp	r0, #0
+ 672 004a 01D1     		bne	.L39
+ 864:common/prog/FuncSafe/fsRom.c ****          }
+ 673              		.loc 1 864 13 is_stmt 1 view .LVU228
+ 864:common/prog/FuncSafe/fsRom.c ****          }
+ 674              		.loc 1 864 19 is_stmt 0 view .LVU229
+ 675 004c FFF7FEFF 		bl	FSF_ucIsrHandleTask
+ 676              	.LVL41:
+ 677              	.L39:
+ 792:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 678              		.loc 1 792 1 view .LVU230
+ 679 0050 0124     		movs	r4, #1
+ 680 0052 07E0     		b	.L41
+ 681              	.LVL42:
+ 682              	.L40:
+ 877:common/prog/FuncSafe/fsRom.c ****                {
+ 683              		.loc 1 877 16 is_stmt 1 view .LVU231
+ 684              	.LBB114:
+ 685              	.LBI114:
+ 771:common/prog/FuncSafe/fsRom.c **** {
+ 686              		.loc 1 771 17 view .LVU232
+ 687              	.LBB115:
+ 776:common/prog/FuncSafe/fsRom.c **** #endif
+ 688              		.loc 1 776 4 view .LVU233
+ 776:common/prog/FuncSafe/fsRom.c **** #endif
+ 689              		.loc 1 776 12 is_stmt 0 view .LVU234
+ 690 0054 FFF7FEFF 		bl	_FSF_bCheckINTduringROMCheck
+ 691              	.LVL43:
+ 692              	.LBE115:
+ 693              	.LBE114:
+ 877:common/prog/FuncSafe/fsRom.c ****                {
+ 694              		.loc 1 877 19 view .LVU235
+ 695 0058 0028     		cmp	r0, #0
+ 696 005a 03D0     		beq	.L41
+ 880:common/prog/FuncSafe/fsRom.c ****                }
+ 697              		.loc 1 880 19 is_stmt 1 view .LVU236
+ 880:common/prog/FuncSafe/fsRom.c ****                }
+ 698              		.loc 1 880 30 is_stmt 0 view .LVU237
+ 699 005c FFF7FEFF 		bl	FSF_ucIsrHandleTask
+ 700              	.LVL44:
+ 701 0060 041E     		subs	r4, r0, #0
+ 702              	.LVL45:
+ 883:common/prog/FuncSafe/fsRom.c ****             {
+ 703              		.loc 1 883 13 is_stmt 1 view .LVU238
+ 883:common/prog/FuncSafe/fsRom.c ****             {
+ 704              		.loc 1 883 16 is_stmt 0 view .LVU239
+ 705 0062 09D0     		beq	.L42
+ 706              	.LVL46:
+ 707              	.L41:
+ 867:common/prog/FuncSafe/fsRom.c ****          {
+ 708              		.loc 1 867 48 is_stmt 1 view .LVU240
+ 709 0064 2B78     		ldrb	r3, [r5]
+ 710 0066 022B     		cmp	r3, #2
+ 711 0068 E6D0     		beq	.L37
+ 869:common/prog/FuncSafe/fsRom.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 34
+
+
+ 712              		.loc 1 869 13 view .LVU241
+ 869:common/prog/FuncSafe/fsRom.c **** 
+ 713              		.loc 1 869 24 is_stmt 0 view .LVU242
+ 714 006a FFF7FEFF 		bl	ucInternalROMTask
+ 715              	.LVL47:
+ 716 006e 0400     		movs	r4, r0
+ 717              	.LVL48:
+ 872:common/prog/FuncSafe/fsRom.c **** 
+ 718              		.loc 1 872 13 is_stmt 1 view .LVU243
+ 719 0070 FFF7FEFF 		bl	vExtTriggerInternalWatchdog
+ 720              	.LVL49:
+ 875:common/prog/FuncSafe/fsRom.c ****             {
+ 721              		.loc 1 875 13 view .LVU244
+ 875:common/prog/FuncSafe/fsRom.c ****             {
+ 722              		.loc 1 875 16 is_stmt 0 view .LVU245
+ 723 0074 002C     		cmp	r4, #0
+ 724 0076 EDD1     		bne	.L40
+ 725              	.LVL50:
+ 726              	.L42:
+ 792:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 727              		.loc 1 792 1 view .LVU246
+ 728 0078 0024     		movs	r4, #0
+ 729 007a DDE7     		b	.L37
+ 730              	.L57:
+ 731              		.align	2
+ 732              	.L56:
+ 733 007c 00000000 		.word	MAL_FwuOptBytes
+ 734 0080 00000000 		.word	.LANCHOR0
+ 735              		.cfi_endproc
+ 736              	.LFE81:
+ 738              		.section	.text.FSF_ucRomTinyHandleTask,"ax",%progbits
+ 739              		.align	1
+ 740              		.global	FSF_ucRomTinyHandleTask
+ 741              		.syntax unified
+ 742              		.code	16
+ 743              		.thumb_func
+ 745              	FSF_ucRomTinyHandleTask:
+ 746              	.LFB82:
+ 898:common/prog/FuncSafe/fsRom.c **** 
+ 899:common/prog/FuncSafe/fsRom.c **** uint8_t FSF_ucRomTinyHandleTask(void)
+ 900:common/prog/FuncSafe/fsRom.c **** {
+ 747              		.loc 1 900 1 is_stmt 1 view -0
+ 748              		.cfi_startproc
+ 749              		@ args = 0, pretend = 0, frame = 0
+ 750              		@ frame_needed = 0, uses_anonymous_args = 0
+ 901:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 751              		.loc 1 901 4 view .LVU248
+ 752              	.LVL51:
+ 902:common/prog/FuncSafe/fsRom.c ****    //  Ask the application, if the ROM check is allowed to start. Do it only once per full check!
+ 903:common/prog/FuncSafe/fsRom.c ****    //  Thus, the application is asked in state FSF_ROM_CHECK_RESTART. In case of refusal, do not
+ 904:common/prog/FuncSafe/fsRom.c ****    //  start so the state of the channel remains unchanged. Instaed ask the application again.
+ 905:common/prog/FuncSafe/fsRom.c ****    if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_RESTART)
+ 753              		.loc 1 905 4 view .LVU249
+ 900:common/prog/FuncSafe/fsRom.c ****    uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+ 754              		.loc 1 900 1 is_stmt 0 view .LVU250
+ 755 0000 70B5     		push	{r4, r5, r6, lr}
+ 756              	.LCFI3:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 35
+
+
+ 757              		.cfi_def_cfa_offset 16
+ 758              		.cfi_offset 4, -16
+ 759              		.cfi_offset 5, -12
+ 760              		.cfi_offset 6, -8
+ 761              		.cfi_offset 14, -4
+ 762              		.loc 1 905 26 view .LVU251
+ 763 0002 124D     		ldr	r5, .L71
+ 764              		.loc 1 905 7 view .LVU252
+ 765 0004 2B78     		ldrb	r3, [r5]
+ 766 0006 002B     		cmp	r3, #0
+ 767 0008 09D1     		bne	.L59
+ 906:common/prog/FuncSafe/fsRom.c ****    {
+ 907:common/prog/FuncSafe/fsRom.c ****       if (bIsROMAtOnceAllowed() == false)
+ 768              		.loc 1 907 7 is_stmt 1 view .LVU253
+ 769              	.LBB122:
+ 770              	.LBI122:
+ 620:common/prog/FuncSafe/fsRom.c **** {
+ 771              		.loc 1 620 17 view .LVU254
+ 772              	.LBB123:
+ 628:common/prog/FuncSafe/fsRom.c **** #endif
+ 773              		.loc 1 628 4 view .LVU255
+ 628:common/prog/FuncSafe/fsRom.c **** #endif
+ 774              		.loc 1 628 11 is_stmt 0 view .LVU256
+ 775 000a FFF7FEFF 		bl	_FSF_bIsROMAtOnceAllowed
+ 776              	.LVL52:
+ 777              	.LBE123:
+ 778              	.LBE122:
+ 779              		.loc 1 907 10 view .LVU257
+ 780 000e 0028     		cmp	r0, #0
+ 781 0010 05D1     		bne	.L59
+ 908:common/prog/FuncSafe/fsRom.c ****       {
+ 909:common/prog/FuncSafe/fsRom.c ****          //  Notify to the generic that the ROM channel is keeping alive. Otherwise, an idle error
+ 910:common/prog/FuncSafe/fsRom.c ****          //  get created by the channel itself.
+ 911:common/prog/FuncSafe/fsRom.c ****          //  PCA, 04/07/2006: do not signal ongoing work, if the ROM check is not allowed actually,
+ 912:common/prog/FuncSafe/fsRom.c ****          //  this would produce a check completion overdue error. Instaed, signal succes.
+ 913:common/prog/FuncSafe/fsRom.c ****          vROMCheckSuccessfullyCompleted();
+ 782              		.loc 1 913 10 is_stmt 1 view .LVU258
+ 783              	.LBB124:
+ 784              	.LBI124:
+ 682:common/prog/FuncSafe/fsRom.c **** {
+ 785              		.loc 1 682 17 view .LVU259
+ 786              	.LBB125:
+ 702:common/prog/FuncSafe/fsRom.c **** }
+ 787              		.loc 1 702 4 view .LVU260
+ 788 0012 0230     		adds	r0, r0, #2
+ 789 0014 FFF7FEFF 		bl	FSF_vReportSuccess
+ 790              	.LVL53:
+ 791              	.LBE125:
+ 792              	.LBE124:
+ 914:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Refused"
+ 915:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 916:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Refused);
+ 917:common/prog/FuncSafe/fsRom.c **** #endif
+ 918:common/prog/FuncSafe/fsRom.c ****          //no secure data touched --> no calculation of checksum
+ 919:common/prog/FuncSafe/fsRom.c ****          return (uint8_t)TASK_INITIALISED;
+ 793              		.loc 1 919 17 is_stmt 0 view .LVU261
+ 794 0018 0124     		movs	r4, #1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 36
+
+
+ 795              	.LVL54:
+ 796              	.L60:
+ 920:common/prog/FuncSafe/fsRom.c ****       }
+ 921:common/prog/FuncSafe/fsRom.c ****    }
+ 922:common/prog/FuncSafe/fsRom.c ****    if (bIsROMAtOnce() == false)
+ 923:common/prog/FuncSafe/fsRom.c ****    {
+ 924:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 925:common/prog/FuncSafe/fsRom.c ****     Check the ROM piece by piece
+ 926:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 927:common/prog/FuncSafe/fsRom.c ****       /** If the ROM space is checked piece by piece, the internal ROM task handler get called cont
+ 928:common/prog/FuncSafe/fsRom.c ****       */
+ 929:common/prog/FuncSafe/fsRom.c **** 
+ 930:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_Fragmented"
+ 931:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 932:common/prog/FuncSafe/fsRom.c ****       //  Does the ROM check restart (again)?
+ 933:common/prog/FuncSafe/fsRom.c ****       if (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+ 934:common/prog/FuncSafe/fsRom.c ****       {
+ 935:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Fragmented);
+ 936:common/prog/FuncSafe/fsRom.c ****       }
+ 937:common/prog/FuncSafe/fsRom.c **** #endif
+ 938:common/prog/FuncSafe/fsRom.c ****       ucRetVal = ucInternalROMTask ();
+ 939:common/prog/FuncSafe/fsRom.c ****    }
+ 940:common/prog/FuncSafe/fsRom.c ****    else
+ 941:common/prog/FuncSafe/fsRom.c ****    {
+ 942:common/prog/FuncSafe/fsRom.c **** /*======================================================================
+ 943:common/prog/FuncSafe/fsRom.c ****     Check the ROM at once
+ 944:common/prog/FuncSafe/fsRom.c **** ======================================================================*/
+ 945:common/prog/FuncSafe/fsRom.c ****       /** If the ROM space has to be checked at once, the internal ROM task handler get called only
+ 946:common/prog/FuncSafe/fsRom.c ****           If this check completes successfully, this result is notified to FSCOM.
+ 947:common/prog/FuncSafe/fsRom.c ****       */
+ 948:common/prog/FuncSafe/fsRom.c ****       //  ROM check completed?
+ 949:common/prog/FuncSafe/fsRom.c ****       if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_FINISH)
+ 950:common/prog/FuncSafe/fsRom.c ****       {
+ 951:common/prog/FuncSafe/fsRom.c ****          ucRetVal = ucInternalROMTask ();
+ 952:common/prog/FuncSafe/fsRom.c ****       }
+ 953:common/prog/FuncSafe/fsRom.c ****       else
+ 954:common/prog/FuncSafe/fsRom.c ****       {
+ 955:common/prog/FuncSafe/fsRom.c **** //  Testpoint "TP_FSF_ROM_Check_At_Once"
+ 956:common/prog/FuncSafe/fsRom.c **** #ifdef TH_FSCOM
+ 957:common/prog/FuncSafe/fsRom.c ****          TH_FSFP_PushOutPar(TP_FSF_ROM_Check_At_Once);
+ 958:common/prog/FuncSafe/fsRom.c **** #endif
+ 959:common/prog/FuncSafe/fsRom.c ****          //  Loop until the whole ROM space is checked.
+ 960:common/prog/FuncSafe/fsRom.c ****          while (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+ 961:common/prog/FuncSafe/fsRom.c ****          {
+ 962:common/prog/FuncSafe/fsRom.c ****             ucRetVal = ucInternalROMTask ();
+ 963:common/prog/FuncSafe/fsRom.c **** 
+ 964:common/prog/FuncSafe/fsRom.c ****             //  Avoid problems concerning the internal watchdog
+ 965:common/prog/FuncSafe/fsRom.c ****             vExtTriggerInternalWatchdog();
+ 966:common/prog/FuncSafe/fsRom.c **** 
+ 967:common/prog/FuncSafe/fsRom.c ****             //  DO NOT TRIGGER THE EXTERNAL WATCHDOG AT THIS MOMENT IN TIME AS THIS WOULD CHANGE TH
+ 968:common/prog/FuncSafe/fsRom.c ****             if (ucRetVal != (uint8_t)TASK_NOT_INITIALISED)
+ 969:common/prog/FuncSafe/fsRom.c ****             {
+ 970:common/prog/FuncSafe/fsRom.c **** 
+ 971:common/prog/FuncSafe/fsRom.c ****             }
+ 972:common/prog/FuncSafe/fsRom.c ****             if (ucRetVal == (uint8_t)TASK_NOT_INITIALISED)
+ 973:common/prog/FuncSafe/fsRom.c ****             {
+ 974:common/prog/FuncSafe/fsRom.c ****                break;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 37
+
+
+ 975:common/prog/FuncSafe/fsRom.c ****                //  Msg(2:0769) This break statement terminates an iteration statement.
+ 976:common/prog/FuncSafe/fsRom.c ****                //  PCA comment: desired state and better readable in X32, code tested and reviewed 
+ 977:common/prog/FuncSafe/fsRom.c ****             }
+ 978:common/prog/FuncSafe/fsRom.c ****          }
+ 979:common/prog/FuncSafe/fsRom.c ****       }
+ 980:common/prog/FuncSafe/fsRom.c ****    }
+ 981:common/prog/FuncSafe/fsRom.c **** 
+ 982:common/prog/FuncSafe/fsRom.c ****    return ucRetVal;
+ 983:common/prog/FuncSafe/fsRom.c **** }
+ 797              		.loc 1 983 1 view .LVU262
+ 798              		@ sp needed
+ 799 001a 2000     		movs	r0, r4
+ 800 001c 70BD     		pop	{r4, r5, r6, pc}
+ 801              	.LVL55:
+ 802              	.L59:
+ 922:common/prog/FuncSafe/fsRom.c ****    {
+ 803              		.loc 1 922 4 is_stmt 1 view .LVU263
+ 804              	.LBB126:
+ 805              	.LBI126:
+ 644:common/prog/FuncSafe/fsRom.c **** {
+ 806              		.loc 1 644 17 view .LVU264
+ 807              	.LBB127:
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 808              		.loc 1 649 4 view .LVU265
+ 649:common/prog/FuncSafe/fsRom.c **** #endif
+ 809              		.loc 1 649 11 is_stmt 0 view .LVU266
+ 810 001e FFF7FEFF 		bl	_FSF_bIsROMAtOnce
+ 811              	.LVL56:
+ 812              	.LBE127:
+ 813              	.LBE126:
+ 922:common/prog/FuncSafe/fsRom.c ****    {
+ 814              		.loc 1 922 7 view .LVU267
+ 815 0022 0028     		cmp	r0, #0
+ 816 0024 03D1     		bne	.L61
+ 817              	.L62:
+ 938:common/prog/FuncSafe/fsRom.c ****    }
+ 818              		.loc 1 938 7 is_stmt 1 view .LVU268
+ 938:common/prog/FuncSafe/fsRom.c ****    }
+ 819              		.loc 1 938 18 is_stmt 0 view .LVU269
+ 820 0026 FFF7FEFF 		bl	ucInternalROMTask
+ 821              	.LVL57:
+ 822 002a 0400     		movs	r4, r0
+ 823              	.LVL58:
+ 938:common/prog/FuncSafe/fsRom.c ****    }
+ 824              		.loc 1 938 18 view .LVU270
+ 825 002c F5E7     		b	.L60
+ 826              	.LVL59:
+ 827              	.L61:
+ 949:common/prog/FuncSafe/fsRom.c ****       {
+ 828              		.loc 1 949 7 is_stmt 1 view .LVU271
+ 949:common/prog/FuncSafe/fsRom.c ****       {
+ 829              		.loc 1 949 10 is_stmt 0 view .LVU272
+ 830 002e 2B78     		ldrb	r3, [r5]
+ 831 0030 022B     		cmp	r3, #2
+ 832 0032 F8D0     		beq	.L62
+ 833              	.LVL60:
+ 834              	.L63:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 38
+
+
+ 962:common/prog/FuncSafe/fsRom.c **** 
+ 835              		.loc 1 962 13 is_stmt 1 view .LVU273
+ 962:common/prog/FuncSafe/fsRom.c **** 
+ 836              		.loc 1 962 24 is_stmt 0 view .LVU274
+ 837 0034 FFF7FEFF 		bl	ucInternalROMTask
+ 838              	.LVL61:
+ 839 0038 0400     		movs	r4, r0
+ 840              	.LVL62:
+ 965:common/prog/FuncSafe/fsRom.c **** 
+ 841              		.loc 1 965 13 is_stmt 1 view .LVU275
+ 842 003a FFF7FEFF 		bl	vExtTriggerInternalWatchdog
+ 843              	.LVL63:
+ 968:common/prog/FuncSafe/fsRom.c ****             {
+ 844              		.loc 1 968 13 view .LVU276
+ 971:common/prog/FuncSafe/fsRom.c ****             if (ucRetVal == (uint8_t)TASK_NOT_INITIALISED)
+ 845              		.loc 1 971 13 view .LVU277
+ 972:common/prog/FuncSafe/fsRom.c ****             {
+ 846              		.loc 1 972 13 view .LVU278
+ 972:common/prog/FuncSafe/fsRom.c ****             {
+ 847              		.loc 1 972 16 is_stmt 0 view .LVU279
+ 848 003e 002C     		cmp	r4, #0
+ 849 0040 EBD0     		beq	.L60
+ 960:common/prog/FuncSafe/fsRom.c ****          {
+ 850              		.loc 1 960 48 is_stmt 1 view .LVU280
+ 851 0042 2B78     		ldrb	r3, [r5]
+ 852 0044 022B     		cmp	r3, #2
+ 853 0046 F5D1     		bne	.L63
+ 854 0048 E7E7     		b	.L60
+ 855              	.L72:
+ 856 004a C046     		.align	2
+ 857              	.L71:
+ 858 004c 00000000 		.word	.LANCHOR0
+ 859              		.cfi_endproc
+ 860              	.LFE82:
+ 862              		.section	.text._FSF_RAM_CON_vRomModuleCheckBySum,"ax",%progbits
+ 863              		.align	1
+ 864              		.global	_FSF_RAM_CON_vRomModuleCheckBySum
+ 865              		.syntax unified
+ 866              		.code	16
+ 867              		.thumb_func
+ 869              	_FSF_RAM_CON_vRomModuleCheckBySum:
+ 870              	.LFB83:
+ 984:common/prog/FuncSafe/fsRom.c **** 
+ 985:common/prog/FuncSafe/fsRom.c **** 
+ 986:common/prog/FuncSafe/fsRom.c **** void _FSF_RAM_CON_vRomModuleCheckBySum(void)
+ 987:common/prog/FuncSafe/fsRom.c **** {
+ 871              		.loc 1 987 1 view -0
+ 872              		.cfi_startproc
+ 873              		@ args = 0, pretend = 0, frame = 0
+ 874              		@ frame_needed = 0, uses_anonymous_args = 0
+ 988:common/prog/FuncSafe/fsRom.c ****      _FSF_RAM_CON_vCheckBySum(FS_ROM_ucCheckValueRamConBlock,
+ 875              		.loc 1 988 6 view .LVU282
+ 987:common/prog/FuncSafe/fsRom.c ****      _FSF_RAM_CON_vCheckBySum(FS_ROM_ucCheckValueRamConBlock,
+ 876              		.loc 1 987 1 is_stmt 0 view .LVU283
+ 877 0000 10B5     		push	{r4, lr}
+ 878              	.LCFI4:
+ 879              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 39
+
+
+ 880              		.cfi_offset 4, -8
+ 881              		.cfi_offset 14, -4
+ 882              		.loc 1 988 6 view .LVU284
+ 883 0002 044B     		ldr	r3, .L74
+ 884 0004 1821     		movs	r1, #24
+ 989:common/prog/FuncSafe/fsRom.c ****         (uint8_t)sizeof(FS_ROM_RamConBlock),
+ 990:common/prog/FuncSafe/fsRom.c ****         (const uint8_t*)(&FS_ROM_RamConBlock), /*lint !e927 !e928 cast tested to work correctly */
+ 991:common/prog/FuncSafe/fsRom.c ****         (uint8_t)(FSF_ERR_RAM_CON_IN_ROM));
+ 992:common/prog/FuncSafe/fsRom.c **** }
+ 885              		.loc 1 992 1 view .LVU285
+ 886              		@ sp needed
+ 988:common/prog/FuncSafe/fsRom.c ****         (uint8_t)sizeof(FS_ROM_RamConBlock),
+ 887              		.loc 1 988 6 view .LVU286
+ 888 0006 1878     		ldrb	r0, [r3]
+ 889 0008 034A     		ldr	r2, .L74+4
+ 890 000a 0E23     		movs	r3, #14
+ 891 000c FFF7FEFF 		bl	_FSF_RAM_CON_vCheckBySum
+ 892              	.LVL64:
+ 893              		.loc 1 992 1 view .LVU287
+ 894 0010 10BD     		pop	{r4, pc}
+ 895              	.L75:
+ 896 0012 C046     		.align	2
+ 897              	.L74:
+ 898 0014 00000000 		.word	.LANCHOR2
+ 899 0018 00000000 		.word	.LANCHOR0
+ 900              		.cfi_endproc
+ 901              	.LFE83:
+ 903              		.section	.text._FSF_RAM_CON_vRomModuleCheckByMirror,"ax",%progbits
+ 904              		.align	1
+ 905              		.global	_FSF_RAM_CON_vRomModuleCheckByMirror
+ 906              		.syntax unified
+ 907              		.code	16
+ 908              		.thumb_func
+ 910              	_FSF_RAM_CON_vRomModuleCheckByMirror:
+ 911              	.LFB84:
+ 993:common/prog/FuncSafe/fsRom.c **** 
+ 994:common/prog/FuncSafe/fsRom.c **** void _FSF_RAM_CON_vRomModuleCheckByMirror(void)
+ 995:common/prog/FuncSafe/fsRom.c **** {
+ 912              		.loc 1 995 1 is_stmt 1 view -0
+ 913              		.cfi_startproc
+ 914              		@ args = 0, pretend = 0, frame = 0
+ 915              		@ frame_needed = 0, uses_anonymous_args = 0
+ 996:common/prog/FuncSafe/fsRom.c ****     if (FS_ROM_bIsRamConInitDone == true) {
+ 916              		.loc 1 996 5 view .LVU289
+ 917              		.loc 1 996 34 is_stmt 0 view .LVU290
+ 918 0000 074B     		ldr	r3, .L79
+ 995:common/prog/FuncSafe/fsRom.c ****     if (FS_ROM_bIsRamConInitDone == true) {
+ 919              		.loc 1 995 1 view .LVU291
+ 920 0002 10B5     		push	{r4, lr}
+ 921              	.LCFI5:
+ 922              		.cfi_def_cfa_offset 8
+ 923              		.cfi_offset 4, -8
+ 924              		.cfi_offset 14, -4
+ 925              		.loc 1 996 8 view .LVU292
+ 926 0004 1A78     		ldrb	r2, [r3]
+ 927 0006 002A     		cmp	r2, #0
+ 928 0008 06D0     		beq	.L77
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 40
+
+
+ 997:common/prog/FuncSafe/fsRom.c ****         _FSF_RAM_CON_vCheckByMirror((uint8_t) sizeof(FS_ROM_RamConBlock),
+ 929              		.loc 1 997 9 is_stmt 1 view .LVU293
+ 930 000a 0E23     		movs	r3, #14
+ 931 000c 1820     		movs	r0, #24
+ 932 000e 054A     		ldr	r2, .L79+4
+ 933 0010 0549     		ldr	r1, .L79+8
+ 934 0012 FFF7FEFF 		bl	_FSF_RAM_CON_vCheckByMirror
+ 935              	.LVL65:
+ 936              	.L76:
+ 998:common/prog/FuncSafe/fsRom.c ****                 (const uint8_t*)(&(FS_ROM_RamConBlock)), /*lint !e927 !e928 cast tested to work cor
+ 999:common/prog/FuncSafe/fsRom.c ****                 (const uint8_t*)(&(FS_ROM_RamConBlockMirror)), /*lint !e927 !e928 cast tested to wo
+1000:common/prog/FuncSafe/fsRom.c ****                 (uint8_t) (FSF_ERR_RAM_CON_IN_ROM));
+1001:common/prog/FuncSafe/fsRom.c ****     } else {
+1002:common/prog/FuncSafe/fsRom.c ****         FS_ROM_bIsRamConInitDone = true;
+1003:common/prog/FuncSafe/fsRom.c ****     }
+1004:common/prog/FuncSafe/fsRom.c **** }
+ 937              		.loc 1 1004 1 is_stmt 0 view .LVU294
+ 938              		@ sp needed
+ 939 0016 10BD     		pop	{r4, pc}
+ 940              	.L77:
+1002:common/prog/FuncSafe/fsRom.c ****     }
+ 941              		.loc 1 1002 9 is_stmt 1 view .LVU295
+1002:common/prog/FuncSafe/fsRom.c ****     }
+ 942              		.loc 1 1002 34 is_stmt 0 view .LVU296
+ 943 0018 0122     		movs	r2, #1
+ 944 001a 1A70     		strb	r2, [r3]
+ 945              		.loc 1 1004 1 view .LVU297
+ 946 001c FBE7     		b	.L76
+ 947              	.L80:
+ 948 001e C046     		.align	2
+ 949              	.L79:
+ 950 0020 00000000 		.word	.LANCHOR3
+ 951 0024 00000000 		.word	.LANCHOR4
+ 952 0028 00000000 		.word	.LANCHOR0
+ 953              		.cfi_endproc
+ 954              	.LFE84:
+ 956              		.section	.text._FSF_RAM_CON_vRomModuleUpdateCheckBySum,"ax",%progbits
+ 957              		.align	1
+ 958              		.global	_FSF_RAM_CON_vRomModuleUpdateCheckBySum
+ 959              		.syntax unified
+ 960              		.code	16
+ 961              		.thumb_func
+ 963              	_FSF_RAM_CON_vRomModuleUpdateCheckBySum:
+ 964              	.LFB85:
+1005:common/prog/FuncSafe/fsRom.c **** 
+1006:common/prog/FuncSafe/fsRom.c **** /*Axivion Disable MisraC2012-1.1 : Number of significant initial characters for external identifier
+1007:common/prog/FuncSafe/fsRom.c **** void _FSF_RAM_CON_vRomModuleUpdateCheckBySum(void)
+1008:common/prog/FuncSafe/fsRom.c **** {
+ 965              		.loc 1 1008 1 is_stmt 1 view -0
+ 966              		.cfi_startproc
+ 967              		@ args = 0, pretend = 0, frame = 0
+ 968              		@ frame_needed = 0, uses_anonymous_args = 0
+1009:common/prog/FuncSafe/fsRom.c ****     _FSF_RAM_CON_vUpdateCheckBySum((uint8_t*)(&(FS_ROM_ucCheckValueRamConBlock)), /*lint !e927 !e92
+ 969              		.loc 1 1009 5 view .LVU299
+1008:common/prog/FuncSafe/fsRom.c ****     _FSF_RAM_CON_vUpdateCheckBySum((uint8_t*)(&(FS_ROM_ucCheckValueRamConBlock)), /*lint !e927 !e92
+ 970              		.loc 1 1008 1 is_stmt 0 view .LVU300
+ 971 0000 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 41
+
+
+ 972              	.LCFI6:
+ 973              		.cfi_def_cfa_offset 8
+ 974              		.cfi_offset 4, -8
+ 975              		.cfi_offset 14, -4
+ 976              		.loc 1 1009 5 view .LVU301
+ 977 0002 1821     		movs	r1, #24
+1010:common/prog/FuncSafe/fsRom.c ****         (uint8_t)sizeof(FS_ROM_RamConBlock),
+1011:common/prog/FuncSafe/fsRom.c ****         (const uint8_t*)(&FS_ROM_RamConBlock)); /*lint !e927 !e928 cast tested to work correctly */
+1012:common/prog/FuncSafe/fsRom.c **** }
+ 978              		.loc 1 1012 1 view .LVU302
+ 979              		@ sp needed
+1009:common/prog/FuncSafe/fsRom.c ****         (uint8_t)sizeof(FS_ROM_RamConBlock),
+ 980              		.loc 1 1009 5 view .LVU303
+ 981 0004 024A     		ldr	r2, .L82
+ 982 0006 0348     		ldr	r0, .L82+4
+ 983 0008 FFF7FEFF 		bl	_FSF_RAM_CON_vUpdateCheckBySum
+ 984              	.LVL66:
+ 985              		.loc 1 1012 1 view .LVU304
+ 986 000c 10BD     		pop	{r4, pc}
+ 987              	.L83:
+ 988 000e C046     		.align	2
+ 989              	.L82:
+ 990 0010 00000000 		.word	.LANCHOR0
+ 991 0014 00000000 		.word	.LANCHOR2
+ 992              		.cfi_endproc
+ 993              	.LFE85:
+ 995              		.section	.text._FSF_RAM_CON_vRomModuleUpdateCheckByMirror,"ax",%progbits
+ 996              		.align	1
+ 997              		.global	_FSF_RAM_CON_vRomModuleUpdateCheckByMirror
+ 998              		.syntax unified
+ 999              		.code	16
+ 1000              		.thumb_func
+ 1002              	_FSF_RAM_CON_vRomModuleUpdateCheckByMirror:
+ 1003              	.LFB86:
+1013:common/prog/FuncSafe/fsRom.c **** 
+1014:common/prog/FuncSafe/fsRom.c **** void _FSF_RAM_CON_vRomModuleUpdateCheckByMirror(void)
+1015:common/prog/FuncSafe/fsRom.c **** {
+ 1004              		.loc 1 1015 1 is_stmt 1 view -0
+ 1005              		.cfi_startproc
+ 1006              		@ args = 0, pretend = 0, frame = 0
+ 1007              		@ frame_needed = 0, uses_anonymous_args = 0
+1016:common/prog/FuncSafe/fsRom.c ****     _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t)sizeof(FS_ROM_RamConBlock),
+ 1008              		.loc 1 1016 5 view .LVU306
+1015:common/prog/FuncSafe/fsRom.c ****     _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t)sizeof(FS_ROM_RamConBlock),
+ 1009              		.loc 1 1015 1 is_stmt 0 view .LVU307
+ 1010 0000 10B5     		push	{r4, lr}
+ 1011              	.LCFI7:
+ 1012              		.cfi_def_cfa_offset 8
+ 1013              		.cfi_offset 4, -8
+ 1014              		.cfi_offset 14, -4
+ 1015              		.loc 1 1016 5 view .LVU308
+ 1016 0002 1820     		movs	r0, #24
+1017:common/prog/FuncSafe/fsRom.c ****         (const uint8_t*)(&(FS_ROM_RamConBlock)), /*lint !e927 !e928 cast tested to work correctly *
+1018:common/prog/FuncSafe/fsRom.c ****         (uint8_t*)(&(FS_ROM_RamConBlockMirror)));/*lint !e927 !e928 cast tested to work correctly *
+1019:common/prog/FuncSafe/fsRom.c **** }
+ 1017              		.loc 1 1019 1 view .LVU309
+ 1018              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc6jOYUR.s 			page 42
+
+
+1016:common/prog/FuncSafe/fsRom.c ****         (const uint8_t*)(&(FS_ROM_RamConBlock)), /*lint !e927 !e928 cast tested to work correctly *
+ 1019              		.loc 1 1016 5 view .LVU310
+ 1020 0004 024A     		ldr	r2, .L85
+ 1021 0006 0349     		ldr	r1, .L85+4
+ 1022 0008 FFF7FEFF 		bl	_FSF_RAM_CON_vUpdateCheckByMirror
+ 1023              	.LVL67:
+ 1024              		.loc 1 1019 1 view .LVU311
+ 1025 000c 10BD     		pop	{r4, pc}
+ 1026              	.L86:
+ 1027 000e C046     		.align	2
+ 1028              	.L85:
+ 1029 0010 00000000 		.word	.LANCHOR4
+ 1030 0014 00000000 		.word	.LANCHOR0
+ 1031              		.cfi_endproc
+ 1032              	.LFE86:
+ 1034              		.section	.bss.FS_ROM_RamConBlock,"aw",%nobits
+ 1035              		.align	2
+ 1036              		.set	.LANCHOR0,. + 0
+ 1039              	FS_ROM_RamConBlock:
+ 1040 0000 00000000 		.space	24
+ 1040      00000000 
+ 1040      00000000 
+ 1040      00000000 
+ 1040      00000000 
+ 1041              		.section	.bss.FS_ROM_RamConBlockMirror,"aw",%nobits
+ 1042              		.align	2
+ 1043              		.set	.LANCHOR4,. + 0
+ 1046              	FS_ROM_RamConBlockMirror:
+ 1047 0000 00000000 		.space	24
+ 1047      00000000 
+ 1047      00000000 
+ 1047      00000000 
+ 1047      00000000 
+ 1048              		.section	.bss.FS_ROM_bIsRamConInitDone,"aw",%nobits
+ 1049              		.set	.LANCHOR3,. + 0
+ 1052              	FS_ROM_bIsRamConInitDone:
+ 1053 0000 00       		.space	1
+ 1054              		.section	.bss.FS_ROM_ucCheckValueRamConBlock,"aw",%nobits
+ 1055              		.align	2
+ 1056              		.set	.LANCHOR2,. + 0
+ 1059              	FS_ROM_ucCheckValueRamConBlock:
+ 1060 0000 00       		.space	1
+ 1061              		.section	.bss.ucROMCheckCycleCount,"aw",%nobits
+ 1062              		.set	.LANCHOR1,. + 0
+ 1065              	ucROMCheckCycleCount:
+ 1066 0000 00       		.space	1
+ 1067              		.text
+ 1068              	.Letext0:
+ 1069              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 1070              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 1071              		.file 5 "common/prog/FuncSafe/fSafe.h"
+ 1072              		.file 6 "app/prog/FuncSafe/fSafeXS.h"
+ 1073              		.file 7 "common/prog/FuncSafe/fspriv.h"
+ 1074              		.file 8 "common/prog/FuncSafe/fsramcon.h"
+ 1075              		.file 9 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

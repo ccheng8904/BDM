@@ -1,0 +1,237 @@
+
+out/programmer/prog/ped_fw/timer/timerlib.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.TIM_bHandleTask:
+
+00000000 <TIM_bHandleTask>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+BOOL TIM_bHandleTask(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    if (TIM_tTaskState == TIM_WORK)
+   2:	4d1d      	ldr	r5, [pc, #116]	; (78 <TIM_bHandleTask+0x78>)
+   4:	782c      	ldrb	r4, [r5, #0]
+   6:	2c01      	cmp	r4, #1
+   8:	d123      	bne.n	52 <TIM_bHandleTask+0x52>
+    {
+        if (_TIM_bIsBaseTimerDown())
+   a:	f7ff fffe 	bl	0 <_TIM_bIsBaseTimerDown>
+   e:	2800      	cmp	r0, #0
+  10:	d01b      	beq.n	4a <TIM_bHandleTask+0x4a>
+        {
+            (*pucTimerPtr)++;     //increment prescaler
+            if (*pucTimerPtr == ucPrescaler)//prescaler down?
+            {
+                //reset prescaler
+                *pucTimerPtr = 0;
+  12:	2000      	movs	r0, #0
+    pucTimerPtr   = TIM_ptTimer8Config[0].pucPrescalerPtr; // point to first prescaler (TIM_uc8Start1)
+  14:	4a19      	ldr	r2, [pc, #100]	; (7c <TIM_bHandleTask+0x7c>)
+  16:	6813      	ldr	r3, [r2, #0]
+        ptTimerConfig++;
+  18:	3208      	adds	r2, #8
+        while ( pucTimerPtr < ptTimerConfig->pucPrescalerPtr )//do for all timers in segment
+  1a:	6811      	ldr	r1, [r2, #0]
+            pucTimerPtr++; // next timer in segment
+  1c:	3301      	adds	r3, #1
+        while ( pucTimerPtr < ptTimerConfig->pucPrescalerPtr )//do for all timers in segment
+  1e:	428b      	cmp	r3, r1
+  20:	d30b      	bcc.n	3a <TIM_bHandleTask+0x3a>
+        ucPrescaler = ptTimerConfig->ucPrescaler;
+  22:	7915      	ldrb	r5, [r2, #4]
+        if ( ucPrescaler != TIM_END_MARK )//terminate loop if prescaler is zero -->end mark
+  24:	2d00      	cmp	r5, #0
+  26:	d010      	beq.n	4a <TIM_bHandleTask+0x4a>
+            (*pucTimerPtr)++;     //increment prescaler
+  28:	7819      	ldrb	r1, [r3, #0]
+  2a:	3101      	adds	r1, #1
+  2c:	b2c9      	uxtb	r1, r1
+  2e:	7019      	strb	r1, [r3, #0]
+            if (*pucTimerPtr == ucPrescaler)//prescaler down?
+  30:	7819      	ldrb	r1, [r3, #0]
+  32:	428d      	cmp	r5, r1
+  34:	d109      	bne.n	4a <TIM_bHandleTask+0x4a>
+                *pucTimerPtr = 0;
+  36:	7018      	strb	r0, [r3, #0]
+        ptTimerConfig++;
+  38:	e7ee      	b.n	18 <TIM_bHandleTask+0x18>
+            if ( *pucTimerPtr != 0u ) // if not timer down
+  3a:	7819      	ldrb	r1, [r3, #0]
+  3c:	2900      	cmp	r1, #0
+  3e:	d0ec      	beq.n	1a <TIM_bHandleTask+0x1a>
+                (*pucTimerPtr)--;     // decrement timer
+  40:	7819      	ldrb	r1, [r3, #0]
+  42:	3901      	subs	r1, #1
+  44:	b2c9      	uxtb	r1, r1
+  46:	7019      	strb	r1, [r3, #0]
+  48:	e7e7      	b.n	1a <TIM_bHandleTask+0x1a>
+        STIM_SchedulerHandleTask();
+  4a:	f7ff fffe 	bl	0 <STIM_SchedulerHandleTask>
+}
+  4e:	0020      	movs	r0, r4
+  50:	bd70      	pop	{r4, r5, r6, pc}
+        if (_TIM_bGetInitConfig())
+  52:	f7ff fffe 	bl	0 <_TIM_bGetInitConfig>
+  56:	1e04      	subs	r4, r0, #0
+  58:	d0f9      	beq.n	4e <TIM_bHandleTask+0x4e>
+{
+    Ttimer8 *pucPtr = &TIM_uc8End;
+
+    while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all 8-Bit timers
+    {
+        *pucPtr = 0;
+  5a:	2100      	movs	r1, #0
+    while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all 8-Bit timers
+  5c:	4b07      	ldr	r3, [pc, #28]	; (7c <TIM_bHandleTask+0x7c>)
+  5e:	681a      	ldr	r2, [r3, #0]
+    Ttimer8 *pucPtr = &TIM_uc8End;
+  60:	4b07      	ldr	r3, [pc, #28]	; (80 <TIM_bHandleTask+0x80>)
+    while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all 8-Bit timers
+  62:	4293      	cmp	r3, r2
+  64:	d204      	bcs.n	70 <TIM_bHandleTask+0x70>
+            TIM_tTaskState = TIM_WORK;
+  66:	2401      	movs	r4, #1
+            (void)STIM_InitModule();
+  68:	f7ff fffe 	bl	0 <STIM_InitModule>
+            TIM_tTaskState = TIM_WORK;
+  6c:	702c      	strb	r4, [r5, #0]
+  6e:	e7ee      	b.n	4e <TIM_bHandleTask+0x4e>
+        *pucPtr = 0;
+  70:	7019      	strb	r1, [r3, #0]
+        pucPtr--;
+  72:	3b01      	subs	r3, #1
+  74:	e7f5      	b.n	62 <TIM_bHandleTask+0x62>
+  76:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.TIM_bHandleTask16:
+
+00000000 <TIM_bHandleTask16>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    if (TIM_tTaskState == TIM_WORK)
+   2:	4d2b      	ldr	r5, [pc, #172]	; (b0 <TIM_bHandleTask16+0xb0>)
+   4:	782c      	ldrb	r4, [r5, #0]
+   6:	2c01      	cmp	r4, #1
+   8:	d13f      	bne.n	8a <TIM_bHandleTask16+0x8a>
+        if (_TIM_bIsBaseTimerDown())
+   a:	f7ff fffe 	bl	0 <_TIM_bIsBaseTimerDown>
+   e:	2800      	cmp	r0, #0
+  10:	d037      	beq.n	82 <TIM_bHandleTask16+0x82>
+  12:	2100      	movs	r1, #0
+                while ( (((uint32_t)((uint32_t)pucTimerPtr)) & 3u) != 0u )
+  14:	2603      	movs	r6, #3
+                    *pucTimerPtr = 0;
+  16:	000f      	movs	r7, r1
+    ptTimerConfig = TIM_ptTimer8Config;//init config pointer
+  18:	4a26      	ldr	r2, [pc, #152]	; (b4 <TIM_bHandleTask16+0xb4>)
+        pucTimerPtr = ptTimerConfig->pucPrescalerPtr; // point to first prescaler (TIM_uc8Start1/TIM_uc16Start1)
+  1a:	6813      	ldr	r3, [r2, #0]
+            ptTimerConfig++;
+  1c:	3208      	adds	r2, #8
+            pucTimerPtr++;
+  1e:	3301      	adds	r3, #1
+            if ((ucTimerType != TIM_8BIT) && (pucTimerPtr < (ptTimerConfig->pucPrescalerPtr)))
+  20:	2900      	cmp	r1, #0
+  22:	d004      	beq.n	2e <TIM_bHandleTask16+0x2e>
+  24:	6810      	ldr	r0, [r2, #0]
+  26:	4283      	cmp	r3, r0
+  28:	d204      	bcs.n	34 <TIM_bHandleTask16+0x34>
+                while ( (((uint32_t)((uint32_t)pucTimerPtr)) & 3u) != 0u )
+  2a:	4233      	tst	r3, r6
+  2c:	d111      	bne.n	52 <TIM_bHandleTask16+0x52>
+            while (pucTimerPtr < (ptTimerConfig->pucPrescalerPtr))//do for all timers in segment
+  2e:	6810      	ldr	r0, [r2, #0]
+  30:	4283      	cmp	r3, r0
+  32:	d310      	bcc.n	56 <TIM_bHandleTask16+0x56>
+            ucPrescaler = ptTimerConfig->ucPrescaler;
+  34:	7915      	ldrb	r5, [r2, #4]
+            if ( ucPrescaler != TIM_END_MARK )//terminate loop if prescaler is zero -->end mark
+  36:	2d00      	cmp	r5, #0
+  38:	d021      	beq.n	7e <TIM_bHandleTask16+0x7e>
+                (*pucTimerPtr)++;     //decrement prescaler
+  3a:	7818      	ldrb	r0, [r3, #0]
+  3c:	3001      	adds	r0, #1
+  3e:	b2c0      	uxtb	r0, r0
+  40:	7018      	strb	r0, [r3, #0]
+                if (*pucTimerPtr == ucPrescaler)//prescaler down?
+  42:	7818      	ldrb	r0, [r3, #0]
+  44:	4285      	cmp	r5, r0
+  46:	d11a      	bne.n	7e <TIM_bHandleTask16+0x7e>
+                    *pucTimerPtr = 0;
+  48:	701f      	strb	r7, [r3, #0]
+  4a:	e7e7      	b.n	1c <TIM_bHandleTask16+0x1c>
+  4c:	2101      	movs	r1, #1
+            ptTimerConfig = TIM_ptTimer16Config;//init config pointer
+  4e:	4a1a      	ldr	r2, [pc, #104]	; (b8 <TIM_bHandleTask16+0xb8>)
+  50:	e7e3      	b.n	1a <TIM_bHandleTask16+0x1a>
+                    pucTimerPtr++;
+  52:	3301      	adds	r3, #1
+  54:	e7e9      	b.n	2a <TIM_bHandleTask16+0x2a>
+                if (ucTimerType == TIM_16BIT)
+  56:	2901      	cmp	r1, #1
+  58:	d108      	bne.n	6c <TIM_bHandleTask16+0x6c>
+                    if (*((Ttimer16*)(volatile void*)pucTimerPtr) != 0u)   // if not 16-Bit timer down
+  5a:	8818      	ldrh	r0, [r3, #0]
+  5c:	2800      	cmp	r0, #0
+  5e:	d003      	beq.n	68 <TIM_bHandleTask16+0x68>
+                        (*((Ttimer16*)(volatile void*)pucTimerPtr))--;   //decrement timer
+  60:	8818      	ldrh	r0, [r3, #0]
+  62:	3801      	subs	r0, #1
+  64:	b280      	uxth	r0, r0
+  66:	8018      	strh	r0, [r3, #0]
+                    pucTimerPtr+=sizeof(uint16_t);//lint !e9016 "pointer arithmetic [MISRA 2012 Rule 18.4 advisory]"
+  68:	3302      	adds	r3, #2
+  6a:	e7e0      	b.n	2e <TIM_bHandleTask16+0x2e>
+                    if (*pucTimerPtr != 0u)   //if not 8-Bit timer down
+  6c:	7818      	ldrb	r0, [r3, #0]
+  6e:	2800      	cmp	r0, #0
+  70:	d003      	beq.n	7a <TIM_bHandleTask16+0x7a>
+                        (*pucTimerPtr)--;   //decrement timer
+  72:	7818      	ldrb	r0, [r3, #0]
+  74:	3801      	subs	r0, #1
+  76:	b2c0      	uxtb	r0, r0
+  78:	7018      	strb	r0, [r3, #0]
+                    pucTimerPtr++;
+  7a:	3301      	adds	r3, #1
+  7c:	e7d7      	b.n	2e <TIM_bHandleTask16+0x2e>
+    while (ucTimerType <= TIM_16BIT)
+  7e:	2901      	cmp	r1, #1
+  80:	d1e4      	bne.n	4c <TIM_bHandleTask16+0x4c>
+        STIM_SchedulerHandleTask();
+  82:	f7ff fffe 	bl	0 <STIM_SchedulerHandleTask>
+}
+  86:	0020      	movs	r0, r4
+  88:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        if (_TIM_bGetInitConfig())
+  8a:	f7ff fffe 	bl	0 <_TIM_bGetInitConfig>
+  8e:	1e04      	subs	r4, r0, #0
+  90:	d0f9      	beq.n	86 <TIM_bHandleTask16+0x86>
+        *pucPtr = 0;
+  92:	2100      	movs	r1, #0
+    while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all (8 and 16-Bit) timers
+  94:	4b07      	ldr	r3, [pc, #28]	; (b4 <TIM_bHandleTask16+0xb4>)
+  96:	681a      	ldr	r2, [r3, #0]
+    Ttimer8 *pucPtr = &TIM_uc16End;
+  98:	4b08      	ldr	r3, [pc, #32]	; (bc <TIM_bHandleTask16+0xbc>)
+    while (pucPtr >= TIM_ptTimer8Config[0].pucPrescalerPtr)   //do for all (8 and 16-Bit) timers
+  9a:	4293      	cmp	r3, r2
+  9c:	d204      	bcs.n	a8 <TIM_bHandleTask16+0xa8>
+            TIM_tTaskState = TIM_WORK;
+  9e:	2401      	movs	r4, #1
+            (void)STIM_InitModule();
+  a0:	f7ff fffe 	bl	0 <STIM_InitModule>
+            TIM_tTaskState = TIM_WORK;
+  a4:	702c      	strb	r4, [r5, #0]
+  a6:	e7ee      	b.n	86 <TIM_bHandleTask16+0x86>
+        *pucPtr = 0;
+  a8:	7019      	strb	r1, [r3, #0]
+        pucPtr--;
+  aa:	3b01      	subs	r3, #1
+  ac:	e7f5      	b.n	9a <TIM_bHandleTask16+0x9a>
+  ae:	46c0      	nop			; (mov r8, r8)
+	...

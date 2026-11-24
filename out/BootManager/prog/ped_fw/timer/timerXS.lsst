@@ -1,0 +1,617 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"timerXS.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._TIM_bIsBaseTimerDown,"ax",%progbits
+  18              		.align	1
+  19              		.global	_TIM_bIsBaseTimerDown
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	_TIM_bIsBaseTimerDown:
+  25              	.LFB57:
+  26              		.file 1 "app/prog/ped_fw/timer/timerXS.c"
+   1:app/prog/ped_fw/timer/timerXS.c **** /*******************************************************************************
+   2:app/prog/ped_fw/timer/timerXS.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:app/prog/ped_fw/timer/timerXS.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/ped_fw/timer/timerXS.c ****  *
+   5:app/prog/ped_fw/timer/timerXS.c ****  *  All rights reserved. This program and the accompanying materials
+   6:app/prog/ped_fw/timer/timerXS.c ****  *  are protected by international copyright laws.
+   7:app/prog/ped_fw/timer/timerXS.c ****  *  Please contact copyright holder for licensing information.
+   8:app/prog/ped_fw/timer/timerXS.c ****  *
+   9:app/prog/ped_fw/timer/timerXS.c ****  *******************************************************************************
+  10:app/prog/ped_fw/timer/timerXS.c ****  *  PROJECT          Generic SW
+  11:app/prog/ped_fw/timer/timerXS.c ****  *  COMP_ABBREV      TIM
+  12:app/prog/ped_fw/timer/timerXS.c ****  ******************************************************************************/
+  13:app/prog/ped_fw/timer/timerXS.c **** 
+  14:app/prog/ped_fw/timer/timerXS.c **** 
+  15:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  16:app/prog/ped_fw/timer/timerXS.c **** /* DOCUMENTATION                                                              */
+  17:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  18:app/prog/ped_fw/timer/timerXS.c **** /** \file timerXS.c
+  19:app/prog/ped_fw/timer/timerXS.c ****     \brief Configuration template for timer library.
+  20:app/prog/ped_fw/timer/timerXS.c **** 
+  21:app/prog/ped_fw/timer/timerXS.c ****        This is the common project specific platform independent configuration.
+  22:app/prog/ped_fw/timer/timerXS.c **** */
+  23:app/prog/ped_fw/timer/timerXS.c **** 
+  24:app/prog/ped_fw/timer/timerXS.c **** 
+  25:app/prog/ped_fw/timer/timerXS.c **** 
+  26:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  27:app/prog/ped_fw/timer/timerXS.c **** /* INCLUDES                                                                   */
+  28:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  29:app/prog/ped_fw/timer/timerXS.c **** 
+  30:app/prog/ped_fw/timer/timerXS.c **** #include "bsh_stdinc.h"
+  31:app/prog/ped_fw/timer/timerXS.c **** #include "LibTypes.h"
+  32:app/prog/ped_fw/timer/timerXS.c **** #include "hsup.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 2
+
+
+  33:app/prog/ped_fw/timer/timerXS.c **** #include "SegmentDef.h"
+  34:app/prog/ped_fw/timer/timerXS.c **** #include "timerlib.h"
+  35:app/prog/ped_fw/timer/timerXS.c **** 
+  36:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  37:app/prog/ped_fw/timer/timerXS.c **** /* PRIVATE DEFINITIONS                                                        */
+  38:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  39:app/prog/ped_fw/timer/timerXS.c **** 
+  40:app/prog/ped_fw/timer/timerXS.c **** /* Timerlib configuration switches comment in or out*/
+  41:app/prog/ped_fw/timer/timerXS.c **** 
+  42:app/prog/ped_fw/timer/timerXS.c **** /* comment in to use 16bis timer.
+  43:app/prog/ped_fw/timer/timerXS.c ****  * Note: To enable 16Bit timers call task handler TIM_bHandleTask16 must be called also
+  44:app/prog/ped_fw/timer/timerXS.c ****  */
+  45:app/prog/ped_fw/timer/timerXS.c **** #define TIM_16_BIT_TIMER_USED ///< Switches on the usage of 16Bit timers
+  46:app/prog/ped_fw/timer/timerXS.c **** 
+  47:app/prog/ped_fw/timer/timerXS.c **** 
+  48:app/prog/ped_fw/timer/timerXS.c **** 
+  49:app/prog/ped_fw/timer/timerXS.c **** 
+  50:app/prog/ped_fw/timer/timerXS.c **** #define BASE_TICKS_PER_US           (10000U) ///< base time in µs
+  51:app/prog/ped_fw/timer/timerXS.c **** 
+  52:app/prog/ped_fw/timer/timerXS.c **** 
+  53:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  54:app/prog/ped_fw/timer/timerXS.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  55:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  56:app/prog/ped_fw/timer/timerXS.c **** 
+  57:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+  58:app/prog/ped_fw/timer/timerXS.c **** typedef uint32_t Tclock;  ///< Type for circulating timer is 32 Bit
+  59:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+  60:app/prog/ped_fw/timer/timerXS.c **** 
+  61:app/prog/ped_fw/timer/timerXS.c **** 
+  62:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  63:app/prog/ped_fw/timer/timerXS.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  64:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+  65:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_1)
+  66:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 1 */
+  67:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc8Start1;
+  68:app/prog/ped_fw/timer/timerXS.c **** 
+  69:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_2)
+  70:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 2 */
+  71:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart2;
+  72:app/prog/ped_fw/timer/timerXS.c **** 
+  73:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_3)
+  74:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 3 */
+  75:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart3;
+  76:app/prog/ped_fw/timer/timerXS.c **** 
+  77:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_4)
+  78:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 4 */
+  79:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart4;
+  80:app/prog/ped_fw/timer/timerXS.c **** 
+  81:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_5)
+  82:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 5 */
+  83:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart5;
+  84:app/prog/ped_fw/timer/timerXS.c **** 
+  85:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_6)
+  86:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 6 */
+  87:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart6;
+  88:app/prog/ped_fw/timer/timerXS.c **** 
+  89:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_7)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 3
+
+
+  90:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 7 */
+  91:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart7;
+  92:app/prog/ped_fw/timer/timerXS.c **** 
+  93:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_8)
+  94:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 8 */
+  95:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart8;
+  96:app/prog/ped_fw/timer/timerXS.c **** 
+  97:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_9)
+  98:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 9 */
+  99:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart9;
+ 100:app/prog/ped_fw/timer/timerXS.c **** 
+ 101:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START8_10)
+ 102:app/prog/ped_fw/timer/timerXS.c **** /** Prescaler of 8-bit timer segment 10 */
+ 103:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_ucStart10;
+ 104:app/prog/ped_fw/timer/timerXS.c **** 
+ 105:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(END8)
+ 106:app/prog/ped_fw/timer/timerXS.c **** /** Status for timer library, end address of last 8 bit timer segment */
+ 107:app/prog/ped_fw/timer/timerXS.c **** Ttimer8 TIM_uc8End;
+ 108:app/prog/ped_fw/timer/timerXS.c **** 
+ 109:app/prog/ped_fw/timer/timerXS.c **** 
+ 110:app/prog/ped_fw/timer/timerXS.c **** #ifdef TIM_16_BIT_TIMER_USED
+ 111:app/prog/ped_fw/timer/timerXS.c **** 
+ 112:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_1)
+ 113:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 1 */
+ 114:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start1;
+ 115:app/prog/ped_fw/timer/timerXS.c **** 
+ 116:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_2)
+ 117:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 2 */
+ 118:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start2;
+ 119:app/prog/ped_fw/timer/timerXS.c **** 
+ 120:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_3)
+ 121:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 3 */
+ 122:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start3;
+ 123:app/prog/ped_fw/timer/timerXS.c **** 
+ 124:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_4)
+ 125:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 4 */
+ 126:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start4;
+ 127:app/prog/ped_fw/timer/timerXS.c **** 
+ 128:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_5)
+ 129:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 5 */
+ 130:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start5;
+ 131:app/prog/ped_fw/timer/timerXS.c **** 
+ 132:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_6)
+ 133:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 6 */
+ 134:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start6;
+ 135:app/prog/ped_fw/timer/timerXS.c **** 
+ 136:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_7)
+ 137:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 7 */
+ 138:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start7;
+ 139:app/prog/ped_fw/timer/timerXS.c **** 
+ 140:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_8)
+ 141:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 8 */
+ 142:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start8;
+ 143:app/prog/ped_fw/timer/timerXS.c **** 
+ 144:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_9)
+ 145:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 9 */
+ 146:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start9;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 4
+
+
+ 147:app/prog/ped_fw/timer/timerXS.c **** 
+ 148:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_10)
+ 149:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 10 */
+ 150:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start10;
+ 151:app/prog/ped_fw/timer/timerXS.c **** 
+ 152:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_11)
+ 153:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 11 */
+ 154:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start11;
+ 155:app/prog/ped_fw/timer/timerXS.c **** 
+ 156:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(START16_12)
+ 157:app/prog/ped_fw/timer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 12 */
+ 158:app/prog/ped_fw/timer/timerXS.c **** static Ttimer8 TIM_uc16Start12;
+ 159:app/prog/ped_fw/timer/timerXS.c **** 
+ 160:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW(END16)
+ 161:app/prog/ped_fw/timer/timerXS.c **** Ttimer8 TIM_uc16End;
+ 162:app/prog/ped_fw/timer/timerXS.c **** 
+ 163:app/prog/ped_fw/timer/timerXS.c **** #endif
+ 164:app/prog/ped_fw/timer/timerXS.c **** SDEF_SetSegmentRW_Default() // switch back to default RW segment
+ 165:app/prog/ped_fw/timer/timerXS.c **** 
+ 166:app/prog/ped_fw/timer/timerXS.c **** static uint16_t TIM_uiTimeOld = 0;///< used to calculate time difference
+ 167:app/prog/ped_fw/timer/timerXS.c **** 
+ 168:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+ 169:app/prog/ped_fw/timer/timerXS.c **** static Tclock TIM_tCircleTime = 0;
+ 170:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+ 171:app/prog/ped_fw/timer/timerXS.c **** 
+ 172:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+ 173:app/prog/ped_fw/timer/timerXS.c **** /* GLOBAL DATA                                                                */
+ 174:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+ 175:app/prog/ped_fw/timer/timerXS.c **** 
+ 176:app/prog/ped_fw/timer/timerXS.c **** /* QAC Error: Msg(5:6007)
+ 177:app/prog/ped_fw/timer/timerXS.c ****    Comment  : Error belongs to an external library linked to the code.
+ 178:app/prog/ped_fw/timer/timerXS.c ****               External linkage is required here!
+ 179:app/prog/ped_fw/timer/timerXS.c **** */
+ 180:app/prog/ped_fw/timer/timerXS.c **** 
+ 181:app/prog/ped_fw/timer/timerXS.c **** /*****************************************************************/
+ 182:app/prog/ped_fw/timer/timerXS.c **** /* Note: The prescalers TIM_uc8Startxx must be in the same order */
+ 183:app/prog/ped_fw/timer/timerXS.c **** /*       the timer segments defined by linker options             */
+ 184:app/prog/ped_fw/timer/timerXS.c **** /*****************************************************************/
+ 185:app/prog/ped_fw/timer/timerXS.c **** 
+ 186:app/prog/ped_fw/timer/timerXS.c **** /* Table of 8 Bit Timer prescalers */
+ 187:app/prog/ped_fw/timer/timerXS.c **** const TtimerConfig TIM_ptTimer8Config[] =
+ 188:app/prog/ped_fw/timer/timerXS.c **** {
+ 189:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc8Start1,    10}, /* 10ms, change for other base times */
+ 190:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart2,     2},  /* 20ms  */
+ 191:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart3,     5},  /* 100ms */
+ 192:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart4,     2},  /* 200ms */
+ 193:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart5,     5},  /* 1s    */
+ 194:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart6,     2},  /* 2s    */
+ 195:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart7,     5},  /* 10s   */
+ 196:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart8,     2},  /* 20s   */
+ 197:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart9,     3},  /* 1min  */
+ 198:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_ucStart10,    2},  /* 2min  */
+ 199:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc8End,       0}   /* Do not change! Internal use and endmark of last segment */
+ 200:app/prog/ped_fw/timer/timerXS.c **** };
+ 201:app/prog/ped_fw/timer/timerXS.c **** 
+ 202:app/prog/ped_fw/timer/timerXS.c **** /* Table of 16 Bit Timer prescalers */
+ 203:app/prog/ped_fw/timer/timerXS.c **** const TtimerConfig TIM_ptTimer16Config[] ={
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 5
+
+
+ 204:app/prog/ped_fw/timer/timerXS.c **** 
+ 205:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start1,       10}, // 10ms, change for other base times
+ 206:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start2,       2},  // 20ms
+ 207:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start3,       5},  // 100ms
+ 208:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start4,       2},  // 200ms
+ 209:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start5,       5},  // 1s
+ 210:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start6,       2},  // 2s
+ 211:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start7,       5},  // 10s
+ 212:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start8,       2},  // 20s
+ 213:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start9,       3},  // 1min
+ 214:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start10,      2},  // 2min
+ 215:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start11,      5},  // 10min
+ 216:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16Start12,      2},  // 20min
+ 217:app/prog/ped_fw/timer/timerXS.c ****            {&TIM_uc16End,          0}   // do not change, internal use and endmark of last segment
+ 218:app/prog/ped_fw/timer/timerXS.c **** };
+ 219:app/prog/ped_fw/timer/timerXS.c **** 
+ 220:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+ 221:app/prog/ped_fw/timer/timerXS.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 222:app/prog/ped_fw/timer/timerXS.c **** /******************************************************************************/
+ 223:app/prog/ped_fw/timer/timerXS.c **** 
+ 224:app/prog/ped_fw/timer/timerXS.c **** BOOL _TIM_bIsBaseTimerDown(void)
+ 225:app/prog/ped_fw/timer/timerXS.c **** {
+  27              		.loc 1 225 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 70B5     		push	{r4, r5, r6, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 4, -16
+  35              		.cfi_offset 5, -12
+  36              		.cfi_offset 6, -8
+  37              		.cfi_offset 14, -4
+ 226:app/prog/ped_fw/timer/timerXS.c ****    /* Is base time down? */
+ 227:app/prog/ped_fw/timer/timerXS.c ****    while ( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) >= BASE_TICKS_PER_US )
+  38              		.loc 1 227 4 view .LVU1
+  39              	.L2:
+  40              		.loc 1 227 72 view .LVU2
+  41              		.loc 1 227 24 is_stmt 0 view .LVU3
+  42 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  43              	.LVL0:
+  44              		.loc 1 227 12 view .LVU4
+  45 0006 0C4C     		ldr	r4, .L6
+  46              		.loc 1 227 72 view .LVU5
+  47 0008 0C4D     		ldr	r5, .L6+4
+  48              		.loc 1 227 12 view .LVU6
+  49 000a 2388     		ldrh	r3, [r4]
+  50 000c C01A     		subs	r0, r0, r3
+  51              		.loc 1 227 72 view .LVU7
+  52 000e 80B2     		uxth	r0, r0
+  53 0010 A842     		cmp	r0, r5
+  54 0012 01D8     		bhi	.L4
+ 228:app/prog/ped_fw/timer/timerXS.c ****    {
+ 229:app/prog/ped_fw/timer/timerXS.c ****       /* HW-Timer elapsed */
+ 230:app/prog/ped_fw/timer/timerXS.c ****       HSUP_vDisableInt();
+ 231:app/prog/ped_fw/timer/timerXS.c ****       TIM_uiTimeOld  += BASE_TICKS_PER_US;
+ 232:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 6
+
+
+ 233:app/prog/ped_fw/timer/timerXS.c ****       TIM_tCircleTime += BASE_TICKS_PER_US;
+ 234:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+ 235:app/prog/ped_fw/timer/timerXS.c ****       HSUP_vEnableInt();
+ 236:app/prog/ped_fw/timer/timerXS.c ****       if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+ 237:app/prog/ped_fw/timer/timerXS.c ****       {
+ 238:app/prog/ped_fw/timer/timerXS.c ****           return TRUE;
+ 239:app/prog/ped_fw/timer/timerXS.c ****       }
+ 240:app/prog/ped_fw/timer/timerXS.c ****    }
+ 241:app/prog/ped_fw/timer/timerXS.c ****    return FALSE;
+  55              		.loc 1 241 11 view .LVU8
+  56 0014 0020     		movs	r0, #0
+  57              	.L3:
+ 242:app/prog/ped_fw/timer/timerXS.c **** }
+  58              		.loc 1 242 1 view .LVU9
+  59              		@ sp needed
+  60 0016 70BD     		pop	{r4, r5, r6, pc}
+  61              	.L4:
+ 230:app/prog/ped_fw/timer/timerXS.c ****       TIM_uiTimeOld  += BASE_TICKS_PER_US;
+  62              		.loc 1 230 25 is_stmt 1 view .LVU10
+ 231:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+  63              		.loc 1 231 7 view .LVU11
+ 231:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+  64              		.loc 1 231 22 is_stmt 0 view .LVU12
+  65 0018 0949     		ldr	r1, .L6+8
+ 233:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+  66              		.loc 1 233 23 view .LVU13
+  67 001a 0A4A     		ldr	r2, .L6+12
+ 231:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+  68              		.loc 1 231 22 view .LVU14
+  69 001c 5B18     		adds	r3, r3, r1
+  70 001e 2380     		strh	r3, [r4]
+ 233:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+  71              		.loc 1 233 7 is_stmt 1 view .LVU15
+ 233:app/prog/ped_fw/timer/timerXS.c **** #endif // USE_32BIT_HWTIMER
+  72              		.loc 1 233 23 is_stmt 0 view .LVU16
+  73 0020 1368     		ldr	r3, [r2]
+  74 0022 5B18     		adds	r3, r3, r1
+  75 0024 1360     		str	r3, [r2]
+ 235:app/prog/ped_fw/timer/timerXS.c ****       if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+  76              		.loc 1 235 24 is_stmt 1 view .LVU17
+ 236:app/prog/ped_fw/timer/timerXS.c ****       {
+  77              		.loc 1 236 7 view .LVU18
+ 236:app/prog/ped_fw/timer/timerXS.c ****       {
+  78              		.loc 1 236 23 is_stmt 0 view .LVU19
+  79 0026 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  80              	.LVL1:
+ 236:app/prog/ped_fw/timer/timerXS.c ****       {
+  81              		.loc 1 236 11 view .LVU20
+  82 002a 2388     		ldrh	r3, [r4]
+  83 002c C01A     		subs	r0, r0, r3
+ 236:app/prog/ped_fw/timer/timerXS.c ****       {
+  84              		.loc 1 236 9 view .LVU21
+  85 002e 80B2     		uxth	r0, r0
+  86 0030 A842     		cmp	r0, r5
+  87 0032 E6D8     		bhi	.L2
+ 238:app/prog/ped_fw/timer/timerXS.c ****       }
+  88              		.loc 1 238 18 view .LVU22
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 7
+
+
+  89 0034 0120     		movs	r0, #1
+  90 0036 EEE7     		b	.L3
+  91              	.L7:
+  92              		.align	2
+  93              	.L6:
+  94 0038 00000000 		.word	.LANCHOR0
+  95 003c 0F270000 		.word	9999
+  96 0040 10270000 		.word	10000
+  97 0044 00000000 		.word	.LANCHOR1
+  98              		.cfi_endproc
+  99              	.LFE57:
+ 101              		.section	.text.TIM_u32GetCircleMicroSeconds,"ax",%progbits
+ 102              		.align	1
+ 103              		.global	TIM_u32GetCircleMicroSeconds
+ 104              		.syntax unified
+ 105              		.code	16
+ 106              		.thumb_func
+ 108              	TIM_u32GetCircleMicroSeconds:
+ 109              	.LFB58:
+ 243:app/prog/ped_fw/timer/timerXS.c **** 
+ 244:app/prog/ped_fw/timer/timerXS.c **** #ifndef USE_32BIT_HWTIMER
+ 245:app/prog/ped_fw/timer/timerXS.c **** uint32_t TIM_u32GetCircleMicroSeconds(void)
+ 246:app/prog/ped_fw/timer/timerXS.c **** {
+ 110              		.loc 1 246 1 is_stmt 1 view -0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 0
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 247:app/prog/ped_fw/timer/timerXS.c ****    uint16_t elapsedTime = (uint16_t)(TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld);
+ 114              		.loc 1 247 4 view .LVU24
+ 246:app/prog/ped_fw/timer/timerXS.c ****    uint16_t elapsedTime = (uint16_t)(TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld);
+ 115              		.loc 1 246 1 is_stmt 0 view .LVU25
+ 116 0000 10B5     		push	{r4, lr}
+ 117              	.LCFI1:
+ 118              		.cfi_def_cfa_offset 8
+ 119              		.cfi_offset 4, -8
+ 120              		.cfi_offset 14, -4
+ 121              		.loc 1 247 38 view .LVU26
+ 122 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 123              	.LVL2:
+ 248:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 124              		.loc 1 248 4 is_stmt 1 view .LVU27
+ 249:app/prog/ped_fw/timer/timerXS.c **** }
+ 125              		.loc 1 249 1 is_stmt 0 view .LVU28
+ 126              		@ sp needed
+ 247:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 127              		.loc 1 247 27 view .LVU29
+ 128 0006 044B     		ldr	r3, .L9
+ 247:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 129              		.loc 1 247 13 view .LVU30
+ 130 0008 1B88     		ldrh	r3, [r3]
+ 131 000a C01A     		subs	r0, r0, r3
+ 132              	.LVL3:
+ 248:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 133              		.loc 1 248 27 view .LVU31
+ 134 000c 034B     		ldr	r3, .L9+4
+ 248:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 135              		.loc 1 248 29 view .LVU32
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 8
+
+
+ 136 000e 80B2     		uxth	r0, r0
+ 248:app/prog/ped_fw/timer/timerXS.c ****    return TIM_tCircleTime + (uint32_t)elapsedTime;
+ 137              		.loc 1 248 27 view .LVU33
+ 138 0010 1B68     		ldr	r3, [r3]
+ 139 0012 C018     		adds	r0, r0, r3
+ 140              		.loc 1 249 1 view .LVU34
+ 141 0014 10BD     		pop	{r4, pc}
+ 142              	.L10:
+ 143 0016 C046     		.align	2
+ 144              	.L9:
+ 145 0018 00000000 		.word	.LANCHOR0
+ 146 001c 00000000 		.word	.LANCHOR1
+ 147              		.cfi_endproc
+ 148              	.LFE58:
+ 150              		.global	TIM_ptTimer16Config
+ 151              		.global	TIM_ptTimer8Config
+ 152              		.global	TIM_uc16End
+ 153              		.global	TIM_uc8End
+ 154              		.section	.END16,"aw"
+ 157              	TIM_uc16End:
+ 158 0000 00       		.space	1
+ 159              		.section	.END8,"aw"
+ 162              	TIM_uc8End:
+ 163 0000 00       		.space	1
+ 164              		.section	.START16_1,"aw"
+ 167              	TIM_uc16Start1:
+ 168 0000 00       		.space	1
+ 169              		.section	.START16_10,"aw"
+ 172              	TIM_uc16Start10:
+ 173 0000 00       		.space	1
+ 174              		.section	.START16_11,"aw"
+ 177              	TIM_uc16Start11:
+ 178 0000 00       		.space	1
+ 179              		.section	.START16_12,"aw"
+ 182              	TIM_uc16Start12:
+ 183 0000 00       		.space	1
+ 184              		.section	.START16_2,"aw"
+ 187              	TIM_uc16Start2:
+ 188 0000 00       		.space	1
+ 189              		.section	.START16_3,"aw"
+ 192              	TIM_uc16Start3:
+ 193 0000 00       		.space	1
+ 194              		.section	.START16_4,"aw"
+ 197              	TIM_uc16Start4:
+ 198 0000 00       		.space	1
+ 199              		.section	.START16_5,"aw"
+ 202              	TIM_uc16Start5:
+ 203 0000 00       		.space	1
+ 204              		.section	.START16_6,"aw"
+ 207              	TIM_uc16Start6:
+ 208 0000 00       		.space	1
+ 209              		.section	.START16_7,"aw"
+ 212              	TIM_uc16Start7:
+ 213 0000 00       		.space	1
+ 214              		.section	.START16_8,"aw"
+ 217              	TIM_uc16Start8:
+ 218 0000 00       		.space	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 9
+
+
+ 219              		.section	.START16_9,"aw"
+ 222              	TIM_uc16Start9:
+ 223 0000 00       		.space	1
+ 224              		.section	.START8_1,"aw"
+ 227              	TIM_uc8Start1:
+ 228 0000 00       		.space	1
+ 229              		.section	.START8_10,"aw"
+ 232              	TIM_ucStart10:
+ 233 0000 00       		.space	1
+ 234              		.section	.START8_2,"aw"
+ 237              	TIM_ucStart2:
+ 238 0000 00       		.space	1
+ 239              		.section	.START8_3,"aw"
+ 242              	TIM_ucStart3:
+ 243 0000 00       		.space	1
+ 244              		.section	.START8_4,"aw"
+ 247              	TIM_ucStart4:
+ 248 0000 00       		.space	1
+ 249              		.section	.START8_5,"aw"
+ 252              	TIM_ucStart5:
+ 253 0000 00       		.space	1
+ 254              		.section	.START8_6,"aw"
+ 257              	TIM_ucStart6:
+ 258 0000 00       		.space	1
+ 259              		.section	.START8_7,"aw"
+ 262              	TIM_ucStart7:
+ 263 0000 00       		.space	1
+ 264              		.section	.START8_8,"aw"
+ 267              	TIM_ucStart8:
+ 268 0000 00       		.space	1
+ 269              		.section	.START8_9,"aw"
+ 272              	TIM_ucStart9:
+ 273 0000 00       		.space	1
+ 274              		.section	.bss.TIM_tCircleTime,"aw",%nobits
+ 275              		.align	2
+ 276              		.set	.LANCHOR1,. + 0
+ 279              	TIM_tCircleTime:
+ 280 0000 00000000 		.space	4
+ 281              		.section	.bss.TIM_uiTimeOld,"aw",%nobits
+ 282              		.align	1
+ 283              		.set	.LANCHOR0,. + 0
+ 286              	TIM_uiTimeOld:
+ 287 0000 0000     		.space	2
+ 288              		.section	.rodata.TIM_ptTimer16Config,"a"
+ 289              		.align	2
+ 292              	TIM_ptTimer16Config:
+ 293 0000 00000000 		.word	TIM_uc16Start1
+ 294 0004 0A       		.byte	10
+ 295 0005 000000   		.space	3
+ 296 0008 00000000 		.word	TIM_uc16Start2
+ 297 000c 02       		.byte	2
+ 298 000d 000000   		.space	3
+ 299 0010 00000000 		.word	TIM_uc16Start3
+ 300 0014 05       		.byte	5
+ 301 0015 000000   		.space	3
+ 302 0018 00000000 		.word	TIM_uc16Start4
+ 303 001c 02       		.byte	2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 10
+
+
+ 304 001d 000000   		.space	3
+ 305 0020 00000000 		.word	TIM_uc16Start5
+ 306 0024 05       		.byte	5
+ 307 0025 000000   		.space	3
+ 308 0028 00000000 		.word	TIM_uc16Start6
+ 309 002c 02       		.byte	2
+ 310 002d 000000   		.space	3
+ 311 0030 00000000 		.word	TIM_uc16Start7
+ 312 0034 05       		.byte	5
+ 313 0035 000000   		.space	3
+ 314 0038 00000000 		.word	TIM_uc16Start8
+ 315 003c 02       		.byte	2
+ 316 003d 000000   		.space	3
+ 317 0040 00000000 		.word	TIM_uc16Start9
+ 318 0044 03       		.byte	3
+ 319 0045 000000   		.space	3
+ 320 0048 00000000 		.word	TIM_uc16Start10
+ 321 004c 02       		.byte	2
+ 322 004d 000000   		.space	3
+ 323 0050 00000000 		.word	TIM_uc16Start11
+ 324 0054 05       		.byte	5
+ 325 0055 000000   		.space	3
+ 326 0058 00000000 		.word	TIM_uc16Start12
+ 327 005c 02       		.byte	2
+ 328 005d 000000   		.space	3
+ 329 0060 00000000 		.word	TIM_uc16End
+ 330 0064 00       		.byte	0
+ 331 0065 000000   		.space	3
+ 332              		.section	.rodata.TIM_ptTimer8Config,"a"
+ 333              		.align	2
+ 336              	TIM_ptTimer8Config:
+ 337 0000 00000000 		.word	TIM_uc8Start1
+ 338 0004 0A       		.byte	10
+ 339 0005 000000   		.space	3
+ 340 0008 00000000 		.word	TIM_ucStart2
+ 341 000c 02       		.byte	2
+ 342 000d 000000   		.space	3
+ 343 0010 00000000 		.word	TIM_ucStart3
+ 344 0014 05       		.byte	5
+ 345 0015 000000   		.space	3
+ 346 0018 00000000 		.word	TIM_ucStart4
+ 347 001c 02       		.byte	2
+ 348 001d 000000   		.space	3
+ 349 0020 00000000 		.word	TIM_ucStart5
+ 350 0024 05       		.byte	5
+ 351 0025 000000   		.space	3
+ 352 0028 00000000 		.word	TIM_ucStart6
+ 353 002c 02       		.byte	2
+ 354 002d 000000   		.space	3
+ 355 0030 00000000 		.word	TIM_ucStart7
+ 356 0034 05       		.byte	5
+ 357 0035 000000   		.space	3
+ 358 0038 00000000 		.word	TIM_ucStart8
+ 359 003c 02       		.byte	2
+ 360 003d 000000   		.space	3
+ 361 0040 00000000 		.word	TIM_ucStart9
+ 362 0044 03       		.byte	3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccnprIQn.s 			page 11
+
+
+ 363 0045 000000   		.space	3
+ 364 0048 00000000 		.word	TIM_ucStart10
+ 365 004c 02       		.byte	2
+ 366 004d 000000   		.space	3
+ 367 0050 00000000 		.word	TIM_uc8End
+ 368 0054 00       		.byte	0
+ 369 0055 000000   		.space	3
+ 370              		.text
+ 371              	.Letext0:
+ 372              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 373              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 374              		.file 4 "common/prog/ped_fw/LibTypes.h"
+ 375              		.file 5 "common/prog/ped_fw/timer/timerlib.h"
+ 376              		.file 6 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

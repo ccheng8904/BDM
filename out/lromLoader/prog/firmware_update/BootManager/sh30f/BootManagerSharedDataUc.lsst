@@ -1,0 +1,269 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUE2v0c.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BootManagerSharedDataUc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BMDAT_isPowerOnReset,"ax",%progbits
+  18              		.align	1
+  19              		.global	BMDAT_isPowerOnReset
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BMDAT_isPowerOnReset:
+  25              	.LFB45:
+  26              		.file 1 "common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c"
+   1:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *
+   5:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *
+   9:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  PROJECT          Boot-Manager
+  11:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  13:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  14:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /** \file     BootManagerSharedDataUc.c
+  18:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *
+  19:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  \ingroup  BootManager
+  20:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *
+  21:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *  \brief    GD32E23 specific implementation of for Boot Manager shared data.
+  22:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  *
+  23:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****  */
+  24:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  25:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  26:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  27:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** #include "BSH_stdinc.h"
+  30:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** #include <stdbool.h>
+  31:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** #include "BootManagerSharedData.h"
+  32:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** #include "BootManagerSharedDataUc.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUE2v0c.s 			page 2
+
+
+  33:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** #include "processor.h"
+  34:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  35:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  36:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  37:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  38:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** /******************************************************************************/
+  39:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  40:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** bool BMDAT_isPowerOnReset(void)
+  41:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** {
+  27              		.loc 1 41 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  42:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     if((RCC->RSTSTR.V32 & RCC_RSTSTR_PORSTF_Msk) != 0u)
+  32              		.loc 1 42 5 view .LVU1
+  33              		.loc 1 42 25 is_stmt 0 view .LVU2
+  34 0000 0422     		movs	r2, #4
+  35              		.loc 1 42 20 view .LVU3
+  36 0002 064B     		ldr	r3, .L5
+  43:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     {
+  44:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         // clear the reset flag
+  45:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC_REGS_UNLOCK();
+  46:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC->RSTCLR.V32 |= (uint32_t)RCC_RSTCLR_PORSTFC_Msk;
+  47:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC_REGS_LOCK();
+  48:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  49:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         return true;
+  50:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     }
+  51:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     return false;
+  37              		.loc 1 51 12 view .LVU4
+  38 0004 0020     		movs	r0, #0
+  42:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     if((RCC->RSTSTR.V32 & RCC_RSTSTR_PORSTF_Msk) != 0u)
+  39              		.loc 1 42 20 view .LVU5
+  40 0006 D96A     		ldr	r1, [r3, #44]
+  42:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     if((RCC->RSTSTR.V32 & RCC_RSTSTR_PORSTF_Msk) != 0u)
+  41              		.loc 1 42 7 view .LVU6
+  42 0008 1142     		tst	r1, r2
+  43 000a 06D0     		beq	.L2
+  45:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC->RSTCLR.V32 |= (uint32_t)RCC_RSTCLR_PORSTFC_Msk;
+  44              		.loc 1 45 9 is_stmt 1 view .LVU7
+  45 000c 0449     		ldr	r1, .L5+4
+  46 000e 5963     		str	r1, [r3, #52]
+  46:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC_REGS_LOCK();
+  47              		.loc 1 46 9 view .LVU8
+  46:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****         RCC_REGS_LOCK();
+  48              		.loc 1 46 25 is_stmt 0 view .LVU9
+  49 0010 196B     		ldr	r1, [r3, #48]
+  50 0012 0A43     		orrs	r2, r1
+  51 0014 1A63     		str	r2, [r3, #48]
+  47:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  52              		.loc 1 47 9 is_stmt 1 view .LVU10
+  53 0016 5863     		str	r0, [r3, #52]
+  49:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     }
+  54              		.loc 1 49 9 view .LVU11
+  49:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     }
+  55              		.loc 1 49 16 is_stmt 0 view .LVU12
+  56 0018 0130     		adds	r0, r0, #1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUE2v0c.s 			page 3
+
+
+  57              	.L2:
+  52:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** }
+  58              		.loc 1 52 1 view .LVU13
+  59              		@ sp needed
+  60 001a 7047     		bx	lr
+  61              	.L6:
+  62              		.align	2
+  63              	.L5:
+  64 001c 00080440 		.word	1074006016
+  65 0020 CC330000 		.word	13260
+  66              		.cfi_endproc
+  67              	.LFE45:
+  69              		.section	.text.BMDAT_setDataInitializedFlag,"ax",%progbits
+  70              		.align	1
+  71              		.global	BMDAT_setDataInitializedFlag
+  72              		.syntax unified
+  73              		.code	16
+  74              		.thumb_func
+  76              	BMDAT_setDataInitializedFlag:
+  77              	.LFB46:
+  53:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  54:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** void BMDAT_setDataInitializedFlag(void)
+  55:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** {
+  78              		.loc 1 55 1 is_stmt 1 view -0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  56:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     BMDAT_setMagicPattern(BMDAT_magicPattern);
+  82              		.loc 1 56 5 view .LVU15
+  55:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     BMDAT_setMagicPattern(BMDAT_magicPattern);
+  83              		.loc 1 55 1 is_stmt 0 view .LVU16
+  84 0000 10B5     		push	{r4, lr}
+  85              	.LCFI0:
+  86              		.cfi_def_cfa_offset 8
+  87              		.cfi_offset 4, -8
+  88              		.cfi_offset 14, -4
+  89              		.loc 1 56 5 view .LVU17
+  90 0002 0248     		ldr	r0, .L8
+  91 0004 FFF7FEFF 		bl	BMDAT_setMagicPattern
+  92              	.LVL0:
+  57:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** }
+  93              		.loc 1 57 1 view .LVU18
+  94              		@ sp needed
+  95 0008 10BD     		pop	{r4, pc}
+  96              	.L9:
+  97 000a C046     		.align	2
+  98              	.L8:
+  99 000c 784B715A 		.word	1517374328
+ 100              		.cfi_endproc
+ 101              	.LFE46:
+ 103              		.section	.text.BMDAT_resetDataInitializedFlag,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	BMDAT_resetDataInitializedFlag
+ 106              		.syntax unified
+ 107              		.code	16
+ 108              		.thumb_func
+ 110              	BMDAT_resetDataInitializedFlag:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUE2v0c.s 			page 4
+
+
+ 111              	.LFB47:
+  58:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  59:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** void BMDAT_resetDataInitializedFlag(void)
+  60:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** {
+ 112              		.loc 1 60 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+  61:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     BMDAT_setMagicPattern(BMDAT_startAppAfterReset);
+ 116              		.loc 1 61 5 view .LVU20
+  60:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     BMDAT_setMagicPattern(BMDAT_startAppAfterReset);
+ 117              		.loc 1 60 1 is_stmt 0 view .LVU21
+ 118 0000 10B5     		push	{r4, lr}
+ 119              	.LCFI1:
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 4, -8
+ 122              		.cfi_offset 14, -4
+ 123              		.loc 1 61 5 view .LVU22
+ 124 0002 0248     		ldr	r0, .L11
+ 125 0004 FFF7FEFF 		bl	BMDAT_setMagicPattern
+ 126              	.LVL1:
+  62:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** }
+ 127              		.loc 1 62 1 view .LVU23
+ 128              		@ sp needed
+ 129 0008 10BD     		pop	{r4, pc}
+ 130              	.L12:
+ 131 000a C046     		.align	2
+ 132              	.L11:
+ 133 000c 9977AA55 		.word	1437235097
+ 134              		.cfi_endproc
+ 135              	.LFE47:
+ 137              		.section	.text.BMDAT_isDataInitialized,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	BMDAT_isDataInitialized
+ 140              		.syntax unified
+ 141              		.code	16
+ 142              		.thumb_func
+ 144              	BMDAT_isDataInitialized:
+ 145              	.LFB48:
+  63:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  64:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** 
+  65:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** bool BMDAT_isDataInitialized(void)
+  66:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** {
+ 146              		.loc 1 66 1 is_stmt 1 view -0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+  67:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     return ((BMDAT_getMagicPattern() == BMDAT_magicPattern) ? true : false);
+ 150              		.loc 1 67 5 view .LVU25
+  66:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     return ((BMDAT_getMagicPattern() == BMDAT_magicPattern) ? true : false);
+ 151              		.loc 1 66 1 is_stmt 0 view .LVU26
+ 152 0000 10B5     		push	{r4, lr}
+ 153              	.LCFI2:
+ 154              		.cfi_def_cfa_offset 8
+ 155              		.cfi_offset 4, -8
+ 156              		.cfi_offset 14, -4
+ 157              		.loc 1 67 14 view .LVU27
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccUE2v0c.s 			page 5
+
+
+ 158 0002 FFF7FEFF 		bl	BMDAT_getMagicPattern
+ 159              	.LVL2:
+  68:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c **** }
+ 160              		.loc 1 68 1 view .LVU28
+ 161              		@ sp needed
+  67:common/prog/firmware_update/BootManager/sh30f/BootManagerSharedDataUc.c ****     return ((BMDAT_getMagicPattern() == BMDAT_magicPattern) ? true : false);
+ 162              		.loc 1 67 68 view .LVU29
+ 163 0006 034B     		ldr	r3, .L14
+ 164 0008 C018     		adds	r0, r0, r3
+ 165 000a 4342     		rsbs	r3, r0, #0
+ 166 000c 5841     		adcs	r0, r0, r3
+ 167 000e C0B2     		uxtb	r0, r0
+ 168              		.loc 1 68 1 view .LVU30
+ 169 0010 10BD     		pop	{r4, pc}
+ 170              	.L15:
+ 171 0012 C046     		.align	2
+ 172              	.L14:
+ 173 0014 88B48EA5 		.word	-1517374328
+ 174              		.cfi_endproc
+ 175              	.LFE48:
+ 177              		.text
+ 178              	.Letext0:
+ 179              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 180              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 181              		.file 4 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 182              		.file 5 "common/prog/firmware_update/BootManager/BootManagerSharedData.h"

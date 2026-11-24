@@ -1,0 +1,43 @@
+
+out/BootManager/prog/firmware_update/version/fwu_version.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FWU_getHardwareVersion:
+
+00000000 <FWU_getHardwareVersion>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+const struct FWU_hw_version_s* FWU_getHardwareVersion(void)
+{
+   0:	b510      	push	{r4, lr}
+    return OTP_getHardwareVersion();
+   2:	f7ff fffe 	bl	0 <OTP_getHardwareVersion>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FWU_getSoftwareVersion:
+
+00000000 <FWU_getSoftwareVersion>:
+
+const struct FWU_sw_version_s* FWU_getSoftwareVersion(void)
+{
+  #if defined(REMOTE_FIRMWARE_UPDATE)
+    const struct MAL_ModuleHeader_s *module_header;
+    module_header = BMMOD_GetMemModuleHeader(MAL_PRODUCT_APP1);
+   0:	2088      	movs	r0, #136	; 0x88
+{
+   2:	b510      	push	{r4, lr}
+    module_header = BMMOD_GetMemModuleHeader(MAL_PRODUCT_APP1);
+   4:	0180      	lsls	r0, r0, #6
+   6:	f7ff fffe 	bl	0 <BMMOD_GetMemModuleHeader>
+    return &module_header->sw_version;
+   a:	3010      	adds	r0, #16
+    return &SW_version;
+    
+  #else
+    return NULL;
+  #endif
+}
+   c:	bd10      	pop	{r4, pc}

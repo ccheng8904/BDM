@@ -1,0 +1,450 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BLmessageLoop.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BLMLP_handleMessageLoop,"ax",%progbits
+  18              		.align	1
+  19              		.global	BLMLP_handleMessageLoop
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BLMLP_handleMessageLoop:
+  25              	.LVL0:
+  26              	.LFB117:
+  27              		.file 1 "common/prog/firmware_update/BootLoader/BLmessageLoop.c"
+   1:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *
+   5:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *
+   9:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  PROJECT          Generic SW / Boot-Loader
+  11:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  13:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  14:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /** \file
+  18:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *
+  19:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  \ingroup  firmware_update
+  20:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *
+  21:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  \brief    Implementation Boot-Loader Message Loop.
+  22:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *
+  23:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *  \details  Handles the message loop for Boot-Loader and RAM-Loader
+  24:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  *            and calls the according service functions.
+  25:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****  */
+  26:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  27:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  28:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* INCLUDES                                                                   */
+  30:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  31:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include "bsh_stdinc.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 2
+
+
+  32:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include <stdint.h>
+  33:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include <stdbool.h>
+  34:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include "BLmessageLoop.h"
+  35:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include "BLcom.h"
+  36:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include "BLcommands.h"
+  37:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #include "BLservices.h"
+  38:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #if defined(VARIANT_ROMLOADER) || defined(VARIANT_LROMLOADER)
+  39:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #ifdef MCAL_INCLUDED
+  40:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     #include "BLcomMcalMap.h"
+  41:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #else
+  42:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     #include "BLcomMap.h"
+  43:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #endif
+  44:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #endif
+  45:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  46:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  47:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* PRIVATE DEFINITIONS                                                        */
+  48:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  49:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /** message buffer size for ROM-Loader (space for a single frame) */
+  50:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #define BLMLP_FRAME_LENGTH  4u
+  51:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  52:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  53:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  54:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  55:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  56:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** static void BLMLP_init(void);
+  57:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  58:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  59:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  60:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  61:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  62:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /*lint -esym(9003,BLMLP_*) could define variable at block scope
+  63:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   *                 [MISRA 2012 Rule 8.9, advisory]
+  64:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   */
+  65:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** static const uint8_t  BLMLP_frameLength = BLMLP_FRAME_LENGTH;
+  66:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #ifdef VARIANT_ROMLOADER
+  67:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     static const uint16_t BLMLP_msgTimeout  = 500u;  // 500ms message time-out
+  68:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** #endif
+  69:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** static uint8_t  BLMLP_msgBuffer[BLMLP_FRAME_LENGTH]; // message buffer
+  70:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  71:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  72:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  73:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  74:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+  75:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** void BLMLP_handleMessageLoop(uint16_t bootTimeOut)
+  76:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** {
+  28              		.loc 1 76 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  77:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     uint16_t timeOut = bootTimeOut;
+  32              		.loc 1 77 5 view .LVU1
+  76:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     uint16_t timeOut = bootTimeOut;
+  33              		.loc 1 76 1 is_stmt 0 view .LVU2
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 3
+
+
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  76:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     uint16_t timeOut = bootTimeOut;
+  41              		.loc 1 76 1 view .LVU3
+  42 0002 0400     		movs	r4, r0
+  43              	.LVL1:
+  78:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+  79:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     BLMLP_init();
+  44              		.loc 1 79 5 is_stmt 1 view .LVU4
+  45              	.LBB10:
+  46              	.LBI10:
+  80:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #ifndef VARIANT_RAMLOADER
+  81:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     BLCOM_sendByte(BL_HAND_SHAKE);
+  82:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #endif
+  83:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     for(;;)
+  84:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     {
+  85:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         enum BLCOM_rxResult rxResult;
+  86:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         
+  87:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         rxResult = BLCOM_receiveFrame(BLMLP_msgBuffer, BLMLP_frameLength, timeOut);
+  88:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         if (rxResult == BLCOM_rxSuccess)
+  89:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  90:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             rxResult = BLSRV_doCommandService(BLMLP_msgBuffer);
+  91:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             #ifdef VARIANT_ROMLOADER
+  92:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             timeOut  = BLMLP_msgTimeout;
+  93:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             #endif
+  94:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         }
+  95:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         if (rxResult == BLCOM_rxError)
+  96:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  97:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             BLCOM_sendAck(BL_TRANSMISSION_ERROR);
+  98:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         }
+  99:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         if (rxResult == BLCOM_rxTimeOut)
+ 100:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+ 101:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             BLCOM_sendAck(BL_RECEIVER_TIMEOUT);
+ 102:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****           #if defined(VARIANT_ROMLOADER) || defined(VARIANT_LROMLOADER)
+ 103:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             BLCOM_generateReset(); // leave ROM-Loader and enter application
+ 104:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****           #endif
+ 105:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         }
+ 106:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****       #ifdef UNIT_UNDER_TEST
+ 107:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         BLMLP_handleMessageLoop_timeOut = timeOut;
+ 108:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         return; // no endless loop for unit test
+ 109:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****       #endif
+ 110:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     }
+ 111:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** }
+ 112:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+ 113:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+ 114:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** 
+ 115:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+ 116:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 117:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** /******************************************************************************/
+ 118:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** static void BLMLP_init(void)
+  47              		.loc 1 118 13 view .LVU5
+  48              	.LBB11:
+ 119:common/prog/firmware_update/BootLoader/BLmessageLoop.c **** {
+ 120:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     BLCOM_init();
+  49              		.loc 1 120 5 view .LVU6
+  50 0004 FFF7FEFF 		bl	BLCOM_init
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 4
+
+
+  51              	.LVL2:
+ 121:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     BLSRV_init();
+  52              		.loc 1 121 5 view .LVU7
+  53 0008 FFF7FEFF 		bl	BLSRV_init
+  54              	.LVL3:
+  55              	.LBE11:
+  56              	.LBE10:
+  81:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****   #endif
+  57              		.loc 1 81 5 view .LVU8
+  58 000c 5420     		movs	r0, #84
+  59 000e FFF7FEFF 		bl	BLCOM_sendByte
+  60              	.LVL4:
+  61              	.L2:
+  83:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****     {
+  62              		.loc 1 83 5 view .LVU9
+  63              	.LBB12:
+  85:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         
+  64              		.loc 1 85 9 view .LVU10
+  87:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         if (rxResult == BLCOM_rxSuccess)
+  65              		.loc 1 87 9 view .LVU11
+  87:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         if (rxResult == BLCOM_rxSuccess)
+  66              		.loc 1 87 20 is_stmt 0 view .LVU12
+  67 0012 0C4D     		ldr	r5, .L7
+  68 0014 2200     		movs	r2, r4
+  69 0016 0421     		movs	r1, #4
+  70 0018 2800     		movs	r0, r5
+  71 001a FFF7FEFF 		bl	BLCOM_receiveFrame
+  72              	.LVL5:
+  88:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  73              		.loc 1 88 9 is_stmt 1 view .LVU13
+  88:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  74              		.loc 1 88 12 is_stmt 0 view .LVU14
+  75 001e 0028     		cmp	r0, #0
+  76 0020 02D1     		bne	.L3
+  90:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             #ifdef VARIANT_ROMLOADER
+  77              		.loc 1 90 13 is_stmt 1 view .LVU15
+  90:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             #ifdef VARIANT_ROMLOADER
+  78              		.loc 1 90 24 is_stmt 0 view .LVU16
+  79 0022 2800     		movs	r0, r5
+  80              	.LVL6:
+  90:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****             #ifdef VARIANT_ROMLOADER
+  81              		.loc 1 90 24 view .LVU17
+  82 0024 FFF7FEFF 		bl	BLSRV_doCommandService
+  83              	.LVL7:
+  84              	.L3:
+  95:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  85              		.loc 1 95 9 is_stmt 1 view .LVU18
+  95:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  86              		.loc 1 95 12 is_stmt 0 view .LVU19
+  87 0028 0128     		cmp	r0, #1
+  88 002a 03D1     		bne	.L4
+  97:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         }
+  89              		.loc 1 97 13 is_stmt 1 view .LVU20
+  90 002c 0530     		adds	r0, r0, #5
+  91              	.LVL8:
+  97:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         }
+  92              		.loc 1 97 13 is_stmt 0 view .LVU21
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 5
+
+
+  93 002e FFF7FEFF 		bl	BLCOM_sendAck
+  94              	.LVL9:
+  99:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  95              		.loc 1 99 9 is_stmt 1 view .LVU22
+  96 0032 EEE7     		b	.L2
+  97              	.LVL10:
+  98              	.L4:
+  99:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+  99              		.loc 1 99 9 view .LVU23
+  99:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****         {
+ 100              		.loc 1 99 12 is_stmt 0 view .LVU24
+ 101 0034 0228     		cmp	r0, #2
+ 102 0036 ECD1     		bne	.L2
+ 101:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****           #if defined(VARIANT_ROMLOADER) || defined(VARIANT_LROMLOADER)
+ 103              		.loc 1 101 13 is_stmt 1 view .LVU25
+ 104 0038 0530     		adds	r0, r0, #5
+ 105              	.LVL11:
+ 101:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****           #if defined(VARIANT_ROMLOADER) || defined(VARIANT_LROMLOADER)
+ 106              		.loc 1 101 13 is_stmt 0 view .LVU26
+ 107 003a FFF7FEFF 		bl	BLCOM_sendAck
+ 108              	.LVL12:
+ 103:common/prog/firmware_update/BootLoader/BLmessageLoop.c ****           #endif
+ 109              		.loc 1 103 13 is_stmt 1 view .LVU27
+ 110              	.LBB13:
+ 111              	.LBI13:
+ 112              		.file 2 "common/prog/firmware_update/BootLoader/BLcomMcalMap.h"
+   1:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /*******************************************************************************
+   2:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+   5:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+   9:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *******************************************************************************
+  10:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  PROJECT          Generic SW / Boot-Loader
+  11:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  13:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  14:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #ifndef BLCOM_MCALMAP_H
+  15:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #define BLCOM_MCALMAP_H
+  16:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  17:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #ifdef __cplusplus
+  18:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** extern "C" {
+  19:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #endif
+  20:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  21:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  22:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  23:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  25:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** \file
+  26:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  27:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \ingroup  firmware_update
+  28:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  29:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \brief    maps the uart functions for BLcom 
+  30:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  31:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 6
+
+
+  32:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  33:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  34:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  35:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  36:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /* INCLUDES                                                                   */
+  37:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  38:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #include "bsh_stdinc.h"
+  39:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #include <stdint.h>
+  40:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #include <stdbool.h>
+  41:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #include "mcal_channels.h"
+  42:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  43:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #ifndef __PCGCC__
+  44:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #ifndef DBUSCAN_INCLUDED
+  45:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  46:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  47:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /* PUBLIC DEFINITIONS                                                         */
+  48:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  49:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** extern const struct MUART_Config MuartHandleConfig;
+  50:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  51:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  52:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  53:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /* INLINE FUNCTION DEFINITIONS                                                */
+  54:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /******************************************************************************/
+  55:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** Initializes the UART
+  56:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \note This interface must be called before any other.
+  57:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+  58:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline void BLCOM_initUart(void)
+  59:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+  60:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     const struct MUART_Channel *channel = &BP2_MUART_CHANNEL;
+  61:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     (void)MUART_configure(channel, &MuartHandleConfig);
+  62:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     (void)MUART_configurePins(channel->rxPin, channel->txPin);
+  63:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+  64:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  65:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  66:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** Enables the UART
+  67:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \note This interface must be called before any other.
+  68:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+  69:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline void BLCOM_enableUart(void)
+  70:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+  71:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     MUART_enableChannel(&BP2_MUART_CHANNEL);
+  72:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+  73:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  74:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  75:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** sets the UART baud rate
+  76:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  77:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \param baudrate: Baud rate in 100 Bits per second (e.g. 9600 Bd -> uiBaudRate = 96).
+  78:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+  79:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline void BLCOM_Configure(uint16_t baudrate)
+  80:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+  81:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     MUART_configureBaudrate(&BP2_MUART_CHANNEL, baudrate*100uL);
+  82:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+  83:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  84:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  85:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** writes a single byte into transmit register
+  86:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  87:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \param data data byte to transmit
+  88:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 7
+
+
+  89:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline void BLCOM_setTxData(uint8_t data)
+  90:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+  91:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     MUART_writeDataReg(&BP2_MUART_CHANNEL, (uint32_t)data);
+  92:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+  93:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  94:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+  95:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** returns true is a transmit is in progress
+  96:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+  97:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \return true is transmission is in progress, else false
+  98:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+  99:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline bool BLCOM_isTxOnGoing(void)
+ 100:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+ 101:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     return !(MUART_isEvent(&BP2_MUART_CHANNEL, MCAL_EVENT_WRITE_BYTE));
+ 102:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+ 103:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 104:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 105:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** returns whether new data is available or not 
+ 106:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+ 107:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \return true if received data available, else false
+ 108:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ 109:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline bool BLCOM_isDataAvailable(void)
+ 110:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+ 111:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     return MUART_isEvent(&BP2_MUART_CHANNEL, MCAL_EVENT_READ_BYTE);
+ 112:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+ 113:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 114:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 115:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** returns whether receive error happened during last reception or not 
+ 116:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+ 117:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \return true if receive error happened, else false
+ 118:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ 119:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline bool BLCOM_isReceiveError(void)
+ 120:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+ 121:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     return ((MCAL_OK != MUART_getChannelError(&BP2_MUART_CHANNEL)) ? true : false);
+ 122:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+ 123:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 124:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 125:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** reads a data byte from the receive register
+ 126:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *
+ 127:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *  \details this interface returns a received byte after
+ 128:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  *           \sa BLCOM_isDataAvailable returned true.
+ 129:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  * \return last received byte
+ 130:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ 131:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline uint8_t BLCOM_getRxData(void)
+ 132:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+ 133:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     return (uint8_t)MUART_readDataReg(&BP2_MUART_CHANNEL);
+ 134:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+ 135:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 136:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 137:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** #endif /* DBUSCAN_INCLUDED */
+ 138:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 139:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** 
+ 140:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** /** Generate the Reset
+ 141:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****  */
+ 142:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** static inline void BLCOM_generateReset(void)
+ 113              		.loc 2 142 20 view .LVU28
+ 114              	.LBB14:
+ 143:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc3LLFNO.s 			page 8
+
+
+ 144:common/prog/firmware_update/BootLoader/BLcomMcalMap.h ****     MSUP_generateReset();
+ 115              		.loc 2 144 5 view .LVU29
+ 116 003e FFF7FEFF 		bl	MSUP_generateReset
+ 117              	.LVL13:
+ 145:common/prog/firmware_update/BootLoader/BLcomMcalMap.h **** }
+ 118              		.loc 2 145 1 is_stmt 0 view .LVU30
+ 119 0042 E6E7     		b	.L2
+ 120              	.L8:
+ 121              		.align	2
+ 122              	.L7:
+ 123 0044 00000000 		.word	.LANCHOR0
+ 124              	.LBE14:
+ 125              	.LBE13:
+ 126              	.LBE12:
+ 127              		.cfi_endproc
+ 128              	.LFE117:
+ 130              		.section	.bss.BLMLP_msgBuffer,"aw",%nobits
+ 131              		.set	.LANCHOR0,. + 0
+ 134              	BLMLP_msgBuffer:
+ 135 0000 00000000 		.space	4
+ 136              		.text
+ 137              	.Letext0:
+ 138              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 139              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 140              		.file 5 "common/prog/MSP/mcal/msup.h"
+ 141              		.file 6 "common/prog/firmware_update/BootLoader/BLservices.h"
+ 142              		.file 7 "common/prog/firmware_update/BootLoader/BLcom.h"

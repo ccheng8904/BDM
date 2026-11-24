@@ -1,0 +1,266 @@
+
+out/BootManager/prog/firmware_update/BootManager/BootManagerModule.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BMMOD_GetMemModuleHeader:
+
+00000000 <BMMOD_GetMemModuleHeader>:
+
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+const struct MAL_ModuleHeader_s * BMMOD_GetMemModuleHeader(enum MAL_ModuleEnum module)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    MAL_initPartition();
+   4:	f7ff fffe 	bl	0 <MAL_initPartition>
+    return MAL_PartitionToHeader(MAL_GetMemModule(module));
+   8:	0020      	movs	r0, r4
+   a:	f7ff fffe 	bl	0 <MAL_GetMemModule>
+   e:	f7ff fffe 	bl	0 <MAL_PartitionToHeader>
+}
+  12:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.BMMOD_bInitMemoryModule:
+
+00000000 <BMMOD_bInitMemoryModule>:
+
+
+#ifdef VARIANT_BOOTMANAGER
+bool BMMOD_bInitMemoryModule(enum MAL_ModuleEnum ModuleId)
+{
+   0:	b510      	push	{r4, lr}
+    FSF_DoProgramCounterMonitoring(FSF_BM_SHARED_DATA_INITIALIZED, FSF_BM_MEMORY_MODULE_INITIALIZED);
+   2:	21c0      	movs	r1, #192	; 0xc0
+{
+   4:	0004      	movs	r4, r0
+    FSF_DoProgramCounterMonitoring(FSF_BM_SHARED_DATA_INITIALIZED, FSF_BM_MEMORY_MODULE_INITIALIZED);
+   6:	2080      	movs	r0, #128	; 0x80
+   8:	0089      	lsls	r1, r1, #2
+   a:	0080      	lsls	r0, r0, #2
+   c:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+    MAL_initPartition();
+  10:	f7ff fffe 	bl	0 <MAL_initPartition>
+    BMMOD_partition = MAL_GetMemModule(ModuleId);
+  14:	0020      	movs	r0, r4
+  16:	f7ff fffe 	bl	0 <MAL_GetMemModule>
+  1a:	4c05      	ldr	r4, [pc, #20]	; (30 <BMMOD_bInitMemoryModule+0x30>)
+  1c:	6020      	str	r0, [r4, #0]
+    BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+  1e:	f7ff fffe 	bl	0 <MAL_PartitionToHeader>
+  22:	4b04      	ldr	r3, [pc, #16]	; (34 <BMMOD_bInitMemoryModule+0x34>)
+  24:	6018      	str	r0, [r3, #0]
+    return (BMMOD_partition == NULL) ? false : true;
+  26:	6820      	ldr	r0, [r4, #0]
+  28:	1e43      	subs	r3, r0, #1
+  2a:	4198      	sbcs	r0, r3
+  2c:	b2c0      	uxtb	r0, r0
+}
+  2e:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.BMMOD_startModule:
+
+00000000 <BMMOD_startModule>:
+
+
+void BMMOD_startModule(void)
+{
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_FW_ID_VALID, FSF_BM_START_MODULE);
+   0:	21e0      	movs	r1, #224	; 0xe0
+   2:	20c0      	movs	r0, #192	; 0xc0
+{
+   4:	b570      	push	{r4, r5, r6, lr}
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_FW_ID_VALID, FSF_BM_START_MODULE);
+   6:	00c9      	lsls	r1, r1, #3
+   8:	00c0      	lsls	r0, r0, #3
+   a:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+
+    /* reload correct module to be started */
+    BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+   e:	4c0c      	ldr	r4, [pc, #48]	; (40 <BMMOD_startModule+0x40>)
+  10:	6820      	ldr	r0, [r4, #0]
+  12:	f7ff fffe 	bl	0 <MAL_PartitionToHeader>
+  16:	4b0b      	ldr	r3, [pc, #44]	; (44 <BMMOD_startModule+0x44>)
+ */
+static void BMMOD_LoadModule(void)
+{
+
+
+    if (BMMOD_partition->physical_start.addr != BMMOD_header->executionAddress)
+  18:	6822      	ldr	r2, [r4, #0]
+  1a:	68c1      	ldr	r1, [r0, #12]
+    BMMOD_header = MAL_PartitionToHeader(BMMOD_partition);
+  1c:	6018      	str	r0, [r3, #0]
+    if (BMMOD_partition->physical_start.addr != BMMOD_header->executionAddress)
+  1e:	6813      	ldr	r3, [r2, #0]
+  20:	1acd      	subs	r5, r1, r3
+  22:	428b      	cmp	r3, r1
+  24:	d106      	bne.n	34 <BMMOD_startModule+0x34>
+    ITBL_StartApplication( (size_t)(uint32_t)BMMOD_header->ISRtbl_ptr); /*lint !e923 !e507 cast tested to work correctly */
+  26:	6840      	ldr	r0, [r0, #4]
+  28:	f7ff fffe 	bl	0 <ITBL_StartApplication>
+}
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+
+        for(const uint8_t *ptr  =  BMMOD_partition->physical_start.ptr; /*lint !e926 cast tested to work correctly */
+            ptr <= (const uint8_t*)BMMOD_partition->physical_end.ptr; /*lint !e946 !e926 relational tested to work correctly */
+            ptr++)
+        {
+            *exePtr++ = *ptr;/*lint !e9049 misra adv. inc. comined with other operation*/
+  2e:	7819      	ldrb	r1, [r3, #0]
+            ptr++)
+  30:	3301      	adds	r3, #1
+            *exePtr++ = *ptr;/*lint !e9049 misra adv. inc. comined with other operation*/
+  32:	7021      	strb	r1, [r4, #0]
+            ptr <= (const uint8_t*)BMMOD_partition->physical_end.ptr; /*lint !e946 !e926 relational tested to work correctly */
+  34:	6851      	ldr	r1, [r2, #4]
+  36:	195c      	adds	r4, r3, r5
+  38:	428b      	cmp	r3, r1
+  3a:	d9f8      	bls.n	2e <BMMOD_startModule+0x2e>
+  3c:	e7f3      	b.n	26 <BMMOD_startModule+0x26>
+  3e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.BMMOD_isModuleStartable:
+
+00000000 <BMMOD_isModuleStartable>:
+    FSF_DoProgramCounterMonitoring(FSF_BM_MEMORY_MODULE_INITIALIZED, FSF_BM_IS_MODULE_STARTABLE);
+   0:	2180      	movs	r1, #128	; 0x80
+   2:	20c0      	movs	r0, #192	; 0xc0
+{
+   4:	b510      	push	{r4, lr}
+    FSF_DoProgramCounterMonitoring(FSF_BM_MEMORY_MODULE_INITIALIZED, FSF_BM_IS_MODULE_STARTABLE);
+   6:	0080      	lsls	r0, r0, #2
+   8:	00c9      	lsls	r1, r1, #3
+   a:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+    if( BMMOD_partition->mod_attributes & MAL_CTX_MF_EXECUTABLE )
+   e:	4b03      	ldr	r3, [pc, #12]	; (1c <BMMOD_isModuleStartable+0x1c>)
+  10:	681b      	ldr	r3, [r3, #0]
+  12:	7ad8      	ldrb	r0, [r3, #11]
+  14:	06c0      	lsls	r0, r0, #27
+}
+  16:	0fc0      	lsrs	r0, r0, #31
+  18:	bd10      	pop	{r4, pc}
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BMMOD_isModuleFirmwareIdValid:
+
+00000000 <BMMOD_isModuleFirmwareIdValid>:
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_INTEGRITY_OK, FSF_BM_IS_MODULE_FW_ID_VALID);
+   0:	21c0      	movs	r1, #192	; 0xc0
+   2:	20a0      	movs	r0, #160	; 0xa0
+{
+   4:	b570      	push	{r4, r5, r6, lr}
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_INTEGRITY_OK, FSF_BM_IS_MODULE_FW_ID_VALID);
+   6:	00c0      	lsls	r0, r0, #3
+   8:	00c9      	lsls	r1, r1, #3
+   a:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+    if (MAL_isBuildInApplication(BMMOD_partition))
+   e:	4b1a      	ldr	r3, [pc, #104]	; (78 <BMMOD_isModuleFirmwareIdValid+0x78>)
+  10:	6818      	ldr	r0, [r3, #0]
+  12:	f7ff fffe 	bl	0 <MAL_isBuildInApplication>
+  16:	2800      	cmp	r0, #0
+  18:	d108      	bne.n	2c <BMMOD_isModuleFirmwareIdValid+0x2c>
+    const struct MAL_fw_id_array  * FwIdArrayToCheck = OTP_getFirmwareIDs();
+  1a:	f7ff fffe 	bl	0 <OTP_getFirmwareIDs>
+  1e:	1e01      	subs	r1, r0, #0
+    if (FwIdArrayToCheck == NULL){return true;}
+  20:	d105      	bne.n	2e <BMMOD_isModuleFirmwareIdValid+0x2e>
+    const struct MAL_fw_id_array  * FwIdArrayToCheck = OTP_getFirmwareIDs();
+  22:	f7ff fffe 	bl	0 <OTP_getFirmwareIDs>
+    if (FwIdArrayToCheck != NULL)
+  26:	2800      	cmp	r0, #0
+  28:	d109      	bne.n	3e <BMMOD_isModuleFirmwareIdValid+0x3e>
+        return ((BMMOD_isFirmwareIdConsistent() && BMMOD_isFirmwareIdCompatible()) ? true : false);
+  2a:	2001      	movs	r0, #1
+}
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+    CRC_crc_t FwCrcExpected = FwIdArrayToCheck->CRC;
+  2e:	c910      	ldmia	r1!, {r4}
+static inline CRC_crc_t CRC_Calc( uint32_t len, const uint8_t *data )
+{
+#ifdef crc_16bit_width
+    return CRC_Ccitt_Calc(len, data );
+#else
+    return CRC_Ethernet_Calc(len, data );
+  30:	2064      	movs	r0, #100	; 0x64
+  32:	f7ff fffe 	bl	0 <CRC_Ethernet_Calc>
+        return ((BMMOD_isFirmwareIdConsistent() && BMMOD_isFirmwareIdCompatible()) ? true : false);
+  36:	4284      	cmp	r4, r0
+  38:	d0f3      	beq.n	22 <BMMOD_isModuleFirmwareIdValid+0x22>
+  3a:	2000      	movs	r0, #0
+  3c:	e7f6      	b.n	2c <BMMOD_isModuleFirmwareIdValid+0x2c>
+  3e:	1d05      	adds	r5, r0, #4
+  40:	3068      	adds	r0, #104	; 0x68
+  42:	0004      	movs	r4, r0
+            if (FwIdEntryToCheck[entryIndex].mod_number != MAL_NO_MODULE)
+  44:	8828      	ldrh	r0, [r5, #0]
+  46:	4b0d      	ldr	r3, [pc, #52]	; (7c <BMMOD_isModuleFirmwareIdValid+0x7c>)
+  48:	4298      	cmp	r0, r3
+  4a:	d011      	beq.n	70 <BMMOD_isModuleFirmwareIdValid+0x70>
+                partition = MAL_GetMemModule(FwIdEntryToCheck[entryIndex].mod_number);
+  4c:	f7ff fffe 	bl	0 <MAL_GetMemModule>
+                moduleHeader = MAL_PartitionToHeader(partition);
+  50:	f7ff fffe 	bl	0 <MAL_PartitionToHeader>
+                if (moduleHeader != NULL)
+  54:	2800      	cmp	r0, #0
+  56:	d00b      	beq.n	70 <BMMOD_isModuleFirmwareIdValid+0x70>
+    for(uint8_t i=0u; i<STDV_ID_LENGTH; i++)
+  58:	002a      	movs	r2, r5
+  5a:	1cab      	adds	r3, r5, #2
+  5c:	3010      	adds	r0, #16
+  5e:	320a      	adds	r2, #10
+        if(id1[i] != id2[i]){return false;}
+  60:	781e      	ldrb	r6, [r3, #0]
+  62:	7801      	ldrb	r1, [r0, #0]
+  64:	428e      	cmp	r6, r1
+  66:	d1e8      	bne.n	3a <BMMOD_isModuleFirmwareIdValid+0x3a>
+    for(uint8_t i=0u; i<STDV_ID_LENGTH; i++)
+  68:	3301      	adds	r3, #1
+  6a:	3001      	adds	r0, #1
+  6c:	4293      	cmp	r3, r2
+  6e:	d1f7      	bne.n	60 <BMMOD_isModuleFirmwareIdValid+0x60>
+        for (uint8_t entryIndex = 0u; entryIndex < FWU_FW_ID_MAX_COUNT; entryIndex++)
+  70:	350a      	adds	r5, #10
+  72:	42a5      	cmp	r5, r4
+  74:	d1e6      	bne.n	44 <BMMOD_isModuleFirmwareIdValid+0x44>
+  76:	e7d8      	b.n	2a <BMMOD_isModuleFirmwareIdValid+0x2a>
+  78:	00000000 	.word	0x00000000
+  7c:	0000ffff 	.word	0x0000ffff
+
+Disassembly of section .text.BMMOD_isModuleIntegrityOk:
+
+00000000 <BMMOD_isModuleIntegrityOk>:
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_STARTABLE, FSF_BM_IS_MODULE_INTEGRITY_OK);
+   0:	21a0      	movs	r1, #160	; 0xa0
+   2:	2080      	movs	r0, #128	; 0x80
+{
+   4:	b510      	push	{r4, lr}
+    FSF_DoProgramCounterMonitoring(FSF_BM_IS_MODULE_STARTABLE, FSF_BM_IS_MODULE_INTEGRITY_OK);
+   6:	00c0      	lsls	r0, r0, #3
+   8:	00c9      	lsls	r1, r1, #3
+   a:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+ *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is executed
+ *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+ */
+static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+{
+    return MAL_FwuOptBytes.integrityConfig;
+   e:	4b05      	ldr	r3, [pc, #20]	; (24 <BMMOD_isModuleIntegrityOk+0x24>)
+        return true;
+  10:	2001      	movs	r0, #1
+    if(FWU_isIntegCheckDisabledCalc())
+  12:	781b      	ldrb	r3, [r3, #0]
+  14:	2bdc      	cmp	r3, #220	; 0xdc
+  16:	d003      	beq.n	20 <BMMOD_isModuleIntegrityOk+0x20>
+        return MAL_isModuleIntegrityOk(BMMOD_partition);
+  18:	4b03      	ldr	r3, [pc, #12]	; (28 <BMMOD_isModuleIntegrityOk+0x28>)
+  1a:	6818      	ldr	r0, [r3, #0]
+  1c:	f7ff fffe 	bl	0 <MAL_isModuleIntegrityOk>
+}
+  20:	bd10      	pop	{r4, pc}
+  22:	46c0      	nop			; (mov r8, r8)
+	...

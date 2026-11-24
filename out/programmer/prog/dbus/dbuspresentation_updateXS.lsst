@@ -1,0 +1,1110 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbuspresentation_updateXS.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DBPL_bIsUpdateModePossible,"ax",%progbits
+  18              		.align	1
+  19              		.global	DBPL_bIsUpdateModePossible
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	DBPL_bIsUpdateModePossible:
+  25              	.LFB117:
+  26              		.file 1 "app/prog/dbus/dbuspresentation_updateXS.c"
+   1:app/prog/dbus/dbuspresentation_updateXS.c **** /*******************************************************************************
+   2:app/prog/dbus/dbuspresentation_updateXS.c **** *   Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:app/prog/dbus/dbuspresentation_updateXS.c **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/dbus/dbuspresentation_updateXS.c **** *
+   5:app/prog/dbus/dbuspresentation_updateXS.c **** *   All rights reserved. This program and the accompanying materials
+   6:app/prog/dbus/dbuspresentation_updateXS.c **** *   are protected by international copyright laws.
+   7:app/prog/dbus/dbuspresentation_updateXS.c **** *   Please contact copyright holder for licensing information.
+   8:app/prog/dbus/dbuspresentation_updateXS.c **** *
+   9:app/prog/dbus/dbuspresentation_updateXS.c **** ********************************************************************************
+  10:app/prog/dbus/dbuspresentation_updateXS.c **** *   PROJECT          Generic SW
+  11:app/prog/dbus/dbuspresentation_updateXS.c **** *   COMP_ABBREV      DBPL
+  12:app/prog/dbus/dbuspresentation_updateXS.c **** *******************************************************************************/
+  13:app/prog/dbus/dbuspresentation_updateXS.c **** /** \file
+  14:app/prog/dbus/dbuspresentation_updateXS.c ****  * \brief Application layer configuration for remote update
+  15:app/prog/dbus/dbuspresentation_updateXS.c ****  */
+  16:app/prog/dbus/dbuspresentation_updateXS.c **** #include "bsh_stdinc.h"
+  17:app/prog/dbus/dbuspresentation_updateXS.c **** #include "dbuspresentation_ecu_types.h"
+  18:app/prog/dbus/dbuspresentation_updateXS.c **** #include "dbuspresentation_update.h"
+  19:app/prog/dbus/dbuspresentation_updateXS.c **** #include "dbusdll.h"
+  20:app/prog/dbus/dbuspresentation_updateXS.c **** #include "dbusmapping.h"
+  21:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(MCAL_MSUP_INCLUDED)
+  22:app/prog/dbus/dbuspresentation_updateXS.c **** #include "mcal/msup.h" //Needed for reset execution
+  23:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+  24:app/prog/dbus/dbuspresentation_updateXS.c **** #include "hsup.h" //Needed for reset execution
+  25:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  26:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  27:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(DBUS2_UPDATE)||defined(DBUS2_UPDATE_HSI)
+  28:app/prog/dbus/dbuspresentation_updateXS.c ****     #if defined(REMOTE_FIRMWARE_UPDATE)
+  29:app/prog/dbus/dbuspresentation_updateXS.c ****         #include "firmware_update/BootManager/BootManagerSharedData.h"
+  30:app/prog/dbus/dbuspresentation_updateXS.c ****         #include "firmware_update/mal/moduleAdministration.h"
+  31:app/prog/dbus/dbuspresentation_updateXS.c ****         #include "firmware_update/BootManager/BootManagerModule.h"
+  32:app/prog/dbus/dbuspresentation_updateXS.c ****     #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 2
+
+
+  33:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  34:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  35:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(DBUS2_PROD_MSG_IN_APP) || defined(REMOTE_FIRMWARE_UPDATE)
+  36:app/prog/dbus/dbuspresentation_updateXS.c ****     #include "firmware_update/version/fwu_version.h"
+  37:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  38:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  39:app/prog/dbus/dbuspresentation_updateXS.c **** #if (DBUS_DEFAULT_BAUDRATE==96)
+  40:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud9600;
+  41:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==192)
+  42:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud19200;
+  43:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==384)
+  44:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud38400;
+  45:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==576)
+  46:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud57600;
+  47:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==1152)
+  48:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud115200;
+  49:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==1250)
+  50:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud125000;
+  51:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==2304)
+  52:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud230400;
+  53:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==2500)
+  54:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud250000;
+  55:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==5000)
+  56:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud500000;
+  57:app/prog/dbus/dbuspresentation_updateXS.c **** #elif (DBUS_DEFAULT_BAUDRATE==10000)
+  58:app/prog/dbus/dbuspresentation_updateXS.c **** const enum DBPL_BaudRate DBPL_uDefaultBaudRate=DBPL_Baud1000000;
+  59:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  60:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  61:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(DBUS2_UPDATE)||defined(DBUS2_UPDATE_HSI)
+  62:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  63:app/prog/dbus/dbuspresentation_updateXS.c **** #ifdef VARIANT_PROGRAMMER
+  64:app/prog/dbus/dbuspresentation_updateXS.c ****     #define UPDATE_TRANSITION_DELAY_10MS   0U
+  65:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+  66:app/prog/dbus/dbuspresentation_updateXS.c ****     #define UPDATE_TRANSITION_DELAY_10MS   50U // In case of programmer zero, else time needed to b
+  67:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  68:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  69:app/prog/dbus/dbuspresentation_updateXS.c **** #define BAUDRATE_TRANSITION_DELAY_10MS 1U
+  70:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  71:app/prog/dbus/dbuspresentation_updateXS.c **** #ifdef REMOTE_FIRMWARE_UPDATE
+  72:app/prog/dbus/dbuspresentation_updateXS.c **** #define IS_UPDATE_POSSIBLE             1U
+  73:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+  74:app/prog/dbus/dbuspresentation_updateXS.c **** #define IS_UPDATE_POSSIBLE             0U
+  75:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  76:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  77:app/prog/dbus/dbuspresentation_updateXS.c **** #ifdef DBM_DBUSCAN
+  78:app/prog/dbus/dbuspresentation_updateXS.c **** static const enum DBPL_BaudRate baud_lookup_table[]={DBPL_Baud9600,DBPL_Baud19200,DBPL_Baud38400,DB
+  79:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+  80:app/prog/dbus/dbuspresentation_updateXS.c **** static const enum DBPL_BaudRate baud_lookup_table[]={DBPL_Baud9600,DBPL_Baud19200,DBPL_Baud38400,DB
+  81:app/prog/dbus/dbuspresentation_updateXS.c **** /*lint -esym(9003,bit_time_lookup_table ) readability not better when in block scope */
+  82:app/prog/dbus/dbuspresentation_updateXS.c **** static const enum DBPL_BitTimingUs bit_time_lookup_table[]=
+  83:app/prog/dbus/dbuspresentation_updateXS.c **** {
+  84:app/prog/dbus/dbuspresentation_updateXS.c ****     DBPL_BitTimingUs9600,   DBPL_BitTimingUs19200,
+  85:app/prog/dbus/dbuspresentation_updateXS.c ****     DBPL_BitTimingUs38400,  DBPL_BitTimingUs57600,
+  86:app/prog/dbus/dbuspresentation_updateXS.c ****     DBPL_BitTimingUs115200, DBPL_BitTimingUs125000
+  87:app/prog/dbus/dbuspresentation_updateXS.c **** };
+  88:app/prog/dbus/dbuspresentation_updateXS.c **** #endif // DBM_DBUSCAN
+  89:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 3
+
+
+  90:app/prog/dbus/dbuspresentation_updateXS.c **** bool DBPL_bIsUpdateModePossible(void)
+  91:app/prog/dbus/dbuspresentation_updateXS.c **** {
+  27              		.loc 1 91 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  92:app/prog/dbus/dbuspresentation_updateXS.c **** #if IS_UPDATE_POSSIBLE>0U
+  93:app/prog/dbus/dbuspresentation_updateXS.c ****     return true;
+  32              		.loc 1 93 5 view .LVU1
+  94:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+  95:app/prog/dbus/dbuspresentation_updateXS.c ****     return false;
+  96:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+  97:app/prog/dbus/dbuspresentation_updateXS.c **** }
+  33              		.loc 1 97 1 is_stmt 0 view .LVU2
+  34 0000 0120     		movs	r0, #1
+  35              		@ sp needed
+  36 0002 7047     		bx	lr
+  37              		.cfi_endproc
+  38              	.LFE117:
+  40              		.section	.text.DBPL_vSetUpdateMode,"ax",%progbits
+  41              		.align	1
+  42              		.global	DBPL_vSetUpdateMode
+  43              		.syntax unified
+  44              		.code	16
+  45              		.thumb_func
+  47              	DBPL_vSetUpdateMode:
+  48              	.LFB118:
+  98:app/prog/dbus/dbuspresentation_updateXS.c **** 
+  99:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vSetUpdateMode(void)
+ 100:app/prog/dbus/dbuspresentation_updateXS.c **** {
+  49              		.loc 1 100 1 is_stmt 1 view -0
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 0
+  52              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(REMOTE_FIRMWARE_UPDATE)
+ 102:app/prog/dbus/dbuspresentation_updateXS.c ****     BMDAT_setBootModule(MAL_PROGRAMMER_ID);
+  53              		.loc 1 102 5 view .LVU4
+ 100:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(REMOTE_FIRMWARE_UPDATE)
+  54              		.loc 1 100 1 is_stmt 0 view .LVU5
+  55 0000 10B5     		push	{r4, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 4, -8
+  59              		.cfi_offset 14, -4
+  60              		.loc 1 102 5 view .LVU6
+  61 0002 0248     		ldr	r0, .L3
+  62 0004 FFF7FEFF 		bl	BMDAT_setBootModule
+  63              	.LVL0:
+ 103:app/prog/dbus/dbuspresentation_updateXS.c **** #ifndef VARIANT_PROGRAMMER
+ 104:app/prog/dbus/dbuspresentation_updateXS.c ****     #if defined(MCAL_MSUP_INCLUDED)
+ 105:app/prog/dbus/dbuspresentation_updateXS.c ****         MSUP_generateReset();
+ 106:app/prog/dbus/dbuspresentation_updateXS.c ****     #else
+ 107:app/prog/dbus/dbuspresentation_updateXS.c ****         HSUP_vGenerateReset();
+ 108:app/prog/dbus/dbuspresentation_updateXS.c ****     #endif
+ 109:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ 110:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 4
+
+
+ 111:app/prog/dbus/dbuspresentation_updateXS.c **** }
+  64              		.loc 1 111 1 view .LVU7
+  65              		@ sp needed
+  66 0008 10BD     		pop	{r4, pc}
+  67              	.L4:
+  68 000a C046     		.align	2
+  69              	.L3:
+  70 000c 10550000 		.word	21776
+  71              		.cfi_endproc
+  72              	.LFE118:
+  74              		.section	.text.DBPL_vLeaveUpdateMode,"ax",%progbits
+  75              		.align	1
+  76              		.global	DBPL_vLeaveUpdateMode
+  77              		.syntax unified
+  78              		.code	16
+  79              		.thumb_func
+  81              	DBPL_vLeaveUpdateMode:
+  82              	.LFB119:
+ 112:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 113:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vLeaveUpdateMode(void)
+ 114:app/prog/dbus/dbuspresentation_updateXS.c **** {
+  83              		.loc 1 114 1 is_stmt 1 view -0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(REMOTE_FIRMWARE_UPDATE)
+ 116:app/prog/dbus/dbuspresentation_updateXS.c ****     BMDAT_setBaudRate(0u);
+  87              		.loc 1 116 5 view .LVU9
+ 114:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(REMOTE_FIRMWARE_UPDATE)
+  88              		.loc 1 114 1 is_stmt 0 view .LVU10
+  89 0000 10B5     		push	{r4, lr}
+  90              	.LCFI1:
+  91              		.cfi_def_cfa_offset 8
+  92              		.cfi_offset 4, -8
+  93              		.cfi_offset 14, -4
+  94              		.loc 1 116 5 view .LVU11
+  95 0002 0020     		movs	r0, #0
+ 117:app/prog/dbus/dbuspresentation_updateXS.c ****     BMDAT_setBootModule(MAL_PRODUCT_APP1);
+ 118:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ 119:app/prog/dbus/dbuspresentation_updateXS.c ****     #if defined(MCAL_MSUP_INCLUDED)
+ 120:app/prog/dbus/dbuspresentation_updateXS.c ****         MSUP_generateReset();
+ 121:app/prog/dbus/dbuspresentation_updateXS.c ****     #else
+ 122:app/prog/dbus/dbuspresentation_updateXS.c ****         HSUP_vGenerateReset();
+ 123:app/prog/dbus/dbuspresentation_updateXS.c ****     #endif
+ 124:app/prog/dbus/dbuspresentation_updateXS.c **** }
+  96              		.loc 1 124 1 view .LVU12
+  97              		@ sp needed
+ 116:app/prog/dbus/dbuspresentation_updateXS.c ****     BMDAT_setBootModule(MAL_PRODUCT_APP1);
+  98              		.loc 1 116 5 view .LVU13
+  99 0004 FFF7FEFF 		bl	BMDAT_setBaudRate
+ 100              	.LVL1:
+ 117:app/prog/dbus/dbuspresentation_updateXS.c ****     BMDAT_setBootModule(MAL_PRODUCT_APP1);
+ 101              		.loc 1 117 5 is_stmt 1 view .LVU14
+ 102 0008 8820     		movs	r0, #136
+ 103 000a 8001     		lsls	r0, r0, #6
+ 104 000c FFF7FEFF 		bl	BMDAT_setBootModule
+ 105              	.LVL2:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 5
+
+
+ 120:app/prog/dbus/dbuspresentation_updateXS.c ****     #else
+ 106              		.loc 1 120 9 view .LVU15
+ 107 0010 FFF7FEFF 		bl	MSUP_generateReset
+ 108              	.LVL3:
+ 109              		.loc 1 124 1 is_stmt 0 view .LVU16
+ 110 0014 10BD     		pop	{r4, pc}
+ 111              		.cfi_endproc
+ 112              	.LFE119:
+ 114              		.section	.text.DBPL_ulGetUpdateTransitionDelay,"ax",%progbits
+ 115              		.align	1
+ 116              		.global	DBPL_ulGetUpdateTransitionDelay
+ 117              		.syntax unified
+ 118              		.code	16
+ 119              		.thumb_func
+ 121              	DBPL_ulGetUpdateTransitionDelay:
+ 122              	.LFB120:
+ 125:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 126:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_ulGetUpdateTransitionDelay(void)
+ 127:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 123              		.loc 1 127 1 is_stmt 1 view -0
+ 124              		.cfi_startproc
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127              		@ link register save eliminated.
+ 128:app/prog/dbus/dbuspresentation_updateXS.c ****     return (uint16_t)UPDATE_TRANSITION_DELAY_10MS;
+ 128              		.loc 1 128 5 view .LVU18
+ 129:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 129              		.loc 1 129 1 is_stmt 0 view .LVU19
+ 130 0000 0020     		movs	r0, #0
+ 131              		@ sp needed
+ 132 0002 7047     		bx	lr
+ 133              		.cfi_endproc
+ 134              	.LFE120:
+ 136              		.section	.text.DBPL_bIsRequestedBaudValid,"ax",%progbits
+ 137              		.align	1
+ 138              		.global	DBPL_bIsRequestedBaudValid
+ 139              		.syntax unified
+ 140              		.code	16
+ 141              		.thumb_func
+ 143              	DBPL_bIsRequestedBaudValid:
+ 144              	.LVL4:
+ 145              	.LFB121:
+ 130:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 131:app/prog/dbus/dbuspresentation_updateXS.c **** bool DBPL_bIsRequestedBaudValid(uint16_t baud)
+ 132:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 146              		.loc 1 132 1 is_stmt 1 view -0
+ 147              		.cfi_startproc
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+ 133:app/prog/dbus/dbuspresentation_updateXS.c ****     uint8_t i;
+ 151              		.loc 1 133 5 view .LVU21
+ 134:app/prog/dbus/dbuspresentation_updateXS.c ****     bool ret=false;
+ 152              		.loc 1 134 5 view .LVU22
+ 135:app/prog/dbus/dbuspresentation_updateXS.c ****     uint8_t numOfElements=((uint8_t)sizeof(baud_lookup_table)/(uint8_t)sizeof(enum DBPL_BaudRate));
+ 153              		.loc 1 135 5 view .LVU23
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     for(i=0;i<numOfElements;i++)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 6
+
+
+ 154              		.loc 1 136 5 view .LVU24
+ 155              		.loc 1 136 14 view .LVU25
+ 137:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         if(baud==(uint16_t)baud_lookup_table[i])
+ 156              		.loc 1 138 9 view .LVU26
+ 132:app/prog/dbus/dbuspresentation_updateXS.c ****     uint8_t i;
+ 157              		.loc 1 132 1 is_stmt 0 view .LVU27
+ 158 0000 0300     		movs	r3, r0
+ 139:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 140:app/prog/dbus/dbuspresentation_updateXS.c ****             ret=true;
+ 159              		.loc 1 140 16 view .LVU28
+ 160 0002 0120     		movs	r0, #1
+ 161              	.LVL5:
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 162              		.loc 1 138 11 view .LVU29
+ 163 0004 602B     		cmp	r3, #96
+ 164 0006 11D0     		beq	.L8
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 165              		.loc 1 136 30 is_stmt 1 view .LVU30
+ 166              	.LVL6:
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 167              		.loc 1 136 14 view .LVU31
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 168              		.loc 1 138 9 view .LVU32
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 169              		.loc 1 138 11 is_stmt 0 view .LVU33
+ 170 0008 C02B     		cmp	r3, #192
+ 171 000a 0FD0     		beq	.L8
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 172              		.loc 1 136 30 is_stmt 1 view .LVU34
+ 173              	.LVL7:
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 174              		.loc 1 136 14 view .LVU35
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 175              		.loc 1 138 9 view .LVU36
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 176              		.loc 1 138 11 is_stmt 0 view .LVU37
+ 177 000c C022     		movs	r2, #192
+ 178 000e 5200     		lsls	r2, r2, #1
+ 179 0010 9342     		cmp	r3, r2
+ 180 0012 0BD0     		beq	.L8
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 181              		.loc 1 136 30 is_stmt 1 view .LVU38
+ 182              	.LVL8:
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 183              		.loc 1 136 14 view .LVU39
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 184              		.loc 1 138 9 view .LVU40
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 185              		.loc 1 138 11 is_stmt 0 view .LVU41
+ 186 0014 C032     		adds	r2, r2, #192
+ 187 0016 9342     		cmp	r3, r2
+ 188 0018 08D0     		beq	.L8
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 189              		.loc 1 136 30 is_stmt 1 view .LVU42
+ 190              	.LVL9:
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 7
+
+
+ 191              		.loc 1 136 14 view .LVU43
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 192              		.loc 1 138 9 view .LVU44
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 193              		.loc 1 138 11 is_stmt 0 view .LVU45
+ 194 001a 9022     		movs	r2, #144
+ 195 001c D200     		lsls	r2, r2, #3
+ 196 001e 9342     		cmp	r3, r2
+ 197 0020 04D0     		beq	.L8
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 198              		.loc 1 136 30 is_stmt 1 view .LVU46
+ 199              	.LVL10:
+ 136:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 200              		.loc 1 136 14 view .LVU47
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 201              		.loc 1 138 9 view .LVU48
+ 138:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 202              		.loc 1 138 11 is_stmt 0 view .LVU49
+ 203 0022 034A     		ldr	r2, .L14
+ 204 0024 9B18     		adds	r3, r3, r2
+ 205 0026 5A42     		rsbs	r2, r3, #0
+ 206 0028 5341     		adcs	r3, r3, r2
+ 207 002a D8B2     		uxtb	r0, r3
+ 208              	.LVL11:
+ 209              	.L8:
+ 141:app/prog/dbus/dbuspresentation_updateXS.c ****             break;
+ 142:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 143:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 144:app/prog/dbus/dbuspresentation_updateXS.c ****     return ret;
+ 210              		.loc 1 144 5 is_stmt 1 view .LVU50
+ 145:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 211              		.loc 1 145 1 is_stmt 0 view .LVU51
+ 212              		@ sp needed
+ 213 002c 7047     		bx	lr
+ 214              	.L15:
+ 215 002e C046     		.align	2
+ 216              	.L14:
+ 217 0030 1EFBFFFF 		.word	-1250
+ 218              		.cfi_endproc
+ 219              	.LFE121:
+ 221              		.section	.text.DBPL_ulGetBaudrateTransitionDelay,"ax",%progbits
+ 222              		.align	1
+ 223              		.global	DBPL_ulGetBaudrateTransitionDelay
+ 224              		.syntax unified
+ 225              		.code	16
+ 226              		.thumb_func
+ 228              	DBPL_ulGetBaudrateTransitionDelay:
+ 229              	.LFB122:
+ 146:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 147:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_ulGetBaudrateTransitionDelay(void)
+ 148:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 230              		.loc 1 148 1 is_stmt 1 view -0
+ 231              		.cfi_startproc
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+ 234              		@ link register save eliminated.
+ 149:app/prog/dbus/dbuspresentation_updateXS.c ****     return (uint16_t)BAUDRATE_TRANSITION_DELAY_10MS;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 8
+
+
+ 235              		.loc 1 149 5 view .LVU53
+ 150:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 236              		.loc 1 150 1 is_stmt 0 view .LVU54
+ 237 0000 0120     		movs	r0, #1
+ 238              		@ sp needed
+ 239 0002 7047     		bx	lr
+ 240              		.cfi_endproc
+ 241              	.LFE122:
+ 243              		.section	.text.DBPL_vConfigureBaudrate,"ax",%progbits
+ 244              		.align	1
+ 245              		.global	DBPL_vConfigureBaudrate
+ 246              		.syntax unified
+ 247              		.code	16
+ 248              		.thumb_func
+ 250              	DBPL_vConfigureBaudrate:
+ 251              	.LVL12:
+ 252              	.LFB123:
+ 151:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 152:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vConfigureBaudrate(uint16_t baud)
+ 153:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 253              		.loc 1 153 1 is_stmt 1 view -0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154:app/prog/dbus/dbuspresentation_updateXS.c ****     if(DBPL_bIsRequestedBaudValid(baud))
+ 257              		.loc 1 154 5 view .LVU56
+ 153:app/prog/dbus/dbuspresentation_updateXS.c ****     if(DBPL_bIsRequestedBaudValid(baud))
+ 258              		.loc 1 153 1 is_stmt 0 view .LVU57
+ 259 0000 10B5     		push	{r4, lr}
+ 260              	.LCFI2:
+ 261              		.cfi_def_cfa_offset 8
+ 262              		.cfi_offset 4, -8
+ 263              		.cfi_offset 14, -4
+ 153:app/prog/dbus/dbuspresentation_updateXS.c ****     if(DBPL_bIsRequestedBaudValid(baud))
+ 264              		.loc 1 153 1 view .LVU58
+ 265 0002 0400     		movs	r4, r0
+ 266              		.loc 1 154 8 view .LVU59
+ 267 0004 FFF7FEFF 		bl	DBPL_bIsRequestedBaudValid
+ 268              	.LVL13:
+ 269              		.loc 1 154 7 view .LVU60
+ 270 0008 0028     		cmp	r0, #0
+ 271 000a 07D0     		beq	.L17
+ 155:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 156:app/prog/dbus/dbuspresentation_updateXS.c **** #if defined(REMOTE_FIRMWARE_UPDATE)
+ 157:app/prog/dbus/dbuspresentation_updateXS.c ****         BMDAT_setBaudRate(baud);
+ 272              		.loc 1 157 9 is_stmt 1 view .LVU61
+ 273 000c 2000     		movs	r0, r4
+ 274 000e FFF7FEFF 		bl	BMDAT_setBaudRate
+ 275              	.LVL14:
+ 158:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ 159:app/prog/dbus/dbuspresentation_updateXS.c ****         DBM_PERIPH_vSetBaudRate(DLL_ucGetStandardUartConfigIndex(), baud);
+ 276              		.loc 1 159 9 view .LVU62
+ 277 0012 FFF7FEFF 		bl	DLL_ucGetStandardUartConfigIndex
+ 278              	.LVL15:
+ 279 0016 2100     		movs	r1, r4
+ 280 0018 FFF7FEFF 		bl	DBM_PERIPH_vSetBaudRate
+ 281              	.LVL16:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 9
+
+
+ 282              	.L17:
+ 160:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 161:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 283              		.loc 1 161 1 is_stmt 0 view .LVU63
+ 284              		@ sp needed
+ 285 001c 10BD     		pop	{r4, pc}
+ 286              		.cfi_endproc
+ 287              	.LFE123:
+ 289              		.section	.text.DBPL_uGetUsBitTimeForBaudRate,"ax",%progbits
+ 290              		.align	1
+ 291              		.global	DBPL_uGetUsBitTimeForBaudRate
+ 292              		.syntax unified
+ 293              		.code	16
+ 294              		.thumb_func
+ 296              	DBPL_uGetUsBitTimeForBaudRate:
+ 297              	.LVL17:
+ 298              	.LFB124:
+ 162:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 163:app/prog/dbus/dbuspresentation_updateXS.c **** #ifndef DBM_DBUSCAN
+ 164:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_uGetUsBitTimeForBaudRate(uint16_t baud)
+ 165:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 299              		.loc 1 165 1 is_stmt 1 view -0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303              		@ link register save eliminated.
+ 166:app/prog/dbus/dbuspresentation_updateXS.c ****     uint8_t numOfElements=((uint8_t)sizeof(bit_time_lookup_table)/(uint8_t)sizeof(enum DBPL_BitTimi
+ 304              		.loc 1 166 5 view .LVU65
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 305              		.loc 1 167 5 view .LVU66
+ 306              	.LBB2:
+ 307              		.loc 1 167 9 view .LVU67
+ 308              		.loc 1 167 22 view .LVU68
+ 168:app/prog/dbus/dbuspresentation_updateXS.c ****     {   /*lint -e{661,662} no out of bound access here! */
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         if(baud==(uint16_t)baud_lookup_table[i])
+ 309              		.loc 1 169 9 view .LVU69
+ 310              	.LBE2:
+ 165:app/prog/dbus/dbuspresentation_updateXS.c ****     uint8_t numOfElements=((uint8_t)sizeof(bit_time_lookup_table)/(uint8_t)sizeof(enum DBPL_BitTimi
+ 311              		.loc 1 165 1 is_stmt 0 view .LVU70
+ 312 0000 0300     		movs	r3, r0
+ 313              	.LBB3:
+ 314              		.loc 1 169 11 view .LVU71
+ 315 0002 6028     		cmp	r0, #96
+ 316 0004 14D0     		beq	.L25
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 317              		.loc 1 167 38 is_stmt 1 view .LVU72
+ 318              	.LVL18:
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 319              		.loc 1 167 22 view .LVU73
+ 320              		.loc 1 169 9 view .LVU74
+ 321              		.loc 1 169 11 is_stmt 0 view .LVU75
+ 322 0006 C028     		cmp	r0, #192
+ 323 0008 14D0     		beq	.L26
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 324              		.loc 1 167 38 is_stmt 1 view .LVU76
+ 325              	.LVL19:
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 10
+
+
+ 326              		.loc 1 167 22 view .LVU77
+ 327              		.loc 1 169 9 view .LVU78
+ 328              		.loc 1 169 11 is_stmt 0 view .LVU79
+ 329 000a C022     		movs	r2, #192
+ 330 000c 5200     		lsls	r2, r2, #1
+ 331 000e 9042     		cmp	r0, r2
+ 332 0010 12D0     		beq	.L27
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 333              		.loc 1 167 38 is_stmt 1 view .LVU80
+ 334              	.LVL20:
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 335              		.loc 1 167 22 view .LVU81
+ 336              		.loc 1 169 9 view .LVU82
+ 337              		.loc 1 169 11 is_stmt 0 view .LVU83
+ 338 0012 C032     		adds	r2, r2, #192
+ 339 0014 9042     		cmp	r0, r2
+ 340 0016 11D0     		beq	.L28
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 341              		.loc 1 167 38 is_stmt 1 view .LVU84
+ 342              	.LVL21:
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 343              		.loc 1 167 22 view .LVU85
+ 344              		.loc 1 169 9 view .LVU86
+ 345              		.loc 1 169 11 is_stmt 0 view .LVU87
+ 346 0018 9022     		movs	r2, #144
+ 347 001a D200     		lsls	r2, r2, #3
+ 348 001c 9042     		cmp	r0, r2
+ 349 001e 0FD0     		beq	.L29
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 350              		.loc 1 167 38 is_stmt 1 view .LVU88
+ 351              	.LVL22:
+ 167:app/prog/dbus/dbuspresentation_updateXS.c ****     for(uint8_t i=0;i<numOfElements;i++)
+ 352              		.loc 1 167 22 view .LVU89
+ 353              		.loc 1 169 9 view .LVU90
+ 354              		.loc 1 169 11 is_stmt 0 view .LVU91
+ 355 0020 084A     		ldr	r2, .L31
+ 356              	.LBE3:
+ 170:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 171:app/prog/dbus/dbuspresentation_updateXS.c ****             /*lint -e{661,662} no out of bound access here! */
+ 172:app/prog/dbus/dbuspresentation_updateXS.c ****             return (uint16_t)bit_time_lookup_table[i];
+ 173:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 174:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 175:app/prog/dbus/dbuspresentation_updateXS.c ****     return 0U;
+ 357              		.loc 1 175 12 view .LVU92
+ 358 0022 0020     		movs	r0, #0
+ 359              	.LVL23:
+ 360              	.LBB4:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 361              		.loc 1 169 11 view .LVU93
+ 362 0024 9342     		cmp	r3, r2
+ 363 0026 02D1     		bne	.L24
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 364              		.loc 1 169 45 view .LVU94
+ 365 0028 0523     		movs	r3, #5
+ 366              	.LVL24:
+ 367              	.L23:
+ 172:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 11
+
+
+ 368              		.loc 1 172 13 is_stmt 1 view .LVU95
+ 172:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 369              		.loc 1 172 51 is_stmt 0 view .LVU96
+ 370 002a 074A     		ldr	r2, .L31+4
+ 172:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 371              		.loc 1 172 20 view .LVU97
+ 372 002c D05C     		ldrb	r0, [r2, r3]
+ 373              	.L24:
+ 374              	.LBE4:
+ 176:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 375              		.loc 1 176 1 view .LVU98
+ 376              		@ sp needed
+ 377 002e 7047     		bx	lr
+ 378              	.LVL25:
+ 379              	.L25:
+ 380              	.LBB5:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 381              		.loc 1 169 45 view .LVU99
+ 382 0030 0023     		movs	r3, #0
+ 383 0032 FAE7     		b	.L23
+ 384              	.LVL26:
+ 385              	.L26:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 386              		.loc 1 169 45 view .LVU100
+ 387 0034 0123     		movs	r3, #1
+ 388 0036 F8E7     		b	.L23
+ 389              	.LVL27:
+ 390              	.L27:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 391              		.loc 1 169 45 view .LVU101
+ 392 0038 0223     		movs	r3, #2
+ 393 003a F6E7     		b	.L23
+ 394              	.LVL28:
+ 395              	.L28:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 396              		.loc 1 169 45 view .LVU102
+ 397 003c 0323     		movs	r3, #3
+ 398 003e F4E7     		b	.L23
+ 399              	.LVL29:
+ 400              	.L29:
+ 169:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 401              		.loc 1 169 45 view .LVU103
+ 402 0040 0423     		movs	r3, #4
+ 403 0042 F2E7     		b	.L23
+ 404              	.L32:
+ 405              		.align	2
+ 406              	.L31:
+ 407 0044 E2040000 		.word	1250
+ 408 0048 00000000 		.word	.LANCHOR0
+ 409              	.LBE5:
+ 410              		.cfi_endproc
+ 411              	.LFE124:
+ 413              		.section	.text.DBPL_tGetEcuConfigReadResult,"ax",%progbits
+ 414              		.align	1
+ 415              		.global	DBPL_tGetEcuConfigReadResult
+ 416              		.syntax unified
+ 417              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 12
+
+
+ 418              		.thumb_func
+ 420              	DBPL_tGetEcuConfigReadResult:
+ 421              	.LVL30:
+ 422              	.LFB125:
+ 177:app/prog/dbus/dbuspresentation_updateXS.c **** #endif // DBM_DBUSCAN
+ 178:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 179:app/prog/dbus/dbuspresentation_updateXS.c **** #else /*DBUS2_UPDATE or DBUS2_UPDATE_HSI*/
+ 180:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 181:app/prog/dbus/dbuspresentation_updateXS.c **** bool DBPL_bIsUpdateModePossible(void)
+ 182:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 183:app/prog/dbus/dbuspresentation_updateXS.c ****     return false;
+ 184:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 185:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 186:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vSetUpdateMode(void)
+ 187:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 188:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 189:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 190:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 191:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vLeaveUpdateMode(void)
+ 192:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 193:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 194:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 195:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 196:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_ulGetUpdateTransitionDelay(void)
+ 197:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 198:app/prog/dbus/dbuspresentation_updateXS.c ****     return (uint16_t)0U;
+ 199:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 200:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 201:app/prog/dbus/dbuspresentation_updateXS.c **** bool DBPL_bIsRequestedBaudValid(uint16_t baud)
+ 202:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 203:app/prog/dbus/dbuspresentation_updateXS.c ****     (void)baud;
+ 204:app/prog/dbus/dbuspresentation_updateXS.c ****     return false;
+ 205:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 206:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 207:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_ulGetBaudrateTransitionDelay(void)
+ 208:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 209:app/prog/dbus/dbuspresentation_updateXS.c ****     return (uint16_t)0U;
+ 210:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 211:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 212:app/prog/dbus/dbuspresentation_updateXS.c **** void DBPL_vConfigureBaudrate(uint16_t baud)
+ 213:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 214:app/prog/dbus/dbuspresentation_updateXS.c ****     (void)baud;
+ 215:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 216:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 217:app/prog/dbus/dbuspresentation_updateXS.c **** uint16_t DBPL_uGetUsBitTimeForBaudRate(uint16_t baud)
+ 218:app/prog/dbus/dbuspresentation_updateXS.c **** {
+ 219:app/prog/dbus/dbuspresentation_updateXS.c ****     (void)baud;
+ 220:app/prog/dbus/dbuspresentation_updateXS.c ****     return 0U;
+ 221:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 222:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 223:app/prog/dbus/dbuspresentation_updateXS.c **** #endif/*DBUS2_UPDATE or DBUS2_UPDATE_HSI*/
+ 224:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 225:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 226:app/prog/dbus/dbuspresentation_updateXS.c **** #if (defined(DBUS2_UPDATE)||defined(DBUS2_UPDATE_HSI))&&defined(REMOTE_FIRMWARE_UPDATE)
+ 227:app/prog/dbus/dbuspresentation_updateXS.c **** struct DBPL_EcuConfigReadResult DBPL_tGetEcuConfigReadResult(uint8_t objIdNumber)
+ 228:app/prog/dbus/dbuspresentation_updateXS.c **** {   /* "partially initialized struct MisraC2012 9.3 required" other 2 elements initialized later */
+ 423              		.loc 1 228 1 is_stmt 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 13
+
+
+ 424              		.cfi_startproc
+ 425              		@ args = 0, pretend = 0, frame = 40
+ 426              		@ frame_needed = 0, uses_anonymous_args = 0
+ 229:app/prog/dbus/dbuspresentation_updateXS.c ****     struct DBPL_EcuConfigReadResult obj = {.identificationObject = {{{0}}}}; /*lint !e785 , C99 ini
+ 427              		.loc 1 229 5 view .LVU105
+ 228:app/prog/dbus/dbuspresentation_updateXS.c ****     struct DBPL_EcuConfigReadResult obj = {.identificationObject = {{{0}}}}; /*lint !e785 , C99 ini
+ 428              		.loc 1 228 1 is_stmt 0 view .LVU106
+ 429 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 430              	.LCFI3:
+ 431              		.cfi_def_cfa_offset 20
+ 432              		.cfi_offset 4, -20
+ 433              		.cfi_offset 5, -16
+ 434              		.cfi_offset 6, -12
+ 435              		.cfi_offset 7, -8
+ 436              		.cfi_offset 14, -4
+ 437 0002 8BB0     		sub	sp, sp, #44
+ 438              	.LCFI4:
+ 439              		.cfi_def_cfa_offset 64
+ 228:app/prog/dbus/dbuspresentation_updateXS.c ****     struct DBPL_EcuConfigReadResult obj = {.identificationObject = {{{0}}}}; /*lint !e785 , C99 ini
+ 440              		.loc 1 228 1 view .LVU107
+ 441 0004 0C00     		movs	r4, r1
+ 442 0006 0700     		movs	r7, r0
+ 443              		.loc 1 229 37 view .LVU108
+ 444 0008 2722     		movs	r2, #39
+ 445 000a 0021     		movs	r1, #0
+ 446              	.LVL31:
+ 447              		.loc 1 229 37 view .LVU109
+ 448 000c 6846     		mov	r0, sp
+ 449              	.LVL32:
+ 450              		.loc 1 229 37 view .LVU110
+ 451 000e FFF7FEFF 		bl	memset
+ 452              	.LVL33:
+ 230:app/prog/dbus/dbuspresentation_updateXS.c ****     const uint8_t EcuConfigCount   = ECU_ID_COUNT;
+ 453              		.loc 1 230 5 is_stmt 1 view .LVU111
+ 231:app/prog/dbus/dbuspresentation_updateXS.c ****     const uint8_t ProgrammerObjId  = PROGRAMMER_ID_NUMBER;
+ 454              		.loc 1 231 5 view .LVU112
+ 232:app/prog/dbus/dbuspresentation_updateXS.c ****     const uint8_t ApplicationObjId = APP_ID_NUMBER;
+ 455              		.loc 1 232 5 view .LVU113
+ 233:app/prog/dbus/dbuspresentation_updateXS.c **** #ifdef VARIANT_PROGRAMMER
+ 234:app/prog/dbus/dbuspresentation_updateXS.c ****     /* do not change settings for programmer */
+ 235:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.status = DBPL_EcuStatusUpdateModeActive; /*Programmer is running.*/
+ 456              		.loc 1 235 5 view .LVU114
+ 236:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+ 237:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.status = DBPL_EcuStatusOK; /*Expected to be ok.*/
+ 238:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ 239:app/prog/dbus/dbuspresentation_updateXS.c ****     const struct FWU_hw_version_s  *hw_version = NULL;
+ 457              		.loc 1 239 5 view .LVU115
+ 240:app/prog/dbus/dbuspresentation_updateXS.c ****     const struct MAL_ModuleHeader_s *module_header = NULL;
+ 458              		.loc 1 240 5 view .LVU116
+ 241:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 242:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.objIdNumber = objIdNumber;
+ 459              		.loc 1 242 5 view .LVU117
+ 243:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.objCount = EcuConfigCount;
+ 460              		.loc 1 243 5 view .LVU118
+ 244:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 245:app/prog/dbus/dbuspresentation_updateXS.c ****     if((objIdNumber > DBPL_UPDATE_ECU_CONFIG_UNSUPPORTED_OBJ_ID_NUMBER) && (objIdNumber <= EcuConfi
+ 461              		.loc 1 245 5 view .LVU119
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 14
+
+
+ 462              		.loc 1 245 7 is_stmt 0 view .LVU120
+ 463 0012 012C     		cmp	r4, #1
+ 464 0014 12D1     		bne	.L34
+ 246:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 247:app/prog/dbus/dbuspresentation_updateXS.c ****         if (objIdNumber == ApplicationObjId)/*lint !e774 boolean condition always evaluates to 'tru
+ 465              		.loc 1 247 9 is_stmt 1 view .LVU121
+ 248:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 249:app/prog/dbus/dbuspresentation_updateXS.c ****             module_header = BMMOD_GetMemModuleHeader(MAL_PRODUCT_APP1);
+ 250:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 251:app/prog/dbus/dbuspresentation_updateXS.c ****         else if (objIdNumber == ProgrammerObjId)/*lint !e774 boolean condition always evaluates to 
+ 466              		.loc 1 251 14 view .LVU122
+ 252:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 253:app/prog/dbus/dbuspresentation_updateXS.c ****             module_header = BMMOD_GetMemModuleHeader(MAL_PROGRAMMER_ID);
+ 467              		.loc 1 253 13 view .LVU123
+ 468              		.loc 1 253 29 is_stmt 0 view .LVU124
+ 469 0016 1748     		ldr	r0, .L44
+ 470 0018 FFF7FEFF 		bl	BMMOD_GetMemModuleHeader
+ 471              	.LVL34:
+ 472 001c 0600     		movs	r6, r0
+ 473              	.LVL35:
+ 254:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 255:app/prog/dbus/dbuspresentation_updateXS.c ****         else
+ 256:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 257:app/prog/dbus/dbuspresentation_updateXS.c ****             /* no action required */
+ 258:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 474              		.loc 1 258 9 is_stmt 1 view .LVU125
+ 259:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 260:app/prog/dbus/dbuspresentation_updateXS.c ****         hw_version = FWU_getHardwareVersion();
+ 475              		.loc 1 260 9 view .LVU126
+ 476              		.loc 1 260 22 is_stmt 0 view .LVU127
+ 477 001e FFF7FEFF 		bl	FWU_getHardwareVersion
+ 478              	.LVL36:
+ 479              		.loc 1 260 22 view .LVU128
+ 480 0022 0500     		movs	r5, r0
+ 481              	.LVL37:
+ 261:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 262:app/prog/dbus/dbuspresentation_updateXS.c ****     else if(objIdNumber == DBPL_UPDATE_ECU_CONFIG_UNSUPPORTED_OBJ_ID_NUMBER)
+ 263:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 264:app/prog/dbus/dbuspresentation_updateXS.c ****         obj.status = DBPL_EcuStatusUnsupported;
+ 265:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 266:app/prog/dbus/dbuspresentation_updateXS.c ****     else
+ 267:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 268:app/prog/dbus/dbuspresentation_updateXS.c ****         /* no action required */
+ 269:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 482              		.loc 1 269 5 is_stmt 1 view .LVU129
+ 270:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 271:app/prog/dbus/dbuspresentation_updateXS.c ****     if(obj.status != DBPL_EcuStatusUnsupported)
+ 483              		.loc 1 271 5 view .LVU130
+ 272:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 273:app/prog/dbus/dbuspresentation_updateXS.c ****         if (module_header != NULL)
+ 484              		.loc 1 273 9 view .LVU131
+ 485              		.loc 1 273 12 is_stmt 0 view .LVU132
+ 486 0024 002E     		cmp	r6, #0
+ 487 0026 1BD1     		bne	.L35
+ 274:app/prog/dbus/dbuspresentation_updateXS.c ****         {   /* Copy SW ID and version string */
+ 275:app/prog/dbus/dbuspresentation_updateXS.c ****             obj.identificationObject.sw_version = module_header->sw_version.version;
+ 276:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 15
+
+
+ 277:app/prog/dbus/dbuspresentation_updateXS.c ****         else
+ 278:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 279:app/prog/dbus/dbuspresentation_updateXS.c ****             obj.status = DBPL_EcuStatusError;
+ 488              		.loc 1 279 24 view .LVU133
+ 489 0028 2036     		adds	r6, r6, #32
+ 490              	.LVL38:
+ 491              	.L36:
+ 280:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 281:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 282:app/prog/dbus/dbuspresentation_updateXS.c ****         if (hw_version != NULL)
+ 492              		.loc 1 282 9 is_stmt 1 view .LVU134
+ 493              		.loc 1 282 12 is_stmt 0 view .LVU135
+ 494 002a 002D     		cmp	r5, #0
+ 495 002c 09D0     		beq	.L38
+ 283:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 284:app/prog/dbus/dbuspresentation_updateXS.c ****             /* Copy HW version string */
+ 285:app/prog/dbus/dbuspresentation_updateXS.c ****             obj.identificationObject.hw_version = hw_version->version;
+ 496              		.loc 1 285 13 is_stmt 1 view .LVU136
+ 497              		.loc 1 285 49 is_stmt 0 view .LVU137
+ 498 002e 1520     		movs	r0, #21
+ 499 0030 1222     		movs	r2, #18
+ 500 0032 291D     		adds	r1, r5, #4
+ 501 0034 6844     		add	r0, r0, sp
+ 502 0036 FFF7FEFF 		bl	memcpy
+ 503              	.LVL39:
+ 504 003a 03E0     		b	.L37
+ 505              	.LVL40:
+ 506              	.L34:
+ 262:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 507              		.loc 1 262 10 is_stmt 1 view .LVU138
+ 508 003c 2126     		movs	r6, #33
+ 262:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 509              		.loc 1 262 12 is_stmt 0 view .LVU139
+ 510 003e 002C     		cmp	r4, #0
+ 511 0040 00D0     		beq	.L37
+ 512              	.LVL41:
+ 513              	.L38:
+ 282:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 514              		.loc 1 282 9 is_stmt 1 view .LVU140
+ 286:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 287:app/prog/dbus/dbuspresentation_updateXS.c ****         else
+ 288:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 289:app/prog/dbus/dbuspresentation_updateXS.c ****             obj.status = DBPL_EcuStatusError;
+ 515              		.loc 1 289 24 is_stmt 0 view .LVU141
+ 516 0042 2026     		movs	r6, #32
+ 517              	.LVL42:
+ 518              	.L37:
+ 290:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 291:app/prog/dbus/dbuspresentation_updateXS.c ****     }
+ 292:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 293:app/prog/dbus/dbuspresentation_updateXS.c ****     return obj;
+ 519              		.loc 1 293 5 is_stmt 1 view .LVU142
+ 520              		.loc 1 293 12 is_stmt 0 view .LVU143
+ 521 0044 6B46     		mov	r3, sp
+ 522 0046 6A46     		mov	r2, sp
+ 523 0048 1E70     		strb	r6, [r3]
+ 524 004a 5C70     		strb	r4, [r3, #1]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 16
+
+
+ 525 004c 0123     		movs	r3, #1
+ 526 004e 6946     		mov	r1, sp
+ 527 0050 9370     		strb	r3, [r2, #2]
+ 528 0052 3800     		movs	r0, r7
+ 529 0054 2722     		movs	r2, #39
+ 530 0056 FFF7FEFF 		bl	memcpy
+ 531              	.LVL43:
+ 294:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 532              		.loc 1 294 1 view .LVU144
+ 533 005a 3800     		movs	r0, r7
+ 534 005c 0BB0     		add	sp, sp, #44
+ 535              		@ sp needed
+ 536              	.LVL44:
+ 537              		.loc 1 294 1 view .LVU145
+ 538 005e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 539              	.LVL45:
+ 540              	.L35:
+ 275:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 541              		.loc 1 275 13 is_stmt 1 view .LVU146
+ 275:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 542              		.loc 1 275 49 is_stmt 0 view .LVU147
+ 543 0060 3100     		movs	r1, r6
+ 544 0062 6B46     		mov	r3, sp
+ 545 0064 1222     		movs	r2, #18
+ 546 0066 1031     		adds	r1, r1, #16
+ 547 0068 D81C     		adds	r0, r3, #3
+ 548              	.LVL46:
+ 275:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 549              		.loc 1 275 49 view .LVU148
+ 550 006a FFF7FEFF 		bl	memcpy
+ 551              	.LVL47:
+ 552 006e 2600     		movs	r6, r4
+ 553              	.LVL48:
+ 275:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 554              		.loc 1 275 49 view .LVU149
+ 555 0070 DBE7     		b	.L36
+ 556              	.L45:
+ 557 0072 C046     		.align	2
+ 558              	.L44:
+ 559 0074 10550000 		.word	21776
+ 560              		.cfi_endproc
+ 561              	.LFE125:
+ 563              		.section	.text.DBPL_tGetSwSubmoduleReadResult,"ax",%progbits
+ 564              		.align	1
+ 565              		.global	DBPL_tGetSwSubmoduleReadResult
+ 566              		.syntax unified
+ 567              		.code	16
+ 568              		.thumb_func
+ 570              	DBPL_tGetSwSubmoduleReadResult:
+ 571              	.LVL49:
+ 572              	.LFB126:
+ 295:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 296:app/prog/dbus/dbuspresentation_updateXS.c **** struct DBPL_SwSubmoduleReadResult DBPL_tGetSwSubmoduleReadResult(const uint8_t * const pucSwID, uin
+ 297:app/prog/dbus/dbuspresentation_updateXS.c **** {   
+ 573              		.loc 1 297 1 is_stmt 1 view -0
+ 574              		.cfi_startproc
+ 575              		@ args = 0, pretend = 0, frame = 40
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 17
+
+
+ 576              		@ frame_needed = 0, uses_anonymous_args = 0
+ 298:app/prog/dbus/dbuspresentation_updateXS.c ****     // adapt parameters below according your requiremets
+ 299:app/prog/dbus/dbuspresentation_updateXS.c ****     
+ 300:app/prog/dbus/dbuspresentation_updateXS.c ****     /*lint -e818 Pointer parameter ... could be declared: pucSwID was not used */
+ 301:app/prog/dbus/dbuspresentation_updateXS.c ****     (void)*pucSwID; 
+ 577              		.loc 1 301 5 view .LVU151
+ 302:app/prog/dbus/dbuspresentation_updateXS.c ****     
+ 303:app/prog/dbus/dbuspresentation_updateXS.c ****     struct DBPL_SwSubmoduleReadResult obj = 
+ 578              		.loc 1 303 5 view .LVU152
+ 304:app/prog/dbus/dbuspresentation_updateXS.c ****     {
+ 305:app/prog/dbus/dbuspresentation_updateXS.c ****         .status = DBPL_EcuStatusOK,
+ 306:app/prog/dbus/dbuspresentation_updateXS.c ****         .objIdNumber   = objIdNumber,
+ 307:app/prog/dbus/dbuspresentation_updateXS.c ****         .objCount      = 0x00u,        
+ 308:app/prog/dbus/dbuspresentation_updateXS.c ****         .identificationObject =
+ 309:app/prog/dbus/dbuspresentation_updateXS.c ****         {
+ 310:app/prog/dbus/dbuspresentation_updateXS.c ****          .sw_version =
+ 311:app/prog/dbus/dbuspresentation_updateXS.c ****             { /** \todo please specify id-string for your flex partition */
+ 312:app/prog/dbus/dbuspresentation_updateXS.c ****                 .ID       = {0,1,2,3,4,5,6,7},
+ 313:app/prog/dbus/dbuspresentation_updateXS.c ****                 .major    = {0x12, 0x34},
+ 314:app/prog/dbus/dbuspresentation_updateXS.c ****                 .minor    = {0x98, 0x76},
+ 315:app/prog/dbus/dbuspresentation_updateXS.c ****                 .revision = {0xfe, 0xdc},
+ 316:app/prog/dbus/dbuspresentation_updateXS.c ****                 .build    = {0xab, 0xcd, 0xef, 0x01}
+ 317:app/prog/dbus/dbuspresentation_updateXS.c ****             },
+ 318:app/prog/dbus/dbuspresentation_updateXS.c ****          .sw_submodule_version = 
+ 319:app/prog/dbus/dbuspresentation_updateXS.c ****             { /** \todo please specify id-string for your flex partition */
+ 320:app/prog/dbus/dbuspresentation_updateXS.c ****                 .ID       = {0,1,2,3,4,5,6,7},
+ 321:app/prog/dbus/dbuspresentation_updateXS.c ****                 .major    = {0x12, 0x34},
+ 322:app/prog/dbus/dbuspresentation_updateXS.c ****                 .minor    = {0x98, 0x76},
+ 323:app/prog/dbus/dbuspresentation_updateXS.c ****                 .revision = {0xfe, 0xdc},
+ 324:app/prog/dbus/dbuspresentation_updateXS.c ****                 .build    = {0xab, 0xcd, 0xef, 0x01}
+ 325:app/prog/dbus/dbuspresentation_updateXS.c ****             }
+ 326:app/prog/dbus/dbuspresentation_updateXS.c ****         }
+ 327:app/prog/dbus/dbuspresentation_updateXS.c ****     };
+ 328:app/prog/dbus/dbuspresentation_updateXS.c ****     
+ 329:app/prog/dbus/dbuspresentation_updateXS.c **** #ifdef VARIANT_PROGRAMMER
+ 330:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.status = DBPL_EcuStatusUpdateModeActive; /*Programmer is running.*/
+ 579              		.loc 1 330 5 view .LVU153
+ 331:app/prog/dbus/dbuspresentation_updateXS.c **** #else
+ 332:app/prog/dbus/dbuspresentation_updateXS.c ****     obj.status = DBPL_EcuStatusOK; /*Expected to be ok.*/
+ 333:app/prog/dbus/dbuspresentation_updateXS.c **** #endif
+ 334:app/prog/dbus/dbuspresentation_updateXS.c **** 
+ 335:app/prog/dbus/dbuspresentation_updateXS.c ****     return obj;    
+ 580              		.loc 1 335 5 view .LVU154
+ 297:app/prog/dbus/dbuspresentation_updateXS.c ****     // adapt parameters below according your requiremets
+ 581              		.loc 1 297 1 is_stmt 0 view .LVU155
+ 582 0000 10B5     		push	{r4, lr}
+ 583              	.LCFI5:
+ 584              		.cfi_def_cfa_offset 8
+ 585              		.cfi_offset 4, -8
+ 586              		.cfi_offset 14, -4
+ 587 0002 8AB0     		sub	sp, sp, #40
+ 588              	.LCFI6:
+ 589              		.cfi_def_cfa_offset 48
+ 590              		.loc 1 335 12 view .LVU156
+ 591 0004 6946     		mov	r1, sp
+ 592              	.LVL50:
+ 593              		.loc 1 335 12 view .LVU157
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 18
+
+
+ 594 0006 0123     		movs	r3, #1
+ 595 0008 0B70     		strb	r3, [r1]
+ 596 000a 6B46     		mov	r3, sp
+ 297:app/prog/dbus/dbuspresentation_updateXS.c ****     // adapt parameters below according your requiremets
+ 597              		.loc 1 297 1 view .LVU158
+ 598 000c 0400     		movs	r4, r0
+ 599              		.loc 1 335 12 view .LVU159
+ 600 000e 4A70     		strb	r2, [r1, #1]
+ 601 0010 981C     		adds	r0, r3, #2
+ 602              	.LVL51:
+ 603              		.loc 1 335 12 view .LVU160
+ 604 0012 2522     		movs	r2, #37
+ 605              	.LVL52:
+ 606              		.loc 1 335 12 view .LVU161
+ 607 0014 0549     		ldr	r1, .L47
+ 608              	.LVL53:
+ 609              		.loc 1 335 12 view .LVU162
+ 610 0016 FFF7FEFF 		bl	memcpy
+ 611              	.LVL54:
+ 612              		.loc 1 335 12 view .LVU163
+ 613 001a 2722     		movs	r2, #39
+ 614 001c 6946     		mov	r1, sp
+ 615 001e 2000     		movs	r0, r4
+ 616 0020 FFF7FEFF 		bl	memcpy
+ 617              	.LVL55:
+ 336:app/prog/dbus/dbuspresentation_updateXS.c **** }
+ 618              		.loc 1 336 1 view .LVU164
+ 619 0024 2000     		movs	r0, r4
+ 620 0026 0AB0     		add	sp, sp, #40
+ 621              		@ sp needed
+ 622              	.LVL56:
+ 623              		.loc 1 336 1 view .LVU165
+ 624 0028 10BD     		pop	{r4, pc}
+ 625              	.L48:
+ 626 002a C046     		.align	2
+ 627              	.L47:
+ 628 002c 00000000 		.word	.LANCHOR1
+ 629              		.cfi_endproc
+ 630              	.LFE126:
+ 632              		.global	DBPL_uDefaultBaudRate
+ 633              		.section	.rodata
+ 634              		.set	.LANCHOR1,. + 0
+ 635              	.LC1:
+ 636 0000 00000102 		.ascii	"\000\000\001\002\003\004\005\006\007\0224\230v\376\334"
+ 636      03040506 
+ 636      07123498 
+ 636      76FEDC
+ 637 000f ABCDEF01 		.ascii	"\253\315\357\001\000\001\002\003\004\005\006\007\022"
+ 637      00010203 
+ 637      04050607 
+ 637      12
+ 638 001c 349876FE 		.ascii	"4\230v\376\334\253\315\357\001"
+ 638      DCABCDEF 
+ 638      01
+ 639              		.section	.rodata.DBPL_uDefaultBaudRate,"a"
+ 640              		.align	1
+ 643              	DBPL_uDefaultBaudRate:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccXyCh97.s 			page 19
+
+
+ 644 0000 6000     		.short	96
+ 645              		.section	.rodata.bit_time_lookup_table,"a"
+ 646              		.set	.LANCHOR0,. + 0
+ 649              	bit_time_lookup_table:
+ 650 0000 68       		.byte	104
+ 651 0001 34       		.byte	52
+ 652 0002 1A       		.byte	26
+ 653 0003 11       		.byte	17
+ 654 0004 09       		.byte	9
+ 655 0005 08       		.byte	8
+ 656              		.text
+ 657              	.Letext0:
+ 658              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 659              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 660              		.file 4 "common/prog/std_lib/std_version.h"
+ 661              		.file 5 "common/prog/dbus/dbuspresentation_ecu_types.h"
+ 662              		.file 6 "common/prog/dbus/dbuspresentation_update.h"
+ 663              		.file 7 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 664              		.file 8 "common/prog/firmware_update/version/fwu_version.h"
+ 665              		.file 9 "common/prog/firmware_update/mal/moduleAdministration.h"
+ 666              		.file 10 "common/prog/dbus/dbusdll.h"
+ 667              		.file 11 "common/prog/dbus/dbusmapping.h"
+ 668              		.file 12 "common/prog/firmware_update/BootManager/BootManagerSharedData.h"
+ 669              		.file 13 "<built-in>"
+ 670              		.file 14 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 671              		.file 15 "common/prog/firmware_update/BootManager/BootManagerModule.h"
+ 672              		.file 16 "common/prog/MSP/mcal/msup.h"

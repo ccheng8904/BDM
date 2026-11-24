@@ -1,0 +1,609 @@
+
+out/BootManager/prog/FuncSafe/fsRom.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.uiSetupNextROMAddress:
+
+00000000 <uiSetupNextROMAddress>:
+
+    \pre        Called only at operational time. \n
+    \post       ROM channel work area updated, if necessary \n
+*/
+uint32_t  uiSetupNextROMAddress   (uint16_t ui16length)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    uint16_t uiStoredCrc;
+#endif
+
+   //  Add the size of data already checked and determine the space left inside the actual segment
+#ifdef FSF_CRC_32_BIT
+   FS_ROM_RamConBlock.pucRomPtr  += ui16length*sizeof(uint32_t);/*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+   2:	4c24      	ldr	r4, [pc, #144]	; (94 <uiSetupNextROMAddress+0x94>)
+   4:	0082      	lsls	r2, r0, #2
+   6:	6863      	ldr	r3, [r4, #4]
+#endif
+   //  Msg(4:0488) Performing pointer arithmetic.
+   //  MISRA-C:2004 Rule 17.4 <next>
+   //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+
+   FS_ROM_RamConBlock.uiROMDLen  -= ui16length;
+   8:	68a5      	ldr	r5, [r4, #8]
+   FS_ROM_RamConBlock.pucRomPtr  += ui16length*sizeof(uint32_t);/*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+   a:	189b      	adds	r3, r3, r2
+   FS_ROM_RamConBlock.uiROMDLen  -= ui16length;
+   c:	1a2d      	subs	r5, r5, r0
+   FS_ROM_RamConBlock.pucRomPtr  += ui16length*sizeof(uint32_t);/*lint !e9016 "Pointer arithmetic not allowed MisraC201 18.4 [advisory], required here */
+   e:	6063      	str	r3, [r4, #4]
+   FS_ROM_RamConBlock.uiROMDLen  -= ui16length;
+  10:	60a5      	str	r5, [r4, #8]
+   //  Has this ROM segment been checked?
+   if (FS_ROM_RamConBlock.uiROMDLen == 0u)
+  12:	d138      	bne.n	86 <uiSetupNextROMAddress+0x86>
+   {
+      FS_ROM_RamConBlock.ucSegIdx++; // Next ROM Segment
+  14:	78a3      	ldrb	r3, [r4, #2]
+
+      if (FS_ROM_RamConBlock.ucSegIdx >= FS_ROM_RamConBlock.patRom->ucSegmentCount)
+  16:	68e2      	ldr	r2, [r4, #12]
+      FS_ROM_RamConBlock.ucSegIdx++; // Next ROM Segment
+  18:	3301      	adds	r3, #1
+  1a:	b2db      	uxtb	r3, r3
+  1c:	70a3      	strb	r3, [r4, #2]
+      if (FS_ROM_RamConBlock.ucSegIdx >= FS_ROM_RamConBlock.patRom->ucSegmentCount)
+  1e:	7912      	ldrb	r2, [r2, #4]
+  20:	429a      	cmp	r2, r3
+  22:	d832      	bhi.n	8a <uiSetupNextROMAddress+0x8a>
+         //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+
+         //  Before move on to the next ROM module, the CRC-16 value from
+         //  the current ROM module need to be checked
+#ifdef FSF_CRC_32_BIT
+          FS_ROM_RamConBlock.ui32Crc = _FSF_ui32FinalizeCrcCalculation(FS_ROM_RamConBlock.ui32Crc);
+  24:	6960      	ldr	r0, [r4, #20]
+  26:	f7ff fffe 	bl	0 <_FSF_ui32FinalizeCrcCalculation>
+          ui32StoredCrc = *(FS_ROM_RamConBlock.patRom->pui32CRCValue);
+  2a:	68e3      	ldr	r3, [r4, #12]
+          FS_ROM_RamConBlock.ui32Crc = _FSF_ui32FinalizeCrcCalculation(FS_ROM_RamConBlock.ui32Crc);
+  2c:	6160      	str	r0, [r4, #20]
+          ui32StoredCrc = *(FS_ROM_RamConBlock.patRom->pui32CRCValue);
+  2e:	691b      	ldr	r3, [r3, #16]
+         if (FS_ROM_RamConBlock.ui32Crc != ui32StoredCrc)
+  30:	681b      	ldr	r3, [r3, #0]
+  32:	4298      	cmp	r0, r3
+  34:	d00a      	beq.n	4c <uiSetupNextROMAddress+0x4c>
+ *            MAL_INTEGRITY_IGNORE_ERROR: integrity check errors is ignored but calculation is executed
+ *            MAL_INTEGRITY_DISABLE_CALC: integrity check is disabled (errors + calculation)
+ */
+static inline enum MAL_integrityConfig MAL_getIntegrityOpt(void)
+{
+    return MAL_FwuOptBytes.integrityConfig;
+  36:	4b18      	ldr	r3, [pc, #96]	; (98 <uiSetupNextROMAddress+0x98>)
+  38:	781b      	ldrb	r3, [r3, #0]
+         if (FS_ROM_RamConBlock.uiCrc != uiStoredCrc)
+#endif//#ifdef FSF_CRC_32_BIT
+
+         {
+            // Rom check is always success (Error is ignored)
+             if(!FWU_isIntegCheckDisabledCalc() && !FWU_isIntegCheckErrorIgnored())
+  3a:	2bdc      	cmp	r3, #220	; 0xdc
+  3c:	d006      	beq.n	4c <uiSetupNextROMAddress+0x4c>
+  3e:	2b1e      	cmp	r3, #30
+  40:	d004      	beq.n	4c <uiSetupNextROMAddress+0x4c>
+             {
+                 FSF_vReportError((uint8_t)FSF_ROM_TEST, FSF_ROM_CRC_ERROR,(uint8_t)FS_ROM_RamConBlock.ucROMIdx);
+  42:	0029      	movs	r1, r5
+  44:	2002      	movs	r0, #2
+  46:	7862      	ldrb	r2, [r4, #1]
+  48:	f7ff fffe 	bl	0 <FSF_vReportError>
+             }
+         }
+
+         FS_ROM_RamConBlock.ucROMIdx++; // Next ROM Module
+  4c:	7863      	ldrb	r3, [r4, #1]
+         if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+  4e:	4a13      	ldr	r2, [pc, #76]	; (9c <uiSetupNextROMAddress+0x9c>)
+         FS_ROM_RamConBlock.ucROMIdx++; // Next ROM Module
+  50:	3301      	adds	r3, #1
+         if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+  52:	7812      	ldrb	r2, [r2, #0]
+         FS_ROM_RamConBlock.ucROMIdx++; // Next ROM Module
+  54:	b2db      	uxtb	r3, r3
+  56:	7063      	strb	r3, [r4, #1]
+         if (FS_ROM_RamConBlock.ucROMIdx < FSF_ucRomModuleCount)
+  58:	429a      	cmp	r2, r3
+  5a:	d914      	bls.n	86 <uiSetupNextROMAddress+0x86>
+         {
+            FS_ROM_RamConBlock.patRom++;
+  5c:	68e3      	ldr	r3, [r4, #12]
+  5e:	001a      	movs	r2, r3
+            //  Msg(2:0510) Arithmetic operation on pointer value that is possibly NULL.
+            //  Msg(4:0489) Increment or decrement operation performed on pointer.
+            //  MISRA-C:2004 Rule 17.4 <next>
+            //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+
+            FS_ROM_RamConBlock.patSeg          = FS_ROM_RamConBlock.patRom->patSegment;
+  60:	695b      	ldr	r3, [r3, #20]
+            FS_ROM_RamConBlock.patRom++;
+  62:	3214      	adds	r2, #20
+            FS_ROM_RamConBlock.patSeg          = FS_ROM_RamConBlock.patRom->patSegment;
+  64:	6123      	str	r3, [r4, #16]
+            //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+            //  REFERENCE - ISO-6.3.3.2 Semantics
+            //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+#ifdef FSF_CRC_32_BIT
+            FS_ROM_RamConBlock.ui32Crc           = (uint32_t)FSF_CRC_INIT;
+  66:	2301      	movs	r3, #1
+  68:	425b      	negs	r3, r3
+  6a:	6163      	str	r3, [r4, #20]
+            FS_ROM_RamConBlock.patRom++;
+  6c:	60e2      	str	r2, [r4, #12]
+            // Reset CRC calculation was moved into Xs file, because lib user now can select crc
+            // calculation type (SW/HW/...)
+            (void)_FSF_ui32ResetCrcCalculation();
+  6e:	f7ff fffe 	bl	0 <_FSF_ui32ResetCrcCalculation>
+#else
+            FS_ROM_RamConBlock.uiCrc           = (uint16_t)FSF_CRC_INIT;
+#endif
+            bSegChanged     = true;
+            FS_ROM_RamConBlock.ucSegIdx        = (uint8_t)0;
+  72:	2300      	movs	r3, #0
+  74:	70a3      	strb	r3, [r4, #2]
+#endif
+      }
+      if (bSegChanged != false)
+      {
+         // Segment has changed
+         FS_ROM_RamConBlock.pucRomPtr      = FS_ROM_RamConBlock.patSeg->pucStartSeg;
+  76:	6923      	ldr	r3, [r4, #16]
+  78:	681a      	ldr	r2, [r3, #0]
+         //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+         //  REFERENCE - ISO-6.3.3.2 Semantics
+         //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+         /*lint -save -e946 -e947 -e9029 tested to work correctly */
+#ifdef FSF_CRC_32_BIT
+         FS_ROM_RamConBlock.uiROMDLen      = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamConBlock.pucRomPtr) + 1u) / sizeof(uint32_t));
+  7a:	685b      	ldr	r3, [r3, #4]
+         FS_ROM_RamConBlock.pucRomPtr      = FS_ROM_RamConBlock.patSeg->pucStartSeg;
+  7c:	6062      	str	r2, [r4, #4]
+         FS_ROM_RamConBlock.uiROMDLen      = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamConBlock.pucRomPtr) + 1u) / sizeof(uint32_t));
+  7e:	1a9b      	subs	r3, r3, r2
+  80:	3301      	adds	r3, #1
+  82:	089b      	lsrs	r3, r3, #2
+  84:	60a3      	str	r3, [r4, #8]
+#endif
+         /*lint -restore -e946 -e947 -e9029 */
+      }
+   }
+
+   return FS_ROM_RamConBlock.uiROMDLen;
+  86:	68a0      	ldr	r0, [r4, #8]
+}
+  88:	bd70      	pop	{r4, r5, r6, pc}
+         FS_ROM_RamConBlock.patSeg++;
+  8a:	6923      	ldr	r3, [r4, #16]
+  8c:	3308      	adds	r3, #8
+  8e:	6123      	str	r3, [r4, #16]
+      if (bSegChanged != false)
+  90:	e7f1      	b.n	76 <uiSetupNextROMAddress+0x76>
+  92:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.ucInternalROMTask:
+
+00000000 <ucInternalROMTask>:
+}
+
+
+//  ROM Indirect Access
+STATIC  uint8_t   ucInternalROMTask   (void)
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   if (FSF_ucRomModuleCount == 0u)
+   2:	4b32      	ldr	r3, [pc, #200]	; (cc <ucInternalROMTask+0xcc>)
+   4:	781d      	ldrb	r5, [r3, #0]
+   6:	2d00      	cmp	r5, #0
+   8:	d01e      	beq.n	48 <ucInternalROMTask+0x48>
+      TH_FSFP_PushOutPar(TP_FSF_ROM_No_Configuration);
+#endif
+      //  Return this value in order not to run into an indefinite loop.
+      return  (uint8_t)TASK_NOT_INITIALISED;
+   }
+   switch (FS_ROM_RamConBlock.ucROMTState)
+   a:	4c31      	ldr	r4, [pc, #196]	; (d0 <ucInternalROMTask+0xd0>)
+   c:	7825      	ldrb	r5, [r4, #0]
+   e:	2d01      	cmp	r5, #1
+  10:	d01c      	beq.n	4c <ucInternalROMTask+0x4c>
+  12:	2d02      	cmp	r5, #2
+  14:	d04e      	beq.n	b4 <ucInternalROMTask+0xb4>
+  16:	2d00      	cmp	r5, #0
+  18:	d151      	bne.n	be <ucInternalROMTask+0xbe>
+*/
+STATIC  void    vROMCheckOngoing     (void)
+{
+#ifndef SYSTEMTEST_F15
+   //  Report ongoing ROM check.
+   FSF_vReportOnGoing((uint8_t)FSF_ROM_TEST);
+  1a:	2002      	movs	r0, #2
+  1c:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+      FS_ROM_RamConBlock.patRom        = (T_ROM_Module FSTH_CONST *)(&FSF_atRomModules[0]); /*lint !e927 !e929 cast tested to work correctly */
+  20:	4b2c      	ldr	r3, [pc, #176]	; (d4 <ucInternalROMTask+0xd4>)
+      FS_ROM_RamConBlock.ucROMIdx      = (uint8_t)0;                         //!< First ROM Mod. Index
+  22:	7065      	strb	r5, [r4, #1]
+      FS_ROM_RamConBlock.patRom        = (T_ROM_Module FSTH_CONST *)(&FSF_atRomModules[0]); /*lint !e927 !e929 cast tested to work correctly */
+  24:	60e3      	str	r3, [r4, #12]
+      FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< First ROM Segment
+  26:	681b      	ldr	r3, [r3, #0]
+      FS_ROM_RamConBlock.ucSegIdx      = (uint8_t)0;                         //!< First ROM Seg. Index
+  28:	70a5      	strb	r5, [r4, #2]
+      FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< First Data Position in ROM
+  2a:	681a      	ldr	r2, [r3, #0]
+      FS_ROM_RamConBlock.patSeg        = FS_ROM_RamConBlock.patRom->patSegment;               //!< First ROM Segment
+  2c:	6123      	str	r3, [r4, #16]
+      FS_ROM_RamConBlock.uiROMDLen     = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamConBlock.pucRomPtr) + 1u) / sizeof(uint32_t)); //!< Partial CRC Data length
+  2e:	685b      	ldr	r3, [r3, #4]
+         FS_ROM_RamConBlock.ucROMTState = ucInitialiseROMChannel();
+  30:	3501      	adds	r5, #1
+      FS_ROM_RamConBlock.uiROMDLen     = (((FS_ROM_RamConBlock.patSeg->pucEndSeg - FS_ROM_RamConBlock.pucRomPtr) + 1u) / sizeof(uint32_t)); //!< Partial CRC Data length
+  32:	1a9b      	subs	r3, r3, r2
+  34:	3301      	adds	r3, #1
+  36:	089b      	lsrs	r3, r3, #2
+  38:	60a3      	str	r3, [r4, #8]
+      FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+  3a:	2301      	movs	r3, #1
+  3c:	425b      	negs	r3, r3
+      FS_ROM_RamConBlock.pucRomPtr     = FS_ROM_RamConBlock.patSeg->pucStartSeg;              //!< First Data Position in ROM
+  3e:	6062      	str	r2, [r4, #4]
+      FS_ROM_RamConBlock.ui32Crc        = ui32InitializeCRCValue();         //!< CRC Initial value
+  40:	6163      	str	r3, [r4, #20]
+      (void)_FSF_ui32ResetCrcCalculation();
+  42:	f7ff fffe 	bl	0 <_FSF_ui32ResetCrcCalculation>
+         FS_ROM_RamConBlock.ucROMTState = ucInitialiseROMChannel();
+  46:	7025      	strb	r5, [r4, #0]
+}
+  48:	0028      	movs	r0, r5
+  4a:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+         uint16_t ui16Partlen = FS_ROM_RamConBlock.patRom->ui16CycleBytesCount;
+  4c:	68e3      	ldr	r3, [r4, #12]
+  4e:	88de      	ldrh	r6, [r3, #6]
+         if (ui16Partlen > FS_ROM_RamConBlock.uiROMDLen)
+  50:	68a3      	ldr	r3, [r4, #8]
+  52:	429e      	cmp	r6, r3
+  54:	d900      	bls.n	58 <ucInternalROMTask+0x58>
+            ui16Partlen = (uint16_t)FS_ROM_RamConBlock.uiROMDLen;
+  56:	b29e      	uxth	r6, r3
+   FSF_vReportOnGoing((uint8_t)FSF_ROM_TEST);
+  58:	2002      	movs	r0, #2
+  5a:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   return  FS_ROM_RamConBlock.patRom->pfROMReady(pucData,ui16length);
+  5e:	68e3      	ldr	r3, [r4, #12]
+  60:	0031      	movs	r1, r6
+  62:	68db      	ldr	r3, [r3, #12]
+  64:	6860      	ldr	r0, [r4, #4]
+  66:	4798      	blx	r3
+         if (bExtIsROMReady(FS_ROM_RamConBlock.pucRomPtr,ui16Partlen) != false)
+  68:	2800      	cmp	r0, #0
+  6a:	d0ed      	beq.n	48 <ucInternalROMTask+0x48>
+   return  FS_ROM_RamConBlock.patRom->pfROMRead(pucData,ui16length);
+  6c:	68e3      	ldr	r3, [r4, #12]
+  6e:	0031      	movs	r1, r6
+  70:	689b      	ldr	r3, [r3, #8]
+  72:	6860      	ldr	r0, [r4, #4]
+            FS_ROM_RamConBlock.ui32Crc = uiCalculateCRC32  (FS_ROM_RamConBlock.ui32Crc, (FSTH_CONST uint32_t*)pucExtROMRead((uint8_t*)FS_ROM_RamConBlock.pucRomPtr,ui16Partlen),ui16Partlen);/*lint !e927 !e926 cast tested to work correctly */
+  74:	6967      	ldr	r7, [r4, #20]
+   return  FS_ROM_RamConBlock.patRom->pfROMRead(pucData,ui16length);
+  76:	4798      	blx	r3
+            FS_ROM_RamConBlock.ui32Crc = uiCalculateCRC32  (FS_ROM_RamConBlock.ui32Crc, (FSTH_CONST uint32_t*)pucExtROMRead((uint8_t*)FS_ROM_RamConBlock.pucRomPtr,ui16Partlen),ui16Partlen);/*lint !e927 !e926 cast tested to work correctly */
+  78:	0032      	movs	r2, r6
+   return  FS_ROM_RamConBlock.patRom->pfROMRead(pucData,ui16length);
+  7a:	0001      	movs	r1, r0
+            FS_ROM_RamConBlock.ui32Crc = uiCalculateCRC32  (FS_ROM_RamConBlock.ui32Crc, (FSTH_CONST uint32_t*)pucExtROMRead((uint8_t*)FS_ROM_RamConBlock.pucRomPtr,ui16Partlen),ui16Partlen);/*lint !e927 !e926 cast tested to work correctly */
+  7c:	0038      	movs	r0, r7
+  7e:	f7ff fffe 	bl	0 <uiCalculateCRC32>
+  82:	6160      	str	r0, [r4, #20]
+            FS_ROM_RamConBlock.uiROMDLen = uiSetupNextROMAddress (ui16Partlen);
+  84:	0030      	movs	r0, r6
+  86:	f7ff fffe 	bl	0 <ucInternalROMTask>
+  8a:	60a0      	str	r0, [r4, #8]
+            if (FS_ROM_RamConBlock.uiROMDLen == 0u)
+  8c:	2800      	cmp	r0, #0
+  8e:	d1db      	bne.n	48 <ucInternalROMTask+0x48>
+   FSF_vReportSuccess((uint8_t)FSF_ROM_TEST);
+  90:	3002      	adds	r0, #2
+  92:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+   _FSF_vNotifyROMCheckComplete();
+  96:	f7ff fffe 	bl	0 <_FSF_vNotifyROMCheckComplete>
+   ucROMCheckCycleCount++;
+  9a:	4a0f      	ldr	r2, [pc, #60]	; (d8 <ucInternalROMTask+0xd8>)
+  9c:	7813      	ldrb	r3, [r2, #0]
+  9e:	3301      	adds	r3, #1
+  a0:	7013      	strb	r3, [r2, #0]
+   return _FSF_bIsROMAtOnce();
+  a2:	f7ff fffe 	bl	0 <_FSF_bIsROMAtOnce>
+               if (bIsROMAtOnce() != false)
+  a6:	2800      	cmp	r0, #0
+  a8:	d002      	beq.n	b0 <ucInternalROMTask+0xb0>
+                  FS_ROM_RamConBlock.ucROMTState = (uint8_t)FSF_ROM_CHECK_FINISH;
+  aa:	2302      	movs	r3, #2
+  ac:	7023      	strb	r3, [r4, #0]
+  ae:	e7cb      	b.n	48 <ucInternalROMTask+0x48>
+                  FS_ROM_RamConBlock.ucROMTState = (uint8_t)FSF_ROM_CHECK_RESTART;
+  b0:	7020      	strb	r0, [r4, #0]
+  b2:	e7c9      	b.n	48 <ucInternalROMTask+0x48>
+   FSF_vReportSuccess((uint8_t)FSF_ROM_TEST);
+  b4:	0028      	movs	r0, r5
+  b6:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+   return  (uint8_t)TASK_INITIALISED;
+  ba:	2501      	movs	r5, #1
+         break;
+  bc:	e7c4      	b.n	48 <ucInternalROMTask+0x48>
+         FSF_vReportError((uint8_t)FSF_ROM_TEST,(uint8_t)FSF_ERR_INVALID_STATE,(uint8_t)0);
+  be:	2200      	movs	r2, #0
+  c0:	2107      	movs	r1, #7
+  c2:	2002      	movs	r0, #2
+  c4:	f7ff fffe 	bl	0 <FSF_vReportError>
+  c8:	e7f7      	b.n	ba <ucInternalROMTask+0xba>
+  ca:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.FSF_ucRomHandleTask:
+
+00000000 <FSF_ucRomHandleTask>:
+   0:	4b1e      	ldr	r3, [pc, #120]	; (7c <FSF_ucRomHandleTask+0x7c>)
+
+    \pre        FSCOM runs in its operational state\n
+    \post       Partial ROM data checked.
+*/
+uint8_t FSF_ucRomHandleTask(void)
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+   uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+
+   if(FWU_isIntegCheckDisabledCalc())
+   4:	781b      	ldrb	r3, [r3, #0]
+   6:	2bdc      	cmp	r3, #220	; 0xdc
+   8:	d105      	bne.n	16 <FSF_ucRomHandleTask+0x16>
+   FSF_vReportSuccess((uint8_t)FSF_ROM_TEST);
+   a:	2002      	movs	r0, #2
+   c:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+   {
+       vROMCheckSuccessfullyCompleted();
+       return ucRetVal;
+  10:	2401      	movs	r4, #1
+
+   /* calc new checksum at exit of task handler */
+   _FSF_RAM_CON_vDoUpdateCheckInRomModule();
+
+   return ucRetVal;
+}
+  12:	0020      	movs	r0, r4
+  14:	bd70      	pop	{r4, r5, r6, pc}
+   _FSF_RAM_CON_vDoCheckInRomModule();
+  16:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vDoCheckInRomModule>
+   if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_RESTART)
+  1a:	4d19      	ldr	r5, [pc, #100]	; (80 <FSF_ucRomHandleTask+0x80>)
+  1c:	782b      	ldrb	r3, [r5, #0]
+  1e:	2b00      	cmp	r3, #0
+  20:	d103      	bne.n	2a <FSF_ucRomHandleTask+0x2a>
+   return _FSF_bIsROMAtOnceAllowed();
+  22:	f7ff fffe 	bl	0 <_FSF_bIsROMAtOnceAllowed>
+      if (bIsROMAtOnceAllowed() == false)
+  26:	2800      	cmp	r0, #0
+  28:	d0ef      	beq.n	a <FSF_ucRomHandleTask+0xa>
+   return _FSF_bIsROMAtOnce();
+  2a:	f7ff fffe 	bl	0 <_FSF_bIsROMAtOnce>
+   if (bIsROMAtOnce() == false)
+  2e:	2800      	cmp	r0, #0
+  30:	d105      	bne.n	3e <FSF_ucRomHandleTask+0x3e>
+      ucRetVal = ucInternalROMTask ();
+  32:	f7ff fffe 	bl	0 <FSF_ucRomHandleTask>
+  36:	0004      	movs	r4, r0
+   _FSF_RAM_CON_vDoUpdateCheckInRomModule();
+  38:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vDoUpdateCheckInRomModule>
+   return ucRetVal;
+  3c:	e7e9      	b.n	12 <FSF_ucRomHandleTask+0x12>
+      if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_FINISH)
+  3e:	782b      	ldrb	r3, [r5, #0]
+  40:	2b02      	cmp	r3, #2
+  42:	d0f6      	beq.n	32 <FSF_ucRomHandleTask+0x32>
+   return  _FSF_bCheckINTduringROMCheck();
+  44:	f7ff fffe 	bl	0 <_FSF_bCheckINTduringROMCheck>
+         if (bCheckINTduringROMCheck() == false)
+  48:	2800      	cmp	r0, #0
+  4a:	d101      	bne.n	50 <FSF_ucRomHandleTask+0x50>
+            (void)FSF_ucIsrHandleTask ();
+  4c:	f7ff fffe 	bl	0 <FSF_ucIsrHandleTask>
+{
+  50:	2401      	movs	r4, #1
+  52:	e007      	b.n	64 <FSF_ucRomHandleTask+0x64>
+   return  _FSF_bCheckINTduringROMCheck();
+  54:	f7ff fffe 	bl	0 <_FSF_bCheckINTduringROMCheck>
+               if (bCheckINTduringROMCheck() == true)
+  58:	2800      	cmp	r0, #0
+  5a:	d003      	beq.n	64 <FSF_ucRomHandleTask+0x64>
+                  ucRetVal = FSF_ucIsrHandleTask ();
+  5c:	f7ff fffe 	bl	0 <FSF_ucIsrHandleTask>
+  60:	1e04      	subs	r4, r0, #0
+            if (ucRetVal == (uint8_t)TASK_NOT_INITIALISED)
+  62:	d009      	beq.n	78 <FSF_ucRomHandleTask+0x78>
+         while (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+  64:	782b      	ldrb	r3, [r5, #0]
+  66:	2b02      	cmp	r3, #2
+  68:	d0e6      	beq.n	38 <FSF_ucRomHandleTask+0x38>
+            ucRetVal = ucInternalROMTask ();
+  6a:	f7ff fffe 	bl	0 <FSF_ucRomHandleTask>
+  6e:	0004      	movs	r4, r0
+            vExtTriggerInternalWatchdog();
+  70:	f7ff fffe 	bl	0 <vExtTriggerInternalWatchdog>
+            if (ucRetVal != (uint8_t)TASK_NOT_INITIALISED)
+  74:	2c00      	cmp	r4, #0
+  76:	d1ed      	bne.n	54 <FSF_ucRomHandleTask+0x54>
+{
+  78:	2400      	movs	r4, #0
+  7a:	e7dd      	b.n	38 <FSF_ucRomHandleTask+0x38>
+	...
+
+Disassembly of section .text.FSF_ucRomTinyHandleTask:
+
+00000000 <FSF_ucRomTinyHandleTask>:
+
+uint8_t FSF_ucRomTinyHandleTask(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   uint8_t   ucRetVal = (uint8_t)TASK_INITIALISED;
+   //  Ask the application, if the ROM check is allowed to start. Do it only once per full check!
+   //  Thus, the application is asked in state FSF_ROM_CHECK_RESTART. In case of refusal, do not
+   //  start so the state of the channel remains unchanged. Instaed ask the application again.
+   if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_RESTART)
+   2:	4d12      	ldr	r5, [pc, #72]	; (4c <FSF_ucRomTinyHandleTask+0x4c>)
+   4:	782b      	ldrb	r3, [r5, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d109      	bne.n	1e <FSF_ucRomTinyHandleTask+0x1e>
+   return _FSF_bIsROMAtOnceAllowed();
+   a:	f7ff fffe 	bl	0 <_FSF_bIsROMAtOnceAllowed>
+   {
+      if (bIsROMAtOnceAllowed() == false)
+   e:	2800      	cmp	r0, #0
+  10:	d105      	bne.n	1e <FSF_ucRomTinyHandleTask+0x1e>
+   FSF_vReportSuccess((uint8_t)FSF_ROM_TEST);
+  12:	3002      	adds	r0, #2
+  14:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+//  Testpoint "TP_FSF_ROM_Check_Refused"
+#ifdef TH_FSCOM
+         TH_FSFP_PushOutPar(TP_FSF_ROM_Check_Refused);
+#endif
+         //no secure data touched --> no calculation of checksum
+         return (uint8_t)TASK_INITIALISED;
+  18:	2401      	movs	r4, #1
+         }
+      }
+   }
+
+   return ucRetVal;
+}
+  1a:	0020      	movs	r0, r4
+  1c:	bd70      	pop	{r4, r5, r6, pc}
+   return _FSF_bIsROMAtOnce();
+  1e:	f7ff fffe 	bl	0 <_FSF_bIsROMAtOnce>
+   if (bIsROMAtOnce() == false)
+  22:	2800      	cmp	r0, #0
+  24:	d103      	bne.n	2e <FSF_ucRomTinyHandleTask+0x2e>
+      ucRetVal = ucInternalROMTask ();
+  26:	f7ff fffe 	bl	0 <FSF_ucRomTinyHandleTask>
+  2a:	0004      	movs	r4, r0
+  2c:	e7f5      	b.n	1a <FSF_ucRomTinyHandleTask+0x1a>
+      if (FS_ROM_RamConBlock.ucROMTState == (uint8_t)FSF_ROM_CHECK_FINISH)
+  2e:	782b      	ldrb	r3, [r5, #0]
+  30:	2b02      	cmp	r3, #2
+  32:	d0f8      	beq.n	26 <FSF_ucRomTinyHandleTask+0x26>
+            ucRetVal = ucInternalROMTask ();
+  34:	f7ff fffe 	bl	0 <FSF_ucRomTinyHandleTask>
+  38:	0004      	movs	r4, r0
+            vExtTriggerInternalWatchdog();
+  3a:	f7ff fffe 	bl	0 <vExtTriggerInternalWatchdog>
+            if (ucRetVal == (uint8_t)TASK_NOT_INITIALISED)
+  3e:	2c00      	cmp	r4, #0
+  40:	d0eb      	beq.n	1a <FSF_ucRomTinyHandleTask+0x1a>
+         while (FS_ROM_RamConBlock.ucROMTState != (uint8_t)FSF_ROM_CHECK_FINISH)
+  42:	782b      	ldrb	r3, [r5, #0]
+  44:	2b02      	cmp	r3, #2
+  46:	d1f5      	bne.n	34 <FSF_ucRomTinyHandleTask+0x34>
+  48:	e7e7      	b.n	1a <FSF_ucRomTinyHandleTask+0x1a>
+  4a:	46c0      	nop			; (mov r8, r8)
+  4c:	00000000 	.word	0x00000000
+
+Disassembly of section .text._FSF_RAM_CON_vRomModuleCheckBySum:
+
+00000000 <_FSF_RAM_CON_vRomModuleCheckBySum>:
+
+
+void _FSF_RAM_CON_vRomModuleCheckBySum(void)
+{
+   0:	b510      	push	{r4, lr}
+     _FSF_RAM_CON_vCheckBySum(FS_ROM_ucCheckValueRamConBlock,
+   2:	4b04      	ldr	r3, [pc, #16]	; (14 <_FSF_RAM_CON_vRomModuleCheckBySum+0x14>)
+   4:	2118      	movs	r1, #24
+   6:	7818      	ldrb	r0, [r3, #0]
+   8:	4a03      	ldr	r2, [pc, #12]	; (18 <_FSF_RAM_CON_vRomModuleCheckBySum+0x18>)
+   a:	230e      	movs	r3, #14
+   c:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vCheckBySum>
+        (uint8_t)sizeof(FS_ROM_RamConBlock),
+        (const uint8_t*)(&FS_ROM_RamConBlock), /*lint !e927 !e928 cast tested to work correctly */
+        (uint8_t)(FSF_ERR_RAM_CON_IN_ROM));
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vRomModuleCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vRomModuleCheckByMirror>:
+
+void _FSF_RAM_CON_vRomModuleCheckByMirror(void)
+{
+    if (FS_ROM_bIsRamConInitDone == true) {
+   0:	4b07      	ldr	r3, [pc, #28]	; (20 <_FSF_RAM_CON_vRomModuleCheckByMirror+0x20>)
+{
+   2:	b510      	push	{r4, lr}
+    if (FS_ROM_bIsRamConInitDone == true) {
+   4:	781a      	ldrb	r2, [r3, #0]
+   6:	2a00      	cmp	r2, #0
+   8:	d006      	beq.n	18 <_FSF_RAM_CON_vRomModuleCheckByMirror+0x18>
+        _FSF_RAM_CON_vCheckByMirror((uint8_t) sizeof(FS_ROM_RamConBlock),
+   a:	230e      	movs	r3, #14
+   c:	2018      	movs	r0, #24
+   e:	4a05      	ldr	r2, [pc, #20]	; (24 <_FSF_RAM_CON_vRomModuleCheckByMirror+0x24>)
+  10:	4905      	ldr	r1, [pc, #20]	; (28 <_FSF_RAM_CON_vRomModuleCheckByMirror+0x28>)
+  12:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vCheckByMirror>
+                (const uint8_t*)(&(FS_ROM_RamConBlockMirror)), /*lint !e927 !e928 cast tested to work correctly */
+                (uint8_t) (FSF_ERR_RAM_CON_IN_ROM));
+    } else {
+        FS_ROM_bIsRamConInitDone = true;
+    }
+}
+  16:	bd10      	pop	{r4, pc}
+        FS_ROM_bIsRamConInitDone = true;
+  18:	2201      	movs	r2, #1
+  1a:	701a      	strb	r2, [r3, #0]
+}
+  1c:	e7fb      	b.n	16 <_FSF_RAM_CON_vRomModuleCheckByMirror+0x16>
+  1e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vRomModuleUpdateCheckBySum:
+
+00000000 <_FSF_RAM_CON_vRomModuleUpdateCheckBySum>:
+
+/*Axivion Disable MisraC2012-1.1 : Number of significant initial characters for external identifier not a problem with our tools */
+void _FSF_RAM_CON_vRomModuleUpdateCheckBySum(void)
+{
+   0:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vUpdateCheckBySum((uint8_t*)(&(FS_ROM_ucCheckValueRamConBlock)), /*lint !e927 !e926 cast tested to work correctly */
+   2:	2118      	movs	r1, #24
+   4:	4a02      	ldr	r2, [pc, #8]	; (10 <_FSF_RAM_CON_vRomModuleUpdateCheckBySum+0x10>)
+   6:	4803      	ldr	r0, [pc, #12]	; (14 <_FSF_RAM_CON_vRomModuleUpdateCheckBySum+0x14>)
+   8:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vUpdateCheckBySum>
+        (uint8_t)sizeof(FS_ROM_RamConBlock),
+        (const uint8_t*)(&FS_ROM_RamConBlock)); /*lint !e927 !e928 cast tested to work correctly */
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vRomModuleUpdateCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vRomModuleUpdateCheckByMirror>:
+
+void _FSF_RAM_CON_vRomModuleUpdateCheckByMirror(void)
+{
+   0:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t)sizeof(FS_ROM_RamConBlock),
+   2:	2018      	movs	r0, #24
+   4:	4a02      	ldr	r2, [pc, #8]	; (10 <_FSF_RAM_CON_vRomModuleUpdateCheckByMirror+0x10>)
+   6:	4903      	ldr	r1, [pc, #12]	; (14 <_FSF_RAM_CON_vRomModuleUpdateCheckByMirror+0x14>)
+   8:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vUpdateCheckByMirror>
+        (const uint8_t*)(&(FS_ROM_RamConBlock)), /*lint !e927 !e928 cast tested to work correctly */
+        (uint8_t*)(&(FS_ROM_RamConBlockMirror)));/*lint !e927 !e928 cast tested to work correctly */
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+	...

@@ -1,0 +1,1112 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fsRam.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.FSF_vRam_OneTimeCheck,"ax",%progbits
+  18              		.align	1
+  19              		.global	FSF_vRam_OneTimeCheck
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	FSF_vRam_OneTimeCheck:
+  25              	.LFB72:
+  26              		.file 1 "common/prog/FuncSafe/fsRam.c"
+   1:common/prog/FuncSafe/fsRam.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/fsRam.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/fsRam.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/fsRam.c ****  *
+   5:common/prog/FuncSafe/fsRam.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/fsRam.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/fsRam.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/fsRam.c ****  *
+   9:common/prog/FuncSafe/fsRam.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/fsRam.c ****  *  PROJECT          SW_LIB
+  11:common/prog/FuncSafe/fsRam.c ****  *  COMP_ABBREV      FSF
+  12:common/prog/FuncSafe/fsRam.c ****  ******************************************************************************/
+  13:common/prog/FuncSafe/fsRam.c **** 
+  14:common/prog/FuncSafe/fsRam.c **** /******************************************************************************/
+  15:common/prog/FuncSafe/fsRam.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/FuncSafe/fsRam.c **** /******************************************************************************/
+  17:common/prog/FuncSafe/fsRam.c **** /** \file fsRam.c
+  18:common/prog/FuncSafe/fsRam.c ****  *
+  19:common/prog/FuncSafe/fsRam.c ****  *  \ingroup  <DOXY_GROUP_FSF_RAM>
+  20:common/prog/FuncSafe/fsRam.c ****  *
+  21:common/prog/FuncSafe/fsRam.c ****  *  \brief    Implementation of package fsRam of library functional safety.
+  22:common/prog/FuncSafe/fsRam.c ****  *
+  23:common/prog/FuncSafe/fsRam.c ****  *  \details  The RAM area of a controller is checked by this task.
+  24:common/prog/FuncSafe/fsRam.c ****  *Its responsibility is separated into one task that is thought to be so-called one-time check, whi
+  25:common/prog/FuncSafe/fsRam.c ****  *startup of a controller, and the task handler, which is thought to check the RAM at normal operat
+  26:common/prog/FuncSafe/fsRam.c ****  *\n
+  27:common/prog/FuncSafe/fsRam.c ****  *\n
+  28:common/prog/FuncSafe/fsRam.c ****  *<b>Functional Safety RAM Check Component - Top-Level Design</b>
+  29:common/prog/FuncSafe/fsRam.c ****  *\n
+  30:common/prog/FuncSafe/fsRam.c ****  *\n
+  31:common/prog/FuncSafe/fsRam.c ****  *\li<b>Package Model </b>\n
+  32:common/prog/FuncSafe/fsRam.c ****  *\image html Package_RAM.jpg
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 2
+
+
+  33:common/prog/FuncSafe/fsRam.c ****  *\n
+  34:common/prog/FuncSafe/fsRam.c ****  *<b>Description </b>\n
+  35:common/prog/FuncSafe/fsRam.c ****  *The fsRam package provides the parts outlined in the model. By compilation switch, the Ram task m
+  36:common/prog/FuncSafe/fsRam.c ****  *the usual operating mode or in test harness mode. When running in the usual operating mode, the t
+  37:common/prog/FuncSafe/fsRam.c ****  *will not be linked to the package. When running in test harness mode, stub services are provided,
+  38:common/prog/FuncSafe/fsRam.c ****  *RAM checking interface is separated from being called and only the test server will be able to ca
+  39:common/prog/FuncSafe/fsRam.c ****  *\n
+  40:common/prog/FuncSafe/fsRam.c ****  *<b>Rationale </b>\n
+  41:common/prog/FuncSafe/fsRam.c ****  *At normal operational work, checking the whole RAM at once is not possible, at least a very diffi
+  42:common/prog/FuncSafe/fsRam.c ****  *reason, it was decided to perform a full RAM check at startup only. Below an overview is provided
+  43:common/prog/FuncSafe/fsRam.c ****  *is used comparable to some other public algorithms. Fault models can be found at the respective i
+  44:common/prog/FuncSafe/fsRam.c ****  *\n
+  45:common/prog/FuncSafe/fsRam.c ****  *\image html RAM_Test_Algorithm.jpg
+  46:common/prog/FuncSafe/fsRam.c ****  *\n
+  47:common/prog/FuncSafe/fsRam.c ****  *As shown the quality of the implemented algorithm is comparable to the March Y algorithm extended
+  48:common/prog/FuncSafe/fsRam.c ****  *the March-LR algorithm. The comparison table shows the implemented algorithm to be able to cover 
+  49:common/prog/FuncSafe/fsRam.c ****  *data cells and address lines as well. The RAM check task is implemented using assembler language 
+  50:common/prog/FuncSafe/fsRam.c ****  *C-wrapper function on its top, thus it depends on the type of controller.
+  51:common/prog/FuncSafe/fsRam.c ****  *\n
+  52:common/prog/FuncSafe/fsRam.c ****  *During normal operational work, the March-X algorithm is used to continue checking the RAM. As th
+  53:common/prog/FuncSafe/fsRam.c ****  *\n
+  54:common/prog/FuncSafe/fsRam.c ****  *\n
+  55:common/prog/FuncSafe/fsRam.c ****  *\li<b>Input Document Reference(s) </b>\n
+  56:common/prog/FuncSafe/fsRam.c ****  *\n
+  57:common/prog/FuncSafe/fsRam.c ****  *<TABLE style="text-align: center">
+  58:common/prog/FuncSafe/fsRam.c ****  *<TR style="background-color:rgb(255,255,206)">
+  59:common/prog/FuncSafe/fsRam.c ****  *<TD>Reference</TD>
+  60:common/prog/FuncSafe/fsRam.c ****  *<TD>Ducument Title</TD>
+  61:common/prog/FuncSafe/fsRam.c ****  *<TD>Document Reference Name/Number</TD>
+  62:common/prog/FuncSafe/fsRam.c ****  *<TD>Version</TD>
+  63:common/prog/FuncSafe/fsRam.c ****  *<TD>Status</TD>
+  64:common/prog/FuncSafe/fsRam.c ****  *<TD>Release Date</TD>
+  65:common/prog/FuncSafe/fsRam.c ****  *</TR>
+  66:common/prog/FuncSafe/fsRam.c ****  *<TR>
+  67:common/prog/FuncSafe/fsRam.c ****  *<TD> [1] </TD>
+  68:common/prog/FuncSafe/fsRam.c ****  *<TD> Functional Safety Software Design document </TD>
+  69:common/prog/FuncSafe/fsRam.c ****  *<TD> FuncSafeSWSpec.pdf / 5560 0000003770 </TD>
+  70:common/prog/FuncSafe/fsRam.c ****  *<TD> Version 2.0 </TD>
+  71:common/prog/FuncSafe/fsRam.c ****  *<TD> Proposed </TD>
+  72:common/prog/FuncSafe/fsRam.c ****  *<TD> 08.05.2008 </TD>
+  73:common/prog/FuncSafe/fsRam.c ****  *</TR>
+  74:common/prog/FuncSafe/fsRam.c ****  *<TR>
+  75:common/prog/FuncSafe/fsRam.c ****  *<TD> [2] </TD>
+  76:common/prog/FuncSafe/fsRam.c ****  *<TD> Generic Functional Safety Software Specification</TD>
+  77:common/prog/FuncSafe/fsRam.c ****  *<TD> GenericFuncSafeSpec.pdf / 5560 0000007751 </TD>
+  78:common/prog/FuncSafe/fsRam.c ****  *<TD> Version 2.0 </TD>
+  79:common/prog/FuncSafe/fsRam.c ****  *<TD> Proposed </TD>
+  80:common/prog/FuncSafe/fsRam.c ****  *<TD> 08.05.2008 </TD>
+  81:common/prog/FuncSafe/fsRam.c ****  *</TR>
+  82:common/prog/FuncSafe/fsRam.c ****  *</TABLE>
+  83:common/prog/FuncSafe/fsRam.c ****  *\n
+  84:common/prog/FuncSafe/fsRam.c ****  */
+  85:common/prog/FuncSafe/fsRam.c **** 
+  86:common/prog/FuncSafe/fsRam.c **** #include "bsh_stdinc.h"
+  87:common/prog/FuncSafe/fsRam.c **** 
+  88:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+  89:common/prog/FuncSafe/fsRam.c **** #include "LibTypes.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 3
+
+
+  90:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fSafe.h"
+  91:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fSafeXS.h"
+  92:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fspriv.h"
+  93:common/prog/FuncSafe/fsRam.c **** #else
+  94:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fSafe.h"
+  95:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fSafeXS.h"
+  96:common/prog/FuncSafe/fsRam.c **** #include "hsup.h"
+  97:common/prog/FuncSafe/fsRam.c **** #include "FuncSafe/fspriv.h"
+  98:common/prog/FuncSafe/fsRam.c **** #endif
+  99:common/prog/FuncSafe/fsRam.c **** 
+ 100:common/prog/FuncSafe/fsRam.c **** /* Local macros ***********************************************************************************
+ 101:common/prog/FuncSafe/fsRam.c **** 
+ 102:common/prog/FuncSafe/fsRam.c **** /* ((RAM_BLOCKSIZE * sizeof(uint32)) + 4 bytes) => + 4 bytes which are omitted in Scramble (0, 2, 3
+ 103:common/prog/FuncSafe/fsRam.c **** #define COUNT_OF_TESTED_BYTES    ((uint32_t)RAM_BLOCKSIZE * (uint32_t)sizeof(uint32_t))
+ 104:common/prog/FuncSafe/fsRam.c **** 
+ 105:common/prog/FuncSafe/fsRam.c **** /* Local type definitions *************************************************************************
+ 106:common/prog/FuncSafe/fsRam.c **** 
+ 107:common/prog/FuncSafe/fsRam.c **** /* Local prototypes *******************************************************************************
+ 108:common/prog/FuncSafe/fsRam.c **** #ifdef OPERATIONAL_RAM_CHECK
+ 109:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRamOpercheck (uint8_t * pucRAM, uint8_t * pucDEXBuffer, uint8_t ucPatNoInv, uint8_
+ 110:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRAMCheckOngoing     (void);
+ 111:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRAMCheckSuccess     (void);
+ 112:common/prog/FuncSafe/fsRam.c **** #endif
+ 113:common/prog/FuncSafe/fsRam.c **** 
+ 114:common/prog/FuncSafe/fsRam.c **** /* RAM/ROM Variable definitions *******************************************************************
+ 115:common/prog/FuncSafe/fsRam.c **** #ifdef OPERATIONAL_RAM_CHECK
+ 116:common/prog/FuncSafe/fsRam.c **** STATIC  uint8_t       FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_RESTART;  //!<    The RAM task ha
+ 117:common/prog/FuncSafe/fsRam.c **** STATIC  uint8_t *     FSF_pucActualRAMAddress;                              //!<    The actual RAM 
+ 118:common/prog/FuncSafe/fsRam.c **** STATIC  FSTH_CONST uint8_t *     FSF_pucEndAdrRamSeg;
+ 119:common/prog/FuncSafe/fsRam.c **** STATIC  uint8_t       FSF_ucActualRAMIdx  = (uint8_t)0;                     //!<    The actual RAM 
+ 120:common/prog/FuncSafe/fsRam.c **** STATIC  uint8_t       FSF_ucPatternIdx    = (uint8_t)0;                     //!<    The actual chec
+ 121:common/prog/FuncSafe/fsRam.c **** #endif
+ 122:common/prog/FuncSafe/fsRam.c **** #ifdef  TH_FSCOM
+ 123:common/prog/FuncSafe/fsRam.c **** //  Actual RAM Configuration:
+ 124:common/prog/FuncSafe/fsRam.c **** #ifdef  OPERATIONAL_RAM_CHECK
+ 125:common/prog/FuncSafe/fsRam.c **** 
+ 126:common/prog/FuncSafe/fsRam.c **** //  Operational RAM check
+ 127:common/prog/FuncSafe/fsRam.c **** const   uint8_t       RAMConfig[2]    = {(uint8_t)true,(uint8_t)MARCHBUFLENGTH};
+ 128:common/prog/FuncSafe/fsRam.c **** 
+ 129:common/prog/FuncSafe/fsRam.c **** 
+ 130:common/prog/FuncSafe/fsRam.c **** //  Reserve three and two elements for test
+ 131:common/prog/FuncSafe/fsRam.c **** STATIC  char        RAMTestBuffer0[3 * MARCHBUFLENGTH]          = {0};
+ 132:common/prog/FuncSafe/fsRam.c **** STATIC  char        RAMTestBuffer1[2 * (MARCHBUFLENGTH - 3)]    = {0};
+ 133:common/prog/FuncSafe/fsRam.c **** 
+ 134:common/prog/FuncSafe/fsRam.c **** 
+ 135:common/prog/FuncSafe/fsRam.c **** //  RAM Segment Table.
+ 136:common/prog/FuncSafe/fsRam.c **** FSTH_CONST   T_RAM_Segment   FSF_atRamSegments[] = {
+ 137:common/prog/FuncSafe/fsRam.c ****    {(uint8_t *)RAMTestBuffer0,(uint8_t *)&RAMTestBuffer0[(3 * MARCHBUFLENGTH) - 1]},
+ 138:common/prog/FuncSafe/fsRam.c ****    {(uint8_t *)RAMTestBuffer1,(uint8_t *)&RAMTestBuffer1[(2 * (MARCHBUFLENGTH - 3)) - 1]}
+ 139:common/prog/FuncSafe/fsRam.c **** };
+ 140:common/prog/FuncSafe/fsRam.c **** 
+ 141:common/prog/FuncSafe/fsRam.c **** 
+ 142:common/prog/FuncSafe/fsRam.c **** //  Check Pattern Table
+ 143:common/prog/FuncSafe/fsRam.c **** FSTH_CONST   T_RAM_Pattern   FSF_asPatternTable[] = {    {MARCH_PATTERN_0_0,MARCH_PATTERN_1_0},
+ 144:common/prog/FuncSafe/fsRam.c ****                                                     {MARCH_PATTERN_0_1,MARCH_PATTERN_1_1},
+ 145:common/prog/FuncSafe/fsRam.c ****                                                     {MARCH_PATTERN_0_2,MARCH_PATTERN_1_2},
+ 146:common/prog/FuncSafe/fsRam.c ****                                                     {MARCH_PATTERN_0_3,MARCH_PATTERN_1_3}};
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 4
+
+
+ 147:common/prog/FuncSafe/fsRam.c **** 
+ 148:common/prog/FuncSafe/fsRam.c **** 
+ 149:common/prog/FuncSafe/fsRam.c **** //  RAM Module descriptor
+ 150:common/prog/FuncSafe/fsRam.c **** FSTH_CONST   T_RAM_Module    FSF_atRamModule   = {   (uint8_t)MARCHBUFLENGTH,
+ 151:common/prog/FuncSafe/fsRam.c ****                                                 (uint8_t)(sizeof(FSF_atRamSegments)/sizeof(T_RAM_Se
+ 152:common/prog/FuncSafe/fsRam.c ****                                                 (uint8_t)(sizeof(FSF_asPatternTable)/sizeof(T_RAM_P
+ 153:common/prog/FuncSafe/fsRam.c **** #else
+ 154:common/prog/FuncSafe/fsRam.c **** 
+ 155:common/prog/FuncSafe/fsRam.c **** //  No operational RAM check
+ 156:common/prog/FuncSafe/fsRam.c **** const   uint8_t   RAMConfig[2] = {(uint8_t)false,(uint8_t)0};
+ 157:common/prog/FuncSafe/fsRam.c **** #endif
+ 158:common/prog/FuncSafe/fsRam.c **** #endif
+ 159:common/prog/FuncSafe/fsRam.c **** 
+ 160:common/prog/FuncSafe/fsRam.c **** /* static function definitions ********************************************************************
+ 161:common/prog/FuncSafe/fsRam.c **** #ifdef OPERATIONAL_RAM_CHECK
+ 162:common/prog/FuncSafe/fsRam.c **** 
+ 163:common/prog/FuncSafe/fsRam.c **** /*=====================================================================================
+ 164:common/prog/FuncSafe/fsRam.c ****     Check a piece of RAM
+ 165:common/prog/FuncSafe/fsRam.c **** =====================================================================================*/
+ 166:common/prog/FuncSafe/fsRam.c **** 
+ 167:common/prog/FuncSafe/fsRam.c **** /** Do one operational check cycle
+ 168:common/prog/FuncSafe/fsRam.c **** This handler basically provide three different means:
+ 169:common/prog/FuncSafe/fsRam.c **** 1.) On call, it checks the addressed area against cell errors.
+ 170:common/prog/FuncSafe/fsRam.c **** 2.) It maintains the actual RAM segment length
+ 171:common/prog/FuncSafe/fsRam.c **** */
+ 172:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRamOpercheck (uint8_t * pucRAM, uint8_t * pucDEXBuffer, uint8_t ucPatNoInv, uint8_
+ 173:common/prog/FuncSafe/fsRam.c **** {
+ 174:common/prog/FuncSafe/fsRam.c **** 
+ 175:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 176:common/prog/FuncSafe/fsRam.c ****     Preserve some loop variables for test
+ 177:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 178:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 179:common/prog/FuncSafe/fsRam.c ****    //  Some Loop variables
+ 180:common/prog/FuncSafe/fsRam.c ****    uint8_t   i;
+ 181:common/prog/FuncSafe/fsRam.c ****    uint8_t * p;
+ 182:common/prog/FuncSafe/fsRam.c ****    uint8_t * q;
+ 183:common/prog/FuncSafe/fsRam.c **** #endif
+ 184:common/prog/FuncSafe/fsRam.c **** 
+ 185:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 186:common/prog/FuncSafe/fsRam.c ****     Disable all interrupts while checking
+ 187:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 188:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 189:common/prog/FuncSafe/fsRam.c ****    //  Only keep track of interrupt disabling
+ 190:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(TP_FSF_RAM_INT_Disabled);
+ 191:common/prog/FuncSafe/fsRam.c **** #else
+ 192:common/prog/FuncSafe/fsRam.c ****    //  Do it real!
+ 193:common/prog/FuncSafe/fsRam.c ****    HSUP_vDisableInt();
+ 194:common/prog/FuncSafe/fsRam.c ****    _FSF_vDoWhenPieceRamCheckStarted();
+ 195:common/prog/FuncSafe/fsRam.c **** #endif
+ 196:common/prog/FuncSafe/fsRam.c **** 
+ 197:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 198:common/prog/FuncSafe/fsRam.c ****     Test Harness code
+ 199:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 200:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 201:common/prog/FuncSafe/fsRam.c ****    //  Notify this piece of code has passed
+ 202:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(TP_FSF_FSF_vRamOpercheck);
+ 203:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(ucPatNoInv);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 5
+
+
+ 204:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(ucPatInv);
+ 205:common/prog/FuncSafe/fsRam.c ****    //  For test purposes:
+ 206:common/prog/FuncSafe/fsRam.c ****    //  - save the original data into the exchange buffer
+ 207:common/prog/FuncSafe/fsRam.c ****    for (i=(uint8_t)0,q = pucDEXBuffer, p = pucRAM; i < (uint8_t)MARCHBUFLENGTH; i++)
+ 208:common/prog/FuncSafe/fsRam.c ****    {
+ 209:common/prog/FuncSafe/fsRam.c ****       *q++ = *p++;
+ 210:common/prog/FuncSafe/fsRam.c ****    }
+ 211:common/prog/FuncSafe/fsRam.c ****    //  - then, fill the original data with the check pattern
+ 212:common/prog/FuncSafe/fsRam.c ****    for (i=(uint8_t)0,q = pucRAM; i < (uint8_t)MARCHBUFLENGTH; i++)
+ 213:common/prog/FuncSafe/fsRam.c ****    {
+ 214:common/prog/FuncSafe/fsRam.c ****       *q++ = ucPatNoInv;
+ 215:common/prog/FuncSafe/fsRam.c ****    }
+ 216:common/prog/FuncSafe/fsRam.c ****    //  - finally restore the original data part
+ 217:common/prog/FuncSafe/fsRam.c ****    for (i=(uint8_t)0,q = pucDEXBuffer, p = pucRAM; i < (uint8_t)MARCHBUFLENGTH; i++)
+ 218:common/prog/FuncSafe/fsRam.c ****    {
+ 219:common/prog/FuncSafe/fsRam.c ****       *p++ = *q++;
+ 220:common/prog/FuncSafe/fsRam.c ****    }
+ 221:common/prog/FuncSafe/fsRam.c **** #endif
+ 222:common/prog/FuncSafe/fsRam.c **** 
+ 223:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 224:common/prog/FuncSafe/fsRam.c ****     Production code
+ 225:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 226:common/prog/FuncSafe/fsRam.c **** #ifndef TH_FSCOM
+ 227:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 228:common/prog/FuncSafe/fsRam.c ****     Interface description R8c
+ 229:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 230:common/prog/FuncSafe/fsRam.c **** 
+ 231:common/prog/FuncSafe/fsRam.c ****    /**
+ 232:common/prog/FuncSafe/fsRam.c ****     Since the interface below is required to run as fast as possible, it is implemented in pure ASM
+ 233:common/prog/FuncSafe/fsRam.c ****     For R8C, IAR, this interface convention holds:
+ 234:common/prog/FuncSafe/fsRam.c ****     ucPatInv            R0H     as unsigned byte
+ 235:common/prog/FuncSafe/fsRam.c ****     ucPatNo Inv         R0L     as unsigned byte
+ 236:common/prog/FuncSafe/fsRam.c ****     pucDEXBuffer        R2      as unsigned word (pointer to near data)
+ 237:common/prog/FuncSafe/fsRam.c ****     pucRAM              A0      as unsigned word (pointer to near data)
+ 238:common/prog/FuncSafe/fsRam.c ****     */
+ 239:common/prog/FuncSafe/fsRam.c **** 
+ 240:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 241:common/prog/FuncSafe/fsRam.c ****     Interface description Hcs12
+ 242:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 243:common/prog/FuncSafe/fsRam.c **** 
+ 244:common/prog/FuncSafe/fsRam.c ****    /** For HCS12, METROWERKS, this interface convention holds:
+ 245:common/prog/FuncSafe/fsRam.c ****     ucPatInv            B       as unsigned byte
+ 246:common/prog/FuncSafe/fsRam.c ****     ucPatNo Inv         [SP]    as unsigned byte
+ 247:common/prog/FuncSafe/fsRam.c ****     pucDEXBuffer        [SP+1]  as unsigned word (pointer to near data)
+ 248:common/prog/FuncSafe/fsRam.c ****     pucRAM
+ 249:common/prog/FuncSafe/fsRam.c ****    */
+ 250:common/prog/FuncSafe/fsRam.c **** 
+ 251:common/prog/FuncSafe/fsRam.c ****    FSF_vRamOpercheck(pucRAM,pucDEXBuffer,ucPatNoInv,ucPatInv);
+ 252:common/prog/FuncSafe/fsRam.c **** #endif
+ 253:common/prog/FuncSafe/fsRam.c **** 
+ 254:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 255:common/prog/FuncSafe/fsRam.c ****     Re-Enable all interrupts
+ 256:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 257:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 258:common/prog/FuncSafe/fsRam.c ****    //  Only keep track of enebling
+ 259:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(TP_FSF_RAM_INT_Enabled);
+ 260:common/prog/FuncSafe/fsRam.c **** #else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 6
+
+
+ 261:common/prog/FuncSafe/fsRam.c ****    _FSF_vDoWhenPieceRamCheckFinished();
+ 262:common/prog/FuncSafe/fsRam.c ****    // Do it real!
+ 263:common/prog/FuncSafe/fsRam.c ****    HSUP_vEnableInt();
+ 264:common/prog/FuncSafe/fsRam.c **** #endif
+ 265:common/prog/FuncSafe/fsRam.c **** }
+ 266:common/prog/FuncSafe/fsRam.c **** 
+ 267:common/prog/FuncSafe/fsRam.c **** /*=====================================================================================
+ 268:common/prog/FuncSafe/fsRam.c ****     Notify RAM check ongoing
+ 269:common/prog/FuncSafe/fsRam.c **** =====================================================================================*/
+ 270:common/prog/FuncSafe/fsRam.c **** /** RAM Check Ongoing
+ 271:common/prog/FuncSafe/fsRam.c ****     This function is called if a RAM check cycle is ongoing. \n
+ 272:common/prog/FuncSafe/fsRam.c **** 
+ 273:common/prog/FuncSafe/fsRam.c ****     \param      none
+ 274:common/prog/FuncSafe/fsRam.c ****     \pre        none. \n
+ 275:common/prog/FuncSafe/fsRam.c **** */
+ 276:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRAMCheckOngoing     (void)
+ 277:common/prog/FuncSafe/fsRam.c **** {
+ 278:common/prog/FuncSafe/fsRam.c **** #ifdef SYSTEMTEST_F15b
+ 279:common/prog/FuncSafe/fsRam.c ****    //  System Test Case F15b
+ 280:common/prog/FuncSafe/fsRam.c ****    //  The RAM channel is not ongoing, it remains idle
+ 281:common/prog/FuncSafe/fsRam.c **** #else
+ 282:common/prog/FuncSafe/fsRam.c ****    //  Report ongoing RAM check.
+ 283:common/prog/FuncSafe/fsRam.c ****    FSF_vReportOnGoing((uint8_t)FSF_RAM_TEST);
+ 284:common/prog/FuncSafe/fsRam.c **** #endif
+ 285:common/prog/FuncSafe/fsRam.c **** }
+ 286:common/prog/FuncSafe/fsRam.c **** 
+ 287:common/prog/FuncSafe/fsRam.c **** /*=====================================================================================
+ 288:common/prog/FuncSafe/fsRam.c ****     Notify RAM check successfully completed
+ 289:common/prog/FuncSafe/fsRam.c **** =====================================================================================*/
+ 290:common/prog/FuncSafe/fsRam.c **** /** RAM Check Success
+ 291:common/prog/FuncSafe/fsRam.c ****     This function is called if a RAM check cycle is completed. \n
+ 292:common/prog/FuncSafe/fsRam.c **** 
+ 293:common/prog/FuncSafe/fsRam.c ****     \param      none
+ 294:common/prog/FuncSafe/fsRam.c ****     \pre        none. \n
+ 295:common/prog/FuncSafe/fsRam.c **** */
+ 296:common/prog/FuncSafe/fsRam.c **** STATIC  void    vRAMCheckSuccess     (void)
+ 297:common/prog/FuncSafe/fsRam.c **** {
+ 298:common/prog/FuncSafe/fsRam.c **** #ifdef SYSTEMTEST_F19b
+ 299:common/prog/FuncSafe/fsRam.c ****    //  System Test Case F19b
+ 300:common/prog/FuncSafe/fsRam.c ****    //  The RAM channel does not complete in time
+ 301:common/prog/FuncSafe/fsRam.c **** #else
+ 302:common/prog/FuncSafe/fsRam.c ****    //  Report successfully completed RAM check.
+ 303:common/prog/FuncSafe/fsRam.c ****    FSF_vReportSuccess((uint8_t)FSF_RAM_TEST);
+ 304:common/prog/FuncSafe/fsRam.c **** #endif
+ 305:common/prog/FuncSafe/fsRam.c **** }
+ 306:common/prog/FuncSafe/fsRam.c **** #endif
+ 307:common/prog/FuncSafe/fsRam.c **** 
+ 308:common/prog/FuncSafe/fsRam.c **** /*=================================================================================================
+ 309:common/prog/FuncSafe/fsRam.c ****     external function definitions
+ 310:common/prog/FuncSafe/fsRam.c **** ===================================================================================================
+ 311:common/prog/FuncSafe/fsRam.c **** #if (!defined(WIN32) && defined(MC9S12GC96))
+ 312:common/prog/FuncSafe/fsRam.c **** #pragma CODE_SEG NON_BANKED
+ 313:common/prog/FuncSafe/fsRam.c **** #endif
+ 314:common/prog/FuncSafe/fsRam.c **** 
+ 315:common/prog/FuncSafe/fsRam.c **** // The RAM One-time check handler
+ 316:common/prog/FuncSafe/fsRam.c **** void FSF_vRam_OneTimeCheck(void)
+ 317:common/prog/FuncSafe/fsRam.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 7
+
+
+  27              		.loc 1 317 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 318:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 319:common/prog/FuncSafe/fsRam.c ****    TH_FSFP_PushOutPar(TP_FSF_vRam_OneTimeCheck);
+ 320:common/prog/FuncSafe/fsRam.c **** #else
+ 321:common/prog/FuncSafe/fsRam.c ****    FSF_vRamcheck(FSF_atRamSegments, FSF_u32GetNumberOfRamSegments(), 0u);
+  31              		.loc 1 321 4 view .LVU1
+ 317:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+  32              		.loc 1 317 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 321 4 view .LVU3
+  39 0002 FFF7FEFF 		bl	FSF_u32GetNumberOfRamSegments
+  40              	.LVL0:
+ 322:common/prog/FuncSafe/fsRam.c **** #endif
+ 323:common/prog/FuncSafe/fsRam.c **** }
+  41              		.loc 1 323 1 view .LVU4
+  42              		@ sp needed
+ 321:common/prog/FuncSafe/fsRam.c **** #endif
+  43              		.loc 1 321 4 view .LVU5
+  44 0006 034B     		ldr	r3, .L2
+  45 0008 0100     		movs	r1, r0
+  46 000a 0022     		movs	r2, #0
+  47 000c 1800     		movs	r0, r3
+  48 000e FFF7FEFF 		bl	FSF_vRamcheck
+  49              	.LVL1:
+  50              		.loc 1 323 1 view .LVU6
+  51 0012 10BD     		pop	{r4, pc}
+  52              	.L3:
+  53              		.align	2
+  54              	.L2:
+  55 0014 00000000 		.word	FSF_atRamSegments
+  56              		.cfi_endproc
+  57              	.LFE72:
+  59              		.section	.text.FSF_ucRamHandleTask,"ax",%progbits
+  60              		.align	1
+  61              		.global	FSF_ucRamHandleTask
+  62              		.syntax unified
+  63              		.code	16
+  64              		.thumb_func
+  66              	FSF_ucRamHandleTask:
+  67              	.LFB73:
+ 324:common/prog/FuncSafe/fsRam.c **** 
+ 325:common/prog/FuncSafe/fsRam.c **** // The RAM operational check handler
+ 326:common/prog/FuncSafe/fsRam.c **** uint8_t FSF_ucRamHandleTask(void)
+ 327:common/prog/FuncSafe/fsRam.c **** {
+  68              		.loc 1 327 1 is_stmt 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 8
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+ 328:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+ 329:common/prog/FuncSafe/fsRam.c ****     The operational RAM check
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 8
+
+
+ 330:common/prog/FuncSafe/fsRam.c **** ======================================================================*/
+ 331:common/prog/FuncSafe/fsRam.c **** #ifdef OPERATIONAL_RAM_CHECK
+ 332:common/prog/FuncSafe/fsRam.c ****    switch (FSF_ucRamTaskState)
+  72              		.loc 1 332 4 view .LVU8
+ 327:common/prog/FuncSafe/fsRam.c **** /*======================================================================
+  73              		.loc 1 327 1 is_stmt 0 view .LVU9
+  74 0000 F7B5     		push	{r0, r1, r2, r4, r5, r6, r7, lr}
+  75              	.LCFI1:
+  76              		.cfi_def_cfa_offset 32
+  77              		.cfi_offset 0, -32
+  78              		.cfi_offset 1, -28
+  79              		.cfi_offset 2, -24
+  80              		.cfi_offset 4, -20
+  81              		.cfi_offset 5, -16
+  82              		.cfi_offset 6, -12
+  83              		.cfi_offset 7, -8
+  84              		.cfi_offset 14, -4
+  85              		.loc 1 332 4 view .LVU10
+  86 0002 3D4C     		ldr	r4, .L21
+  87 0004 2078     		ldrb	r0, [r4]
+  88 0006 0328     		cmp	r0, #3
+  89 0008 00D9     		bls	.LCB46
+  90 000a 6FE0     		b	.L5	@long jump
+  91              	.LCB46:
+  92 000c FFF7FEFF 		bl	__gnu_thumb1_case_uqi
+  93              	.L7:
+  94 0010 02       		.byte	(.L10-.L7)/2
+  95 0011 20       		.byte	(.L9-.L7)/2
+  96 0012 48       		.byte	(.L8-.L7)/2
+  97 0013 5D       		.byte	(.L6-.L7)/2
+  98              		.p2align 1
+  99              	.L10:
+ 333:common/prog/FuncSafe/fsRam.c ****    {
+ 334:common/prog/FuncSafe/fsRam.c ****       case (uint8_t)FSF_RAM_CHECK_RESTART:
+ 335:common/prog/FuncSafe/fsRam.c ****       {
+ 336:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 337:common/prog/FuncSafe/fsRam.c ****     RAM check initialisation
+ 338:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 339:common/prog/FuncSafe/fsRam.c ****           /** Restart the RAM check again. But, do not change the actual check pattern at this poin
+ 340:common/prog/FuncSafe/fsRam.c ****           */
+ 341:common/prog/FuncSafe/fsRam.c **** #ifdef FSF_RAM_4_BYTES_AT_ONCE
+ 342:common/prog/FuncSafe/fsRam.c ****           //  Before start of the RAM check, the data exchange buffer has to be checked. The physic
+ 343:common/prog/FuncSafe/fsRam.c ****           //  location of the data exchange buffer is just behind RAMTOP. Since this area has to be
+ 344:common/prog/FuncSafe/fsRam.c ****           //  excluded from operational checking, it is checked separately at this point.
+ 345:common/prog/FuncSafe/fsRam.c **** 
+ 346:common/prog/FuncSafe/fsRam.c ****           // **************************************************************************
+ 347:common/prog/FuncSafe/fsRam.c ****           //             Check the data exchange buffer. (Data is not saved)
+ 348:common/prog/FuncSafe/fsRam.c ****           // **************************************************************************
+ 349:common/prog/FuncSafe/fsRam.c ****           vRamOpercheck( FSF_arMarchDataBuffer,
+ 100              		.loc 1 349 11 is_stmt 1 view .LVU11
+ 101 0014 394B     		ldr	r3, .L21+4
+ 102 0016 1A78     		ldrb	r2, [r3]
+ 350:common/prog/FuncSafe/fsRam.c ****                                   &FSF_arMarchDataBuffer[MARCHBUFLENGTH/2],
+ 351:common/prog/FuncSafe/fsRam.c ****           //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 352:common/prog/FuncSafe/fsRam.c ****           //  REFERENCE - ISO-6.3.3.2 Semantics
+ 353:common/prog/FuncSafe/fsRam.c ****           //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 354:common/prog/FuncSafe/fsRam.c ****                                   FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 9
+
+
+ 103              		.loc 1 354 71 is_stmt 0 view .LVU12
+ 104 0018 394B     		ldr	r3, .L21+8
+ 105 001a 5200     		lsls	r2, r2, #1
+ 106 001c D55C     		ldrb	r5, [r2, r3]
+ 355:common/prog/FuncSafe/fsRam.c ****                                   FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 107              		.loc 1 355 71 view .LVU13
+ 108 001e 9B18     		adds	r3, r3, r2
+ 109 0020 5E78     		ldrb	r6, [r3, #1]
+ 110              	.LVL2:
+ 111              	.LBB10:
+ 112              	.LBI10:
+ 172:common/prog/FuncSafe/fsRam.c **** {
+ 113              		.loc 1 172 17 is_stmt 1 view .LVU14
+ 114              	.LBB11:
+ 193:common/prog/FuncSafe/fsRam.c ****    _FSF_vDoWhenPieceRamCheckStarted();
+ 115              		.loc 1 193 22 view .LVU15
+ 194:common/prog/FuncSafe/fsRam.c **** #endif
+ 116              		.loc 1 194 4 view .LVU16
+ 117 0022 FFF7FEFF 		bl	_FSF_vDoWhenPieceRamCheckStarted
+ 118              	.LVL3:
+ 251:common/prog/FuncSafe/fsRam.c **** #endif
+ 119              		.loc 1 251 4 view .LVU17
+ 120 0026 3300     		movs	r3, r6
+ 121 0028 2A00     		movs	r2, r5
+ 122 002a 3649     		ldr	r1, .L21+12
+ 123              	.LVL4:
+ 251:common/prog/FuncSafe/fsRam.c **** #endif
+ 124              		.loc 1 251 4 is_stmt 0 view .LVU18
+ 125 002c 3648     		ldr	r0, .L21+16
+ 126 002e FFF7FEFF 		bl	FSF_vRamOpercheck
+ 127              	.LVL5:
+ 261:common/prog/FuncSafe/fsRam.c ****    // Do it real!
+ 128              		.loc 1 261 4 is_stmt 1 view .LVU19
+ 129 0032 FFF7FEFF 		bl	_FSF_vDoWhenPieceRamCheckFinished
+ 130              	.LVL6:
+ 263:common/prog/FuncSafe/fsRam.c **** #endif
+ 131              		.loc 1 263 21 view .LVU20
+ 263:common/prog/FuncSafe/fsRam.c **** #endif
+ 132              		.loc 1 263 21 is_stmt 0 view .LVU21
+ 133              	.LBE11:
+ 134              	.LBE10:
+ 356:common/prog/FuncSafe/fsRam.c **** 
+ 357:common/prog/FuncSafe/fsRam.c ****           //  Start with the first RAM address
+ 358:common/prog/FuncSafe/fsRam.c ****           FSF_pucActualRAMAddress = FSF_atRamSegments[0].pucStartSeg;
+ 135              		.loc 1 358 11 is_stmt 1 view .LVU22
+ 136              		.loc 1 358 57 is_stmt 0 view .LVU23
+ 137 0036 354A     		ldr	r2, .L21+20
+ 138              		.loc 1 358 35 view .LVU24
+ 139 0038 354B     		ldr	r3, .L21+24
+ 140 003a 1168     		ldr	r1, [r2]
+ 141 003c 1960     		str	r1, [r3]
+ 359:common/prog/FuncSafe/fsRam.c **** #else
+ 360:common/prog/FuncSafe/fsRam.c **** 
+ 361:common/prog/FuncSafe/fsRam.c ****          //  Before start of the RAM check, the data exchange buffer has to be checked. The physica
+ 362:common/prog/FuncSafe/fsRam.c ****          //  location of the data exchange buffer is just behind RAMTOP. Since this area has to be
+ 363:common/prog/FuncSafe/fsRam.c ****          //  excluded from operational checking, it is checked separately at this point.
+ 364:common/prog/FuncSafe/fsRam.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 10
+
+
+ 365:common/prog/FuncSafe/fsRam.c ****          // **************************************************************************
+ 366:common/prog/FuncSafe/fsRam.c ****          //             Check the data exchange buffer. Data get saved behind
+ 367:common/prog/FuncSafe/fsRam.c ****          // **************************************************************************
+ 368:common/prog/FuncSafe/fsRam.c ****          vRamOpercheck( FSF_arMarchDataBuffer,
+ 369:common/prog/FuncSafe/fsRam.c ****                                  &FSF_arMarchDataBuffer[MARCHBUFLENGTH],
+ 370:common/prog/FuncSafe/fsRam.c ****          //  Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+ 371:common/prog/FuncSafe/fsRam.c ****          //  REFERENCE - ISO-6.3.3.2 Semantics
+ 372:common/prog/FuncSafe/fsRam.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 373:common/prog/FuncSafe/fsRam.c ****                                  FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+ 374:common/prog/FuncSafe/fsRam.c ****                                  FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 375:common/prog/FuncSafe/fsRam.c **** 
+ 376:common/prog/FuncSafe/fsRam.c **** 
+ 377:common/prog/FuncSafe/fsRam.c ****          // **************************************************************************
+ 378:common/prog/FuncSafe/fsRam.c ****          //             Check the data behind.  Data get saved in the exchange buffer.
+ 379:common/prog/FuncSafe/fsRam.c ****          // **************************************************************************
+ 380:common/prog/FuncSafe/fsRam.c ****          vRamOpercheck( &FSF_arMarchDataBuffer[MARCHBUFLENGTH],
+ 381:common/prog/FuncSafe/fsRam.c ****                                   FSF_arMarchDataBuffer,
+ 382:common/prog/FuncSafe/fsRam.c ****                                   FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+ 383:common/prog/FuncSafe/fsRam.c ****                                   FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 384:common/prog/FuncSafe/fsRam.c **** 
+ 385:common/prog/FuncSafe/fsRam.c ****          //  Start with the first RAM address
+ 386:common/prog/FuncSafe/fsRam.c ****          FSF_pucActualRAMAddress = FSF_atRamSegments[0].pucStartSeg;
+ 387:common/prog/FuncSafe/fsRam.c **** #endif
+ 388:common/prog/FuncSafe/fsRam.c ****          //  Start with the first segment from the segment table.
+ 389:common/prog/FuncSafe/fsRam.c ****          FSF_ucActualRAMIdx      = (uint8_t)0;
+ 142              		.loc 1 389 10 is_stmt 1 view .LVU25
+ 143              		.loc 1 389 34 is_stmt 0 view .LVU26
+ 144 003e 0021     		movs	r1, #0
+ 145 0040 344B     		ldr	r3, .L21+28
+ 146 0042 1970     		strb	r1, [r3]
+ 390:common/prog/FuncSafe/fsRam.c ****          /*Note 9016 Pointer arithmetic not allowed MisraC2012 18.4 [advisory] : required here */
+ 391:common/prog/FuncSafe/fsRam.c ****          /*lint -save -e9016 */
+ 392:common/prog/FuncSafe/fsRam.c ****          // We must exclude RAMCONT_EXCLUDED_DATA for RAM1
+ 393:common/prog/FuncSafe/fsRam.c ****          if(FSF_ucActualRAMIdx == 0u) // RAM1
+ 147              		.loc 1 393 10 is_stmt 1 view .LVU27
+ 394:common/prog/FuncSafe/fsRam.c ****          {
+ 395:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - (COUNT_OF_T
+ 148              		.loc 1 395 13 view .LVU28
+ 149              		.loc 1 395 87 is_stmt 0 view .LVU29
+ 150 0044 5368     		ldr	r3, [r2, #4]
+ 151              		.loc 1 395 33 view .LVU30
+ 152 0046 3449     		ldr	r1, .L21+32
+ 153              		.loc 1 395 87 view .LVU31
+ 154 0048 573B     		subs	r3, r3, #87
+ 155              	.L20:
+ 396:common/prog/FuncSafe/fsRam.c ****          }
+ 397:common/prog/FuncSafe/fsRam.c ****          else // RAM2, RAM3
+ 398:common/prog/FuncSafe/fsRam.c ****          {
+ 399:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_OF_TE
+ 400:common/prog/FuncSafe/fsRam.c ****          }
+ 401:common/prog/FuncSafe/fsRam.c ****          //  Msg(4:0488) Performing pointer arithmetic.
+ 402:common/prog/FuncSafe/fsRam.c ****          //  MISRA-C:2004 Rule 17.4 <next>
+ 403:common/prog/FuncSafe/fsRam.c ****          //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 404:common/prog/FuncSafe/fsRam.c ****           //  Change to next state
+ 405:common/prog/FuncSafe/fsRam.c ****          FSF_ucRamTaskState      = (uint8_t)FSF_RAM_CHECK_ONGOING;
+ 406:common/prog/FuncSafe/fsRam.c ****          break;
+ 407:common/prog/FuncSafe/fsRam.c ****       }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 11
+
+
+ 408:common/prog/FuncSafe/fsRam.c ****       case (uint8_t)FSF_RAM_CHECK_ONGOING:
+ 409:common/prog/FuncSafe/fsRam.c ****       {
+ 410:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 411:common/prog/FuncSafe/fsRam.c ****     Do one operational check cycle
+ 412:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 413:common/prog/FuncSafe/fsRam.c ****           //  RAM check inside the middle of the RAM segment OR does it have reached the final port
+ 414:common/prog/FuncSafe/fsRam.c ****           if ( FSF_pucActualRAMAddress > FSF_pucEndAdrRamSeg )           /*lint !e946 Relational or
+ 415:common/prog/FuncSafe/fsRam.c ****           {
+ 416:common/prog/FuncSafe/fsRam.c ****                 //  Finally change to the next RAM segment (if any)
+ 417:common/prog/FuncSafe/fsRam.c ****                 FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_CHANGE_SEGMENT;
+ 418:common/prog/FuncSafe/fsRam.c ****           }
+ 419:common/prog/FuncSafe/fsRam.c ****           else
+ 420:common/prog/FuncSafe/fsRam.c ****           {
+ 421:common/prog/FuncSafe/fsRam.c ****                 // Do the check for the actual RAM protion
+ 422:common/prog/FuncSafe/fsRam.c ****                 vRamOpercheck( FSF_pucActualRAMAddress, FSF_arMarchDataBuffer,
+ 423:common/prog/FuncSafe/fsRam.c ****                                FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+ 424:common/prog/FuncSafe/fsRam.c ****                                FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 425:common/prog/FuncSafe/fsRam.c **** 
+ 426:common/prog/FuncSafe/fsRam.c ****                 //  Set up next address area
+ 427:common/prog/FuncSafe/fsRam.c ****                 FSF_pucActualRAMAddress += (int16_t)FSF_atRamModule.ucBufferLength - 1;
+ 428:common/prog/FuncSafe/fsRam.c ****           }
+ 429:common/prog/FuncSafe/fsRam.c ****          break;
+ 430:common/prog/FuncSafe/fsRam.c ****       }
+ 431:common/prog/FuncSafe/fsRam.c ****       case (uint8_t)FSF_RAM_CHECK_CHANGE_SEGMENT:
+ 432:common/prog/FuncSafe/fsRam.c ****       {
+ 433:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 434:common/prog/FuncSafe/fsRam.c ****     Compute the next RAM address
+ 435:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 436:common/prog/FuncSafe/fsRam.c ****          /** Compute the next RAM address
+ 437:common/prog/FuncSafe/fsRam.c ****          Check the next RAM segment WITHOUT changing the check pattern. The requirements says, do f
+ 438:common/prog/FuncSafe/fsRam.c ****          check using one pattern. When finished, change the pattern and start the check again.
+ 439:common/prog/FuncSafe/fsRam.c ****          */
+ 440:common/prog/FuncSafe/fsRam.c **** 
+ 441:common/prog/FuncSafe/fsRam.c ****          // Switch to the next segment, if any
+ 442:common/prog/FuncSafe/fsRam.c ****          FSF_ucActualRAMIdx++;
+ 443:common/prog/FuncSafe/fsRam.c **** 
+ 444:common/prog/FuncSafe/fsRam.c ****          // If all segments have been checked, finalise the actual check session
+ 445:common/prog/FuncSafe/fsRam.c ****          if (FSF_ucActualRAMIdx >= FSF_atRamModule.ucSegmentCount)
+ 446:common/prog/FuncSafe/fsRam.c ****          {
+ 447:common/prog/FuncSafe/fsRam.c ****             //  Enter the finish state
+ 448:common/prog/FuncSafe/fsRam.c ****             FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_FINISH;
+ 449:common/prog/FuncSafe/fsRam.c ****          }
+ 450:common/prog/FuncSafe/fsRam.c ****          else
+ 451:common/prog/FuncSafe/fsRam.c ****          {
+ 452:common/prog/FuncSafe/fsRam.c ****             //  Set up the next RAM address
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucActualRAMAddress = FSF_atRamSegments[FSF_ucActualRAMIdx].pucStartSeg;
+ 454:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 156              		.loc 1 454 38 view .LVU32
+ 157 004a 0B60     		str	r3, [r1]
+ 455:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 456:common/prog/FuncSafe/fsRam.c ****             //  Msg(4:0488) Performing pointer arithmetic.
+ 457:common/prog/FuncSafe/fsRam.c ****             //  MISRA-C:2004 Rule 17.4
+ 458:common/prog/FuncSafe/fsRam.c ****             //  PCA comment: code tested and reviewed to work correctly. Thus, left unchanged.
+ 459:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 460:common/prog/FuncSafe/fsRam.c ****             TH_FSFP_PushOutPar(TP_FSF_RAM_Segment_changed);
+ 461:common/prog/FuncSafe/fsRam.c ****             TH_FSFP_PushOutPar(FSF_ucActualRAMIdx);
+ 462:common/prog/FuncSafe/fsRam.c **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 12
+
+
+ 463:common/prog/FuncSafe/fsRam.c ****             FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_ONGOING;
+ 158              		.loc 1 463 13 is_stmt 1 view .LVU33
+ 159              		.loc 1 463 32 is_stmt 0 view .LVU34
+ 160 004c 0123     		movs	r3, #1
+ 161 004e 06E0     		b	.L19
+ 162              	.L9:
+ 414:common/prog/FuncSafe/fsRam.c ****           {
+ 163              		.loc 1 414 11 is_stmt 1 view .LVU35
+ 414:common/prog/FuncSafe/fsRam.c ****           {
+ 164              		.loc 1 414 40 is_stmt 0 view .LVU36
+ 165 0050 2F4D     		ldr	r5, .L21+24
+ 166 0052 314B     		ldr	r3, .L21+32
+ 167 0054 2E68     		ldr	r6, [r5]
+ 414:common/prog/FuncSafe/fsRam.c ****           {
+ 168              		.loc 1 414 14 view .LVU37
+ 169 0056 1B68     		ldr	r3, [r3]
+ 170 0058 9E42     		cmp	r6, r3
+ 171 005a 05D9     		bls	.L12
+ 417:common/prog/FuncSafe/fsRam.c ****           }
+ 172              		.loc 1 417 17 is_stmt 1 view .LVU38
+ 417:common/prog/FuncSafe/fsRam.c ****           }
+ 173              		.loc 1 417 36 is_stmt 0 view .LVU39
+ 174 005c 0223     		movs	r3, #2
+ 175              	.L19:
+ 448:common/prog/FuncSafe/fsRam.c ****          }
+ 176              		.loc 1 448 32 view .LVU40
+ 177 005e 2370     		strb	r3, [r4]
+ 178              	.L11:
+ 464:common/prog/FuncSafe/fsRam.c ****          }
+ 465:common/prog/FuncSafe/fsRam.c ****          break;
+ 466:common/prog/FuncSafe/fsRam.c ****       }
+ 467:common/prog/FuncSafe/fsRam.c ****       case (uint8_t)FSF_RAM_CHECK_FINISH:
+ 468:common/prog/FuncSafe/fsRam.c ****       {
+ 469:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 470:common/prog/FuncSafe/fsRam.c ****     RAM check complete
+ 471:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 472:common/prog/FuncSafe/fsRam.c ****          /** Change to the next check pattern and restart the RAM check
+ 473:common/prog/FuncSafe/fsRam.c ****          */
+ 474:common/prog/FuncSafe/fsRam.c **** 
+ 475:common/prog/FuncSafe/fsRam.c ****          //  Switch to the next pattern
+ 476:common/prog/FuncSafe/fsRam.c ****          FSF_ucPatternIdx++;
+ 477:common/prog/FuncSafe/fsRam.c **** 
+ 478:common/prog/FuncSafe/fsRam.c ****          if (FSF_ucPatternIdx >= FSF_atRamModule.ucPatternCount)
+ 479:common/prog/FuncSafe/fsRam.c ****          {
+ 480:common/prog/FuncSafe/fsRam.c ****             FSF_ucPatternIdx = (uint8_t)0;
+ 481:common/prog/FuncSafe/fsRam.c ****          }
+ 482:common/prog/FuncSafe/fsRam.c **** 
+ 483:common/prog/FuncSafe/fsRam.c ****          //  Restart the RAM check
+ 484:common/prog/FuncSafe/fsRam.c ****          FSF_ucRamTaskState = (uint8_t)FSF_RAM_CHECK_RESTART;
+ 485:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 486:common/prog/FuncSafe/fsRam.c ****          TH_FSFP_PushOutPar(TP_FSF_RAM_Pattern_changed);
+ 487:common/prog/FuncSafe/fsRam.c ****          TH_FSFP_PushOutPar(FSF_ucPatternIdx);
+ 488:common/prog/FuncSafe/fsRam.c **** #endif
+ 489:common/prog/FuncSafe/fsRam.c ****          break;
+ 490:common/prog/FuncSafe/fsRam.c ****       }
+ 491:common/prog/FuncSafe/fsRam.c ****       default:
+ 492:common/prog/FuncSafe/fsRam.c ****       {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 13
+
+
+ 493:common/prog/FuncSafe/fsRam.c **** /*=======================================================
+ 494:common/prog/FuncSafe/fsRam.c ****     Report Error due to invalid state
+ 495:common/prog/FuncSafe/fsRam.c **** =======================================================*/
+ 496:common/prog/FuncSafe/fsRam.c ****          FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_INVALID_STATE,(uint8_t)0);
+ 497:common/prog/FuncSafe/fsRam.c ****          break;
+ 498:common/prog/FuncSafe/fsRam.c ****       }
+ 499:common/prog/FuncSafe/fsRam.c ****    }
+ 500:common/prog/FuncSafe/fsRam.c ****    //  Signal the channel state to the FSCOM
+ 501:common/prog/FuncSafe/fsRam.c ****    if (FSF_ucRamTaskState == (uint8_t)FSF_RAM_CHECK_RESTART)
+ 179              		.loc 1 501 4 is_stmt 1 view .LVU41
+ 502:common/prog/FuncSafe/fsRam.c ****    {
+ 503:common/prog/FuncSafe/fsRam.c ****       //  Signal finished check
+ 504:common/prog/FuncSafe/fsRam.c ****       vRAMCheckSuccess();
+ 505:common/prog/FuncSafe/fsRam.c ****    }
+ 506:common/prog/FuncSafe/fsRam.c ****    else
+ 507:common/prog/FuncSafe/fsRam.c ****    {
+ 508:common/prog/FuncSafe/fsRam.c ****       //  Signal ongoing work
+ 509:common/prog/FuncSafe/fsRam.c ****       vRAMCheckOngoing();
+ 180              		.loc 1 509 7 view .LVU42
+ 181              	.LBB12:
+ 182              	.LBI12:
+ 276:common/prog/FuncSafe/fsRam.c **** {
+ 183              		.loc 1 276 17 view .LVU43
+ 184              	.LBB13:
+ 283:common/prog/FuncSafe/fsRam.c **** #endif
+ 185              		.loc 1 283 4 view .LVU44
+ 186 0060 0120     		movs	r0, #1
+ 187 0062 FFF7FEFF 		bl	FSF_vReportOnGoing
+ 188              	.LVL7:
+ 189              	.LBE13:
+ 190              	.LBE12:
+ 510:common/prog/FuncSafe/fsRam.c ****    }
+ 511:common/prog/FuncSafe/fsRam.c **** #endif
+ 512:common/prog/FuncSafe/fsRam.c ****    return  (uint8_t)TASK_INITIALISED;
+ 191              		.loc 1 512 4 view .LVU45
+ 192              		.loc 1 512 12 is_stmt 0 view .LVU46
+ 193 0066 3FE0     		b	.L18
+ 194              	.L12:
+ 422:common/prog/FuncSafe/fsRam.c ****                                FSF_asPatternTable[FSF_ucPatternIdx].ucPatNotInv,
+ 195              		.loc 1 422 17 is_stmt 1 view .LVU47
+ 196 0068 244B     		ldr	r3, .L21+4
+ 197 006a 1A78     		ldrb	r2, [r3]
+ 423:common/prog/FuncSafe/fsRam.c ****                                FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 198              		.loc 1 423 68 is_stmt 0 view .LVU48
+ 199 006c 244B     		ldr	r3, .L21+8
+ 200 006e 5200     		lsls	r2, r2, #1
+ 201 0070 D15C     		ldrb	r1, [r2, r3]
+ 424:common/prog/FuncSafe/fsRam.c **** 
+ 202              		.loc 1 424 68 view .LVU49
+ 203 0072 9B18     		adds	r3, r3, r2
+ 204 0074 5F78     		ldrb	r7, [r3, #1]
+ 205              	.LVL8:
+ 206              	.LBB14:
+ 207              	.LBI14:
+ 172:common/prog/FuncSafe/fsRam.c **** {
+ 208              		.loc 1 172 17 is_stmt 1 view .LVU50
+ 209              	.LBB15:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 14
+
+
+ 193:common/prog/FuncSafe/fsRam.c ****    _FSF_vDoWhenPieceRamCheckStarted();
+ 210              		.loc 1 193 22 view .LVU51
+ 194:common/prog/FuncSafe/fsRam.c **** #endif
+ 211              		.loc 1 194 4 view .LVU52
+ 212              	.LBE15:
+ 213              	.LBE14:
+ 423:common/prog/FuncSafe/fsRam.c ****                                FSF_asPatternTable[FSF_ucPatternIdx].ucPatInvers);
+ 214              		.loc 1 423 68 is_stmt 0 view .LVU53
+ 215 0076 0191     		str	r1, [sp, #4]
+ 216              	.LBB17:
+ 217              	.LBB16:
+ 194:common/prog/FuncSafe/fsRam.c **** #endif
+ 218              		.loc 1 194 4 view .LVU54
+ 219 0078 FFF7FEFF 		bl	_FSF_vDoWhenPieceRamCheckStarted
+ 220              	.LVL9:
+ 251:common/prog/FuncSafe/fsRam.c **** #endif
+ 221              		.loc 1 251 4 is_stmt 1 view .LVU55
+ 222 007c 3B00     		movs	r3, r7
+ 223 007e 019A     		ldr	r2, [sp, #4]
+ 224 0080 3000     		movs	r0, r6
+ 225 0082 2149     		ldr	r1, .L21+16
+ 226 0084 FFF7FEFF 		bl	FSF_vRamOpercheck
+ 227              	.LVL10:
+ 261:common/prog/FuncSafe/fsRam.c ****    // Do it real!
+ 228              		.loc 1 261 4 view .LVU56
+ 229 0088 FFF7FEFF 		bl	_FSF_vDoWhenPieceRamCheckFinished
+ 230              	.LVL11:
+ 263:common/prog/FuncSafe/fsRam.c **** #endif
+ 231              		.loc 1 263 21 view .LVU57
+ 263:common/prog/FuncSafe/fsRam.c **** #endif
+ 232              		.loc 1 263 21 is_stmt 0 view .LVU58
+ 233              	.LBE16:
+ 234              	.LBE17:
+ 427:common/prog/FuncSafe/fsRam.c ****           }
+ 235              		.loc 1 427 17 is_stmt 1 view .LVU59
+ 427:common/prog/FuncSafe/fsRam.c ****           }
+ 236              		.loc 1 427 68 is_stmt 0 view .LVU60
+ 237 008c 234B     		ldr	r3, .L21+36
+ 427:common/prog/FuncSafe/fsRam.c ****           }
+ 238              		.loc 1 427 44 view .LVU61
+ 239 008e 1A78     		ldrb	r2, [r3]
+ 427:common/prog/FuncSafe/fsRam.c ****           }
+ 240              		.loc 1 427 41 view .LVU62
+ 241 0090 2B68     		ldr	r3, [r5]
+ 242 0092 013A     		subs	r2, r2, #1
+ 243 0094 9B18     		adds	r3, r3, r2
+ 244 0096 2B60     		str	r3, [r5]
+ 245              	.L13:
+ 501:common/prog/FuncSafe/fsRam.c ****    {
+ 246              		.loc 1 501 4 is_stmt 1 view .LVU63
+ 501:common/prog/FuncSafe/fsRam.c ****    {
+ 247              		.loc 1 501 7 is_stmt 0 view .LVU64
+ 248 0098 2378     		ldrb	r3, [r4]
+ 249 009a 002B     		cmp	r3, #0
+ 250 009c 21D0     		beq	.L16
+ 251 009e DFE7     		b	.L11
+ 252              	.L8:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 15
+
+
+ 442:common/prog/FuncSafe/fsRam.c **** 
+ 253              		.loc 1 442 10 is_stmt 1 view .LVU65
+ 442:common/prog/FuncSafe/fsRam.c **** 
+ 254              		.loc 1 442 28 is_stmt 0 view .LVU66
+ 255 00a0 1C4A     		ldr	r2, .L21+28
+ 256 00a2 1378     		ldrb	r3, [r2]
+ 257 00a4 0133     		adds	r3, r3, #1
+ 258 00a6 DBB2     		uxtb	r3, r3
+ 259 00a8 1370     		strb	r3, [r2]
+ 445:common/prog/FuncSafe/fsRam.c ****          {
+ 260              		.loc 1 445 10 is_stmt 1 view .LVU67
+ 445:common/prog/FuncSafe/fsRam.c ****          {
+ 261              		.loc 1 445 51 is_stmt 0 view .LVU68
+ 262 00aa 1C4A     		ldr	r2, .L21+36
+ 445:common/prog/FuncSafe/fsRam.c ****          {
+ 263              		.loc 1 445 13 view .LVU69
+ 264 00ac 5278     		ldrb	r2, [r2, #1]
+ 265 00ae 9A42     		cmp	r2, r3
+ 266 00b0 01D8     		bhi	.L14
+ 448:common/prog/FuncSafe/fsRam.c ****          }
+ 267              		.loc 1 448 13 is_stmt 1 view .LVU70
+ 448:common/prog/FuncSafe/fsRam.c ****          }
+ 268              		.loc 1 448 32 is_stmt 0 view .LVU71
+ 269 00b2 0323     		movs	r3, #3
+ 270 00b4 D3E7     		b	.L19
+ 271              	.L14:
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 272              		.loc 1 453 13 is_stmt 1 view .LVU72
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 273              		.loc 1 453 76 is_stmt 0 view .LVU73
+ 274 00b6 154A     		ldr	r2, .L21+20
+ 275 00b8 DB00     		lsls	r3, r3, #3
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 276              		.loc 1 453 37 view .LVU74
+ 277 00ba 9858     		ldr	r0, [r3, r2]
+ 454:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 278              		.loc 1 454 77 view .LVU75
+ 279 00bc D218     		adds	r2, r2, r3
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 280              		.loc 1 453 37 view .LVU76
+ 281 00be 1449     		ldr	r1, .L21+24
+ 454:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 282              		.loc 1 454 92 view .LVU77
+ 283 00c0 5368     		ldr	r3, [r2, #4]
+ 453:common/prog/FuncSafe/fsRam.c ****             FSF_pucEndAdrRamSeg      = FSF_atRamSegments[FSF_ucActualRAMIdx].pucEndSeg + 1 - COUNT_
+ 284              		.loc 1 453 37 view .LVU78
+ 285 00c2 0860     		str	r0, [r1]
+ 454:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 286              		.loc 1 454 13 is_stmt 1 view .LVU79
+ 454:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 287              		.loc 1 454 92 is_stmt 0 view .LVU80
+ 288 00c4 173B     		subs	r3, r3, #23
+ 454:common/prog/FuncSafe/fsRam.c ****             /*lint -restore -e9016 */
+ 289              		.loc 1 454 38 view .LVU81
+ 290 00c6 1449     		ldr	r1, .L21+32
+ 291 00c8 BFE7     		b	.L20
+ 292              	.L6:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 16
+
+
+ 476:common/prog/FuncSafe/fsRam.c **** 
+ 293              		.loc 1 476 10 is_stmt 1 view .LVU82
+ 476:common/prog/FuncSafe/fsRam.c **** 
+ 294              		.loc 1 476 26 is_stmt 0 view .LVU83
+ 295 00ca 0C4A     		ldr	r2, .L21+4
+ 478:common/prog/FuncSafe/fsRam.c ****          {
+ 296              		.loc 1 478 49 view .LVU84
+ 297 00cc 1349     		ldr	r1, .L21+36
+ 476:common/prog/FuncSafe/fsRam.c **** 
+ 298              		.loc 1 476 26 view .LVU85
+ 299 00ce 1378     		ldrb	r3, [r2]
+ 478:common/prog/FuncSafe/fsRam.c ****          {
+ 300              		.loc 1 478 13 view .LVU86
+ 301 00d0 8878     		ldrb	r0, [r1, #2]
+ 476:common/prog/FuncSafe/fsRam.c **** 
+ 302              		.loc 1 476 26 view .LVU87
+ 303 00d2 0133     		adds	r3, r3, #1
+ 304 00d4 DBB2     		uxtb	r3, r3
+ 305 00d6 0021     		movs	r1, #0
+ 306 00d8 1370     		strb	r3, [r2]
+ 478:common/prog/FuncSafe/fsRam.c ****          {
+ 307              		.loc 1 478 10 is_stmt 1 view .LVU88
+ 478:common/prog/FuncSafe/fsRam.c ****          {
+ 308              		.loc 1 478 13 is_stmt 0 view .LVU89
+ 309 00da 9842     		cmp	r0, r3
+ 310 00dc 00D8     		bhi	.L15
+ 480:common/prog/FuncSafe/fsRam.c ****          }
+ 311              		.loc 1 480 13 is_stmt 1 view .LVU90
+ 480:common/prog/FuncSafe/fsRam.c ****          }
+ 312              		.loc 1 480 30 is_stmt 0 view .LVU91
+ 313 00de 1170     		strb	r1, [r2]
+ 314              	.L15:
+ 484:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 315              		.loc 1 484 10 is_stmt 1 view .LVU92
+ 484:common/prog/FuncSafe/fsRam.c **** #ifdef TH_FSCOM
+ 316              		.loc 1 484 29 is_stmt 0 view .LVU93
+ 317 00e0 2170     		strb	r1, [r4]
+ 489:common/prog/FuncSafe/fsRam.c ****       }
+ 318              		.loc 1 489 10 is_stmt 1 view .LVU94
+ 501:common/prog/FuncSafe/fsRam.c ****    {
+ 319              		.loc 1 501 4 view .LVU95
+ 320              	.L16:
+ 504:common/prog/FuncSafe/fsRam.c ****    }
+ 321              		.loc 1 504 7 view .LVU96
+ 322              	.LBB18:
+ 323              	.LBI18:
+ 296:common/prog/FuncSafe/fsRam.c **** {
+ 324              		.loc 1 296 17 view .LVU97
+ 325              	.LBB19:
+ 303:common/prog/FuncSafe/fsRam.c **** #endif
+ 326              		.loc 1 303 4 view .LVU98
+ 327 00e2 0120     		movs	r0, #1
+ 328 00e4 FFF7FEFF 		bl	FSF_vReportSuccess
+ 329              	.LVL12:
+ 330              	.L18:
+ 331              	.LBE19:
+ 332              	.LBE18:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 17
+
+
+ 513:common/prog/FuncSafe/fsRam.c **** }
+ 333              		.loc 1 513 1 is_stmt 0 view .LVU99
+ 334              		@ sp needed
+ 335 00e8 0120     		movs	r0, #1
+ 336 00ea FEBD     		pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+ 337              	.L5:
+ 496:common/prog/FuncSafe/fsRam.c ****          break;
+ 338              		.loc 1 496 10 is_stmt 1 view .LVU100
+ 339 00ec 0022     		movs	r2, #0
+ 340 00ee 0721     		movs	r1, #7
+ 341 00f0 0120     		movs	r0, #1
+ 342 00f2 FFF7FEFF 		bl	FSF_vReportError
+ 343              	.LVL13:
+ 497:common/prog/FuncSafe/fsRam.c ****       }
+ 344              		.loc 1 497 10 view .LVU101
+ 345 00f6 CFE7     		b	.L13
+ 346              	.L22:
+ 347              		.align	2
+ 348              	.L21:
+ 349 00f8 00000000 		.word	.LANCHOR0
+ 350 00fc 00000000 		.word	.LANCHOR1
+ 351 0100 00000000 		.word	FSF_asPatternTable
+ 352 0104 10000000 		.word	FSF_arMarchDataBuffer+16
+ 353 0108 00000000 		.word	FSF_arMarchDataBuffer
+ 354 010c 00000000 		.word	FSF_atRamSegments
+ 355 0110 00000000 		.word	.LANCHOR2
+ 356 0114 00000000 		.word	.LANCHOR3
+ 357 0118 00000000 		.word	.LANCHOR4
+ 358 011c 00000000 		.word	FSF_atRamModule
+ 359              		.cfi_endproc
+ 360              	.LFE73:
+ 362              		.section	.text.FSF_vRam_OperationalException,"ax",%progbits
+ 363              		.align	1
+ 364              		.global	FSF_vRam_OperationalException
+ 365              		.syntax unified
+ 366              		.code	16
+ 367              		.thumb_func
+ 369              	FSF_vRam_OperationalException:
+ 370              	.LFB74:
+ 514:common/prog/FuncSafe/fsRam.c **** 
+ 515:common/prog/FuncSafe/fsRam.c **** /*=====================================================================================
+ 516:common/prog/FuncSafe/fsRam.c ****     Operational Exception
+ 517:common/prog/FuncSafe/fsRam.c **** =====================================================================================*/
+ 518:common/prog/FuncSafe/fsRam.c **** #ifdef OPERATIONAL_RAM_CHECK
+ 519:common/prog/FuncSafe/fsRam.c **** // The RAM Operational Exception
+ 520:common/prog/FuncSafe/fsRam.c **** void FSF_vRam_OperationalException(void)
+ 521:common/prog/FuncSafe/fsRam.c **** {
+ 371              		.loc 1 521 1 view -0
+ 372              		.cfi_startproc
+ 373              		@ args = 0, pretend = 0, frame = 0
+ 374              		@ frame_needed = 0, uses_anonymous_args = 0
+ 522:common/prog/FuncSafe/fsRam.c ****    FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_FATAL_EXCEPTION,(uint8_t)0);
+ 375              		.loc 1 522 4 view .LVU103
+ 521:common/prog/FuncSafe/fsRam.c ****    FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_FATAL_EXCEPTION,(uint8_t)0);
+ 376              		.loc 1 521 1 is_stmt 0 view .LVU104
+ 377 0000 10B5     		push	{r4, lr}
+ 378              	.LCFI2:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 18
+
+
+ 379              		.cfi_def_cfa_offset 8
+ 380              		.cfi_offset 4, -8
+ 381              		.cfi_offset 14, -4
+ 382              		.loc 1 522 4 view .LVU105
+ 383 0002 0022     		movs	r2, #0
+ 523:common/prog/FuncSafe/fsRam.c **** }
+ 384              		.loc 1 523 1 view .LVU106
+ 385              		@ sp needed
+ 522:common/prog/FuncSafe/fsRam.c ****    FSF_vReportError((uint8_t)FSF_RAM_TEST,(uint8_t)FSF_ERR_FATAL_EXCEPTION,(uint8_t)0);
+ 386              		.loc 1 522 4 view .LVU107
+ 387 0004 0221     		movs	r1, #2
+ 388 0006 0120     		movs	r0, #1
+ 389 0008 FFF7FEFF 		bl	FSF_vReportError
+ 390              	.LVL14:
+ 391              		.loc 1 523 1 view .LVU108
+ 392 000c 10BD     		pop	{r4, pc}
+ 393              		.cfi_endproc
+ 394              	.LFE74:
+ 396              		.section	.text.FSF_vRam_FatalException,"ax",%progbits
+ 397              		.align	1
+ 398              		.global	FSF_vRam_FatalException
+ 399              		.syntax unified
+ 400              		.code	16
+ 401              		.thumb_func
+ 403              	FSF_vRam_FatalException:
+ 404              	.LFB75:
+ 524:common/prog/FuncSafe/fsRam.c **** #endif
+ 525:common/prog/FuncSafe/fsRam.c **** 
+ 526:common/prog/FuncSafe/fsRam.c **** /*=====================================================================================
+ 527:common/prog/FuncSafe/fsRam.c ****     Fatal Exception
+ 528:common/prog/FuncSafe/fsRam.c **** =====================================================================================*/
+ 529:common/prog/FuncSafe/fsRam.c **** // The RAM Fatal Exception
+ 530:common/prog/FuncSafe/fsRam.c **** void FSF_vRam_FatalException(void)
+ 531:common/prog/FuncSafe/fsRam.c **** {
+ 405              		.loc 1 531 1 is_stmt 1 view -0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532:common/prog/FuncSafe/fsRam.c ****    FSF_vReportFatal();
+ 409              		.loc 1 532 4 view .LVU110
+ 531:common/prog/FuncSafe/fsRam.c ****    FSF_vReportFatal();
+ 410              		.loc 1 531 1 is_stmt 0 view .LVU111
+ 411 0000 10B5     		push	{r4, lr}
+ 412              	.LCFI3:
+ 413              		.cfi_def_cfa_offset 8
+ 414              		.cfi_offset 4, -8
+ 415              		.cfi_offset 14, -4
+ 416              		.loc 1 532 4 view .LVU112
+ 417 0002 FFF7FEFF 		bl	FSF_vReportFatal
+ 418              	.LVL15:
+ 533:common/prog/FuncSafe/fsRam.c **** }
+ 419              		.loc 1 533 1 view .LVU113
+ 420              		@ sp needed
+ 421 0006 10BD     		pop	{r4, pc}
+ 422              		.cfi_endproc
+ 423              	.LFE75:
+ 425              		.section	.bss.FSF_pucActualRAMAddress,"aw",%nobits
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc7QvOlA.s 			page 19
+
+
+ 426              		.align	2
+ 427              		.set	.LANCHOR2,. + 0
+ 430              	FSF_pucActualRAMAddress:
+ 431 0000 00000000 		.space	4
+ 432              		.section	.bss.FSF_pucEndAdrRamSeg,"aw",%nobits
+ 433              		.align	2
+ 434              		.set	.LANCHOR4,. + 0
+ 437              	FSF_pucEndAdrRamSeg:
+ 438 0000 00000000 		.space	4
+ 439              		.section	.bss.FSF_ucActualRAMIdx,"aw",%nobits
+ 440              		.set	.LANCHOR3,. + 0
+ 443              	FSF_ucActualRAMIdx:
+ 444 0000 00       		.space	1
+ 445              		.section	.bss.FSF_ucPatternIdx,"aw",%nobits
+ 446              		.set	.LANCHOR1,. + 0
+ 449              	FSF_ucPatternIdx:
+ 450 0000 00       		.space	1
+ 451              		.section	.bss.FSF_ucRamTaskState,"aw",%nobits
+ 452              		.set	.LANCHOR0,. + 0
+ 455              	FSF_ucRamTaskState:
+ 456 0000 00       		.space	1
+ 457              		.text
+ 458              	.Letext0:
+ 459              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 460              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 461              		.file 4 "common/prog/FuncSafe/fSafe.h"
+ 462              		.file 5 "app/prog/FuncSafe/fSafeXS.h"
+ 463              		.file 6 "common/prog/FuncSafe/fspriv.h"
+ 464              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

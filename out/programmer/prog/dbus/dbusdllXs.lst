@@ -1,0 +1,89 @@
+
+out/programmer/prog/dbus/dbusdllXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DLL_vInitDllConfig:
+
+00000000 <DLL_vInitDllConfig>:
+struct DllConfigurationItem DLL_ConfigurationItem; //!< Configurable settings for the data link layer.
+
+
+void DLL_vInitDllConfig(void)
+{
+    DLL_ConfigurationItem.ucNodeAddress         = DLL_NODE_ADDRESS;
+   0:	2202      	movs	r2, #2
+   2:	4b03      	ldr	r3, [pc, #12]	; (10 <DLL_vInitDllConfig+0x10>)
+   4:	801a      	strh	r2, [r3, #0]
+    DLL_ConfigurationItem.ucConfigIndex         = DLL_CONFIG_INDEX;
+    DLL_ConfigurationItem.ucInputBufferLength   = DLL_MESSAGE_INPUT_BUFFER_SIZE;
+   6:	32c7      	adds	r2, #199	; 0xc7
+   8:	709a      	strb	r2, [r3, #2]
+    DLL_ConfigurationItem.ulWaitingTimeOffsetUs = 0U;
+   a:	2200      	movs	r2, #0
+   c:	605a      	str	r2, [r3, #4]
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_vSetupSavedBaudRate:
+
+00000000 <DLL_vSetupSavedBaudRate>:
+
+
+void DLL_vSetupSavedBaudRate(void)
+{
+   0:	b510      	push	{r4, lr}
+#if (defined(DBUS2_UPDATE)||defined(DBUS2_UPDATE_HSI))&&defined(REMOTE_FIRMWARE_UPDATE)
+    DBPL_vConfigureBaudrate(BMDAT_getBaudRate());
+   2:	f7ff fffe 	bl	0 <BMDAT_getBaudRate>
+   6:	f7ff fffe 	bl	0 <DBPL_vConfigureBaudrate>
+#endif
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DLL_bIsCurrentNode:
+
+00000000 <DLL_bIsCurrentNode>:
+ \b type: bool\n
+ \b range \li 0 = false
+          \li all other values = true
+*/
+bool DLL_bIsCurrentNode(uint8_t ucAddress)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    return ((ucAddress>>NIBBLE_SIZE) == DLL_ucGetMainNodeAddress()) ? true : false;
+   4:	f7ff fffe 	bl	0 <DLL_ucGetMainNodeAddress>
+   8:	0924      	lsrs	r4, r4, #4
+   a:	1a24      	subs	r4, r4, r0
+   c:	4263      	negs	r3, r4
+   e:	415c      	adcs	r4, r3
+  10:	b2e0      	uxtb	r0, r4
+}
+  12:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DLL_ucGetStandardUartConfigIndex:
+
+00000000 <DLL_ucGetStandardUartConfigIndex>:
+
+
+uint8_t DLL_ucGetStandardUartConfigIndex(void)
+{
+    return DLL_ConfigurationItem.ucConfigIndex;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DLL_ucGetStandardUartConfigIndex+0x8>)
+   2:	7858      	ldrb	r0, [r3, #1]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DLL_vMessageTransmitted_UserCallback:
+
+00000000 <DLL_vMessageTransmitted_UserCallback>:
+    {
+        DBAL_setLastSendingStatus(ucNodeAddress, DLL_GET_ACKNOWLEDGE(ucAcknowledge), (uint8_t)uiUserCode);
+    }
+#endif
+    return;
+}
+   0:	4770      	bx	lr

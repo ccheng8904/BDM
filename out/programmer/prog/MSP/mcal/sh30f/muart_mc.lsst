@@ -1,0 +1,3017 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"muart_mc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MUART_configurePeriphDataBits,"ax",%progbits
+  18              		.align	1
+  19              		.global	MUART_configurePeriphDataBits
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MUART_configurePeriphDataBits:
+  25              	.LVL0:
+  26              	.LFB97:
+  27              		.file 1 "common/prog/MSP/mcal/sh30f/muart_mc.c"
+   1:common/prog/MSP/mcal/sh30f/muart_mc.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *
+   5:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *
+   9:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  COMP_ABBREV      MUART
+  12:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  PROCESSOR        SH30F9X71
+  13:common/prog/MSP/mcal/sh30f/muart_mc.c ****  ******************************************************************************/
+  14:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  15:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  16:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  17:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* DOCUMENTATION                                                              */
+  18:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  19:common/prog/MSP/mcal/sh30f/muart_mc.c **** /** \file     muart_mc.c
+  20:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *
+  21:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  \ingroup  MCAL
+  22:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *
+  23:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *  \brief    Implementation of MUART.
+  24:common/prog/MSP/mcal/sh30f/muart_mc.c ****  *
+  25:common/prog/MSP/mcal/sh30f/muart_mc.c ****  */
+  26:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  27:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  28:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* INCLUDES                                                                   */
+  30:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  31:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 2
+
+
+  32:common/prog/MSP/mcal/sh30f/muart_mc.c **** #include "math/mathDiv.h"
+  33:common/prog/MSP/mcal/sh30f/muart_mc.c **** #include "muart_mc.h"
+  34:common/prog/MSP/mcal/sh30f/muart_mc.c **** #include "muart_priv.h"
+  35:common/prog/MSP/mcal/sh30f/muart_mc.c **** #include "std_lib/std_symbol.h"
+  36:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  37:common/prog/MSP/mcal/sh30f/muart_mc.c **** #ifdef MCAL_MPCM_INCLUDED
+  38:common/prog/MSP/mcal/sh30f/muart_mc.c ****     #include "mpcm.h"
+  39:common/prog/MSP/mcal/sh30f/muart_mc.c **** #endif
+  40:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  41:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  42:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* PRIVATE DEFINITIONS                                                        */
+  43:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  44:common/prog/MSP/mcal/sh30f/muart_mc.c **** #define MUART_ERROR_ANY_READ_MASK    (UART_FR_PE_Msk | UART_FR_FE_Msk | \
+  45:common/prog/MSP/mcal/sh30f/muart_mc.c ****                                       UART_FR_RXOV_Msk)
+  46:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  47:common/prog/MSP/mcal/sh30f/muart_mc.c **** #define MUART_ERROR_ANY_CLEAR_MASK    (UART_FR_PEC_Msk | UART_FR_FEC_Msk | \
+  48:common/prog/MSP/mcal/sh30f/muart_mc.c ****                                        UART_FR_RXOVC_Msk)
+  49:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  50:common/prog/MSP/mcal/sh30f/muart_mc.c **** #define UART_CR_STOP_2bits      0x01u
+  51:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  52:common/prog/MSP/mcal/sh30f/muart_mc.c **** #define UART_CR_PARITY_ENABLED      (0x2UL << UART_CR_MULTIE_Pos)
+  53:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  54:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  55:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  56:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  57:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  58:common/prog/MSP/mcal/sh30f/muart_mc.c **** static bool MUART_isParityEnabled(const struct MUART_Periph *muart)
+  59:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  60:common/prog/MSP/mcal/sh30f/muart_mc.c ****      return ((muart->USARTx->CR.V32 & UART_CR_PARITY_ENABLED) != 0U);
+  61:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  62:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  63:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  64:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* PUBLIC DATA DEFINITIONS                                                    */
+  65:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+  66:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* "Side effect in initializer list, volatile access": false positive, as volatile register is not 
+  67:common/prog/MSP/mcal/sh30f/muart_mc.c **** /*Axivion Disable Style MisraC2012-13.1  : false positive, no volatile access, just pointer used */
+  68:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  69:common/prog/MSP/mcal/sh30f/muart_mc.c **** /*lint -save -e923 Note 923: Cast from unsigned int to pointer*/
+  70:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  71:common/prog/MSP/mcal/sh30f/muart_mc.c **** const struct MUART_Periph MUART0 =
+  72:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  73:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART0,
+  74:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART0_IRQ_INDEX,
+  75:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART0_IRQn,
+  76:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+  77:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+  78:common/prog/MSP/mcal/sh30f/muart_mc.c ****             &RCC->APB1ENR.V32,        // source clock for UART0-3 >> APB1 
+  79:common/prog/MSP/mcal/sh30f/muart_mc.c ****             RCC_APB1ENR_UART0EN_Msk
+  80:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+  81:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+  82:common/prog/MSP/mcal/sh30f/muart_mc.c **** };
+  83:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  84:common/prog/MSP/mcal/sh30f/muart_mc.c **** const struct MUART_Periph MUART1 =
+  85:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  86:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART1,
+  87:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART1_IRQ_INDEX,
+  88:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART1_IRQn,
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 3
+
+
+  89:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+  90:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+  91:common/prog/MSP/mcal/sh30f/muart_mc.c ****             &RCC->APB1ENR.V32,        // source clock for UART0-3 >> APB1 
+  92:common/prog/MSP/mcal/sh30f/muart_mc.c ****             RCC_APB1ENR_UART1EN_Msk
+  93:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+  94:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+  95:common/prog/MSP/mcal/sh30f/muart_mc.c **** };
+  96:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+  97:common/prog/MSP/mcal/sh30f/muart_mc.c **** const struct MUART_Periph MUART2 =
+  98:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  99:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART2,
+ 100:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART2_IRQ_INDEX,
+ 101:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART2_IRQn,
+ 102:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 103:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+ 104:common/prog/MSP/mcal/sh30f/muart_mc.c ****             &RCC->APB1ENR.V32,        // source clock for UART0-3 >> APB1 
+ 105:common/prog/MSP/mcal/sh30f/muart_mc.c ****             RCC_APB1ENR_UART2EN_Msk
+ 106:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+ 107:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 108:common/prog/MSP/mcal/sh30f/muart_mc.c **** };
+ 109:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 110:common/prog/MSP/mcal/sh30f/muart_mc.c **** const struct MUART_Periph MUART3 =
+ 111:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 112:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART3,
+ 113:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART3_IRQ_INDEX,
+ 114:common/prog/MSP/mcal/sh30f/muart_mc.c ****     UART3_IRQn,
+ 115:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 116:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+ 117:common/prog/MSP/mcal/sh30f/muart_mc.c ****             &RCC->APB1ENR.V32,        // source clock for UART0-3 >> APB1 
+ 118:common/prog/MSP/mcal/sh30f/muart_mc.c ****             RCC_APB1ENR_UART3EN_Msk
+ 119:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+ 120:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 121:common/prog/MSP/mcal/sh30f/muart_mc.c **** };
+ 122:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 123:common/prog/MSP/mcal/sh30f/muart_mc.c **** /*Axivion Enable Style MisraC2012-13.1 */
+ 124:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+ 125:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+ 126:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+ 127:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 128:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 129:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 130:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+ 131:common/prog/MSP/mcal/sh30f/muart_mc.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 132:common/prog/MSP/mcal/sh30f/muart_mc.c **** /******************************************************************************/
+ 133:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 134:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 135:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_configurePeriphDataBits(const struct MUART_Periph *muart, enum MUART_DataBits dataBits)
+ 136:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  28              		.loc 1 136 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 137:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t tmp =  muart->USARTx->CR.V32 & ~UART_CR_SM_Msk;
+  33              		.loc 1 137 5 view .LVU1
+  34              		.loc 1 137 26 is_stmt 0 view .LVU2
+  35 0000 0268     		ldr	r2, [r0]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 4
+
+
+  36              		.loc 1 137 14 view .LVU3
+  37 0002 0948     		ldr	r0, .L7
+  38              	.LVL1:
+  39              		.loc 1 137 38 view .LVU4
+  40 0004 9369     		ldr	r3, [r2, #24]
+  41              		.loc 1 137 14 view .LVU5
+  42 0006 0340     		ands	r3, r0
+  43              	.LVL2:
+ 138:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 139:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(dataBits == MUART_DATA_BITS_8)
+  44              		.loc 1 139 5 is_stmt 1 view .LVU6
+  45              		.loc 1 139 7 is_stmt 0 view .LVU7
+  46 0008 0129     		cmp	r1, #1
+  47 000a 09D1     		bne	.L2
+ 140:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 141:common/prog/MSP/mcal/sh30f/muart_mc.c ****         if(MUART_isParityEnabled(muart))
+  48              		.loc 1 141 9 is_stmt 1 view .LVU8
+  49              	.LBB10:
+  50              	.LBI10:
+  58:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+  51              		.loc 1 58 13 view .LVU9
+  52              	.LVL3:
+  53              	.LBB11:
+  60:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  54              		.loc 1 60 6 view .LVU10
+  60:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  55              		.loc 1 60 32 is_stmt 0 view .LVU11
+  56 000c 9169     		ldr	r1, [r2, #24]
+  57              	.LVL4:
+  60:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  58              		.loc 1 60 32 view .LVU12
+  59              	.LBE11:
+  60              	.LBE10:
+  61              		.loc 1 141 11 view .LVU13
+  62 000e C904     		lsls	r1, r1, #19
+  63 0010 02D5     		bpl	.L3
+  64              	.L5:
+ 142:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+ 143:common/prog/MSP/mcal/sh30f/muart_mc.c ****             // set 9-bit mode (8-bit data + 1-bit parity)
+ 144:common/prog/MSP/mcal/sh30f/muart_mc.c ****             tmp |= UART_Mode_3; 
+ 145:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+ 146:common/prog/MSP/mcal/sh30f/muart_mc.c ****         else 
+ 147:common/prog/MSP/mcal/sh30f/muart_mc.c ****         {
+ 148:common/prog/MSP/mcal/sh30f/muart_mc.c ****             // standart 8-bit mode without parity
+ 149:common/prog/MSP/mcal/sh30f/muart_mc.c ****             tmp |= UART_Mode_1; 
+ 150:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+ 151:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 152:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(dataBits == MUART_DATA_BITS_9)
+ 153:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 154:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // standart 9-bit mode
+ 155:common/prog/MSP/mcal/sh30f/muart_mc.c ****         tmp |= UART_Mode_3; 
+  65              		.loc 1 155 9 is_stmt 1 view .LVU14
+  66              		.loc 1 155 13 is_stmt 0 view .LVU15
+  67 0012 C021     		movs	r1, #192
+  68 0014 C901     		lsls	r1, r1, #7
+  69 0016 01E0     		b	.L6
+  70              	.L3:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 5
+
+
+ 149:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+  71              		.loc 1 149 13 is_stmt 1 view .LVU16
+ 149:common/prog/MSP/mcal/sh30f/muart_mc.c ****         }
+  72              		.loc 1 149 17 is_stmt 0 view .LVU17
+  73 0018 8021     		movs	r1, #128
+  74 001a 8901     		lsls	r1, r1, #6
+  75              	.L6:
+  76              		.loc 1 155 13 view .LVU18
+  77 001c 0B43     		orrs	r3, r1
+  78              	.LVL5:
+  79              		.loc 1 155 13 view .LVU19
+  80 001e 01E0     		b	.L4
+  81              	.LVL6:
+  82              	.L2:
+ 152:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+  83              		.loc 1 152 10 is_stmt 1 view .LVU20
+ 152:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+  84              		.loc 1 152 12 is_stmt 0 view .LVU21
+  85 0020 0229     		cmp	r1, #2
+  86 0022 F6D0     		beq	.L5
+  87              	.LVL7:
+  88              	.L4:
+ 156:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 157:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 158:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 159:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // assert
+ 160:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+  89              		.loc 1 160 5 is_stmt 1 view .LVU22
+ 161:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 162:common/prog/MSP/mcal/sh30f/muart_mc.c ****     muart->USARTx->CR.V32 =  tmp;
+  90              		.loc 1 162 5 view .LVU23
+ 163:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  91              		.loc 1 163 1 is_stmt 0 view .LVU24
+  92              		@ sp needed
+ 162:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+  93              		.loc 1 162 27 view .LVU25
+  94 0024 9361     		str	r3, [r2, #24]
+  95              		.loc 1 163 1 view .LVU26
+  96 0026 7047     		bx	lr
+  97              	.L8:
+  98              		.align	2
+  99              	.L7:
+ 100 0028 FF9FFFFF 		.word	-24577
+ 101              		.cfi_endproc
+ 102              	.LFE97:
+ 104              		.section	.text.MUART_configurePeriphStopBits,"ax",%progbits
+ 105              		.align	1
+ 106              		.global	MUART_configurePeriphStopBits
+ 107              		.syntax unified
+ 108              		.code	16
+ 109              		.thumb_func
+ 111              	MUART_configurePeriphStopBits:
+ 112              	.LVL8:
+ 113              	.LFB98:
+ 164:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 165:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 166:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_configurePeriphStopBits(const struct MUART_Periph *muart, enum MUART_StopBits stopBits)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 6
+
+
+ 167:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 114              		.loc 1 167 1 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118              		@ link register save eliminated.
+ 168:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t tmp = muart->USARTx->CR.V32;
+ 119              		.loc 1 168 5 view .LVU28
+ 120              		.loc 1 168 25 is_stmt 0 view .LVU29
+ 121 0000 0268     		ldr	r2, [r0]
+ 122              		.loc 1 168 14 view .LVU30
+ 123 0002 9369     		ldr	r3, [r2, #24]
+ 124              	.LVL9:
+ 169:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 170:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(stopBits == MUART_STOP_BITS_1)
+ 125              		.loc 1 170 5 is_stmt 1 view .LVU31
+ 126              		.loc 1 170 7 is_stmt 0 view .LVU32
+ 127 0004 0129     		cmp	r1, #1
+ 128 0006 02D1     		bne	.L10
+ 171:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 172:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // clean flag for one bit stop
+ 173:common/prog/MSP/mcal/sh30f/muart_mc.c ****         tmp &= ~UART_CR_STOP_Msk;
+ 129              		.loc 1 173 9 is_stmt 1 view .LVU33
+ 130              		.loc 1 173 13 is_stmt 0 view .LVU34
+ 131 0008 8B43     		bics	r3, r1
+ 132              	.LVL10:
+ 133              	.L11:
+ 174:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 175:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(stopBits == MUART_STOP_BITS_2)
+ 176:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 177:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // set flag for two bits stop
+ 178:common/prog/MSP/mcal/sh30f/muart_mc.c ****         tmp |= UART_CR_STOP_2bits;
+ 179:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 180:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 181:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 182:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // assert, invalid option(MUART_STOP_BITS_0_5,MUART_STOP_BITS_1_5)
+ 183:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 134              		.loc 1 183 5 is_stmt 1 view .LVU35
+ 184:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 185:common/prog/MSP/mcal/sh30f/muart_mc.c ****     muart->USARTx->CR.V32 = tmp;
+ 135              		.loc 1 185 5 view .LVU36
+ 136              		.loc 1 185 27 is_stmt 0 view .LVU37
+ 137 000a 9361     		str	r3, [r2, #24]
+ 186:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 138              		.loc 1 186 1 view .LVU38
+ 139              		@ sp needed
+ 140 000c 7047     		bx	lr
+ 141              	.LVL11:
+ 142              	.L10:
+ 175:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 143              		.loc 1 175 10 is_stmt 1 view .LVU39
+ 175:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 144              		.loc 1 175 12 is_stmt 0 view .LVU40
+ 145 000e 0329     		cmp	r1, #3
+ 146 0010 FBD1     		bne	.L11
+ 178:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 147              		.loc 1 178 9 is_stmt 1 view .LVU41
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 7
+
+
+ 178:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 148              		.loc 1 178 13 is_stmt 0 view .LVU42
+ 149 0012 0239     		subs	r1, r1, #2
+ 150              	.LVL12:
+ 178:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 151              		.loc 1 178 13 view .LVU43
+ 152 0014 0B43     		orrs	r3, r1
+ 153              	.LVL13:
+ 178:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 154              		.loc 1 178 13 view .LVU44
+ 155 0016 F8E7     		b	.L11
+ 156              		.cfi_endproc
+ 157              	.LFE98:
+ 159              		.section	.text.MUART_configurePeriphParity,"ax",%progbits
+ 160              		.align	1
+ 161              		.global	MUART_configurePeriphParity
+ 162              		.syntax unified
+ 163              		.code	16
+ 164              		.thumb_func
+ 166              	MUART_configurePeriphParity:
+ 167              	.LVL14:
+ 168              	.LFB99:
+ 187:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 188:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 189:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_configurePeriphParity(const struct MUART_Periph *muart, enum MUART_Parity parity)
+ 190:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 169              		.loc 1 190 1 is_stmt 1 view -0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173              		@ link register save eliminated.
+ 191:common/prog/MSP/mcal/sh30f/muart_mc.c ****     // Clear Parity bits
+ 192:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t tmp = muart->USARTx->CR.V32 & ~(UART_CR_PS_Msk | UART_CR_MULTIE_Msk);
+ 174              		.loc 1 192 5 view .LVU46
+ 175              		.loc 1 192 25 is_stmt 0 view .LVU47
+ 176 0000 0268     		ldr	r2, [r0]
+ 177              		.loc 1 192 14 view .LVU48
+ 178 0002 0848     		ldr	r0, .L19
+ 179              	.LVL15:
+ 180              		.loc 1 192 37 view .LVU49
+ 181 0004 9369     		ldr	r3, [r2, #24]
+ 182              		.loc 1 192 14 view .LVU50
+ 183 0006 0340     		ands	r3, r0
+ 184              	.LVL16:
+ 193:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 194:common/prog/MSP/mcal/sh30f/muart_mc.c ****     /* NOTE: Parity can be enabled only for 9-bit mode (8bit data + 1 bit parity)
+ 195:common/prog/MSP/mcal/sh30f/muart_mc.c ****     */
+ 196:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 197:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(parity == MUART_PARITY_NONE)
+ 185              		.loc 1 197 5 is_stmt 1 view .LVU51
+ 186              		.loc 1 197 7 is_stmt 0 view .LVU52
+ 187 0008 0029     		cmp	r1, #0
+ 188 000a 04D0     		beq	.L13
+ 198:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 199:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // Nothing to do for this settings
+ 200:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 201:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(parity == MUART_PARITY_EVEN)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 8
+
+
+ 189              		.loc 1 201 10 is_stmt 1 view .LVU53
+ 190              		.loc 1 201 12 is_stmt 0 view .LVU54
+ 191 000c 0229     		cmp	r1, #2
+ 192 000e 04D1     		bne	.L14
+ 202:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 203:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // NOTE: available only in 9-bit mode!
+ 204:common/prog/MSP/mcal/sh30f/muart_mc.c ****         tmp |= UART_Parity_Even;
+ 193              		.loc 1 204 9 is_stmt 1 view .LVU55
+ 194              		.loc 1 204 13 is_stmt 0 view .LVU56
+ 195 0010 A021     		movs	r1, #160
+ 196              	.LVL17:
+ 197              	.L18:
+ 205:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 206:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(parity == MUART_PARITY_ODD)
+ 207:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 208:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // NOTE: available only in 9-bit mode!
+ 209:common/prog/MSP/mcal/sh30f/muart_mc.c ****         tmp |= UART_Parity_Odd;
+ 198              		.loc 1 209 13 view .LVU57
+ 199 0012 4901     		lsls	r1, r1, #5
+ 200 0014 0B43     		orrs	r3, r1
+ 201              	.LVL18:
+ 202              	.L13:
+ 210:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 211:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 212:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 213:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // assert
+ 214:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 203              		.loc 1 214 5 is_stmt 1 view .LVU58
+ 215:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 216:common/prog/MSP/mcal/sh30f/muart_mc.c ****     muart->USARTx->CR.V32 = tmp;
+ 204              		.loc 1 216 5 view .LVU59
+ 205              		.loc 1 216 27 is_stmt 0 view .LVU60
+ 206 0016 9361     		str	r3, [r2, #24]
+ 217:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 207              		.loc 1 217 1 view .LVU61
+ 208              		@ sp needed
+ 209 0018 7047     		bx	lr
+ 210              	.LVL19:
+ 211              	.L14:
+ 206:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 212              		.loc 1 206 10 is_stmt 1 view .LVU62
+ 206:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 213              		.loc 1 206 12 is_stmt 0 view .LVU63
+ 214 001a 0129     		cmp	r1, #1
+ 215 001c FBD1     		bne	.L13
+ 209:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 216              		.loc 1 209 9 is_stmt 1 view .LVU64
+ 209:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 217              		.loc 1 209 13 is_stmt 0 view .LVU65
+ 218 001e 8021     		movs	r1, #128
+ 219              	.LVL20:
+ 209:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 220              		.loc 1 209 13 view .LVU66
+ 221 0020 F7E7     		b	.L18
+ 222              	.L20:
+ 223 0022 C046     		.align	2
+ 224              	.L19:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 9
+
+
+ 225 0024 FFE3FFFF 		.word	-7169
+ 226              		.cfi_endproc
+ 227              	.LFE99:
+ 229              		.global	__aeabi_uidiv
+ 230              		.section	.text.MUART_configurePeriphBaudrate,"ax",%progbits
+ 231              		.align	1
+ 232              		.global	MUART_configurePeriphBaudrate
+ 233              		.syntax unified
+ 234              		.code	16
+ 235              		.thumb_func
+ 237              	MUART_configurePeriphBaudrate:
+ 238              	.LVL21:
+ 239              	.LFB100:
+ 218:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 219:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 220:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_configurePeriphBaudrate(const struct MUART_Periph *muart, uint32_t baudrate)
+ 221:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 240              		.loc 1 221 1 is_stmt 1 view -0
+ 241              		.cfi_startproc
+ 242              		@ args = 0, pretend = 0, frame = 0
+ 243              		@ frame_needed = 0, uses_anonymous_args = 0
+ 222:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t clkHz;
+ 244              		.loc 1 222 5 view .LVU68
+ 223:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t intdiv;
+ 245              		.loc 1 223 5 view .LVU69
+ 224:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t fradiv;
+ 246              		.loc 1 224 5 view .LVU70
+ 225:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 226:common/prog/MSP/mcal/sh30f/muart_mc.c ****     muart->USARTx->CR.V32 |= UART_CR_SBRTEN_Msk;        // enable UART baudrate generator
+ 247              		.loc 1 226 5 view .LVU71
+ 248              		.loc 1 226 27 is_stmt 0 view .LVU72
+ 249 0000 0223     		movs	r3, #2
+ 221:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t clkHz;
+ 250              		.loc 1 221 1 view .LVU73
+ 251 0002 70B5     		push	{r4, r5, r6, lr}
+ 252              	.LCFI0:
+ 253              		.cfi_def_cfa_offset 16
+ 254              		.cfi_offset 4, -16
+ 255              		.cfi_offset 5, -12
+ 256              		.cfi_offset 6, -8
+ 257              		.cfi_offset 14, -4
+ 258              		.loc 1 226 10 view .LVU74
+ 259 0004 0468     		ldr	r4, [r0]
+ 227:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 228:common/prog/MSP/mcal/sh30f/muart_mc.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 229:common/prog/MSP/mcal/sh30f/muart_mc.c ****     enum MPCM_Clock clockSource = MPCM_CLOCK_PCLK1;     //UART clock source = APB1 
+ 230:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 231:common/prog/MSP/mcal/sh30f/muart_mc.c ****     clkHz = (uint32_t)MPCM_getClockFreq(clockSource);
+ 232:common/prog/MSP/mcal/sh30f/muart_mc.c ****   #else
+ 233:common/prog/MSP/mcal/sh30f/muart_mc.c ****     //USART[0-3] is using APB1 which is PCLOCK1
+ 234:common/prog/MSP/mcal/sh30f/muart_mc.c ****     clkHz = PCLOCK1 * 1000000u;
+ 235:common/prog/MSP/mcal/sh30f/muart_mc.c ****   #endif
+ 236:common/prog/MSP/mcal/sh30f/muart_mc.c ****     /* Info 774: boolean condition for 'if' always evaluates to 'true' (involving variable 'clkHz')
+ 237:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(clkHz > 0U)//lint !e774 : intended to prevent additional compiler switches
+ 238:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 239:common/prog/MSP/mcal/sh30f/muart_mc.c ****         
+ 240:common/prog/MSP/mcal/sh30f/muart_mc.c ****         intdiv = ((clkHz / 16U) / baudrate) - 1U;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 10
+
+
+ 260              		.loc 1 240 33 view .LVU75
+ 261 0006 0A48     		ldr	r0, .L22
+ 262              	.LVL22:
+ 226:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 263              		.loc 1 226 27 view .LVU76
+ 264 0008 A269     		ldr	r2, [r4, #24]
+ 221:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t clkHz;
+ 265              		.loc 1 221 1 view .LVU77
+ 266 000a 0E00     		movs	r6, r1
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 243:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 244:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 245:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 246:common/prog/MSP/mcal/sh30f/muart_mc.c ****         // assert
+ 247:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 248:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 267              		.loc 1 248 1 view .LVU78
+ 268              		@ sp needed
+ 226:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 269              		.loc 1 226 27 view .LVU79
+ 270 000c 1343     		orrs	r3, r2
+ 271 000e A361     		str	r3, [r4, #24]
+ 234:common/prog/MSP/mcal/sh30f/muart_mc.c ****   #endif
+ 272              		.loc 1 234 5 is_stmt 1 view .LVU80
+ 273              	.LVL23:
+ 237:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 274              		.loc 1 237 5 view .LVU81
+ 240:common/prog/MSP/mcal/sh30f/muart_mc.c ****         fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+ 275              		.loc 1 240 9 view .LVU82
+ 240:common/prog/MSP/mcal/sh30f/muart_mc.c ****         fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+ 276              		.loc 1 240 33 is_stmt 0 view .LVU83
+ 277 0010 FFF7FEFF 		bl	__aeabi_uidiv
+ 278              	.LVL24:
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 279              		.loc 1 241 25 view .LVU84
+ 280 0014 3100     		movs	r1, r6
+ 240:common/prog/MSP/mcal/sh30f/muart_mc.c ****         fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+ 281              		.loc 1 240 33 view .LVU85
+ 282 0016 0500     		movs	r5, r0
+ 283              	.LVL25:
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 284              		.loc 1 241 9 is_stmt 1 view .LVU86
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 285              		.loc 1 242 9 view .LVU87
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 286              		.loc 1 241 25 is_stmt 0 view .LVU88
+ 287 0018 0648     		ldr	r0, .L22+4
+ 288              	.LVL26:
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 289              		.loc 1 241 25 view .LVU89
+ 290 001a FFF7FEFF 		bl	__aeabi_uidiv
+ 291              	.LVL27:
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ 292              		.loc 1 241 44 view .LVU90
+ 293 001e 2B01     		lsls	r3, r5, #4
+ 241:common/prog/MSP/mcal/sh30f/muart_mc.c ****         muart->USARTx->BRT.V32 = ((UART_BRT_SBRT_Msk | UART_BRT_BFINE_Msk) & (intdiv | (fradiv << 1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 11
+
+
+ 294              		.loc 1 241 16 view .LVU91
+ 295 0020 C01A     		subs	r0, r0, r3
+ 240:common/prog/MSP/mcal/sh30f/muart_mc.c ****         fradiv = (clkHz / baudrate) - (16U * (intdiv + 1U));
+ 296              		.loc 1 240 16 view .LVU92
+ 297 0022 013D     		subs	r5, r5, #1
+ 298              	.LVL28:
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 299              		.loc 1 242 76 view .LVU93
+ 300 0024 044B     		ldr	r3, .L22+8
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 301              		.loc 1 242 96 view .LVU94
+ 302 0026 0004     		lsls	r0, r0, #16
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 303              		.loc 1 242 86 view .LVU95
+ 304 0028 2843     		orrs	r0, r5
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 305              		.loc 1 242 76 view .LVU96
+ 306 002a 1840     		ands	r0, r3
+ 242:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 307              		.loc 1 242 32 view .LVU97
+ 308 002c 6061     		str	r0, [r4, #20]
+ 247:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 309              		.loc 1 247 5 is_stmt 1 view .LVU98
+ 310              	.LVL29:
+ 311              	.LVL30:
+ 312              		.loc 1 248 1 is_stmt 0 view .LVU99
+ 313 002e 70BD     		pop	{r4, r5, r6, pc}
+ 314              	.L23:
+ 315              		.align	2
+ 316              	.L22:
+ 317 0030 60E31600 		.word	1500000
+ 318 0034 00366E01 		.word	24000000
+ 319 0038 FF7F0F00 		.word	1015807
+ 320              		.cfi_endproc
+ 321              	.LFE100:
+ 323              		.section	.text.MUART_enableClock,"ax",%progbits
+ 324              		.align	1
+ 325              		.global	MUART_enableClock
+ 326              		.syntax unified
+ 327              		.code	16
+ 328              		.thumb_func
+ 330              	MUART_enableClock:
+ 331              	.LVL31:
+ 332              	.LFB101:
+ 249:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 250:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 251:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_enableClock(const struct MUART_Periph *muart)
+ 252:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 333              		.loc 1 252 1 is_stmt 1 view -0
+ 334              		.cfi_startproc
+ 335              		@ args = 0, pretend = 0, frame = 0
+ 336              		@ frame_needed = 0, uses_anonymous_args = 0
+ 337              		@ link register save eliminated.
+ 253:common/prog/MSP/mcal/sh30f/muart_mc.c ****     // unlock RCC registers
+ 254:common/prog/MSP/mcal/sh30f/muart_mc.c ****     RCC_REGS_UNLOCK();
+ 338              		.loc 1 254 5 view .LVU101
+ 339 0000 054A     		ldr	r2, .L25
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 12
+
+
+ 340 0002 064B     		ldr	r3, .L25+4
+ 341              	.LBB16:
+ 342              	.LBB17:
+ 343              		.file 2 "common/prog/MSP/mcal/msup.h"
+   1:common/prog/MSP/mcal/msup.h **** /*******************************************************************************
+   2:common/prog/MSP/mcal/msup.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/msup.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/msup.h ****  *
+   5:common/prog/MSP/mcal/msup.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/msup.h ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/msup.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/msup.h ****  *
+   9:common/prog/MSP/mcal/msup.h ****  *******************************************************************************
+  10:common/prog/MSP/mcal/msup.h ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/msup.h ****  *  COMP_ABBREV      MSUP
+  12:common/prog/MSP/mcal/msup.h ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/msup.h **** 
+  14:common/prog/MSP/mcal/msup.h **** 
+  15:common/prog/MSP/mcal/msup.h **** #ifndef MSUP_H
+  16:common/prog/MSP/mcal/msup.h **** #define MSUP_H
+  17:common/prog/MSP/mcal/msup.h **** 
+  18:common/prog/MSP/mcal/msup.h **** #if defined(__cplusplus) && !defined(MOCK_IT)
+  19:common/prog/MSP/mcal/msup.h **** extern "C" {
+  20:common/prog/MSP/mcal/msup.h **** #endif //__cplusplus
+  21:common/prog/MSP/mcal/msup.h **** 
+  22:common/prog/MSP/mcal/msup.h ****  /******************************************************************************/
+  23:common/prog/MSP/mcal/msup.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  25:common/prog/MSP/mcal/msup.h **** /** \file
+  26:common/prog/MSP/mcal/msup.h ****  *
+  27:common/prog/MSP/mcal/msup.h ****  *  \ingroup  MCAL
+  28:common/prog/MSP/mcal/msup.h ****  *
+  29:common/prog/MSP/mcal/msup.h ****  *  \brief    Public definitions and declarations for unit MSUP.
+  30:common/prog/MSP/mcal/msup.h ****  *            HSUP library is used because of interrupts enable/disable. It is too 
+  31:common/prog/MSP/mcal/msup.h ****  *            complicated to implement interrupts enable/disable because it uses
+  32:common/prog/MSP/mcal/msup.h ****  *            other functionality and it has to be able to measure disable time,
+  33:common/prog/MSP/mcal/msup.h ****  *            etc. It will be resolved in future update.
+  34:common/prog/MSP/mcal/msup.h ****  **/
+  35:common/prog/MSP/mcal/msup.h **** 
+  36:common/prog/MSP/mcal/msup.h **** 
+  37:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  38:common/prog/MSP/mcal/msup.h **** /* INCLUDES                                                                   */
+  39:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  40:common/prog/MSP/mcal/msup.h **** 
+  41:common/prog/MSP/mcal/msup.h **** #include "BSH_stdinc.h"
+  42:common/prog/MSP/mcal/msup.h **** #include "hsup.h"
+  43:common/prog/MSP/mcal/msup.h **** #include "mcal.h"
+  44:common/prog/MSP/mcal/msup.h **** 
+  45:common/prog/MSP/mcal/msup.h **** 
+  46:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  47:common/prog/MSP/mcal/msup.h **** /* PUBLIC TYPE DECLARATIONS                                                   */
+  48:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  49:common/prog/MSP/mcal/msup.h **** 
+  50:common/prog/MSP/mcal/msup.h **** /** Structure for specifying register 32-bit bitfield */
+  51:common/prog/MSP/mcal/msup.h **** struct MSUP_RegBitField32
+  52:common/prog/MSP/mcal/msup.h **** {
+  53:common/prog/MSP/mcal/msup.h ****     volatile uint32_t   *regPtr;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 13
+
+
+  54:common/prog/MSP/mcal/msup.h ****     uint32_t            bitFieldMask;
+  55:common/prog/MSP/mcal/msup.h **** };
+  56:common/prog/MSP/mcal/msup.h **** 
+  57:common/prog/MSP/mcal/msup.h **** 
+  58:common/prog/MSP/mcal/msup.h **** /** Structure for specifying register 16-bit bitfield */
+  59:common/prog/MSP/mcal/msup.h **** struct MSUP_RegBitField16
+  60:common/prog/MSP/mcal/msup.h **** {
+  61:common/prog/MSP/mcal/msup.h ****     volatile uint16_t   *regPtr;
+  62:common/prog/MSP/mcal/msup.h ****     uint16_t            bitFieldMask;
+  63:common/prog/MSP/mcal/msup.h **** };
+  64:common/prog/MSP/mcal/msup.h **** 
+  65:common/prog/MSP/mcal/msup.h **** 
+  66:common/prog/MSP/mcal/msup.h **** struct MSUP_TimeoutHandle
+  67:common/prog/MSP/mcal/msup.h **** {
+  68:common/prog/MSP/mcal/msup.h ****     /** Variable for storing the current timer value */
+  69:common/prog/MSP/mcal/msup.h ****     uint32_t  timer;
+  70:common/prog/MSP/mcal/msup.h ****     
+  71:common/prog/MSP/mcal/msup.h ****     /** Variable for storing required time for timeout in microseconds */
+  72:common/prog/MSP/mcal/msup.h ****     uint32_t  timeout;
+  73:common/prog/MSP/mcal/msup.h ****     
+  74:common/prog/MSP/mcal/msup.h ****     /** Variable for storing the last timestamp */
+  75:common/prog/MSP/mcal/msup.h ****     uint16_t  timeStamp;
+  76:common/prog/MSP/mcal/msup.h **** };/*lint -e9045 "non-hidden definition of type..." not hidden by intention */
+  77:common/prog/MSP/mcal/msup.h **** 
+  78:common/prog/MSP/mcal/msup.h **** 
+  79:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  80:common/prog/MSP/mcal/msup.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  81:common/prog/MSP/mcal/msup.h **** /******************************************************************************/
+  82:common/prog/MSP/mcal/msup.h **** 
+  83:common/prog/MSP/mcal/msup.h **** /** Function for updating local time measurement variables.
+  84:common/prog/MSP/mcal/msup.h ****  *  \brief  To handle internal timer functionality, function MSUP_handleTimerExt,
+  85:common/prog/MSP/mcal/msup.h ****  *          MSUP_getMeasuredTimeExt or MSUP_isTimeoutExt needs to be
+  86:common/prog/MSP/mcal/msup.h ****  *          called periodically at least once in 30 ms.
+  87:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+  88:common/prog/MSP/mcal/msup.h ****  *  \return none
+  89:common/prog/MSP/mcal/msup.h ****  */
+  90:common/prog/MSP/mcal/msup.h **** extern void MSUP_handleTimerExt(struct MSUP_TimeoutHandle *handle);
+  91:common/prog/MSP/mcal/msup.h **** 
+  92:common/prog/MSP/mcal/msup.h **** 
+  93:common/prog/MSP/mcal/msup.h **** /** Function for starting of microsecond time measurement with local time 
+  94:common/prog/MSP/mcal/msup.h ****  *  measurement variables.
+  95:common/prog/MSP/mcal/msup.h ****  *  \brief  See related MSUP_handleTimerExt function.
+  96:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+  97:common/prog/MSP/mcal/msup.h ****  *  \return none
+  98:common/prog/MSP/mcal/msup.h ****  */
+  99:common/prog/MSP/mcal/msup.h **** extern void MSUP_startTimeMeasureExt(struct MSUP_TimeoutHandle *handle);
+ 100:common/prog/MSP/mcal/msup.h **** 
+ 101:common/prog/MSP/mcal/msup.h **** 
+ 102:common/prog/MSP/mcal/msup.h **** /** Sets timeout for local time measurement variables.
+ 103:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets required time for timeout in microseconds.
+ 104:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+ 105:common/prog/MSP/mcal/msup.h ****  *  \param timeout: The number of microseconds after which MSUP_isTimeOutExt returns
+ 106:common/prog/MSP/mcal/msup.h ****  *         true(0x1 .. 0xFFFF FFFF). See related MSUP_handleTimerExt function.
+ 107:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 108:common/prog/MSP/mcal/msup.h ****  */
+ 109:common/prog/MSP/mcal/msup.h **** extern void MSUP_setTimeOutExt(struct MSUP_TimeoutHandle *handle, uint32_t timeout);
+ 110:common/prog/MSP/mcal/msup.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 14
+
+
+ 111:common/prog/MSP/mcal/msup.h **** 
+ 112:common/prog/MSP/mcal/msup.h **** /** Function for getting actual measured time in microseconds from local 
+ 113:common/prog/MSP/mcal/msup.h ****  *  time measurement variables.
+ 114:common/prog/MSP/mcal/msup.h ****  *  \brief  For starting of time measurement use MSUP_startTimeMeasureExt
+ 115:common/prog/MSP/mcal/msup.h ****  *          or MSUP_setTimeOutExt function. See related MSUP_handleTimerExt function.
+ 116:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+ 117:common/prog/MSP/mcal/msup.h ****  *  \return measured time
+ 118:common/prog/MSP/mcal/msup.h ****  */
+ 119:common/prog/MSP/mcal/msup.h **** extern uint32_t MSUP_getMeasuredTimeExt(struct MSUP_TimeoutHandle *handle);
+ 120:common/prog/MSP/mcal/msup.h **** 
+ 121:common/prog/MSP/mcal/msup.h **** 
+ 122:common/prog/MSP/mcal/msup.h **** /** Performs a non busy wait for an arbitrary time in microseconds.
+ 123:common/prog/MSP/mcal/msup.h ****  *  \brief This function performs a non busy wait for an arbitrary time
+ 124:common/prog/MSP/mcal/msup.h ****  *         in microseconds set by MSUP_setTimeOutExt.
+ 125:common/prog/MSP/mcal/msup.h ****  *         See related MSUP_handleTimerExt function. 
+ 126:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+ 127:common/prog/MSP/mcal/msup.h ****  *  \return true if timer is down, false else
+ 128:common/prog/MSP/mcal/msup.h ****  */
+ 129:common/prog/MSP/mcal/msup.h **** extern bool MSUP_isTimeOutExt(struct MSUP_TimeoutHandle *handle);
+ 130:common/prog/MSP/mcal/msup.h **** 
+ 131:common/prog/MSP/mcal/msup.h **** 
+ 132:common/prog/MSP/mcal/msup.h **** /** Performs a non busy wait for an arbitrary time in microseconds.
+ 133:common/prog/MSP/mcal/msup.h ****  *  \brief  Same as MSUP_isTimeOutExt but with different return type.
+ 134:common/prog/MSP/mcal/msup.h ****  *          This allows it to be used together with MCAL_RETURN_ON_ERROR or
+ 135:common/prog/MSP/mcal/msup.h ****  *          MCAL_BREAK_ON_ERROR macros. See related MSUP_handleTimerExt function.
+ 136:common/prog/MSP/mcal/msup.h ****  *  \param handle: pointer to MSUP_TimeoutHandle instance
+ 137:common/prog/MSP/mcal/msup.h ****  *  \return MCAL_ERROR_TIMEOUT if time has been reached, MCAL_OK otherwise
+ 138:common/prog/MSP/mcal/msup.h ****  */
+ 139:common/prog/MSP/mcal/msup.h **** static inline enum MCAL_Error MSUP_checkTimeOutExt(struct MSUP_TimeoutHandle *handle)
+ 140:common/prog/MSP/mcal/msup.h **** {
+ 141:common/prog/MSP/mcal/msup.h ****     return MSUP_isTimeOutExt(handle) ? MCAL_ERROR_TIMEOUT : MCAL_OK;
+ 142:common/prog/MSP/mcal/msup.h **** }
+ 143:common/prog/MSP/mcal/msup.h **** 
+ 144:common/prog/MSP/mcal/msup.h **** 
+ 145:common/prog/MSP/mcal/msup.h **** /** Performs a busy wait for an arbitrary time in microseconds.
+ 146:common/prog/MSP/mcal/msup.h ****  *  \brief This function performs a busy wait for an arbitrary time.
+ 147:common/prog/MSP/mcal/msup.h ****  *  \param delay: The function waits at least delay microseconds (0x1 .. 0xFFFF).
+ 148:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 149:common/prog/MSP/mcal/msup.h ****  */
+ 150:common/prog/MSP/mcal/msup.h **** extern void MSUP_delay(uint16_t delay);
+ 151:common/prog/MSP/mcal/msup.h **** 
+ 152:common/prog/MSP/mcal/msup.h **** 
+ 153:common/prog/MSP/mcal/msup.h **** /** Function for updating internal time measurement variables.
+ 154:common/prog/MSP/mcal/msup.h ****  *  \brief  To handle internal timer functionality, function MSUP_handleTimer,
+ 155:common/prog/MSP/mcal/msup.h ****  *          MSUP_getMeasuredTime or MSUP_isTimeout needs to be
+ 156:common/prog/MSP/mcal/msup.h ****  *          called periodically at least once in 30 ms.
+ 157:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 158:common/prog/MSP/mcal/msup.h ****  */
+ 159:common/prog/MSP/mcal/msup.h **** extern void MSUP_handleTimer(void);
+ 160:common/prog/MSP/mcal/msup.h **** 
+ 161:common/prog/MSP/mcal/msup.h **** 
+ 162:common/prog/MSP/mcal/msup.h **** /** Function for starting of microsecond time measurement with internal time 
+ 163:common/prog/MSP/mcal/msup.h ****  *  measurement variables.
+ 164:common/prog/MSP/mcal/msup.h ****  *  \brief  See related MSUP_handleTimer function.
+ 165:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 166:common/prog/MSP/mcal/msup.h ****  */
+ 167:common/prog/MSP/mcal/msup.h **** extern void MSUP_startTimeMeasure(void);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 15
+
+
+ 168:common/prog/MSP/mcal/msup.h **** 
+ 169:common/prog/MSP/mcal/msup.h **** 
+ 170:common/prog/MSP/mcal/msup.h **** /** Sets timeout for internal time measurement variables.
+ 171:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets required time for timeout in microseconds.
+ 172:common/prog/MSP/mcal/msup.h ****  *  \param timeout: The number of microseconds after which MSUP_isTimeOut returns
+ 173:common/prog/MSP/mcal/msup.h ****  *         true(0x1 .. 0xFFFF FFFF). See related MSUP_handleTimer function.
+ 174:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 175:common/prog/MSP/mcal/msup.h ****  */
+ 176:common/prog/MSP/mcal/msup.h **** extern void MSUP_setTimeOut(uint32_t timeout);
+ 177:common/prog/MSP/mcal/msup.h **** 
+ 178:common/prog/MSP/mcal/msup.h **** 
+ 179:common/prog/MSP/mcal/msup.h **** /** Function for getting actual measured time in microseconds from internal 
+ 180:common/prog/MSP/mcal/msup.h ****  *  time measurement variables.
+ 181:common/prog/MSP/mcal/msup.h ****  *  \brief  For starting of time measurement use MSUP_startTimeMeasure
+ 182:common/prog/MSP/mcal/msup.h ****  *          or MSUP_setTimeOut function. See related MSUP_handleTimer function.
+ 183:common/prog/MSP/mcal/msup.h ****  *  \return measured time
+ 184:common/prog/MSP/mcal/msup.h ****  */
+ 185:common/prog/MSP/mcal/msup.h **** extern uint32_t MSUP_getMeasuredTime(void);
+ 186:common/prog/MSP/mcal/msup.h **** 
+ 187:common/prog/MSP/mcal/msup.h **** 
+ 188:common/prog/MSP/mcal/msup.h **** /** Performs a non busy wait for an arbitrary time in microseconds.
+ 189:common/prog/MSP/mcal/msup.h ****  *  \brief This function performs a non busy wait for an arbitrary time
+ 190:common/prog/MSP/mcal/msup.h ****  *         in microseconds set by MSUP_setTimeOut.
+ 191:common/prog/MSP/mcal/msup.h ****  *         See related MSUP_handleTimer function. 
+ 192:common/prog/MSP/mcal/msup.h ****  *  \param none
+ 193:common/prog/MSP/mcal/msup.h ****  *  \return true if timer is down, false else
+ 194:common/prog/MSP/mcal/msup.h ****  */
+ 195:common/prog/MSP/mcal/msup.h **** extern bool MSUP_isTimeOut(void);
+ 196:common/prog/MSP/mcal/msup.h **** 
+ 197:common/prog/MSP/mcal/msup.h **** 
+ 198:common/prog/MSP/mcal/msup.h **** /** Performs a non busy wait for an arbitrary time in microseconds.
+ 199:common/prog/MSP/mcal/msup.h ****  *  \brief  Same as MSUP_isTimeOut but with different return type.
+ 200:common/prog/MSP/mcal/msup.h ****  *          This allows it to be used together with MCAL_RETURN_ON_ERROR or
+ 201:common/prog/MSP/mcal/msup.h ****  *          MCAL_BREAK_ON_ERROR macros. See related MSUP_handleTimer function.
+ 202:common/prog/MSP/mcal/msup.h ****  *  \return MCAL_ERROR_TIMEOUT if time has been reached, MCAL_OK otherwise
+ 203:common/prog/MSP/mcal/msup.h ****  */
+ 204:common/prog/MSP/mcal/msup.h **** static inline enum MCAL_Error MSUP_checkTimeOut(void)
+ 205:common/prog/MSP/mcal/msup.h **** {
+ 206:common/prog/MSP/mcal/msup.h ****     return MSUP_isTimeOut() ? MCAL_ERROR_TIMEOUT : MCAL_OK;
+ 207:common/prog/MSP/mcal/msup.h **** }
+ 208:common/prog/MSP/mcal/msup.h **** 
+ 209:common/prog/MSP/mcal/msup.h **** 
+ 210:common/prog/MSP/mcal/msup.h **** #if !defined(NO_ISR_SUPPORT) || defined(MOCK_IT)
+ 211:common/prog/MSP/mcal/msup.h **** /** Disables all interrupts.
+ 212:common/prog/MSP/mcal/msup.h ****  *  \brief This function disables all interrupts.
+ 213:common/prog/MSP/mcal/msup.h ****  *  \param none
+ 214:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 215:common/prog/MSP/mcal/msup.h ****  */
+ 216:common/prog/MSP/mcal/msup.h **** extern void HSUP_disableInt(void);
+ 217:common/prog/MSP/mcal/msup.h **** 
+ 218:common/prog/MSP/mcal/msup.h **** 
+ 219:common/prog/MSP/mcal/msup.h **** /** Enables all interrupts.
+ 220:common/prog/MSP/mcal/msup.h ****  *  \brief This function enables all interrupts.
+ 221:common/prog/MSP/mcal/msup.h ****  *  \param none
+ 222:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 223:common/prog/MSP/mcal/msup.h ****  */
+ 224:common/prog/MSP/mcal/msup.h **** extern void HSUP_enableInt(void);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 16
+
+
+ 225:common/prog/MSP/mcal/msup.h **** #else
+ 226:common/prog/MSP/mcal/msup.h **** #define HSUP_DisableInt()
+ 227:common/prog/MSP/mcal/msup.h **** #define HSUP_enableInt()
+ 228:common/prog/MSP/mcal/msup.h **** #endif // NO_ISR_SUPPORT
+ 229:common/prog/MSP/mcal/msup.h **** 
+ 230:common/prog/MSP/mcal/msup.h **** /** Generates a CPU reset.
+ 231:common/prog/MSP/mcal/msup.h ****  *  \brief This function generates a CPU reset.
+ 232:common/prog/MSP/mcal/msup.h ****  *  \param none
+ 233:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 234:common/prog/MSP/mcal/msup.h ****  */
+ 235:common/prog/MSP/mcal/msup.h **** extern void MSUP_generateReset(void);
+ 236:common/prog/MSP/mcal/msup.h **** 
+ 237:common/prog/MSP/mcal/msup.h **** #if defined(__cplusplus) && defined(MOCK_IT)
+ 238:common/prog/MSP/mcal/msup.h **** extern "C" { // in global namespace --> no mocking
+ 239:common/prog/MSP/mcal/msup.h **** #endif
+ 240:common/prog/MSP/mcal/msup.h **** 
+ 241:common/prog/MSP/mcal/msup.h **** /** Returns the high byte of the passed integer value.
+ 242:common/prog/MSP/mcal/msup.h ****  *  \brief This function returns the high byte of the passed integer value.
+ 243:common/prog/MSP/mcal/msup.h ****  *  \param value: The value where the high byte shall be returned.
+ 244:common/prog/MSP/mcal/msup.h ****  *  \return High byte of value.
+ 245:common/prog/MSP/mcal/msup.h ****  */
+ 246:common/prog/MSP/mcal/msup.h **** extern uint8_t MSUP_getHighByte(uint16_t value);
+ 247:common/prog/MSP/mcal/msup.h **** 
+ 248:common/prog/MSP/mcal/msup.h **** 
+ 249:common/prog/MSP/mcal/msup.h **** /** Returns the low byte of the passed integer value.
+ 250:common/prog/MSP/mcal/msup.h ****  *  \brief This function returns the low byte of the passed integer value.
+ 251:common/prog/MSP/mcal/msup.h ****  *  \param value: The value where the low byte shall be returned.
+ 252:common/prog/MSP/mcal/msup.h ****  *  \return Low byte of value.
+ 253:common/prog/MSP/mcal/msup.h ****  */
+ 254:common/prog/MSP/mcal/msup.h **** extern uint8_t MSUP_getLowByte(uint16_t value);
+ 255:common/prog/MSP/mcal/msup.h **** 
+ 256:common/prog/MSP/mcal/msup.h **** 
+ 257:common/prog/MSP/mcal/msup.h **** /** Sets the high byte of 16bit value.
+ 258:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets the high byte of *value1 with the passed value value2.
+ 259:common/prog/MSP/mcal/msup.h ****  *  \param value1: The pointer to the value where the high byte will be set.
+ 260:common/prog/MSP/mcal/msup.h ****  *  \param value2: The new value of the high byte.
+ 261:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 262:common/prog/MSP/mcal/msup.h ****  */
+ 263:common/prog/MSP/mcal/msup.h **** extern void MSUP_setHighByte(uint16_t *value1, uint8_t value2);
+ 264:common/prog/MSP/mcal/msup.h **** 
+ 265:common/prog/MSP/mcal/msup.h **** 
+ 266:common/prog/MSP/mcal/msup.h **** /** Sets the low byte of 16bit value.
+ 267:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets the low byte of value1 with the passed value value2.
+ 268:common/prog/MSP/mcal/msup.h ****  *  \param value1: The pointer to the value where the low byte will be set.
+ 269:common/prog/MSP/mcal/msup.h ****  *  \param value2: The new value of the low byte.
+ 270:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 271:common/prog/MSP/mcal/msup.h ****  */
+ 272:common/prog/MSP/mcal/msup.h **** extern void MSUP_setLowByte(uint16_t *value1, uint8_t value2);
+ 273:common/prog/MSP/mcal/msup.h **** 
+ 274:common/prog/MSP/mcal/msup.h **** 
+ 275:common/prog/MSP/mcal/msup.h ****  /** Returns the high word of the passed long value.
+ 276:common/prog/MSP/mcal/msup.h ****  *  \brief This function returns the high word of the passed long value.
+ 277:common/prog/MSP/mcal/msup.h ****  *  \param value: The value where the high word will be returned.
+ 278:common/prog/MSP/mcal/msup.h ****  *  \return The high word of the value val.
+ 279:common/prog/MSP/mcal/msup.h ****  */
+ 280:common/prog/MSP/mcal/msup.h **** extern uint32_t MSUP_getHighWord(uint32_t value);
+ 281:common/prog/MSP/mcal/msup.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 17
+
+
+ 282:common/prog/MSP/mcal/msup.h **** 
+ 283:common/prog/MSP/mcal/msup.h ****  /** Returns the low word of the passed long value.
+ 284:common/prog/MSP/mcal/msup.h ****  *  \brief This function returns the low word of the passed long value.
+ 285:common/prog/MSP/mcal/msup.h ****  *  \param value: The value where the low word will be returned.
+ 286:common/prog/MSP/mcal/msup.h ****  *  \return The low word of the value val.
+ 287:common/prog/MSP/mcal/msup.h ****  */
+ 288:common/prog/MSP/mcal/msup.h **** extern uint32_t MSUP_getLowWord(uint32_t value);
+ 289:common/prog/MSP/mcal/msup.h **** 
+ 290:common/prog/MSP/mcal/msup.h **** 
+ 291:common/prog/MSP/mcal/msup.h ****  /** Sets the high word of uint32_t value.
+ 292:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets the high word of *value1 with the passed value value2.
+ 293:common/prog/MSP/mcal/msup.h ****  *  \param value1: The pointer to the value where the high word will be set.
+ 294:common/prog/MSP/mcal/msup.h ****  *  \param value2: The new value of the high word.
+ 295:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 296:common/prog/MSP/mcal/msup.h ****  */
+ 297:common/prog/MSP/mcal/msup.h **** extern void MSUP_setHighWord(uint32_t *value1, uint16_t value2);
+ 298:common/prog/MSP/mcal/msup.h **** 
+ 299:common/prog/MSP/mcal/msup.h **** 
+ 300:common/prog/MSP/mcal/msup.h ****  /** Sets the low word of uint32_t value.
+ 301:common/prog/MSP/mcal/msup.h ****  *  \brief This function sets the low word of *value1 with the passed value value2.
+ 302:common/prog/MSP/mcal/msup.h ****  *  \param value1: The pointer to the value where the low word will be set.
+ 303:common/prog/MSP/mcal/msup.h ****  *  \param value2: The new value of the low word.
+ 304:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 305:common/prog/MSP/mcal/msup.h ****  */
+ 306:common/prog/MSP/mcal/msup.h **** extern void MSUP_setLowWord(uint32_t *value1, uint16_t value2);
+ 307:common/prog/MSP/mcal/msup.h **** 
+ 308:common/prog/MSP/mcal/msup.h **** 
+ 309:common/prog/MSP/mcal/msup.h **** /** Clears section of 32-bit register given by mask.
+ 310:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 311:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be cleared
+ 312:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 313:common/prog/MSP/mcal/msup.h ****  */
+ 314:common/prog/MSP/mcal/msup.h **** static inline void MSUP_clearReg32(volatile uint32_t *reg, uint32_t mask)
+ 315:common/prog/MSP/mcal/msup.h **** {
+ 316:common/prog/MSP/mcal/msup.h ****     *reg &= ~mask;
+ 317:common/prog/MSP/mcal/msup.h **** }
+ 318:common/prog/MSP/mcal/msup.h **** 
+ 319:common/prog/MSP/mcal/msup.h **** 
+ 320:common/prog/MSP/mcal/msup.h **** /** Sets section of 32-bit register given by mask.
+ 321:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 322:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be set
+ 323:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 324:common/prog/MSP/mcal/msup.h ****  */
+ 325:common/prog/MSP/mcal/msup.h **** static inline void MSUP_setReg32(volatile uint32_t *reg, uint32_t mask)
+ 326:common/prog/MSP/mcal/msup.h **** {
+ 327:common/prog/MSP/mcal/msup.h ****     *reg |= mask;
+ 328:common/prog/MSP/mcal/msup.h **** }
+ 329:common/prog/MSP/mcal/msup.h **** 
+ 330:common/prog/MSP/mcal/msup.h **** 
+ 331:common/prog/MSP/mcal/msup.h **** /** Writes section of 32-bit register given by mask.
+ 332:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 333:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be overwritten
+ 334:common/prog/MSP/mcal/msup.h ****  *  \param value new value for section
+ 335:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 336:common/prog/MSP/mcal/msup.h ****  */
+ 337:common/prog/MSP/mcal/msup.h **** static inline void MSUP_writeReg32(volatile uint32_t *reg, uint32_t mask, uint32_t value)
+ 338:common/prog/MSP/mcal/msup.h **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 18
+
+
+ 339:common/prog/MSP/mcal/msup.h ****     uint32_t tmpReg = *reg & ~mask;
+ 340:common/prog/MSP/mcal/msup.h ****     tmpReg |= value & mask;
+ 341:common/prog/MSP/mcal/msup.h ****     *reg = tmpReg;
+ 342:common/prog/MSP/mcal/msup.h **** }
+ 343:common/prog/MSP/mcal/msup.h **** 
+ 344:common/prog/MSP/mcal/msup.h **** 
+ 345:common/prog/MSP/mcal/msup.h **** /** Clears section of 16-bit register given by mask.
+ 346:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 347:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be cleared
+ 348:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 349:common/prog/MSP/mcal/msup.h ****  */
+ 350:common/prog/MSP/mcal/msup.h **** static inline void MSUP_clearReg16(volatile uint16_t *reg, uint16_t mask)
+ 351:common/prog/MSP/mcal/msup.h **** {
+ 352:common/prog/MSP/mcal/msup.h ****     *reg &= ~mask;
+ 353:common/prog/MSP/mcal/msup.h **** }
+ 354:common/prog/MSP/mcal/msup.h **** 
+ 355:common/prog/MSP/mcal/msup.h **** 
+ 356:common/prog/MSP/mcal/msup.h **** /** Sets section of 16-bit register given by mask.
+ 357:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 358:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be set
+ 359:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 360:common/prog/MSP/mcal/msup.h ****  */
+ 361:common/prog/MSP/mcal/msup.h **** static inline void MSUP_setReg16(volatile uint16_t *reg, uint16_t mask)
+ 362:common/prog/MSP/mcal/msup.h **** {
+ 363:common/prog/MSP/mcal/msup.h ****     *reg |= mask;
+ 364:common/prog/MSP/mcal/msup.h **** }
+ 365:common/prog/MSP/mcal/msup.h **** 
+ 366:common/prog/MSP/mcal/msup.h **** 
+ 367:common/prog/MSP/mcal/msup.h **** /** Writes section of 16-bit register given by mask.
+ 368:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 369:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be overwritten
+ 370:common/prog/MSP/mcal/msup.h ****  *  \param value new value for section
+ 371:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 372:common/prog/MSP/mcal/msup.h ****  */
+ 373:common/prog/MSP/mcal/msup.h **** static inline void MSUP_writeReg16(volatile uint16_t *reg, uint16_t mask, uint16_t value)
+ 374:common/prog/MSP/mcal/msup.h **** {
+ 375:common/prog/MSP/mcal/msup.h ****     uint16_t tmpReg = *reg & ~mask;
+ 376:common/prog/MSP/mcal/msup.h ****     tmpReg |= value & mask;
+ 377:common/prog/MSP/mcal/msup.h ****     *reg = tmpReg;
+ 378:common/prog/MSP/mcal/msup.h **** }
+ 379:common/prog/MSP/mcal/msup.h **** 
+ 380:common/prog/MSP/mcal/msup.h **** 
+ 381:common/prog/MSP/mcal/msup.h **** /** Clears section of 8-bit register given by mask.
+ 382:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 383:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be cleared
+ 384:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 385:common/prog/MSP/mcal/msup.h ****  */
+ 386:common/prog/MSP/mcal/msup.h **** static inline void MSUP_clearReg8(volatile uint8_t *reg, uint8_t mask)
+ 387:common/prog/MSP/mcal/msup.h **** {
+ 388:common/prog/MSP/mcal/msup.h ****     *reg &= ~mask;
+ 389:common/prog/MSP/mcal/msup.h **** }
+ 390:common/prog/MSP/mcal/msup.h **** 
+ 391:common/prog/MSP/mcal/msup.h **** 
+ 392:common/prog/MSP/mcal/msup.h **** /** Sets section of 8-bit register given by mask.
+ 393:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 394:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be set
+ 395:common/prog/MSP/mcal/msup.h ****  *  \return none
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 19
+
+
+ 396:common/prog/MSP/mcal/msup.h ****  */
+ 397:common/prog/MSP/mcal/msup.h **** static inline void MSUP_setReg8(volatile uint8_t *reg, uint8_t mask)
+ 398:common/prog/MSP/mcal/msup.h **** {
+ 399:common/prog/MSP/mcal/msup.h ****     *reg |= mask;
+ 400:common/prog/MSP/mcal/msup.h **** }
+ 401:common/prog/MSP/mcal/msup.h **** 
+ 402:common/prog/MSP/mcal/msup.h **** 
+ 403:common/prog/MSP/mcal/msup.h **** /** Writes section of 8-bit register given by mask.
+ 404:common/prog/MSP/mcal/msup.h ****  *  \param reg pointer to the register
+ 405:common/prog/MSP/mcal/msup.h ****  *  \param mask define bits to be overwritten
+ 406:common/prog/MSP/mcal/msup.h ****  *  \param value new value for section
+ 407:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 408:common/prog/MSP/mcal/msup.h ****  */
+ 409:common/prog/MSP/mcal/msup.h **** static inline void MSUP_writeReg8(volatile uint8_t *reg, uint8_t mask, uint8_t value)
+ 410:common/prog/MSP/mcal/msup.h **** {
+ 411:common/prog/MSP/mcal/msup.h ****     uint8_t tmpReg = *reg & ~mask;
+ 412:common/prog/MSP/mcal/msup.h ****     tmpReg |= value & mask;
+ 413:common/prog/MSP/mcal/msup.h ****     *reg = tmpReg;
+ 414:common/prog/MSP/mcal/msup.h **** }
+ 415:common/prog/MSP/mcal/msup.h **** 
+ 416:common/prog/MSP/mcal/msup.h **** 
+ 417:common/prog/MSP/mcal/msup.h **** /** Clears bitfield of 16-bit register.
+ 418:common/prog/MSP/mcal/msup.h ****  *  \param regBitField structure containing register pointer and bitfield mask
+ 419:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 420:common/prog/MSP/mcal/msup.h ****  */
+ 421:common/prog/MSP/mcal/msup.h **** static inline void MSUP_clearRegBitField16(const struct MSUP_RegBitField16 *regBitField)
+ 422:common/prog/MSP/mcal/msup.h **** {
+ 423:common/prog/MSP/mcal/msup.h ****     MSUP_clearReg16(regBitField->regPtr, regBitField->bitFieldMask);
+ 424:common/prog/MSP/mcal/msup.h **** }
+ 425:common/prog/MSP/mcal/msup.h **** 
+ 426:common/prog/MSP/mcal/msup.h **** 
+ 427:common/prog/MSP/mcal/msup.h **** /** Sets bitfield of 16-bit register.
+ 428:common/prog/MSP/mcal/msup.h ****  *  \param regBitField structure containing register pointer and bitfield mask
+ 429:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 430:common/prog/MSP/mcal/msup.h ****  */
+ 431:common/prog/MSP/mcal/msup.h **** static inline void MSUP_setRegBitField16(const struct MSUP_RegBitField16 *regBitField)
+ 432:common/prog/MSP/mcal/msup.h **** {
+ 433:common/prog/MSP/mcal/msup.h ****     MSUP_setReg16(regBitField->regPtr, regBitField->bitFieldMask);
+ 434:common/prog/MSP/mcal/msup.h **** }
+ 435:common/prog/MSP/mcal/msup.h **** 
+ 436:common/prog/MSP/mcal/msup.h **** 
+ 437:common/prog/MSP/mcal/msup.h **** /** Clears bitfield of 32-bit register.
+ 438:common/prog/MSP/mcal/msup.h ****  *  \param regBitField structure containing register pointer and bitfield mask
+ 439:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 440:common/prog/MSP/mcal/msup.h ****  */
+ 441:common/prog/MSP/mcal/msup.h **** static inline void MSUP_clearRegBitField32(const struct MSUP_RegBitField32 *regBitField)
+ 442:common/prog/MSP/mcal/msup.h **** {
+ 443:common/prog/MSP/mcal/msup.h ****     MSUP_clearReg32(regBitField->regPtr, regBitField->bitFieldMask);
+ 444:common/prog/MSP/mcal/msup.h **** }
+ 445:common/prog/MSP/mcal/msup.h **** 
+ 446:common/prog/MSP/mcal/msup.h **** 
+ 447:common/prog/MSP/mcal/msup.h **** /** Sets bitfield of 32-bit register.
+ 448:common/prog/MSP/mcal/msup.h ****  *  \param regBitField structure containing register pointer and bitfield mask
+ 449:common/prog/MSP/mcal/msup.h ****  *  \return none
+ 450:common/prog/MSP/mcal/msup.h ****  */
+ 451:common/prog/MSP/mcal/msup.h **** static inline void MSUP_setRegBitField32(const struct MSUP_RegBitField32 *regBitField)
+ 452:common/prog/MSP/mcal/msup.h **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 20
+
+
+ 453:common/prog/MSP/mcal/msup.h ****     MSUP_setReg32(regBitField->regPtr, regBitField->bitFieldMask);
+ 344              		.loc 2 453 30 is_stmt 0 view .LVU102
+ 345 0004 8168     		ldr	r1, [r0, #8]
+ 346              	.LBE17:
+ 347              	.LBE16:
+ 348              		.loc 1 254 5 view .LVU103
+ 349 0006 5363     		str	r3, [r2, #52]
+ 255:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 256:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MSUP_setRegBitField32(&muart->clockCfg.RcuEnr);
+ 350              		.loc 1 256 5 is_stmt 1 view .LVU104
+ 351              	.LVL32:
+ 352              	.LBB24:
+ 353              	.LBI16:
+ 451:common/prog/MSP/mcal/msup.h **** {
+ 354              		.loc 2 451 20 view .LVU105
+ 355              	.LBB22:
+ 356              		.loc 2 453 5 view .LVU106
+ 357              	.LBB18:
+ 358              	.LBI18:
+ 325:common/prog/MSP/mcal/msup.h **** {
+ 359              		.loc 2 325 20 view .LVU107
+ 360              	.LBB19:
+ 327:common/prog/MSP/mcal/msup.h **** }
+ 361              		.loc 2 327 5 view .LVU108
+ 327:common/prog/MSP/mcal/msup.h **** }
+ 362              		.loc 2 327 10 is_stmt 0 view .LVU109
+ 363 0008 0B68     		ldr	r3, [r1]
+ 364 000a C068     		ldr	r0, [r0, #12]
+ 365              	.LVL33:
+ 327:common/prog/MSP/mcal/msup.h **** }
+ 366              		.loc 2 327 10 view .LVU110
+ 367              	.LBE19:
+ 368              	.LBE18:
+ 369              	.LBE22:
+ 370              	.LBE24:
+ 257:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 258:common/prog/MSP/mcal/sh30f/muart_mc.c ****     // Lock RCC registers
+ 259:common/prog/MSP/mcal/sh30f/muart_mc.c ****     RCC_REGS_LOCK();
+ 260:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 371              		.loc 1 260 1 view .LVU111
+ 372              		@ sp needed
+ 373              	.LBB25:
+ 374              	.LBB23:
+ 375              	.LBB21:
+ 376              	.LBB20:
+ 327:common/prog/MSP/mcal/msup.h **** }
+ 377              		.loc 2 327 10 view .LVU112
+ 378 000c 0343     		orrs	r3, r0
+ 379 000e 0B60     		str	r3, [r1]
+ 380              	.LVL34:
+ 327:common/prog/MSP/mcal/msup.h **** }
+ 381              		.loc 2 327 10 view .LVU113
+ 382              	.LBE20:
+ 383              	.LBE21:
+ 384              	.LBE23:
+ 385              	.LBE25:
+ 259:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 21
+
+
+ 386              		.loc 1 259 5 is_stmt 1 view .LVU114
+ 387 0010 0023     		movs	r3, #0
+ 388 0012 5363     		str	r3, [r2, #52]
+ 389              		.loc 1 260 1 is_stmt 0 view .LVU115
+ 390 0014 7047     		bx	lr
+ 391              	.L26:
+ 392 0016 C046     		.align	2
+ 393              	.L25:
+ 394 0018 00080440 		.word	1074006016
+ 395 001c CC330000 		.word	13260
+ 396              		.cfi_endproc
+ 397              	.LFE101:
+ 399              		.section	.text.MUART_disableClock,"ax",%progbits
+ 400              		.align	1
+ 401              		.global	MUART_disableClock
+ 402              		.syntax unified
+ 403              		.code	16
+ 404              		.thumb_func
+ 406              	MUART_disableClock:
+ 407              	.LVL35:
+ 408              	.LFB102:
+ 261:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 262:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 263:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_disableClock(const struct MUART_Periph *muart)
+ 264:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 409              		.loc 1 264 1 is_stmt 1 view -0
+ 410              		.cfi_startproc
+ 411              		@ args = 0, pretend = 0, frame = 0
+ 412              		@ frame_needed = 0, uses_anonymous_args = 0
+ 413              		@ link register save eliminated.
+ 265:common/prog/MSP/mcal/sh30f/muart_mc.c ****     // unlock RCC registers
+ 266:common/prog/MSP/mcal/sh30f/muart_mc.c ****     RCC_REGS_UNLOCK();
+ 414              		.loc 1 266 5 view .LVU117
+ 415 0000 054A     		ldr	r2, .L28
+ 416 0002 064B     		ldr	r3, .L28+4
+ 417              	.LBB30:
+ 418              	.LBB31:
+ 443:common/prog/MSP/mcal/msup.h **** }
+ 419              		.loc 2 443 32 is_stmt 0 view .LVU118
+ 420 0004 8168     		ldr	r1, [r0, #8]
+ 421              	.LBE31:
+ 422              	.LBE30:
+ 423              		.loc 1 266 5 view .LVU119
+ 424 0006 5363     		str	r3, [r2, #52]
+ 267:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 268:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MSUP_clearRegBitField32(&muart->clockCfg.RcuEnr);
+ 425              		.loc 1 268 5 is_stmt 1 view .LVU120
+ 426              	.LVL36:
+ 427              	.LBB38:
+ 428              	.LBI30:
+ 441:common/prog/MSP/mcal/msup.h **** {
+ 429              		.loc 2 441 20 view .LVU121
+ 430              	.LBB36:
+ 443:common/prog/MSP/mcal/msup.h **** }
+ 431              		.loc 2 443 5 view .LVU122
+ 432              	.LBB32:
+ 433              	.LBI32:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 22
+
+
+ 314:common/prog/MSP/mcal/msup.h **** {
+ 434              		.loc 2 314 20 view .LVU123
+ 435              	.LBB33:
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 436              		.loc 2 316 5 view .LVU124
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 437              		.loc 2 316 10 is_stmt 0 view .LVU125
+ 438 0008 0B68     		ldr	r3, [r1]
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 439              		.loc 2 316 13 view .LVU126
+ 440 000a C068     		ldr	r0, [r0, #12]
+ 441              	.LVL37:
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 442              		.loc 2 316 13 view .LVU127
+ 443              	.LBE33:
+ 444              	.LBE32:
+ 445              	.LBE36:
+ 446              	.LBE38:
+ 269:common/prog/MSP/mcal/sh30f/muart_mc.c ****     
+ 270:common/prog/MSP/mcal/sh30f/muart_mc.c ****     // Lock RCC registers
+ 271:common/prog/MSP/mcal/sh30f/muart_mc.c ****     RCC_REGS_LOCK();
+ 272:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 447              		.loc 1 272 1 view .LVU128
+ 448              		@ sp needed
+ 449              	.LBB39:
+ 450              	.LBB37:
+ 451              	.LBB35:
+ 452              	.LBB34:
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 453              		.loc 2 316 10 view .LVU129
+ 454 000c 8343     		bics	r3, r0
+ 455 000e 0B60     		str	r3, [r1]
+ 456              	.LVL38:
+ 316:common/prog/MSP/mcal/msup.h **** }
+ 457              		.loc 2 316 10 view .LVU130
+ 458              	.LBE34:
+ 459              	.LBE35:
+ 460              	.LBE37:
+ 461              	.LBE39:
+ 271:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 462              		.loc 1 271 5 is_stmt 1 view .LVU131
+ 463 0010 0023     		movs	r3, #0
+ 464 0012 5363     		str	r3, [r2, #52]
+ 465              		.loc 1 272 1 is_stmt 0 view .LVU132
+ 466 0014 7047     		bx	lr
+ 467              	.L29:
+ 468 0016 C046     		.align	2
+ 469              	.L28:
+ 470 0018 00080440 		.word	1074006016
+ 471 001c CC330000 		.word	13260
+ 472              		.cfi_endproc
+ 473              	.LFE102:
+ 475              		.section	.text.MUART_configure,"ax",%progbits
+ 476              		.align	1
+ 477              		.global	MUART_configure
+ 478              		.syntax unified
+ 479              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 23
+
+
+ 480              		.thumb_func
+ 482              	MUART_configure:
+ 483              	.LVL39:
+ 484              	.LFB103:
+ 273:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 274:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 275:common/prog/MSP/mcal/sh30f/muart_mc.c **** enum MCAL_Error MUART_configure(const struct MUART_Channel *channel, const struct MUART_Config *cfg
+ 276:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 485              		.loc 1 276 1 is_stmt 1 view -0
+ 486              		.cfi_startproc
+ 487              		@ args = 0, pretend = 0, frame = 0
+ 488              		@ frame_needed = 0, uses_anonymous_args = 0
+ 277:common/prog/MSP/mcal/sh30f/muart_mc.c ****     const struct MUART_Periph *muart = channel->muart;
+ 489              		.loc 1 277 5 view .LVU134
+ 276:common/prog/MSP/mcal/sh30f/muart_mc.c ****     const struct MUART_Periph *muart = channel->muart;
+ 490              		.loc 1 276 1 is_stmt 0 view .LVU135
+ 491 0000 70B5     		push	{r4, r5, r6, lr}
+ 492              	.LCFI1:
+ 493              		.cfi_def_cfa_offset 16
+ 494              		.cfi_offset 4, -16
+ 495              		.cfi_offset 5, -12
+ 496              		.cfi_offset 6, -8
+ 497              		.cfi_offset 14, -4
+ 276:common/prog/MSP/mcal/sh30f/muart_mc.c ****     const struct MUART_Periph *muart = channel->muart;
+ 498              		.loc 1 276 1 view .LVU136
+ 499 0002 0C00     		movs	r4, r1
+ 278:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 279:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_enableClock(muart);
+ 280:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 281:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphBaudrate(muart, cfg->baudrate);
+ 282:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphParity(muart, cfg->parity);
+ 283:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphDataBits(muart, cfg->dataBits);
+ 284:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphStopBits(muart, cfg->stopBits);
+ 285:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 286:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return MCAL_OK;
+ 287:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 500              		.loc 1 287 1 view .LVU137
+ 501              		@ sp needed
+ 277:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 502              		.loc 1 277 32 view .LVU138
+ 503 0004 0568     		ldr	r5, [r0]
+ 504              	.LVL40:
+ 279:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 505              		.loc 1 279 5 is_stmt 1 view .LVU139
+ 506 0006 2800     		movs	r0, r5
+ 507              	.LVL41:
+ 279:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 508              		.loc 1 279 5 is_stmt 0 view .LVU140
+ 509 0008 FFF7FEFF 		bl	MUART_enableClock
+ 510              	.LVL42:
+ 281:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphParity(muart, cfg->parity);
+ 511              		.loc 1 281 5 is_stmt 1 view .LVU141
+ 512 000c 2800     		movs	r0, r5
+ 513 000e 6168     		ldr	r1, [r4, #4]
+ 514 0010 FFF7FEFF 		bl	MUART_configurePeriphBaudrate
+ 515              	.LVL43:
+ 282:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphDataBits(muart, cfg->dataBits);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 24
+
+
+ 516              		.loc 1 282 5 view .LVU142
+ 517 0014 2800     		movs	r0, r5
+ 518 0016 6178     		ldrb	r1, [r4, #1]
+ 519 0018 FFF7FEFF 		bl	MUART_configurePeriphParity
+ 520              	.LVL44:
+ 283:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphStopBits(muart, cfg->stopBits);
+ 521              		.loc 1 283 5 view .LVU143
+ 522 001c 2800     		movs	r0, r5
+ 523 001e 2178     		ldrb	r1, [r4]
+ 524 0020 FFF7FEFF 		bl	MUART_configurePeriphDataBits
+ 525              	.LVL45:
+ 284:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 526              		.loc 1 284 5 view .LVU144
+ 527 0024 2800     		movs	r0, r5
+ 528 0026 A178     		ldrb	r1, [r4, #2]
+ 529 0028 FFF7FEFF 		bl	MUART_configurePeriphStopBits
+ 530              	.LVL46:
+ 286:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 531              		.loc 1 286 5 view .LVU145
+ 532              		.loc 1 287 1 is_stmt 0 view .LVU146
+ 533 002c 0020     		movs	r0, #0
+ 534              	.LVL47:
+ 535              	.LVL48:
+ 536              		.loc 1 287 1 view .LVU147
+ 537 002e 70BD     		pop	{r4, r5, r6, pc}
+ 538              		.cfi_endproc
+ 539              	.LFE103:
+ 541              		.section	.text.MUART_enableChannel,"ax",%progbits
+ 542              		.align	1
+ 543              		.global	MUART_enableChannel
+ 544              		.syntax unified
+ 545              		.code	16
+ 546              		.thumb_func
+ 548              	MUART_enableChannel:
+ 549              	.LVL49:
+ 550              	.LFB105:
+ 288:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 289:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 290:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_configureBaudrate(const struct MUART_Channel *channel, uint32_t baudrate)
+ 291:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 292:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_disableChannel(channel);
+ 293:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphBaudrate(channel->muart, baudrate);
+ 294:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_enableChannel(channel);
+ 295:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 296:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 297:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 298:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_enableChannel(const struct MUART_Channel *channel)
+ 299:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 551              		.loc 1 299 1 is_stmt 1 view -0
+ 552              		.cfi_startproc
+ 553              		@ args = 0, pretend = 0, frame = 0
+ 554              		@ frame_needed = 0, uses_anonymous_args = 0
+ 555              		@ link register save eliminated.
+ 300:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->CR.V32 |= (UART_CR_TEN_Msk | UART_CR_REN_Msk);
+ 556              		.loc 1 300 5 view .LVU149
+ 557              		.loc 1 300 19 is_stmt 0 view .LVU150
+ 558 0000 0368     		ldr	r3, [r0]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 25
+
+
+ 301:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 559              		.loc 1 301 1 view .LVU151
+ 560              		@ sp needed
+ 300:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->CR.V32 |= (UART_CR_TEN_Msk | UART_CR_REN_Msk);
+ 561              		.loc 1 300 19 view .LVU152
+ 562 0002 1A68     		ldr	r2, [r3]
+ 300:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->CR.V32 |= (UART_CR_TEN_Msk | UART_CR_REN_Msk);
+ 563              		.loc 1 300 36 view .LVU153
+ 564 0004 C023     		movs	r3, #192
+ 565 0006 9169     		ldr	r1, [r2, #24]
+ 566 0008 DB02     		lsls	r3, r3, #11
+ 567 000a 0B43     		orrs	r3, r1
+ 568 000c 9361     		str	r3, [r2, #24]
+ 569              		.loc 1 301 1 view .LVU154
+ 570 000e 7047     		bx	lr
+ 571              		.cfi_endproc
+ 572              	.LFE105:
+ 574              		.section	.text.MUART_disableChannel,"ax",%progbits
+ 575              		.align	1
+ 576              		.global	MUART_disableChannel
+ 577              		.syntax unified
+ 578              		.code	16
+ 579              		.thumb_func
+ 581              	MUART_disableChannel:
+ 582              	.LVL50:
+ 583              	.LFB106:
+ 302:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 303:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 304:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_disableChannel(const struct MUART_Channel *channel)
+ 305:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 584              		.loc 1 305 1 is_stmt 1 view -0
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 0
+ 587              		@ frame_needed = 0, uses_anonymous_args = 0
+ 588              		@ link register save eliminated.
+ 306:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->CR.V32 &= ~(UART_CR_TEN_Msk | UART_CR_REN_Msk);
+ 589              		.loc 1 306 5 view .LVU156
+ 590              		.loc 1 306 19 is_stmt 0 view .LVU157
+ 591 0000 0368     		ldr	r3, [r0]
+ 592              		.loc 1 306 36 view .LVU158
+ 593 0002 0349     		ldr	r1, .L33
+ 594              		.loc 1 306 19 view .LVU159
+ 595 0004 1A68     		ldr	r2, [r3]
+ 307:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 596              		.loc 1 307 1 view .LVU160
+ 597              		@ sp needed
+ 306:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->CR.V32 &= ~(UART_CR_TEN_Msk | UART_CR_REN_Msk);
+ 598              		.loc 1 306 36 view .LVU161
+ 599 0006 9369     		ldr	r3, [r2, #24]
+ 600 0008 0B40     		ands	r3, r1
+ 601 000a 9361     		str	r3, [r2, #24]
+ 602              		.loc 1 307 1 view .LVU162
+ 603 000c 7047     		bx	lr
+ 604              	.L34:
+ 605 000e C046     		.align	2
+ 606              	.L33:
+ 607 0010 FFFFF9FF 		.word	-393217
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 26
+
+
+ 608              		.cfi_endproc
+ 609              	.LFE106:
+ 611              		.section	.text.MUART_configureBaudrate,"ax",%progbits
+ 612              		.align	1
+ 613              		.global	MUART_configureBaudrate
+ 614              		.syntax unified
+ 615              		.code	16
+ 616              		.thumb_func
+ 618              	MUART_configureBaudrate:
+ 619              	.LVL51:
+ 620              	.LFB104:
+ 291:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_disableChannel(channel);
+ 621              		.loc 1 291 1 is_stmt 1 view -0
+ 622              		.cfi_startproc
+ 623              		@ args = 0, pretend = 0, frame = 0
+ 624              		@ frame_needed = 0, uses_anonymous_args = 0
+ 292:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphBaudrate(channel->muart, baudrate);
+ 625              		.loc 1 292 5 view .LVU164
+ 291:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_disableChannel(channel);
+ 626              		.loc 1 291 1 is_stmt 0 view .LVU165
+ 627 0000 70B5     		push	{r4, r5, r6, lr}
+ 628              	.LCFI2:
+ 629              		.cfi_def_cfa_offset 16
+ 630              		.cfi_offset 4, -16
+ 631              		.cfi_offset 5, -12
+ 632              		.cfi_offset 6, -8
+ 633              		.cfi_offset 14, -4
+ 291:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_disableChannel(channel);
+ 634              		.loc 1 291 1 view .LVU166
+ 635 0002 0400     		movs	r4, r0
+ 295:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 636              		.loc 1 295 1 view .LVU167
+ 637              		@ sp needed
+ 291:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_disableChannel(channel);
+ 638              		.loc 1 291 1 view .LVU168
+ 639 0004 0D00     		movs	r5, r1
+ 292:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_configurePeriphBaudrate(channel->muart, baudrate);
+ 640              		.loc 1 292 5 view .LVU169
+ 641 0006 FFF7FEFF 		bl	MUART_disableChannel
+ 642              	.LVL52:
+ 293:common/prog/MSP/mcal/sh30f/muart_mc.c ****     MUART_enableChannel(channel);
+ 643              		.loc 1 293 5 is_stmt 1 view .LVU170
+ 644 000a 2900     		movs	r1, r5
+ 645 000c 2068     		ldr	r0, [r4]
+ 646 000e FFF7FEFF 		bl	MUART_configurePeriphBaudrate
+ 647              	.LVL53:
+ 294:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 648              		.loc 1 294 5 view .LVU171
+ 649 0012 2000     		movs	r0, r4
+ 650 0014 FFF7FEFF 		bl	MUART_enableChannel
+ 651              	.LVL54:
+ 652              	.LVL55:
+ 653              	.LVL56:
+ 295:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 654              		.loc 1 295 1 is_stmt 0 view .LVU172
+ 655 0018 70BD     		pop	{r4, r5, r6, pc}
+ 656              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 27
+
+
+ 657              	.LFE104:
+ 659              		.section	.text.MUART_writeDataReg,"ax",%progbits
+ 660              		.align	1
+ 661              		.global	MUART_writeDataReg
+ 662              		.syntax unified
+ 663              		.code	16
+ 664              		.thumb_func
+ 666              	MUART_writeDataReg:
+ 667              	.LVL57:
+ 668              	.LFB107:
+ 308:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 309:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 310:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_writeDataReg(const struct MUART_Channel *channel, uint32_t data)
+ 311:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 669              		.loc 1 311 1 is_stmt 1 view -0
+ 670              		.cfi_startproc
+ 671              		@ args = 0, pretend = 0, frame = 0
+ 672              		@ frame_needed = 0, uses_anonymous_args = 0
+ 673              		@ link register save eliminated.
+ 312:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->TDR.V32 = data;
+ 674              		.loc 1 312 5 view .LVU174
+ 675              		.loc 1 312 19 is_stmt 0 view .LVU175
+ 676 0000 0368     		ldr	r3, [r0]
+ 313:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 677              		.loc 1 313 1 view .LVU176
+ 678              		@ sp needed
+ 312:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->TDR.V32 = data;
+ 679              		.loc 1 312 19 view .LVU177
+ 680 0002 1B68     		ldr	r3, [r3]
+ 312:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->TDR.V32 = data;
+ 681              		.loc 1 312 37 view .LVU178
+ 682 0004 9960     		str	r1, [r3, #8]
+ 683              		.loc 1 313 1 view .LVU179
+ 684 0006 7047     		bx	lr
+ 685              		.cfi_endproc
+ 686              	.LFE107:
+ 688              		.section	.text.MUART_readDataReg,"ax",%progbits
+ 689              		.align	1
+ 690              		.global	MUART_readDataReg
+ 691              		.syntax unified
+ 692              		.code	16
+ 693              		.thumb_func
+ 695              	MUART_readDataReg:
+ 696              	.LVL58:
+ 697              	.LFB108:
+ 314:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 315:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 316:common/prog/MSP/mcal/sh30f/muart_mc.c **** uint16_t MUART_readDataReg(const struct MUART_Channel *channel)
+ 317:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 698              		.loc 1 317 1 is_stmt 1 view -0
+ 699              		.cfi_startproc
+ 700              		@ args = 0, pretend = 0, frame = 0
+ 701              		@ frame_needed = 0, uses_anonymous_args = 0
+ 702              		@ link register save eliminated.
+ 318:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return (uint16_t)channel->muart->USARTx->RDR.V32;
+ 703              		.loc 1 318 5 view .LVU181
+ 704              		.loc 1 318 36 is_stmt 0 view .LVU182
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 28
+
+
+ 705 0000 0368     		ldr	r3, [r0]
+ 319:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 706              		.loc 1 319 1 view .LVU183
+ 707              		@ sp needed
+ 318:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return (uint16_t)channel->muart->USARTx->RDR.V32;
+ 708              		.loc 1 318 36 view .LVU184
+ 709 0002 1B68     		ldr	r3, [r3]
+ 318:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return (uint16_t)channel->muart->USARTx->RDR.V32;
+ 710              		.loc 1 318 49 view .LVU185
+ 711 0004 D868     		ldr	r0, [r3, #12]
+ 712              	.LVL59:
+ 318:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return (uint16_t)channel->muart->USARTx->RDR.V32;
+ 713              		.loc 1 318 12 view .LVU186
+ 714 0006 80B2     		uxth	r0, r0
+ 715              		.loc 1 319 1 view .LVU187
+ 716 0008 7047     		bx	lr
+ 717              		.cfi_endproc
+ 718              	.LFE108:
+ 720              		.section	.text.MUART_getStatusReg,"ax",%progbits
+ 721              		.align	1
+ 722              		.global	MUART_getStatusReg
+ 723              		.syntax unified
+ 724              		.code	16
+ 725              		.thumb_func
+ 727              	MUART_getStatusReg:
+ 728              	.LVL60:
+ 729              	.LFB109:
+ 320:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 321:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 322:common/prog/MSP/mcal/sh30f/muart_mc.c **** uint32_t MUART_getStatusReg(const struct MUART_Channel *channel)
+ 323:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 730              		.loc 1 323 1 is_stmt 1 view -0
+ 731              		.cfi_startproc
+ 732              		@ args = 0, pretend = 0, frame = 0
+ 733              		@ frame_needed = 0, uses_anonymous_args = 0
+ 734              		@ link register save eliminated.
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return channel->muart->USARTx->FR.V32;
+ 735              		.loc 1 324 5 view .LVU189
+ 736              		.loc 1 324 26 is_stmt 0 view .LVU190
+ 737 0000 0368     		ldr	r3, [r0]
+ 325:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 738              		.loc 1 325 1 view .LVU191
+ 739              		@ sp needed
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return channel->muart->USARTx->FR.V32;
+ 740              		.loc 1 324 26 view .LVU192
+ 741 0002 1B68     		ldr	r3, [r3]
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return channel->muart->USARTx->FR.V32;
+ 742              		.loc 1 324 38 view .LVU193
+ 743 0004 1868     		ldr	r0, [r3]
+ 744              	.LVL61:
+ 745              		.loc 1 325 1 view .LVU194
+ 746 0006 7047     		bx	lr
+ 747              		.cfi_endproc
+ 748              	.LFE109:
+ 750              		.section	.text.MUART_clearErrorReg,"ax",%progbits
+ 751              		.align	1
+ 752              		.global	MUART_clearErrorReg
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 29
+
+
+ 753              		.syntax unified
+ 754              		.code	16
+ 755              		.thumb_func
+ 757              	MUART_clearErrorReg:
+ 758              	.LVL62:
+ 759              	.LFB110:
+ 326:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 327:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 328:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_clearErrorReg(const struct MUART_Channel *channel)
+ 329:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 760              		.loc 1 329 1 is_stmt 1 view -0
+ 761              		.cfi_startproc
+ 762              		@ args = 0, pretend = 0, frame = 0
+ 763              		@ frame_needed = 0, uses_anonymous_args = 0
+ 764              		@ link register save eliminated.
+ 330:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+ 765              		.loc 1 330 5 view .LVU196
+ 766              		.loc 1 330 36 is_stmt 0 view .LVU197
+ 767 0000 E022     		movs	r2, #224
+ 331:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 768              		.loc 1 331 1 view .LVU198
+ 769              		@ sp needed
+ 330:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+ 770              		.loc 1 330 19 view .LVU199
+ 771 0002 0368     		ldr	r3, [r0]
+ 330:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+ 772              		.loc 1 330 36 view .LVU200
+ 773 0004 D203     		lsls	r2, r2, #15
+ 330:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+ 774              		.loc 1 330 19 view .LVU201
+ 775 0006 1B68     		ldr	r3, [r3]
+ 330:common/prog/MSP/mcal/sh30f/muart_mc.c ****     channel->muart->USARTx->FR.V32 = MUART_ERROR_ANY_CLEAR_MASK;
+ 776              		.loc 1 330 36 view .LVU202
+ 777 0008 1A60     		str	r2, [r3]
+ 778              		.loc 1 331 1 view .LVU203
+ 779 000a 7047     		bx	lr
+ 780              		.cfi_endproc
+ 781              	.LFE110:
+ 783              		.section	.text.MUART_getStatusRegMaskForEvent,"ax",%progbits
+ 784              		.align	1
+ 785              		.global	MUART_getStatusRegMaskForEvent
+ 786              		.syntax unified
+ 787              		.code	16
+ 788              		.thumb_func
+ 790              	MUART_getStatusRegMaskForEvent:
+ 791              	.LVL63:
+ 792              	.LFB111:
+ 332:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 333:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 334:common/prog/MSP/mcal/sh30f/muart_mc.c **** uint32_t MUART_getStatusRegMaskForEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+ 335:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 793              		.loc 1 335 1 is_stmt 1 view -0
+ 794              		.cfi_startproc
+ 795              		@ args = 0, pretend = 0, frame = 0
+ 796              		@ frame_needed = 0, uses_anonymous_args = 0
+ 797              		@ link register save eliminated.
+ 336:common/prog/MSP/mcal/sh30f/muart_mc.c ****     (void)*channel;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 30
+
+
+ 798              		.loc 1 336 5 view .LVU205
+ 337:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 338:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(event == MCAL_EVENT_READ_BYTE)
+ 799              		.loc 1 338 5 view .LVU206
+ 339:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 340:common/prog/MSP/mcal/sh30f/muart_mc.c ****         return UART_FR_RI_Msk;
+ 800              		.loc 1 340 16 is_stmt 0 view .LVU207
+ 801 0000 0120     		movs	r0, #1
+ 802              	.LVL64:
+ 338:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 803              		.loc 1 338 7 view .LVU208
+ 804 0002 1029     		cmp	r1, #16
+ 805 0004 08D0     		beq	.L40
+ 341:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 342:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(event == MCAL_EVENT_WRITE_BYTE)
+ 806              		.loc 1 342 10 is_stmt 1 view .LVU209
+ 343:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 344:common/prog/MSP/mcal/sh30f/muart_mc.c ****         return UART_FR_TI_Msk;
+ 807              		.loc 1 344 16 is_stmt 0 view .LVU210
+ 808 0006 0018     		adds	r0, r0, r0
+ 342:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 809              		.loc 1 342 12 view .LVU211
+ 810 0008 2029     		cmp	r1, #32
+ 811 000a 05D0     		beq	.L40
+ 345:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 346:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(event == MCAL_EVENT_ERROR)
+ 812              		.loc 1 346 10 is_stmt 1 view .LVU212
+ 813              		.loc 1 346 12 is_stmt 0 view .LVU213
+ 814 000c 8023     		movs	r3, #128
+ 347:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 348:common/prog/MSP/mcal/sh30f/muart_mc.c ****         return MUART_ERROR_ANY_READ_MASK;
+ 815              		.loc 1 348 16 view .LVU214
+ 816 000e 6E30     		adds	r0, r0, #110
+ 346:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 817              		.loc 1 346 12 view .LVU215
+ 818 0010 DB05     		lsls	r3, r3, #23
+ 819 0012 9942     		cmp	r1, r3
+ 820 0014 00D0     		beq	.L40
+ 349:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 350:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 351:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 352:common/prog/MSP/mcal/sh30f/muart_mc.c ****         return 0u;
+ 821              		.loc 1 352 16 view .LVU216
+ 822 0016 0020     		movs	r0, #0
+ 823              	.L40:
+ 353:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 354:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 824              		.loc 1 354 1 view .LVU217
+ 825              		@ sp needed
+ 826 0018 7047     		bx	lr
+ 827              		.cfi_endproc
+ 828              	.LFE111:
+ 830              		.section	.text.MUART_getChannelError,"ax",%progbits
+ 831              		.align	1
+ 832              		.global	MUART_getChannelError
+ 833              		.syntax unified
+ 834              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 31
+
+
+ 835              		.thumb_func
+ 837              	MUART_getChannelError:
+ 838              	.LVL65:
+ 839              	.LFB112:
+ 355:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 356:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 357:common/prog/MSP/mcal/sh30f/muart_mc.c **** enum MCAL_Error MUART_getChannelError(const struct MUART_Channel *channel)
+ 358:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 840              		.loc 1 358 1 is_stmt 1 view -0
+ 841              		.cfi_startproc
+ 842              		@ args = 0, pretend = 0, frame = 0
+ 843              		@ frame_needed = 0, uses_anonymous_args = 0
+ 844              		@ link register save eliminated.
+ 359:common/prog/MSP/mcal/sh30f/muart_mc.c ****     enum MCAL_Error error = MCAL_OK;
+ 845              		.loc 1 359 5 view .LVU219
+ 360:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 846              		.loc 1 360 5 view .LVU220
+ 847              	.LBB40:
+ 848              	.LBI40:
+ 322:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 849              		.loc 1 322 10 view .LVU221
+ 850              	.LBB41:
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 851              		.loc 1 324 5 view .LVU222
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 852              		.loc 1 324 26 is_stmt 0 view .LVU223
+ 853 0000 0368     		ldr	r3, [r0]
+ 854              	.LBE41:
+ 855              	.LBE40:
+ 361:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 362:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(status & UART_FR_FE_Msk)
+ 363:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 364:common/prog/MSP/mcal/sh30f/muart_mc.c ****         error = MCAL_ERROR_FRAMING;
+ 856              		.loc 1 364 15 view .LVU224
+ 857 0002 0C20     		movs	r0, #12
+ 858              	.LVL66:
+ 859              	.LBB43:
+ 860              	.LBB42:
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 861              		.loc 1 324 26 view .LVU225
+ 862 0004 1B68     		ldr	r3, [r3]
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 863              		.loc 1 324 38 view .LVU226
+ 864 0006 1B68     		ldr	r3, [r3]
+ 865              	.LVL67:
+ 324:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 866              		.loc 1 324 38 view .LVU227
+ 867              	.LBE42:
+ 868              	.LBE43:
+ 362:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 869              		.loc 1 362 5 is_stmt 1 view .LVU228
+ 362:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 870              		.loc 1 362 7 is_stmt 0 view .LVU229
+ 871 0008 9A06     		lsls	r2, r3, #26
+ 872 000a 09D4     		bmi	.L46
+ 365:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 366:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(status & UART_FR_PE_Msk)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 32
+
+
+ 873              		.loc 1 366 10 is_stmt 1 view .LVU230
+ 874              		.loc 1 366 20 is_stmt 0 view .LVU231
+ 875 000c 4022     		movs	r2, #64
+ 876 000e 1900     		movs	r1, r3
+ 367:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 368:common/prog/MSP/mcal/sh30f/muart_mc.c ****         error = MCAL_ERROR_PARITY;
+ 877              		.loc 1 368 15 view .LVU232
+ 878 0010 0230     		adds	r0, r0, #2
+ 366:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 879              		.loc 1 366 20 view .LVU233
+ 880 0012 1140     		ands	r1, r2
+ 366:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 881              		.loc 1 366 12 view .LVU234
+ 882 0014 1342     		tst	r3, r2
+ 883 0016 03D1     		bne	.L46
+ 369:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 370:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(status & UART_FR_RXOV_Msk)
+ 884              		.loc 1 370 10 is_stmt 1 view .LVU235
+ 359:common/prog/MSP/mcal/sh30f/muart_mc.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 885              		.loc 1 359 21 is_stmt 0 view .LVU236
+ 886 0018 0800     		movs	r0, r1
+ 887              		.loc 1 370 12 view .LVU237
+ 888 001a DB06     		lsls	r3, r3, #27
+ 889 001c 00D5     		bpl	.L46
+ 890              	.LVL68:
+ 371:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 372:common/prog/MSP/mcal/sh30f/muart_mc.c ****         error = MCAL_ERROR_OVERFLOW;
+ 891              		.loc 1 372 15 view .LVU238
+ 892 001e 0D20     		movs	r0, #13
+ 893              	.L46:
+ 894              	.LVL69:
+ 373:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 374:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 375:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 376:common/prog/MSP/mcal/sh30f/muart_mc.c ****         /* nothing to do */
+ 377:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 895              		.loc 1 377 5 is_stmt 1 view .LVU239
+ 378:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 379:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return error;
+ 896              		.loc 1 379 5 view .LVU240
+ 380:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 897              		.loc 1 380 1 is_stmt 0 view .LVU241
+ 898              		@ sp needed
+ 899 0020 7047     		bx	lr
+ 900              		.cfi_endproc
+ 901              	.LFE112:
+ 903              		.section	.text.MUART_IRQ_getIndex,"ax",%progbits
+ 904              		.align	1
+ 905              		.global	MUART_IRQ_getIndex
+ 906              		.syntax unified
+ 907              		.code	16
+ 908              		.thumb_func
+ 910              	MUART_IRQ_getIndex:
+ 911              	.LVL70:
+ 912              	.LFB113:
+ 381:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 382:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 33
+
+
+ 383:common/prog/MSP/mcal/sh30f/muart_mc.c **** enum MUART_IRQ_Index MUART_IRQ_getIndex(const struct MUART_Channel *channel)
+ 384:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 913              		.loc 1 384 1 is_stmt 1 view -0
+ 914              		.cfi_startproc
+ 915              		@ args = 0, pretend = 0, frame = 0
+ 916              		@ frame_needed = 0, uses_anonymous_args = 0
+ 917              		@ link register save eliminated.
+ 385:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return channel->muart->index;
+ 918              		.loc 1 385 5 view .LVU243
+ 919              		.loc 1 385 26 is_stmt 0 view .LVU244
+ 920 0000 0368     		ldr	r3, [r0]
+ 386:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 921              		.loc 1 386 1 view .LVU245
+ 922              		@ sp needed
+ 385:common/prog/MSP/mcal/sh30f/muart_mc.c ****     return channel->muart->index;
+ 923              		.loc 1 385 26 view .LVU246
+ 924 0002 1879     		ldrb	r0, [r3, #4]
+ 925              	.LVL71:
+ 926              		.loc 1 386 1 view .LVU247
+ 927 0004 7047     		bx	lr
+ 928              		.cfi_endproc
+ 929              	.LFE113:
+ 931              		.section	.text.MUART_IRQ_enable,"ax",%progbits
+ 932              		.align	1
+ 933              		.global	MUART_IRQ_enable
+ 934              		.syntax unified
+ 935              		.code	16
+ 936              		.thumb_func
+ 938              	MUART_IRQ_enable:
+ 939              	.LVL72:
+ 940              	.LFB114:
+ 387:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 388:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 389:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_IRQ_enable(const struct MUART_Channel *channel)
+ 390:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 941              		.loc 1 390 1 is_stmt 1 view -0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 0
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 945              		@ link register save eliminated.
+ 391:common/prog/MSP/mcal/sh30f/muart_mc.c ****     NVIC_EnableIRQ(channel->muart->IRQn);
+ 946              		.loc 1 391 5 view .LVU249
+ 947              		.loc 1 391 34 is_stmt 0 view .LVU250
+ 948 0000 0368     		ldr	r3, [r0]
+ 949 0002 5B79     		ldrb	r3, [r3, #5]
+ 950 0004 5BB2     		sxtb	r3, r3
+ 951              	.LVL73:
+ 952              	.LBB46:
+ 953              	.LBI46:
+ 954              		.file 3 "common/prog/MSP/CMSIS/core_cm0plus.h"
+   1:common/prog/MSP/CMSIS/core_cm0plus.h **** /**************************************************************************//**
+   2:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @file     core_cm0plus.h
+   3:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @brief    CMSIS Cortex-M0+ Core Peripheral Access Layer Header File
+   4:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @version  V5.0.9
+   5:common/prog/MSP/CMSIS/core_cm0plus.h ****  * @date     21. August 2019
+   6:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+   7:common/prog/MSP/CMSIS/core_cm0plus.h **** /*
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 34
+
+
+   8:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
+   9:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  10:common/prog/MSP/CMSIS/core_cm0plus.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  12:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:common/prog/MSP/CMSIS/core_cm0plus.h ****  * not use this file except in compliance with the License.
+  14:common/prog/MSP/CMSIS/core_cm0plus.h ****  * You may obtain a copy of the License at
+  15:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  16:common/prog/MSP/CMSIS/core_cm0plus.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:common/prog/MSP/CMSIS/core_cm0plus.h ****  *
+  18:common/prog/MSP/CMSIS/core_cm0plus.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:common/prog/MSP/CMSIS/core_cm0plus.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:common/prog/MSP/CMSIS/core_cm0plus.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:common/prog/MSP/CMSIS/core_cm0plus.h ****  * See the License for the specific language governing permissions and
+  22:common/prog/MSP/CMSIS/core_cm0plus.h ****  * limitations under the License.
+  23:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  24:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  25:common/prog/MSP/CMSIS/core_cm0plus.h **** #if   defined ( __ICCARM__ )
+  26:common/prog/MSP/CMSIS/core_cm0plus.h ****   #pragma system_include         /* treat file as system include file for MISRA check */
+  27:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined (__clang__)
+  28:common/prog/MSP/CMSIS/core_cm0plus.h ****   #pragma clang system_header   /* treat file as system include file */
+  29:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+  30:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  31:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CORE_CM0PLUS_H_GENERIC
+  32:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORE_CM0PLUS_H_GENERIC
+  33:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  34:common/prog/MSP/CMSIS/core_cm0plus.h **** #include <stdint.h>
+  35:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  36:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+  37:common/prog/MSP/CMSIS/core_cm0plus.h ****  extern "C" {
+  38:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+  39:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  40:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+  41:common/prog/MSP/CMSIS/core_cm0plus.h ****   \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  42:common/prog/MSP/CMSIS/core_cm0plus.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  43:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  44:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  45:common/prog/MSP/CMSIS/core_cm0plus.h ****      Function definitions in header files are used to allow 'inlining'.
+  46:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  47:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  48:common/prog/MSP/CMSIS/core_cm0plus.h ****      Unions are used for effective representation of core registers.
+  49:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  50:common/prog/MSP/CMSIS/core_cm0plus.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  51:common/prog/MSP/CMSIS/core_cm0plus.h ****      Function-like macros are used to allow more efficient code.
+  52:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  53:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  54:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  55:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+  56:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                 CMSIS definitions
+  57:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+  58:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+  59:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup Cortex-M0+
+  60:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+  61:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+  62:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  63:common/prog/MSP/CMSIS/core_cm0plus.h **** #include "cmsis_version.h"
+  64:common/prog/MSP/CMSIS/core_cm0plus.h ****  
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 35
+
+
+  65:common/prog/MSP/CMSIS/core_cm0plus.h **** /*  CMSIS CM0+ definitions */
+  66:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION_MAIN (__CM_CMSIS_VERSION_MAIN)                  /*!< \deprecated [3
+  67:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION_SUB  (__CM_CMSIS_VERSION_SUB)                   /*!< \deprecated [1
+  68:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CM0PLUS_CMSIS_VERSION      ((__CM0PLUS_CMSIS_VERSION_MAIN << 16U) | \
+  69:common/prog/MSP/CMSIS/core_cm0plus.h ****                                        __CM0PLUS_CMSIS_VERSION_SUB           )  /*!< \deprecated CM
+  70:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  71:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORTEX_M                   (0U)                                       /*!< Cortex-M Core 
+  72:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  73:common/prog/MSP/CMSIS/core_cm0plus.h **** /** __FPU_USED indicates whether an FPU is used or not.
+  74:common/prog/MSP/CMSIS/core_cm0plus.h ****     This core does not support an FPU at all
+  75:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+  76:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __FPU_USED       0U
+  77:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  78:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined ( __CC_ARM )
+  79:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __TARGET_FPU_VFP
+  80:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  81:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  82:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  83:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  84:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __ARM_FP
+  85:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  86:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  87:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  88:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __GNUC__ )
+  89:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+  90:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  91:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  92:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  93:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __ICCARM__ )
+  94:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __ARMVFP__
+  95:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  96:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+  97:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+  98:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __TI_ARM__ )
+  99:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __TI_VFP_SUPPORT__
+ 100:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 101:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 102:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 103:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __TASKING__ )
+ 104:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if defined __FPU_VFP__
+ 105:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 106:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 107:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 108:common/prog/MSP/CMSIS/core_cm0plus.h **** #elif defined ( __CSMC__ )
+ 109:common/prog/MSP/CMSIS/core_cm0plus.h ****   #if ( __CSMC__ & 0x400U)
+ 110:common/prog/MSP/CMSIS/core_cm0plus.h ****     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+ 111:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 112:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 113:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 114:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 115:common/prog/MSP/CMSIS/core_cm0plus.h **** #include "cmsis_compiler.h"               /* CMSIS compiler specific defines */
+ 116:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 117:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 118:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 119:common/prog/MSP/CMSIS/core_cm0plus.h **** }
+ 120:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 121:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 36
+
+
+ 122:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif /* __CORE_CM0PLUS_H_GENERIC */
+ 123:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 124:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CMSIS_GENERIC
+ 125:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 126:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifndef __CORE_CM0PLUS_H_DEPENDANT
+ 127:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __CORE_CM0PLUS_H_DEPENDANT
+ 128:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 129:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 130:common/prog/MSP/CMSIS/core_cm0plus.h ****  extern "C" {
+ 131:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 132:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 133:common/prog/MSP/CMSIS/core_cm0plus.h **** /* check device defines and use defaults */
+ 134:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined __CHECK_DEVICE_DEFINES
+ 135:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __CM0PLUS_REV
+ 136:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __CM0PLUS_REV             0x0000U
+ 137:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__CM0PLUS_REV not defined in device header file; using default!"
+ 138:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 139:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 140:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __MPU_PRESENT
+ 141:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __MPU_PRESENT             0U
+ 142:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 143:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 144:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 145:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __VTOR_PRESENT
+ 146:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __VTOR_PRESENT            0U
+ 147:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__VTOR_PRESENT not defined in device header file; using default!"
+ 148:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 149:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 150:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __NVIC_PRIO_BITS
+ 151:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __NVIC_PRIO_BITS          2U
+ 152:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 153:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 154:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 155:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef __Vendor_SysTickConfig
+ 156:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define __Vendor_SysTickConfig    0U
+ 157:common/prog/MSP/CMSIS/core_cm0plus.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 158:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 159:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 160:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 161:common/prog/MSP/CMSIS/core_cm0plus.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 162:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 163:common/prog/MSP/CMSIS/core_cm0plus.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 164:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 165:common/prog/MSP/CMSIS/core_cm0plus.h ****     <strong>IO Type Qualifiers</strong> are used
+ 166:common/prog/MSP/CMSIS/core_cm0plus.h ****     \li to specify the access to peripheral variables.
+ 167:common/prog/MSP/CMSIS/core_cm0plus.h ****     \li for automatic generation of peripheral register debug information.
+ 168:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 169:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef __cplusplus
+ 170:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions */
+ 171:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 172:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions */
+ 173:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 174:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __O     volatile             /*!< Defines 'write only' permissions */
+ 175:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+ 176:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 177:common/prog/MSP/CMSIS/core_cm0plus.h **** /* following defines should be used for structure members */
+ 178:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IM     volatile const      /*! Defines 'read only' structure member permissions */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 37
+
+
+ 179:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
+ 180:common/prog/MSP/CMSIS/core_cm0plus.h **** #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
+ 181:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 182:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group Cortex-M0+ */
+ 183:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 184:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 185:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 186:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+ 187:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                 Register Abstraction
+ 188:common/prog/MSP/CMSIS/core_cm0plus.h ****   Core Register contain:
+ 189:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core Register
+ 190:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core NVIC Register
+ 191:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SCB Register
+ 192:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SysTick Register
+ 193:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core MPU Register
+ 194:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+ 195:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 196:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_core_register Defines and Type Definitions
+ 197:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief Type definitions and defines for Cortex-M processor based devices.
+ 198:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 199:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 200:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 201:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 202:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_CORE  Status and Control Registers
+ 203:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Core Register type definitions.
+ 204:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 205:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 206:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 207:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 208:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Application Program Status Register (APSR).
+ 209:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 210:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 211:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 212:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 213:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 214:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:28;              /*!< bit:  0..27  Reserved */
+ 215:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 216:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 217:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 218:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 219:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 220:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 221:common/prog/MSP/CMSIS/core_cm0plus.h **** } APSR_Type;
+ 222:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 223:common/prog/MSP/CMSIS/core_cm0plus.h **** /* APSR Register Definitions */
+ 224:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_N_Pos                         31U                                            /*!< APSR
+ 225:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_N_Msk                         (1UL << APSR_N_Pos)                            /*!< APSR
+ 226:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 227:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_Z_Pos                         30U                                            /*!< APSR
+ 228:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_Z_Msk                         (1UL << APSR_Z_Pos)                            /*!< APSR
+ 229:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 230:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_C_Pos                         29U                                            /*!< APSR
+ 231:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_C_Msk                         (1UL << APSR_C_Pos)                            /*!< APSR
+ 232:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 233:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_V_Pos                         28U                                            /*!< APSR
+ 234:common/prog/MSP/CMSIS/core_cm0plus.h **** #define APSR_V_Msk                         (1UL << APSR_V_Pos)                            /*!< APSR
+ 235:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 38
+
+
+ 236:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 237:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 238:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 239:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 240:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 241:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 242:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 243:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 244:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 245:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
+ 246:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 247:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 248:common/prog/MSP/CMSIS/core_cm0plus.h **** } IPSR_Type;
+ 249:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 250:common/prog/MSP/CMSIS/core_cm0plus.h **** /* IPSR Register Definitions */
+ 251:common/prog/MSP/CMSIS/core_cm0plus.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ 252:common/prog/MSP/CMSIS/core_cm0plus.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
+ 253:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 254:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 255:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 256:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 257:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 258:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 259:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 260:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 261:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 262:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 263:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved */
+ 264:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0) */
+ 265:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved1:3;               /*!< bit: 25..27  Reserved */
+ 266:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 267:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 268:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 269:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 270:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 271:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 272:common/prog/MSP/CMSIS/core_cm0plus.h **** } xPSR_Type;
+ 273:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 274:common/prog/MSP/CMSIS/core_cm0plus.h **** /* xPSR Register Definitions */
+ 275:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_N_Pos                         31U                                            /*!< xPSR
+ 276:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_N_Msk                         (1UL << xPSR_N_Pos)                            /*!< xPSR
+ 277:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 278:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_Z_Pos                         30U                                            /*!< xPSR
+ 279:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_Z_Msk                         (1UL << xPSR_Z_Pos)                            /*!< xPSR
+ 280:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 281:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_C_Pos                         29U                                            /*!< xPSR
+ 282:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_C_Msk                         (1UL << xPSR_C_Pos)                            /*!< xPSR
+ 283:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 284:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_V_Pos                         28U                                            /*!< xPSR
+ 285:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_V_Msk                         (1UL << xPSR_V_Pos)                            /*!< xPSR
+ 286:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 287:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_T_Pos                         24U                                            /*!< xPSR
+ 288:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_T_Msk                         (1UL << xPSR_T_Pos)                            /*!< xPSR
+ 289:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 290:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
+ 291:common/prog/MSP/CMSIS/core_cm0plus.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
+ 292:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 39
+
+
+ 293:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 294:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 295:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Union type to access the Control Registers (CONTROL).
+ 296:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 297:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef union
+ 298:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 299:common/prog/MSP/CMSIS/core_cm0plus.h ****   struct
+ 300:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 301:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 302:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used */
+ 303:common/prog/MSP/CMSIS/core_cm0plus.h ****     uint32_t _reserved1:30;              /*!< bit:  2..31  Reserved */
+ 304:common/prog/MSP/CMSIS/core_cm0plus.h ****   } b;                                   /*!< Structure used for bit  access */
+ 305:common/prog/MSP/CMSIS/core_cm0plus.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 306:common/prog/MSP/CMSIS/core_cm0plus.h **** } CONTROL_Type;
+ 307:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 308:common/prog/MSP/CMSIS/core_cm0plus.h **** /* CONTROL Register Definitions */
+ 309:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_SPSEL_Pos                   1U                                            /*!< CONT
+ 310:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_SPSEL_Msk                  (1UL << CONTROL_SPSEL_Pos)                     /*!< CONT
+ 311:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 312:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_nPRIV_Pos                   0U                                            /*!< CONT
+ 313:common/prog/MSP/CMSIS/core_cm0plus.h **** #define CONTROL_nPRIV_Msk                  (1UL /*<< CONTROL_nPRIV_Pos*/)                 /*!< CONT
+ 314:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 315:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_CORE */
+ 316:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 317:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 318:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 319:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 320:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 321:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Type definitions for the NVIC Registers
+ 322:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 323:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 324:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 325:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 326:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 327:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 328:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 329:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 330:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ISER[1U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 331:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED0[31U];
+ 332:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICER[1U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 333:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED1[31U];
+ 334:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ISPR[1U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register *
+ 335:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED2[31U];
+ 336:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICPR[1U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 337:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED3[31U];
+ 338:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED4[64U];
+ 339:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t IP[8U];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
+ 340:common/prog/MSP/CMSIS/core_cm0plus.h **** }  NVIC_Type;
+ 341:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 342:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_NVIC */
+ 343:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 344:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 345:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 346:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 347:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_SCB     System Control Block (SCB)
+ 348:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the System Control Block Registers
+ 349:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 40
+
+
+ 350:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 351:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 352:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 353:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the System Control Block (SCB).
+ 354:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 355:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 356:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 357:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 358:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 359:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 360:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t VTOR;                   /*!< Offset: 0x008 (R/W)  Vector Table Offset Register */
+ 361:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 362:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED0;
+ 363:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 364:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 365:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+ 366:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register *
+ 367:common/prog/MSP/CMSIS/core_cm0plus.h ****         uint32_t RESERVED1;
+ 368:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SHP[2U];                /*!< Offset: 0x01C (R/W)  System Handlers Priority Registe
+ 369:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 370:common/prog/MSP/CMSIS/core_cm0plus.h **** } SCB_Type;
+ 371:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 372:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB CPUID Register Definitions */
+ 373:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24U                                            /*!< SCB 
+ 374:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 375:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 376:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_VARIANT_Pos              20U                                            /*!< SCB 
+ 377:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 378:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 379:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
+ 380:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 381:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 382:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
+ 383:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 384:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 385:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
+ 386:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
+ 387:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 388:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Interrupt Control State Register Definitions */
+ 389:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_NMIPENDSET_Pos            31U                                            /*!< SCB 
+ 390:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 391:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 392:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVSET_Pos             28U                                            /*!< SCB 
+ 393:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 394:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 395:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVCLR_Pos             27U                                            /*!< SCB 
+ 396:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 397:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 398:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTSET_Pos             26U                                            /*!< SCB 
+ 399:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 400:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 401:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTCLR_Pos             25U                                            /*!< SCB 
+ 402:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 403:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 404:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23U                                            /*!< SCB 
+ 405:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 406:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 41
+
+
+ 407:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPENDING_Pos            22U                                            /*!< SCB 
+ 408:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 409:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 410:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTPENDING_Pos           12U                                            /*!< SCB 
+ 411:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 412:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 413:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTACTIVE_Pos             0U                                            /*!< SCB 
+ 414:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL /*<< SCB_ICSR_VECTACTIVE_Pos*/)       /*!< SCB 
+ 415:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 416:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+ 417:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Interrupt Control State Register Definitions */
+ 418:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_VTOR_TBLOFF_Pos                 8U                                            /*!< SCB 
+ 419:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_VTOR_TBLOFF_Msk                (0xFFFFFFUL << SCB_VTOR_TBLOFF_Pos)            /*!< SCB 
+ 420:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 421:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 422:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 423:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEY_Pos              16U                                            /*!< SCB 
+ 424:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 425:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 426:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16U                                            /*!< SCB 
+ 427:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 428:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 429:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_ENDIANESS_Pos            15U                                            /*!< SCB 
+ 430:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 431:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 432:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
+ 433:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 434:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 435:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
+ 436:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 437:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 438:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB System Control Register Definitions */
+ 439:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
+ 440:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 441:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 442:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPDEEP_Pos               2U                                            /*!< SCB 
+ 443:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 444:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 445:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1U                                            /*!< SCB 
+ 446:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 447:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 448:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB Configuration Control Register Definitions */
+ 449:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_STKALIGN_Pos                9U                                            /*!< SCB 
+ 450:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 451:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 452:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3U                                            /*!< SCB 
+ 453:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 454:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 455:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SCB System Handler Control and State Register Definitions */
+ 456:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB 
+ 457:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 458:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 459:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_SCB */
+ 460:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 461:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 462:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 463:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 42
+
+
+ 464:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 465:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the System Timer Registers.
+ 466:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 467:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 468:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 469:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 470:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the System Timer (SysTick).
+ 471:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 472:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 473:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 474:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 475:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+ 476:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
+ 477:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+ 478:common/prog/MSP/CMSIS/core_cm0plus.h **** } SysTick_Type;
+ 479:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 480:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Control / Status Register Definitions */
+ 481:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
+ 482:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 483:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 484:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2U                                            /*!< SysT
+ 485:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 486:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 487:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_TICKINT_Pos            1U                                            /*!< SysT
+ 488:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 489:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 490:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_ENABLE_Pos             0U                                            /*!< SysT
+ 491:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysT
+ 492:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 493:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Reload Register Definitions */
+ 494:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_LOAD_RELOAD_Pos             0U                                            /*!< SysT
+ 495:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysT
+ 496:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 497:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Current Register Definitions */
+ 498:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_VAL_CURRENT_Pos             0U                                            /*!< SysT
+ 499:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysT
+ 500:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 501:common/prog/MSP/CMSIS/core_cm0plus.h **** /* SysTick Calibration Register Definitions */
+ 502:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_NOREF_Pos            31U                                            /*!< SysT
+ 503:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 504:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 505:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_SKEW_Pos             30U                                            /*!< SysT
+ 506:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 507:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 508:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysT
+ 509:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysT
+ 510:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 511:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_SysTick */
+ 512:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 513:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+ 514:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 515:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 516:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
+ 517:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Type definitions for the Memory Protection Unit (MPU)
+ 518:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 519:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 520:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 43
+
+
+ 521:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 522:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief  Structure type to access the Memory Protection Unit (MPU).
+ 523:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 524:common/prog/MSP/CMSIS/core_cm0plus.h **** typedef struct
+ 525:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 526:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IM  uint32_t TYPE;                   /*!< Offset: 0x000 (R/ )  MPU Type Register */
+ 527:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x004 (R/W)  MPU Control Register */
+ 528:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RNR;                    /*!< Offset: 0x008 (R/W)  MPU Region RNRber Register */
+ 529:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RBAR;                   /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+ 530:common/prog/MSP/CMSIS/core_cm0plus.h ****   __IOM uint32_t RASR;                   /*!< Offset: 0x010 (R/W)  MPU Region Attribute and Size Re
+ 531:common/prog/MSP/CMSIS/core_cm0plus.h **** } MPU_Type;
+ 532:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 533:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_RALIASES                  1U
+ 534:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 535:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Type Register Definitions */
+ 536:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_IREGION_Pos               16U                                            /*!< MPU 
+ 537:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+ 538:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 539:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_DREGION_Pos                8U                                            /*!< MPU 
+ 540:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+ 541:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 542:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_SEPARATE_Pos               0U                                            /*!< MPU 
+ 543:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL /*<< MPU_TYPE_SEPARATE_Pos*/)             /*!< MPU 
+ 544:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 545:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Control Register Definitions */
+ 546:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2U                                            /*!< MPU 
+ 547:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+ 548:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 549:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_HFNMIENA_Pos               1U                                            /*!< MPU 
+ 550:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+ 551:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 552:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_ENABLE_Pos                 0U                                            /*!< MPU 
+ 553:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_CTRL_ENABLE_Msk                (1UL /*<< MPU_CTRL_ENABLE_Pos*/)               /*!< MPU 
+ 554:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 555:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Number Register Definitions */
+ 556:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RNR_REGION_Pos                  0U                                            /*!< MPU 
+ 557:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL /*<< MPU_RNR_REGION_Pos*/)             /*!< MPU 
+ 558:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 559:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Base Address Register Definitions */
+ 560:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_ADDR_Pos                   8U                                            /*!< MPU 
+ 561:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_ADDR_Msk                  (0xFFFFFFUL << MPU_RBAR_ADDR_Pos)              /*!< MPU 
+ 562:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 563:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_VALID_Pos                  4U                                            /*!< MPU 
+ 564:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
+ 565:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 566:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_REGION_Pos                 0U                                            /*!< MPU 
+ 567:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RBAR_REGION_Msk                (0xFUL /*<< MPU_RBAR_REGION_Pos*/)             /*!< MPU 
+ 568:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 569:common/prog/MSP/CMSIS/core_cm0plus.h **** /* MPU Region Attribute and Size Register Definitions */
+ 570:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ATTRS_Pos                 16U                                            /*!< MPU 
+ 571:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
+ 572:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 573:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_XN_Pos                    28U                                            /*!< MPU 
+ 574:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_XN_Msk                    (1UL << MPU_RASR_XN_Pos)                       /*!< MPU 
+ 575:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 576:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_AP_Pos                    24U                                            /*!< MPU 
+ 577:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_AP_Msk                    (0x7UL << MPU_RASR_AP_Pos)                     /*!< MPU 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 44
+
+
+ 578:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 579:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_TEX_Pos                   19U                                            /*!< MPU 
+ 580:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_TEX_Msk                   (0x7UL << MPU_RASR_TEX_Pos)                    /*!< MPU 
+ 581:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 582:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_S_Pos                     18U                                            /*!< MPU 
+ 583:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_S_Msk                     (1UL << MPU_RASR_S_Pos)                        /*!< MPU 
+ 584:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 585:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_C_Pos                     17U                                            /*!< MPU 
+ 586:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_C_Msk                     (1UL << MPU_RASR_C_Pos)                        /*!< MPU 
+ 587:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 588:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_B_Pos                     16U                                            /*!< MPU 
+ 589:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_B_Msk                     (1UL << MPU_RASR_B_Pos)                        /*!< MPU 
+ 590:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 591:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SRD_Pos                    8U                                            /*!< MPU 
+ 592:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SRD_Msk                   (0xFFUL << MPU_RASR_SRD_Pos)                   /*!< MPU 
+ 593:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 594:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SIZE_Pos                   1U                                            /*!< MPU 
+ 595:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_SIZE_Msk                  (0x1FUL << MPU_RASR_SIZE_Pos)                  /*!< MPU 
+ 596:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 597:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ENABLE_Pos                 0U                                            /*!< MPU 
+ 598:common/prog/MSP/CMSIS/core_cm0plus.h **** #define MPU_RASR_ENABLE_Msk                (1UL /*<< MPU_RASR_ENABLE_Pos*/)               /*!< MPU 
+ 599:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 600:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_MPU */
+ 601:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 602:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 603:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 604:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 605:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_core_register
+ 606:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+ 607:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Cortex-M0+ Core Debug Registers (DCB registers, SHCSR, and DFSR) are only accessible ov
+ 608:common/prog/MSP/CMSIS/core_cm0plus.h ****             Therefore they are not covered by the Cortex-M0+ header file.
+ 609:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 610:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 611:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_CoreDebug */
+ 612:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 613:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 614:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 615:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 616:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_core_bitfield     Core register bit field macros
+ 617:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Macros for use with bit field definitions (xxx_Pos, xxx_Msk).
+ 618:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 619:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 620:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 621:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 622:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Mask and shift a bit field value for use in a register bit range.
+ 623:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] field  Name of the register bit field.
+ 624:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] value  Value of the bit field. This parameter is interpreted as an uint32_t type.
+ 625:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return           Masked and shifted value.
+ 626:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 627:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _VAL2FLD(field, value)    (((uint32_t)(value) << field ## _Pos) & field ## _Msk)
+ 628:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 629:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 630:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief     Mask and shift a register value to extract a bit filed value.
+ 631:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] field  Name of the register bit field.
+ 632:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param[in] value  Value of register. This parameter is interpreted as an uint32_t type.
+ 633:common/prog/MSP/CMSIS/core_cm0plus.h ****   \return           Masked and shifted bit field value.
+ 634:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 45
+
+
+ 635:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _FLD2VAL(field, value)    (((uint32_t)(value) & field ## _Msk) >> field ## _Pos)
+ 636:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 637:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} end of group CMSIS_core_bitfield */
+ 638:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 639:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 640:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 641:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup    CMSIS_core_register
+ 642:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup   CMSIS_core_base     Core Definitions
+ 643:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief      Definitions for base addresses, unions, and structures.
+ 644:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 645:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 646:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 647:common/prog/MSP/CMSIS/core_cm0plus.h **** /* Memory mapping of Core Hardware */
+ 648:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+ 649:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
+ 650:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address */
+ 651:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+ 652:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 653:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+ 654:common/prog/MSP/CMSIS/core_cm0plus.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+ 655:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+ 656:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 657:common/prog/MSP/CMSIS/core_cm0plus.h **** #if defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)
+ 658:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit *
+ 659:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit *
+ 660:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif
+ 661:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 662:common/prog/MSP/CMSIS/core_cm0plus.h **** /*@} */
+ 663:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 664:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 665:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 666:common/prog/MSP/CMSIS/core_cm0plus.h **** /*******************************************************************************
+ 667:common/prog/MSP/CMSIS/core_cm0plus.h ****  *                Hardware Abstraction Layer
+ 668:common/prog/MSP/CMSIS/core_cm0plus.h ****   Core Function Interface contains:
+ 669:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core NVIC Functions
+ 670:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core SysTick Functions
+ 671:common/prog/MSP/CMSIS/core_cm0plus.h ****   - Core Register Access Functions
+ 672:common/prog/MSP/CMSIS/core_cm0plus.h ****  ******************************************************************************/
+ 673:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 674:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+ 675:common/prog/MSP/CMSIS/core_cm0plus.h **** */
+ 676:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 677:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 678:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 679:common/prog/MSP/CMSIS/core_cm0plus.h **** /* ##########################   NVIC functions  #################################### */
+ 680:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 681:common/prog/MSP/CMSIS/core_cm0plus.h ****   \ingroup  CMSIS_Core_FunctionInterface
+ 682:common/prog/MSP/CMSIS/core_cm0plus.h ****   \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+ 683:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief    Functions that manage interrupts and exceptions via the NVIC.
+ 684:common/prog/MSP/CMSIS/core_cm0plus.h ****   @{
+ 685:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 686:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 687:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef CMSIS_NVIC_VIRTUAL
+ 688:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef CMSIS_NVIC_VIRTUAL_HEADER_FILE
+ 689:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define CMSIS_NVIC_VIRTUAL_HEADER_FILE "cmsis_nvic_virtual.h"
+ 690:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 691:common/prog/MSP/CMSIS/core_cm0plus.h ****   #include CMSIS_NVIC_VIRTUAL_HEADER_FILE
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 46
+
+
+ 692:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 693:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPriorityGrouping    __NVIC_SetPriorityGrouping
+ 694:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPriorityGrouping    __NVIC_GetPriorityGrouping
+ 695:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_EnableIRQ              __NVIC_EnableIRQ
+ 696:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetEnableIRQ           __NVIC_GetEnableIRQ
+ 697:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_DisableIRQ             __NVIC_DisableIRQ
+ 698:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPendingIRQ          __NVIC_GetPendingIRQ
+ 699:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPendingIRQ          __NVIC_SetPendingIRQ
+ 700:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_ClearPendingIRQ        __NVIC_ClearPendingIRQ
+ 701:common/prog/MSP/CMSIS/core_cm0plus.h **** /*#define NVIC_GetActive              __NVIC_GetActive             not available for Cortex-M0+ */
+ 702:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetPriority            __NVIC_SetPriority
+ 703:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetPriority            __NVIC_GetPriority
+ 704:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SystemReset            __NVIC_SystemReset
+ 705:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif /* CMSIS_NVIC_VIRTUAL */
+ 706:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 707:common/prog/MSP/CMSIS/core_cm0plus.h **** #ifdef CMSIS_VECTAB_VIRTUAL
+ 708:common/prog/MSP/CMSIS/core_cm0plus.h ****   #ifndef CMSIS_VECTAB_VIRTUAL_HEADER_FILE
+ 709:common/prog/MSP/CMSIS/core_cm0plus.h ****     #define CMSIS_VECTAB_VIRTUAL_HEADER_FILE "cmsis_vectab_virtual.h"
+ 710:common/prog/MSP/CMSIS/core_cm0plus.h ****   #endif
+ 711:common/prog/MSP/CMSIS/core_cm0plus.h ****   #include CMSIS_VECTAB_VIRTUAL_HEADER_FILE
+ 712:common/prog/MSP/CMSIS/core_cm0plus.h **** #else
+ 713:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_SetVector              __NVIC_SetVector
+ 714:common/prog/MSP/CMSIS/core_cm0plus.h ****   #define NVIC_GetVector              __NVIC_GetVector
+ 715:common/prog/MSP/CMSIS/core_cm0plus.h **** #endif  /* (CMSIS_VECTAB_VIRTUAL) */
+ 716:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 717:common/prog/MSP/CMSIS/core_cm0plus.h **** #define NVIC_USER_IRQ_OFFSET          16
+ 718:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 719:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 720:common/prog/MSP/CMSIS/core_cm0plus.h **** /* The following EXC_RETURN values are saved the LR on exception entry */
+ 721:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_HANDLER         (0xFFFFFFF1UL)     /* return to Handler mode, uses MSP after ret
+ 722:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_THREAD_MSP      (0xFFFFFFF9UL)     /* return to Thread mode, uses MSP after retu
+ 723:common/prog/MSP/CMSIS/core_cm0plus.h **** #define EXC_RETURN_THREAD_PSP      (0xFFFFFFFDUL)     /* return to Thread mode, uses PSP after retu
+ 724:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 725:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 726:common/prog/MSP/CMSIS/core_cm0plus.h **** /* Interrupt Priorities are WORD accessible only under Armv6-M                  */
+ 727:common/prog/MSP/CMSIS/core_cm0plus.h **** /* The following MACROS handle generation of the register offset and byte masks */
+ 728:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _BIT_SHIFT(IRQn)         (  ((((uint32_t)(int32_t)(IRQn))         )      &  0x03UL) * 8UL)
+ 729:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _SHP_IDX(IRQn)           ( (((((uint32_t)(int32_t)(IRQn)) & 0x0FUL)-8UL) >>    2UL)      )
+ 730:common/prog/MSP/CMSIS/core_cm0plus.h **** #define _IP_IDX(IRQn)            (   (((uint32_t)(int32_t)(IRQn))                >>    2UL)      )
+ 731:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 732:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __NVIC_SetPriorityGrouping(X) (void)(X)
+ 733:common/prog/MSP/CMSIS/core_cm0plus.h **** #define __NVIC_GetPriorityGrouping()  (0U)
+ 734:common/prog/MSP/CMSIS/core_cm0plus.h **** 
+ 735:common/prog/MSP/CMSIS/core_cm0plus.h **** /**
+ 736:common/prog/MSP/CMSIS/core_cm0plus.h ****   \brief   Enable Interrupt
+ 737:common/prog/MSP/CMSIS/core_cm0plus.h ****   \details Enables a device specific interrupt in the NVIC interrupt controller.
+ 738:common/prog/MSP/CMSIS/core_cm0plus.h ****   \param [in]      IRQn  Device specific interrupt number.
+ 739:common/prog/MSP/CMSIS/core_cm0plus.h ****   \note    IRQn must not be negative.
+ 740:common/prog/MSP/CMSIS/core_cm0plus.h ****  */
+ 741:common/prog/MSP/CMSIS/core_cm0plus.h **** __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+ 955              		.loc 3 741 22 is_stmt 1 view .LVU251
+ 956              	.LBB47:
+ 742:common/prog/MSP/CMSIS/core_cm0plus.h **** {
+ 743:common/prog/MSP/CMSIS/core_cm0plus.h ****   if ((int32_t)(IRQn) >= 0)
+ 957              		.loc 3 743 3 view .LVU252
+ 958              		.loc 3 743 6 is_stmt 0 view .LVU253
+ 959 0006 002B     		cmp	r3, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 47
+
+
+ 960 0008 06DB     		blt	.L54
+ 744:common/prog/MSP/CMSIS/core_cm0plus.h ****   {
+ 745:common/prog/MSP/CMSIS/core_cm0plus.h ****     __COMPILER_BARRIER();
+ 961              		.loc 3 745 5 is_stmt 1 view .LVU254
+ 746:common/prog/MSP/CMSIS/core_cm0plus.h ****     NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+ 962              		.loc 3 746 5 view .LVU255
+ 963              		.loc 3 746 58 is_stmt 0 view .LVU256
+ 964 000a 1F22     		movs	r2, #31
+ 965 000c 1340     		ands	r3, r2
+ 966              	.LVL74:
+ 967              		.loc 3 746 22 view .LVU257
+ 968 000e 1E3A     		subs	r2, r2, #30
+ 969 0010 9A40     		lsls	r2, r2, r3
+ 970 0012 1300     		movs	r3, r2
+ 971              		.loc 3 746 20 view .LVU258
+ 972 0014 014A     		ldr	r2, .L56
+ 973 0016 1360     		str	r3, [r2]
+ 974              	.LVL75:
+ 747:common/prog/MSP/CMSIS/core_cm0plus.h ****     __COMPILER_BARRIER();
+ 975              		.loc 3 747 5 is_stmt 1 view .LVU259
+ 976              	.L54:
+ 977              		.loc 3 747 5 is_stmt 0 view .LVU260
+ 978              	.LBE47:
+ 979              	.LBE46:
+ 392:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 980              		.loc 1 392 1 view .LVU261
+ 981              		@ sp needed
+ 982 0018 7047     		bx	lr
+ 983              	.L57:
+ 984 001a C046     		.align	2
+ 985              	.L56:
+ 986 001c 00E100E0 		.word	-536813312
+ 987              		.cfi_endproc
+ 988              	.LFE114:
+ 990              		.section	.text.MUART_IRQ_enableEvent,"ax",%progbits
+ 991              		.align	1
+ 992              		.global	MUART_IRQ_enableEvent
+ 993              		.syntax unified
+ 994              		.code	16
+ 995              		.thumb_func
+ 997              	MUART_IRQ_enableEvent:
+ 998              	.LVL76:
+ 999              	.LFB115:
+ 393:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 394:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 395:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_IRQ_enableEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+ 396:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 1000              		.loc 1 396 1 is_stmt 1 view -0
+ 1001              		.cfi_startproc
+ 1002              		@ args = 0, pretend = 0, frame = 0
+ 1003              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1004              		@ link register save eliminated.
+ 397:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(event == MCAL_EVENT_READ_BYTE)
+ 1005              		.loc 1 397 5 view .LVU263
+ 1006              		.loc 1 397 7 is_stmt 0 view .LVU264
+ 1007 0000 1029     		cmp	r1, #16
+ 1008 0002 06D1     		bne	.L59
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 48
+
+
+ 398:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 399:common/prog/MSP/mcal/sh30f/muart_mc.c ****         channel->muart->USARTx->CR.V32 |= UART_CR_RIE_Msk;
+ 1009              		.loc 1 399 9 is_stmt 1 view .LVU265
+ 1010              		.loc 1 399 23 is_stmt 0 view .LVU266
+ 1011 0004 0368     		ldr	r3, [r0]
+ 1012 0006 1A68     		ldr	r2, [r3]
+ 1013              		.loc 1 399 40 view .LVU267
+ 1014 0008 0823     		movs	r3, #8
+ 1015 000a 9169     		ldr	r1, [r2, #24]
+ 1016              	.LVL77:
+ 1017              	.L61:
+ 400:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 401:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(event == MCAL_EVENT_WRITE_BYTE)
+ 402:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 403:common/prog/MSP/mcal/sh30f/muart_mc.c ****         channel->muart->USARTx->CR.V32 |= UART_CR_TIE_Msk;
+ 1018              		.loc 1 403 40 view .LVU268
+ 1019 000c 0B43     		orrs	r3, r1
+ 1020 000e 9361     		str	r3, [r2, #24]
+ 404:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 405:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 406:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 407:common/prog/MSP/mcal/sh30f/muart_mc.c ****         /* Nothing to do */
+ 408:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1021              		.loc 1 408 5 is_stmt 1 view .LVU269
+ 1022              	.L58:
+ 409:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 1023              		.loc 1 409 1 is_stmt 0 view .LVU270
+ 1024              		@ sp needed
+ 1025 0010 7047     		bx	lr
+ 1026              	.LVL78:
+ 1027              	.L59:
+ 401:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 1028              		.loc 1 401 10 is_stmt 1 view .LVU271
+ 401:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 1029              		.loc 1 401 12 is_stmt 0 view .LVU272
+ 1030 0012 2029     		cmp	r1, #32
+ 1031 0014 FCD1     		bne	.L58
+ 403:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1032              		.loc 1 403 9 is_stmt 1 view .LVU273
+ 403:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1033              		.loc 1 403 23 is_stmt 0 view .LVU274
+ 1034 0016 0368     		ldr	r3, [r0]
+ 1035 0018 1A68     		ldr	r2, [r3]
+ 403:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1036              		.loc 1 403 40 view .LVU275
+ 1037 001a 1023     		movs	r3, #16
+ 1038 001c 9169     		ldr	r1, [r2, #24]
+ 1039              	.LVL79:
+ 403:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1040              		.loc 1 403 40 view .LVU276
+ 1041 001e F5E7     		b	.L61
+ 1042              		.cfi_endproc
+ 1043              	.LFE115:
+ 1045              		.section	.text.MUART_IRQ_disableEvent,"ax",%progbits
+ 1046              		.align	1
+ 1047              		.global	MUART_IRQ_disableEvent
+ 1048              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 49
+
+
+ 1049              		.code	16
+ 1050              		.thumb_func
+ 1052              	MUART_IRQ_disableEvent:
+ 1053              	.LVL80:
+ 1054              	.LFB116:
+ 410:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 411:common/prog/MSP/mcal/sh30f/muart_mc.c **** 
+ 412:common/prog/MSP/mcal/sh30f/muart_mc.c **** void MUART_IRQ_disableEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+ 413:common/prog/MSP/mcal/sh30f/muart_mc.c **** {
+ 1055              		.loc 1 413 1 is_stmt 1 view -0
+ 1056              		.cfi_startproc
+ 1057              		@ args = 0, pretend = 0, frame = 0
+ 1058              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1059              		@ link register save eliminated.
+ 414:common/prog/MSP/mcal/sh30f/muart_mc.c ****     if(event == MCAL_EVENT_READ_BYTE)
+ 1060              		.loc 1 414 5 view .LVU278
+ 1061              		.loc 1 414 7 is_stmt 0 view .LVU279
+ 1062 0000 1029     		cmp	r1, #16
+ 1063 0002 06D1     		bne	.L63
+ 415:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 416:common/prog/MSP/mcal/sh30f/muart_mc.c ****         channel->muart->USARTx->CR.V32 &= ~UART_CR_RIE_Msk;
+ 1064              		.loc 1 416 9 is_stmt 1 view .LVU280
+ 1065              		.loc 1 416 23 is_stmt 0 view .LVU281
+ 1066 0004 0368     		ldr	r3, [r0]
+ 1067              		.loc 1 416 40 view .LVU282
+ 1068 0006 0839     		subs	r1, r1, #8
+ 1069              	.LVL81:
+ 1070              		.loc 1 416 23 view .LVU283
+ 1071 0008 1A68     		ldr	r2, [r3]
+ 1072              		.loc 1 416 40 view .LVU284
+ 1073 000a 9369     		ldr	r3, [r2, #24]
+ 1074              	.LVL82:
+ 1075              	.L65:
+ 417:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 418:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else if(event == MCAL_EVENT_WRITE_BYTE)
+ 419:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****         channel->muart->USARTx->CR.V32 &= ~UART_CR_TIE_Msk;
+ 1076              		.loc 1 420 40 view .LVU285
+ 1077 000c 8B43     		bics	r3, r1
+ 1078 000e 9361     		str	r3, [r2, #24]
+ 421:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 422:common/prog/MSP/mcal/sh30f/muart_mc.c ****     else
+ 423:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 424:common/prog/MSP/mcal/sh30f/muart_mc.c ****         /* Nothing to do */
+ 425:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1079              		.loc 1 425 5 is_stmt 1 view .LVU286
+ 1080              	.L62:
+ 426:common/prog/MSP/mcal/sh30f/muart_mc.c **** }
+ 1081              		.loc 1 426 1 is_stmt 0 view .LVU287
+ 1082              		@ sp needed
+ 1083 0010 7047     		bx	lr
+ 1084              	.LVL83:
+ 1085              	.L63:
+ 418:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 1086              		.loc 1 418 10 is_stmt 1 view .LVU288
+ 418:common/prog/MSP/mcal/sh30f/muart_mc.c ****     {
+ 1087              		.loc 1 418 12 is_stmt 0 view .LVU289
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 50
+
+
+ 1088 0012 2029     		cmp	r1, #32
+ 1089 0014 FCD1     		bne	.L62
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1090              		.loc 1 420 9 is_stmt 1 view .LVU290
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1091              		.loc 1 420 23 is_stmt 0 view .LVU291
+ 1092 0016 0368     		ldr	r3, [r0]
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1093              		.loc 1 420 40 view .LVU292
+ 1094 0018 1039     		subs	r1, r1, #16
+ 1095              	.LVL84:
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1096              		.loc 1 420 23 view .LVU293
+ 1097 001a 1A68     		ldr	r2, [r3]
+ 420:common/prog/MSP/mcal/sh30f/muart_mc.c ****     }
+ 1098              		.loc 1 420 40 view .LVU294
+ 1099 001c 9369     		ldr	r3, [r2, #24]
+ 1100 001e F5E7     		b	.L65
+ 1101              		.cfi_endproc
+ 1102              	.LFE116:
+ 1104              		.global	MUART3
+ 1105              		.global	MUART2
+ 1106              		.global	MUART1
+ 1107              		.global	MUART0
+ 1108              		.section	.rodata.MUART0,"a"
+ 1109              		.align	2
+ 1112              	MUART0:
+ 1113 0000 00000240 		.word	1073872896
+ 1114 0004 00       		.byte	0
+ 1115 0005 13       		.byte	19
+ 1116 0006 0000     		.space	2
+ 1117 0008 24080440 		.word	1074006052
+ 1118 000c 01000000 		.word	1
+ 1119              		.section	.rodata.MUART1,"a"
+ 1120              		.align	2
+ 1123              	MUART1:
+ 1124 0000 00040240 		.word	1073873920
+ 1125 0004 01       		.byte	1
+ 1126 0005 17       		.byte	23
+ 1127 0006 0000     		.space	2
+ 1128 0008 24080440 		.word	1074006052
+ 1129 000c 02000000 		.word	2
+ 1130              		.section	.rodata.MUART2,"a"
+ 1131              		.align	2
+ 1134              	MUART2:
+ 1135 0000 00080240 		.word	1073874944
+ 1136 0004 02       		.byte	2
+ 1137 0005 18       		.byte	24
+ 1138 0006 0000     		.space	2
+ 1139 0008 24080440 		.word	1074006052
+ 1140 000c 04000000 		.word	4
+ 1141              		.section	.rodata.MUART3,"a"
+ 1142              		.align	2
+ 1145              	MUART3:
+ 1146 0000 000C0240 		.word	1073875968
+ 1147 0004 03       		.byte	3
+ 1148 0005 19       		.byte	25
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc8vMpTp.s 			page 51
+
+
+ 1149 0006 0000     		.space	2
+ 1150 0008 24080440 		.word	1074006052
+ 1151 000c 08000000 		.word	8
+ 1152              		.text
+ 1153              	.Letext0:
+ 1154              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 1155              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 1156              		.file 6 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 1157              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 1158              		.file 8 "common/prog/MSP/mcal/muart_types.h"
+ 1159              		.file 9 "common/prog/MSP/mcal/mcal_types.h"
+ 1160              		.file 10 "common/prog/MSP/mcal/mdio_types.h"
+ 1161              		.file 11 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 1162              		.file 12 "common/prog/MSP/mcal/sh30f/muart_mc.h"

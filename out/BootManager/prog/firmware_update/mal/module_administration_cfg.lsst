@@ -1,0 +1,69 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNJG5Iy.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"module_administration_cfg.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	MAL_partitionFix
+  18              		.section	.rodata.MAL_partitionFix,"a"
+  19              		.align	2
+  22              	MAL_partitionFix:
+  23 0000 000F0000 		.word	3840
+  24 0004 FF190000 		.word	6655
+  25 0008 2055     		.short	21792
+  26 000a 01       		.byte	1
+  27 000b 10       		.byte	16
+  28 000c 526F6D2D 		.ascii	"Rom-Loader_LRO\000"
+  28      4C6F6164 
+  28      65725F4C 
+  28      524F00
+  29 001b 00       		.space	1
+  30 001c FFFF     		.short	-1
+  31 001e 0000     		.space	2
+  32 0020 001A0000 		.word	6656
+  33 0024 FF5F0000 		.word	24575
+  34 0028 1055     		.short	21776
+  35 002a 01       		.byte	1
+  36 002b 10       		.byte	16
+  37 002c 50726F67 		.ascii	"Programmer\000"
+  37      72616D6D 
+  37      657200
+  38 0037 00000000 		.space	5
+  38      00
+  39 003c FFFF     		.short	-1
+  40 003e 0000     		.space	2
+  41 0040 00640000 		.word	25600
+  42 0044 FFFF0300 		.word	262143
+  43 0048 0022     		.short	8704
+  44 004a 01       		.byte	1
+  45 004b 17       		.byte	23
+  46 004c 4170706C 		.ascii	"Application\000"
+  46      69636174 
+  46      696F6E00 
+  47 0058 00000000 		.space	4
+  48 005c FFFF     		.short	-1
+  49 005e 0000     		.space	2
+  50              		.text
+  51              	.Letext0:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccNJG5Iy.s 			page 2
+
+
+  52              		.file 1 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  53              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  54              		.file 3 "app/prog/firmware_update/mal/module_administration_cfg.h"
+  55              		.file 4 "common/prog/firmware_update/mal/moduleAdministration.h"
+  56              		.file 5 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+  57              		.file 6 "app/prog/firmware_update/mal/module_administration_cfg.c"

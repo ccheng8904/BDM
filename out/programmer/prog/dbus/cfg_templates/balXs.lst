@@ -1,0 +1,78 @@
+
+out/programmer/prog/dbus/cfg_templates/balXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BAL_vNotifyNonDeliverableMessage:
+
+00000000 <BAL_vNotifyNonDeliverableMessage>:
+          CCCMTD_dbus2PedFwNotifyNondeliverableMessage(ucMessageIndex);
+          break;
+      }
+#endif
+   }
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.BAL_vNotifyError:
+
+00000000 <BAL_vNotifyError>:
+
+void BAL_vNotifyError(uint8_t ucError)
+{
+   static uint8_t BAL_aucErrorCounter[BAL_ERROR_TYPES] = {0};
+
+   if (ucError < BAL_ERROR_TYPES)
+   0:	2803      	cmp	r0, #3
+   2:	d803      	bhi.n	c <BAL_vNotifyError+0xc>
+   {
+      (void)BAL_aucErrorCounter[ucError]; /*just access variable*/
+      BAL_aucErrorCounter[ucError]++;
+   4:	4a02      	ldr	r2, [pc, #8]	; (10 <BAL_vNotifyError+0x10>)
+   6:	5c13      	ldrb	r3, [r2, r0]
+   8:	3301      	adds	r3, #1
+   a:	5413      	strb	r3, [r2, r0]
+
+   }
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_vNotifyUnknownMessage:
+
+00000000 <BAL_vNotifyUnknownMessage>:
+
+void BAL_vNotifyUnknownMessage(uint8_t ucReceivedTargetAddress, TbusMessageIdentifier tReceivedMessageId)
+{
+    (void)ucReceivedTargetAddress;
+    (void)tReceivedMessageId;
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.BAL_bIsIdentifierInRangeOfReceiveTable:
+
+00000000 <BAL_bIsIdentifierInRangeOfReceiveTable>:
+             ret=true;
+         }
+    }
+#endif
+    return ret;
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.BAL_vEnterCriticalSectionForSending:
+
+00000000 <BAL_vEnterCriticalSectionForSending>:
+void BAL_vEnterCriticalSectionForSending(void)
+{
+#ifdef RTOS
+    (void)RTOS_enterCriticalSection(&mutex_BAL);
+#endif
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.BAL_vExitCriticalSectionforSending:
+
+00000000 <BAL_vExitCriticalSectionforSending>:
+   0:	4770      	bx	lr

@@ -1,0 +1,210 @@
+
+out/lromLoader/prog/firmware_update/BootLoader/BLservices.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BLSRV_invalidCommand:
+
+00000000 <BLSRV_invalidCommand>:
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+    return (BLCOM_rxSuccess);
+}
+
+static enum BLCOM_rxResult BLSRV_invalidCommand(uint16_t address, uint16_t length)
+{
+   0:	b510      	push	{r4, lr}
+    (void)length;
+    (void)address;
+    
+    BLCOM_sendByte(BL_UNKNOWN_COMMAND);
+   2:	2001      	movs	r0, #1
+   4:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+    return (BLCOM_rxSuccess);
+
+}
+   8:	2000      	movs	r0, #0
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.BLSRV_setPage:
+
+00000000 <BLSRV_setPage>:
+{
+   0:	b510      	push	{r4, lr}
+    BLSRV_pageAddress = address;
+   2:	4b03      	ldr	r3, [pc, #12]	; (10 <BLSRV_setPage+0x10>)
+   4:	8018      	strh	r0, [r3, #0]
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+   6:	20a0      	movs	r0, #160	; 0xa0
+   8:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+}
+   c:	2000      	movs	r0, #0
+   e:	bd10      	pop	{r4, pc}
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BLSRV_jumpLoader:
+
+00000000 <BLSRV_jumpLoader>:
+
+}
+#endif
+
+static enum BLCOM_rxResult BLSRV_jumpLoader(uint16_t address, uint16_t length)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    (void)length;
+    (void)address;
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+   4:	20a0      	movs	r0, #160	; 0xa0
+   6:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+#endif  // defined(VARIANT_RAMLOADER) || defined(VARIANT_GECKO_BL) || defined(UNIT_UNDER_TEST) || defined(UNIT_TEST_INST)
+
+
+static uint32_t BLSRV_getTargetAddress(uint16_t address)
+{
+    uint32_t targetAddress = (uint32_t)BLSRV_pageAddress << 16u;
+   a:	4b03      	ldr	r3, [pc, #12]	; (18 <BLSRV_jumpLoader+0x18>)
+   c:	881b      	ldrh	r3, [r3, #0]
+   e:	041b      	lsls	r3, r3, #16
+    targetAddress += address;
+  10:	18e4      	adds	r4, r4, r3
+    fptr(); // call RAM-Loader (never come back)
+  12:	47a0      	blx	r4
+}
+  14:	2000      	movs	r0, #0
+  16:	bd10      	pop	{r4, pc}
+  18:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BLSRV_setBaudRate:
+
+00000000 <BLSRV_setBaudRate>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	1e04      	subs	r4, r0, #0
+    if (baud == BLSRV_HIGH_BAUD_ID)
+   4:	d100      	bne.n	8 <BLSRV_setBaudRate+0x8>
+        baud = BLSRV_highBaud;
+   6:	4c04      	ldr	r4, [pc, #16]	; (18 <BLSRV_setBaudRate+0x18>)
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK); // send acknowledge in former baud rate
+   8:	20a0      	movs	r0, #160	; 0xa0
+   a:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+    BLCOM_setBaudrate(baud);
+   e:	0020      	movs	r0, r4
+  10:	f7ff fffe 	bl	0 <BLCOM_setBaudrate>
+}
+  14:	2000      	movs	r0, #0
+  16:	bd10      	pop	{r4, pc}
+  18:	000004e2 	.word	0x000004e2
+
+Disassembly of section .text.BLSRV_selfIdent:
+
+00000000 <BLSRV_selfIdent>:
+{
+   0:	b510      	push	{r4, lr}
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+   2:	20a0      	movs	r0, #160	; 0xa0
+   4:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+    BLCOM_sendBuffer((const void *)BLSRV_idString, (uint16_t)sizeof(BLSRV_idString)); /*lint !e928 */
+   8:	4802      	ldr	r0, [pc, #8]	; (14 <BLSRV_selfIdent+0x14>)
+   a:	2120      	movs	r1, #32
+   c:	f7ff fffe 	bl	0 <BLCOM_sendBuffer>
+}
+  10:	2000      	movs	r0, #0
+  12:	bd10      	pop	{r4, pc}
+  14:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BLSRV_storeData:
+
+00000000 <BLSRV_storeData>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+   4:	20a0      	movs	r0, #160	; 0xa0
+{
+   6:	000d      	movs	r5, r1
+    BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+   8:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+    rxResult = BLCOM_receiveFrame(ptr, length, BLSRV_dataTimeout);  /*lint !e928 */
+   c:	2296      	movs	r2, #150	; 0x96
+    uint32_t targetAddress = (uint32_t)BLSRV_pageAddress << 16u;
+   e:	4b07      	ldr	r3, [pc, #28]	; (2c <BLSRV_storeData+0x2c>)
+    rxResult = BLCOM_receiveFrame(ptr, length, BLSRV_dataTimeout);  /*lint !e928 */
+  10:	0029      	movs	r1, r5
+    uint32_t targetAddress = (uint32_t)BLSRV_pageAddress << 16u;
+  12:	8818      	ldrh	r0, [r3, #0]
+    rxResult = BLCOM_receiveFrame(ptr, length, BLSRV_dataTimeout);  /*lint !e928 */
+  14:	0052      	lsls	r2, r2, #1
+    uint32_t targetAddress = (uint32_t)BLSRV_pageAddress << 16u;
+  16:	0400      	lsls	r0, r0, #16
+    targetAddress += address;
+  18:	1820      	adds	r0, r4, r0
+    rxResult = BLCOM_receiveFrame(ptr, length, BLSRV_dataTimeout);  /*lint !e928 */
+  1a:	f7ff fffe 	bl	0 <BLCOM_receiveFrame>
+  1e:	1e04      	subs	r4, r0, #0
+    if (rxResult == BLCOM_rxSuccess)
+  20:	d102      	bne.n	28 <BLSRV_storeData+0x28>
+        BLCOM_sendByte(BL_ACKNOWLEDGE_OK);
+  22:	20a0      	movs	r0, #160	; 0xa0
+  24:	f7ff fffe 	bl	0 <BLCOM_sendByte>
+}
+  28:	0020      	movs	r0, r4
+  2a:	bd70      	pop	{r4, r5, r6, pc}
+  2c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BLSRV_init:
+
+00000000 <BLSRV_init>:
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.BLSRV_doCommandService:
+
+00000000 <BLSRV_doCommandService>:
+{
+   0:	0003      	movs	r3, r0
+   2:	b570      	push	{r4, r5, r6, lr}
+}
+
+
+static uint16_t BLSRV_u16FromBuffer(const uint8_t* buffer)
+{
+    uint16_t result = (uint16_t)buffer[0u] << 8u;
+   4:	7880      	ldrb	r0, [r0, #2]
+    result += buffer[1u];
+   6:	78da      	ldrb	r2, [r3, #3]
+    uint16_t result = (uint16_t)buffer[0u] << 8u;
+   8:	0200      	lsls	r0, r0, #8
+    uint16_t length  = buffer[BLSRV_FRAME_LEN_POS];
+   a:	7859      	ldrb	r1, [r3, #1]
+    result += buffer[1u];
+   c:	1880      	adds	r0, r0, r2
+    uint8_t  command = buffer[BLSRV_FRAME_CMD_POS];
+   e:	781e      	ldrb	r6, [r3, #0]
+    result += buffer[1u];
+  10:	b280      	uxth	r0, r0
+    if (length == 0u) {length = 256u;}
+  12:	2900      	cmp	r1, #0
+  14:	d101      	bne.n	1a <BLSRV_doCommandService+0x1a>
+  16:	3101      	adds	r1, #1
+  18:	31ff      	adds	r1, #255	; 0xff
+    for (index = 0u; BLSRV_cmdServiceTbl[index].cmd !=BL_INVALID_CMD ; index++)
+  1a:	2300      	movs	r3, #0
+  1c:	4a06      	ldr	r2, [pc, #24]	; (38 <BLSRV_doCommandService+0x38>)
+  1e:	00dc      	lsls	r4, r3, #3
+  20:	5ca5      	ldrb	r5, [r4, r2]
+  22:	2d00      	cmp	r5, #0
+  24:	d103      	bne.n	2e <BLSRV_doCommandService+0x2e>
+    return BLSRV_cmdServiceTbl[index].service(address,length);
+  26:	1912      	adds	r2, r2, r4
+  28:	6853      	ldr	r3, [r2, #4]
+  2a:	4798      	blx	r3
+}
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+        if (BLSRV_cmdServiceTbl[index].cmd  == command) {break;}
+  2e:	42b5      	cmp	r5, r6
+  30:	d0f9      	beq.n	26 <BLSRV_doCommandService+0x26>
+    for (index = 0u; BLSRV_cmdServiceTbl[index].cmd !=BL_INVALID_CMD ; index++)
+  32:	3301      	adds	r3, #1
+  34:	b29b      	uxth	r3, r3
+  36:	e7f2      	b.n	1e <BLSRV_doCommandService+0x1e>
+  38:	00000000 	.word	0x00000000

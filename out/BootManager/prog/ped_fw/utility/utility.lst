@@ -1,0 +1,376 @@
+
+out/BootManager/prog/ped_fw/utility/utility.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.UTI_vMemFill:
+
+00000000 <UTI_vMemFill>:
+#include "utility.h"
+
+
+void UTI_vMemFill(uint8_t * const pucDestination, const uint8_t ucFillValue, uint16_t uiLength)
+{
+   while (uiLength > 0U)
+   0:	2a00      	cmp	r2, #0
+   2:	d100      	bne.n	6 <UTI_vMemFill+0x6>
+   {
+      uiLength--;
+      pucDestination[uiLength] = ucFillValue;
+   }
+}
+   4:	4770      	bx	lr
+      uiLength--;
+   6:	3a01      	subs	r2, #1
+   8:	b292      	uxth	r2, r2
+      pucDestination[uiLength] = ucFillValue;
+   a:	5481      	strb	r1, [r0, r2]
+   c:	e7f8      	b.n	0 <UTI_vMemFill>
+
+Disassembly of section .text.UTI_vMemCopy:
+
+00000000 <UTI_vMemCopy>:
+
+
+void UTI_vMemCopy(const uint8_t * const pucSource, uint8_t * const pucDestination, uint16_t uiLength)
+{
+   while (uiLength > 0U)
+   0:	2a00      	cmp	r2, #0
+   2:	d100      	bne.n	6 <UTI_vMemCopy+0x6>
+   {
+      uiLength--;
+      pucDestination[uiLength] = pucSource[uiLength];
+   }
+}
+   4:	4770      	bx	lr
+      uiLength--;
+   6:	3a01      	subs	r2, #1
+   8:	b292      	uxth	r2, r2
+      pucDestination[uiLength] = pucSource[uiLength];
+   a:	5c83      	ldrb	r3, [r0, r2]
+   c:	548b      	strb	r3, [r1, r2]
+   e:	e7f7      	b.n	0 <UTI_vMemCopy>
+
+Disassembly of section .text.UTI_bIsMemEqual:
+
+00000000 <UTI_bIsMemEqual>:
+bool UTI_bIsMemEqual(const uint8_t * const pucSource1, const uint8_t * const pucSource2, uint16_t uiLength)
+{
+   const uint8_t* puc1 = pucSource1;
+   const uint8_t* puc2 = pucSource2;
+
+   while (uiLength > 0U)
+   0:	2300      	movs	r3, #0
+{
+   2:	b530      	push	{r4, r5, lr}
+   {
+      uiLength--;
+      if (*puc1 != *puc2)
+   4:	3901      	subs	r1, #1
+   while (uiLength > 0U)
+   6:	429a      	cmp	r2, r3
+   8:	d101      	bne.n	e <UTI_bIsMemEqual+0xe>
+      puc2++;
+      /* Msg(4:0489) Increment or decrement operation performed on pointer.
+         Code is tested, not dangerous
+      */
+   }
+   return true;
+   a:	2001      	movs	r0, #1
+}
+   c:	bd30      	pop	{r4, r5, pc}
+      if (*puc1 != *puc2)
+   e:	5cc4      	ldrb	r4, [r0, r3]
+  10:	3301      	adds	r3, #1
+  12:	5ccd      	ldrb	r5, [r1, r3]
+  14:	42a5      	cmp	r5, r4
+  16:	d0f6      	beq.n	6 <UTI_bIsMemEqual+0x6>
+         return false;
+  18:	2000      	movs	r0, #0
+  1a:	e7f7      	b.n	c <UTI_bIsMemEqual+0xc>
+
+Disassembly of section .text.UTI_vSetBit:
+
+00000000 <UTI_vSetBit>:
+
+\sa UTI_ucShiftRight()
+*/
+static inline uint8_t UTI_ucShiftLeft(uint8_t ucValue, uint8_t ucShift)
+{
+    return ((uint8_t)(ucValue<<ucShift));
+   0:	2307      	movs	r3, #7
+
+
+void UTI_vSetBit(uint8_t* pucBitField, uint16_t uiBitId, bool bOnOff)
+{
+   2:	b530      	push	{r4, r5, lr}
+   uint8_t ucByte;
+   uint8_t ucBitMask;
+      ucByte = (uint8_t)(uiBitId / (uint16_t)8U);
+   4:	08cc      	lsrs	r4, r1, #3
+   pucBitField +=ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+   6:	b2e4      	uxtb	r4, r4
+   8:	4019      	ands	r1, r3
+   a:	1905      	adds	r5, r0, r4
+   c:	3b06      	subs	r3, #6
+   ucBitMask = UTI_ucShiftLeft(1u, (uint8_t)(uiBitId % (uint16_t)8U));
+   if (bOnOff)
+   {
+      *pucBitField |= ucBitMask;
+   e:	5d00      	ldrb	r0, [r0, r4]
+  10:	408b      	lsls	r3, r1
+   }
+   else
+   {
+      *pucBitField &= (uint8_t)(~ucBitMask);
+  12:	0001      	movs	r1, r0
+  14:	b2db      	uxtb	r3, r3
+  16:	4399      	bics	r1, r3
+   if (bOnOff)
+  18:	2a00      	cmp	r2, #0
+  1a:	d001      	beq.n	20 <UTI_vSetBit+0x20>
+      *pucBitField |= ucBitMask;
+  1c:	0001      	movs	r1, r0
+  1e:	4319      	orrs	r1, r3
+  20:	7029      	strb	r1, [r5, #0]
+   }
+}
+  22:	bd30      	pop	{r4, r5, pc}
+
+Disassembly of section .text.UTI_bGetBit:
+
+00000000 <UTI_bGetBit>:
+   uint8_t ucBit;
+   uint8_t ucBitMask;
+   ucByte = (uint8_t)(uiBitId / (uint16_t)8U);
+   ucBit  = (uint8_t)(uiBitId % (uint16_t)8U);
+   pucBitField += ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+   ucBitMask = (uint8_t)(1U << ucBit);
+   0:	2307      	movs	r3, #7
+   ucByte = (uint8_t)(uiBitId / (uint16_t)8U);
+   2:	08ca      	lsrs	r2, r1, #3
+   ucBitMask = (uint8_t)(1U << ucBit);
+   4:	4019      	ands	r1, r3
+   6:	3b06      	subs	r3, #6
+   8:	408b      	lsls	r3, r1
+   pucBitField += ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+   a:	b2d2      	uxtb	r2, r2
+   return ( ((*pucBitField & ucBitMask) == 0u) ? false : true );
+   c:	5c82      	ldrb	r2, [r0, r2]
+   e:	4013      	ands	r3, r2
+  10:	1e5a      	subs	r2, r3, #1
+  12:	4193      	sbcs	r3, r2
+  14:	b2d8      	uxtb	r0, r3
+}
+  16:	4770      	bx	lr
+
+Disassembly of section .text.UTI_vSetBitField:
+
+00000000 <UTI_vSetBitField>:
+
+
+void UTI_vSetBitField(uint8_t* pucBitField, uint16_t uiBitFieldId, uint8_t ucBitCount, uint8_t ucValue)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   uint8_t* pucPtr;
+   
+   ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+   //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+   pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+   ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucBytePos
+   2:	2407      	movs	r4, #7
+   ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+   4:	4351      	muls	r1, r2
+   6:	b2c9      	uxtb	r1, r1
+   pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+   8:	08ca      	lsrs	r2, r1, #3
+   ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucBytePos
+   a:	4021      	ands	r1, r4
+   *pucPtr |=          UTI_ucShiftLeft( ucValue,ucBitPos);  //sets bits
+   *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+   c:	43dc      	mvns	r4, r3
+   e:	001e      	movs	r6, r3
+  10:	b2e4      	uxtb	r4, r4
+   pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+  12:	1885      	adds	r5, r0, r2
+   *pucPtr |=          UTI_ucShiftLeft( ucValue,ucBitPos);  //sets bits
+  14:	5c82      	ldrb	r2, [r0, r2]
+  16:	0020      	movs	r0, r4
+  18:	408e      	lsls	r6, r1
+  1a:	4088      	lsls	r0, r1
+  1c:	4332      	orrs	r2, r6
+   *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+  1e:	4382      	bics	r2, r0
+  20:	702a      	strb	r2, [r5, #0]
+   pucPtr++;
+   *pucPtr |=          UTI_ucShiftRight( ucValue,(uint8_t)(8U-ucBitPos)); //sets bits
+  22:	2208      	movs	r2, #8
+  24:	1a52      	subs	r2, r2, r1
+
+\sa UTI_ucShiftLeft()
+*/
+static inline uint8_t UTI_ucShiftRight(uint8_t ucValue, uint8_t ucShift)
+{
+    return ((uint8_t)(ucValue>>ucShift));
+  26:	b2d2      	uxtb	r2, r2
+  28:	4113      	asrs	r3, r2
+  2a:	0019      	movs	r1, r3
+  2c:	4114      	asrs	r4, r2
+  2e:	786b      	ldrb	r3, [r5, #1]
+  30:	430b      	orrs	r3, r1
+   *pucPtr &= (uint8_t)(~UTI_ucShiftRight((uint8_t)~ucValue,(uint8_t)(8U-ucBitPos)));//resets bits
+  32:	43a3      	bics	r3, r4
+  34:	706b      	strb	r3, [r5, #1]
+}
+  36:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.UTI_ucGetBitField:
+
+00000000 <UTI_ucGetBitField>:
+   const uint8_t* pucPtr;
+   
+   ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+   //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+   pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+   ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucBytePos
+   0:	2307      	movs	r3, #7
+   ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+   2:	4351      	muls	r1, r2
+{
+   4:	b510      	push	{r4, lr}
+   ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+   6:	b2c9      	uxtb	r1, r1
+   pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+   8:	08cc      	lsrs	r4, r1, #3
+   a:	1904      	adds	r4, r0, r4
+   ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucBytePos
+   c:	4019      	ands	r1, r3
+
+   ucData = UTI_ucShiftRight(*pucPtr,ucBitPos);
+
+   pucPtr++;
+
+   ucData |=UTI_ucShiftLeft(*pucPtr,(uint8_t)(8U-ucBitPos));
+   e:	3301      	adds	r3, #1
+    return ((uint8_t)(ucValue<<ucShift));
+  10:	7860      	ldrb	r0, [r4, #1]
+  12:	1a5b      	subs	r3, r3, r1
+  14:	b2db      	uxtb	r3, r3
+  16:	4098      	lsls	r0, r3
+    return ((uint8_t)(ucValue>>ucShift));
+  18:	7823      	ldrb	r3, [r4, #0]
+  1a:	410b      	asrs	r3, r1
+  1c:	4318      	orrs	r0, r3
+    return ((uint8_t)(ucValue<<ucShift));
+  1e:	23ff      	movs	r3, #255	; 0xff
+  20:	4093      	lsls	r3, r2
+  22:	b2c0      	uxtb	r0, r0
+   ucData &=(uint8_t)(~UTI_ucShiftLeft(0xFFU,ucBitCount));
+
+   return ucData;
+  24:	4398      	bics	r0, r3
+}
+  26:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.UTI_vIIRFilter:
+
+00000000 <UTI_vIIRFilter>:
+
+
+void UTI_vIIRFilter(uint16_t *puiAccu, uint8_t ucValue, uint8_t ucDampPlus, uint8_t ucDampMinus)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0006      	movs	r6, r0
+   4:	0008      	movs	r0, r1
+   uint16_t uiAccu = *puiAccu;
+   6:	8835      	ldrh	r5, [r6, #0]
+{
+   8:	0011      	movs	r1, r2
+
+   uint16_t uiValue=(uint16_t)(ucValue) << 8U;
+   a:	0200      	lsls	r0, r0, #8
+   if ( uiValue >= uiAccu )
+   c:	4285      	cmp	r5, r0
+   e:	d809      	bhi.n	24 <UTI_vIIRFilter+0x24>
+   {
+      if (ucDampPlus != 0U)
+  10:	2a00      	cmp	r2, #0
+  12:	d005      	beq.n	20 <UTI_vIIRFilter+0x20>
+      {
+         uiAccu += (uint16_t)(uiValue-uiAccu) / ucDampPlus;
+  14:	1b40      	subs	r0, r0, r5
+  16:	b280      	uxth	r0, r0
+  18:	f7ff fffe 	bl	0 <__aeabi_idiv>
+  1c:	1945      	adds	r5, r0, r5
+   }
+   else
+   {
+      if (ucDampMinus != 0U)
+      {
+         uiAccu -= (uint16_t)(uiAccu - uiValue) / ucDampMinus;
+  1e:	b2ad      	uxth	r5, r5
+      }
+   }
+   *puiAccu = uiAccu;
+  20:	8035      	strh	r5, [r6, #0]
+}
+  22:	bd70      	pop	{r4, r5, r6, pc}
+      if (ucDampMinus != 0U)
+  24:	2b00      	cmp	r3, #0
+  26:	d0fb      	beq.n	20 <UTI_vIIRFilter+0x20>
+         uiAccu -= (uint16_t)(uiAccu - uiValue) / ucDampMinus;
+  28:	1a28      	subs	r0, r5, r0
+  2a:	0019      	movs	r1, r3
+  2c:	b280      	uxth	r0, r0
+  2e:	f7ff fffe 	bl	0 <__aeabi_idiv>
+  32:	1a2d      	subs	r5, r5, r0
+  34:	e7f3      	b.n	1e <UTI_vIIRFilter+0x1e>
+
+Disassembly of section .text.UTI_vIIRFilter16Bit:
+
+00000000 <UTI_vIIRFilter16Bit>:
+
+void UTI_vIIRFilter16Bit(uint32_t *pulAccu, uint16_t uiValue, uint8_t ucDampPlus, uint8_t ucDampMinus)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0006      	movs	r6, r0
+   4:	0008      	movs	r0, r1
+  uint32_t accu;
+  uint32_t value;
+
+  accu = *pulAccu;
+   6:	6835      	ldr	r5, [r6, #0]
+{
+   8:	0011      	movs	r1, r2
+  value = (uint32_t)(uiValue) << (uint32_t)16U;
+   a:	0400      	lsls	r0, r0, #16
+
+  if ( value >= accu )
+   c:	4285      	cmp	r5, r0
+   e:	d807      	bhi.n	20 <UTI_vIIRFilter16Bit+0x20>
+  {
+    if (ucDampPlus != 0U)
+  10:	2a00      	cmp	r2, #0
+  12:	d003      	beq.n	1c <UTI_vIIRFilter16Bit+0x1c>
+    {
+      accu += (value - accu) / ucDampPlus;
+  14:	1b40      	subs	r0, r0, r5
+  16:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+  1a:	182d      	adds	r5, r5, r0
+    if (ucDampMinus != 0U)
+    {
+      accu -= (accu - value) / ucDampMinus;
+    }
+  }
+  *pulAccu = accu;
+  1c:	6035      	str	r5, [r6, #0]
+}
+  1e:	bd70      	pop	{r4, r5, r6, pc}
+    if (ucDampMinus != 0U)
+  20:	2b00      	cmp	r3, #0
+  22:	d0fb      	beq.n	1c <UTI_vIIRFilter16Bit+0x1c>
+      accu -= (accu - value) / ucDampMinus;
+  24:	1a28      	subs	r0, r5, r0
+  26:	0019      	movs	r1, r3
+  28:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+  2c:	1a2d      	subs	r5, r5, r0
+  2e:	e7f5      	b.n	1c <UTI_vIIRFilter16Bit+0x1c>

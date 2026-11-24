@@ -1,0 +1,333 @@
+# Maksym 3.0.2 - Symbol Extraction from ELF/DWARF Executables (Fri Oct 29 10:41:50 2021)
+# (c) 2021 B/S/H/
+
+
+# Loaded DWARF Library: E:\project\example\MD370R\common\tools\maksym\3.0.2\dwarf_keil_mid0028.dll
+# Origin:               E:\project\example\MD370R\out\lromLoader\bin\lromLoader.elf
+# Created at:           Wed Nov 18 17:06:01 2026
+# Encoding little_endian
+
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootLoader
+            unit name: ModuleHeader.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDHD_ModuleHeader                                              0x00000F00          0x28 (40)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x28 (40)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f
+            unit name: timerMcXs.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+TIM_uiGetCircleMicroSeconds                                    0x00000F81          0xC (12)
+_TIM_bGetInitConfig                                            0x00000F39          0x48 (72)
+
+# Size of Functions/Procedures in this CU: 0x54 (84)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/armCmx
+            unit name: int_exc_cfg.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+INT_StackFrame                                                 0x20000000          0x4 (4)
+HardFault_Handler                                              0x00000F8D          0x10 (16)
+
+# Size of Functions/Procedures in this CU: 0x10 (16)
+# Size of Variables in this CU:            0x4 (4)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/mcal/sh30f
+            unit name: mcal_channels.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDIOA15_MUART0_TX                                              0x0000183C          0x8 (8)
+MDIOB0_MUART0_RX                                               0x00001844          0x8 (8)
+MUART0_RX_PB0_TX_PA15                                          0x0000184C          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x1C (28)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mdio.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+MDIO_configureOutputState                                      0x00000FBB          0x1C (28)
+MDIO_init                                                      0x00000FA3          0x18 (24)
+
+# Size of Functions/Procedures in this CU: 0x34 (52)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: mdio_mc.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDIOA                                                          0x00001858          0x8 (8)
+MDIOB                                                          0x00001860          0x8 (8)
+MDIO_resetPort                                                 0x000010FD          0x8 (8)
+MDIO_setPort                                                   0x000010F7          0x6 (6)
+MDIO_configure                                                 0x000010AD          0x4A (74)
+MDIO_configureSpeed                                            0x0000104F          0x26 (38)
+MDIO_configureMode                                             0x0000102F          0x20 (32)
+MDIO_configurePullType                                         0x0000100F          0x20 (32)
+MDIO_configureOutputType                                       0x00000FDD          0x32 (50)
+MDIO_enablePort                                                0x00000FD7          0x2 (2)
+MDIO_getPort                                                   0x00000FD9          0x4 (4)
+MDIO_configureAlternateFunction                                0x00001075          0x38 (56)
+
+# Size of Functions/Procedures in this CU: 0x12E (302)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: muart.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+MUART_configurePins                                            0x00001124          0x30 (48)
+MUART_isEvent                                                  0x00001105          0x1E (30)
+
+# Size of Functions/Procedures in this CU: 0x4E (78)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: muart_mc.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MUART0                                                         0x00001868          0x10 (16)
+MUART_getChannelError                                          0x000012BF          0x22 (34)
+MUART_getStatusRegMaskForEvent                                 0x000012A5          0x1A (26)
+MUART_readDataReg                                              0x00001293          0xA (10)
+MUART_writeDataReg                                             0x0000128B          0x8 (8)
+MUART_disableChannel                                           0x0000125D          0x14 (20)
+MUART_enableChannel                                            0x0000124D          0x10 (16)
+MUART_configureBaudrate                                        0x00001271          0x1A (26)
+MUART_configure                                                0x0000121D          0x30 (48)
+MUART_enableClock                                              0x000011FD          0x20 (32)
+MUART_configurePeriphBaudrate                                  0x000011C1          0x3C (60)
+MUART_configurePeriphParity                                    0x00001199          0x28 (40)
+MUART_configurePeriphStopBits                                  0x00001181          0x18 (24)
+MUART_configurePeriphDataBits                                  0x00001155          0x2C (44)
+MUART_getStatusReg                                             0x0000129D          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x18C (396)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mwdt.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+MWDT_initConfigStruct                                          0x000012E9          0x8 (8)
+MWDT_trigger                                                   0x000012E1          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x10 (16)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: mwdt_mc.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MWDT_LocalMwdtCfg                                              0x20000004          0x4 (4)
+MWDT_initConfigStructMWDT                                      0x0000131D          0x10 (16)
+mwdtCfg                                                        0x00001878          0x8 (8)
+MWDT_triggerWDT                                                0x000012F1          0x2C (44)
+
+# Size of Functions/Procedures in this CU: 0x3C (60)
+# Size of Variables in this CU:            0xC (12)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: msup.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+MSUP_generateReset                                             0x0000132D          0x1C (28)
+
+# Size of Functions/Procedures in this CU: 0x1C (28)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/armCmx
+            unit name: IntTblArmCM.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+ITBL_fixedVectors                                              0x00000000          0x8 (8)
+ITBL_coreVectors                                               0x00000F28          0x10 (16)
+ITBL_vResetHandler                                             0x00001349          0x14 (20)
+
+# Size of Functions/Procedures in this CU: 0x14 (20)
+# Size of Variables in this CU:            0x18 (24)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/lib
+            unit name: sh30f9xx_sa0_rcc.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+RCC_APB0PeriphClockOnOff                                       0x0000135D          0x24 (36)
+
+# Size of Functions/Procedures in this CU: 0x24 (36)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/lib
+            unit name: sh30f9xx_sa0_timer.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+TIM_OnOff                                                      0x000013CD          0x14 (20)
+TIM_INTConfig                                                  0x000013B9          0x14 (20)
+TIM_Init                                                       0x0000138D          0x2C (44)
+TIM_StructInit                                                 0x00001381          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x60 (96)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootLoader
+            unit name: BLmain.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+Main                                                           0x000013E1          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0xC (12)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootLoader
+            unit name: BLmessageLoop.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BLMLP_msgBuffer                                                0x20000008          0x4 (4)
+BLMLP_handleMessageLoop                                        0x000013ED          0x48 (72)
+
+# Size of Functions/Procedures in this CU: 0x48 (72)
+# Size of Variables in this CU:            0x4 (4)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootLoader
+            unit name: BLservices.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BLSRV_idString                                                 0x000018B0          0x20 (32)
+BLSRV_cmdServiceTbl                                            0x00001880          0x30 (48)
+BLSRV_pageAddress                                              0x2000000C          0x2 (2)
+BLSRV_storeData                                                0x000014A5          0x30 (48)
+BLSRV_jumpLoader                                               0x00001455          0x1C (28)
+BLSRV_selfIdent                                                0x0000148D          0x18 (24)
+BLSRV_setBaudRate                                              0x00001471          0x1C (28)
+BLSRV_invalidCommand                                           0x00001435          0xC (12)
+BLSRV_setPage                                                  0x00001441          0x14 (20)
+BLSRV_doCommandService                                         0x000014D9          0x3C (60)
+BLSRV_init                                                     0x000014D5          0x2 (2)
+
+# Size of Functions/Procedures in this CU: 0xDE (222)
+# Size of Variables in this CU:            0x52 (82)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootLoader
+            unit name: BLcom.c
+
+Name                                                           Address             Size hex (dec)
+----                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BLCOM_rxErrorFlag                                              0x20000012          0x1 (1)
+BLCOM_firstFrameReceived                                       0x2000000F          0x1 (1)
+BLCOM_checksum                                                 0x2000000E          0x1 (1)
+BLCOM_timer                                                    0x20000016          0x2 (2)
+BLCOM_reloadTime                                               0x20000010          0x2 (2)
+BLCOM_timeStamp                                                0x20000014          0x2 (2)
+MuartHandleConfig                                              0x000018D0          0x8 (8)
+BLCOM_receiveData                                              0x00001515          0x44 (68)
+BLCOM_init                                                     0x000016E5          0x40 (64)
+BLCOM_setBaudrate                                              0x000016D1          0x14 (20)
+BLCOM_sendAck                                                  0x000016BD          0x14 (20)
+BLCOM_sendBuffer                                               0x0000167D          0x40 (64)
+BLCOM_sendByte                                                 0x00001629          0x54 (84)
+BLCOM_receiveFrame                                             0x00001559          0xD0 (208)
+
+# Size of Functions/Procedures in this CU: 0x210 (528)
+# Size of Variables in this CU:            0x11 (17)
+
+Summary of objects:
+
+Code size for all functions listed                0x0 (0) Bytes
+Data size for all variables (RAM and ROM) listed  0x0 (0) Bytes
+
+IntegerSize			4
+LongDoubleSize		8
+FarPointerSize		4
+NearPointerSize		4
+GenericPointerSize	4
+
+# Maksym: out/lromLoader/bin/lromLoader.elf processed
+

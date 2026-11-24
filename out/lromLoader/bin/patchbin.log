@@ -1,0 +1,29 @@
+PatchBin 1.60...
+Arguments: -Lout/lromLoader/bin/patchbin.log -i!(0x1000000:B4096)out/lromLoader/bin/lromLoader.s37 -Sout/lromLoader/bin/lromLoader.sym -silent1 -el -f(0xf00,0x19ff):0x00 -CRC(0xf00+0x04,0x19ff)(0xf00):32 -CRC(0xf00,0x19ff)(v=CRC1):32 -omS0multi()out/lromLoader/bin/lromLoader.mot#\nCRCstart1=0xf00\nCRCend1=0x19ff\nCRC1=%%CRC1\nCRCtmo=5\nlromLoader -oh()out/lromLoader/bin/lromLoader.hex
+Start 2026/11/18 17:06:05
+Auto importing from out/lromLoader/bin/lromLoader.s37...
+Importing Motorola S-Records formatted data...
+... from file E:\project\example\MD370R\out\lromLoader\bin\lromLoader.s37
+Warning: The data length 64 characters was exceeded (66 characters) at the line #1.
+... 0.038 seconds
+Filling unused memory...
+... at address range 00000F00-000019FF by value 00, consecutively
+... 0.015 seconds
+Calculating 32-bit CRC with arguments 0x04C11DB7 (poly), 0xFFFFFFFF (init), True (refin), True (refout), 0xFFFFFFFF (xorout)...
+... over 00000F04-000019FF
+... written to 00000F00
+... is 0x6A60B999
+... 0.008 seconds
+Calculating 32-bit CRC with arguments 0x04C11DB7 (poly), 0xFFFFFFFF (init), True (refin), True (refout), 0xFFFFFFFF (xorout)...
+... over 00000F00-000019FF
+... is 0x7722621F
+... result is written to variable CRC1
+... 0.001 seconds
+Exporting Motorola S-Records formatted data...
+... to file E:\project\example\MD370R\out\lromLoader\bin\lromLoader.mot
+... 0.01 seconds
+Exporting Intel Hex Records formatted data...
+... to file E:\project\example\MD370R\out\lromLoader\bin\lromLoader.hex
+... 0.004 seconds
+End 0.197 seconds
+... has completed the processing.

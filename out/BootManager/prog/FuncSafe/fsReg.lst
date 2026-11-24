@@ -1,0 +1,66 @@
+
+out/BootManager/prog/FuncSafe/fsReg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FSF_vRegister_OneTimeCheck:
+
+00000000 <FSF_vRegister_OneTimeCheck>:
+
+/* static function definitions ************************************************************************/
+
+// The Register One-time check handler
+void FSF_vRegister_OneTimeCheck (void)
+{
+   0:	b510      	push	{r4, lr}
+#if !defined(TH_FSCOM)
+   FSF_vRegistercheck();
+   2:	f7ff fffe 	bl	0 <FSF_vRegistercheck>
+#else
+   TH_FSFP_PushOutPar(TP_FSF_vRegister_OneTimeCheck);
+#endif
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vReg_FatalException:
+
+00000000 <FSF_vReg_FatalException>:
+
+//The Register Fatal Exception
+void FSF_vReg_FatalException(void)
+{
+   0:	b510      	push	{r4, lr}
+   FSF_vReportFatal();
+   2:	f7ff fffe 	bl	0 <FSF_vReportFatal>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_ucRegHandleTask:
+
+00000000 <FSF_ucRegHandleTask>:
+
+    \pre    None
+    \post   Conditions for the CPU registers are fulfilled
+*/
+uint8_t FSF_ucRegHandleTask(void)
+{
+   0:	b510      	push	{r4, lr}
+======================================================================*/
+#ifdef TH_FSCOM
+   TH_FSFP_PushOutPar(TP_FSF_vReg_OperCheck);
+#endif
+
+   FSF_vRegOpercheck();
+   2:	f7ff fffe 	bl	0 <FSF_vRegOpercheck>
+   TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Enabled);
+#else
+   HSUP_vEnableInt();
+#endif
+
+   FSF_vReportSuccess((uint8_t)FSF_REG_TEST);
+   6:	2000      	movs	r0, #0
+   8:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+
+   return (uint8_t)TASK_INITIALISED;
+}
+   c:	2001      	movs	r0, #1
+   e:	bd10      	pop	{r4, pc}

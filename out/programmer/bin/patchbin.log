@@ -1,0 +1,31 @@
+PatchBin 1.60...
+Arguments: -Lout/programmer/bin/patchbin.log -i!(0x1000000:B4096)out/programmer/bin/programmer.s37 -Sout/programmer/bin/programmer.sym -silent1 -el -f(0x1a00,0x5fff):0x00 -CRC(0x1a00+0x04,0x5fff)(0x1a00):32 -CRC(0x1a00,0x5fff)(v=CRC1):32 -omS0multi()out/programmer/bin/programmer.mot#\nCRCstart1=0x1a00\nCRCend1=0x5fff\nCRC1=%%CRC1\nCRCtmo=5\nprogrammer -oh()out/programmer/bin/programmer.hex
+Start 2026/11/18 17:07:51
+Warning: Symbol timeStamp already exist. The previous one will be replaced (last wins).
+Warning: Symbol status already exist. The previous one will be replaced (last wins).
+Auto importing from out/programmer/bin/programmer.s37...
+Importing Motorola S-Records formatted data...
+... from file E:\project\example\MD370R\out\programmer\bin\programmer.s37
+Warning: The data length 64 characters was exceeded (66 characters) at the line #1.
+... 0.059 seconds
+Filling unused memory...
+... at address range 00001A00-00005FFF by value 00, consecutively
+... 0.006 seconds
+Calculating 32-bit CRC with arguments 0x04C11DB7 (poly), 0xFFFFFFFF (init), True (refin), True (refout), 0xFFFFFFFF (xorout)...
+... over 00001A04-00005FFF
+... written to 00001A00
+... is 0x5D88BB3A
+... 0.004 seconds
+Calculating 32-bit CRC with arguments 0x04C11DB7 (poly), 0xFFFFFFFF (init), True (refin), True (refout), 0xFFFFFFFF (xorout)...
+... over 00001A00-00005FFF
+... is 0x42A4E932
+... result is written to variable CRC1
+... 0 seconds
+Exporting Motorola S-Records formatted data...
+... to file E:\project\example\MD370R\out\programmer\bin\programmer.mot
+... 0.012 seconds
+Exporting Intel Hex Records formatted data...
+... to file E:\project\example\MD370R\out\programmer\bin\programmer.hex
+... 0.009 seconds
+End 0.242 seconds
+... has completed the processing.

@@ -1,0 +1,186 @@
+
+out/programmer/prog/MSP/mcal/mexti.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MEXTI_init:
+
+00000000 <MEXTI_init>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+enum MCAL_Error MEXTI_init(struct MEXTI_Handle *handle, const struct MEXTI_Channel *channel, const struct MEXTI_Config *cfg)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+   4:	0008      	movs	r0, r1
+   6:	0011      	movs	r1, r2
+    MCAL_assert(handle != NULL);
+    
+    handle->channel = channel;
+   8:	6020      	str	r0, [r4, #0]
+    
+    MEXTI_configureChannel(channel, cfg);
+   a:	f7ff fffe 	bl	0 <MEXTI_configureChannel>
+    
+    MEXTI_IRQ_enable(handle->channel);
+   e:	6820      	ldr	r0, [r4, #0]
+  10:	f7ff fffe 	bl	0 <MEXTI_IRQ_enable>
+/* PRIVATE FUNCTION DEFINITIONS                                               */
+/******************************************************************************/
+
+static void MEXTI_IRQ_registerHandle(struct MEXTI_Handle *handle)
+{
+    enum MEXTI_IRQ_Index index = MEXTI_IRQ_getIndex(handle->channel);
+  14:	6820      	ldr	r0, [r4, #0]
+  16:	f7ff fffe 	bl	0 <MEXTI_IRQ_getIndex>
+    /* Note 661 MEXTI_IRQ_getIndex never returns out of bounds index*/
+    if(MEXTI_IRQ_HandleTable[index] == NULL) /*lint !e661 */
+  1a:	4a08      	ldr	r2, [pc, #32]	; (3c <MEXTI_init+0x3c>)
+  1c:	0080      	lsls	r0, r0, #2
+  1e:	5883      	ldr	r3, [r0, r2]
+  20:	2b00      	cmp	r3, #0
+  22:	d104      	bne.n	2e <MEXTI_init+0x2e>
+    {
+        MEXTI_IRQ_HandleTable[index] = handle;/*lint !e661 */
+  24:	5084      	str	r4, [r0, r2]
+        {
+            handleEntry = handleEntry->nextHandle;
+        }
+        handleEntry->nextHandle = handle;
+    }
+    handle->nextHandle = NULL;
+  26:	2000      	movs	r0, #0
+  28:	60e0      	str	r0, [r4, #12]
+    handle->cbList = NULL;
+  2a:	6060      	str	r0, [r4, #4]
+}
+  2c:	bd10      	pop	{r4, pc}
+        while(handleEntry->nextHandle != NULL)
+  2e:	001a      	movs	r2, r3
+  30:	68db      	ldr	r3, [r3, #12]
+  32:	2b00      	cmp	r3, #0
+  34:	d1fb      	bne.n	2e <MEXTI_init+0x2e>
+        handleEntry->nextHandle = handle;
+  36:	60d4      	str	r4, [r2, #12]
+  38:	e7f5      	b.n	26 <MEXTI_init+0x26>
+  3a:	46c0      	nop			; (mov r8, r8)
+  3c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MEXTI_enableEvent:
+
+00000000 <MEXTI_enableEvent>:
+{
+   0:	b510      	push	{r4, lr}
+    MCAL_enableEvent(&handle->cbList, callback, MCAL_EVENT_TRIGGER);
+   2:	2201      	movs	r2, #1
+{
+   4:	0004      	movs	r4, r0
+    MCAL_enableEvent(&handle->cbList, callback, MCAL_EVENT_TRIGGER);
+   6:	3004      	adds	r0, #4
+   8:	f7ff fffe 	bl	0 <MCAL_enableEvent>
+    handle->enabledEvent = true; 
+   c:	2301      	movs	r3, #1
+    MEXTI_enableEventReg(handle->channel);
+   e:	6820      	ldr	r0, [r4, #0]
+    handle->enabledEvent = true; 
+  10:	7223      	strb	r3, [r4, #8]
+    MEXTI_enableEventReg(handle->channel);
+  12:	f7ff fffe 	bl	0 <MEXTI_enableEventReg>
+}
+  16:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MEXTI_disableEvent:
+
+00000000 <MEXTI_disableEvent>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+    MEXTI_disableEventReg(handle->channel);
+   6:	6800      	ldr	r0, [r0, #0]
+   8:	f7ff fffe 	bl	0 <MEXTI_disableEventReg>
+    MCAL_disableEvent(callback, MCAL_EVENT_TRIGGER);
+   c:	0028      	movs	r0, r5
+   e:	2101      	movs	r1, #1
+  10:	f7ff fffe 	bl	0 <MCAL_disableEvent>
+    handle->enabledEvent = false; 
+  14:	2300      	movs	r3, #0
+  16:	7223      	strb	r3, [r4, #8]
+}
+  18:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MEXTI_isEvent:
+
+00000000 <MEXTI_isEvent>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    uint32_t status = MEXTI_getStatusReg(channel);
+   4:	f7ff fffe 	bl	0 <MEXTI_getStatusReg>
+   8:	0005      	movs	r5, r0
+    uint32_t eventStatusMask = MEXTI_getStatusRegMaskForEvent(channel);
+   a:	0020      	movs	r0, r4
+   c:	f7ff fffe 	bl	0 <MEXTI_getStatusRegMaskForEvent>
+    return (((status & eventStatusMask) != 0U) ? true : false);
+  10:	4028      	ands	r0, r5
+  12:	1e43      	subs	r3, r0, #1
+  14:	4198      	sbcs	r0, r3
+  16:	b2c0      	uxtb	r0, r0
+}
+  18:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MEXTI_IRQ_Handler:
+
+00000000 <MEXTI_IRQ_Handler>:
+/* INTERRUPT SERVICE ROUTINES                                                 */
+/******************************************************************************/
+
+void MEXTI_IRQ_Handler(enum MEXTI_IRQ_Index index)
+{
+    const struct MEXTI_Handle *handle = MEXTI_IRQ_HandleTable[index];
+   0:	4b0e      	ldr	r3, [pc, #56]	; (3c <MEXTI_IRQ_Handler+0x3c>)
+   2:	0080      	lsls	r0, r0, #2
+{
+   4:	b570      	push	{r4, r5, r6, lr}
+    const struct MEXTI_Handle *handle = MEXTI_IRQ_HandleTable[index];
+   6:	58c4      	ldr	r4, [r0, r3]
+    
+    while(handle != NULL)
+   8:	2c00      	cmp	r4, #0
+   a:	d100      	bne.n	e <MEXTI_IRQ_Handler+0xe>
+        handle = handle->nextHandle;
+      #else
+        break;
+      #endif
+    }
+}
+   c:	bd70      	pop	{r4, r5, r6, pc}
+        uint32_t status = MEXTI_getStatusReg(handle->channel);
+   e:	6820      	ldr	r0, [r4, #0]
+  10:	f7ff fffe 	bl	0 <MEXTI_getStatusReg>
+  14:	0005      	movs	r5, r0
+    uint32_t eventStatusMask = MEXTI_getStatusRegMaskForEvent(handle->channel);
+  16:	6820      	ldr	r0, [r4, #0]
+  18:	f7ff fffe 	bl	0 <MEXTI_getStatusRegMaskForEvent>
+    return handle->enabledEvent;
+  1c:	7a23      	ldrb	r3, [r4, #8]
+    if(MEXTI_isEventEnabled(handle))
+  1e:	2b00      	cmp	r3, #0
+  20:	d00a      	beq.n	38 <MEXTI_IRQ_Handler+0x38>
+        if((status & eventStatusMask) != 0u )
+  22:	4228      	tst	r0, r5
+  24:	d008      	beq.n	38 <MEXTI_IRQ_Handler+0x38>
+            MEXTI_clearEventReg(handle->channel);
+  26:	6820      	ldr	r0, [r4, #0]
+  28:	f7ff fffe 	bl	0 <MEXTI_clearEventReg>
+            MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MEXTI, MCAL_EVENT_TRIGGER, NULL);
+  2c:	2300      	movs	r3, #0
+  2e:	2201      	movs	r2, #1
+  30:	2102      	movs	r1, #2
+  32:	6860      	ldr	r0, [r4, #4]
+  34:	f7ff fffe 	bl	0 <MCAL_invokeCallbacks>
+        handle = handle->nextHandle;
+  38:	68e4      	ldr	r4, [r4, #12]
+  3a:	e7e5      	b.n	8 <MEXTI_IRQ_Handler+0x8>
+  3c:	00000000 	.word	0x00000000

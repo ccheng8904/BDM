@@ -1,0 +1,1097 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"sh30f9xx_sa0_timer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.TIM_Reset,"ax",%progbits
+  18              		.align	1
+  19              		.global	TIM_Reset
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	TIM_Reset:
+  25              	.LVL0:
+  26              	.LFB45:
+  27              		.file 1 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c"
+   1:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+   2:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   ******************************************************************************
+   3:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @file    sh30f9xx_sa0_timer.c
+   4:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @author  sinowealth
+   5:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @version V1.1.0
+   6:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @date    2020-12-14  
+   7:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief   This file provides firmware functions to manage the following 
+   8:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         
+   9:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *  @verbatim
+  10:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  11:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *          ===================================================================
+  12:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *                                   How to use this driver
+  13:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *          ===================================================================
+  14:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  15:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *  @endverbatim
+  16:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  17:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   ******************************************************************************
+  18:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @attention
+  19:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  20:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * SINOWEALTH IS SUPPLYING THIS SOFTWARE FOR USE EXCLUSIVELY SH_ON SINOWEALTH'S 
+  21:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * MICROCONTROLLER PRODUCTS. IT IS PROTECTED UNDER APPLICABLE COPYRIGHT LAWS. 
+  22:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * THIS SOFTWARE IS FOR GUIDANCE IN ORDER TO SAVE TIME. AS A RESULT, SINOWEALTH 
+  23:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES 
+  24:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT OF SUCH FIRMWARE AND/OR
+  25:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION CONTAINED HEREIN IN 
+  26:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * CONNECTION WITH THEIR PRODUCTS.
+  27:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  28:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * <h2><center>&copy; COPYRIGHT 2020 Sinowealth</center></h2>
+  29:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *
+  30:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   ******************************************************************************
+  31:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 2
+
+
+  32:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  33:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Includes ------------------------------------------------------------------*/
+  34:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** #include "sh30f9xx_sa0_timer.h"
+  35:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  36:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /** @addtogroup SH30F9xx_sa0_libcfg_StdLib_Driver
+  37:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @{
+  38:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+  39:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  40:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /** @defgroup TIM_MODULE TIM 
+  41:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief TIM driver modules
+  42:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @{
+  43:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+  44:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  45:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private typedef -----------------------------------------------------------*/
+  46:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private define ------------------------------------------------------------*/
+  47:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private macro -------------------------------------------------------------*/
+  48:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private variables ---------------------------------------------------------*/
+  49:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private function prototypes -----------------------------------------------*/
+  50:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /* Private functions ---------------------------------------------------------*/
+  51:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  52:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /** @defgroup TIM_Private_Functions
+  53:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @{
+  54:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+  55:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  56:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /** @defgroup PPP_Group1 Initialization and Configuration
+  57:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****  *  @brief    Initialization and Configuration
+  58:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****  *
+  59:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** @verbatim    
+  60:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****  ===============================================================================
+  61:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****                       Initialization and Configuration
+  62:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****  ===============================================================================  
+  63:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****    
+  64:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** @endverbatim
+  65:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @{
+  66:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+  67:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  68:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+  69:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Reset the TIMx peripheral registers to their default reset values.
+  70:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+  71:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+  72:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+  73:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_Reset(TIMER_TypeDef *TIMx)
+  74:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+  28              		.loc 1 74 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  75:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* Check the parameters */
+  76:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+  32              		.loc 1 76 5 view .LVU1
+  77:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  78:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (TIMx == TIM0)
+  33              		.loc 1 78 5 view .LVU2
+  34              		.loc 1 78 8 is_stmt 0 view .LVU3
+  35 0000 094B     		ldr	r3, .L7
+  74:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* Check the parameters */
+  36              		.loc 1 74 1 view .LVU4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 3
+
+
+  37 0002 10B5     		push	{r4, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 8
+  40              		.cfi_offset 4, -8
+  41              		.cfi_offset 14, -4
+  42              		.loc 1 78 8 view .LVU5
+  43 0004 9842     		cmp	r0, r3
+  44 0006 03D1     		bne	.L2
+  79:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  80:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         RCC_APB0PeriphReset(RCC_APB0_TIM0);
+  45              		.loc 1 80 9 is_stmt 1 view .LVU6
+  46 0008 0120     		movs	r0, #1
+  47              	.LVL1:
+  48              	.L6:
+  81:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  82:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else if (TIMx == TIM1)
+  83:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         RCC_APB0PeriphReset(RCC_APB0_TIM1);
+  85:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else if (TIMx == TIM2)
+  87:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  88:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         RCC_APB0PeriphReset(RCC_APB0_TIM2);
+  89:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  90:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+  91:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         RCC_APB0PeriphReset(RCC_APB0_TIM3);
+  93:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  94:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+  49              		.loc 1 94 1 is_stmt 0 view .LVU7
+  50              		@ sp needed
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  51              		.loc 1 92 9 view .LVU8
+  52 000a FFF7FEFF 		bl	RCC_APB0PeriphReset
+  53              	.LVL2:
+  54              		.loc 1 94 1 view .LVU9
+  55 000e 10BD     		pop	{r4, pc}
+  56              	.LVL3:
+  57              	.L2:
+  82:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  58              		.loc 1 82 10 is_stmt 1 view .LVU10
+  82:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  59              		.loc 1 82 13 is_stmt 0 view .LVU11
+  60 0010 064B     		ldr	r3, .L7+4
+  61 0012 9842     		cmp	r0, r3
+  62 0014 01D1     		bne	.L4
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  63              		.loc 1 84 9 is_stmt 1 view .LVU12
+  64 0016 0220     		movs	r0, #2
+  65              	.LVL4:
+  84:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  66              		.loc 1 84 9 is_stmt 0 view .LVU13
+  67 0018 F7E7     		b	.L6
+  68              	.LVL5:
+  69              	.L4:
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+  70              		.loc 1 86 10 is_stmt 1 view .LVU14
+  86:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 4
+
+
+  71              		.loc 1 86 13 is_stmt 0 view .LVU15
+  72 001a 054B     		ldr	r3, .L7+8
+  73 001c 9842     		cmp	r0, r3
+  74 001e 01D1     		bne	.L5
+  88:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  75              		.loc 1 88 9 is_stmt 1 view .LVU16
+  76 0020 0420     		movs	r0, #4
+  77              	.LVL6:
+  88:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  78              		.loc 1 88 9 is_stmt 0 view .LVU17
+  79 0022 F2E7     		b	.L6
+  80              	.LVL7:
+  81              	.L5:
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  82              		.loc 1 92 9 is_stmt 1 view .LVU18
+  83 0024 0820     		movs	r0, #8
+  84              	.LVL8:
+  92:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+  85              		.loc 1 92 9 is_stmt 0 view .LVU19
+  86 0026 F0E7     		b	.L6
+  87              	.L8:
+  88              		.align	2
+  89              	.L7:
+  90 0028 00040040 		.word	1073742848
+  91 002c 00080040 		.word	1073743872
+  92 0030 000C0040 		.word	1073744896
+  93              		.cfi_endproc
+  94              	.LFE45:
+  96              		.section	.text.TIM_StructInit,"ax",%progbits
+  97              		.align	1
+  98              		.global	TIM_StructInit
+  99              		.syntax unified
+ 100              		.code	16
+ 101              		.thumb_func
+ 103              	TIM_StructInit:
+ 104              	.LVL9:
+ 105              	.LFB46:
+  95:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+  96:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+  97:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Fills each TIM_InitStruct member with its default value.
+  98:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIM_InitStruct : pointer to a @ref TIM_InitTypeDef
+  99:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         structure which will be initialized.
+ 100:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 101:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 102:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_StructInit(TIM_InitTypeDef *TIM_InitStruct)
+ 103:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 106              		.loc 1 103 1 is_stmt 1 view -0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              		@ link register save eliminated.
+ 104:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_Prescaler = 0x00;
+ 111              		.loc 1 104 5 view .LVU21
+ 105:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_Period    = 0x00;
+ 112              		.loc 1 105 5 view .LVU22
+ 106:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_CLKSource = TIM_CLKSource_PCLK;
+ 113              		.loc 1 106 5 view .LVU23
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 5
+
+
+ 107:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_OPMode    = TIM_OPMode_Continue;
+ 114              		.loc 1 107 5 view .LVU24
+ 108:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_TCMode    = TIM_TCMode_Disable;
+ 115              		.loc 1 108 5 view .LVU25
+ 109:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_ECFFilter = TIM_FLITER_TIMER_NONE;
+ 116              		.loc 1 109 5 view .LVU26
+ 104:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_Period    = 0x00;
+ 117              		.loc 1 104 35 is_stmt 0 view .LVU27
+ 118 0000 0023     		movs	r3, #0
+ 110:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 119              		.loc 1 110 1 view .LVU28
+ 120              		@ sp needed
+ 104:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_Period    = 0x00;
+ 121              		.loc 1 104 35 view .LVU29
+ 122 0002 0360     		str	r3, [r0]
+ 105:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_CLKSource = TIM_CLKSource_PCLK;
+ 123              		.loc 1 105 35 view .LVU30
+ 124 0004 4360     		str	r3, [r0, #4]
+ 106:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_OPMode    = TIM_OPMode_Continue;
+ 125              		.loc 1 106 35 view .LVU31
+ 126 0006 8360     		str	r3, [r0, #8]
+ 108:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIM_InitStruct->TIM_ECFFilter = TIM_FLITER_TIMER_NONE;
+ 127              		.loc 1 108 35 view .LVU32
+ 128 0008 C360     		str	r3, [r0, #12]
+ 129              		.loc 1 110 1 view .LVU33
+ 130 000a 7047     		bx	lr
+ 131              		.cfi_endproc
+ 132              	.LFE46:
+ 134              		.section	.text.TIM_Init,"ax",%progbits
+ 135              		.align	1
+ 136              		.global	TIM_Init
+ 137              		.syntax unified
+ 138              		.code	16
+ 139              		.thumb_func
+ 141              	TIM_Init:
+ 142              	.LVL10:
+ 143              	.LFB47:
+ 111:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 112:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 113:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Initializes the TIMx peripheral according to the specified parameters 
+ 114:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         in the TIM_InitStruct.
+ 115:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be  0 to 3 to select the TIM peripheral.
+ 116:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIM_InitStruct: pointer to a @ref TIM_InitTypeDef structure that contains 
+ 117:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         the configuration information for the specified TIM peripheral.
+ 118:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 119:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 120:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_Init(TIMER_TypeDef *TIMx, TIM_InitTypeDef *TIM_InitStruct)
+ 121:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 144              		.loc 1 121 1 is_stmt 1 view -0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 123:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 148              		.loc 1 123 5 view .LVU35
+ 124:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_CLK_SOURCE(TIM_InitStruct->TIM_CLKSource));
+ 149              		.loc 1 124 5 view .LVU36
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 6
+
+
+ 125:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_OP_MODE(TIM_InitStruct->TIM_OPMode));
+ 150              		.loc 1 125 5 view .LVU37
+ 126:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 127:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->PSQ = TIM_InitStruct->TIM_Prescaler;
+ 151              		.loc 1 127 5 view .LVU38
+ 152              		.loc 1 127 31 is_stmt 0 view .LVU39
+ 153 0000 0B68     		ldr	r3, [r1]
+ 121:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 154              		.loc 1 121 1 view .LVU40
+ 155 0002 10B5     		push	{r4, lr}
+ 156              	.LCFI1:
+ 157              		.cfi_def_cfa_offset 8
+ 158              		.cfi_offset 4, -8
+ 159              		.cfi_offset 14, -4
+ 160              		.loc 1 127 15 view .LVU41
+ 161 0004 C360     		str	r3, [r0, #12]
+ 128:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->TPR = TIM_InitStruct->TIM_Period;
+ 162              		.loc 1 128 5 is_stmt 1 view .LVU42
+ 163              		.loc 1 128 31 is_stmt 0 view .LVU43
+ 164 0006 4B68     		ldr	r3, [r1, #4]
+ 129:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 130:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 &= ~(TIM_CR_CLKS_Msk | TIM_CR_OPM_Msk | TIM_CR_TC_Msk | TIM_CR_ECF_Msk);
+ 165              		.loc 1 130 18 view .LVU44
+ 166 0008 074A     		ldr	r2, .L11
+ 128:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->TPR = TIM_InitStruct->TIM_Period;
+ 167              		.loc 1 128 15 view .LVU45
+ 168 000a 8360     		str	r3, [r0, #8]
+ 169              		.loc 1 130 5 is_stmt 1 view .LVU46
+ 170              		.loc 1 130 18 is_stmt 0 view .LVU47
+ 171 000c 0368     		ldr	r3, [r0]
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****                     | TIM_InitStruct->TIM_TCMode | TIM_InitStruct->TIM_ECFFilter;
+ 133:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 172              		.loc 1 133 1 view .LVU48
+ 173              		@ sp needed
+ 130:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+ 174              		.loc 1 130 18 view .LVU49
+ 175 000e 1340     		ands	r3, r2
+ 176 0010 0360     		str	r3, [r0]
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+ 177              		.loc 1 131 5 is_stmt 1 view .LVU50
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 178              		.loc 1 132 50 is_stmt 0 view .LVU51
+ 179 0012 4C89     		ldrh	r4, [r1, #10]
+ 180 0014 0B89     		ldrh	r3, [r1, #8]
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+ 181              		.loc 1 131 18 view .LVU52
+ 182 0016 0268     		ldr	r2, [r0]
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 183              		.loc 1 132 50 view .LVU53
+ 184 0018 2343     		orrs	r3, r4
+ 185 001a 8C89     		ldrh	r4, [r1, #12]
+ 186 001c C989     		ldrh	r1, [r1, #14]
+ 187              	.LVL11:
+ 132:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 188              		.loc 1 132 50 view .LVU54
+ 189 001e 2343     		orrs	r3, r4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 7
+
+
+ 190 0020 0B43     		orrs	r3, r1
+ 131:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->CR.V32 |= TIM_InitStruct->TIM_CLKSource | TIM_InitStruct->TIM_OPMode  \
+ 191              		.loc 1 131 18 view .LVU55
+ 192 0022 1343     		orrs	r3, r2
+ 193 0024 0360     		str	r3, [r0]
+ 194              		.loc 1 133 1 view .LVU56
+ 195 0026 10BD     		pop	{r4, pc}
+ 196              	.L12:
+ 197              		.align	2
+ 198              	.L11:
+ 199 0028 C7CBFFFF 		.word	-13369
+ 200              		.cfi_endproc
+ 201              	.LFE47:
+ 203              		.section	.text.TIM_INTConfig,"ax",%progbits
+ 204              		.align	1
+ 205              		.global	TIM_INTConfig
+ 206              		.syntax unified
+ 207              		.code	16
+ 208              		.thumb_func
+ 210              	TIM_INTConfig:
+ 211              	.LVL12:
+ 212              	.LFB48:
+ 134:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 135:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 136:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Enable or disable the specified TIM interrupt.
+ 137:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.       
+ 138:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  NewState: new state of the TIM interrupt.
+ 139:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         This parameter can be one of the following values:
+ 140:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_ENABLE
+ 141:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_DISABLE
+ 142:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 143:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 144:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_INTConfig(TIMER_TypeDef *TIMx, FunctionalState NewState)
+ 145:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 213              		.loc 1 145 1 is_stmt 1 view -0
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 0
+ 216              		@ frame_needed = 0, uses_anonymous_args = 0
+ 217              		@ link register save eliminated.
+ 146:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 147:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 218              		.loc 1 147 5 view .LVU58
+ 148:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 219              		.loc 1 148 5 view .LVU59
+ 149:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 150:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (NewState != SH_DISABLE)
+ 220              		.loc 1 150 5 view .LVU60
+ 221 0000 8023     		movs	r3, #128
+ 151:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 152:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 |= TIM_CR_IE_Msk;
+ 222              		.loc 1 152 22 is_stmt 0 view .LVU61
+ 223 0002 0268     		ldr	r2, [r0]
+ 150:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 224              		.loc 1 150 8 view .LVU62
+ 225 0004 0029     		cmp	r1, #0
+ 226 0006 02D0     		beq	.L14
+ 227              		.loc 1 152 9 is_stmt 1 view .LVU63
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 8
+
+
+ 228              		.loc 1 152 22 is_stmt 0 view .LVU64
+ 229 0008 1343     		orrs	r3, r2
+ 230 000a 0360     		str	r3, [r0]
+ 231              	.L13:
+ 153:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 154:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 155:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 156:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 &= (~TIM_CR_IE_Msk);
+ 157:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 158:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 232              		.loc 1 158 1 view .LVU65
+ 233              		@ sp needed
+ 234 000c 7047     		bx	lr
+ 235              	.L14:
+ 156:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 236              		.loc 1 156 9 is_stmt 1 view .LVU66
+ 156:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 237              		.loc 1 156 22 is_stmt 0 view .LVU67
+ 238 000e 9A43     		bics	r2, r3
+ 239 0010 0260     		str	r2, [r0]
+ 240              		.loc 1 158 1 view .LVU68
+ 241 0012 FBE7     		b	.L13
+ 242              		.cfi_endproc
+ 243              	.LFE48:
+ 245              		.section	.text.TIM_OnOff,"ax",%progbits
+ 246              		.align	1
+ 247              		.global	TIM_OnOff
+ 248              		.syntax unified
+ 249              		.code	16
+ 250              		.thumb_func
+ 252              	TIM_OnOff:
+ 253              	.LVL13:
+ 254              	.LFB49:
+ 159:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 160:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 161:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Open or close the TIM peripheral.
+ 162:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 163:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  OnOffState: state of the TIM peripheral.
+ 164:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *         This parameter can be one of the following values:
+ 165:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_ON
+ 166:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_OFF
+ 167:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 168:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 169:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_OnOff(TIMER_TypeDef *TIMx, CmdState OnOffState)
+ 170:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 255              		.loc 1 170 1 is_stmt 1 view -0
+ 256              		.cfi_startproc
+ 257              		@ args = 0, pretend = 0, frame = 0
+ 258              		@ frame_needed = 0, uses_anonymous_args = 0
+ 259              		@ link register save eliminated.
+ 171:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 172:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 260              		.loc 1 172 5 view .LVU70
+ 173:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_CMD_STATE(OnOffState));
+ 261              		.loc 1 173 5 view .LVU71
+ 174:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 175:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (OnOffState != SH_OFF)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 9
+
+
+ 262              		.loc 1 175 5 view .LVU72
+ 263 0000 0123     		movs	r3, #1
+ 176:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 177:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 |= TIM_CR_STR_Msk;
+ 264              		.loc 1 177 22 is_stmt 0 view .LVU73
+ 265 0002 0268     		ldr	r2, [r0]
+ 175:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 266              		.loc 1 175 8 view .LVU74
+ 267 0004 0029     		cmp	r1, #0
+ 268 0006 02D0     		beq	.L17
+ 269              		.loc 1 177 9 is_stmt 1 view .LVU75
+ 270              		.loc 1 177 22 is_stmt 0 view .LVU76
+ 271 0008 1343     		orrs	r3, r2
+ 272 000a 0360     		str	r3, [r0]
+ 273              	.L16:
+ 178:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 179:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 180:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 181:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 &= (~TIM_CR_STR_Msk);
+ 182:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 183:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 274              		.loc 1 183 1 view .LVU77
+ 275              		@ sp needed
+ 276 000c 7047     		bx	lr
+ 277              	.L17:
+ 181:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 278              		.loc 1 181 9 is_stmt 1 view .LVU78
+ 181:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 279              		.loc 1 181 22 is_stmt 0 view .LVU79
+ 280 000e 9A43     		bics	r2, r3
+ 281 0010 0260     		str	r2, [r0]
+ 282              		.loc 1 183 1 view .LVU80
+ 283 0012 FBE7     		b	.L16
+ 284              		.cfi_endproc
+ 285              	.LFE49:
+ 287              		.section	.text.TIM_OutPutConfig,"ax",%progbits
+ 288              		.align	1
+ 289              		.global	TIM_OutPutConfig
+ 290              		.syntax unified
+ 291              		.code	16
+ 292              		.thumb_func
+ 294              	TIM_OutPutConfig:
+ 295              	.LVL14:
+ 296              	.LFB50:
+ 184:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 185:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 186:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Enable or disable the TIMx's output pin.
+ 187:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 188:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  NewState: new state of the TIMx's output pin.
+ 189:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *          This parameter can be one of the following values:
+ 190:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_ENABLE
+ 191:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_DISABLE
+ 192:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 193:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 194:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_OutPutConfig(TIMER_TypeDef *TIMx, FunctionalState NewState)
+ 195:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 297              		.loc 1 195 1 is_stmt 1 view -0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 10
+
+
+ 298              		.cfi_startproc
+ 299              		@ args = 0, pretend = 0, frame = 0
+ 300              		@ frame_needed = 0, uses_anonymous_args = 0
+ 301              		@ link register save eliminated.
+ 196:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 197:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 302              		.loc 1 197 5 view .LVU82
+ 198:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 303              		.loc 1 198 5 view .LVU83
+ 199:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 200:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (NewState != SH_DISABLE)
+ 304              		.loc 1 200 5 view .LVU84
+ 305              		.loc 1 200 8 is_stmt 0 view .LVU85
+ 306 0000 0029     		cmp	r1, #0
+ 307 0002 05D0     		beq	.L20
+ 201:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 202:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 |= TIM_CR_TC_Msk;
+ 308              		.loc 1 202 9 is_stmt 1 view .LVU86
+ 309              		.loc 1 202 22 is_stmt 0 view .LVU87
+ 310 0004 8023     		movs	r3, #128
+ 311 0006 0268     		ldr	r2, [r0]
+ 312 0008 DB00     		lsls	r3, r3, #3
+ 313 000a 1343     		orrs	r3, r2
+ 314              	.L22:
+ 203:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 204:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 205:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 206:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 &= ~TIM_CR_TC_Msk;
+ 315              		.loc 1 206 22 view .LVU88
+ 316 000c 0360     		str	r3, [r0]
+ 207:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 208:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 317              		.loc 1 208 1 view .LVU89
+ 318              		@ sp needed
+ 319 000e 7047     		bx	lr
+ 320              	.L20:
+ 206:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 321              		.loc 1 206 9 is_stmt 1 view .LVU90
+ 206:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 322              		.loc 1 206 22 is_stmt 0 view .LVU91
+ 323 0010 0368     		ldr	r3, [r0]
+ 324 0012 014A     		ldr	r2, .L23
+ 325 0014 1340     		ands	r3, r2
+ 326 0016 F9E7     		b	.L22
+ 327              	.L24:
+ 328              		.align	2
+ 329              	.L23:
+ 330 0018 FFFBFFFF 		.word	-1025
+ 331              		.cfi_endproc
+ 332              	.LFE50:
+ 334              		.section	.text.TIM_CM0EventTrigger,"ax",%progbits
+ 335              		.align	1
+ 336              		.global	TIM_CM0EventTrigger
+ 337              		.syntax unified
+ 338              		.code	16
+ 339              		.thumb_func
+ 341              	TIM_CM0EventTrigger:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 11
+
+
+ 342              	.LVL15:
+ 343              	.LFB51:
+ 209:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 210:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 211:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Enable or disable the TIMx's trigger CM0+ core function.
+ 212:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 213:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  NewState: new state of the TIMx's trigger function.
+ 214:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *          This parameter can be one of the following values:
+ 215:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_ENABLE
+ 216:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_DISABLE
+ 217:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 218:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 219:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_CM0EventTrigger(TIMER_TypeDef *TIMx, FunctionalState NewState)
+ 220:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 344              		.loc 1 220 1 is_stmt 1 view -0
+ 345              		.cfi_startproc
+ 346              		@ args = 0, pretend = 0, frame = 0
+ 347              		@ frame_needed = 0, uses_anonymous_args = 0
+ 348              		@ link register save eliminated.
+ 221:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 222:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 349              		.loc 1 222 5 view .LVU93
+ 223:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 350              		.loc 1 223 5 view .LVU94
+ 224:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 225:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (NewState != SH_DISABLE)
+ 351              		.loc 1 225 5 view .LVU95
+ 352              		.loc 1 225 8 is_stmt 0 view .LVU96
+ 353 0000 0029     		cmp	r1, #0
+ 354 0002 05D0     		beq	.L26
+ 226:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 227:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 228:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 |= TIM_CR_ETEN_Msk;
+ 355              		.loc 1 228 9 is_stmt 1 view .LVU97
+ 356              		.loc 1 228 22 is_stmt 0 view .LVU98
+ 357 0004 8023     		movs	r3, #128
+ 358 0006 0268     		ldr	r2, [r0]
+ 359 0008 9B00     		lsls	r3, r3, #2
+ 360 000a 1343     		orrs	r3, r2
+ 361              	.L28:
+ 229:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 230:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 231:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 &= ~TIM_CR_ETEN_Msk;
+ 362              		.loc 1 232 22 view .LVU99
+ 363 000c 0360     		str	r3, [r0]
+ 233:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 234:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 364              		.loc 1 234 1 view .LVU100
+ 365              		@ sp needed
+ 366 000e 7047     		bx	lr
+ 367              	.L26:
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 368              		.loc 1 232 9 is_stmt 1 view .LVU101
+ 232:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 369              		.loc 1 232 22 is_stmt 0 view .LVU102
+ 370 0010 0368     		ldr	r3, [r0]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 12
+
+
+ 371 0012 014A     		ldr	r2, .L29
+ 372 0014 1340     		ands	r3, r2
+ 373 0016 F9E7     		b	.L28
+ 374              	.L30:
+ 375              		.align	2
+ 376              	.L29:
+ 377 0018 FFFDFFFF 		.word	-513
+ 378              		.cfi_endproc
+ 379              	.LFE51:
+ 381              		.section	.text.TIM_ExtPeripheralsTrigger,"ax",%progbits
+ 382              		.align	1
+ 383              		.global	TIM_ExtPeripheralsTrigger
+ 384              		.syntax unified
+ 385              		.code	16
+ 386              		.thumb_func
+ 388              	TIM_ExtPeripheralsTrigger:
+ 389              	.LVL16:
+ 390              	.LFB52:
+ 235:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 236:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 237:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Enable or disable the TIMx's trigger function.
+ 238:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 239:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  NewState: new state of the TIMx's trigger function.
+ 240:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *          This parameter can be one of the following values:
+ 241:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_ENABLE
+ 242:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   *            @arg SH_DISABLE
+ 243:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 244:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 245:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_ExtPeripheralsTrigger(TIMER_TypeDef *TIMx, FunctionalState NewState)
+ 246:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 391              		.loc 1 246 1 is_stmt 1 view -0
+ 392              		.cfi_startproc
+ 393              		@ args = 0, pretend = 0, frame = 0
+ 394              		@ frame_needed = 0, uses_anonymous_args = 0
+ 395              		@ link register save eliminated.
+ 247:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 248:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 396              		.loc 1 248 5 view .LVU104
+ 249:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_FUNCTION_STATE(NewState));
+ 397              		.loc 1 249 5 view .LVU105
+ 250:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 251:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if (NewState != SH_DISABLE)
+ 398              		.loc 1 251 5 view .LVU106
+ 399              		.loc 1 251 8 is_stmt 0 view .LVU107
+ 400 0000 0029     		cmp	r1, #0
+ 401 0002 05D0     		beq	.L32
+ 252:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 253:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 254:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 |= TIM_CR_TRIGEN_Msk;
+ 402              		.loc 1 254 9 is_stmt 1 view .LVU108
+ 403              		.loc 1 254 22 is_stmt 0 view .LVU109
+ 404 0004 8023     		movs	r3, #128
+ 405 0006 0268     		ldr	r2, [r0]
+ 406 0008 5B00     		lsls	r3, r3, #1
+ 407 000a 1343     		orrs	r3, r2
+ 408              	.L34:
+ 255:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 13
+
+
+ 256:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 257:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 258:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         TIMx->CR.V32 &= ~TIM_CR_TRIGEN_Msk;
+ 409              		.loc 1 258 22 view .LVU110
+ 410 000c 0360     		str	r3, [r0]
+ 259:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 260:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 411              		.loc 1 260 1 view .LVU111
+ 412              		@ sp needed
+ 413 000e 7047     		bx	lr
+ 414              	.L32:
+ 258:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 415              		.loc 1 258 9 is_stmt 1 view .LVU112
+ 258:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 416              		.loc 1 258 22 is_stmt 0 view .LVU113
+ 417 0010 0368     		ldr	r3, [r0]
+ 418 0012 014A     		ldr	r2, .L35
+ 419 0014 1340     		ands	r3, r2
+ 420 0016 F9E7     		b	.L34
+ 421              	.L36:
+ 422              		.align	2
+ 423              	.L35:
+ 424 0018 FFFEFFFF 		.word	-257
+ 425              		.cfi_endproc
+ 426              	.LFE52:
+ 428              		.section	.text.TIM_GetFlagStatus,"ax",%progbits
+ 429              		.align	1
+ 430              		.global	TIM_GetFlagStatus
+ 431              		.syntax unified
+ 432              		.code	16
+ 433              		.thumb_func
+ 435              	TIM_GetFlagStatus:
+ 436              	.LVL17:
+ 437              	.LFB53:
+ 261:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 262:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 263:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Check whether the specified TIM flag is set or not.
+ 264:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 265:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval The new state of TIMx's flag.
+ 266:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 267:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** FlagStatus TIM_GetFlagStatus(TIMER_TypeDef *TIMx)
+ 268:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 438              		.loc 1 268 1 is_stmt 1 view -0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442              		@ link register save eliminated.
+ 269:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     FlagStatus bitStatus;
+ 443              		.loc 1 269 5 view .LVU115
+ 270:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 271:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 272:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 444              		.loc 1 272 5 view .LVU116
+ 273:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 274:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     if ((TIMx->TIMINTF.V32 & TIM_TIMINTF_TF_Msk) != SH_RESET)
+ 445              		.loc 1 274 5 view .LVU117
+ 275:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 14
+
+
+ 276:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         bitStatus = SH_SET;
+ 277:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 278:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     else
+ 279:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 280:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****         bitStatus = SH_RESET;
+ 281:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     }
+ 282:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 283:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     return bitStatus;
+ 446              		.loc 1 283 12 is_stmt 0 view .LVU118
+ 447 0000 0123     		movs	r3, #1
+ 284:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 448              		.loc 1 284 1 view .LVU119
+ 449              		@ sp needed
+ 274:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     {
+ 450              		.loc 1 274 23 view .LVU120
+ 451 0002 0069     		ldr	r0, [r0, #16]
+ 452              	.LVL18:
+ 283:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 453              		.loc 1 283 5 is_stmt 1 view .LVU121
+ 283:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 454              		.loc 1 283 12 is_stmt 0 view .LVU122
+ 455 0004 1840     		ands	r0, r3
+ 456              	.LVL19:
+ 457              		.loc 1 284 1 view .LVU123
+ 458 0006 7047     		bx	lr
+ 459              		.cfi_endproc
+ 460              	.LFE53:
+ 462              		.section	.text.TIM_ClearFlag,"ax",%progbits
+ 463              		.align	1
+ 464              		.global	TIM_ClearFlag
+ 465              		.syntax unified
+ 466              		.code	16
+ 467              		.thumb_func
+ 469              	TIM_ClearFlag:
+ 470              	.LVL20:
+ 471              	.LFB54:
+ 285:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 286:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 287:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Clear the TIMx's pending flag.
+ 288:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 289:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 290:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 291:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_ClearFlag(TIMER_TypeDef *TIMx)
+ 292:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 472              		.loc 1 292 1 is_stmt 1 view -0
+ 473              		.cfi_startproc
+ 474              		@ args = 0, pretend = 0, frame = 0
+ 475              		@ frame_needed = 0, uses_anonymous_args = 0
+ 476              		@ link register save eliminated.
+ 293:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 294:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 477              		.loc 1 294 5 view .LVU125
+ 295:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 296:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->TIMINTF.V32 = TIM_TIMINTF_TFC_Msk;
+ 478              		.loc 1 296 5 view .LVU126
+ 479              		.loc 1 296 23 is_stmt 0 view .LVU127
+ 480 0000 8023     		movs	r3, #128
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 15
+
+
+ 297:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 481              		.loc 1 297 1 view .LVU128
+ 482              		@ sp needed
+ 296:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 483              		.loc 1 296 23 view .LVU129
+ 484 0002 5B02     		lsls	r3, r3, #9
+ 485 0004 0361     		str	r3, [r0, #16]
+ 486              		.loc 1 297 1 view .LVU130
+ 487 0006 7047     		bx	lr
+ 488              		.cfi_endproc
+ 489              	.LFE54:
+ 491              		.section	.text.TIM_GetCounter,"ax",%progbits
+ 492              		.align	1
+ 493              		.global	TIM_GetCounter
+ 494              		.syntax unified
+ 495              		.code	16
+ 496              		.thumb_func
+ 498              	TIM_GetCounter:
+ 499              	.LVL21:
+ 500              	.LFB55:
+ 298:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 299:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 300:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Get the TIMx Period Register value
+ 301:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 302:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval Counter Register value
+ 303:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 304:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** uint32_t TIM_GetCounter(TIMER_TypeDef *TIMx)
+ 305:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 501              		.loc 1 305 1 is_stmt 1 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 0
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 505              		@ link register save eliminated.
+ 306:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 307:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 308:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 506              		.loc 1 308 5 view .LVU132
+ 309:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 310:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     return TIMx->TCNT;
+ 507              		.loc 1 310 5 view .LVU133
+ 508              		.loc 1 310 16 is_stmt 0 view .LVU134
+ 509 0000 4068     		ldr	r0, [r0, #4]
+ 510              	.LVL22:
+ 311:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 511              		.loc 1 311 1 view .LVU135
+ 512              		@ sp needed
+ 513 0002 7047     		bx	lr
+ 514              		.cfi_endproc
+ 515              	.LFE55:
+ 517              		.section	.text.TIM_GetPrescaler,"ax",%progbits
+ 518              		.align	1
+ 519              		.global	TIM_GetPrescaler
+ 520              		.syntax unified
+ 521              		.code	16
+ 522              		.thumb_func
+ 524              	TIM_GetPrescaler:
+ 525              	.LVL23:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 16
+
+
+ 526              	.LFB56:
+ 312:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 313:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 314:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Get the TIMx PSQ Register value
+ 315:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 316:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval Prescaler Register value
+ 317:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 318:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** uint32_t TIM_GetPrescaler(TIMER_TypeDef *TIMx)
+ 319:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 527              		.loc 1 319 1 is_stmt 1 view -0
+ 528              		.cfi_startproc
+ 529              		@ args = 0, pretend = 0, frame = 0
+ 530              		@ frame_needed = 0, uses_anonymous_args = 0
+ 531              		@ link register save eliminated.
+ 320:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 321:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 532              		.loc 1 321 5 view .LVU137
+ 322:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 323:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     return TIMx->PSQ;
+ 533              		.loc 1 323 5 view .LVU138
+ 534              		.loc 1 323 16 is_stmt 0 view .LVU139
+ 535 0000 C068     		ldr	r0, [r0, #12]
+ 536              	.LVL24:
+ 324:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 537              		.loc 1 324 1 view .LVU140
+ 538              		@ sp needed
+ 539 0002 7047     		bx	lr
+ 540              		.cfi_endproc
+ 541              	.LFE56:
+ 543              		.section	.text.TIM_GetPeriod,"ax",%progbits
+ 544              		.align	1
+ 545              		.global	TIM_GetPeriod
+ 546              		.syntax unified
+ 547              		.code	16
+ 548              		.thumb_func
+ 550              	TIM_GetPeriod:
+ 551              	.LVL25:
+ 552              	.LFB57:
+ 325:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 326:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 327:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Get the TIMx Period Register value
+ 328:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 329:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval Period Register value
+ 330:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 331:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** uint32_t TIM_GetPeriod(TIMER_TypeDef *TIMx)
+ 332:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 553              		.loc 1 332 1 is_stmt 1 view -0
+ 554              		.cfi_startproc
+ 555              		@ args = 0, pretend = 0, frame = 0
+ 556              		@ frame_needed = 0, uses_anonymous_args = 0
+ 557              		@ link register save eliminated.
+ 333:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 334:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 558              		.loc 1 334 5 view .LVU142
+ 335:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 336:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     return TIMx->TPR;
+ 559              		.loc 1 336 5 view .LVU143
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 17
+
+
+ 560              		.loc 1 336 16 is_stmt 0 view .LVU144
+ 561 0000 8068     		ldr	r0, [r0, #8]
+ 562              	.LVL26:
+ 337:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 563              		.loc 1 337 1 view .LVU145
+ 564              		@ sp needed
+ 565 0002 7047     		bx	lr
+ 566              		.cfi_endproc
+ 567              	.LFE57:
+ 569              		.section	.text.TIM_SetCounter,"ax",%progbits
+ 570              		.align	1
+ 571              		.global	TIM_SetCounter
+ 572              		.syntax unified
+ 573              		.code	16
+ 574              		.thumb_func
+ 576              	TIM_SetCounter:
+ 577              	.LVL27:
+ 578              	.LFB58:
+ 338:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 339:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 340:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Set the TIMx Counter Register value
+ 341:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 342:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  Counter: specifies the Counter register new value.
+ 343:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 344:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 345:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_SetCounter(TIMER_TypeDef *TIMx, uint32_t Counter)
+ 346:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 579              		.loc 1 346 1 is_stmt 1 view -0
+ 580              		.cfi_startproc
+ 581              		@ args = 0, pretend = 0, frame = 0
+ 582              		@ frame_needed = 0, uses_anonymous_args = 0
+ 583              		@ link register save eliminated.
+ 347:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 348:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 349:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 584              		.loc 1 349 5 view .LVU147
+ 350:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 351:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->TCNT = Counter;
+ 585              		.loc 1 351 5 view .LVU148
+ 586              		.loc 1 351 16 is_stmt 0 view .LVU149
+ 587 0000 4160     		str	r1, [r0, #4]
+ 352:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 588              		.loc 1 352 1 view .LVU150
+ 589              		@ sp needed
+ 590 0002 7047     		bx	lr
+ 591              		.cfi_endproc
+ 592              	.LFE58:
+ 594              		.section	.text.TIM_SetPrescaler,"ax",%progbits
+ 595              		.align	1
+ 596              		.global	TIM_SetPrescaler
+ 597              		.syntax unified
+ 598              		.code	16
+ 599              		.thumb_func
+ 601              	TIM_SetPrescaler:
+ 602              	.LVL28:
+ 603              	.LFB59:
+ 353:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 18
+
+
+ 354:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 355:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Set the TIMx Prescaler Register value
+ 356:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 357:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  Prescaler: specifies the Prescaler register new value.
+ 358:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 359:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 360:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_SetPrescaler(TIMER_TypeDef *TIMx, uint32_t Prescaler)
+ 361:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 604              		.loc 1 361 1 is_stmt 1 view -0
+ 605              		.cfi_startproc
+ 606              		@ args = 0, pretend = 0, frame = 0
+ 607              		@ frame_needed = 0, uses_anonymous_args = 0
+ 608              		@ link register save eliminated.
+ 362:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 363:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 609              		.loc 1 363 5 view .LVU152
+ 364:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 365:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->PSQ = Prescaler;
+ 610              		.loc 1 365 5 view .LVU153
+ 611              		.loc 1 365 15 is_stmt 0 view .LVU154
+ 612 0000 C160     		str	r1, [r0, #12]
+ 366:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 613              		.loc 1 366 1 view .LVU155
+ 614              		@ sp needed
+ 615 0002 7047     		bx	lr
+ 616              		.cfi_endproc
+ 617              	.LFE59:
+ 619              		.section	.text.TIM_SetPeriod,"ax",%progbits
+ 620              		.align	1
+ 621              		.global	TIM_SetPeriod
+ 622              		.syntax unified
+ 623              		.code	16
+ 624              		.thumb_func
+ 626              	TIM_SetPeriod:
+ 627              	.LVL29:
+ 628              	.LFB60:
+ 367:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 368:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** /**
+ 369:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @brief  Set the TIMx Period Register value
+ 370:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  TIMx: where x can be 0 to 3 to select the TIM peripheral.
+ 371:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @param  Period: specifies the Period register new value.
+ 372:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   * @retval None
+ 373:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****   */
+ 374:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** void TIM_SetPeriod(TIMER_TypeDef *TIMx, uint32_t Period)
+ 375:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** {
+ 629              		.loc 1 375 1 is_stmt 1 view -0
+ 630              		.cfi_startproc
+ 631              		@ args = 0, pretend = 0, frame = 0
+ 632              		@ frame_needed = 0, uses_anonymous_args = 0
+ 633              		@ link register save eliminated.
+ 376:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     /* check the parameters */
+ 377:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     assert_param(IS_TIM_ALL_PERIPH(TIMx));
+ 634              		.loc 1 377 5 view .LVU157
+ 378:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** 
+ 379:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c ****     TIMx->TPR = Period;
+ 635              		.loc 1 379 5 view .LVU158
+ 636              		.loc 1 379 15 is_stmt 0 view .LVU159
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc4FqtSS.s 			page 19
+
+
+ 637 0000 8160     		str	r1, [r0, #8]
+ 380:common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.c **** }
+ 638              		.loc 1 380 1 view .LVU160
+ 639              		@ sp needed
+ 640 0002 7047     		bx	lr
+ 641              		.cfi_endproc
+ 642              	.LFE60:
+ 644              		.text
+ 645              	.Letext0:
+ 646              		.file 2 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_libcfg.h"
+ 647              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 648              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 649              		.file 5 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_rcc.h"
+ 650              		.file 6 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_timer.h"

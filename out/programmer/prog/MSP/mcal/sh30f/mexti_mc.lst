@@ -1,0 +1,282 @@
+
+out/programmer/prog/MSP/mcal/sh30f/mexti_mc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MEXTI_configureTrigger:
+
+00000000 <MEXTI_configureTrigger>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+
+void MEXTI_configureTrigger(const struct MEXTI_Channel *channel, enum MEXTI_Trigger trigger)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+    uint8_t portNum = (uint8_t)MDIO_getPort(channel->mextiPin)->portIndex;
+   4:	6800      	ldr	r0, [r0, #0]
+{
+   6:	000d      	movs	r5, r1
+    uint8_t portNum = (uint8_t)MDIO_getPort(channel->mextiPin)->portIndex;
+   8:	f7ff fffe 	bl	0 <MDIO_getPort>
+   c:	7906      	ldrb	r6, [r0, #4]
+    uint8_t pinNum = (uint8_t)MDIO_getPin(channel->mextiPin);
+   e:	6820      	ldr	r0, [r4, #0]
+  10:	f7ff fffe 	bl	0 <MDIO_getPin>
+    uint32_t pinMask = 1UL << pinNum;
+  14:	2401      	movs	r4, #1
+  16:	4084      	lsls	r4, r0
+    uint8_t pinNum = (uint8_t)MDIO_getPin(channel->mextiPin);
+  18:	0001      	movs	r1, r0
+
+    // set EXTI port source for selected pin
+    // Note 9030: cannot cast an unsigned value to an enum type [MISRA 2012 Rule 10.5, advisory]
+    EXTI_PinConfig((EXTI_Port_Type)portNum, (EXTI_PIN_Type)pinNum);//lint !e9030
+  1a:	0030      	movs	r0, r6
+  1c:	f7ff fffe 	bl	0 <EXTI_PinConfig>
+        
+    // set to default
+    EXTI->TMSR &= (~pinMask);//edge trigger
+  20:	4b12      	ldr	r3, [pc, #72]	; (6c <MEXTI_configureTrigger+0x6c>)
+  22:	689a      	ldr	r2, [r3, #8]
+  24:	43a2      	bics	r2, r4
+  26:	609a      	str	r2, [r3, #8]
+    EXTI->RTSR &= (~pinMask);//disable rising trigger
+  28:	68da      	ldr	r2, [r3, #12]
+  2a:	43a2      	bics	r2, r4
+  2c:	60da      	str	r2, [r3, #12]
+    EXTI->FTSR &= (~pinMask);//disable falling trigger
+  2e:	691a      	ldr	r2, [r3, #16]
+  30:	43a2      	bics	r2, r4
+  32:	611a      	str	r2, [r3, #16]
+
+    if(trigger == MEXTI_TRIGGER_RISING)
+  34:	2d01      	cmp	r5, #1
+  36:	d103      	bne.n	40 <MEXTI_configureTrigger+0x40>
+
+    }
+    else if(trigger == MEXTI_TRIGGER_HIGH_LEVEL)
+    {
+        EXTI->TMSR |= pinMask;
+        EXTI->RTSR |= pinMask;
+  38:	68da      	ldr	r2, [r3, #12]
+  3a:	4322      	orrs	r2, r4
+  3c:	60da      	str	r2, [r3, #12]
+    }
+    else
+    {
+        //assert
+    }
+}
+  3e:	e00c      	b.n	5a <MEXTI_configureTrigger+0x5a>
+    else if(trigger == MEXTI_TRIGGER_FALLING)
+  40:	1ea8      	subs	r0, r5, #2
+  42:	2803      	cmp	r0, #3
+  44:	d809      	bhi.n	5a <MEXTI_configureTrigger+0x5a>
+  46:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uqi>
+  4a:	0205      	.short	0x0205
+  4c:	0d09      	.short	0x0d09
+        EXTI->RTSR |= pinMask;
+  4e:	68da      	ldr	r2, [r3, #12]
+  50:	4322      	orrs	r2, r4
+  52:	60da      	str	r2, [r3, #12]
+        EXTI->FTSR |= pinMask;
+  54:	691a      	ldr	r2, [r3, #16]
+  56:	4322      	orrs	r2, r4
+  58:	611a      	str	r2, [r3, #16]
+}
+  5a:	bd70      	pop	{r4, r5, r6, pc}
+        EXTI->TMSR |= pinMask;
+  5c:	689a      	ldr	r2, [r3, #8]
+  5e:	4322      	orrs	r2, r4
+  60:	609a      	str	r2, [r3, #8]
+  62:	e7f7      	b.n	54 <MEXTI_configureTrigger+0x54>
+        EXTI->TMSR |= pinMask;
+  64:	689a      	ldr	r2, [r3, #8]
+  66:	4322      	orrs	r2, r4
+  68:	609a      	str	r2, [r3, #8]
+  6a:	e7e5      	b.n	38 <MEXTI_configureTrigger+0x38>
+  6c:	40003400 	.word	0x40003400
+
+Disassembly of section .text.MEXTI_configureChannel:
+
+00000000 <MEXTI_configureChannel>:
+
+
+void MEXTI_configureChannel(const struct MEXTI_Channel *channel, const struct MEXTI_Config *cfg)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+
+
+static void MEXTI_enableClock(const struct MEXTI_Channel *channel)
+{
+    (void)*channel;
+    RCC_APB0PeriphClockOnOff(RCC_APB0_EXTI, SH_ON);
+   4:	2080      	movs	r0, #128	; 0x80
+{
+   6:	000d      	movs	r5, r1
+    RCC_APB0PeriphClockOnOff(RCC_APB0_EXTI, SH_ON);
+   8:	0140      	lsls	r0, r0, #5
+   a:	2101      	movs	r1, #1
+   c:	f7ff fffe 	bl	0 <RCC_APB0PeriphClockOnOff>
+    MEXTI_configureTrigger(channel, cfg->trigger);
+  10:	7829      	ldrb	r1, [r5, #0]
+  12:	0020      	movs	r0, r4
+  14:	f7ff fffe 	bl	0 <MEXTI_configureChannel>
+}
+  18:	bd70      	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text.MEXTI_getStatusReg:
+
+00000000 <MEXTI_getStatusReg>:
+    status  = EXTI->PR.V32 & 0xFFFFu;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <MEXTI_getStatusReg+0x8>)
+   2:	6998      	ldr	r0, [r3, #24]
+   4:	b280      	uxth	r0, r0
+}
+   6:	4770      	bx	lr
+   8:	40003400 	.word	0x40003400
+
+Disassembly of section .text.MEXTI_getStatusRegMaskForEvent:
+
+00000000 <MEXTI_getStatusRegMaskForEvent>:
+{
+   0:	b510      	push	{r4, lr}
+    uint8_t pinNum = (uint8_t)MDIO_getPin(channel->mextiPin);
+   2:	6800      	ldr	r0, [r0, #0]
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+    uint32_t statusMask = (uint32_t)MEXTI_STATUS_MASK_PIN0 << pinNum;
+   8:	2301      	movs	r3, #1
+   a:	4083      	lsls	r3, r0
+   c:	0018      	movs	r0, r3
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MEXTI_enableEventReg:
+
+00000000 <MEXTI_enableEventReg>:
+{
+   0:	b510      	push	{r4, lr}
+    uint32_t pinMask = MEXTI_getPinMask(channel);
+   2:	f7ff fffe 	bl	0 <MEXTI_enableEventReg>
+    EXTI->IMR |= pinMask;
+   6:	4a02      	ldr	r2, [pc, #8]	; (10 <MEXTI_enableEventReg+0x10>)
+   8:	6813      	ldr	r3, [r2, #0]
+   a:	4303      	orrs	r3, r0
+   c:	6013      	str	r3, [r2, #0]
+}
+   e:	bd10      	pop	{r4, pc}
+  10:	40003400 	.word	0x40003400
+
+Disassembly of section .text.MEXTI_disableEventReg:
+
+00000000 <MEXTI_disableEventReg>:
+{
+   0:	b510      	push	{r4, lr}
+    uint32_t pinMask = MEXTI_getPinMask(channel);
+   2:	f7ff fffe 	bl	0 <MEXTI_disableEventReg>
+    EXTI->IMR &= ~pinMask;
+   6:	4a02      	ldr	r2, [pc, #8]	; (10 <MEXTI_disableEventReg+0x10>)
+   8:	6813      	ldr	r3, [r2, #0]
+   a:	4383      	bics	r3, r0
+   c:	6013      	str	r3, [r2, #0]
+}
+   e:	bd10      	pop	{r4, pc}
+  10:	40003400 	.word	0x40003400
+
+Disassembly of section .text.MEXTI_clearEventReg:
+
+00000000 <MEXTI_clearEventReg>:
+{
+   0:	b510      	push	{r4, lr}
+    uint32_t pinMask = MEXTI_getPinMask(channel);
+   2:	f7ff fffe 	bl	0 <MEXTI_clearEventReg>
+    EXTI->PR.V32 |= (uint32_t)(pinMask << 16);
+   6:	4b03      	ldr	r3, [pc, #12]	; (14 <MEXTI_clearEventReg+0x14>)
+   8:	0400      	lsls	r0, r0, #16
+   a:	699a      	ldr	r2, [r3, #24]
+   c:	4310      	orrs	r0, r2
+   e:	6198      	str	r0, [r3, #24]
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	40003400 	.word	0x40003400
+
+Disassembly of section .text.MEXTI_IRQ_getIndex:
+
+00000000 <MEXTI_IRQ_getIndex>:
+{
+   0:	b510      	push	{r4, lr}
+    enum MDIO_Pin pin = MDIO_getPin(channel->mextiPin);
+   2:	6800      	ldr	r0, [r0, #0]
+   4:	f7ff fffe 	bl	0 <MDIO_getPin>
+    if(pin == MDIO_PIN0)
+   8:	2800      	cmp	r0, #0
+   a:	d00a      	beq.n	22 <MEXTI_IRQ_getIndex+0x22>
+    else if(pin == MDIO_PIN1)
+   c:	2801      	cmp	r0, #1
+   e:	d008      	beq.n	22 <MEXTI_IRQ_getIndex+0x22>
+    else if(pin == MDIO_PIN2)
+  10:	2802      	cmp	r0, #2
+  12:	d006      	beq.n	22 <MEXTI_IRQ_getIndex+0x22>
+    else if(pin == MDIO_PIN3)
+  14:	2803      	cmp	r0, #3
+  16:	d004      	beq.n	22 <MEXTI_IRQ_getIndex+0x22>
+        return MEXTI15_10_IRQ_INDEX;
+  18:	2309      	movs	r3, #9
+  1a:	4283      	cmp	r3, r0
+  1c:	419b      	sbcs	r3, r3
+  1e:	425b      	negs	r3, r3
+  20:	1d18      	adds	r0, r3, #4
+}
+  22:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MEXTI_IRQ_enable:
+
+00000000 <MEXTI_IRQ_enable>:
+{
+   0:	b510      	push	{r4, lr}
+    enum MEXTI_IRQ_Index index = MEXTI_IRQ_getIndex(channel);
+   2:	f7ff fffe 	bl	0 <MEXTI_IRQ_enable>
+    if(index == MEXTI0_IRQ_INDEX)
+   6:	4b0c      	ldr	r3, [pc, #48]	; (38 <MEXTI_IRQ_enable+0x38>)
+   8:	2800      	cmp	r0, #0
+   a:	d102      	bne.n	12 <MEXTI_IRQ_enable+0x12>
+__STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    __COMPILER_BARRIER();
+    NVIC->ISER[0U] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+   c:	2208      	movs	r2, #8
+   e:	601a      	str	r2, [r3, #0]
+}
+  10:	bd10      	pop	{r4, pc}
+    else if(index == MEXTI1_IRQ_INDEX)
+  12:	3801      	subs	r0, #1
+  14:	2803      	cmp	r0, #3
+  16:	d80c      	bhi.n	32 <MEXTI_IRQ_enable+0x32>
+  18:	f7ff fffe 	bl	0 <__gnu_thumb1_case_uqi>
+  1c:	08060402 	.word	0x08060402
+  20:	2210      	movs	r2, #16
+  22:	e7f4      	b.n	e <MEXTI_IRQ_enable+0xe>
+  24:	2220      	movs	r2, #32
+  26:	e7f2      	b.n	e <MEXTI_IRQ_enable+0xe>
+  28:	2240      	movs	r2, #64	; 0x40
+  2a:	e7f0      	b.n	e <MEXTI_IRQ_enable+0xe>
+  2c:	2280      	movs	r2, #128	; 0x80
+  2e:	02d2      	lsls	r2, r2, #11
+  30:	e7ed      	b.n	e <MEXTI_IRQ_enable+0xe>
+  32:	2280      	movs	r2, #128	; 0x80
+  34:	04d2      	lsls	r2, r2, #19
+  36:	e7ea      	b.n	e <MEXTI_IRQ_enable+0xe>
+  38:	e000e100 	.word	0xe000e100
+
+Disassembly of section .text.MEXTI_getPin:
+
+00000000 <MEXTI_getPin>:
+    return channel->mextiPin;
+   0:	6800      	ldr	r0, [r0, #0]
+}
+   2:	4770      	bx	lr

@@ -1,0 +1,1360 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fsramcon.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._FSF_RAM_CON_vCheckBySum,"ax",%progbits
+  18              		.align	1
+  19              		.global	_FSF_RAM_CON_vCheckBySum
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	_FSF_RAM_CON_vCheckBySum:
+  25              	.LVL0:
+  26              	.LFB69:
+  27              		.file 1 "common/prog/FuncSafe/fsramcon.c"
+   1:common/prog/FuncSafe/fsramcon.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/fsramcon.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/fsramcon.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/fsramcon.c ****  *
+   5:common/prog/FuncSafe/fsramcon.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/fsramcon.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/fsramcon.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/fsramcon.c ****  *
+   9:common/prog/FuncSafe/fsramcon.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/fsramcon.c ****  *  PROJECT          SW_LIB
+  11:common/prog/FuncSafe/fsramcon.c ****  *  COMP_ABBREV      FSF_RAM_CON
+  12:common/prog/FuncSafe/fsramcon.c ****  ******************************************************************************/
+  13:common/prog/FuncSafe/fsramcon.c **** 
+  14:common/prog/FuncSafe/fsramcon.c **** /******************************************************************************/
+  15:common/prog/FuncSafe/fsramcon.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/FuncSafe/fsramcon.c **** /******************************************************************************/
+  17:common/prog/FuncSafe/fsramcon.c **** /** \file fsramcon.c
+  18:common/prog/FuncSafe/fsramcon.c ****  *
+  19:common/prog/FuncSafe/fsramcon.c ****  *  \ingroup  <DOXY_GROUP_FSF_RAMCON>
+  20:common/prog/FuncSafe/fsramcon.c ****  *
+  21:common/prog/FuncSafe/fsramcon.c ****  *  \brief    This file contains the implementation of the Functional Safety Module RAM Consistency
+  22:common/prog/FuncSafe/fsramcon.c ****  *
+  23:common/prog/FuncSafe/fsramcon.c ****  *  \details  The detailed description can be found in the section \ref FSF_RAM_CON_DESCR.
+  24:common/prog/FuncSafe/fsramcon.c ****  */
+  25:common/prog/FuncSafe/fsramcon.c **** 
+  26:common/prog/FuncSafe/fsramcon.c **** 
+  27:common/prog/FuncSafe/fsramcon.c **** 
+  28:common/prog/FuncSafe/fsramcon.c **** #include "bsh_stdinc.h"
+  29:common/prog/FuncSafe/fsramcon.c **** 
+  30:common/prog/FuncSafe/fsramcon.c **** 
+  31:common/prog/FuncSafe/fsramcon.c **** /*~+:Includes*/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 2
+
+
+  32:common/prog/FuncSafe/fsramcon.c **** #include "hsup.h"
+  33:common/prog/FuncSafe/fsramcon.c **** 
+  34:common/prog/FuncSafe/fsramcon.c **** #include "FuncSafe/fSafe.h"  // needed for fspriv.h (FSF_NR_OF_FLAGS,....)
+  35:common/prog/FuncSafe/fsramcon.c **** #include "FuncSafe/fSafeXS.h"// needed for fspriv.h (T_Stack, TisrControl, TisrShortControl)
+  36:common/prog/FuncSafe/fsramcon.c **** #include "FuncSafe/fspriv.h" // needed for _FSF_vApplicationErrorNotify()
+  37:common/prog/FuncSafe/fsramcon.c **** #include "FuncSafe/fsramcon.h"
+  38:common/prog/FuncSafe/fsramcon.c **** #include <assert.h>
+  39:common/prog/FuncSafe/fsramcon.c **** 
+  40:common/prog/FuncSafe/fsramcon.c **** /*~+:Definitions and Declarations*/
+  41:common/prog/FuncSafe/fsramcon.c **** 
+  42:common/prog/FuncSafe/fsramcon.c **** /*~+:Private Definitions*/
+  43:common/prog/FuncSafe/fsramcon.c **** 
+  44:common/prog/FuncSafe/fsramcon.c **** /*~+:Private Variables*/
+  45:common/prog/FuncSafe/fsramcon.c **** 
+  46:common/prog/FuncSafe/fsramcon.c **** /*~+:Private Functions*/
+  47:common/prog/FuncSafe/fsramcon.c **** 
+  48:common/prog/FuncSafe/fsramcon.c **** /*~+:Global Functions */
+  49:common/prog/FuncSafe/fsramcon.c **** #ifdef __QAC_RELEASE__
+  50:common/prog/FuncSafe/fsramcon.c **** /* Switch off QAC-Warning for 489:
+  51:common/prog/FuncSafe/fsramcon.c **** "Msg(4:0489) Increment or decrement operation performed on pointer.
+  52:common/prog/FuncSafe/fsramcon.c **** MISRA-C:2004 Rule 17.4"
+  53:common/prog/FuncSafe/fsramcon.c **** */
+  54:common/prog/FuncSafe/fsramcon.c **** #pragma PRQA_MESSAGES_OFF 489
+  55:common/prog/FuncSafe/fsramcon.c **** #endif
+  56:common/prog/FuncSafe/fsramcon.c **** 
+  57:common/prog/FuncSafe/fsramcon.c **** #ifdef __QAC_RELEASE__
+  58:common/prog/FuncSafe/fsramcon.c **** /* Switch off QAC-Warning for 506:
+  59:common/prog/FuncSafe/fsramcon.c **** "Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+  60:common/prog/FuncSafe/fsramcon.c **** REFERENCE - ISO-6.3.3.2 Semantics"
+  61:common/prog/FuncSafe/fsramcon.c **** */
+  62:common/prog/FuncSafe/fsramcon.c **** #pragma PRQA_MESSAGES_OFF 506
+  63:common/prog/FuncSafe/fsramcon.c **** #endif
+  64:common/prog/FuncSafe/fsramcon.c **** 
+  65:common/prog/FuncSafe/fsramcon.c **** #define SIZE_OF_CHECKED_BYTES  4uL
+  66:common/prog/FuncSafe/fsramcon.c **** /*lint -save -e9005 attempt to cast away const/volatile from a pointer or reference */
+  67:common/prog/FuncSafe/fsramcon.c **** 
+  68:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vCheckBySum(uint8_t ucCheckValue, uint8_t ucSizeInBytes, const uint8_t* pucS
+  69:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vCheckBySum(uint8_t ucCheckValue, uint8_t ucSizeInBytes, const uint8_t* pucStartA
+  70:common/prog/FuncSafe/fsramcon.c **** {
+  28              		.loc 1 70 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  71:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+  32              		.loc 1 71 4 view .LVU1
+  72:common/prog/FuncSafe/fsramcon.c ****    uint8_t m;
+  33              		.loc 1 72 4 view .LVU2
+  73:common/prog/FuncSafe/fsramcon.c **** 
+  74:common/prog/FuncSafe/fsramcon.c ****    ucNewCheckValue = 0;
+  34              		.loc 1 74 4 view .LVU3
+  75:common/prog/FuncSafe/fsramcon.c **** 
+  76:common/prog/FuncSafe/fsramcon.c ****    //HSUP_vDisableInt();//moved into fsramcon.h (macro FSF_RAM_CON_vCheck)-> is too late ucCheckVal
+  77:common/prog/FuncSafe/fsramcon.c ****    for(m = 0; m < ucSizeInBytes; m++)
+  35              		.loc 1 77 4 view .LVU4
+  70:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+  36              		.loc 1 70 1 is_stmt 0 view .LVU5
+  37 0000 70B5     		push	{r4, r5, r6, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 3
+
+
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 16
+  40              		.cfi_offset 4, -16
+  41              		.cfi_offset 5, -12
+  42              		.cfi_offset 6, -8
+  43              		.cfi_offset 14, -4
+  70:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+  44              		.loc 1 70 1 view .LVU6
+  45 0002 1400     		movs	r4, r2
+  74:common/prog/FuncSafe/fsramcon.c **** 
+  46              		.loc 1 74 20 view .LVU7
+  47 0004 0025     		movs	r5, #0
+  70:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+  48              		.loc 1 70 1 view .LVU8
+  49 0006 1A00     		movs	r2, r3
+  50              	.LVL1:
+  70:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+  51              		.loc 1 70 1 view .LVU9
+  52 0008 6118     		adds	r1, r4, r1
+  53              	.LVL2:
+  54              	.L2:
+  55              		.loc 1 77 17 is_stmt 1 discriminator 1 view .LVU10
+  56 000a 8C42     		cmp	r4, r1
+  57 000c 06D1     		bne	.L3
+  78:common/prog/FuncSafe/fsramcon.c ****    {
+  79:common/prog/FuncSafe/fsramcon.c ****       ucNewCheckValue += *pucStartAddress;
+  80:common/prog/FuncSafe/fsramcon.c **** 
+  81:common/prog/FuncSafe/fsramcon.c ****       pucStartAddress++;
+  82:common/prog/FuncSafe/fsramcon.c ****    }
+  83:common/prog/FuncSafe/fsramcon.c **** 
+  84:common/prog/FuncSafe/fsramcon.c ****    if (ucNewCheckValue != ucCheckValue)
+  58              		.loc 1 84 4 view .LVU11
+  59              		.loc 1 84 7 is_stmt 0 view .LVU12
+  60 000e 8542     		cmp	r5, r0
+  61 0010 03D0     		beq	.L1
+  85:common/prog/FuncSafe/fsramcon.c ****    {
+  86:common/prog/FuncSafe/fsramcon.c ****        _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENCY_CH
+  62              		.loc 1 86 8 is_stmt 1 view .LVU13
+  63 0012 0821     		movs	r1, #8
+  64 0014 0920     		movs	r0, #9
+  65              	.LVL3:
+  66              		.loc 1 86 8 is_stmt 0 view .LVU14
+  67 0016 FFF7FEFF 		bl	_FSF_vApplicationErrorNotify
+  68              	.LVL4:
+  69              	.L1:
+  87:common/prog/FuncSafe/fsramcon.c ****    }
+  88:common/prog/FuncSafe/fsramcon.c **** 
+  89:common/prog/FuncSafe/fsramcon.c ****    //HSUP_vEnableInt();//moved itno fsramcon.h
+  90:common/prog/FuncSafe/fsramcon.c **** }
+  70              		.loc 1 90 1 view .LVU15
+  71              		@ sp needed
+  72              	.LVL5:
+  73              	.LVL6:
+  74              		.loc 1 90 1 view .LVU16
+  75 001a 70BD     		pop	{r4, r5, r6, pc}
+  76              	.LVL7:
+  77              	.L3:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 4
+
+
+  79:common/prog/FuncSafe/fsramcon.c **** 
+  78              		.loc 1 79 7 is_stmt 1 discriminator 3 view .LVU17
+  79:common/prog/FuncSafe/fsramcon.c **** 
+  79              		.loc 1 79 23 is_stmt 0 discriminator 3 view .LVU18
+  80 001c 2378     		ldrb	r3, [r4]
+  81:common/prog/FuncSafe/fsramcon.c ****    }
+  81              		.loc 1 81 22 discriminator 3 view .LVU19
+  82 001e 0134     		adds	r4, r4, #1
+  83              	.LVL8:
+  79:common/prog/FuncSafe/fsramcon.c **** 
+  84              		.loc 1 79 23 discriminator 3 view .LVU20
+  85 0020 ED18     		adds	r5, r5, r3
+  86              	.LVL9:
+  79:common/prog/FuncSafe/fsramcon.c **** 
+  87              		.loc 1 79 23 discriminator 3 view .LVU21
+  88 0022 EDB2     		uxtb	r5, r5
+  89              	.LVL10:
+  81:common/prog/FuncSafe/fsramcon.c ****    }
+  90              		.loc 1 81 7 is_stmt 1 discriminator 3 view .LVU22
+  77:common/prog/FuncSafe/fsramcon.c ****    {
+  91              		.loc 1 77 35 discriminator 3 view .LVU23
+  77:common/prog/FuncSafe/fsramcon.c ****    {
+  92              		.loc 1 77 35 is_stmt 0 discriminator 3 view .LVU24
+  93 0024 F1E7     		b	.L2
+  94              		.cfi_endproc
+  95              	.LFE69:
+  97              		.section	.text._FSF_RAM_CON_vCheckByMirror,"ax",%progbits
+  98              		.align	1
+  99              		.global	_FSF_RAM_CON_vCheckByMirror
+ 100              		.syntax unified
+ 101              		.code	16
+ 102              		.thumb_func
+ 104              	_FSF_RAM_CON_vCheckByMirror:
+ 105              	.LVL11:
+ 106              	.LFB70:
+  91:common/prog/FuncSafe/fsramcon.c **** 
+  92:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vCheckByMirror(uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, const 
+  93:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vCheckByMirror(uint8_t ucSizeInBytes, const uint8_t* pucStartAddress, const uint8
+  94:common/prog/FuncSafe/fsramcon.c **** {
+ 107              		.loc 1 94 1 is_stmt 1 view -0
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 16
+ 110              		@ frame_needed = 0, uses_anonymous_args = 0
+  95:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32BytesCounter = 0u;
+ 111              		.loc 1 95 4 view .LVU26
+  96:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32CountOfAlignedBytes;
+ 112              		.loc 1 96 4 view .LVU27
+  97:common/prog/FuncSafe/fsramcon.c **** 
+  98:common/prog/FuncSafe/fsramcon.c ****    u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+ 113              		.loc 1 98 4 view .LVU28
+  94:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32BytesCounter = 0u;
+ 114              		.loc 1 94 1 is_stmt 0 view .LVU29
+ 115 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 116              	.LCFI1:
+ 117              		.cfi_def_cfa_offset 20
+ 118              		.cfi_offset 4, -20
+ 119              		.cfi_offset 5, -16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 5
+
+
+ 120              		.cfi_offset 6, -12
+ 121              		.cfi_offset 7, -8
+ 122              		.cfi_offset 14, -4
+ 123 0002 0E00     		movs	r6, r1
+ 124 0004 1700     		movs	r7, r2
+  95:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32CountOfAlignedBytes;
+ 125              		.loc 1 95 13 view .LVU30
+ 126 0006 0024     		movs	r4, #0
+  94:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32BytesCounter = 0u;
+ 127              		.loc 1 94 1 view .LVU31
+ 128 0008 1D00     		movs	r5, r3
+ 129              		.loc 1 98 43 view .LVU32
+ 130 000a 8308     		lsrs	r3, r0, #2
+ 131              	.LVL12:
+  94:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32BytesCounter = 0u;
+ 132              		.loc 1 94 1 view .LVU33
+ 133 000c 85B0     		sub	sp, sp, #20
+ 134              	.LCFI2:
+ 135              		.cfi_def_cfa_offset 40
+ 136              		.loc 1 98 27 view .LVU34
+ 137 000e 9B00     		lsls	r3, r3, #2
+  94:common/prog/FuncSafe/fsramcon.c ****    uint32_t u32BytesCounter = 0u;
+ 138              		.loc 1 94 1 view .LVU35
+ 139 0010 0090     		str	r0, [sp]
+ 140              		.loc 1 98 27 view .LVU36
+ 141 0012 0193     		str	r3, [sp, #4]
+ 142              	.LVL13:
+  99:common/prog/FuncSafe/fsramcon.c **** 
+ 100:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 143              		.loc 1 100 22 is_stmt 1 view .LVU37
+ 101:common/prog/FuncSafe/fsramcon.c ****    for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+ 144              		.loc 1 101 4 view .LVU38
+ 145              	.L6:
+ 146              		.loc 1 101 4 is_stmt 0 view .LVU39
+ 147 0014 3B19     		adds	r3, r7, r4
+ 148 0016 0393     		str	r3, [sp, #12]
+ 149 0018 3319     		adds	r3, r6, r4
+ 150 001a 0293     		str	r3, [sp, #8]
+ 151              	.LVL14:
+ 152              		.loc 1 101 26 is_stmt 1 discriminator 1 view .LVU40
+ 153 001c 019B     		ldr	r3, [sp, #4]
+ 154              	.LVL15:
+ 155              		.loc 1 101 26 is_stmt 0 discriminator 1 view .LVU41
+ 156 001e 9C42     		cmp	r4, r3
+ 157 0020 05D3     		bcc	.L8
+ 158 0022 2600     		movs	r6, r4
+ 159              	.LVL16:
+ 160              	.L9:
+ 102:common/prog/FuncSafe/fsramcon.c ****    {
+ 103:common/prog/FuncSafe/fsramcon.c ****        if(*(uint32_t*)pucStartAddress != ((*(uint32_t*)pucMIrrorStartAddress) ^ 0xFFFFFFFFuL)) /*li
+ 104:common/prog/FuncSafe/fsramcon.c ****        {
+ 105:common/prog/FuncSafe/fsramcon.c ****            _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENC
+ 106:common/prog/FuncSafe/fsramcon.c ****        }
+ 107:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;       /*lint !e9016 "Pointer arithmetic not allowe
+ 108:common/prog/FuncSafe/fsramcon.c ****        pucMIrrorStartAddress += SIZE_OF_CHECKED_BYTES; /*lint !e9016 "Pointer arithmetic not allowe
+ 109:common/prog/FuncSafe/fsramcon.c ****    }
+ 110:common/prog/FuncSafe/fsramcon.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 6
+
+
+ 111:common/prog/FuncSafe/fsramcon.c ****    for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+ 161              		.loc 1 111 26 is_stmt 1 discriminator 1 view .LVU42
+ 162 0024 009B     		ldr	r3, [sp]
+ 163 0026 B342     		cmp	r3, r6
+ 164 0028 0DD8     		bhi	.L11
+ 112:common/prog/FuncSafe/fsramcon.c ****    {
+ 113:common/prog/FuncSafe/fsramcon.c ****        if((*pucStartAddress) != ((*pucMIrrorStartAddress) ^ 0xFFu))
+ 114:common/prog/FuncSafe/fsramcon.c ****        {
+ 115:common/prog/FuncSafe/fsramcon.c ****            _FSF_vApplicationErrorNotify((uint8_t)FSF_ERR_CHANNEL_ERROR, (uint8_t)FSF_RAM_CONSISTENC
+ 116:common/prog/FuncSafe/fsramcon.c ****        }
+ 117:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress++;
+ 118:common/prog/FuncSafe/fsramcon.c ****        pucMIrrorStartAddress++;
+ 119:common/prog/FuncSafe/fsramcon.c ****    }
+ 120:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 121:common/prog/FuncSafe/fsramcon.c **** }
+ 165              		.loc 1 121 1 is_stmt 0 view .LVU43
+ 166 002a 05B0     		add	sp, sp, #20
+ 167              		@ sp needed
+ 168              	.LVL17:
+ 169              	.LVL18:
+ 170              		.loc 1 121 1 view .LVU44
+ 171 002c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 172              	.LVL19:
+ 173              	.L8:
+ 103:common/prog/FuncSafe/fsramcon.c ****        {
+ 174              		.loc 1 103 8 is_stmt 1 view .LVU45
+ 103:common/prog/FuncSafe/fsramcon.c ****        {
+ 175              		.loc 1 103 79 is_stmt 0 view .LVU46
+ 176 002e 3B59     		ldr	r3, [r7, r4]
+ 103:common/prog/FuncSafe/fsramcon.c ****        {
+ 177              		.loc 1 103 10 view .LVU47
+ 178 0030 3259     		ldr	r2, [r6, r4]
+ 103:common/prog/FuncSafe/fsramcon.c ****        {
+ 179              		.loc 1 103 79 view .LVU48
+ 180 0032 DB43     		mvns	r3, r3
+ 103:common/prog/FuncSafe/fsramcon.c ****        {
+ 181              		.loc 1 103 10 view .LVU49
+ 182 0034 9A42     		cmp	r2, r3
+ 183 0036 04D0     		beq	.L7
+ 105:common/prog/FuncSafe/fsramcon.c ****        }
+ 184              		.loc 1 105 12 is_stmt 1 view .LVU50
+ 185 0038 2A00     		movs	r2, r5
+ 186 003a 0821     		movs	r1, #8
+ 187 003c 0920     		movs	r0, #9
+ 188 003e FFF7FEFF 		bl	_FSF_vApplicationErrorNotify
+ 189              	.LVL20:
+ 190              	.L7:
+ 107:common/prog/FuncSafe/fsramcon.c ****        pucMIrrorStartAddress += SIZE_OF_CHECKED_BYTES; /*lint !e9016 "Pointer arithmetic not allowe
+ 191              		.loc 1 107 8 view .LVU51
+ 108:common/prog/FuncSafe/fsramcon.c ****    }
+ 192              		.loc 1 108 8 view .LVU52
+ 101:common/prog/FuncSafe/fsramcon.c ****    {
+ 193              		.loc 1 101 68 view .LVU53
+ 194 0042 0434     		adds	r4, r4, #4
+ 195              	.LVL21:
+ 101:common/prog/FuncSafe/fsramcon.c ****    {
+ 196              		.loc 1 101 68 is_stmt 0 view .LVU54
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 7
+
+
+ 197 0044 E6E7     		b	.L6
+ 198              	.LVL22:
+ 199              	.L11:
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 200              		.loc 1 113 8 is_stmt 1 view .LVU55
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 201              		.loc 1 113 12 is_stmt 0 view .LVU56
+ 202 0046 029B     		ldr	r3, [sp, #8]
+ 203 0048 1A1B     		subs	r2, r3, r4
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 204              		.loc 1 113 35 view .LVU57
+ 205 004a 039B     		ldr	r3, [sp, #12]
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 206              		.loc 1 113 10 view .LVU58
+ 207 004c 925D     		ldrb	r2, [r2, r6]
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 208              		.loc 1 113 35 view .LVU59
+ 209 004e 1B1B     		subs	r3, r3, r4
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 210              		.loc 1 113 30 view .LVU60
+ 211 0050 9B5D     		ldrb	r3, [r3, r6]
+ 212 0052 DB43     		mvns	r3, r3
+ 113:common/prog/FuncSafe/fsramcon.c ****        {
+ 213              		.loc 1 113 10 view .LVU61
+ 214 0054 DBB2     		uxtb	r3, r3
+ 215 0056 9A42     		cmp	r2, r3
+ 216 0058 04D0     		beq	.L10
+ 115:common/prog/FuncSafe/fsramcon.c ****        }
+ 217              		.loc 1 115 12 is_stmt 1 view .LVU62
+ 218 005a 2A00     		movs	r2, r5
+ 219 005c 0821     		movs	r1, #8
+ 220 005e 0920     		movs	r0, #9
+ 221 0060 FFF7FEFF 		bl	_FSF_vApplicationErrorNotify
+ 222              	.LVL23:
+ 223              	.L10:
+ 117:common/prog/FuncSafe/fsramcon.c ****        pucMIrrorStartAddress++;
+ 224              		.loc 1 117 8 view .LVU63
+ 118:common/prog/FuncSafe/fsramcon.c ****    }
+ 225              		.loc 1 118 8 view .LVU64
+ 111:common/prog/FuncSafe/fsramcon.c ****    {
+ 226              		.loc 1 111 58 view .LVU65
+ 227 0064 0136     		adds	r6, r6, #1
+ 228              	.LVL24:
+ 111:common/prog/FuncSafe/fsramcon.c ****    {
+ 229              		.loc 1 111 58 is_stmt 0 view .LVU66
+ 230 0066 DDE7     		b	.L9
+ 231              		.cfi_endproc
+ 232              	.LFE70:
+ 234              		.section	.text._FSF_RAM_CON_vUpdateCheckBySum,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	_FSF_RAM_CON_vUpdateCheckBySum
+ 237              		.syntax unified
+ 238              		.code	16
+ 239              		.thumb_func
+ 241              	_FSF_RAM_CON_vUpdateCheckBySum:
+ 242              	.LVL25:
+ 243              	.LFB71:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 8
+
+
+ 122:common/prog/FuncSafe/fsramcon.c **** 
+ 123:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vUpdateCheckBySum(uint8_t *pucCheckValue, uint8_t ucSizeInBytes, const uint8
+ 124:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vUpdateCheckBySum(uint8_t *pucCheckValue, uint8_t ucSizeInBytes, const uint8_t *p
+ 125:common/prog/FuncSafe/fsramcon.c **** {
+ 244              		.loc 1 125 1 is_stmt 1 view -0
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 0
+ 247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+ 248              		.loc 1 126 4 view .LVU68
+ 127:common/prog/FuncSafe/fsramcon.c ****    uint8_t m;
+ 249              		.loc 1 127 4 view .LVU69
+ 128:common/prog/FuncSafe/fsramcon.c **** 
+ 129:common/prog/FuncSafe/fsramcon.c ****    ucNewCheckValue = 0;
+ 250              		.loc 1 129 4 view .LVU70
+ 130:common/prog/FuncSafe/fsramcon.c **** 
+ 131:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 251              		.loc 1 131 22 view .LVU71
+ 132:common/prog/FuncSafe/fsramcon.c ****    for(m = 0; m < ucSizeInBytes; m++)
+ 252              		.loc 1 132 4 view .LVU72
+ 129:common/prog/FuncSafe/fsramcon.c **** 
+ 253              		.loc 1 129 20 is_stmt 0 view .LVU73
+ 254 0000 0023     		movs	r3, #0
+ 125:common/prog/FuncSafe/fsramcon.c ****    uint8_t ucNewCheckValue;
+ 255              		.loc 1 125 1 view .LVU74
+ 256 0002 10B5     		push	{r4, lr}
+ 257              	.LCFI3:
+ 258              		.cfi_def_cfa_offset 8
+ 259              		.cfi_offset 4, -8
+ 260              		.cfi_offset 14, -4
+ 261 0004 5118     		adds	r1, r2, r1
+ 262              	.LVL26:
+ 263              	.L13:
+ 264              		.loc 1 132 17 is_stmt 1 discriminator 1 view .LVU75
+ 265 0006 8A42     		cmp	r2, r1
+ 266 0008 01D1     		bne	.L14
+ 133:common/prog/FuncSafe/fsramcon.c ****    {
+ 134:common/prog/FuncSafe/fsramcon.c ****       ucNewCheckValue += *pucStartAddress;
+ 135:common/prog/FuncSafe/fsramcon.c **** 
+ 136:common/prog/FuncSafe/fsramcon.c ****       pucStartAddress++;
+ 137:common/prog/FuncSafe/fsramcon.c ****    }
+ 138:common/prog/FuncSafe/fsramcon.c **** 
+ 139:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = ucNewCheckValue;
+ 267              		.loc 1 139 4 view .LVU76
+ 140:common/prog/FuncSafe/fsramcon.c **** 
+ 141:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 142:common/prog/FuncSafe/fsramcon.c **** }
+ 268              		.loc 1 142 1 is_stmt 0 view .LVU77
+ 269              		@ sp needed
+ 139:common/prog/FuncSafe/fsramcon.c **** 
+ 270              		.loc 1 139 19 view .LVU78
+ 271 000a 0370     		strb	r3, [r0]
+ 141:common/prog/FuncSafe/fsramcon.c **** }
+ 272              		.loc 1 141 21 is_stmt 1 view .LVU79
+ 273              		.loc 1 142 1 is_stmt 0 view .LVU80
+ 274 000c 10BD     		pop	{r4, pc}
+ 275              	.L14:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 9
+
+
+ 134:common/prog/FuncSafe/fsramcon.c **** 
+ 276              		.loc 1 134 7 is_stmt 1 discriminator 3 view .LVU81
+ 134:common/prog/FuncSafe/fsramcon.c **** 
+ 277              		.loc 1 134 23 is_stmt 0 discriminator 3 view .LVU82
+ 278 000e 1478     		ldrb	r4, [r2]
+ 136:common/prog/FuncSafe/fsramcon.c ****    }
+ 279              		.loc 1 136 22 discriminator 3 view .LVU83
+ 280 0010 0132     		adds	r2, r2, #1
+ 281              	.LVL27:
+ 134:common/prog/FuncSafe/fsramcon.c **** 
+ 282              		.loc 1 134 23 discriminator 3 view .LVU84
+ 283 0012 1B19     		adds	r3, r3, r4
+ 284              	.LVL28:
+ 134:common/prog/FuncSafe/fsramcon.c **** 
+ 285              		.loc 1 134 23 discriminator 3 view .LVU85
+ 286 0014 DBB2     		uxtb	r3, r3
+ 287              	.LVL29:
+ 136:common/prog/FuncSafe/fsramcon.c ****    }
+ 288              		.loc 1 136 7 is_stmt 1 discriminator 3 view .LVU86
+ 132:common/prog/FuncSafe/fsramcon.c ****    {
+ 289              		.loc 1 132 35 discriminator 3 view .LVU87
+ 132:common/prog/FuncSafe/fsramcon.c ****    {
+ 290              		.loc 1 132 35 is_stmt 0 discriminator 3 view .LVU88
+ 291 0016 F6E7     		b	.L13
+ 292              		.cfi_endproc
+ 293              	.LFE71:
+ 295              		.section	.text._FSF_RAM_CON_vUpdateCheckByMirror,"ax",%progbits
+ 296              		.align	1
+ 297              		.global	_FSF_RAM_CON_vUpdateCheckByMirror
+ 298              		.syntax unified
+ 299              		.code	16
+ 300              		.thumb_func
+ 302              	_FSF_RAM_CON_vUpdateCheckByMirror:
+ 303              	.LVL30:
+ 304              	.LFB72:
+ 143:common/prog/FuncSafe/fsramcon.c **** 
+ 144:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vUpdateCheckByMirror(uint8_t ucSizeInBytes, const uint8_t *pucStartAddress, 
+ 145:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vUpdateCheckByMirror(uint8_t ucSizeInBytes, const uint8_t *pucStartAddress, uint8
+ 146:common/prog/FuncSafe/fsramcon.c **** {
+ 305              		.loc 1 146 1 is_stmt 1 view -0
+ 306              		.cfi_startproc
+ 307              		@ args = 0, pretend = 0, frame = 0
+ 308              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147:common/prog/FuncSafe/fsramcon.c ****     uint32_t u32BytesCounter = 0u;
+ 309              		.loc 1 147 5 view .LVU90
+ 148:common/prog/FuncSafe/fsramcon.c ****     uint32_t u32CountOfAlignedBytes;
+ 310              		.loc 1 148 5 view .LVU91
+ 149:common/prog/FuncSafe/fsramcon.c **** 
+ 150:common/prog/FuncSafe/fsramcon.c ****     u32CountOfAlignedBytes = (ucSizeInBytes/SIZE_OF_CHECKED_BYTES) * SIZE_OF_CHECKED_BYTES;
+ 311              		.loc 1 150 5 view .LVU92
+ 147:common/prog/FuncSafe/fsramcon.c ****     uint32_t u32CountOfAlignedBytes;
+ 312              		.loc 1 147 14 is_stmt 0 view .LVU93
+ 313 0000 0023     		movs	r3, #0
+ 146:common/prog/FuncSafe/fsramcon.c ****     uint32_t u32BytesCounter = 0u;
+ 314              		.loc 1 146 1 view .LVU94
+ 315 0002 70B5     		push	{r4, r5, r6, lr}
+ 316              	.LCFI4:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 10
+
+
+ 317              		.cfi_def_cfa_offset 16
+ 318              		.cfi_offset 4, -16
+ 319              		.cfi_offset 5, -12
+ 320              		.cfi_offset 6, -8
+ 321              		.cfi_offset 14, -4
+ 322              		.loc 1 150 44 view .LVU95
+ 323 0004 8608     		lsrs	r6, r0, #2
+ 324              		.loc 1 150 28 view .LVU96
+ 325 0006 B600     		lsls	r6, r6, #2
+ 326              	.LVL31:
+ 151:common/prog/FuncSafe/fsramcon.c **** 
+ 152:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 327              		.loc 1 152 22 is_stmt 1 view .LVU97
+ 153:common/prog/FuncSafe/fsramcon.c ****    for(; u32BytesCounter < u32CountOfAlignedBytes; u32BytesCounter += SIZE_OF_CHECKED_BYTES)
+ 328              		.loc 1 153 4 view .LVU98
+ 329              	.L16:
+ 330              		.loc 1 153 4 is_stmt 0 view .LVU99
+ 331 0008 D418     		adds	r4, r2, r3
+ 332 000a CD18     		adds	r5, r1, r3
+ 333              	.LVL32:
+ 334              		.loc 1 153 26 is_stmt 1 discriminator 1 view .LVU100
+ 335 000c B342     		cmp	r3, r6
+ 336 000e 04D3     		bcc	.L17
+ 154:common/prog/FuncSafe/fsramcon.c ****    {
+ 155:common/prog/FuncSafe/fsramcon.c ****        *(uint32_t*)pucMirrorStartAddress = (*(uint32_t*)pucStartAddress) ^ 0xFFFFFFFFuL; /*lint !e9
+ 156:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;        /*lint !e9016 "Pointer arithmetic not allow
+ 157:common/prog/FuncSafe/fsramcon.c ****        pucMirrorStartAddress += SIZE_OF_CHECKED_BYTES;  /*lint !e9016 "Pointer arithmetic not allow
+ 158:common/prog/FuncSafe/fsramcon.c ****    }
+ 159:common/prog/FuncSafe/fsramcon.c **** 
+ 160:common/prog/FuncSafe/fsramcon.c ****    for(; u32BytesCounter < ucSizeInBytes; u32BytesCounter++)
+ 161:common/prog/FuncSafe/fsramcon.c ****    {
+ 162:common/prog/FuncSafe/fsramcon.c ****        *pucMirrorStartAddress = (*pucStartAddress) ^ 0xFFu;
+ 337              		.loc 1 162 31 is_stmt 0 view .LVU101
+ 338 0010 E21A     		subs	r2, r4, r3
+ 339 0012 ED1A     		subs	r5, r5, r3
+ 340              	.LVL33:
+ 341              	.L18:
+ 160:common/prog/FuncSafe/fsramcon.c ****    {
+ 342              		.loc 1 160 26 is_stmt 1 discriminator 1 view .LVU102
+ 343 0014 9842     		cmp	r0, r3
+ 344 0016 05D8     		bhi	.L19
+ 163:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress++;
+ 164:common/prog/FuncSafe/fsramcon.c ****        pucMirrorStartAddress++;
+ 165:common/prog/FuncSafe/fsramcon.c ****    }
+ 166:common/prog/FuncSafe/fsramcon.c **** 
+ 167:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 168:common/prog/FuncSafe/fsramcon.c **** }
+ 345              		.loc 1 168 1 is_stmt 0 view .LVU103
+ 346              		@ sp needed
+ 347              	.LVL34:
+ 348              		.loc 1 168 1 view .LVU104
+ 349 0018 70BD     		pop	{r4, r5, r6, pc}
+ 350              	.LVL35:
+ 351              	.L17:
+ 155:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;        /*lint !e9016 "Pointer arithmetic not allow
+ 352              		.loc 1 155 8 is_stmt 1 discriminator 2 view .LVU105
+ 155:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;        /*lint !e9016 "Pointer arithmetic not allow
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 11
+
+
+ 353              		.loc 1 155 74 is_stmt 0 discriminator 2 view .LVU106
+ 354 001a CC58     		ldr	r4, [r1, r3]
+ 355              	.LVL36:
+ 155:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;        /*lint !e9016 "Pointer arithmetic not allow
+ 356              		.loc 1 155 74 discriminator 2 view .LVU107
+ 357 001c E443     		mvns	r4, r4
+ 155:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress += SIZE_OF_CHECKED_BYTES;        /*lint !e9016 "Pointer arithmetic not allow
+ 358              		.loc 1 155 42 discriminator 2 view .LVU108
+ 359 001e D450     		str	r4, [r2, r3]
+ 156:common/prog/FuncSafe/fsramcon.c ****        pucMirrorStartAddress += SIZE_OF_CHECKED_BYTES;  /*lint !e9016 "Pointer arithmetic not allow
+ 360              		.loc 1 156 8 is_stmt 1 discriminator 2 view .LVU109
+ 157:common/prog/FuncSafe/fsramcon.c ****    }
+ 361              		.loc 1 157 8 discriminator 2 view .LVU110
+ 362              	.LVL37:
+ 153:common/prog/FuncSafe/fsramcon.c ****    {
+ 363              		.loc 1 153 68 discriminator 2 view .LVU111
+ 153:common/prog/FuncSafe/fsramcon.c ****    {
+ 364              		.loc 1 153 68 is_stmt 0 discriminator 2 view .LVU112
+ 365 0020 0433     		adds	r3, r3, #4
+ 366              	.LVL38:
+ 153:common/prog/FuncSafe/fsramcon.c ****    {
+ 367              		.loc 1 153 68 discriminator 2 view .LVU113
+ 368 0022 F1E7     		b	.L16
+ 369              	.LVL39:
+ 370              	.L19:
+ 162:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress++;
+ 371              		.loc 1 162 8 is_stmt 1 discriminator 2 view .LVU114
+ 162:common/prog/FuncSafe/fsramcon.c ****        pucStartAddress++;
+ 372              		.loc 1 162 31 is_stmt 0 discriminator 2 view .LVU115
+ 373 0024 EC5C     		ldrb	r4, [r5, r3]
+ 374 0026 E443     		mvns	r4, r4
+ 375 0028 D454     		strb	r4, [r2, r3]
+ 163:common/prog/FuncSafe/fsramcon.c ****        pucMirrorStartAddress++;
+ 376              		.loc 1 163 8 is_stmt 1 discriminator 2 view .LVU116
+ 164:common/prog/FuncSafe/fsramcon.c ****    }
+ 377              		.loc 1 164 8 discriminator 2 view .LVU117
+ 160:common/prog/FuncSafe/fsramcon.c ****    {
+ 378              		.loc 1 160 58 discriminator 2 view .LVU118
+ 379 002a 0133     		adds	r3, r3, #1
+ 380              	.LVL40:
+ 160:common/prog/FuncSafe/fsramcon.c ****    {
+ 381              		.loc 1 160 58 is_stmt 0 discriminator 2 view .LVU119
+ 382 002c F2E7     		b	.L18
+ 383              		.cfi_endproc
+ 384              	.LFE72:
+ 386              		.section	.text._FSF_RAM_CON_vSetUcharBySum,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	_FSF_RAM_CON_vSetUcharBySum
+ 389              		.syntax unified
+ 390              		.code	16
+ 391              		.thumb_func
+ 393              	_FSF_RAM_CON_vSetUcharBySum:
+ 394              	.LVL41:
+ 395              	.LFB73:
+ 169:common/prog/FuncSafe/fsramcon.c **** 
+ 170:common/prog/FuncSafe/fsramcon.c **** #ifdef __QAC_RELEASE__
+ 171:common/prog/FuncSafe/fsramcon.c **** /* Switch on QAC-Warning for 489:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 12
+
+
+ 172:common/prog/FuncSafe/fsramcon.c **** "Msg(4:0489) Increment or decrement operation performed on pointer.
+ 173:common/prog/FuncSafe/fsramcon.c **** MISRA-C:2004 Rule 17.4"
+ 174:common/prog/FuncSafe/fsramcon.c **** */
+ 175:common/prog/FuncSafe/fsramcon.c **** #pragma PRQA_MESSAGES_ON 489
+ 176:common/prog/FuncSafe/fsramcon.c **** #endif
+ 177:common/prog/FuncSafe/fsramcon.c **** 
+ 178:common/prog/FuncSafe/fsramcon.c **** 
+ 179:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vSetUcharBySum(uint8_t *pucVariable, uint8_t *pucCheckValue, uint8_t ucNewVa
+ 180:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vSetUcharBySum(uint8_t *pucVariable, uint8_t *pucCheckValue, uint8_t ucNewVal)
+ 181:common/prog/FuncSafe/fsramcon.c **** {
+ 396              		.loc 1 181 1 is_stmt 1 view -0
+ 397              		.cfi_startproc
+ 398              		@ args = 0, pretend = 0, frame = 0
+ 399              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 400              		.loc 1 182 22 view .LVU121
+ 183:common/prog/FuncSafe/fsramcon.c **** 
+ 184:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - (*pucVariable)) + (ucNewVal);
+ 401              		.loc 1 184 4 view .LVU122
+ 181:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 402              		.loc 1 181 1 is_stmt 0 view .LVU123
+ 403 0000 10B5     		push	{r4, lr}
+ 404              	.LCFI5:
+ 405              		.cfi_def_cfa_offset 8
+ 406              		.cfi_offset 4, -8
+ 407              		.cfi_offset 14, -4
+ 408              		.loc 1 184 43 view .LVU124
+ 409 0002 0B78     		ldrb	r3, [r1]
+ 410 0004 0478     		ldrb	r4, [r0]
+ 185:common/prog/FuncSafe/fsramcon.c **** 
+ 186:common/prog/FuncSafe/fsramcon.c ****    *pucVariable = ucNewVal;
+ 187:common/prog/FuncSafe/fsramcon.c **** 
+ 188:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 189:common/prog/FuncSafe/fsramcon.c **** }
+ 411              		.loc 1 189 1 view .LVU125
+ 412              		@ sp needed
+ 184:common/prog/FuncSafe/fsramcon.c **** 
+ 413              		.loc 1 184 43 view .LVU126
+ 414 0006 1B1B     		subs	r3, r3, r4
+ 184:common/prog/FuncSafe/fsramcon.c **** 
+ 415              		.loc 1 184 61 view .LVU127
+ 416 0008 D318     		adds	r3, r2, r3
+ 184:common/prog/FuncSafe/fsramcon.c **** 
+ 417              		.loc 1 184 23 view .LVU128
+ 418 000a 0B70     		strb	r3, [r1]
+ 186:common/prog/FuncSafe/fsramcon.c **** 
+ 419              		.loc 1 186 4 is_stmt 1 view .LVU129
+ 186:common/prog/FuncSafe/fsramcon.c **** 
+ 420              		.loc 1 186 17 is_stmt 0 view .LVU130
+ 421 000c 0270     		strb	r2, [r0]
+ 188:common/prog/FuncSafe/fsramcon.c **** }
+ 422              		.loc 1 188 21 is_stmt 1 view .LVU131
+ 423              		.loc 1 189 1 is_stmt 0 view .LVU132
+ 424 000e 10BD     		pop	{r4, pc}
+ 425              		.cfi_endproc
+ 426              	.LFE73:
+ 428              		.section	.text._FSF_RAM_CON_vSetUintBySum,"ax",%progbits
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 13
+
+
+ 429              		.align	1
+ 430              		.global	_FSF_RAM_CON_vSetUintBySum
+ 431              		.syntax unified
+ 432              		.code	16
+ 433              		.thumb_func
+ 435              	_FSF_RAM_CON_vSetUintBySum:
+ 436              	.LVL42:
+ 437              	.LFB74:
+ 190:common/prog/FuncSafe/fsramcon.c **** 
+ 191:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vSetUintBySum(uint16_t *puiVariable, uint8_t *pucCheckValue, uint16_t uiNewV
+ 192:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vSetUintBySum(uint16_t *puiVariable, uint8_t *pucCheckValue, uint16_t uiNewVal)
+ 193:common/prog/FuncSafe/fsramcon.c **** {
+ 438              		.loc 1 193 1 is_stmt 1 view -0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 194:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 442              		.loc 1 194 22 view .LVU134
+ 195:common/prog/FuncSafe/fsramcon.c **** 
+ 196:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetHighByte(*puiVariable)) + HSUP_ucGetHighByte(
+ 443              		.loc 1 196 4 view .LVU135
+ 444              	.LBB26:
+ 445              	.LBI26:
+ 446              		.file 2 "common/prog/MSP/hsup.h"
+   1:common/prog/MSP/hsup.h **** /*******************************************************************************
+   2:common/prog/MSP/hsup.h **** *   Copyright (c) 2016 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/hsup.h **** *   Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/hsup.h **** *
+   5:common/prog/MSP/hsup.h **** *   All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/hsup.h **** *   are protected by international copyright laws.
+   7:common/prog/MSP/hsup.h **** *   Please contact copyright holder for licensing information.
+   8:common/prog/MSP/hsup.h **** *
+   9:common/prog/MSP/hsup.h **** ********************************************************************************
+  10:common/prog/MSP/hsup.h **** *   PROJECT          Generic SW
+  11:common/prog/MSP/hsup.h **** *   COMP_ABBREV      HSUP
+  12:common/prog/MSP/hsup.h **** *******************************************************************************/
+  13:common/prog/MSP/hsup.h **** 
+  14:common/prog/MSP/hsup.h **** 
+  15:common/prog/MSP/hsup.h **** /******************************************************************************/
+  16:common/prog/MSP/hsup.h **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/hsup.h **** /******************************************************************************/
+  18:common/prog/MSP/hsup.h **** /** \file
+  19:common/prog/MSP/hsup.h **** *
+  20:common/prog/MSP/hsup.h **** *   \brief    Common HSUP definitions for all platforms.
+  21:common/prog/MSP/hsup.h **** *   \details  \section SUPifc1 Interface Package 1
+  22:common/prog/MSP/hsup.h **** *   <TABLE>
+  23:common/prog/MSP/hsup.h **** *   <TR><TD><b>Interface</TD>  <TD>Description</b></TD></TR>
+  24:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vEnterLowPowerMode(void)</TD><TD>Enters the low power mode (with lowest power cons
+  25:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vDisableInt(void)</TD><TD>Disable all interrupts.</TD></TR>
+  26:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vEnableInt(void)</TD><TD>Enable all interrupts.</TD></TR>
+  27:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vDelay(uint8_t ucDelay)</TD><TD>Performs a busy wait for an arbitrary time.</TD></
+  28:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vNop(void)</TD><TD>Performs a NOP operation of the processor.</TD></TR>
+  29:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_ucMirror(uint8_t ucVal)</TD><TD>Mirror the passed parameter.</TD></TR>
+  30:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_ucGetHighByte(uint16_t uiVal)</TD><TD>Returns the high byte of the passed integer 
+  31:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_ucGetLowByte(uint16_t uiVal)</TD><TD>Returns the low byte of the passed integer va
+  32:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vSetHighByte(uint16_t *puiVal1, uint8_t ucVal2)</TD><TD>Sets the high byte of  *pu
+  33:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vSetLowByte(uint16_t *puiVal1, uint8_t ucVal2)</TD><TD>Sets the low byte of  *puiV
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 14
+
+
+  34:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_uiGetHighWord(uint32_t ulVal)</TD><TD>Returns the high word of the passed long val
+  35:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_uiGetLowWord(uint32_t ulVal)</TD><TD>Returns the low word of the passed long value
+  36:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vSetHighWord(uint32_t *pulVal1, uint16_t uiVal2)</TD><TD>Sets the high word of  *p
+  37:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_vSetLowWord(uint32_t *pulVal1, uint16_t uiVal2)</TD><TD>Sets the low word of  *pul
+  38:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_ulProcToBigEndian(uint32_t ulVal)</TD><TD>Converts the passed value ulVal from pro
+  39:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_uiProcToBigEndian(uint16_t uiVal)</TD><TD>Converts the passed value uiVal from pro
+  40:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_ulBigEndianToProc(uint32_t ulVal)</TD><TD>Converts the passed value ulVal from big
+  41:common/prog/MSP/hsup.h **** *   <TR><TD>HSUP_uiBigEndianToProc(uint16_t uiVal)</TD><TD>Converts the passed value uiVal from big
+  42:common/prog/MSP/hsup.h **** *   </TABLE>
+  43:common/prog/MSP/hsup.h **** *   \n
+  44:common/prog/MSP/hsup.h **** *   The following picture visualises the Interface of HSUP:\n
+  45:common/prog/MSP/hsup.h **** *   \n
+  46:common/prog/MSP/hsup.h **** *   \image html hsup.png "Picture 1: Overview HAL SUP"
+  47:common/prog/MSP/hsup.h **** *
+  48:common/prog/MSP/hsup.h **** */
+  49:common/prog/MSP/hsup.h **** 
+  50:common/prog/MSP/hsup.h **** 
+  51:common/prog/MSP/hsup.h **** #ifndef HSUP_H
+  52:common/prog/MSP/hsup.h **** #define HSUP_H
+  53:common/prog/MSP/hsup.h **** 
+  54:common/prog/MSP/hsup.h **** #ifdef __cplusplus
+  55:common/prog/MSP/hsup.h **** extern "C" {
+  56:common/prog/MSP/hsup.h **** #endif
+  57:common/prog/MSP/hsup.h **** 
+  58:common/prog/MSP/hsup.h **** 
+  59:common/prog/MSP/hsup.h **** /******************************************************************************/
+  60:common/prog/MSP/hsup.h **** /* INCLUDES                                                                   */
+  61:common/prog/MSP/hsup.h **** /******************************************************************************/
+  62:common/prog/MSP/hsup.h **** #include "bsh_stdinc.h"
+  63:common/prog/MSP/hsup.h **** #include "LibTypes.h"
+  64:common/prog/MSP/hsup.h **** #if !defined(__PCGCC__) || defined(MOCK_IT)
+  65:common/prog/MSP/hsup.h **** #include "hsupMc.h"
+  66:common/prog/MSP/hsup.h **** #endif
+  67:common/prog/MSP/hsup.h **** 
+  68:common/prog/MSP/hsup.h **** 
+  69:common/prog/MSP/hsup.h **** 
+  70:common/prog/MSP/hsup.h **** /* DEFINITIONS ************************************************************************************
+  71:common/prog/MSP/hsup.h **** /*lint -esym(621,*_ADR_OFFSET) "Macro identifiers shall be distinct" Axivion false positive" */
+  72:common/prog/MSP/hsup.h **** #if defined(__BIG_ENDIAN_ADAPTATION) || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_
+  73:common/prog/MSP/hsup.h **** #define HIGH_ADR_OFFSET  0 ///< Address offset for high byte/word (big endian)
+  74:common/prog/MSP/hsup.h **** #define LOW_ADR_OFFSET   1 ///< Address offset for low byte/word (big endian)
+  75:common/prog/MSP/hsup.h **** #else
+  76:common/prog/MSP/hsup.h **** #if defined(__LITTLE_ENDIAN_ADAPTATION) || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_L
+  77:common/prog/MSP/hsup.h **** #define HIGH_ADR_OFFSET  1 ///< Address offset for high byte/word (little endian)
+  78:common/prog/MSP/hsup.h **** #define LOW_ADR_OFFSET   0 ///< Address offset for low byte/word (little endian)
+  79:common/prog/MSP/hsup.h **** #else
+  80:common/prog/MSP/hsup.h **** #if   1
+  81:common/prog/MSP/hsup.h **** #error "Either '__LITTLE_ENDIAN_ADAPTATION' or '__BIG_ENDIAN_ADAPTATION' must be defined in build p
+  82:common/prog/MSP/hsup.h **** #endif
+  83:common/prog/MSP/hsup.h **** #endif
+  84:common/prog/MSP/hsup.h **** #endif
+  85:common/prog/MSP/hsup.h **** 
+  86:common/prog/MSP/hsup.h **** /*lint -esym(9026, HSUP_*) function-like macro*/
+  87:common/prog/MSP/hsup.h **** 
+  88:common/prog/MSP/hsup.h **** 
+  89:common/prog/MSP/hsup.h **** static inline uint8_t* HSUP_getBytePtr(uint16_t *value, uint32_t offset)
+  90:common/prog/MSP/hsup.h **** {   /* explicit cast from uint16_t* to uint8_t* [MISRA 2012 Rule 11.3, required], [MISRA 2012 Rule 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 15
+
+
+  91:common/prog/MSP/hsup.h ****        Pointer arithmetic not allowed [+] MisraC2012 18.4 */
+  92:common/prog/MSP/hsup.h ****     return ((uint8_t*)value)+offset; /*lint !e928 !e9016 */ 
+  93:common/prog/MSP/hsup.h **** }
+  94:common/prog/MSP/hsup.h **** 
+  95:common/prog/MSP/hsup.h **** static inline uint16_t* HSUP_getWordPtr(uint32_t *value, uint32_t offset)
+  96:common/prog/MSP/hsup.h **** {   /* explicit cast from uint32_t* to uint16_t* [MISRA 2012 Rule 11.3, required], [MISRA 2012 Rule
+  97:common/prog/MSP/hsup.h ****        Pointer arithmetic not allowed [+] MisraC2012 18.4 */
+  98:common/prog/MSP/hsup.h ****     return ((uint16_t*)value)+offset; /*lint !e929 !e9016 */ 
+  99:common/prog/MSP/hsup.h **** }
+ 100:common/prog/MSP/hsup.h **** 
+ 101:common/prog/MSP/hsup.h **** 
+ 102:common/prog/MSP/hsup.h **** /** Accesses high byte of parameter word.
+ 103:common/prog/MSP/hsup.h **** 
+ 104:common/prog/MSP/hsup.h **** \b package: \n
+ 105:common/prog/MSP/hsup.h ****  HSUPPackage1\n
+ 106:common/prog/MSP/hsup.h **** 
+ 107:common/prog/MSP/hsup.h **** \b description: \n
+ 108:common/prog/MSP/hsup.h ****  This macro accesses the high byte of parameter word
+ 109:common/prog/MSP/hsup.h **** 
+ 110:common/prog/MSP/hsup.h **** \param word: high byte of word will be accessed, type of word shall be uint16_t
+ 111:common/prog/MSP/hsup.h **** 
+ 112:common/prog/MSP/hsup.h **** \return none
+ 113:common/prog/MSP/hsup.h **** */
+ 114:common/prog/MSP/hsup.h **** #define HSUP_HIGH_BYTE(word) (*HSUP_getBytePtr(&(word),HIGH_ADR_OFFSET))
+ 115:common/prog/MSP/hsup.h **** 
+ 116:common/prog/MSP/hsup.h **** /** Accesses high word of parameter hs_long.
+ 117:common/prog/MSP/hsup.h **** 
+ 118:common/prog/MSP/hsup.h **** \b package: \n
+ 119:common/prog/MSP/hsup.h ****  HSUPPackage1\n
+ 120:common/prog/MSP/hsup.h **** 
+ 121:common/prog/MSP/hsup.h **** \b description: \n
+ 122:common/prog/MSP/hsup.h ****  This macro accesses the high word of parameter dword
+ 123:common/prog/MSP/hsup.h **** 
+ 124:common/prog/MSP/hsup.h **** \param dword: high word of dword will be accessed, type of dword shall be uint32_t
+ 125:common/prog/MSP/hsup.h **** 
+ 126:common/prog/MSP/hsup.h **** \return none
+ 127:common/prog/MSP/hsup.h **** */
+ 128:common/prog/MSP/hsup.h **** #define HSUP_HIGH_WORD(dword) (*HSUP_getWordPtr(&(dword),HIGH_ADR_OFFSET))
+ 129:common/prog/MSP/hsup.h **** 
+ 130:common/prog/MSP/hsup.h **** 
+ 131:common/prog/MSP/hsup.h **** /** Accesses low byte of parameter word.
+ 132:common/prog/MSP/hsup.h **** 
+ 133:common/prog/MSP/hsup.h **** \b package: \n
+ 134:common/prog/MSP/hsup.h ****  HSUPPackage1\n
+ 135:common/prog/MSP/hsup.h **** 
+ 136:common/prog/MSP/hsup.h **** \b description: \n
+ 137:common/prog/MSP/hsup.h ****  This macro accesses the  low byte of parameter word
+ 138:common/prog/MSP/hsup.h **** 
+ 139:common/prog/MSP/hsup.h **** \param word: low byte of word will be accessed, type of word uint16_t
+ 140:common/prog/MSP/hsup.h **** 
+ 141:common/prog/MSP/hsup.h **** \return none
+ 142:common/prog/MSP/hsup.h **** */
+ 143:common/prog/MSP/hsup.h **** #define HSUP_LOW_BYTE(word) (*HSUP_getBytePtr(&(word),LOW_ADR_OFFSET))
+ 144:common/prog/MSP/hsup.h **** 
+ 145:common/prog/MSP/hsup.h **** /** Accesses low word of parameter dword.
+ 146:common/prog/MSP/hsup.h **** 
+ 147:common/prog/MSP/hsup.h **** \b package: \n
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 16
+
+
+ 148:common/prog/MSP/hsup.h ****  HSUPPackage1\n
+ 149:common/prog/MSP/hsup.h **** 
+ 150:common/prog/MSP/hsup.h **** \b description: \n
+ 151:common/prog/MSP/hsup.h ****  This macro accesses the low word of parameter dword
+ 152:common/prog/MSP/hsup.h **** 
+ 153:common/prog/MSP/hsup.h **** \param dword: low word of dword will be accessed, type of dword shall be uint32_t
+ 154:common/prog/MSP/hsup.h **** 
+ 155:common/prog/MSP/hsup.h **** \return none
+ 156:common/prog/MSP/hsup.h **** */
+ 157:common/prog/MSP/hsup.h **** #define HSUP_LOW_WORD(dword) (*HSUP_getWordPtr(&(dword),LOW_ADR_OFFSET))
+ 158:common/prog/MSP/hsup.h **** 
+ 159:common/prog/MSP/hsup.h **** 
+ 160:common/prog/MSP/hsup.h **** /* GLOBAL FUNCTIONS *******************************************************************************
+ 161:common/prog/MSP/hsup.h **** 
+ 162:common/prog/MSP/hsup.h **** #if defined(__PCGCC__) && !defined(MOCK_IT)
+ 163:common/prog/MSP/hsup.h **** static inline void HSUP_vDisableInt(void) {}
+ 164:common/prog/MSP/hsup.h **** static inline void HSUP_vEnableInt(void) {}
+ 165:common/prog/MSP/hsup.h **** #else
+ 166:common/prog/MSP/hsup.h **** 
+ 167:common/prog/MSP/hsup.h **** /** Returns the high byte of the passed uint16_t value.
+ 168:common/prog/MSP/hsup.h **** 
+ 169:common/prog/MSP/hsup.h **** \b description: \n
+ 170:common/prog/MSP/hsup.h ****  This function returns the high byte of the passed uint16_t value.
+ 171:common/prog/MSP/hsup.h **** 
+ 172:common/prog/MSP/hsup.h **** \param val: The value where the high byte shall be returned.\n
+ 173:common/prog/MSP/hsup.h ****  \b type: uint16_t\n
+ 174:common/prog/MSP/hsup.h ****  \b range: 0x0000..0xFFFF
+ 175:common/prog/MSP/hsup.h **** 
+ 176:common/prog/MSP/hsup.h **** \return High byte of val.\n
+ 177:common/prog/MSP/hsup.h ****  \b type: uint8_t\n
+ 178:common/prog/MSP/hsup.h ****  \b range:0x00 .. 0xFF
+ 179:common/prog/MSP/hsup.h **** */
+ 180:common/prog/MSP/hsup.h **** static inline uint8_t HSUP_ucGetHighByte(uint16_t val){return (uint8_t)(val >> 8U);}
+ 447              		.loc 2 180 23 view .LVU136
+ 448              	.LBB27:
+ 449              		.loc 2 180 56 view .LVU137
+ 450              		.loc 2 180 56 is_stmt 0 view .LVU138
+ 451              	.LBE27:
+ 452              	.LBE26:
+ 453              	.LBB30:
+ 454              	.LBI30:
+ 455              		.loc 2 180 23 is_stmt 1 view .LVU139
+ 456              	.LBB31:
+ 457              		.loc 2 180 56 view .LVU140
+ 458              		.loc 2 180 56 is_stmt 0 view .LVU141
+ 459              	.LBE31:
+ 460              	.LBE30:
+ 193:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 461              		.loc 1 193 1 view .LVU142
+ 462 0000 10B5     		push	{r4, lr}
+ 463              	.LCFI6:
+ 464              		.cfi_def_cfa_offset 8
+ 465              		.cfi_offset 4, -8
+ 466              		.cfi_offset 14, -4
+ 467              		.loc 1 196 79 view .LVU143
+ 468 0002 0C78     		ldrb	r4, [r1]
+ 469              	.LBB33:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 17
+
+
+ 470              	.LBB32:
+ 471              		.loc 2 180 63 view .LVU144
+ 472 0004 130A     		lsrs	r3, r2, #8
+ 473              	.LBE32:
+ 474              	.LBE33:
+ 475              		.loc 1 196 79 view .LVU145
+ 476 0006 1B19     		adds	r3, r3, r4
+ 477              	.LBB34:
+ 478              	.LBB28:
+ 479              		.loc 2 180 63 view .LVU146
+ 480 0008 0488     		ldrh	r4, [r0]
+ 481              	.LBE28:
+ 482              	.LBE34:
+ 197:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetLowByte(*puiVariable)) + HSUP_ucGetLowByte(ui
+ 198:common/prog/FuncSafe/fsramcon.c ****    *puiVariable = uiNewVal;
+ 199:common/prog/FuncSafe/fsramcon.c **** 
+ 200:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 201:common/prog/FuncSafe/fsramcon.c **** }
+ 483              		.loc 1 201 1 view .LVU147
+ 484              		@ sp needed
+ 485              	.LBB35:
+ 486              	.LBB29:
+ 487              		.loc 2 180 63 view .LVU148
+ 488 000a 240A     		lsrs	r4, r4, #8
+ 489              	.LBE29:
+ 490              	.LBE35:
+ 196:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetLowByte(*puiVariable)) + HSUP_ucGetLowByte(ui
+ 491              		.loc 1 196 79 view .LVU149
+ 492 000c 1B1B     		subs	r3, r3, r4
+ 493 000e DBB2     		uxtb	r3, r3
+ 196:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetLowByte(*puiVariable)) + HSUP_ucGetLowByte(ui
+ 494              		.loc 1 196 23 view .LVU150
+ 495 0010 0B70     		strb	r3, [r1]
+ 197:common/prog/FuncSafe/fsramcon.c ****    (*(pucCheckValue)) = ((*pucCheckValue) - HSUP_ucGetLowByte(*puiVariable)) + HSUP_ucGetLowByte(ui
+ 496              		.loc 1 197 4 is_stmt 1 view .LVU151
+ 497              	.LVL43:
+ 498              	.LBB36:
+ 499              	.LBI36:
+ 181:common/prog/MSP/hsup.h **** 
+ 182:common/prog/MSP/hsup.h **** /** Returns the low byte of the passed uint16_t value.
+ 183:common/prog/MSP/hsup.h **** 
+ 184:common/prog/MSP/hsup.h **** \b description: \n
+ 185:common/prog/MSP/hsup.h ****  This function returns the low byte of the passed uint16_t value.
+ 186:common/prog/MSP/hsup.h **** 
+ 187:common/prog/MSP/hsup.h **** \param val: The value where the low byte shall be returned.\n
+ 188:common/prog/MSP/hsup.h ****  \b type: uint16_t\n
+ 189:common/prog/MSP/hsup.h ****  \b range: 0x0000..0xFFFF
+ 190:common/prog/MSP/hsup.h **** 
+ 191:common/prog/MSP/hsup.h **** \return Low byte of val.\n
+ 192:common/prog/MSP/hsup.h ****  \b type: uint8_t\n
+ 193:common/prog/MSP/hsup.h ****  \b range: 0x00 .. 0xFF
+ 194:common/prog/MSP/hsup.h **** */
+ 195:common/prog/MSP/hsup.h **** static inline uint8_t HSUP_ucGetLowByte(uint16_t val){return (uint8_t)val;}
+ 500              		.loc 2 195 23 view .LVU152
+ 501              	.LBB37:
+ 502              		.loc 2 195 55 view .LVU153
+ 503              		.loc 2 195 55 is_stmt 0 view .LVU154
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 18
+
+
+ 504              	.LBE37:
+ 505              	.LBE36:
+ 506              	.LBB39:
+ 507              	.LBI39:
+ 508              		.loc 2 195 23 is_stmt 1 view .LVU155
+ 509              	.LBB40:
+ 510              		.loc 2 195 55 view .LVU156
+ 511              		.loc 2 195 55 is_stmt 0 view .LVU157
+ 512              	.LBE40:
+ 513              	.LBE39:
+ 514              	.LBB41:
+ 515              	.LBB38:
+ 516              		.loc 2 195 62 view .LVU158
+ 517 0012 0488     		ldrh	r4, [r0]
+ 518              	.LBE38:
+ 519              	.LBE41:
+ 197:common/prog/FuncSafe/fsramcon.c ****    *puiVariable = uiNewVal;
+ 520              		.loc 1 197 78 view .LVU159
+ 521 0014 141B     		subs	r4, r2, r4
+ 522 0016 1B19     		adds	r3, r3, r4
+ 197:common/prog/FuncSafe/fsramcon.c ****    *puiVariable = uiNewVal;
+ 523              		.loc 1 197 23 view .LVU160
+ 524 0018 0B70     		strb	r3, [r1]
+ 198:common/prog/FuncSafe/fsramcon.c **** 
+ 525              		.loc 1 198 4 is_stmt 1 view .LVU161
+ 198:common/prog/FuncSafe/fsramcon.c **** 
+ 526              		.loc 1 198 17 is_stmt 0 view .LVU162
+ 527 001a 0280     		strh	r2, [r0]
+ 200:common/prog/FuncSafe/fsramcon.c **** }
+ 528              		.loc 1 200 21 is_stmt 1 view .LVU163
+ 529              		.loc 1 201 1 is_stmt 0 view .LVU164
+ 530 001c 10BD     		pop	{r4, pc}
+ 531              		.cfi_endproc
+ 532              	.LFE74:
+ 534              		.section	.text._FSF_RAM_CON_vSetBitUintBySum,"ax",%progbits
+ 535              		.align	1
+ 536              		.global	_FSF_RAM_CON_vSetBitUintBySum
+ 537              		.syntax unified
+ 538              		.code	16
+ 539              		.thumb_func
+ 541              	_FSF_RAM_CON_vSetBitUintBySum:
+ 542              	.LVL44:
+ 543              	.LFB75:
+ 202:common/prog/FuncSafe/fsramcon.c **** 
+ 203:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vSetBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiB
+ 204:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vSetBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMas
+ 205:common/prog/FuncSafe/fsramcon.c **** {
+ 544              		.loc 1 205 1 is_stmt 1 view -0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 0
+ 547              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206:common/prog/FuncSafe/fsramcon.c ****    uint16_t uiTemp;
+ 548              		.loc 1 206 4 view .LVU166
+ 207:common/prog/FuncSafe/fsramcon.c **** 
+ 208:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 549              		.loc 1 208 22 view .LVU167
+ 209:common/prog/FuncSafe/fsramcon.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 19
+
+
+ 210:common/prog/FuncSafe/fsramcon.c ****    uiTemp = *puiBitField;
+ 550              		.loc 1 210 4 view .LVU168
+ 205:common/prog/FuncSafe/fsramcon.c ****    uint16_t uiTemp;
+ 551              		.loc 1 205 1 is_stmt 0 view .LVU169
+ 552 0000 30B5     		push	{r4, r5, lr}
+ 553              	.LCFI7:
+ 554              		.cfi_def_cfa_offset 12
+ 555              		.cfi_offset 4, -12
+ 556              		.cfi_offset 5, -8
+ 557              		.cfi_offset 14, -4
+ 558              		.loc 1 210 11 view .LVU170
+ 559 0002 0488     		ldrh	r4, [r0]
+ 560              	.LVL45:
+ 211:common/prog/FuncSafe/fsramcon.c **** 
+ 212:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) - HSUP_ucGetHighByte(uiTemp);
+ 561              		.loc 1 212 4 is_stmt 1 view .LVU171
+ 562              	.LBB42:
+ 563              	.LBI42:
+ 180:common/prog/MSP/hsup.h **** 
+ 564              		.loc 2 180 23 view .LVU172
+ 565              	.LBB43:
+ 180:common/prog/MSP/hsup.h **** 
+ 566              		.loc 2 180 56 view .LVU173
+ 180:common/prog/MSP/hsup.h **** 
+ 567              		.loc 2 180 56 is_stmt 0 view .LVU174
+ 568              	.LBE43:
+ 569              	.LBE42:
+ 213:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) - HSUP_ucGetLowByte(uiTemp);
+ 570              		.loc 1 213 4 is_stmt 1 view .LVU175
+ 571              	.LBB45:
+ 572              	.LBI45:
+ 573              		.loc 2 195 23 view .LVU176
+ 574              	.LBB46:
+ 575              		.loc 2 195 55 view .LVU177
+ 576              		.loc 2 195 55 is_stmt 0 view .LVU178
+ 577              	.LBE46:
+ 578              	.LBE45:
+ 214:common/prog/FuncSafe/fsramcon.c **** 
+ 215:common/prog/FuncSafe/fsramcon.c ****    uiTemp |= uiBitMask;
+ 579              		.loc 1 215 4 is_stmt 1 view .LVU179
+ 216:common/prog/FuncSafe/fsramcon.c **** 
+ 217:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetHighByte(uiTemp);
+ 218:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+ 580              		.loc 1 218 38 is_stmt 0 view .LVU180
+ 581 0004 0D78     		ldrb	r5, [r1]
+ 215:common/prog/FuncSafe/fsramcon.c **** 
+ 582              		.loc 1 215 11 view .LVU181
+ 583 0006 2243     		orrs	r2, r4
+ 584              	.LVL46:
+ 217:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+ 585              		.loc 1 217 4 is_stmt 1 view .LVU182
+ 586              	.LBB47:
+ 587              	.LBI47:
+ 180:common/prog/MSP/hsup.h **** 
+ 588              		.loc 2 180 23 view .LVU183
+ 589              	.LBB48:
+ 180:common/prog/MSP/hsup.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 20
+
+
+ 590              		.loc 2 180 56 view .LVU184
+ 180:common/prog/MSP/hsup.h **** 
+ 591              		.loc 2 180 56 is_stmt 0 view .LVU185
+ 592              	.LBE48:
+ 593              	.LBE47:
+ 594              		.loc 1 218 4 is_stmt 1 view .LVU186
+ 595              	.LBB50:
+ 596              	.LBI50:
+ 597              		.loc 2 195 23 view .LVU187
+ 598              	.LBB51:
+ 599              		.loc 2 195 55 view .LVU188
+ 600              		.loc 2 195 55 is_stmt 0 view .LVU189
+ 601              	.LBE51:
+ 602              	.LBE50:
+ 603              		.loc 1 218 38 view .LVU190
+ 604 0008 131B     		subs	r3, r2, r4
+ 605 000a ED18     		adds	r5, r5, r3
+ 606              	.LBB52:
+ 607              	.LBB49:
+ 180:common/prog/MSP/hsup.h **** 
+ 608              		.loc 2 180 63 view .LVU191
+ 609 000c 130A     		lsrs	r3, r2, #8
+ 610              	.LBE49:
+ 611              	.LBE52:
+ 612              		.loc 1 218 38 view .LVU192
+ 613 000e 5B19     		adds	r3, r3, r5
+ 614              	.LBB53:
+ 615              	.LBB44:
+ 180:common/prog/MSP/hsup.h **** 
+ 616              		.loc 2 180 63 view .LVU193
+ 617 0010 240A     		lsrs	r4, r4, #8
+ 618              	.LBE44:
+ 619              	.LBE53:
+ 620              		.loc 1 218 38 view .LVU194
+ 621 0012 1B1B     		subs	r3, r3, r4
+ 622              		.loc 1 218 19 view .LVU195
+ 623 0014 0B70     		strb	r3, [r1]
+ 219:common/prog/FuncSafe/fsramcon.c **** 
+ 220:common/prog/FuncSafe/fsramcon.c ****    *puiBitField = uiTemp;
+ 624              		.loc 1 220 4 is_stmt 1 view .LVU196
+ 221:common/prog/FuncSafe/fsramcon.c **** 
+ 222:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 223:common/prog/FuncSafe/fsramcon.c **** }
+ 625              		.loc 1 223 1 is_stmt 0 view .LVU197
+ 626              		@ sp needed
+ 220:common/prog/FuncSafe/fsramcon.c **** 
+ 627              		.loc 1 220 17 view .LVU198
+ 628 0016 0280     		strh	r2, [r0]
+ 222:common/prog/FuncSafe/fsramcon.c **** }
+ 629              		.loc 1 222 21 is_stmt 1 view .LVU199
+ 630              		.loc 1 223 1 is_stmt 0 view .LVU200
+ 631 0018 30BD     		pop	{r4, r5, pc}
+ 632              		.cfi_endproc
+ 633              	.LFE75:
+ 635              		.section	.text._FSF_RAM_CON_vResBitUintBySum,"ax",%progbits
+ 636              		.align	1
+ 637              		.global	_FSF_RAM_CON_vResBitUintBySum
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 21
+
+
+ 638              		.syntax unified
+ 639              		.code	16
+ 640              		.thumb_func
+ 642              	_FSF_RAM_CON_vResBitUintBySum:
+ 643              	.LVL47:
+ 644              	.LFB76:
+ 224:common/prog/FuncSafe/fsramcon.c **** 
+ 225:common/prog/FuncSafe/fsramcon.c **** /*~+:void _FSF_RAM_CON_vResBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiB
+ 226:common/prog/FuncSafe/fsramcon.c **** void _FSF_RAM_CON_vResBitUintBySum(uint16_t *puiBitField, uint8_t *pucCheckValue, uint16_t uiBitMas
+ 227:common/prog/FuncSafe/fsramcon.c **** {
+ 645              		.loc 1 227 1 is_stmt 1 view -0
+ 646              		.cfi_startproc
+ 647              		@ args = 0, pretend = 0, frame = 0
+ 648              		@ frame_needed = 0, uses_anonymous_args = 0
+ 228:common/prog/FuncSafe/fsramcon.c ****    uint16_t uiTemp;
+ 649              		.loc 1 228 4 view .LVU202
+ 229:common/prog/FuncSafe/fsramcon.c **** 
+ 230:common/prog/FuncSafe/fsramcon.c ****    HSUP_vDisableInt();
+ 650              		.loc 1 230 22 view .LVU203
+ 231:common/prog/FuncSafe/fsramcon.c **** 
+ 232:common/prog/FuncSafe/fsramcon.c ****    uiTemp = *puiBitField;
+ 651              		.loc 1 232 4 view .LVU204
+ 227:common/prog/FuncSafe/fsramcon.c ****    uint16_t uiTemp;
+ 652              		.loc 1 227 1 is_stmt 0 view .LVU205
+ 653 0000 30B5     		push	{r4, r5, lr}
+ 654              	.LCFI8:
+ 655              		.cfi_def_cfa_offset 12
+ 656              		.cfi_offset 4, -12
+ 657              		.cfi_offset 5, -8
+ 658              		.cfi_offset 14, -4
+ 659              		.loc 1 232 11 view .LVU206
+ 660 0002 0488     		ldrh	r4, [r0]
+ 661              	.LVL48:
+ 233:common/prog/FuncSafe/fsramcon.c **** 
+ 234:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) - HSUP_ucGetHighByte(uiTemp);
+ 662              		.loc 1 234 4 is_stmt 1 view .LVU207
+ 663              	.LBB54:
+ 664              	.LBI54:
+ 180:common/prog/MSP/hsup.h **** 
+ 665              		.loc 2 180 23 view .LVU208
+ 666              	.LBB55:
+ 180:common/prog/MSP/hsup.h **** 
+ 667              		.loc 2 180 56 view .LVU209
+ 180:common/prog/MSP/hsup.h **** 
+ 668              		.loc 2 180 56 is_stmt 0 view .LVU210
+ 669              	.LBE55:
+ 670              	.LBE54:
+ 235:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) - HSUP_ucGetLowByte(uiTemp);
+ 671              		.loc 1 235 4 is_stmt 1 view .LVU211
+ 672              	.LBB57:
+ 673              	.LBI57:
+ 674              		.loc 2 195 23 view .LVU212
+ 675              	.LBB58:
+ 676              		.loc 2 195 55 view .LVU213
+ 677              		.loc 2 195 55 is_stmt 0 view .LVU214
+ 678              	.LBE58:
+ 679              	.LBE57:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 22
+
+
+ 236:common/prog/FuncSafe/fsramcon.c **** 
+ 237:common/prog/FuncSafe/fsramcon.c ****    uiTemp &= ~uiBitMask;
+ 680              		.loc 1 237 4 is_stmt 1 view .LVU215
+ 238:common/prog/FuncSafe/fsramcon.c **** 
+ 239:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetHighByte(uiTemp);
+ 240:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+ 681              		.loc 1 240 38 is_stmt 0 view .LVU216
+ 682 0004 0D78     		ldrb	r5, [r1]
+ 237:common/prog/FuncSafe/fsramcon.c **** 
+ 683              		.loc 1 237 11 view .LVU217
+ 684 0006 2300     		movs	r3, r4
+ 241:common/prog/FuncSafe/fsramcon.c **** 
+ 242:common/prog/FuncSafe/fsramcon.c ****    *puiBitField = uiTemp;
+ 243:common/prog/FuncSafe/fsramcon.c **** 
+ 244:common/prog/FuncSafe/fsramcon.c ****    HSUP_vEnableInt();
+ 245:common/prog/FuncSafe/fsramcon.c **** 
+ 246:common/prog/FuncSafe/fsramcon.c **** }
+ 685              		.loc 1 246 1 view .LVU218
+ 686              		@ sp needed
+ 237:common/prog/FuncSafe/fsramcon.c **** 
+ 687              		.loc 1 237 11 view .LVU219
+ 688 0008 9343     		bics	r3, r2
+ 689 000a 1A00     		movs	r2, r3
+ 690              	.LVL49:
+ 239:common/prog/FuncSafe/fsramcon.c ****    *pucCheckValue = (*pucCheckValue) + HSUP_ucGetLowByte(uiTemp);
+ 691              		.loc 1 239 4 is_stmt 1 view .LVU220
+ 692              	.LBB59:
+ 693              	.LBI59:
+ 180:common/prog/MSP/hsup.h **** 
+ 694              		.loc 2 180 23 view .LVU221
+ 695              	.LBB60:
+ 180:common/prog/MSP/hsup.h **** 
+ 696              		.loc 2 180 56 view .LVU222
+ 180:common/prog/MSP/hsup.h **** 
+ 697              		.loc 2 180 56 is_stmt 0 view .LVU223
+ 698              	.LBE60:
+ 699              	.LBE59:
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 700              		.loc 1 240 4 is_stmt 1 view .LVU224
+ 701              	.LBB62:
+ 702              	.LBI62:
+ 703              		.loc 2 195 23 view .LVU225
+ 704              	.LBB63:
+ 705              		.loc 2 195 55 view .LVU226
+ 706              		.loc 2 195 55 is_stmt 0 view .LVU227
+ 707              	.LBE63:
+ 708              	.LBE62:
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 709              		.loc 1 240 38 view .LVU228
+ 710 000c 1B1B     		subs	r3, r3, r4
+ 711              	.LVL50:
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 712              		.loc 1 240 38 view .LVU229
+ 713 000e ED18     		adds	r5, r5, r3
+ 714              	.LBB64:
+ 715              	.LBB61:
+ 180:common/prog/MSP/hsup.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cct0K5vx.s 			page 23
+
+
+ 716              		.loc 2 180 63 view .LVU230
+ 717 0010 130A     		lsrs	r3, r2, #8
+ 718              	.LBE61:
+ 719              	.LBE64:
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 720              		.loc 1 240 38 view .LVU231
+ 721 0012 5B19     		adds	r3, r3, r5
+ 722              	.LBB65:
+ 723              	.LBB56:
+ 180:common/prog/MSP/hsup.h **** 
+ 724              		.loc 2 180 63 view .LVU232
+ 725 0014 240A     		lsrs	r4, r4, #8
+ 726              	.LBE56:
+ 727              	.LBE65:
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 728              		.loc 1 240 38 view .LVU233
+ 729 0016 1B1B     		subs	r3, r3, r4
+ 240:common/prog/FuncSafe/fsramcon.c **** 
+ 730              		.loc 1 240 19 view .LVU234
+ 731 0018 0B70     		strb	r3, [r1]
+ 242:common/prog/FuncSafe/fsramcon.c **** 
+ 732              		.loc 1 242 4 is_stmt 1 view .LVU235
+ 242:common/prog/FuncSafe/fsramcon.c **** 
+ 733              		.loc 1 242 17 is_stmt 0 view .LVU236
+ 734 001a 0280     		strh	r2, [r0]
+ 244:common/prog/FuncSafe/fsramcon.c **** 
+ 735              		.loc 1 244 21 is_stmt 1 view .LVU237
+ 736              		.loc 1 246 1 is_stmt 0 view .LVU238
+ 737 001c 30BD     		pop	{r4, r5, pc}
+ 738              		.cfi_endproc
+ 739              	.LFE76:
+ 741              		.text
+ 742              	.Letext0:
+ 743              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 744              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 745              		.file 5 "common/prog/FuncSafe/fSafe.h"
+ 746              		.file 6 "common/prog/FuncSafe/fspriv.h"

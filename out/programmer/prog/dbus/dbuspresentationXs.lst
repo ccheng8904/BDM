@@ -1,0 +1,219 @@
+
+out/programmer/prog/dbus/dbuspresentationXs.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MOD_bGetId:
+
+00000000 <MOD_bGetId>:
+   LD_STRINGIZE(DBUS2_NODE_DATE)
+   "\0"
+   "32-bit-MemoryModule\0"
+   DBUS2_ID;
+   
+   uint32_t ulIdAddress32 = (uint32_t)aucDummyId32; //lint !e923 Cast is tested to work correctly
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <MOD_bGetId+0x10>)
+   DBPL_uiPage   = (uint16_t)(ulIdAddress32>>INT_SIZE); //Save high integer part of address.
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <MOD_bGetId+0x14>)
+   4:	0c18      	lsrs	r0, r3, #16
+   6:	8010      	strh	r0, [r2, #0]
+   
+   /* Msg(2:0506) Dereferencing pointer value that is possibly NULL.
+      Code is tested to work correctly
+   */
+   return DBPL_DONE;
+}
+   8:	2001      	movs	r0, #1
+   *puiIdAddress = (uint16_t)ulIdAddress32;// &DummyId32[0];
+   a:	800b      	strh	r3, [r1, #0]
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MOD_bWrite:
+
+00000000 <MOD_bWrite>:
+    ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+   0:	4804      	ldr	r0, [pc, #16]	; (14 <MOD_bWrite+0x14>)
+{
+   2:	b510      	push	{r4, lr}
+    ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+   4:	8800      	ldrh	r0, [r0, #0]
+   6:	0400      	lsls	r0, r0, #16
+   8:	1840      	adds	r0, r0, r1
+    (void)memcpy((void *)ulAddress32, (void *)pucBuffer, ucDataLen);//lint !e923 !e920  both casts are ok
+   a:	0019      	movs	r1, r3
+   c:	f7ff fffe 	bl	0 <memcpy>
+}//lint !e818   pucBuffer cannot be const as service interface is fixed
+  10:	2001      	movs	r0, #1
+  12:	bd10      	pop	{r4, pc}
+  14:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MOD_bRead:
+
+00000000 <MOD_bRead>:
+{
+   0:	0018      	movs	r0, r3
+    ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+   2:	4b04      	ldr	r3, [pc, #16]	; (14 <MOD_bRead+0x14>)
+{
+   4:	b510      	push	{r4, lr}
+    ulAddress32 = ((uint32_t)DBPL_uiPage<<INT_SIZE) + uiAddress;
+   6:	881c      	ldrh	r4, [r3, #0]
+   8:	0424      	lsls	r4, r4, #16
+   a:	1861      	adds	r1, r4, r1
+    (void)memcpy((void *)pucBuffer, (void *)ulAddress32, ucDataLen);//lint !e923 !e920  both casts are ok
+   c:	f7ff fffe 	bl	0 <memcpy>
+}
+  10:	2001      	movs	r0, #1
+  12:	bd10      	pop	{r4, pc}
+  14:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_ucPossiblyChangeTimerBase:
+
+00000000 <DBPL_ucPossiblyChangeTimerBase>:
+}
+#else
+uint8_t DBPL_ucPossiblyChangeTimerBase(uint8_t ucBase)
+{
+   return ucBase;
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vGoOffline:
+
+00000000 <DBPL_vGoOffline>:
+The following functions are called directly by the library source. These functions constitute an interface to the application.
+*/
+void DBPL_vGoOffline(void)
+{
+   /* Possibly notify the application before entering offline mode. Possibly shut down actuators ... */
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vEnterBootloaderMode:
+
+00000000 <DBPL_vEnterBootloaderMode>:
+
+void DBPL_vEnterBootloaderMode(void)
+{
+   0:	b510      	push	{r4, lr}
+#if defined (WIRED_FIRMWARE_UPDATE)
+    BMDAT_setMagicPattern(BMDAT_startBlAfterReset);
+#elif defined (REMOTE_FIRMWARE_UPDATE)
+    BMDAT_setBootModule(MAL_BP2_LOADER_ID);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <DBPL_vEnterBootloaderMode+0xc>)
+   4:	f7ff fffe 	bl	0 <BMDAT_setBootModule>
+#elif defined (BTM_FIRMWARE_UPDATE)
+    GBTL_bootGromLoaderAfterReset();
+#endif
+
+    /* Possibly notify the application before entering firmware update mode. Possibly shut down actuators ... */
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00005520 	.word	0x00005520
+
+Disassembly of section .text.DBPL_vHSI_DataIndication:
+
+00000000 <DBPL_vHSI_DataIndication>:
+
+/*lint -e{715,818} parameter no used if update disabled */
+void DBPL_vHSI_DataIndication(void* const data, uint32_t data_length)
+{
+   0:	b510      	push	{r4, lr}
+#ifdef DBUS2_UPDATE_HSI
+    HSI_DataIndication(data, data_length);
+   2:	f7ff fffe 	bl	0 <HSI_DataIndication>
+#endif
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_bIsNodeToBeWokenUp:
+
+00000000 <DBPL_bIsNodeToBeWokenUp>:
+    or if your project specific timeout has occured:
+    DBPL_vUnNotifyWakeupBreakSent();
+    */
+    return ret;
+#endif
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vWakeupSentResponseReceived:
+
+00000000 <DBPL_vWakeupSentResponseReceived>:
+
+void DBPL_vWakeupSentResponseReceived(uint8_t nodeAddress)
+{
+    (void)nodeAddress;
+}
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_ucGetOwnAddressToInformOtherNodes:
+
+00000000 <DBPL_ucGetOwnAddressToInformOtherNodes>:
+
+uint8_t DBPL_ucGetOwnAddressToInformOtherNodes(void)
+{
+   0:	b510      	push	{r4, lr}
+    /*The node address must be correct and should contain a subsystem implemented by the user application.*/
+    /*This standard implementation here always returns the lowest subsystem implemented by the user.*/
+    for(uint8_t node = 0; node < UINT8_MAX; node++)
+   2:	2400      	movs	r4, #0
+    {
+        if((DLL_bIsCurrentNode(node) == true) && (BAL_ucGetSubsystemIndex(node) != 0U))/*lint !e931 no relevant side effect 931 already removed form MISRA 13.2 for lintplus 1.4 BETA */
+   4:	0020      	movs	r0, r4
+   6:	f7ff fffe 	bl	0 <DLL_bIsCurrentNode>
+   a:	2800      	cmp	r0, #0
+   c:	d108      	bne.n	20 <DBPL_ucGetOwnAddressToInformOtherNodes+0x20>
+    for(uint8_t node = 0; node < UINT8_MAX; node++)
+   e:	3401      	adds	r4, #1
+  10:	b2e4      	uxtb	r4, r4
+  12:	2cff      	cmp	r4, #255	; 0xff
+  14:	d1f6      	bne.n	4 <DBPL_ucGetOwnAddressToInformOtherNodes+0x4>
+            return node;
+        }
+    }
+
+    /*No subsystem apart from zero (Service Messages) implemented. Return subsystem zero.*/
+    return ((uint8_t)(DLL_ucGetMainNodeAddress()<<NIBBLE_SIZE));
+  16:	f7ff fffe 	bl	0 <DLL_ucGetMainNodeAddress>
+  1a:	0104      	lsls	r4, r0, #4
+  1c:	b2e4      	uxtb	r4, r4
+  1e:	e004      	b.n	2a <DBPL_ucGetOwnAddressToInformOtherNodes+0x2a>
+        if((DLL_bIsCurrentNode(node) == true) && (BAL_ucGetSubsystemIndex(node) != 0U))/*lint !e931 no relevant side effect 931 already removed form MISRA 13.2 for lintplus 1.4 BETA */
+  20:	0020      	movs	r0, r4
+  22:	f7ff fffe 	bl	0 <BAL_ucGetSubsystemIndex>
+  26:	2800      	cmp	r0, #0
+  28:	d0f1      	beq.n	e <DBPL_ucGetOwnAddressToInformOtherNodes+0xe>
+}
+  2a:	0020      	movs	r0, r4
+  2c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vSilentModeHasBeenEntered:
+
+00000000 <DBPL_vSilentModeHasBeenEntered>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vPowerFailNotificationHasBeenReceived:
+
+00000000 <DBPL_vPowerFailNotificationHasBeenReceived>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vPowerResurgeNotificationHasBeenReceived:
+
+00000000 <DBPL_vPowerResurgeNotificationHasBeenReceived>:
+   0:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vNotifyNonDeliverablePowerMessage:
+
+00000000 <DBPL_vNotifyNonDeliverablePowerMessage>:
+}
+
+void DBPL_vNotifyNonDeliverablePowerMessage(uint16_t msgId)
+{
+    (void)msgId;
+}
+   0:	4770      	bx	lr

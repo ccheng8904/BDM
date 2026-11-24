@@ -1,0 +1,1870 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"system_timer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.STIM_ProcessTimers.part.0,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  23              	STIM_ProcessTimers.part.0:
+  24              	.LVL0:
+  25              	.LFB79:
+  26              		.file 1 "common/prog/ped_fw/timer/system_timer.c"
+   1:common/prog/ped_fw/timer/system_timer.c **** /*******************************************************************************
+   2:common/prog/ped_fw/timer/system_timer.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/timer/system_timer.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/timer/system_timer.c ****  *
+   5:common/prog/ped_fw/timer/system_timer.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/timer/system_timer.c ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/timer/system_timer.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/timer/system_timer.c ****  *
+   9:common/prog/ped_fw/timer/system_timer.c ****  *******************************************************************************
+  10:common/prog/ped_fw/timer/system_timer.c ****  *  PROJECT          System Timer, Generic SW
+  11:common/prog/ped_fw/timer/system_timer.c ****  *  COMP_ABBREV      STIM
+  12:common/prog/ped_fw/timer/system_timer.c ****  ******************************************************************************/
+  13:common/prog/ped_fw/timer/system_timer.c **** 
+  14:common/prog/ped_fw/timer/system_timer.c **** 
+  15:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  16:common/prog/ped_fw/timer/system_timer.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  18:common/prog/ped_fw/timer/system_timer.c **** /** \file
+  19:common/prog/ped_fw/timer/system_timer.c ****  *
+  20:common/prog/ped_fw/timer/system_timer.c ****  *  \brief    Implementation of STIM.
+  21:common/prog/ped_fw/timer/system_timer.c ****  *
+  22:common/prog/ped_fw/timer/system_timer.c ****  *  \details  System timer library serves for single or periodic time
+  23:common/prog/ped_fw/timer/system_timer.c ****  *            measurement and callback execution with resolution down to one
+  24:common/prog/ped_fw/timer/system_timer.c ****  *            millisecond. System timer library contains two types of execution
+  25:common/prog/ped_fw/timer/system_timer.c ****  *            handlers, interrupt handler and scheduler handler.
+  26:common/prog/ped_fw/timer/system_timer.c ****  *
+  27:common/prog/ped_fw/timer/system_timer.c ****  *            Scheduler handler is used for processing of less accurate timers.
+  28:common/prog/ped_fw/timer/system_timer.c ****  *            Accuracy of these timers is given by time period of execution of
+  29:common/prog/ped_fw/timer/system_timer.c ****  *            this handler. If accuracy of these timers is not sufficient, then
+  30:common/prog/ped_fw/timer/system_timer.c ****  *            interrupt based timers (see next section) should be used instead.
+  31:common/prog/ped_fw/timer/system_timer.c ****  *
+  32:common/prog/ped_fw/timer/system_timer.c ****  *            Interrupt handler is called from hardware timer interrupt service
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 2
+
+
+  33:common/prog/ped_fw/timer/system_timer.c ****  *            routine with period of integer value in milliseconds. This
+  34:common/prog/ped_fw/timer/system_timer.c ****  *            handler is used for base time update and for processing of
+  35:common/prog/ped_fw/timer/system_timer.c ****  *            accurate interrupt base timers (including callback execution).
+  36:common/prog/ped_fw/timer/system_timer.c ****  *            For all ARM Cortex-M micro controllers, SysTick timer is used by
+  37:common/prog/ped_fw/timer/system_timer.c ****  *            default for this purpose.
+  38:common/prog/ped_fw/timer/system_timer.c ****  *
+  39:common/prog/ped_fw/timer/system_timer.c ****  *            Interrupt based timers should only be used if really necessary,
+  40:common/prog/ped_fw/timer/system_timer.c ****  *            and respective callback functions should be kept as light as
+  41:common/prog/ped_fw/timer/system_timer.c ****  *            possible. Otherwise they can have impact on other real-time
+  42:common/prog/ped_fw/timer/system_timer.c ****  *            functions (UART/DBus handling, RTOS scheduling, ...)
+  43:common/prog/ped_fw/timer/system_timer.c ****  *
+  44:common/prog/ped_fw/timer/system_timer.c ****  */
+  45:common/prog/ped_fw/timer/system_timer.c **** 
+  46:common/prog/ped_fw/timer/system_timer.c **** 
+  47:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  48:common/prog/ped_fw/timer/system_timer.c **** /* INCLUDES                                                                   */
+  49:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  50:common/prog/ped_fw/timer/system_timer.c **** #include "system_timer.h"
+  51:common/prog/ped_fw/timer/system_timer.c **** #include "processor.h"
+  52:common/prog/ped_fw/timer/system_timer.c **** #ifdef SYSTEM_TIMER_SYSTICK
+  53:common/prog/ped_fw/timer/system_timer.c ****     #include "systick.h"
+  54:common/prog/ped_fw/timer/system_timer.c **** #else
+  55:common/prog/ped_fw/timer/system_timer.c ****     #include "system_timer_cfg.h"
+  56:common/prog/ped_fw/timer/system_timer.c **** #endif
+  57:common/prog/ped_fw/timer/system_timer.c **** #ifdef MCAL_MPCM_INCLUDED
+  58:common/prog/ped_fw/timer/system_timer.c ****     #include "mcal/mpcm.h"
+  59:common/prog/ped_fw/timer/system_timer.c **** #endif
+  60:common/prog/ped_fw/timer/system_timer.c **** #include "timerlib.h"
+  61:common/prog/ped_fw/timer/system_timer.c **** //#include <assert.h>
+  62:common/prog/ped_fw/timer/system_timer.c **** 
+  63:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  64:common/prog/ped_fw/timer/system_timer.c **** /* PRIVATE DEFINITIONS                                                        */
+  65:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  66:common/prog/ped_fw/timer/system_timer.c **** 
+  67:common/prog/ped_fw/timer/system_timer.c **** /* Definitions for time calculations from ms to us */
+  68:common/prog/ped_fw/timer/system_timer.c **** #define FIXED_POINT_SHIFT   25u
+  69:common/prog/ped_fw/timer/system_timer.c **** #define TICKS_PER_MS        1000u
+  70:common/prog/ped_fw/timer/system_timer.c **** 
+  71:common/prog/ped_fw/timer/system_timer.c **** 
+  72:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  73:common/prog/ped_fw/timer/system_timer.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  74:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  75:common/prog/ped_fw/timer/system_timer.c **** 
+  76:common/prog/ped_fw/timer/system_timer.c **** /* Pointer to the linked list of timers handled in interrupts */
+  77:common/prog/ped_fw/timer/system_timer.c **** static struct STIM_Timer *STIM_interruptTimerList = NULL;
+  78:common/prog/ped_fw/timer/system_timer.c **** 
+  79:common/prog/ped_fw/timer/system_timer.c **** /* Pointer to the linked list of timers handled in scheduler */
+  80:common/prog/ped_fw/timer/system_timer.c **** static struct STIM_Timer *STIM_schedulerTimerList = NULL;
+  81:common/prog/ped_fw/timer/system_timer.c **** 
+  82:common/prog/ped_fw/timer/system_timer.c **** /* Elapsed time variable since system timer initialization */
+  83:common/prog/ped_fw/timer/system_timer.c **** static volatile uint32_t STIM_tick = 0U;
+  84:common/prog/ped_fw/timer/system_timer.c **** 
+  85:common/prog/ped_fw/timer/system_timer.c **** 
+  86:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  87:common/prog/ped_fw/timer/system_timer.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  88:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+  89:common/prog/ped_fw/timer/system_timer.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 3
+
+
+  90:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function registering timer instance into lined list of timers.
+  91:common/prog/ped_fw/timer/system_timer.c ****  *
+  92:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timer:        pointer to timer instance to be added to lined list
+  93:common/prog/ped_fw/timer/system_timer.c ****  *  \param    processingType:   enumeration type for setting processing type
+  94:common/prog/ped_fw/timer/system_timer.c ****  */
+  95:common/prog/ped_fw/timer/system_timer.c **** static int32_t STIM_RegisterTimer(struct STIM_Timer *timer, enum STIM_Processing processingType);
+  96:common/prog/ped_fw/timer/system_timer.c **** 
+  97:common/prog/ped_fw/timer/system_timer.c **** 
+  98:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function processing timer instances.
+  99:common/prog/ped_fw/timer/system_timer.c ****  *
+ 100:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timerPtr:     pointer to first timer instance in timer lined list
+ 101:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timeDiff_ms:  time elapsed since last processing
+ 102:common/prog/ped_fw/timer/system_timer.c ****  */
+ 103:common/prog/ped_fw/timer/system_timer.c **** static void STIM_ProcessTimers(struct STIM_Timer *timerPtr, uint16_t timeDiff_ms);
+ 104:common/prog/ped_fw/timer/system_timer.c **** 
+ 105:common/prog/ped_fw/timer/system_timer.c **** 
+ 106:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function for checking if target time of timer is set.
+ 107:common/prog/ped_fw/timer/system_timer.c ****  *
+ 108:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timer: pointer to timer instance
+ 109:common/prog/ped_fw/timer/system_timer.c ****  *
+ 110:common/prog/ped_fw/timer/system_timer.c ****  *  \return   true, if target time is set
+ 111:common/prog/ped_fw/timer/system_timer.c ****  */
+ 112:common/prog/ped_fw/timer/system_timer.c **** static bool STIM_IsTargetTimeSet(const struct STIM_Timer *timer)
+ 113:common/prog/ped_fw/timer/system_timer.c **** {
+ 114:common/prog/ped_fw/timer/system_timer.c ****     return timer->targetTime_ms != 0U;
+ 115:common/prog/ped_fw/timer/system_timer.c **** }
+ 116:common/prog/ped_fw/timer/system_timer.c **** 
+ 117:common/prog/ped_fw/timer/system_timer.c **** 
+ 118:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function for checking if the timer is triggered.
+ 119:common/prog/ped_fw/timer/system_timer.c ****  *
+ 120:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timer: pointer to timer instance
+ 121:common/prog/ped_fw/timer/system_timer.c ****  *
+ 122:common/prog/ped_fw/timer/system_timer.c ****  *  \return   true, if the timer is triggered
+ 123:common/prog/ped_fw/timer/system_timer.c ****  */
+ 124:common/prog/ped_fw/timer/system_timer.c **** static bool STIM_IsTimerTriggered(const struct STIM_Timer *timer)
+ 125:common/prog/ped_fw/timer/system_timer.c **** {
+ 126:common/prog/ped_fw/timer/system_timer.c ****     return timer->currentTime_ms >= timer->targetTime_ms;
+ 127:common/prog/ped_fw/timer/system_timer.c **** }
+ 128:common/prog/ped_fw/timer/system_timer.c **** 
+ 129:common/prog/ped_fw/timer/system_timer.c **** 
+ 130:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function returns time difference in ms since last function call.
+ 131:common/prog/ped_fw/timer/system_timer.c ****  *
+ 132:common/prog/ped_fw/timer/system_timer.c ****  *  Time difference is calculated based on difference of actual timestamp and
+ 133:common/prog/ped_fw/timer/system_timer.c ****  *  timestamp updated from last function call. For calculating time difference
+ 134:common/prog/ped_fw/timer/system_timer.c ****  *  in milliseconds, fixed point arithmetic multiplication is used:
+ 135:common/prog/ped_fw/timer/system_timer.c ****  *  timeDiff_ms = (timeDiff_us * ceil(2^25 / 1000)) / 2^25
+ 136:common/prog/ped_fw/timer/system_timer.c ****  *  This calculation is precise up to 60 ms with 25 bit fixedPointShift.
+ 137:common/prog/ped_fw/timer/system_timer.c ****  *  Maximum returned elapsed time is 64 ms.
+ 138:common/prog/ped_fw/timer/system_timer.c ****  *
+ 139:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timeStamp: pointer static timestamp value for time keeping
+ 140:common/prog/ped_fw/timer/system_timer.c ****  *
+ 141:common/prog/ped_fw/timer/system_timer.c ****  *  \return   millisecond time difference since last update
+ 142:common/prog/ped_fw/timer/system_timer.c ****  */
+ 143:common/prog/ped_fw/timer/system_timer.c **** static uint16_t STIM_GetElapsedTimeMs(uint16_t *timeStamp)
+ 144:common/prog/ped_fw/timer/system_timer.c **** {
+ 145:common/prog/ped_fw/timer/system_timer.c ****     const uint8_t fixedPointShift = FIXED_POINT_SHIFT;
+ 146:common/prog/ped_fw/timer/system_timer.c ****     const uint16_t ticksPerMs = TICKS_PER_MS;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 4
+
+
+ 147:common/prog/ped_fw/timer/system_timer.c ****     const uint32_t msMulConst = (((uint32_t)1u << FIXED_POINT_SHIFT) / TICKS_PER_MS) + 1u;
+ 148:common/prog/ped_fw/timer/system_timer.c ****     
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_us = TIM_uiGetCircleMicroSeconds() - *timeStamp;
+ 150:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 151:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 152:common/prog/ped_fw/timer/system_timer.c ****     
+ 153:common/prog/ped_fw/timer/system_timer.c ****     return elapsedTime_ms;
+ 154:common/prog/ped_fw/timer/system_timer.c **** }
+ 155:common/prog/ped_fw/timer/system_timer.c **** 
+ 156:common/prog/ped_fw/timer/system_timer.c **** 
+ 157:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Function executing callback functions of timer instance.
+ 158:common/prog/ped_fw/timer/system_timer.c ****  *
+ 159:common/prog/ped_fw/timer/system_timer.c ****  *  \param    timer:    pointer to timer instance
+ 160:common/prog/ped_fw/timer/system_timer.c ****  *  \param    status:   actual timer status flags
+ 161:common/prog/ped_fw/timer/system_timer.c ****  */
+ 162:common/prog/ped_fw/timer/system_timer.c **** static void STIM_ExecuteCallbacks(const struct STIM_Timer *timer, uint8_t status)
+ 163:common/prog/ped_fw/timer/system_timer.c **** {
+ 164:common/prog/ped_fw/timer/system_timer.c ****    (void) STDCB_ExecuteCallbacks(timer->cbList, (uint32_t)status, 0);
+ 165:common/prog/ped_fw/timer/system_timer.c **** }
+ 166:common/prog/ped_fw/timer/system_timer.c **** 
+ 167:common/prog/ped_fw/timer/system_timer.c **** 
+ 168:common/prog/ped_fw/timer/system_timer.c **** #ifdef MCAL_MPCM_INCLUDED
+ 169:common/prog/ped_fw/timer/system_timer.c **** /** \brief    Callback function that is executed when clock frequency is changed
+ 170:common/prog/ped_fw/timer/system_timer.c ****  *
+ 171:common/prog/ped_fw/timer/system_timer.c ****  *  \param    objPtr:       callback object pointer - NULL
+ 172:common/prog/ped_fw/timer/system_timer.c ****  *  \param    eventFlags:   MPCM status flags - MPCM_STATUS_CLOCK_POST
+ 173:common/prog/ped_fw/timer/system_timer.c ****  *  \param    eventData:    integer number of new power mode
+ 174:common/prog/ped_fw/timer/system_timer.c ****  *  \return   always 0
+ 175:common/prog/ped_fw/timer/system_timer.c ****  */
+ 176:common/prog/ped_fw/timer/system_timer.c **** /*lint -e818 Pointer parameter could be declared as pointing to const */
+ 177:common/prog/ped_fw/timer/system_timer.c **** static void STIM_MPCM_CallbackFunction(void *objPtr, uint32_t eventFlags, const struct MCAL_EventRe
+ 178:common/prog/ped_fw/timer/system_timer.c **** {
+ 179:common/prog/ped_fw/timer/system_timer.c ****     (void)eventFlags;
+ 180:common/prog/ped_fw/timer/system_timer.c ****     (void)*eventResponse;
+ 181:common/prog/ped_fw/timer/system_timer.c **** 
+ 182:common/prog/ped_fw/timer/system_timer.c ****     if(objPtr == NULL)
+ 183:common/prog/ped_fw/timer/system_timer.c ****     {
+ 184:common/prog/ped_fw/timer/system_timer.c ****         uint32_t coreClock_Hz;
+ 185:common/prog/ped_fw/timer/system_timer.c ****         coreClock_Hz = MPCM_getClockFreq(MPCM_CORE_CLOCK);
+ 186:common/prog/ped_fw/timer/system_timer.c ****         (void)SysTick_Configure(coreClock_Hz, SYSTEM_TIMER_PERIOD);
+ 187:common/prog/ped_fw/timer/system_timer.c ****     }
+ 188:common/prog/ped_fw/timer/system_timer.c **** }
+ 189:common/prog/ped_fw/timer/system_timer.c **** #endif
+ 190:common/prog/ped_fw/timer/system_timer.c **** 
+ 191:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+ 192:common/prog/ped_fw/timer/system_timer.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 193:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+ 194:common/prog/ped_fw/timer/system_timer.c **** 
+ 195:common/prog/ped_fw/timer/system_timer.c **** int32_t STIM_InitModule(void)
+ 196:common/prog/ped_fw/timer/system_timer.c **** {
+ 197:common/prog/ped_fw/timer/system_timer.c **** #ifdef SYSTEM_TIMER_SYSTICK
+ 198:common/prog/ped_fw/timer/system_timer.c ****     uint32_t coreClock_Hz;
+ 199:common/prog/ped_fw/timer/system_timer.c ****     
+ 200:common/prog/ped_fw/timer/system_timer.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 201:common/prog/ped_fw/timer/system_timer.c ****     /* Initialize callback and attach it to clock change event */
+ 202:common/prog/ped_fw/timer/system_timer.c ****     static MCAL_Callback_t STIM_OnClockChangeCB;
+ 203:common/prog/ped_fw/timer/system_timer.c ****     MCAL_initCallback(&STIM_OnClockChangeCB, STIM_MPCM_CallbackFunction, NULL);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 5
+
+
+ 204:common/prog/ped_fw/timer/system_timer.c ****     (void)MPCM_enableEvent(&STIM_OnClockChangeCB, MCAL_EVENT_CLOCK_CHANGE_POST);
+ 205:common/prog/ped_fw/timer/system_timer.c ****     /* Get actual core clock frequency */
+ 206:common/prog/ped_fw/timer/system_timer.c ****     coreClock_Hz = MPCM_getClockFreq(MPCM_CORE_CLOCK);
+ 207:common/prog/ped_fw/timer/system_timer.c ****   #else
+ 208:common/prog/ped_fw/timer/system_timer.c ****     #ifdef CLOCK_IN_KHZ
+ 209:common/prog/ped_fw/timer/system_timer.c ****         coreClock_Hz = CORE_CLOCK * 1000U;
+ 210:common/prog/ped_fw/timer/system_timer.c ****     #else
+ 211:common/prog/ped_fw/timer/system_timer.c ****         coreClock_Hz = CORE_CLOCK * 1000000U;
+ 212:common/prog/ped_fw/timer/system_timer.c ****     #endif
+ 213:common/prog/ped_fw/timer/system_timer.c ****   #endif
+ 214:common/prog/ped_fw/timer/system_timer.c ****     
+ 215:common/prog/ped_fw/timer/system_timer.c ****     return SysTick_Configure(coreClock_Hz, SYSTEM_TIMER_PERIOD);
+ 216:common/prog/ped_fw/timer/system_timer.c **** #else
+ 217:common/prog/ped_fw/timer/system_timer.c ****     return STIM_HwConfigure(SYSTEM_TIMER_PERIOD);
+ 218:common/prog/ped_fw/timer/system_timer.c **** #endif
+ 219:common/prog/ped_fw/timer/system_timer.c **** }
+ 220:common/prog/ped_fw/timer/system_timer.c **** 
+ 221:common/prog/ped_fw/timer/system_timer.c **** 
+ 222:common/prog/ped_fw/timer/system_timer.c **** // alias for STM32 HAL drivers
+ 223:common/prog/ped_fw/timer/system_timer.c **** #ifdef SYSTEM_TIMER_SYSTICK
+ 224:common/prog/ped_fw/timer/system_timer.c **** extern uint32_t HAL_GetTick(void);
+ 225:common/prog/ped_fw/timer/system_timer.c **** uint32_t HAL_GetTick(void)
+ 226:common/prog/ped_fw/timer/system_timer.c **** {
+ 227:common/prog/ped_fw/timer/system_timer.c ****     return STIM_tick;
+ 228:common/prog/ped_fw/timer/system_timer.c **** }
+ 229:common/prog/ped_fw/timer/system_timer.c **** #endif
+ 230:common/prog/ped_fw/timer/system_timer.c **** uint32_t STIM_GetTick(void)
+ 231:common/prog/ped_fw/timer/system_timer.c **** {
+ 232:common/prog/ped_fw/timer/system_timer.c ****     return STIM_tick;
+ 233:common/prog/ped_fw/timer/system_timer.c **** }
+ 234:common/prog/ped_fw/timer/system_timer.c **** 
+ 235:common/prog/ped_fw/timer/system_timer.c **** 
+ 236:common/prog/ped_fw/timer/system_timer.c **** void STIM_InterruptHandler(uint16_t interruptPeriod_ms)
+ 237:common/prog/ped_fw/timer/system_timer.c **** {
+ 238:common/prog/ped_fw/timer/system_timer.c ****     (void)interruptPeriod_ms;
+ 239:common/prog/ped_fw/timer/system_timer.c ****     
+ 240:common/prog/ped_fw/timer/system_timer.c ****     static uint16_t timeStamp = 0u;
+ 241:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+ 242:common/prog/ped_fw/timer/system_timer.c ****     
+ 243:common/prog/ped_fw/timer/system_timer.c ****     if(elapsedTime_ms > 0U)
+ 244:common/prog/ped_fw/timer/system_timer.c ****     {
+ 245:common/prog/ped_fw/timer/system_timer.c ****         /* Update circular millisecond timer */
+ 246:common/prog/ped_fw/timer/system_timer.c ****         STIM_tick += elapsedTime_ms;
+ 247:common/prog/ped_fw/timer/system_timer.c ****         /* Process IRQ timers */
+ 248:common/prog/ped_fw/timer/system_timer.c ****         STIM_ProcessTimers(STIM_interruptTimerList, elapsedTime_ms);
+ 249:common/prog/ped_fw/timer/system_timer.c ****     }
+ 250:common/prog/ped_fw/timer/system_timer.c **** }
+ 251:common/prog/ped_fw/timer/system_timer.c **** 
+ 252:common/prog/ped_fw/timer/system_timer.c **** 
+ 253:common/prog/ped_fw/timer/system_timer.c **** void STIM_SchedulerHandleTask(void)
+ 254:common/prog/ped_fw/timer/system_timer.c **** {
+ 255:common/prog/ped_fw/timer/system_timer.c ****     static uint16_t timeStamp = 0u;
+ 256:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+ 257:common/prog/ped_fw/timer/system_timer.c ****     
+ 258:common/prog/ped_fw/timer/system_timer.c ****     if(elapsedTime_ms > 0U)
+ 259:common/prog/ped_fw/timer/system_timer.c ****     {
+ 260:common/prog/ped_fw/timer/system_timer.c ****         /* Process Scheduler timers */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 6
+
+
+ 261:common/prog/ped_fw/timer/system_timer.c ****         STIM_ProcessTimers(STIM_schedulerTimerList, elapsedTime_ms);
+ 262:common/prog/ped_fw/timer/system_timer.c ****     }
+ 263:common/prog/ped_fw/timer/system_timer.c **** }
+ 264:common/prog/ped_fw/timer/system_timer.c **** 
+ 265:common/prog/ped_fw/timer/system_timer.c **** 
+ 266:common/prog/ped_fw/timer/system_timer.c **** int32_t STIM_InitTimer(struct STIM_Timer *timer, enum STIM_Processing processingType,
+ 267:common/prog/ped_fw/timer/system_timer.c ****     STIM_Time_t targetTime_ms, enum STIM_Mode timerMode, bool immediateStart, struct STDCB_Callback
+ 268:common/prog/ped_fw/timer/system_timer.c **** {
+ 269:common/prog/ped_fw/timer/system_timer.c ****     //assert(timer); //Currently disabled, because of LINT issues
+ 270:common/prog/ped_fw/timer/system_timer.c ****     
+ 271:common/prog/ped_fw/timer/system_timer.c ****     int32_t retVal = -1;
+ 272:common/prog/ped_fw/timer/system_timer.c ****     
+ 273:common/prog/ped_fw/timer/system_timer.c ****     if(timer != NULL)
+ 274:common/prog/ped_fw/timer/system_timer.c ****     {
+ 275:common/prog/ped_fw/timer/system_timer.c ****         retVal = STIM_RegisterTimer(timer, processingType);
+ 276:common/prog/ped_fw/timer/system_timer.c ****         
+ 277:common/prog/ped_fw/timer/system_timer.c ****         // If timer was successfully registered, initialize him
+ 278:common/prog/ped_fw/timer/system_timer.c ****         if(retVal >= 0)
+ 279:common/prog/ped_fw/timer/system_timer.c ****         {
+ 280:common/prog/ped_fw/timer/system_timer.c ****             STIM_SetTargetTime(timer, targetTime_ms);
+ 281:common/prog/ped_fw/timer/system_timer.c ****             
+ 282:common/prog/ped_fw/timer/system_timer.c ****             STIM_SetTimerMode(timer, timerMode);
+ 283:common/prog/ped_fw/timer/system_timer.c ****             
+ 284:common/prog/ped_fw/timer/system_timer.c ****             timer->cbList = callback;
+ 285:common/prog/ped_fw/timer/system_timer.c ****             
+ 286:common/prog/ped_fw/timer/system_timer.c ****             if(immediateStart)
+ 287:common/prog/ped_fw/timer/system_timer.c ****             {
+ 288:common/prog/ped_fw/timer/system_timer.c ****                 STIM_EnableTimer(timer);
+ 289:common/prog/ped_fw/timer/system_timer.c ****             }
+ 290:common/prog/ped_fw/timer/system_timer.c ****         }
+ 291:common/prog/ped_fw/timer/system_timer.c ****     }
+ 292:common/prog/ped_fw/timer/system_timer.c ****     return retVal;
+ 293:common/prog/ped_fw/timer/system_timer.c **** }
+ 294:common/prog/ped_fw/timer/system_timer.c **** 
+ 295:common/prog/ped_fw/timer/system_timer.c **** 
+ 296:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+ 297:common/prog/ped_fw/timer/system_timer.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 298:common/prog/ped_fw/timer/system_timer.c **** /******************************************************************************/
+ 299:common/prog/ped_fw/timer/system_timer.c **** 
+ 300:common/prog/ped_fw/timer/system_timer.c **** static void STIM_ProcessTimers(struct STIM_Timer *timerPtr, uint16_t timeDiff_ms)
+  27              		.loc 1 300 13 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		.loc 1 300 13 is_stmt 0 view .LVU1
+  32 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 24
+  35              		.cfi_offset 3, -24
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 300 13 view .LVU2
+  42 0002 0400     		movs	r4, r0
+  43 0004 0D00     		movs	r5, r1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 7
+
+
+ 301:common/prog/ped_fw/timer/system_timer.c **** {
+ 302:common/prog/ped_fw/timer/system_timer.c ****     STIM_Time_t timerTime;
+ 303:common/prog/ped_fw/timer/system_timer.c ****     uint8_t timerStatus;
+ 304:common/prog/ped_fw/timer/system_timer.c ****     
+ 305:common/prog/ped_fw/timer/system_timer.c ****     /* no processing needed if timeDiff_ms is 0 */
+ 306:common/prog/ped_fw/timer/system_timer.c ****     if(timeDiff_ms == 0U)
+ 307:common/prog/ped_fw/timer/system_timer.c ****     {
+ 308:common/prog/ped_fw/timer/system_timer.c ****         return;
+ 309:common/prog/ped_fw/timer/system_timer.c ****     }
+ 310:common/prog/ped_fw/timer/system_timer.c ****     
+ 311:common/prog/ped_fw/timer/system_timer.c ****     /* process until last (NULL) timer pointer is reached */
+ 312:common/prog/ped_fw/timer/system_timer.c ****     while(timerPtr != NULL)
+ 313:common/prog/ped_fw/timer/system_timer.c ****     {
+ 314:common/prog/ped_fw/timer/system_timer.c ****         if(timerPtr->enabled == true)
+ 315:common/prog/ped_fw/timer/system_timer.c ****         {
+ 316:common/prog/ped_fw/timer/system_timer.c ****             // Clear status and calculate new time
+ 317:common/prog/ped_fw/timer/system_timer.c ****             timerStatus = 0U;
+ 318:common/prog/ped_fw/timer/system_timer.c ****             timerTime = timerPtr->currentTime_ms + timeDiff_ms;
+ 319:common/prog/ped_fw/timer/system_timer.c ****             
+ 320:common/prog/ped_fw/timer/system_timer.c ****             // Check for timer overflow
+ 321:common/prog/ped_fw/timer/system_timer.c ****             if(timerPtr->currentTime_ms > timerTime)
+ 322:common/prog/ped_fw/timer/system_timer.c ****             {
+ 323:common/prog/ped_fw/timer/system_timer.c ****                 timerStatus |= STIM_STATUS_OVERFLOW;
+ 324:common/prog/ped_fw/timer/system_timer.c ****                 STIM_DisableTimer(timerPtr);
+ 325:common/prog/ped_fw/timer/system_timer.c ****             }
+ 326:common/prog/ped_fw/timer/system_timer.c ****             timerPtr->currentTime_ms = timerTime;
+ 327:common/prog/ped_fw/timer/system_timer.c ****             
+ 328:common/prog/ped_fw/timer/system_timer.c ****             if(STIM_IsTargetTimeSet(timerPtr))
+ 329:common/prog/ped_fw/timer/system_timer.c ****             {
+ 330:common/prog/ped_fw/timer/system_timer.c ****                 // Check if timer is triggered
+ 331:common/prog/ped_fw/timer/system_timer.c ****                 if(STIM_IsTimerTriggered(timerPtr))
+ 332:common/prog/ped_fw/timer/system_timer.c ****                 {
+ 333:common/prog/ped_fw/timer/system_timer.c ****                     timerStatus |= STIM_STATUS_TRIGGERED;
+  44              		.loc 1 333 33 view .LVU3
+  45 0006 0126     		movs	r6, #1
+ 334:common/prog/ped_fw/timer/system_timer.c ****                     
+ 335:common/prog/ped_fw/timer/system_timer.c ****                     // If timer mode is single, stop timer
+ 336:common/prog/ped_fw/timer/system_timer.c ****                     if(timerPtr->mode == STIM_MODE_SINGLE)
+ 337:common/prog/ped_fw/timer/system_timer.c ****                     {
+ 338:common/prog/ped_fw/timer/system_timer.c ****                         STIM_DisableTimer(timerPtr);
+ 339:common/prog/ped_fw/timer/system_timer.c ****                     }
+ 340:common/prog/ped_fw/timer/system_timer.c ****                     else
+ 341:common/prog/ped_fw/timer/system_timer.c ****                     {
+ 342:common/prog/ped_fw/timer/system_timer.c ****                         // Decrement timer by target time
+ 343:common/prog/ped_fw/timer/system_timer.c ****                         timerPtr->currentTime_ms -= timerPtr->targetTime_ms;
+ 344:common/prog/ped_fw/timer/system_timer.c ****                         
+ 345:common/prog/ped_fw/timer/system_timer.c ****                         // Check again for for missed trigger
+ 346:common/prog/ped_fw/timer/system_timer.c ****                         if(STIM_IsTimerTriggered(timerPtr))
+ 347:common/prog/ped_fw/timer/system_timer.c ****                         {
+ 348:common/prog/ped_fw/timer/system_timer.c ****                             timerStatus |= STIM_STATUS_MISSED;
+  46              		.loc 1 348 41 view .LVU4
+  47 0008 0327     		movs	r7, #3
+  48              	.LVL1:
+  49              	.L2:
+ 312:common/prog/ped_fw/timer/system_timer.c ****     {
+  50              		.loc 1 312 20 is_stmt 1 view .LVU5
+  51 000a 002C     		cmp	r4, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 8
+
+
+  52 000c 00D1     		bne	.L10
+ 349:common/prog/ped_fw/timer/system_timer.c ****                         }
+ 350:common/prog/ped_fw/timer/system_timer.c ****                     }
+ 351:common/prog/ped_fw/timer/system_timer.c ****                 }
+ 352:common/prog/ped_fw/timer/system_timer.c ****             }
+ 353:common/prog/ped_fw/timer/system_timer.c ****             
+ 354:common/prog/ped_fw/timer/system_timer.c ****             // In case status is not 0, execute callbacks
+ 355:common/prog/ped_fw/timer/system_timer.c ****             if(timerStatus != 0U)
+ 356:common/prog/ped_fw/timer/system_timer.c ****             {
+ 357:common/prog/ped_fw/timer/system_timer.c ****                 timerPtr->status |= timerStatus;
+ 358:common/prog/ped_fw/timer/system_timer.c ****                 STIM_ExecuteCallbacks(timerPtr, timerStatus);
+ 359:common/prog/ped_fw/timer/system_timer.c ****             }
+ 360:common/prog/ped_fw/timer/system_timer.c ****         }
+ 361:common/prog/ped_fw/timer/system_timer.c ****         
+ 362:common/prog/ped_fw/timer/system_timer.c ****         // set pointer to next timer instance
+ 363:common/prog/ped_fw/timer/system_timer.c ****         timerPtr = timerPtr->nextTimer;
+ 364:common/prog/ped_fw/timer/system_timer.c ****     }
+ 365:common/prog/ped_fw/timer/system_timer.c **** }
+  53              		.loc 1 365 1 is_stmt 0 view .LVU6
+  54              		@ sp needed
+  55              	.LVL2:
+  56              		.loc 1 365 1 view .LVU7
+  57 000e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+  58              	.LVL3:
+  59              	.L10:
+ 314:common/prog/ped_fw/timer/system_timer.c ****         {
+  60              		.loc 1 314 9 is_stmt 1 view .LVU8
+ 314:common/prog/ped_fw/timer/system_timer.c ****         {
+  61              		.loc 1 314 20 is_stmt 0 view .LVU9
+  62 0010 637A     		ldrb	r3, [r4, #9]
+ 314:common/prog/ped_fw/timer/system_timer.c ****         {
+  63              		.loc 1 314 11 view .LVU10
+  64 0012 002B     		cmp	r3, #0
+  65 0014 28D0     		beq	.L4
+ 317:common/prog/ped_fw/timer/system_timer.c ****             timerTime = timerPtr->currentTime_ms + timeDiff_ms;
+  66              		.loc 1 317 13 is_stmt 1 view .LVU11
+  67              	.LVL4:
+ 318:common/prog/ped_fw/timer/system_timer.c ****             
+  68              		.loc 1 318 13 view .LVU12
+ 318:common/prog/ped_fw/timer/system_timer.c ****             
+  69              		.loc 1 318 33 is_stmt 0 view .LVU13
+  70 0016 2268     		ldr	r2, [r4]
+ 321:common/prog/ped_fw/timer/system_timer.c ****             {
+  71              		.loc 1 321 24 view .LVU14
+  72 0018 2168     		ldr	r1, [r4]
+ 318:common/prog/ped_fw/timer/system_timer.c ****             
+  73              		.loc 1 318 23 view .LVU15
+  74 001a AA18     		adds	r2, r5, r2
+  75              	.LVL5:
+ 321:common/prog/ped_fw/timer/system_timer.c ****             {
+  76              		.loc 1 321 13 is_stmt 1 view .LVU16
+  77 001c 0023     		movs	r3, #0
+ 321:common/prog/ped_fw/timer/system_timer.c ****             {
+  78              		.loc 1 321 15 is_stmt 0 view .LVU17
+  79 001e 8A42     		cmp	r2, r1
+  80 0020 01D2     		bcs	.L5
+ 323:common/prog/ped_fw/timer/system_timer.c ****                 STIM_DisableTimer(timerPtr);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 9
+
+
+  81              		.loc 1 323 17 is_stmt 1 view .LVU18
+  82              	.LVL6:
+ 324:common/prog/ped_fw/timer/system_timer.c ****             }
+  83              		.loc 1 324 17 view .LVU19
+  84              	.LBB40:
+  85              	.LBI40:
+  86              		.file 2 "common/prog/ped_fw/timer/system_timer.h"
+   1:common/prog/ped_fw/timer/system_timer.h **** /*******************************************************************************
+   2:common/prog/ped_fw/timer/system_timer.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/timer/system_timer.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/timer/system_timer.h ****  *
+   5:common/prog/ped_fw/timer/system_timer.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/timer/system_timer.h ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/timer/system_timer.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/timer/system_timer.h ****  *
+   9:common/prog/ped_fw/timer/system_timer.h ****  *******************************************************************************
+  10:common/prog/ped_fw/timer/system_timer.h ****  *  PROJECT          System Timer, Generic SW
+  11:common/prog/ped_fw/timer/system_timer.h ****  *  COMP_ABBREV      STIM
+  12:common/prog/ped_fw/timer/system_timer.h ****  ******************************************************************************/
+  13:common/prog/ped_fw/timer/system_timer.h **** 
+  14:common/prog/ped_fw/timer/system_timer.h **** #ifndef SYSTEM_TIMER_H
+  15:common/prog/ped_fw/timer/system_timer.h **** #define SYSTEM_TIMER_H
+  16:common/prog/ped_fw/timer/system_timer.h **** 
+  17:common/prog/ped_fw/timer/system_timer.h **** #ifdef __cplusplus
+  18:common/prog/ped_fw/timer/system_timer.h ****  extern "C" {
+  19:common/prog/ped_fw/timer/system_timer.h **** #endif
+  20:common/prog/ped_fw/timer/system_timer.h **** 
+  21:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+  22:common/prog/ped_fw/timer/system_timer.h **** /* DOCUMENTATION                                                              */
+  23:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+  24:common/prog/ped_fw/timer/system_timer.h **** /*lint -save -e9059 "C comment contains C++ comment"
+  25:common/prog/ped_fw/timer/system_timer.h ****  * Codeblock with comments for doxygen needed. Tested with various parsers to work correctly
+  26:common/prog/ped_fw/timer/system_timer.h ****  */
+  27:common/prog/ped_fw/timer/system_timer.h ****  
+  28:common/prog/ped_fw/timer/system_timer.h **** /** \file
+  29:common/prog/ped_fw/timer/system_timer.h ****  *
+  30:common/prog/ped_fw/timer/system_timer.h ****  *  \brief    Public definitions and declarations for unit STIM.
+  31:common/prog/ped_fw/timer/system_timer.h ****  *
+  32:common/prog/ped_fw/timer/system_timer.h ****  *  \details  System timer library serves for single or periodic time
+  33:common/prog/ped_fw/timer/system_timer.h ****  *            measurement and callback execution with resolution down to one
+  34:common/prog/ped_fw/timer/system_timer.h ****  *            millisecond. System timer library contains two types of execution
+  35:common/prog/ped_fw/timer/system_timer.h ****  *            handlers, interrupt handler and scheduler handler.
+  36:common/prog/ped_fw/timer/system_timer.h ****  *
+  37:common/prog/ped_fw/timer/system_timer.h ****  *            Scheduler handler is used for processing of less accurate timers.
+  38:common/prog/ped_fw/timer/system_timer.h ****  *            Accuracy of these timers is given by time period of execution of
+  39:common/prog/ped_fw/timer/system_timer.h ****  *            this handler. If accuracy of these timers is not sufficient, then
+  40:common/prog/ped_fw/timer/system_timer.h ****  *            interrupt based timers (see next section) should be used instead.
+  41:common/prog/ped_fw/timer/system_timer.h ****  *
+  42:common/prog/ped_fw/timer/system_timer.h ****  *            Interrupt handler is called from hardware timer interrupt service
+  43:common/prog/ped_fw/timer/system_timer.h ****  *            routine with period of integer value in milliseconds. This
+  44:common/prog/ped_fw/timer/system_timer.h ****  *            handler is used for base time update and for processing of
+  45:common/prog/ped_fw/timer/system_timer.h ****  *            accurate interrupt base timers (including callback execution).
+  46:common/prog/ped_fw/timer/system_timer.h ****  *            For all ARM Cortex-M microcontrollers, SysTick timer is used by
+  47:common/prog/ped_fw/timer/system_timer.h ****  *            default for this purpose.
+  48:common/prog/ped_fw/timer/system_timer.h ****  *
+  49:common/prog/ped_fw/timer/system_timer.h ****  *            Interrupt based timers should only be used if really necessary,
+  50:common/prog/ped_fw/timer/system_timer.h ****  *            and respective callback functions should be kept as light as
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 10
+
+
+  51:common/prog/ped_fw/timer/system_timer.h ****  *            possible. Otherwise they can have impact on other real-time
+  52:common/prog/ped_fw/timer/system_timer.h ****  *            functions (UART/DBus handling, RTOS scheduling, ...)
+  53:common/prog/ped_fw/timer/system_timer.h ****  *
+  54:common/prog/ped_fw/timer/system_timer.h ****  *  Example of using system timer for precise single shot time measurement
+  55:common/prog/ped_fw/timer/system_timer.h ****  *  \code
+  56:common/prog/ped_fw/timer/system_timer.h ****  *  // Static definition of timer instance
+  57:common/prog/ped_fw/timer/system_timer.h ****  *  static struct STIM_Timer TimerInstance;
+  58:common/prog/ped_fw/timer/system_timer.h ****  *
+  59:common/prog/ped_fw/timer/system_timer.h ****  *  // Initialization and start of timer (500 ms)
+  60:common/prog/ped_fw/timer/system_timer.h ****  *  STIM_InitTimer(&TimerInstance, STIM_PROCESSING_INTERRUPT, 500u,
+  61:common/prog/ped_fw/timer/system_timer.h ****  *      STIM_MODE_SINGLE, true, NULL);
+  62:common/prog/ped_fw/timer/system_timer.h ****  *
+  63:common/prog/ped_fw/timer/system_timer.h ****  *  // Waiting until timer is down
+  64:common/prog/ped_fw/timer/system_timer.h ****  *  while(!STIM_IsTimerDown(&TimerInstance)) {}
+  65:common/prog/ped_fw/timer/system_timer.h ****  *  \endcode
+  66:common/prog/ped_fw/timer/system_timer.h ****  *
+  67:common/prog/ped_fw/timer/system_timer.h ****  *  Example of using system timer for continuous periodic callback function execution
+  68:common/prog/ped_fw/timer/system_timer.h ****  *  \code
+  69:common/prog/ped_fw/timer/system_timer.h ****  *  // Callback function definition
+  70:common/prog/ped_fw/timer/system_timer.h ****  *  int32_t TimerCallbackFunction(void *obj, uint32_t flags, int32_t data)
+  71:common/prog/ped_fw/timer/system_timer.h ****  *  {
+  72:common/prog/ped_fw/timer/system_timer.h ****  *      // User code ...
+  73:common/prog/ped_fw/timer/system_timer.h ****  *      return 0;
+  74:common/prog/ped_fw/timer/system_timer.h ****  *  }
+  75:common/prog/ped_fw/timer/system_timer.h ****  *
+  76:common/prog/ped_fw/timer/system_timer.h ****  *  // Static definitions of timer and callback instances (1 s)
+  77:common/prog/ped_fw/timer/system_timer.h ****  *  static struct STIM_Timer TimerInstance;
+  78:common/prog/ped_fw/timer/system_timer.h ****  *  static struct STDCB_Callback CallbackInstance;
+  79:common/prog/ped_fw/timer/system_timer.h ****  *
+  80:common/prog/ped_fw/timer/system_timer.h ****  *  // Initialization of callback and timer instances
+  81:common/prog/ped_fw/timer/system_timer.h ****  *  STIM_InitCallback(&CallbackInstance, TimerCallbackFunction, NULL,
+  82:common/prog/ped_fw/timer/system_timer.h ****  *      STIM_STATUS_TRIGGERED);
+  83:common/prog/ped_fw/timer/system_timer.h ****  *  STIM_InitTimer(&TimerInstance, STIM_PROCESSING_SCHEDULER, 1000u,
+  84:common/prog/ped_fw/timer/system_timer.h ****  *      STIM_MODE_PERIODIC, true, &CallbackInstance);
+  85:common/prog/ped_fw/timer/system_timer.h ****  *  \endcode
+  86:common/prog/ped_fw/timer/system_timer.h ****  *
+  87:common/prog/ped_fw/timer/system_timer.h ****  *  Example of using system timer as stopwatch:
+  88:common/prog/ped_fw/timer/system_timer.h ****  *  \code
+  89:common/prog/ped_fw/timer/system_timer.h ****  *  // Static definition of stopwatch instance
+  90:common/prog/ped_fw/timer/system_timer.h ****  *  static struct STIM_Timer StopwatchInstance;
+  91:common/prog/ped_fw/timer/system_timer.h ****  *
+  92:common/prog/ped_fw/timer/system_timer.h ****  *  // Initialization and start of stopwatch
+  93:common/prog/ped_fw/timer/system_timer.h ****  *  STIM_InitStopwatch(&StopwatchInstance, STIM_PROCESSING_INTERRUPT, true);
+  94:common/prog/ped_fw/timer/system_timer.h ****  *
+  95:common/prog/ped_fw/timer/system_timer.h ****  *  // User code ...
+  96:common/prog/ped_fw/timer/system_timer.h ****  *
+  97:common/prog/ped_fw/timer/system_timer.h ****  *  // Read measured time
+  98:common/prog/ped_fw/timer/system_timer.h ****  *  STIM_Time_t measuredTime_ms = STIM_StopStopwatch(&StopwatchInstance);
+  99:common/prog/ped_fw/timer/system_timer.h ****  *  \endcode
+ 100:common/prog/ped_fw/timer/system_timer.h ****  */
+ 101:common/prog/ped_fw/timer/system_timer.h **** 
+ 102:common/prog/ped_fw/timer/system_timer.h **** /*lint -restore -e9059 */
+ 103:common/prog/ped_fw/timer/system_timer.h **** 
+ 104:common/prog/ped_fw/timer/system_timer.h **** 
+ 105:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 106:common/prog/ped_fw/timer/system_timer.h **** /* INCLUDES                                                                   */
+ 107:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 11
+
+
+ 108:common/prog/ped_fw/timer/system_timer.h **** #include "bsh_stdinc.h"
+ 109:common/prog/ped_fw/timer/system_timer.h **** #include <stdint.h>
+ 110:common/prog/ped_fw/timer/system_timer.h **** #include <stdbool.h>
+ 111:common/prog/ped_fw/timer/system_timer.h **** #include "std_lib/std_callback.h"
+ 112:common/prog/ped_fw/timer/system_timer.h **** 
+ 113:common/prog/ped_fw/timer/system_timer.h **** 
+ 114:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 115:common/prog/ped_fw/timer/system_timer.h **** /* PUBLIC DEFINITIONS                                                         */
+ 116:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 117:common/prog/ped_fw/timer/system_timer.h **** 
+ 118:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Timer status masks definitions
+ 119:common/prog/ped_fw/timer/system_timer.h ****  *
+ 120:common/prog/ped_fw/timer/system_timer.h ****  *  \details  These definitions are used when checking status of timer and for
+ 121:common/prog/ped_fw/timer/system_timer.h ****  *            enabling callback events. Status missed is active, when timer
+ 122:common/prog/ped_fw/timer/system_timer.h ****  *            handling misses one or more trigger events. This usually means,
+ 123:common/prog/ped_fw/timer/system_timer.h ****  *            that target time is too short for given execution period of timer
+ 124:common/prog/ped_fw/timer/system_timer.h ****  *            scheduler handle function.
+ 125:common/prog/ped_fw/timer/system_timer.h ****  */
+ 126:common/prog/ped_fw/timer/system_timer.h **** #define STIM_STATUS_TRIGGERED   0x01U   ///< Timer actual time has reached target time
+ 127:common/prog/ped_fw/timer/system_timer.h **** #define STIM_STATUS_MISSED      0x02U   ///< Timer trigger event has occurred multiple times withou
+ 128:common/prog/ped_fw/timer/system_timer.h **** #define STIM_STATUS_OVERFLOW    0x04U   ///< Timer actual time has overflown its type - this should
+ 129:common/prog/ped_fw/timer/system_timer.h **** /* All status masks combined */
+ 130:common/prog/ped_fw/timer/system_timer.h **** #define STIM_STATUS_ALL         (STIM_STATUS_TRIGGERED  | \
+ 131:common/prog/ped_fw/timer/system_timer.h ****                                  STIM_STATUS_MISSED     | \
+ 132:common/prog/ped_fw/timer/system_timer.h ****                                  STIM_STATUS_OVERFLOW)
+ 133:common/prog/ped_fw/timer/system_timer.h **** 
+ 134:common/prog/ped_fw/timer/system_timer.h **** 
+ 135:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Timer base definitions
+ 136:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This definitions are used in target time calculations.
+ 137:common/prog/ped_fw/timer/system_timer.h ****  */
+ 138:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_BASE_MS       1U                          ///< millisecond time base
+ 139:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_BASE_SEC      1000U                       ///< second time base
+ 140:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_BASE_MIN      (STIM_TIME_BASE_SEC * 60U)  ///< minute time base
+ 141:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_BASE_HOUR     (STIM_TIME_BASE_MIN * 60U)  ///< hour time base
+ 142:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_BASE_DAY      (STIM_TIME_BASE_HOUR * 24U) ///< day time base
+ 143:common/prog/ped_fw/timer/system_timer.h **** 
+ 144:common/prog/ped_fw/timer/system_timer.h **** /*lint -save -e9026  "function like macro defined" */
+ 145:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Definitions used to calculate target time.
+ 146:common/prog/ped_fw/timer/system_timer.h ****  */
+ 147:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_MS(time)      (STIM_Time_t)(time)
+ 148:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_SEC(time)     (STIM_Time_t)((time) * STIM_TIME_BASE_SEC)
+ 149:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_MIN(time)     (STIM_Time_t)((time) * STIM_TIME_BASE_MIN)
+ 150:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_HOUR(time)    (STIM_Time_t)((time) * STIM_TIME_BASE_HOUR)
+ 151:common/prog/ped_fw/timer/system_timer.h **** #define STIM_TIME_DAY(time)     (STIM_Time_t)((time) * STIM_TIME_BASE_DAY)
+ 152:common/prog/ped_fw/timer/system_timer.h **** /*lint -restore -e9026 */
+ 153:common/prog/ped_fw/timer/system_timer.h **** 
+ 154:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 155:common/prog/ped_fw/timer/system_timer.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+ 156:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 157:common/prog/ped_fw/timer/system_timer.h **** 
+ 158:common/prog/ped_fw/timer/system_timer.h **** /** \brief    System Timer time type.
+ 159:common/prog/ped_fw/timer/system_timer.h ****  */
+ 160:common/prog/ped_fw/timer/system_timer.h **** typedef uint32_t STIM_Time_t;   ///< Maximum measured time is 2^32 s (~49.71 days)
+ 161:common/prog/ped_fw/timer/system_timer.h **** 
+ 162:common/prog/ped_fw/timer/system_timer.h **** 
+ 163:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Timer repetition and protection mode.
+ 164:common/prog/ped_fw/timer/system_timer.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 12
+
+
+ 165:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This enumeration type is used configure repetition and protection
+ 166:common/prog/ped_fw/timer/system_timer.h ****  *            of single timer instance. In case of single shot timer, the timer
+ 167:common/prog/ped_fw/timer/system_timer.h ****  *            is disabled when the target time is reached. When the timer is in
+ 168:common/prog/ped_fw/timer/system_timer.h ****  *            periodic mode, the actual time is decremented by target time
+ 169:common/prog/ped_fw/timer/system_timer.h ****  *            after reaching target time is reached and timer is kept enabled.
+ 170:common/prog/ped_fw/timer/system_timer.h ****  *            TODO - Timer protection modes not implemented
+ 171:common/prog/ped_fw/timer/system_timer.h ****  */
+ 172:common/prog/ped_fw/timer/system_timer.h **** enum STIM_Mode
+ 173:common/prog/ped_fw/timer/system_timer.h **** {
+ 174:common/prog/ped_fw/timer/system_timer.h ****     STIM_MODE_SINGLE                ///< Single shot timer
+ 175:common/prog/ped_fw/timer/system_timer.h ****     ,STIM_MODE_PERIODIC             ///< Periodic timer without protection (timer reset on missed t
+ 176:common/prog/ped_fw/timer/system_timer.h **** //  ,STIM_MODE_PERIODIC_PROTECTED   ///< Periodic timer with protection (timer is disabled and erro
+ 177:common/prog/ped_fw/timer/system_timer.h **** //  ,STIM_MODE_PERIODIC_CRITICAL    ///< Periodic timer with protection (microcontroller reset or e
+ 178:common/prog/ped_fw/timer/system_timer.h **** };
+ 179:common/prog/ped_fw/timer/system_timer.h **** 
+ 180:common/prog/ped_fw/timer/system_timer.h **** 
+ 181:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Timer processing type.
+ 182:common/prog/ped_fw/timer/system_timer.h ****  *
+ 183:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This enumeration type is used configure processing type of timer
+ 184:common/prog/ped_fw/timer/system_timer.h ****  *            instance. When interrupt processing is selected, timer update
+ 185:common/prog/ped_fw/timer/system_timer.h ****  *            and callback execution is done in background using hardware timer
+ 186:common/prog/ped_fw/timer/system_timer.h ****  *            interrupt service routine. When scheduler processing is selected,
+ 187:common/prog/ped_fw/timer/system_timer.h ****  *            timer update and callback execution is done in foreground using
+ 188:common/prog/ped_fw/timer/system_timer.h ****  *            scheduler task.
+ 189:common/prog/ped_fw/timer/system_timer.h ****  */
+ 190:common/prog/ped_fw/timer/system_timer.h **** enum STIM_Processing
+ 191:common/prog/ped_fw/timer/system_timer.h **** {
+ 192:common/prog/ped_fw/timer/system_timer.h ****     STIM_PROCESSING_INTERRUPT,  ///< Process timer instance in interrupt handler
+ 193:common/prog/ped_fw/timer/system_timer.h ****     STIM_PROCESSING_SCHEDULER   ///< Process timer instance in scheduler handle task
+ 194:common/prog/ped_fw/timer/system_timer.h **** };
+ 195:common/prog/ped_fw/timer/system_timer.h **** 
+ 196:common/prog/ped_fw/timer/system_timer.h **** /*lint -esym(9045,*STIM_Timer)  "non-hidden definition of type struct STIM_Timer" */
+ 197:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Base timer structure.
+ 198:common/prog/ped_fw/timer/system_timer.h ****  *
+ 199:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This structure is used for all system timer instances. System timer
+ 200:common/prog/ped_fw/timer/system_timer.h ****  *            instance has to be placed in static memory, as it is added to
+ 201:common/prog/ped_fw/timer/system_timer.h ****  *            linked list during initialization.
+ 202:common/prog/ped_fw/timer/system_timer.h ****  */
+ 203:common/prog/ped_fw/timer/system_timer.h **** struct STIM_Timer
+ 204:common/prog/ped_fw/timer/system_timer.h **** {
+ 205:common/prog/ped_fw/timer/system_timer.h ****     volatile STIM_Time_t    currentTime_ms; ///< Actual time
+ 206:common/prog/ped_fw/timer/system_timer.h ****     STIM_Time_t             targetTime_ms;  ///< Target time
+ 207:common/prog/ped_fw/timer/system_timer.h ****     
+ 208:common/prog/ped_fw/timer/system_timer.h ****     volatile uint8_t        status;         ///< Timer status
+ 209:common/prog/ped_fw/timer/system_timer.h ****     volatile bool           enabled;        ///< Timer enable flag
+ 210:common/prog/ped_fw/timer/system_timer.h ****     enum STIM_Mode          mode;           ///< Timer mode selection
+ 211:common/prog/ped_fw/timer/system_timer.h **** 
+ 212:common/prog/ped_fw/timer/system_timer.h ****     struct STDCB_Callback   *cbList;        ///< Timer callback list
+ 213:common/prog/ped_fw/timer/system_timer.h ****     struct STIM_Timer       *nextTimer;     ///< Next timer instance in linked list
+ 214:common/prog/ped_fw/timer/system_timer.h **** };
+ 215:common/prog/ped_fw/timer/system_timer.h **** 
+ 216:common/prog/ped_fw/timer/system_timer.h **** 
+ 217:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 218:common/prog/ped_fw/timer/system_timer.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+ 219:common/prog/ped_fw/timer/system_timer.h **** /******************************************************************************/
+ 220:common/prog/ped_fw/timer/system_timer.h **** 
+ 221:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Function for initializing SystemTimer module.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 13
+
+
+ 222:common/prog/ped_fw/timer/system_timer.h ****  */
+ 223:common/prog/ped_fw/timer/system_timer.h **** extern int32_t STIM_InitModule(void);
+ 224:common/prog/ped_fw/timer/system_timer.h **** 
+ 225:common/prog/ped_fw/timer/system_timer.h **** 
+ 226:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Function for reading of circular time variable of system timer.
+ 227:common/prog/ped_fw/timer/system_timer.h ****  *
+ 228:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   actual time in ms
+ 229:common/prog/ped_fw/timer/system_timer.h ****  */
+ 230:common/prog/ped_fw/timer/system_timer.h **** extern uint32_t STIM_GetTick(void);
+ 231:common/prog/ped_fw/timer/system_timer.h **** 
+ 232:common/prog/ped_fw/timer/system_timer.h **** 
+ 233:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Function for initializing callback structure.
+ 234:common/prog/ped_fw/timer/system_timer.h ****  *
+ 235:common/prog/ped_fw/timer/system_timer.h ****  *  \details  Callback structures can be initialized directly by static
+ 236:common/prog/ped_fw/timer/system_timer.h ****  *            initialization or using this initialization function.
+ 237:common/prog/ped_fw/timer/system_timer.h ****  *
+ 238:common/prog/ped_fw/timer/system_timer.h ****  *  \param    callback:     pointer to callback instance
+ 239:common/prog/ped_fw/timer/system_timer.h ****  *  \param    functionPtr:  pointer to callback function
+ 240:common/prog/ped_fw/timer/system_timer.h ****  *  \param    objectPtr:    pointer to user object (NULL if not used)
+ 241:common/prog/ped_fw/timer/system_timer.h ****  *  \param    statusMask:   status mask for enabling callbacks on certain events
+ 242:common/prog/ped_fw/timer/system_timer.h ****  *
+ 243:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   returns 0 if success, otherwise -1
+ 244:common/prog/ped_fw/timer/system_timer.h ****  */
+ 245:common/prog/ped_fw/timer/system_timer.h **** static inline int32_t STIM_InitCallback(struct STDCB_Callback *callback, STDCB_CallbackFunction_t f
+ 246:common/prog/ped_fw/timer/system_timer.h **** {
+ 247:common/prog/ped_fw/timer/system_timer.h ****     return STDCB_InitCallback(callback, functionPtr, objectPtr, (uint32_t) statusMask);
+ 248:common/prog/ped_fw/timer/system_timer.h **** }
+ 249:common/prog/ped_fw/timer/system_timer.h **** 
+ 250:common/prog/ped_fw/timer/system_timer.h **** 
+ 251:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Function for attaching callback structure to timer instance.
+ 252:common/prog/ped_fw/timer/system_timer.h ****  *
+ 253:common/prog/ped_fw/timer/system_timer.h ****  *  \details  One timer can have multiple callbacks attached, for example one
+ 254:common/prog/ped_fw/timer/system_timer.h ****  *            callback for trigger event and one for event error handling. One
+ 255:common/prog/ped_fw/timer/system_timer.h ****  *            callback instance can be assigned only to one timer instance.
+ 256:common/prog/ped_fw/timer/system_timer.h ****  *            This function is protected from attaching already attached callback
+ 257:common/prog/ped_fw/timer/system_timer.h ****  *            instance. Be careful when attaching callback instance, as it has
+ 258:common/prog/ped_fw/timer/system_timer.h ****  *            to be defined in static memory.
+ 259:common/prog/ped_fw/timer/system_timer.h ****  *
+ 260:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer:        pointer to timer instance
+ 261:common/prog/ped_fw/timer/system_timer.h ****  *  \param    callback:     pointer to callback instance
+ 262:common/prog/ped_fw/timer/system_timer.h ****  *
+ 263:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   returns 0 if success, -1 if callback is already attached
+ 264:common/prog/ped_fw/timer/system_timer.h ****  */
+ 265:common/prog/ped_fw/timer/system_timer.h **** static inline int32_t STIM_AttachCallback(struct STIM_Timer *timer, struct STDCB_Callback *callback
+ 266:common/prog/ped_fw/timer/system_timer.h **** {
+ 267:common/prog/ped_fw/timer/system_timer.h ****     return STDCB_AttachCallback(&timer->cbList, callback);
+ 268:common/prog/ped_fw/timer/system_timer.h **** }
+ 269:common/prog/ped_fw/timer/system_timer.h **** 
+ 270:common/prog/ped_fw/timer/system_timer.h **** 
+ 271:common/prog/ped_fw/timer/system_timer.h **** /** \brief    System timer interrupt handle task.
+ 272:common/prog/ped_fw/timer/system_timer.h ****  *
+ 273:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This function increments system time and handle processing
+ 274:common/prog/ped_fw/timer/system_timer.h ****  *            of all timers assigned to processing by interrupts.
+ 275:common/prog/ped_fw/timer/system_timer.h ****  *
+ 276:common/prog/ped_fw/timer/system_timer.h ****  *  \param    interruptPeriod_ms: period of interrupt timer in milliseconds.
+ 277:common/prog/ped_fw/timer/system_timer.h ****  */
+ 278:common/prog/ped_fw/timer/system_timer.h **** extern void STIM_InterruptHandler(uint16_t interruptPeriod_ms);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 14
+
+
+ 279:common/prog/ped_fw/timer/system_timer.h **** 
+ 280:common/prog/ped_fw/timer/system_timer.h **** 
+ 281:common/prog/ped_fw/timer/system_timer.h **** /** \brief    System timer scheduler handle task.
+ 282:common/prog/ped_fw/timer/system_timer.h ****  *
+ 283:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This function handles handles processing of all timers assigned 
+ 284:common/prog/ped_fw/timer/system_timer.h ****  *            to processing by scheduler task.
+ 285:common/prog/ped_fw/timer/system_timer.h ****  *
+ 286:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   required by scheduler and always true
+ 287:common/prog/ped_fw/timer/system_timer.h ****  */
+ 288:common/prog/ped_fw/timer/system_timer.h **** extern void STIM_SchedulerHandleTask(void);
+ 289:common/prog/ped_fw/timer/system_timer.h **** 
+ 290:common/prog/ped_fw/timer/system_timer.h **** 
+ 291:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Timer initialization function.
+ 292:common/prog/ped_fw/timer/system_timer.h ****  *
+ 293:common/prog/ped_fw/timer/system_timer.h ****  *  \details  This function initializes timer instance, appends it to appropriate
+ 294:common/prog/ped_fw/timer/system_timer.h ****  *            timer linked list, sets target time and list
+ 295:common/prog/ped_fw/timer/system_timer.h ****  *
+ 296:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer:          pointer to timer instance
+ 297:common/prog/ped_fw/timer/system_timer.h ****  *  \param    processingType: interrupt or scheduler processing type of timer instance
+ 298:common/prog/ped_fw/timer/system_timer.h ****  *                STIM_PROCESSING_INTERRUPT - timer instance will processed in interrupt handler
+ 299:common/prog/ped_fw/timer/system_timer.h ****  *                STIM_PROCESSING_SCHEDULER - timer instance will processed in scheduler handle tas
+ 300:common/prog/ped_fw/timer/system_timer.h ****  *  \param    targetTime_ms:  target time in milliseconds
+ 301:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timerMode:      mode of timer - periodicity and protection
+ 302:common/prog/ped_fw/timer/system_timer.h ****  *                STIM_MODE_SINGLE - timer will be stopped after reaching target time
+ 303:common/prog/ped_fw/timer/system_timer.h ****  *                STIM_MODE_PERIODIC - timer will be periodically triggered
+ 304:common/prog/ped_fw/timer/system_timer.h ****  *  \param    immediateStart: if true, timer will be started during initialization
+ 305:common/prog/ped_fw/timer/system_timer.h ****  *  \param    callback:       pointer to callback instance, use NULL callback is not used
+ 306:common/prog/ped_fw/timer/system_timer.h ****  *
+ 307:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   returns 0 if success, otherwise -1
+ 308:common/prog/ped_fw/timer/system_timer.h ****  */
+ 309:common/prog/ped_fw/timer/system_timer.h **** extern int32_t STIM_InitTimer(struct STIM_Timer *timer, enum STIM_Processing processingType,
+ 310:common/prog/ped_fw/timer/system_timer.h ****     STIM_Time_t targetTime_ms, enum STIM_Mode timerMode, bool immediateStart, struct STDCB_Callback
+ 311:common/prog/ped_fw/timer/system_timer.h **** 
+ 312:common/prog/ped_fw/timer/system_timer.h **** 
+ 313:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Reads time left of timer instance.
+ 314:common/prog/ped_fw/timer/system_timer.h ****  *
+ 315:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 316:common/prog/ped_fw/timer/system_timer.h ****  *
+ 317:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   time left in milliseconds
+ 318:common/prog/ped_fw/timer/system_timer.h ****  */
+ 319:common/prog/ped_fw/timer/system_timer.h **** static inline STIM_Time_t STIM_ReadTimer(const struct STIM_Timer *timer)
+ 320:common/prog/ped_fw/timer/system_timer.h **** {
+ 321:common/prog/ped_fw/timer/system_timer.h ****     return timer->targetTime_ms - timer->currentTime_ms;
+ 322:common/prog/ped_fw/timer/system_timer.h **** }
+ 323:common/prog/ped_fw/timer/system_timer.h **** 
+ 324:common/prog/ped_fw/timer/system_timer.h **** 
+ 325:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Reads timer status flags.
+ 326:common/prog/ped_fw/timer/system_timer.h ****  *
+ 327:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 328:common/prog/ped_fw/timer/system_timer.h ****  *
+ 329:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   timer status flags
+ 330:common/prog/ped_fw/timer/system_timer.h ****  */
+ 331:common/prog/ped_fw/timer/system_timer.h **** static inline uint8_t STIM_GetStatus(const struct STIM_Timer *timer)
+ 332:common/prog/ped_fw/timer/system_timer.h **** {
+ 333:common/prog/ped_fw/timer/system_timer.h ****     return timer->status;
+ 334:common/prog/ped_fw/timer/system_timer.h **** }
+ 335:common/prog/ped_fw/timer/system_timer.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 15
+
+
+ 336:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Clears timer status flags.
+ 337:common/prog/ped_fw/timer/system_timer.h ****  *
+ 338:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 339:common/prog/ped_fw/timer/system_timer.h ****  */
+ 340:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_ClearStatus(struct STIM_Timer *timer)
+ 341:common/prog/ped_fw/timer/system_timer.h **** {
+ 342:common/prog/ped_fw/timer/system_timer.h ****     timer->status = 0U;
+ 343:common/prog/ped_fw/timer/system_timer.h **** }
+ 344:common/prog/ped_fw/timer/system_timer.h **** 
+ 345:common/prog/ped_fw/timer/system_timer.h **** 
+ 346:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Checks if timer is triggered.
+ 347:common/prog/ped_fw/timer/system_timer.h ****  *
+ 348:common/prog/ped_fw/timer/system_timer.h ****  *  \details  Calling this function will not clear trigger flag.
+ 349:common/prog/ped_fw/timer/system_timer.h ****  *
+ 350:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 351:common/prog/ped_fw/timer/system_timer.h ****  *
+ 352:common/prog/ped_fw/timer/system_timer.h ****  *  \retval   true if timer is triggered
+ 353:common/prog/ped_fw/timer/system_timer.h ****  */
+ 354:common/prog/ped_fw/timer/system_timer.h **** static inline bool STIM_IsTimerDown(const struct STIM_Timer *timer)
+ 355:common/prog/ped_fw/timer/system_timer.h **** {
+ 356:common/prog/ped_fw/timer/system_timer.h ****     return (STIM_GetStatus(timer) & STIM_STATUS_TRIGGERED) != 0u;
+ 357:common/prog/ped_fw/timer/system_timer.h **** }
+ 358:common/prog/ped_fw/timer/system_timer.h **** 
+ 359:common/prog/ped_fw/timer/system_timer.h **** 
+ 360:common/prog/ped_fw/timer/system_timer.h **** /** \brief    This function starts timer.
+ 361:common/prog/ped_fw/timer/system_timer.h ****  *
+ 362:common/prog/ped_fw/timer/system_timer.h ****  *  \details  If the timer is initialized with manual start, this function needs
+ 363:common/prog/ped_fw/timer/system_timer.h ****  *            to be called in order to start timer.
+ 364:common/prog/ped_fw/timer/system_timer.h ****  *
+ 365:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 366:common/prog/ped_fw/timer/system_timer.h ****  */
+ 367:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_EnableTimer(struct STIM_Timer *timer)
+ 368:common/prog/ped_fw/timer/system_timer.h **** {
+ 369:common/prog/ped_fw/timer/system_timer.h ****     timer->enabled = true;
+ 370:common/prog/ped_fw/timer/system_timer.h **** }
+ 371:common/prog/ped_fw/timer/system_timer.h **** 
+ 372:common/prog/ped_fw/timer/system_timer.h **** 
+ 373:common/prog/ped_fw/timer/system_timer.h **** /** \brief    This function stops timer.
+ 374:common/prog/ped_fw/timer/system_timer.h ****  *
+ 375:common/prog/ped_fw/timer/system_timer.h ****  *  \details  Actual time measured is retained, update process is disabled.
+ 376:common/prog/ped_fw/timer/system_timer.h ****  *
+ 377:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 378:common/prog/ped_fw/timer/system_timer.h ****  */
+ 379:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_DisableTimer(struct STIM_Timer *timer)
+  87              		.loc 2 379 20 view .LVU20
+  88              	.LBB41:
+ 380:common/prog/ped_fw/timer/system_timer.h **** {
+ 381:common/prog/ped_fw/timer/system_timer.h ****     timer->enabled = false;
+  89              		.loc 2 381 5 view .LVU21
+  90              		.loc 2 381 20 is_stmt 0 view .LVU22
+  91 0022 6372     		strb	r3, [r4, #9]
+  92              	.LBE41:
+  93              	.LBE40:
+ 323:common/prog/ped_fw/timer/system_timer.c ****                 STIM_DisableTimer(timerPtr);
+  94              		.loc 1 323 29 view .LVU23
+  95 0024 0433     		adds	r3, r3, #4
+  96              	.LVL7:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 16
+
+
+  97              	.L5:
+ 326:common/prog/ped_fw/timer/system_timer.c ****             
+  98              		.loc 1 326 13 is_stmt 1 view .LVU24
+ 326:common/prog/ped_fw/timer/system_timer.c ****             
+  99              		.loc 1 326 38 is_stmt 0 view .LVU25
+ 100 0026 2260     		str	r2, [r4]
+ 328:common/prog/ped_fw/timer/system_timer.c ****             {
+ 101              		.loc 1 328 13 is_stmt 1 view .LVU26
+ 102              	.LVL8:
+ 103              	.LBB42:
+ 104              	.LBI42:
+ 112:common/prog/ped_fw/timer/system_timer.c **** {
+ 105              		.loc 1 112 13 view .LVU27
+ 106              	.LBB43:
+ 114:common/prog/ped_fw/timer/system_timer.c **** }
+ 107              		.loc 1 114 5 view .LVU28
+ 114:common/prog/ped_fw/timer/system_timer.c **** }
+ 108              		.loc 1 114 17 is_stmt 0 view .LVU29
+ 109 0028 6268     		ldr	r2, [r4, #4]
+ 110              	.LVL9:
+ 114:common/prog/ped_fw/timer/system_timer.c **** }
+ 111              		.loc 1 114 17 view .LVU30
+ 112              	.LBE43:
+ 113              	.LBE42:
+ 328:common/prog/ped_fw/timer/system_timer.c ****             {
+ 114              		.loc 1 328 15 view .LVU31
+ 115 002a 002A     		cmp	r2, #0
+ 116 002c 1AD0     		beq	.L6
+ 331:common/prog/ped_fw/timer/system_timer.c ****                 {
+ 117              		.loc 1 331 17 is_stmt 1 view .LVU32
+ 118              	.LVL10:
+ 119              	.LBB44:
+ 120              	.LBI44:
+ 124:common/prog/ped_fw/timer/system_timer.c **** {
+ 121              		.loc 1 124 13 view .LVU33
+ 122              	.LBB45:
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 123              		.loc 1 126 5 view .LVU34
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 124              		.loc 1 126 17 is_stmt 0 view .LVU35
+ 125 002e 2168     		ldr	r1, [r4]
+ 126              	.LVL11:
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 127              		.loc 1 126 17 view .LVU36
+ 128              	.LBE45:
+ 129              	.LBE44:
+ 331:common/prog/ped_fw/timer/system_timer.c ****                 {
+ 130              		.loc 1 331 19 view .LVU37
+ 131 0030 8A42     		cmp	r2, r1
+ 132 0032 17D8     		bhi	.L6
+ 333:common/prog/ped_fw/timer/system_timer.c ****                     
+ 133              		.loc 1 333 21 is_stmt 1 view .LVU38
+ 333:common/prog/ped_fw/timer/system_timer.c ****                     
+ 134              		.loc 1 333 33 is_stmt 0 view .LVU39
+ 135 0034 3100     		movs	r1, r6
+ 336:common/prog/ped_fw/timer/system_timer.c ****                     {
+ 136              		.loc 1 336 23 view .LVU40
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 17
+
+
+ 137 0036 A07A     		ldrb	r0, [r4, #10]
+ 333:common/prog/ped_fw/timer/system_timer.c ****                     
+ 138              		.loc 1 333 33 view .LVU41
+ 139 0038 1943     		orrs	r1, r3
+ 140              	.LVL12:
+ 336:common/prog/ped_fw/timer/system_timer.c ****                     {
+ 141              		.loc 1 336 21 is_stmt 1 view .LVU42
+ 336:common/prog/ped_fw/timer/system_timer.c ****                     {
+ 142              		.loc 1 336 23 is_stmt 0 view .LVU43
+ 143 003a 0028     		cmp	r0, #0
+ 144 003c 09D1     		bne	.L7
+ 338:common/prog/ped_fw/timer/system_timer.c ****                     }
+ 145              		.loc 1 338 25 is_stmt 1 view .LVU44
+ 146              	.LVL13:
+ 147              	.LBB46:
+ 148              	.LBI46:
+ 379:common/prog/ped_fw/timer/system_timer.h **** {
+ 149              		.loc 2 379 20 view .LVU45
+ 150              	.LBB47:
+ 151              		.loc 2 381 5 view .LVU46
+ 152              		.loc 2 381 20 is_stmt 0 view .LVU47
+ 153 003e 6072     		strb	r0, [r4, #9]
+ 154              	.LVL14:
+ 155              	.L8:
+ 156              		.loc 2 381 20 view .LVU48
+ 157              	.LBE47:
+ 158              	.LBE46:
+ 357:common/prog/ped_fw/timer/system_timer.c ****                 STIM_ExecuteCallbacks(timerPtr, timerStatus);
+ 159              		.loc 1 357 17 is_stmt 1 view .LVU49
+ 357:common/prog/ped_fw/timer/system_timer.c ****                 STIM_ExecuteCallbacks(timerPtr, timerStatus);
+ 160              		.loc 1 357 34 is_stmt 0 view .LVU50
+ 161 0040 237A     		ldrb	r3, [r4, #8]
+ 162              	.LBB48:
+ 163              	.LBB49:
+ 164:common/prog/ped_fw/timer/system_timer.c **** }
+ 164              		.loc 1 164 11 view .LVU51
+ 165 0042 0022     		movs	r2, #0
+ 166              	.LBE49:
+ 167              	.LBE48:
+ 357:common/prog/ped_fw/timer/system_timer.c ****                 STIM_ExecuteCallbacks(timerPtr, timerStatus);
+ 168              		.loc 1 357 34 view .LVU52
+ 169 0044 0B43     		orrs	r3, r1
+ 170 0046 DBB2     		uxtb	r3, r3
+ 171              	.LBB52:
+ 172              	.LBB50:
+ 164:common/prog/ped_fw/timer/system_timer.c **** }
+ 173              		.loc 1 164 11 view .LVU53
+ 174 0048 E068     		ldr	r0, [r4, #12]
+ 175              	.LBE50:
+ 176              	.LBE52:
+ 357:common/prog/ped_fw/timer/system_timer.c ****                 STIM_ExecuteCallbacks(timerPtr, timerStatus);
+ 177              		.loc 1 357 34 view .LVU54
+ 178 004a 2372     		strb	r3, [r4, #8]
+ 358:common/prog/ped_fw/timer/system_timer.c ****             }
+ 179              		.loc 1 358 17 is_stmt 1 view .LVU55
+ 180              	.LVL15:
+ 181              	.LBB53:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 18
+
+
+ 182              	.LBI48:
+ 162:common/prog/ped_fw/timer/system_timer.c **** {
+ 183              		.loc 1 162 13 view .LVU56
+ 184              	.LBB51:
+ 164:common/prog/ped_fw/timer/system_timer.c **** }
+ 185              		.loc 1 164 4 view .LVU57
+ 164:common/prog/ped_fw/timer/system_timer.c **** }
+ 186              		.loc 1 164 11 is_stmt 0 view .LVU58
+ 187 004c FFF7FEFF 		bl	STDCB_ExecuteCallbacks
+ 188              	.LVL16:
+ 165:common/prog/ped_fw/timer/system_timer.c **** 
+ 189              		.loc 1 165 1 view .LVU59
+ 190 0050 0AE0     		b	.L4
+ 191              	.LVL17:
+ 192              	.L7:
+ 165:common/prog/ped_fw/timer/system_timer.c **** 
+ 193              		.loc 1 165 1 view .LVU60
+ 194              	.LBE51:
+ 195              	.LBE53:
+ 343:common/prog/ped_fw/timer/system_timer.c ****                         
+ 196              		.loc 1 343 25 is_stmt 1 view .LVU61
+ 343:common/prog/ped_fw/timer/system_timer.c ****                         
+ 197              		.loc 1 343 50 is_stmt 0 view .LVU62
+ 198 0052 2068     		ldr	r0, [r4]
+ 348:common/prog/ped_fw/timer/system_timer.c ****                         }
+ 199              		.loc 1 348 41 view .LVU63
+ 200 0054 3B43     		orrs	r3, r7
+ 343:common/prog/ped_fw/timer/system_timer.c ****                         
+ 201              		.loc 1 343 50 view .LVU64
+ 202 0056 801A     		subs	r0, r0, r2
+ 203 0058 2060     		str	r0, [r4]
+ 204              	.LVL18:
+ 346:common/prog/ped_fw/timer/system_timer.c ****                         {
+ 205              		.loc 1 346 25 is_stmt 1 view .LVU65
+ 206              	.LBB54:
+ 207              	.LBI54:
+ 124:common/prog/ped_fw/timer/system_timer.c **** {
+ 208              		.loc 1 124 13 view .LVU66
+ 209              	.LBB55:
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 210              		.loc 1 126 5 view .LVU67
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 211              		.loc 1 126 17 is_stmt 0 view .LVU68
+ 212 005a 2068     		ldr	r0, [r4]
+ 213              	.LVL19:
+ 126:common/prog/ped_fw/timer/system_timer.c **** }
+ 214              		.loc 1 126 17 view .LVU69
+ 215              	.LBE55:
+ 216              	.LBE54:
+ 346:common/prog/ped_fw/timer/system_timer.c ****                         {
+ 217              		.loc 1 346 27 view .LVU70
+ 218 005c 8242     		cmp	r2, r0
+ 219 005e EFD8     		bhi	.L8
+ 220              	.LVL20:
+ 221              	.L18:
+ 346:common/prog/ped_fw/timer/system_timer.c ****                         {
+ 222              		.loc 1 346 27 view .LVU71
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 19
+
+
+ 223 0060 1900     		movs	r1, r3
+ 224 0062 EDE7     		b	.L8
+ 225              	.LVL21:
+ 226              	.L6:
+ 355:common/prog/ped_fw/timer/system_timer.c ****             {
+ 227              		.loc 1 355 13 is_stmt 1 view .LVU72
+ 355:common/prog/ped_fw/timer/system_timer.c ****             {
+ 228              		.loc 1 355 15 is_stmt 0 view .LVU73
+ 229 0064 002B     		cmp	r3, #0
+ 230 0066 FBD1     		bne	.L18
+ 231              	.LVL22:
+ 232              	.L4:
+ 363:common/prog/ped_fw/timer/system_timer.c ****     }
+ 233              		.loc 1 363 9 is_stmt 1 view .LVU74
+ 363:common/prog/ped_fw/timer/system_timer.c ****     }
+ 234              		.loc 1 363 18 is_stmt 0 view .LVU75
+ 235 0068 2469     		ldr	r4, [r4, #16]
+ 236              	.LVL23:
+ 363:common/prog/ped_fw/timer/system_timer.c ****     }
+ 237              		.loc 1 363 18 view .LVU76
+ 238 006a CEE7     		b	.L2
+ 239              		.cfi_endproc
+ 240              	.LFE79:
+ 242              		.section	.text.STIM_InitModule,"ax",%progbits
+ 243              		.align	1
+ 244              		.global	STIM_InitModule
+ 245              		.syntax unified
+ 246              		.code	16
+ 247              		.thumb_func
+ 249              	STIM_InitModule:
+ 250              	.LFB71:
+ 196:common/prog/ped_fw/timer/system_timer.c **** #ifdef SYSTEM_TIMER_SYSTICK
+ 251              		.loc 1 196 1 is_stmt 1 view -0
+ 252              		.cfi_startproc
+ 253              		@ args = 0, pretend = 0, frame = 0
+ 254              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198:common/prog/ped_fw/timer/system_timer.c ****     
+ 255              		.loc 1 198 5 view .LVU78
+ 211:common/prog/ped_fw/timer/system_timer.c ****     #endif
+ 256              		.loc 1 211 9 view .LVU79
+ 257              	.LVL24:
+ 215:common/prog/ped_fw/timer/system_timer.c **** #else
+ 258              		.loc 1 215 5 view .LVU80
+ 196:common/prog/ped_fw/timer/system_timer.c **** #ifdef SYSTEM_TIMER_SYSTICK
+ 259              		.loc 1 196 1 is_stmt 0 view .LVU81
+ 260 0000 10B5     		push	{r4, lr}
+ 261              	.LCFI1:
+ 262              		.cfi_def_cfa_offset 8
+ 263              		.cfi_offset 4, -8
+ 264              		.cfi_offset 14, -4
+ 215:common/prog/ped_fw/timer/system_timer.c **** #else
+ 265              		.loc 1 215 12 view .LVU82
+ 266 0002 0121     		movs	r1, #1
+ 219:common/prog/ped_fw/timer/system_timer.c **** 
+ 267              		.loc 1 219 1 view .LVU83
+ 268              		@ sp needed
+ 215:common/prog/ped_fw/timer/system_timer.c **** #else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 20
+
+
+ 269              		.loc 1 215 12 view .LVU84
+ 270 0004 0148     		ldr	r0, .L20
+ 271 0006 FFF7FEFF 		bl	SysTick_Configure
+ 272              	.LVL25:
+ 219:common/prog/ped_fw/timer/system_timer.c **** 
+ 273              		.loc 1 219 1 view .LVU85
+ 274 000a 10BD     		pop	{r4, pc}
+ 275              	.L21:
+ 276              		.align	2
+ 277              	.L20:
+ 278 000c 006CDC02 		.word	48000000
+ 279              		.cfi_endproc
+ 280              	.LFE71:
+ 282              		.section	.text.HAL_GetTick,"ax",%progbits
+ 283              		.align	1
+ 284              		.global	HAL_GetTick
+ 285              		.syntax unified
+ 286              		.code	16
+ 287              		.thumb_func
+ 289              	HAL_GetTick:
+ 290              	.LFB81:
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 0
+ 293              		@ frame_needed = 0, uses_anonymous_args = 0
+ 294              		@ link register save eliminated.
+ 295 0000 014B     		ldr	r3, .L23
+ 296              		@ sp needed
+ 297 0002 1868     		ldr	r0, [r3]
+ 298 0004 7047     		bx	lr
+ 299              	.L24:
+ 300 0006 C046     		.align	2
+ 301              	.L23:
+ 302 0008 00000000 		.word	.LANCHOR0
+ 303              		.cfi_endproc
+ 304              	.LFE81:
+ 306              		.section	.text.STIM_GetTick,"ax",%progbits
+ 307              		.align	1
+ 308              		.global	STIM_GetTick
+ 309              		.syntax unified
+ 310              		.code	16
+ 311              		.thumb_func
+ 313              	STIM_GetTick:
+ 314              	.LFB73:
+ 231:common/prog/ped_fw/timer/system_timer.c ****     return STIM_tick;
+ 315              		.loc 1 231 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319              		@ link register save eliminated.
+ 232:common/prog/ped_fw/timer/system_timer.c **** }
+ 320              		.loc 1 232 5 view .LVU87
+ 232:common/prog/ped_fw/timer/system_timer.c **** }
+ 321              		.loc 1 232 12 is_stmt 0 view .LVU88
+ 322 0000 014B     		ldr	r3, .L26
+ 233:common/prog/ped_fw/timer/system_timer.c **** 
+ 323              		.loc 1 233 1 view .LVU89
+ 324              		@ sp needed
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 21
+
+
+ 232:common/prog/ped_fw/timer/system_timer.c **** }
+ 325              		.loc 1 232 12 view .LVU90
+ 326 0002 1868     		ldr	r0, [r3]
+ 233:common/prog/ped_fw/timer/system_timer.c **** 
+ 327              		.loc 1 233 1 view .LVU91
+ 328 0004 7047     		bx	lr
+ 329              	.L27:
+ 330 0006 C046     		.align	2
+ 331              	.L26:
+ 332 0008 00000000 		.word	.LANCHOR0
+ 333              		.cfi_endproc
+ 334              	.LFE73:
+ 336              		.section	.text.STIM_InterruptHandler,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	STIM_InterruptHandler
+ 339              		.syntax unified
+ 340              		.code	16
+ 341              		.thumb_func
+ 343              	STIM_InterruptHandler:
+ 344              	.LVL26:
+ 345              	.LFB74:
+ 237:common/prog/ped_fw/timer/system_timer.c ****     (void)interruptPeriod_ms;
+ 346              		.loc 1 237 1 is_stmt 1 view -0
+ 347              		.cfi_startproc
+ 348              		@ args = 0, pretend = 0, frame = 0
+ 349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 238:common/prog/ped_fw/timer/system_timer.c ****     
+ 350              		.loc 1 238 5 view .LVU93
+ 240:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+ 351              		.loc 1 240 5 view .LVU94
+ 241:common/prog/ped_fw/timer/system_timer.c ****     
+ 352              		.loc 1 241 5 view .LVU95
+ 353              	.LBB60:
+ 354              	.LBI60:
+ 143:common/prog/ped_fw/timer/system_timer.c **** {
+ 355              		.loc 1 143 17 view .LVU96
+ 356              	.LBB61:
+ 145:common/prog/ped_fw/timer/system_timer.c ****     const uint16_t ticksPerMs = TICKS_PER_MS;
+ 357              		.loc 1 145 5 view .LVU97
+ 146:common/prog/ped_fw/timer/system_timer.c ****     const uint32_t msMulConst = (((uint32_t)1u << FIXED_POINT_SHIFT) / TICKS_PER_MS) + 1u;
+ 358              		.loc 1 146 5 view .LVU98
+ 147:common/prog/ped_fw/timer/system_timer.c ****     
+ 359              		.loc 1 147 5 view .LVU99
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 360              		.loc 1 149 5 view .LVU100
+ 361              	.LBE61:
+ 362              	.LBE60:
+ 237:common/prog/ped_fw/timer/system_timer.c ****     (void)interruptPeriod_ms;
+ 363              		.loc 1 237 1 is_stmt 0 view .LVU101
+ 364 0000 10B5     		push	{r4, lr}
+ 365              	.LCFI2:
+ 366              		.cfi_def_cfa_offset 8
+ 367              		.cfi_offset 4, -8
+ 368              		.cfi_offset 14, -4
+ 369              	.LBB63:
+ 370              	.LBB62:
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 22
+
+
+ 371              		.loc 1 149 31 view .LVU102
+ 372 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 373              	.LVL27:
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 374              		.loc 1 149 63 view .LVU103
+ 375 0006 0B4A     		ldr	r2, .L33
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 376              		.loc 1 150 58 view .LVU104
+ 377 0008 0B49     		ldr	r1, .L33+4
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 378              		.loc 1 149 63 view .LVU105
+ 379 000a 1388     		ldrh	r3, [r2]
+ 380              	.LVL28:
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 381              		.loc 1 150 5 is_stmt 1 view .LVU106
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 382              		.loc 1 149 14 is_stmt 0 view .LVU107
+ 383 000c C01A     		subs	r0, r0, r3
+ 384              	.LVL29:
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 385              		.loc 1 150 58 view .LVU108
+ 386 000e 80B2     		uxth	r0, r0
+ 387 0010 4143     		muls	r1, r0
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 388              		.loc 1 151 19 view .LVU109
+ 389 0012 FA20     		movs	r0, #250
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 390              		.loc 1 150 72 view .LVU110
+ 391 0014 4C0E     		lsrs	r4, r1, #25
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 392              		.loc 1 151 19 view .LVU111
+ 393 0016 8000     		lsls	r0, r0, #2
+ 394 0018 6043     		muls	r0, r4
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 395              		.loc 1 151 16 view .LVU112
+ 396 001a 1B18     		adds	r3, r3, r0
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 397              		.loc 1 150 14 view .LVU113
+ 398 001c 211E     		subs	r1, r4, #0
+ 399              	.LVL30:
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 400              		.loc 1 151 5 is_stmt 1 view .LVU114
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 401              		.loc 1 151 16 is_stmt 0 view .LVU115
+ 402 001e 1380     		strh	r3, [r2]
+ 153:common/prog/ped_fw/timer/system_timer.c **** }
+ 403              		.loc 1 153 5 is_stmt 1 view .LVU116
+ 404              	.LVL31:
+ 153:common/prog/ped_fw/timer/system_timer.c **** }
+ 405              		.loc 1 153 5 is_stmt 0 view .LVU117
+ 406              	.LBE62:
+ 407              	.LBE63:
+ 243:common/prog/ped_fw/timer/system_timer.c ****     {
+ 408              		.loc 1 243 5 is_stmt 1 view .LVU118
+ 243:common/prog/ped_fw/timer/system_timer.c ****     {
+ 409              		.loc 1 243 7 is_stmt 0 view .LVU119
+ 410 0020 07D0     		beq	.L28
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 23
+
+
+ 246:common/prog/ped_fw/timer/system_timer.c ****         /* Process IRQ timers */
+ 411              		.loc 1 246 9 is_stmt 1 view .LVU120
+ 246:common/prog/ped_fw/timer/system_timer.c ****         /* Process IRQ timers */
+ 412              		.loc 1 246 19 is_stmt 0 view .LVU121
+ 413 0022 064A     		ldr	r2, .L33+8
+ 414 0024 1368     		ldr	r3, [r2]
+ 415 0026 1B19     		adds	r3, r3, r4
+ 416 0028 1360     		str	r3, [r2]
+ 248:common/prog/ped_fw/timer/system_timer.c ****     }
+ 417              		.loc 1 248 9 is_stmt 1 view .LVU122
+ 418              	.LVL32:
+ 419              	.LBB64:
+ 420              	.LBI64:
+ 300:common/prog/ped_fw/timer/system_timer.c **** {
+ 421              		.loc 1 300 13 view .LVU123
+ 422              	.LBB65:
+ 302:common/prog/ped_fw/timer/system_timer.c ****     uint8_t timerStatus;
+ 423              		.loc 1 302 5 view .LVU124
+ 303:common/prog/ped_fw/timer/system_timer.c ****     
+ 424              		.loc 1 303 5 view .LVU125
+ 306:common/prog/ped_fw/timer/system_timer.c ****     {
+ 425              		.loc 1 306 5 view .LVU126
+ 426              	.LBE65:
+ 427              	.LBE64:
+ 248:common/prog/ped_fw/timer/system_timer.c ****     }
+ 428              		.loc 1 248 9 is_stmt 0 view .LVU127
+ 429 002a 054B     		ldr	r3, .L33+12
+ 430              	.LBB67:
+ 431              	.LBB66:
+ 432 002c 1868     		ldr	r0, [r3]
+ 433 002e FFF7FEFF 		bl	STIM_ProcessTimers.part.0
+ 434              	.LVL33:
+ 435              	.L28:
+ 248:common/prog/ped_fw/timer/system_timer.c ****     }
+ 436              		.loc 1 248 9 view .LVU128
+ 437              	.LBE66:
+ 438              	.LBE67:
+ 250:common/prog/ped_fw/timer/system_timer.c **** 
+ 439              		.loc 1 250 1 view .LVU129
+ 440              		@ sp needed
+ 441              	.LVL34:
+ 250:common/prog/ped_fw/timer/system_timer.c **** 
+ 442              		.loc 1 250 1 view .LVU130
+ 443 0032 10BD     		pop	{r4, pc}
+ 444              	.L34:
+ 445              		.align	2
+ 446              	.L33:
+ 447 0034 00000000 		.word	.LANCHOR1
+ 448 0038 13830000 		.word	33555
+ 449 003c 00000000 		.word	.LANCHOR0
+ 450 0040 00000000 		.word	.LANCHOR2
+ 451              		.cfi_endproc
+ 452              	.LFE74:
+ 454              		.section	.text.STIM_SchedulerHandleTask,"ax",%progbits
+ 455              		.align	1
+ 456              		.global	STIM_SchedulerHandleTask
+ 457              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 24
+
+
+ 458              		.code	16
+ 459              		.thumb_func
+ 461              	STIM_SchedulerHandleTask:
+ 462              	.LFB75:
+ 254:common/prog/ped_fw/timer/system_timer.c ****     static uint16_t timeStamp = 0u;
+ 463              		.loc 1 254 1 is_stmt 1 view -0
+ 464              		.cfi_startproc
+ 465              		@ args = 0, pretend = 0, frame = 0
+ 466              		@ frame_needed = 0, uses_anonymous_args = 0
+ 255:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = STIM_GetElapsedTimeMs(&timeStamp);
+ 467              		.loc 1 255 5 view .LVU132
+ 256:common/prog/ped_fw/timer/system_timer.c ****     
+ 468              		.loc 1 256 5 view .LVU133
+ 469              	.LVL35:
+ 470              	.LBB72:
+ 471              	.LBI72:
+ 143:common/prog/ped_fw/timer/system_timer.c **** {
+ 472              		.loc 1 143 17 view .LVU134
+ 473              	.LBB73:
+ 145:common/prog/ped_fw/timer/system_timer.c ****     const uint16_t ticksPerMs = TICKS_PER_MS;
+ 474              		.loc 1 145 5 view .LVU135
+ 146:common/prog/ped_fw/timer/system_timer.c ****     const uint32_t msMulConst = (((uint32_t)1u << FIXED_POINT_SHIFT) / TICKS_PER_MS) + 1u;
+ 475              		.loc 1 146 5 view .LVU136
+ 147:common/prog/ped_fw/timer/system_timer.c ****     
+ 476              		.loc 1 147 5 view .LVU137
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 477              		.loc 1 149 5 view .LVU138
+ 478              	.LBE73:
+ 479              	.LBE72:
+ 254:common/prog/ped_fw/timer/system_timer.c ****     static uint16_t timeStamp = 0u;
+ 480              		.loc 1 254 1 is_stmt 0 view .LVU139
+ 481 0000 10B5     		push	{r4, lr}
+ 482              	.LCFI3:
+ 483              		.cfi_def_cfa_offset 8
+ 484              		.cfi_offset 4, -8
+ 485              		.cfi_offset 14, -4
+ 486              	.LBB75:
+ 487              	.LBB74:
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 488              		.loc 1 149 31 view .LVU140
+ 489 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 490              	.LVL36:
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 491              		.loc 1 149 63 view .LVU141
+ 492 0006 094A     		ldr	r2, .L40
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 493              		.loc 1 150 58 view .LVU142
+ 494 0008 0949     		ldr	r1, .L40+4
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 495              		.loc 1 149 63 view .LVU143
+ 496 000a 1388     		ldrh	r3, [r2]
+ 497              	.LVL37:
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 498              		.loc 1 150 5 is_stmt 1 view .LVU144
+ 149:common/prog/ped_fw/timer/system_timer.c ****     uint16_t elapsedTime_ms = (uint16_t)((elapsedTime_us * msMulConst) >> fixedPointShift); 
+ 499              		.loc 1 149 14 is_stmt 0 view .LVU145
+ 500 000c C01A     		subs	r0, r0, r3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 25
+
+
+ 501              	.LVL38:
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 502              		.loc 1 150 58 view .LVU146
+ 503 000e 80B2     		uxth	r0, r0
+ 504 0010 4143     		muls	r1, r0
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 505              		.loc 1 151 19 view .LVU147
+ 506 0012 FA20     		movs	r0, #250
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 507              		.loc 1 150 72 view .LVU148
+ 508 0014 4C0E     		lsrs	r4, r1, #25
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 509              		.loc 1 151 19 view .LVU149
+ 510 0016 8000     		lsls	r0, r0, #2
+ 511 0018 6043     		muls	r0, r4
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 512              		.loc 1 151 16 view .LVU150
+ 513 001a 1B18     		adds	r3, r3, r0
+ 150:common/prog/ped_fw/timer/system_timer.c ****     *timeStamp += (uint16_t)(elapsedTime_ms * ticksPerMs);
+ 514              		.loc 1 150 14 view .LVU151
+ 515 001c 211E     		subs	r1, r4, #0
+ 516              	.LVL39:
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 517              		.loc 1 151 5 is_stmt 1 view .LVU152
+ 151:common/prog/ped_fw/timer/system_timer.c ****     
+ 518              		.loc 1 151 16 is_stmt 0 view .LVU153
+ 519 001e 1380     		strh	r3, [r2]
+ 153:common/prog/ped_fw/timer/system_timer.c **** }
+ 520              		.loc 1 153 5 is_stmt 1 view .LVU154
+ 521              	.LVL40:
+ 153:common/prog/ped_fw/timer/system_timer.c **** }
+ 522              		.loc 1 153 5 is_stmt 0 view .LVU155
+ 523              	.LBE74:
+ 524              	.LBE75:
+ 258:common/prog/ped_fw/timer/system_timer.c ****     {
+ 525              		.loc 1 258 5 is_stmt 1 view .LVU156
+ 258:common/prog/ped_fw/timer/system_timer.c ****     {
+ 526              		.loc 1 258 7 is_stmt 0 view .LVU157
+ 527 0020 03D0     		beq	.L35
+ 261:common/prog/ped_fw/timer/system_timer.c ****     }
+ 528              		.loc 1 261 9 is_stmt 1 view .LVU158
+ 529              	.LVL41:
+ 530              	.LBB76:
+ 531              	.LBI76:
+ 300:common/prog/ped_fw/timer/system_timer.c **** {
+ 532              		.loc 1 300 13 view .LVU159
+ 533              	.LBB77:
+ 302:common/prog/ped_fw/timer/system_timer.c ****     uint8_t timerStatus;
+ 534              		.loc 1 302 5 view .LVU160
+ 303:common/prog/ped_fw/timer/system_timer.c ****     
+ 535              		.loc 1 303 5 view .LVU161
+ 306:common/prog/ped_fw/timer/system_timer.c ****     {
+ 536              		.loc 1 306 5 view .LVU162
+ 537              	.LBE77:
+ 538              	.LBE76:
+ 261:common/prog/ped_fw/timer/system_timer.c ****     }
+ 539              		.loc 1 261 9 is_stmt 0 view .LVU163
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 26
+
+
+ 540 0022 044B     		ldr	r3, .L40+8
+ 541              	.LBB79:
+ 542              	.LBB78:
+ 543 0024 1868     		ldr	r0, [r3]
+ 544 0026 FFF7FEFF 		bl	STIM_ProcessTimers.part.0
+ 545              	.LVL42:
+ 546              	.L35:
+ 261:common/prog/ped_fw/timer/system_timer.c ****     }
+ 547              		.loc 1 261 9 view .LVU164
+ 548              	.LBE78:
+ 549              	.LBE79:
+ 263:common/prog/ped_fw/timer/system_timer.c **** 
+ 550              		.loc 1 263 1 view .LVU165
+ 551              		@ sp needed
+ 552              	.LVL43:
+ 263:common/prog/ped_fw/timer/system_timer.c **** 
+ 553              		.loc 1 263 1 view .LVU166
+ 554 002a 10BD     		pop	{r4, pc}
+ 555              	.L41:
+ 556              		.align	2
+ 557              	.L40:
+ 558 002c 00000000 		.word	.LANCHOR3
+ 559 0030 13830000 		.word	33555
+ 560 0034 00000000 		.word	.LANCHOR4
+ 561              		.cfi_endproc
+ 562              	.LFE75:
+ 564              		.section	.text.STIM_InitTimer,"ax",%progbits
+ 565              		.align	1
+ 566              		.global	STIM_InitTimer
+ 567              		.syntax unified
+ 568              		.code	16
+ 569              		.thumb_func
+ 571              	STIM_InitTimer:
+ 572              	.LVL44:
+ 573              	.LFB76:
+ 268:common/prog/ped_fw/timer/system_timer.c ****     //assert(timer); //Currently disabled, because of LINT issues
+ 574              		.loc 1 268 1 is_stmt 1 view -0
+ 575              		.cfi_startproc
+ 576              		@ args = 8, pretend = 0, frame = 0
+ 577              		@ frame_needed = 0, uses_anonymous_args = 0
+ 268:common/prog/ped_fw/timer/system_timer.c ****     //assert(timer); //Currently disabled, because of LINT issues
+ 578              		.loc 1 268 1 is_stmt 0 view .LVU168
+ 579 0000 30B5     		push	{r4, r5, lr}
+ 580              	.LCFI4:
+ 581              		.cfi_def_cfa_offset 12
+ 582              		.cfi_offset 4, -12
+ 583              		.cfi_offset 5, -8
+ 584              		.cfi_offset 14, -4
+ 268:common/prog/ped_fw/timer/system_timer.c ****     //assert(timer); //Currently disabled, because of LINT issues
+ 585              		.loc 1 268 1 view .LVU169
+ 586 0002 0400     		movs	r4, r0
+ 587 0004 03A8     		add	r0, sp, #12
+ 588              	.LVL45:
+ 271:common/prog/ped_fw/timer/system_timer.c ****     
+ 589              		.loc 1 271 5 is_stmt 1 view .LVU170
+ 273:common/prog/ped_fw/timer/system_timer.c ****     {
+ 590              		.loc 1 273 5 view .LVU171
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 27
+
+
+ 268:common/prog/ped_fw/timer/system_timer.c ****     //assert(timer); //Currently disabled, because of LINT issues
+ 591              		.loc 1 268 1 is_stmt 0 view .LVU172
+ 592 0006 0578     		ldrb	r5, [r0]
+ 273:common/prog/ped_fw/timer/system_timer.c ****     {
+ 593              		.loc 1 273 7 view .LVU173
+ 594 0008 002C     		cmp	r4, #0
+ 595 000a 1BD0     		beq	.L49
+ 275:common/prog/ped_fw/timer/system_timer.c ****         
+ 596              		.loc 1 275 9 is_stmt 1 view .LVU174
+ 597              	.LVL46:
+ 598              	.LBB88:
+ 599              	.LBI88:
+ 366:common/prog/ped_fw/timer/system_timer.c **** 
+ 367:common/prog/ped_fw/timer/system_timer.c **** 
+ 368:common/prog/ped_fw/timer/system_timer.c **** static int32_t STIM_RegisterTimer(struct STIM_Timer *timer, enum STIM_Processing processingType)
+ 600              		.loc 1 368 16 view .LVU175
+ 601              	.LBB89:
+ 369:common/prog/ped_fw/timer/system_timer.c **** {
+ 370:common/prog/ped_fw/timer/system_timer.c ****     struct STIM_Timer **timerList;
+ 602              		.loc 1 370 5 view .LVU176
+ 371:common/prog/ped_fw/timer/system_timer.c ****     struct STIM_Timer *timerPtr;
+ 603              		.loc 1 371 5 view .LVU177
+ 372:common/prog/ped_fw/timer/system_timer.c ****     
+ 373:common/prog/ped_fw/timer/system_timer.c ****     timerList = (processingType == STIM_PROCESSING_INTERRUPT) ? &STIM_interruptTimerList : &STIM_sc
+ 604              		.loc 1 373 5 view .LVU178
+ 605              		.loc 1 373 90 is_stmt 0 view .LVU179
+ 606 000c 0029     		cmp	r1, #0
+ 607 000e 0FD1     		bne	.L44
+ 608 0010 0E49     		ldr	r1, .L55
+ 609              	.LVL47:
+ 610              	.L54:
+ 611              		.loc 1 373 90 view .LVU180
+ 612 0012 0868     		ldr	r0, [r1]
+ 613              	.LVL48:
+ 374:common/prog/ped_fw/timer/system_timer.c ****     
+ 375:common/prog/ped_fw/timer/system_timer.c ****     if(*timerList == NULL)
+ 614              		.loc 1 375 5 is_stmt 1 view .LVU181
+ 615              		.loc 1 375 7 is_stmt 0 view .LVU182
+ 616 0014 0028     		cmp	r0, #0
+ 617 0016 0ED1     		bne	.L46
+ 376:common/prog/ped_fw/timer/system_timer.c ****     {
+ 377:common/prog/ped_fw/timer/system_timer.c ****         *timerList = timer;
+ 618              		.loc 1 377 9 is_stmt 1 view .LVU183
+ 619              		.loc 1 377 20 is_stmt 0 view .LVU184
+ 620 0018 0C60     		str	r4, [r1]
+ 378:common/prog/ped_fw/timer/system_timer.c ****         timer->nextTimer = NULL;
+ 621              		.loc 1 378 9 is_stmt 1 view .LVU185
+ 622              	.LVL49:
+ 623              		.loc 1 378 9 is_stmt 0 view .LVU186
+ 624              	.LBE89:
+ 625              	.LBE88:
+ 278:common/prog/ped_fw/timer/system_timer.c ****         {
+ 626              		.loc 1 278 9 is_stmt 1 view .LVU187
+ 627              	.L47:
+ 628              	.LBB93:
+ 629              	.LBB90:
+ 379:common/prog/ped_fw/timer/system_timer.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 28
+
+
+ 380:common/prog/ped_fw/timer/system_timer.c ****     else
+ 381:common/prog/ped_fw/timer/system_timer.c ****     {
+ 382:common/prog/ped_fw/timer/system_timer.c ****         // Check for same timer instance pointer
+ 383:common/prog/ped_fw/timer/system_timer.c ****         // AXIVION Next Line MisraC2012-14.2 : Infinite loop must be of form 'for ( ; ; )'
+ 384:common/prog/ped_fw/timer/system_timer.c ****         for(timerPtr = *timerList; /* No condition */; timerPtr = timerPtr->nextTimer)
+ 385:common/prog/ped_fw/timer/system_timer.c ****         {
+ 386:common/prog/ped_fw/timer/system_timer.c ****             if(timerPtr == timer)
+ 387:common/prog/ped_fw/timer/system_timer.c ****             {
+ 388:common/prog/ped_fw/timer/system_timer.c ****                 return -1;
+ 389:common/prog/ped_fw/timer/system_timer.c ****             }
+ 390:common/prog/ped_fw/timer/system_timer.c ****             
+ 391:common/prog/ped_fw/timer/system_timer.c ****             /* Break at the end of list */
+ 392:common/prog/ped_fw/timer/system_timer.c ****             if(timerPtr->nextTimer == NULL)
+ 393:common/prog/ped_fw/timer/system_timer.c ****             {
+ 394:common/prog/ped_fw/timer/system_timer.c ****                 break;
+ 395:common/prog/ped_fw/timer/system_timer.c ****             }
+ 396:common/prog/ped_fw/timer/system_timer.c ****         }
+ 397:common/prog/ped_fw/timer/system_timer.c ****         
+ 398:common/prog/ped_fw/timer/system_timer.c ****         // Add timer instance to the end of list
+ 399:common/prog/ped_fw/timer/system_timer.c ****         timerPtr->nextTimer = timer;
+ 400:common/prog/ped_fw/timer/system_timer.c ****         timer->nextTimer = NULL;
+ 630              		.loc 1 400 26 is_stmt 0 view .LVU188
+ 631 001a 0020     		movs	r0, #0
+ 632              	.LBE90:
+ 633              	.LBE93:
+ 634              	.LBB94:
+ 635              	.LBB95:
+ 382:common/prog/ped_fw/timer/system_timer.h **** }
+ 383:common/prog/ped_fw/timer/system_timer.h **** 
+ 384:common/prog/ped_fw/timer/system_timer.h **** 
+ 385:common/prog/ped_fw/timer/system_timer.h **** /** \brief    This function resets timer.
+ 386:common/prog/ped_fw/timer/system_timer.h ****  *
+ 387:common/prog/ped_fw/timer/system_timer.h ****  *  \details  Actual time measured and status is cleared. Timer keeps its
+ 388:common/prog/ped_fw/timer/system_timer.h ****  *            working state.
+ 389:common/prog/ped_fw/timer/system_timer.h ****  *
+ 390:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 391:common/prog/ped_fw/timer/system_timer.h ****  */
+ 392:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_ResetTimer(struct STIM_Timer *timer)
+ 393:common/prog/ped_fw/timer/system_timer.h **** {
+ 394:common/prog/ped_fw/timer/system_timer.h ****     timer->currentTime_ms = 0U;
+ 395:common/prog/ped_fw/timer/system_timer.h ****     STIM_ClearStatus(timer);
+ 396:common/prog/ped_fw/timer/system_timer.h **** }
+ 397:common/prog/ped_fw/timer/system_timer.h **** 
+ 398:common/prog/ped_fw/timer/system_timer.h **** 
+ 399:common/prog/ped_fw/timer/system_timer.h **** /** \brief    This function sets timer mode.
+ 400:common/prog/ped_fw/timer/system_timer.h ****  *
+ 401:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer: pointer to timer instance
+ 402:common/prog/ped_fw/timer/system_timer.h ****  *  \param    mode:  enumeration type of timer mode - single or periodic
+ 403:common/prog/ped_fw/timer/system_timer.h ****  */
+ 404:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_SetTimerMode(struct STIM_Timer *timer, enum STIM_Mode mode)
+ 405:common/prog/ped_fw/timer/system_timer.h **** {
+ 406:common/prog/ped_fw/timer/system_timer.h ****     timer->mode = mode;
+ 636              		.loc 2 406 17 view .LVU189
+ 637 001c A372     		strb	r3, [r4, #10]
+ 638              	.LBE95:
+ 639              	.LBE94:
+ 284:common/prog/ped_fw/timer/system_timer.c ****             
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 29
+
+
+ 640              		.loc 1 284 27 view .LVU190
+ 641 001e 049B     		ldr	r3, [sp, #16]
+ 642              	.LVL50:
+ 643              	.LBB97:
+ 644              	.LBB91:
+ 645              		.loc 1 400 26 view .LVU191
+ 646 0020 2061     		str	r0, [r4, #16]
+ 647              	.LBE91:
+ 648              	.LBE97:
+ 280:common/prog/ped_fw/timer/system_timer.c ****             
+ 649              		.loc 1 280 13 is_stmt 1 view .LVU192
+ 650              	.LVL51:
+ 651              	.LBB98:
+ 652              	.LBI98:
+ 407:common/prog/ped_fw/timer/system_timer.h **** }
+ 408:common/prog/ped_fw/timer/system_timer.h **** 
+ 409:common/prog/ped_fw/timer/system_timer.h **** 
+ 410:common/prog/ped_fw/timer/system_timer.h **** /** \brief    Function setting target time of timer instance.
+ 411:common/prog/ped_fw/timer/system_timer.h ****  *
+ 412:common/prog/ped_fw/timer/system_timer.h ****  *  \param    timer:    pointer to timer instance
+ 413:common/prog/ped_fw/timer/system_timer.h ****  *  \param    time_ms:  desired time to be set
+ 414:common/prog/ped_fw/timer/system_timer.h ****  */
+ 415:common/prog/ped_fw/timer/system_timer.h **** static inline void STIM_SetTargetTime(struct STIM_Timer *timer, STIM_Time_t time_ms)
+ 653              		.loc 2 415 20 view .LVU193
+ 654              	.LBB99:
+ 416:common/prog/ped_fw/timer/system_timer.h **** {
+ 417:common/prog/ped_fw/timer/system_timer.h ****     timer->targetTime_ms = time_ms;
+ 655              		.loc 2 417 5 view .LVU194
+ 656              		.loc 2 417 26 is_stmt 0 view .LVU195
+ 657 0022 6260     		str	r2, [r4, #4]
+ 658              	.LVL52:
+ 659              		.loc 2 417 26 view .LVU196
+ 660              	.LBE99:
+ 661              	.LBE98:
+ 282:common/prog/ped_fw/timer/system_timer.c ****             
+ 662              		.loc 1 282 13 is_stmt 1 view .LVU197
+ 663              	.LBB100:
+ 664              	.LBI94:
+ 404:common/prog/ped_fw/timer/system_timer.h **** {
+ 665              		.loc 2 404 20 view .LVU198
+ 666              	.LBB96:
+ 406:common/prog/ped_fw/timer/system_timer.h **** }
+ 667              		.loc 2 406 5 view .LVU199
+ 406:common/prog/ped_fw/timer/system_timer.h **** }
+ 668              		.loc 2 406 5 is_stmt 0 view .LVU200
+ 669              	.LBE96:
+ 670              	.LBE100:
+ 284:common/prog/ped_fw/timer/system_timer.c ****             
+ 671              		.loc 1 284 13 is_stmt 1 view .LVU201
+ 284:common/prog/ped_fw/timer/system_timer.c ****             
+ 672              		.loc 1 284 27 is_stmt 0 view .LVU202
+ 673 0024 E360     		str	r3, [r4, #12]
+ 286:common/prog/ped_fw/timer/system_timer.c ****             {
+ 674              		.loc 1 286 13 is_stmt 1 view .LVU203
+ 286:common/prog/ped_fw/timer/system_timer.c ****             {
+ 675              		.loc 1 286 15 is_stmt 0 view .LVU204
+ 676 0026 8542     		cmp	r5, r0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 30
+
+
+ 677 0028 01D0     		beq	.L42
+ 288:common/prog/ped_fw/timer/system_timer.c ****             }
+ 678              		.loc 1 288 17 is_stmt 1 view .LVU205
+ 679              	.LVL53:
+ 680              	.LBB101:
+ 681              	.LBI101:
+ 367:common/prog/ped_fw/timer/system_timer.h **** {
+ 682              		.loc 2 367 20 view .LVU206
+ 683              	.LBB102:
+ 369:common/prog/ped_fw/timer/system_timer.h **** }
+ 684              		.loc 2 369 5 view .LVU207
+ 369:common/prog/ped_fw/timer/system_timer.h **** }
+ 685              		.loc 2 369 20 is_stmt 0 view .LVU208
+ 686 002a 0123     		movs	r3, #1
+ 687 002c 6372     		strb	r3, [r4, #9]
+ 688              	.LVL54:
+ 689              	.L42:
+ 369:common/prog/ped_fw/timer/system_timer.h **** }
+ 690              		.loc 2 369 20 view .LVU209
+ 691              	.LBE102:
+ 692              	.LBE101:
+ 293:common/prog/ped_fw/timer/system_timer.c **** 
+ 693              		.loc 1 293 1 view .LVU210
+ 694              		@ sp needed
+ 695              	.LVL55:
+ 293:common/prog/ped_fw/timer/system_timer.c **** 
+ 696              		.loc 1 293 1 view .LVU211
+ 697 002e 30BD     		pop	{r4, r5, pc}
+ 698              	.LVL56:
+ 699              	.L44:
+ 700              	.LBB103:
+ 701              	.LBB92:
+ 373:common/prog/ped_fw/timer/system_timer.c ****     
+ 702              		.loc 1 373 90 view .LVU212
+ 703 0030 0749     		ldr	r1, .L55+4
+ 704              	.LVL57:
+ 373:common/prog/ped_fw/timer/system_timer.c ****     
+ 705              		.loc 1 373 90 view .LVU213
+ 706 0032 EEE7     		b	.L54
+ 707              	.LVL58:
+ 708              	.L50:
+ 373:common/prog/ped_fw/timer/system_timer.c ****     
+ 709              		.loc 1 373 90 view .LVU214
+ 710 0034 0800     		movs	r0, r1
+ 711              	.LVL59:
+ 712              	.L46:
+ 386:common/prog/ped_fw/timer/system_timer.c ****             {
+ 713              		.loc 1 386 13 is_stmt 1 view .LVU215
+ 386:common/prog/ped_fw/timer/system_timer.c ****             {
+ 714              		.loc 1 386 15 is_stmt 0 view .LVU216
+ 715 0036 8442     		cmp	r4, r0
+ 716 0038 04D0     		beq	.L49
+ 392:common/prog/ped_fw/timer/system_timer.c ****             {
+ 717              		.loc 1 392 13 is_stmt 1 view .LVU217
+ 392:common/prog/ped_fw/timer/system_timer.c ****             {
+ 718              		.loc 1 392 24 is_stmt 0 view .LVU218
+ 719 003a 0169     		ldr	r1, [r0, #16]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 31
+
+
+ 392:common/prog/ped_fw/timer/system_timer.c ****             {
+ 720              		.loc 1 392 15 view .LVU219
+ 721 003c 0029     		cmp	r1, #0
+ 722 003e F9D1     		bne	.L50
+ 399:common/prog/ped_fw/timer/system_timer.c ****         timer->nextTimer = NULL;
+ 723              		.loc 1 399 9 is_stmt 1 view .LVU220
+ 399:common/prog/ped_fw/timer/system_timer.c ****         timer->nextTimer = NULL;
+ 724              		.loc 1 399 29 is_stmt 0 view .LVU221
+ 725 0040 0461     		str	r4, [r0, #16]
+ 726              		.loc 1 400 9 is_stmt 1 view .LVU222
+ 727              	.LVL60:
+ 728              		.loc 1 400 9 is_stmt 0 view .LVU223
+ 729              	.LBE92:
+ 730              	.LBE103:
+ 278:common/prog/ped_fw/timer/system_timer.c ****         {
+ 731              		.loc 1 278 9 is_stmt 1 view .LVU224
+ 732 0042 EAE7     		b	.L47
+ 733              	.LVL61:
+ 734              	.L49:
+ 271:common/prog/ped_fw/timer/system_timer.c ****     
+ 735              		.loc 1 271 13 is_stmt 0 view .LVU225
+ 736 0044 0120     		movs	r0, #1
+ 737 0046 4042     		rsbs	r0, r0, #0
+ 738 0048 F1E7     		b	.L42
+ 739              	.L56:
+ 740 004a C046     		.align	2
+ 741              	.L55:
+ 742 004c 00000000 		.word	.LANCHOR2
+ 743 0050 00000000 		.word	.LANCHOR4
+ 744              		.cfi_endproc
+ 745              	.LFE76:
+ 747              		.section	.bss.STIM_interruptTimerList,"aw",%nobits
+ 748              		.align	2
+ 749              		.set	.LANCHOR2,. + 0
+ 752              	STIM_interruptTimerList:
+ 753 0000 00000000 		.space	4
+ 754              		.section	.bss.STIM_schedulerTimerList,"aw",%nobits
+ 755              		.align	2
+ 756              		.set	.LANCHOR4,. + 0
+ 759              	STIM_schedulerTimerList:
+ 760 0000 00000000 		.space	4
+ 761              		.section	.bss.STIM_tick,"aw",%nobits
+ 762              		.align	2
+ 763              		.set	.LANCHOR0,. + 0
+ 766              	STIM_tick:
+ 767 0000 00000000 		.space	4
+ 768              		.section	.bss.timeStamp.0,"aw",%nobits
+ 769              		.align	1
+ 770              		.set	.LANCHOR3,. + 0
+ 773              	timeStamp.0:
+ 774 0000 0000     		.space	2
+ 775              		.section	.bss.timeStamp.1,"aw",%nobits
+ 776              		.align	1
+ 777              		.set	.LANCHOR1,. + 0
+ 780              	timeStamp.1:
+ 781 0000 0000     		.space	2
+ 782              		.text
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccB2s30X.s 			page 32
+
+
+ 783              	.Letext0:
+ 784              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 785              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 786              		.file 5 "common/prog/std_lib/std_callback.h"
+ 787              		.file 6 "common/prog/MSP/armCmx/systick.h"
+ 788              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 789              		.file 8 "common/prog/ped_fw/timer/timerlib.h"

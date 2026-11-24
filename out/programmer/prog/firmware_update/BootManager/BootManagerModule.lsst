@@ -1,0 +1,147 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccapAfGG.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BootManagerModule.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.BMMOD_GetMemModuleHeader,"ax",%progbits
+  18              		.align	1
+  19              		.global	BMMOD_GetMemModuleHeader
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	BMMOD_GetMemModuleHeader:
+  25              	.LVL0:
+  26              	.LFB67:
+  27              		.file 1 "common/prog/firmware_update/BootManager/BootManagerModule.c"
+   1:common/prog/firmware_update/BootManager/BootManagerModule.c **** /*******************************************************************************
+   2:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+   5:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+   9:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *******************************************************************************
+  10:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  PROJECT          Firmware Update Boot-Manager
+  11:common/prog/firmware_update/BootManager/BootManagerModule.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  13:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  14:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  15:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  17:common/prog/firmware_update/BootManager/BootManagerModule.c **** /** \file
+  18:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  19:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \ingroup  BootManager
+  20:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  21:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *  \brief    Implementation of Boot-Manager-Main
+  22:common/prog/firmware_update/BootManager/BootManagerModule.c ****  *
+  23:common/prog/firmware_update/BootManager/BootManagerModule.c ****  */
+  24:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  25:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  26:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  27:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  29:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include <stdint.h>
+  31:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include <stdbool.h>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccapAfGG.s 			page 2
+
+
+  32:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/moduleAdministration.h"
+  33:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/mal_driver.h"
+  34:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "BootManagerModule.h"
+  35:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "IntTbl.h"
+  36:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "stdcrc/StdCrc.h"
+  37:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef FEATURE_FUNCTIONAL_SAFETY_ENABLED
+  38:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "FuncSafe/fSafeXS.h"
+  39:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  40:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "FuncSafe/fs_psm.h"
+  41:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/mal/fwu_opt_bytes.h"
+  42:common/prog/firmware_update/BootManager/BootManagerModule.c **** #include "firmware_update/otp_mem/fwu_otp_memory.h"
+  43:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  44:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  45:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  46:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  47:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+  48:common/prog/firmware_update/BootManager/BootManagerModule.c **** static void BMMOD_LoadModule (void);
+  49:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isStdvIdEqual(const uint8_t* id1, const uint8_t* id2);
+  50:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdConsistent(void);
+  51:common/prog/firmware_update/BootManager/BootManagerModule.c **** static bool BMMOD_isFirmwareIdCompatible(void);
+  52:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  53:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  54:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  55:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  56:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  57:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  58:common/prog/firmware_update/BootManager/BootManagerModule.c **** #ifdef VARIANT_BOOTMANAGER
+  59:common/prog/firmware_update/BootManager/BootManagerModule.c **** static const struct MAL_partition_s * BMMOD_partition;
+  60:common/prog/firmware_update/BootManager/BootManagerModule.c **** static const struct MAL_ModuleHeader_s * BMMOD_header;
+  61:common/prog/firmware_update/BootManager/BootManagerModule.c **** #endif
+  62:common/prog/firmware_update/BootManager/BootManagerModule.c **** 
+  63:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  64:common/prog/firmware_update/BootManager/BootManagerModule.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  65:common/prog/firmware_update/BootManager/BootManagerModule.c **** /******************************************************************************/
+  66:common/prog/firmware_update/BootManager/BootManagerModule.c **** const struct MAL_ModuleHeader_s * BMMOD_GetMemModuleHeader(enum MAL_ModuleEnum module)
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c **** {
+  28              		.loc 1 67 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  68:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  32              		.loc 1 68 5 view .LVU1
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  33              		.loc 1 67 1 is_stmt 0 view .LVU2
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  67:common/prog/firmware_update/BootManager/BootManagerModule.c ****     MAL_initPartition();
+  39              		.loc 1 67 1 view .LVU3
+  40 0002 0400     		movs	r4, r0
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  70:common/prog/firmware_update/BootManager/BootManagerModule.c **** }
+  41              		.loc 1 70 1 view .LVU4
+  42              		@ sp needed
+  68:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccapAfGG.s 			page 3
+
+
+  43              		.loc 1 68 5 view .LVU5
+  44 0004 FFF7FEFF 		bl	MAL_initPartition
+  45              	.LVL1:
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  46              		.loc 1 69 5 is_stmt 1 view .LVU6
+  69:common/prog/firmware_update/BootManager/BootManagerModule.c ****     return MAL_PartitionToHeader(MAL_GetMemModule(module));
+  47              		.loc 1 69 12 is_stmt 0 view .LVU7
+  48 0008 2000     		movs	r0, r4
+  49 000a FFF7FEFF 		bl	MAL_GetMemModule
+  50              	.LVL2:
+  51 000e FFF7FEFF 		bl	MAL_PartitionToHeader
+  52              	.LVL3:
+  53              		.loc 1 70 1 view .LVU8
+  54 0012 10BD     		pop	{r4, pc}
+  55              		.cfi_endproc
+  56              	.LFE67:
+  58              		.text
+  59              	.Letext0:
+  60              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  61              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  62              		.file 4 "common/prog/std_lib/std_version.h"
+  63              		.file 5 "common/prog/firmware_update/version/fwu_version.h"
+  64              		.file 6 "app/prog/firmware_update/mal/module_administration_cfg.h"
+  65              		.file 7 "common/prog/firmware_update/mal/moduleAdministration.h"

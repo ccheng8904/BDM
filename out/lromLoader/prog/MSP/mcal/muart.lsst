@@ -1,0 +1,3467 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"muart.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MUART_getStatus,"ax",%progbits
+  18              		.align	1
+  19              		.global	MUART_getStatus
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	MUART_getStatus:
+  25              	.LVL0:
+  26              	.LFB108:
+  27              		.file 1 "common/prog/MSP/mcal/muart.c"
+   1:common/prog/MSP/mcal/muart.c **** /*******************************************************************************
+   2:common/prog/MSP/mcal/muart.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/muart.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/muart.c ****  *
+   5:common/prog/MSP/mcal/muart.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/muart.c ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/muart.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/muart.c ****  *
+   9:common/prog/MSP/mcal/muart.c ****  *******************************************************************************
+  10:common/prog/MSP/mcal/muart.c ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/muart.c ****  *  COMP_ABBREV      MUART
+  12:common/prog/MSP/mcal/muart.c ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/muart.c **** 
+  14:common/prog/MSP/mcal/muart.c **** 
+  15:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  16:common/prog/MSP/mcal/muart.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  18:common/prog/MSP/mcal/muart.c **** /** \file
+  19:common/prog/MSP/mcal/muart.c ****  *
+  20:common/prog/MSP/mcal/muart.c ****  *  \ingroup  MCAL
+  21:common/prog/MSP/mcal/muart.c ****  *
+  22:common/prog/MSP/mcal/muart.c ****  *  \brief    Implementation of MUART
+  23:common/prog/MSP/mcal/muart.c ****  */
+  24:common/prog/MSP/mcal/muart.c **** 
+  25:common/prog/MSP/mcal/muart.c **** 
+  26:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  27:common/prog/MSP/mcal/muart.c **** /* INCLUDES                                                                   */
+  28:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  29:common/prog/MSP/mcal/muart.c **** #include "BSH_stdinc.h"
+  30:common/prog/MSP/mcal/muart.c **** #include "muart.h"
+  31:common/prog/MSP/mcal/muart.c **** #include "mdio.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 2
+
+
+  32:common/prog/MSP/mcal/muart.c **** 
+  33:common/prog/MSP/mcal/muart.c **** #ifdef MCAL_MPCM_INCLUDED
+  34:common/prog/MSP/mcal/muart.c ****     #include "mpcm.h"
+  35:common/prog/MSP/mcal/muart.c **** #endif /* MCAL_MPCM_INCLUDED */
+  36:common/prog/MSP/mcal/muart.c **** 
+  37:common/prog/MSP/mcal/muart.c **** #ifdef MCAL_MUART_NDEBUG
+  38:common/prog/MSP/mcal/muart.c ****     #define NDEBUG
+  39:common/prog/MSP/mcal/muart.c **** #endif 
+  40:common/prog/MSP/mcal/muart.c **** #include "mcal_assert.h"
+  41:common/prog/MSP/mcal/muart.c **** 
+  42:common/prog/MSP/mcal/muart.c **** 
+  43:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  44:common/prog/MSP/mcal/muart.c **** /* PRIVATE FUNCTION DECLARATIONS AND PRIVATE MACRO FUNCTION DEFINITIONS       */
+  45:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+  46:common/prog/MSP/mcal/muart.c **** 
+  47:common/prog/MSP/mcal/muart.c **** /** Function for registering handle instance to IQR handle table.
+  48:common/prog/MSP/mcal/muart.c ****  *  \param handle: pointer to MUART_Handle instance, stored in static memory
+  49:common/prog/MSP/mcal/muart.c ****  */
+  50:common/prog/MSP/mcal/muart.c **** static void MUART_IRQ_registerHandle(struct MUART_Handle *handle);
+  51:common/prog/MSP/mcal/muart.c **** 
+  52:common/prog/MSP/mcal/muart.c **** 
+  53:common/prog/MSP/mcal/muart.c **** /** Function handling write event inside interrupt.
+  54:common/prog/MSP/mcal/muart.c ****  *  \param handle: pointer to MUART_Handle instance, stored in static memory
+  55:common/prog/MSP/mcal/muart.c ****  *  \return MCAL_EVENT_WRITE_COMPLETE_MASK if write is complete
+  56:common/prog/MSP/mcal/muart.c ****  */
+  57:common/prog/MSP/mcal/muart.c **** static void MUART_handleWriteEvent(struct MUART_Handle *handle);
+  58:common/prog/MSP/mcal/muart.c **** 
+  59:common/prog/MSP/mcal/muart.c **** 
+  60:common/prog/MSP/mcal/muart.c **** /** Function handling read event inside interrupt.
+  61:common/prog/MSP/mcal/muart.c ****  *  \param handle: pointer to MUART_Handle instance, stored in static memory
+  62:common/prog/MSP/mcal/muart.c ****  *  \return MCAL_EVENT_READ_COMPLETE_MASK if read is complete
+  63:common/prog/MSP/mcal/muart.c ****  */
+  64:common/prog/MSP/mcal/muart.c **** static void MUART_handleReadEvent(struct MUART_Handle *handle, uint8_t data);
+  65:common/prog/MSP/mcal/muart.c **** 
+  66:common/prog/MSP/mcal/muart.c **** 
+  67:common/prog/MSP/mcal/muart.c **** /** Function for checking if event is pending.
+  68:common/prog/MSP/mcal/muart.c ****  *  \note Pending event is, when event is enabled using MXXX_enableEvent and
+  69:common/prog/MSP/mcal/muart.c ****  *        respective status flag in peripheral status register is set.
+  70:common/prog/MSP/mcal/muart.c ****  *  \param handle: pointer to MUART_Handle instance, stored in static memory
+  71:common/prog/MSP/mcal/muart.c ****  *  \param event: event that is checked
+  72:common/prog/MSP/mcal/muart.c ****  *  \param status: status register value
+  73:common/prog/MSP/mcal/muart.c ****  *  \return true if event is pending
+  74:common/prog/MSP/mcal/muart.c ****  */
+  75:common/prog/MSP/mcal/muart.c **** static bool MUART_isEventPending(const struct MUART_Handle *handle, enum MCAL_Event event, uint32_t
+  76:common/prog/MSP/mcal/muart.c **** 
+  77:common/prog/MSP/mcal/muart.c **** 
+  78:common/prog/MSP/mcal/muart.c **** #ifdef MCAL_MPCM_INCLUDED
+  79:common/prog/MSP/mcal/muart.c **** /** Callback function from MPCM module.
+  80:common/prog/MSP/mcal/muart.c ****  *  \param obj: pointer to MUART_Handle instance
+  81:common/prog/MSP/mcal/muart.c ****  *  \param flags: pending MPCM_STATUS_XXX event flags
+  82:common/prog/MSP/mcal/muart.c ****  *  \param eventResponse: response from event sender
+  83:common/prog/MSP/mcal/muart.c ****  */
+  84:common/prog/MSP/mcal/muart.c **** /*lint -e818 Pointer parameter 'obj' could be declared as pointing to const */
+  85:common/prog/MSP/mcal/muart.c **** static void MUART_MPCM_CallbackFunction(void *obj, uint32_t flags, const struct MCAL_EventResponse 
+  86:common/prog/MSP/mcal/muart.c **** {
+  87:common/prog/MSP/mcal/muart.c ****     const struct MUART_Handle *handle = MUART_getHandle(obj);
+  88:common/prog/MSP/mcal/muart.c ****     enum MCAL_Status status = MUART_getStatus(handle);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 3
+
+
+  89:common/prog/MSP/mcal/muart.c ****     
+  90:common/prog/MSP/mcal/muart.c ****     (void)flags;
+  91:common/prog/MSP/mcal/muart.c **** 
+  92:common/prog/MSP/mcal/muart.c ****     if(MCAL_isEvent(eventResponse, MCAL_EVENT_CLOCK_CHANGE_REQ))
+  93:common/prog/MSP/mcal/muart.c ****     {
+  94:common/prog/MSP/mcal/muart.c ****         /* if MUART is busy, abort request to change pmode */
+  95:common/prog/MSP/mcal/muart.c ****         if(status == MCAL_STATUS_BUSY)
+  96:common/prog/MSP/mcal/muart.c ****         {
+  97:common/prog/MSP/mcal/muart.c ****             MPCM_abortPowerModeChange();
+  98:common/prog/MSP/mcal/muart.c ****         }
+  99:common/prog/MSP/mcal/muart.c ****     }
+ 100:common/prog/MSP/mcal/muart.c ****     else if(MCAL_isEvent(eventResponse, MCAL_EVENT_CLOCK_CHANGE_PRE))
+ 101:common/prog/MSP/mcal/muart.c ****     {
+ 102:common/prog/MSP/mcal/muart.c ****         /* if MUART is enabled, disable it until pmode is changed */
+ 103:common/prog/MSP/mcal/muart.c ****         if(status != MCAL_STATUS_DISABLED)
+ 104:common/prog/MSP/mcal/muart.c ****         {
+ 105:common/prog/MSP/mcal/muart.c ****             MUART_disableChannel(handle->channel);
+ 106:common/prog/MSP/mcal/muart.c ****         }
+ 107:common/prog/MSP/mcal/muart.c ****     }
+ 108:common/prog/MSP/mcal/muart.c ****     else if(MCAL_isEvent(eventResponse, MCAL_EVENT_CLOCK_CHANGE_POST))
+ 109:common/prog/MSP/mcal/muart.c ****     {
+ 110:common/prog/MSP/mcal/muart.c ****         /* configure and reenable MUART if not disabled by user */
+ 111:common/prog/MSP/mcal/muart.c ****         if(status != MCAL_STATUS_DISABLED)
+ 112:common/prog/MSP/mcal/muart.c ****         {
+ 113:common/prog/MSP/mcal/muart.c ****             MUART_configureBaudrate(handle->channel, handle->defaultBaudrate);
+ 114:common/prog/MSP/mcal/muart.c ****             MUART_enableChannel(handle->channel);
+ 115:common/prog/MSP/mcal/muart.c ****         }
+ 116:common/prog/MSP/mcal/muart.c ****     }
+ 117:common/prog/MSP/mcal/muart.c ****     else
+ 118:common/prog/MSP/mcal/muart.c ****     {
+ 119:common/prog/MSP/mcal/muart.c ****         /* Nothing to do */
+ 120:common/prog/MSP/mcal/muart.c ****     }
+ 121:common/prog/MSP/mcal/muart.c **** }
+ 122:common/prog/MSP/mcal/muart.c **** #endif /* MCAL_MPCM_INCLUDED */
+ 123:common/prog/MSP/mcal/muart.c **** 
+ 124:common/prog/MSP/mcal/muart.c **** 
+ 125:common/prog/MSP/mcal/muart.c **** static bool MUART_isEnabled(const struct MUART_Handle *handle)
+ 126:common/prog/MSP/mcal/muart.c **** {
+ 127:common/prog/MSP/mcal/muart.c ****     return (handle->status == MCAL_STATUS_READY) ? true : false;
+ 128:common/prog/MSP/mcal/muart.c **** }
+ 129:common/prog/MSP/mcal/muart.c **** 
+ 130:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 131:common/prog/MSP/mcal/muart.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+ 132:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 133:common/prog/MSP/mcal/muart.c **** 
+ 134:common/prog/MSP/mcal/muart.c **** 
+ 135:common/prog/MSP/mcal/muart.c **** static struct MUART_Handle *MUART_IRQ_HandleTable[MUART_IRQ_CNT];
+ 136:common/prog/MSP/mcal/muart.c **** 
+ 137:common/prog/MSP/mcal/muart.c **** 
+ 138:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 139:common/prog/MSP/mcal/muart.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 140:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 141:common/prog/MSP/mcal/muart.c **** 
+ 142:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_init(struct MUART_Handle *handle, const struct MUART_Channel *channel, const 
+ 143:common/prog/MSP/mcal/muart.c **** {
+ 144:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 145:common/prog/MSP/mcal/muart.c ****     MCAL_assert(channel != NULL);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 4
+
+
+ 146:common/prog/MSP/mcal/muart.c ****     MCAL_assert(cfg != NULL);
+ 147:common/prog/MSP/mcal/muart.c ****     
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configure(channel, cfg));
+ 149:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 150:common/prog/MSP/mcal/muart.c **** 
+ 151:common/prog/MSP/mcal/muart.c ****     handle->channel = channel;
+ 152:common/prog/MSP/mcal/muart.c **** 
+ 153:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_enable(handle->channel);
+ 154:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_registerHandle(handle);
+ 155:common/prog/MSP/mcal/muart.c **** 
+ 156:common/prog/MSP/mcal/muart.c ****     handle->defaultBaudrate = cfg->baudrate;
+ 157:common/prog/MSP/mcal/muart.c ****     handle->cbList = NULL;
+ 158:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 159:common/prog/MSP/mcal/muart.c ****     handle->error = MCAL_OK;
+ 160:common/prog/MSP/mcal/muart.c ****     
+ 161:common/prog/MSP/mcal/muart.c ****   #ifdef MCAL_MPCM_INCLUDED
+ 162:common/prog/MSP/mcal/muart.c ****     MCAL_initCallback(&handle->mpcmCallback, MUART_MPCM_CallbackFunction, handle);
+ 163:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MPCM_enableEvent(&handle->mpcmCallback, MCAL_EVENT_CLOCK_CHANGE_ANY));
+ 164:common/prog/MSP/mcal/muart.c ****   #endif /* MCAL_MPCM_INCLUDED */
+ 165:common/prog/MSP/mcal/muart.c **** 
+ 166:common/prog/MSP/mcal/muart.c ****     return MCAL_OK;
+ 167:common/prog/MSP/mcal/muart.c **** }
+ 168:common/prog/MSP/mcal/muart.c **** 
+ 169:common/prog/MSP/mcal/muart.c **** 
+ 170:common/prog/MSP/mcal/muart.c **** enum MCAL_Status MUART_getStatus(const struct MUART_Handle *handle)
+ 171:common/prog/MSP/mcal/muart.c **** {
+  28              		.loc 1 171 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 172:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+  33              		.loc 1 172 5 view .LVU1
+ 173:common/prog/MSP/mcal/muart.c **** 
+ 174:common/prog/MSP/mcal/muart.c ****     enum MCAL_Status status = handle->status;
+  34              		.loc 1 174 5 view .LVU2
+  35              		.loc 1 174 22 is_stmt 0 view .LVU3
+  36 0000 0279     		ldrb	r2, [r0, #4]
+ 171:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+  37              		.loc 1 171 1 view .LVU4
+  38 0002 0300     		movs	r3, r0
+  39              		.loc 1 174 22 view .LVU5
+  40 0004 D0B2     		uxtb	r0, r2
+  41              	.LVL1:
+ 175:common/prog/MSP/mcal/muart.c ****     
+ 176:common/prog/MSP/mcal/muart.c ****     if(status == MCAL_STATUS_READY)
+  42              		.loc 1 176 5 is_stmt 1 view .LVU6
+  43              		.loc 1 176 7 is_stmt 0 view .LVU7
+  44 0006 012A     		cmp	r2, #1
+  45 0008 0CD1     		bne	.L2
+ 177:common/prog/MSP/mcal/muart.c ****     {
+ 178:common/prog/MSP/mcal/muart.c ****         if(handle->error != MCAL_OK)
+  46              		.loc 1 178 9 is_stmt 1 view .LVU8
+  47              		.loc 1 178 11 is_stmt 0 view .LVU9
+  48 000a 0522     		movs	r2, #5
+  49 000c 9A56     		ldrsb	r2, [r3, r2]
+  50 000e 002A     		cmp	r2, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 5
+
+
+  51 0010 07D1     		bne	.L3
+ 179:common/prog/MSP/mcal/muart.c ****         {
+ 180:common/prog/MSP/mcal/muart.c ****             status = MCAL_STATUS_ERROR;
+ 181:common/prog/MSP/mcal/muart.c ****         }
+ 182:common/prog/MSP/mcal/muart.c ****         else if(MCOM_isBusy(&handle->transfer))
+  52              		.loc 1 182 14 is_stmt 1 view .LVU10
+  53              	.LVL2:
+  54              	.LBB80:
+  55              	.LBI80:
+  56              		.file 2 "common/prog/MSP/mcal/mcom.h"
+   1:common/prog/MSP/mcal/mcom.h **** /*******************************************************************************
+   2:common/prog/MSP/mcal/mcom.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/mcom.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/mcom.h ****  *
+   5:common/prog/MSP/mcal/mcom.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/mcom.h ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/mcom.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/mcom.h ****  *
+   9:common/prog/MSP/mcal/mcom.h ****  *******************************************************************************
+  10:common/prog/MSP/mcal/mcom.h ****  *  PROJECT          MCAL
+  11:common/prog/MSP/mcal/mcom.h ****  *  COMP_ABBREV      MCOM
+  12:common/prog/MSP/mcal/mcom.h ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/mcom.h **** 
+  14:common/prog/MSP/mcal/mcom.h **** 
+  15:common/prog/MSP/mcal/mcom.h **** #ifndef MCOM_H
+  16:common/prog/MSP/mcal/mcom.h **** #define MCOM_H
+  17:common/prog/MSP/mcal/mcom.h **** 
+  18:common/prog/MSP/mcal/mcom.h **** #if defined(__cplusplus) && !defined(MOCK_IT)
+  19:common/prog/MSP/mcal/mcom.h **** extern "C" {
+  20:common/prog/MSP/mcal/mcom.h **** #endif
+  21:common/prog/MSP/mcal/mcom.h **** 
+  22:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  23:common/prog/MSP/mcal/mcom.h **** /* DOCUMENTATION                                                              */
+  24:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  25:common/prog/MSP/mcal/mcom.h **** /** \file
+  26:common/prog/MSP/mcal/mcom.h ****  *
+  27:common/prog/MSP/mcal/mcom.h ****  *  \ingroup  MCAL
+  28:common/prog/MSP/mcal/mcom.h ****  *
+  29:common/prog/MSP/mcal/mcom.h ****  *  \brief    Public definitions and declarations for unit MCOM.
+  30:common/prog/MSP/mcal/mcom.h ****  *
+  31:common/prog/MSP/mcal/mcom.h ****  *
+  32:common/prog/MSP/mcal/mcom.h ****  */
+  33:common/prog/MSP/mcal/mcom.h **** 
+  34:common/prog/MSP/mcal/mcom.h **** 
+  35:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  36:common/prog/MSP/mcal/mcom.h **** /* INCLUDES                                                                   */
+  37:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  38:common/prog/MSP/mcal/mcom.h **** #include "BSH_stdinc.h"
+  39:common/prog/MSP/mcal/mcom.h **** #include <stdint.h>
+  40:common/prog/MSP/mcal/mcom.h **** #include <stdbool.h>
+  41:common/prog/MSP/mcal/mcom.h **** 
+  42:common/prog/MSP/mcal/mcom.h **** /*lint -save -e9018 union declared */
+  43:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  44:common/prog/MSP/mcal/mcom.h **** /* PUBLIC DEFINITIONS                                                         */
+  45:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  46:common/prog/MSP/mcal/mcom.h **** 
+  47:common/prog/MSP/mcal/mcom.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 6
+
+
+  48:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  49:common/prog/MSP/mcal/mcom.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+  50:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  51:common/prog/MSP/mcal/mcom.h **** 
+  52:common/prog/MSP/mcal/mcom.h **** /** MCOM status enumeration */
+  53:common/prog/MSP/mcal/mcom.h **** enum MCOM_Status
+  54:common/prog/MSP/mcal/mcom.h **** {
+  55:common/prog/MSP/mcal/mcom.h ****     MCOM_STATUS_READY = 0,          ///< Buffer is ready
+  56:common/prog/MSP/mcal/mcom.h ****     MCOM_STATUS_BUSY,               ///< Read/write is ongoing
+  57:common/prog/MSP/mcal/mcom.h ****     MCOM_STATUS_COMPLETE            ///< Read/write is complete
+  58:common/prog/MSP/mcal/mcom.h ****     // MCOM_STATUS_ABORTED,
+  59:common/prog/MSP/mcal/mcom.h ****     // MCOM_STATUS_ERROR
+  60:common/prog/MSP/mcal/mcom.h **** };
+  61:common/prog/MSP/mcal/mcom.h **** 
+  62:common/prog/MSP/mcal/mcom.h **** /*lint -esym(9018,*MCOM_buffer_u*) "The union keyword should not be used. MisraC2012-19.2 advisory"
+  63:common/prog/MSP/mcal/mcom.h **** /** MCOM read/write buffer structure */
+  64:common/prog/MSP/mcal/mcom.h **** struct MCOM_BufferHandle
+  65:common/prog/MSP/mcal/mcom.h **** {
+  66:common/prog/MSP/mcal/mcom.h ****     volatile enum MCOM_Status   status;     ///< Status of buffer
+  67:common/prog/MSP/mcal/mcom.h ****     union MCOM_buffer_u
+  68:common/prog/MSP/mcal/mcom.h ****     {
+  69:common/prog/MSP/mcal/mcom.h ****         uint8_t                 *readBuffer;    ///< Read/Write buffer pointer
+  70:common/prog/MSP/mcal/mcom.h ****         const uint8_t           *writeBuffer;    ///< Read/Write buffer pointer
+  71:common/prog/MSP/mcal/mcom.h ****     } buffer;
+  72:common/prog/MSP/mcal/mcom.h ****     uint16_t                    length;     ///< Buffer length
+  73:common/prog/MSP/mcal/mcom.h ****     volatile uint16_t           index;      ///< Buffer index
+  74:common/prog/MSP/mcal/mcom.h **** };
+  75:common/prog/MSP/mcal/mcom.h **** 
+  76:common/prog/MSP/mcal/mcom.h **** 
+  77:common/prog/MSP/mcal/mcom.h **** /** MCOM write buffer structure */
+  78:common/prog/MSP/mcal/mcom.h **** /*lint -esym(9045,*MCOM_Transfer)  "non-hidden definition of type struct MCOM_Transfer" */
+  79:common/prog/MSP/mcal/mcom.h **** struct MCOM_Transfer
+  80:common/prog/MSP/mcal/mcom.h **** {
+  81:common/prog/MSP/mcal/mcom.h ****     struct MCOM_BufferHandle    readBufferHandle;
+  82:common/prog/MSP/mcal/mcom.h ****     struct MCOM_BufferHandle    writeBufferHandle;
+  83:common/prog/MSP/mcal/mcom.h **** };
+  84:common/prog/MSP/mcal/mcom.h **** 
+  85:common/prog/MSP/mcal/mcom.h **** /*lint -restore -e9018 */
+  86:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  87:common/prog/MSP/mcal/mcom.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+  88:common/prog/MSP/mcal/mcom.h **** /******************************************************************************/
+  89:common/prog/MSP/mcal/mcom.h **** 
+  90:common/prog/MSP/mcal/mcom.h **** extern void MCOM_pushByte(struct MCOM_Transfer *transfer, uint8_t data);
+  91:common/prog/MSP/mcal/mcom.h **** 
+  92:common/prog/MSP/mcal/mcom.h **** 
+  93:common/prog/MSP/mcal/mcom.h **** extern uint8_t MCOM_popByte(struct MCOM_Transfer *transfer);
+  94:common/prog/MSP/mcal/mcom.h **** 
+  95:common/prog/MSP/mcal/mcom.h **** 
+  96:common/prog/MSP/mcal/mcom.h **** extern void MCOM_setWriteBuffer(struct MCOM_Transfer *transfer, const uint8_t *buffer, uint16_t len
+  97:common/prog/MSP/mcal/mcom.h **** 
+  98:common/prog/MSP/mcal/mcom.h **** 
+  99:common/prog/MSP/mcal/mcom.h **** extern void MCOM_setReadBuffer(struct MCOM_Transfer *transfer, uint8_t *buffer, uint16_t length);
+ 100:common/prog/MSP/mcal/mcom.h **** 
+ 101:common/prog/MSP/mcal/mcom.h **** #ifndef MCOM_MOCK_H
+ 102:common/prog/MSP/mcal/mcom.h **** 
+ 103:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isReadReady(const struct MCOM_Transfer *transfer)
+ 104:common/prog/MSP/mcal/mcom.h **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 7
+
+
+ 105:common/prog/MSP/mcal/mcom.h ****     return (transfer->readBufferHandle.status == MCOM_STATUS_READY);
+ 106:common/prog/MSP/mcal/mcom.h **** }
+ 107:common/prog/MSP/mcal/mcom.h **** 
+ 108:common/prog/MSP/mcal/mcom.h **** 
+ 109:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isWriteReady(const struct MCOM_Transfer *transfer)
+ 110:common/prog/MSP/mcal/mcom.h **** {
+ 111:common/prog/MSP/mcal/mcom.h ****     return (transfer->writeBufferHandle.status == MCOM_STATUS_READY);
+ 112:common/prog/MSP/mcal/mcom.h **** }
+ 113:common/prog/MSP/mcal/mcom.h **** 
+ 114:common/prog/MSP/mcal/mcom.h **** 
+ 115:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isReadBusy(const struct MCOM_Transfer *transfer)
+ 116:common/prog/MSP/mcal/mcom.h **** {
+ 117:common/prog/MSP/mcal/mcom.h ****     return (transfer->readBufferHandle.status == MCOM_STATUS_BUSY);
+ 118:common/prog/MSP/mcal/mcom.h **** }
+ 119:common/prog/MSP/mcal/mcom.h **** 
+ 120:common/prog/MSP/mcal/mcom.h **** 
+ 121:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isWriteBusy(const struct MCOM_Transfer *transfer)
+ 122:common/prog/MSP/mcal/mcom.h **** {
+ 123:common/prog/MSP/mcal/mcom.h ****     return (transfer->writeBufferHandle.status == MCOM_STATUS_BUSY);
+ 124:common/prog/MSP/mcal/mcom.h **** }
+ 125:common/prog/MSP/mcal/mcom.h **** 
+ 126:common/prog/MSP/mcal/mcom.h **** 
+ 127:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isBusy(const struct MCOM_Transfer *transfer)
+  57              		.loc 2 127 20 view .LVU11
+  58              	.LBB81:
+ 128:common/prog/MSP/mcal/mcom.h **** {
+ 129:common/prog/MSP/mcal/mcom.h ****     return (MCOM_isReadBusy(transfer) || MCOM_isWriteBusy(transfer));
+  59              		.loc 2 129 5 view .LVU12
+  60              	.LBB82:
+  61              	.LBI82:
+ 115:common/prog/MSP/mcal/mcom.h **** {
+  62              		.loc 2 115 20 view .LVU13
+  63              	.LBB83:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+  64              		.loc 2 117 5 view .LVU14
+ 117:common/prog/MSP/mcal/mcom.h **** }
+  65              		.loc 2 117 39 is_stmt 0 view .LVU15
+  66 0012 1A7A     		ldrb	r2, [r3, #8]
+  67              	.LBE83:
+  68              	.LBE82:
+  69              		.loc 2 129 39 view .LVU16
+  70 0014 012A     		cmp	r2, #1
+  71 0016 02D0     		beq	.L5
+  72              	.LVL3:
+  73              	.LBB84:
+  74              	.LBI84:
+ 121:common/prog/MSP/mcal/mcom.h **** {
+  75              		.loc 2 121 20 is_stmt 1 view .LVU17
+  76              	.LBB85:
+ 123:common/prog/MSP/mcal/mcom.h **** }
+  77              		.loc 2 123 5 view .LVU18
+ 123:common/prog/MSP/mcal/mcom.h **** }
+  78              		.loc 2 123 40 is_stmt 0 view .LVU19
+  79 0018 1B7D     		ldrb	r3, [r3, #20]
+  80              	.LVL4:
+ 123:common/prog/MSP/mcal/mcom.h **** }
+  81              		.loc 2 123 40 view .LVU20
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 8
+
+
+  82              	.LBE85:
+  83              	.LBE84:
+  84              	.LBE81:
+  85              	.LBE80:
+  86              		.loc 1 182 16 view .LVU21
+  87 001a 012B     		cmp	r3, #1
+  88 001c 02D1     		bne	.L2
+  89              	.L5:
+ 183:common/prog/MSP/mcal/muart.c ****         {
+ 184:common/prog/MSP/mcal/muart.c ****             status = MCAL_STATUS_BUSY;
+  90              		.loc 1 184 20 view .LVU22
+  91 001e 0320     		movs	r0, #3
+  92              	.LVL5:
+  93              		.loc 1 184 20 view .LVU23
+  94 0020 00E0     		b	.L2
+  95              	.LVL6:
+  96              	.L3:
+ 180:common/prog/MSP/mcal/muart.c ****         }
+  97              		.loc 1 180 20 view .LVU24
+  98 0022 0220     		movs	r0, #2
+  99              	.LVL7:
+ 100              	.L2:
+ 185:common/prog/MSP/mcal/muart.c ****         }
+ 186:common/prog/MSP/mcal/muart.c ****         else
+ 187:common/prog/MSP/mcal/muart.c ****         {
+ 188:common/prog/MSP/mcal/muart.c ****             /* Nothing to do */
+ 189:common/prog/MSP/mcal/muart.c ****         }
+ 101              		.loc 1 189 9 is_stmt 1 view .LVU25
+ 190:common/prog/MSP/mcal/muart.c ****     }
+ 191:common/prog/MSP/mcal/muart.c ****     
+ 192:common/prog/MSP/mcal/muart.c ****     return status;
+ 102              		.loc 1 192 5 view .LVU26
+ 193:common/prog/MSP/mcal/muart.c **** }
+ 103              		.loc 1 193 1 is_stmt 0 view .LVU27
+ 104              		@ sp needed
+ 105 0024 7047     		bx	lr
+ 106              		.cfi_endproc
+ 107              	.LFE108:
+ 109              		.section	.text.MUART_getReadStatus,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	MUART_getReadStatus
+ 112              		.syntax unified
+ 113              		.code	16
+ 114              		.thumb_func
+ 116              	MUART_getReadStatus:
+ 117              	.LVL8:
+ 118              	.LFB109:
+ 194:common/prog/MSP/mcal/muart.c **** 
+ 195:common/prog/MSP/mcal/muart.c **** 
+ 196:common/prog/MSP/mcal/muart.c **** enum MCAL_Status MUART_getReadStatus(const struct MUART_Handle *handle)
+ 197:common/prog/MSP/mcal/muart.c **** {
+ 119              		.loc 1 197 1 is_stmt 1 view -0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123              		@ link register save eliminated.
+ 198:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 9
+
+
+ 124              		.loc 1 198 5 view .LVU29
+ 199:common/prog/MSP/mcal/muart.c **** 
+ 200:common/prog/MSP/mcal/muart.c ****     enum MCAL_Status status = handle->status;
+ 125              		.loc 1 200 5 view .LVU30
+ 126              		.loc 1 200 22 is_stmt 0 view .LVU31
+ 127 0000 0279     		ldrb	r2, [r0, #4]
+ 197:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 128              		.loc 1 197 1 view .LVU32
+ 129 0002 0300     		movs	r3, r0
+ 130              		.loc 1 200 22 view .LVU33
+ 131 0004 D0B2     		uxtb	r0, r2
+ 132              	.LVL9:
+ 201:common/prog/MSP/mcal/muart.c ****     
+ 202:common/prog/MSP/mcal/muart.c ****     if(status == MCAL_STATUS_READY)
+ 133              		.loc 1 202 5 is_stmt 1 view .LVU34
+ 134              		.loc 1 202 7 is_stmt 0 view .LVU35
+ 135 0006 012A     		cmp	r2, #1
+ 136 0008 07D1     		bne	.L7
+ 203:common/prog/MSP/mcal/muart.c ****     {
+ 204:common/prog/MSP/mcal/muart.c ****         if(handle->error != MCAL_OK)
+ 137              		.loc 1 204 9 is_stmt 1 view .LVU36
+ 138              		.loc 1 204 11 is_stmt 0 view .LVU37
+ 139 000a 0522     		movs	r2, #5
+ 140 000c 9A56     		ldrsb	r2, [r3, r2]
+ 141 000e 002A     		cmp	r2, #0
+ 142 0010 04D1     		bne	.L8
+ 205:common/prog/MSP/mcal/muart.c ****         {
+ 206:common/prog/MSP/mcal/muart.c ****             status = MCAL_STATUS_ERROR;
+ 207:common/prog/MSP/mcal/muart.c ****         }
+ 208:common/prog/MSP/mcal/muart.c ****         else if(MCOM_isReadBusy(&handle->transfer))
+ 143              		.loc 1 208 14 is_stmt 1 view .LVU38
+ 144              	.LVL10:
+ 145              	.LBB86:
+ 146              	.LBI86:
+ 115:common/prog/MSP/mcal/mcom.h **** {
+ 147              		.loc 2 115 20 view .LVU39
+ 148              	.LBB87:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 149              		.loc 2 117 5 view .LVU40
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 150              		.loc 2 117 39 is_stmt 0 view .LVU41
+ 151 0012 1B7A     		ldrb	r3, [r3, #8]
+ 152              	.LVL11:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 153              		.loc 2 117 39 view .LVU42
+ 154              	.LBE87:
+ 155              	.LBE86:
+ 156              		.loc 1 208 16 view .LVU43
+ 157 0014 012B     		cmp	r3, #1
+ 158 0016 00D1     		bne	.L7
+ 209:common/prog/MSP/mcal/muart.c ****         {
+ 210:common/prog/MSP/mcal/muart.c ****             status = MCAL_STATUS_BUSY;
+ 159              		.loc 1 210 20 view .LVU44
+ 160 0018 0320     		movs	r0, #3
+ 161              	.LVL12:
+ 162              	.L7:
+ 211:common/prog/MSP/mcal/muart.c ****         }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 10
+
+
+ 212:common/prog/MSP/mcal/muart.c ****         else
+ 213:common/prog/MSP/mcal/muart.c ****         {
+ 214:common/prog/MSP/mcal/muart.c ****             /* Nothing to do */
+ 215:common/prog/MSP/mcal/muart.c ****         }
+ 163              		.loc 1 215 9 is_stmt 1 view .LVU45
+ 216:common/prog/MSP/mcal/muart.c ****     }
+ 217:common/prog/MSP/mcal/muart.c ****     
+ 218:common/prog/MSP/mcal/muart.c ****     return status;
+ 164              		.loc 1 218 5 view .LVU46
+ 219:common/prog/MSP/mcal/muart.c **** }
+ 165              		.loc 1 219 1 is_stmt 0 view .LVU47
+ 166              		@ sp needed
+ 167 001a 7047     		bx	lr
+ 168              	.LVL13:
+ 169              	.L8:
+ 206:common/prog/MSP/mcal/muart.c ****         }
+ 170              		.loc 1 206 20 view .LVU48
+ 171 001c 0220     		movs	r0, #2
+ 172              	.LVL14:
+ 206:common/prog/MSP/mcal/muart.c ****         }
+ 173              		.loc 1 206 20 view .LVU49
+ 174 001e FCE7     		b	.L7
+ 175              		.cfi_endproc
+ 176              	.LFE109:
+ 178              		.section	.text.MUART_getWriteStatus,"ax",%progbits
+ 179              		.align	1
+ 180              		.global	MUART_getWriteStatus
+ 181              		.syntax unified
+ 182              		.code	16
+ 183              		.thumb_func
+ 185              	MUART_getWriteStatus:
+ 186              	.LVL15:
+ 187              	.LFB110:
+ 220:common/prog/MSP/mcal/muart.c **** 
+ 221:common/prog/MSP/mcal/muart.c **** enum MCAL_Status MUART_getWriteStatus(const struct MUART_Handle *handle)
+ 222:common/prog/MSP/mcal/muart.c **** {
+ 188              		.loc 1 222 1 is_stmt 1 view -0
+ 189              		.cfi_startproc
+ 190              		@ args = 0, pretend = 0, frame = 0
+ 191              		@ frame_needed = 0, uses_anonymous_args = 0
+ 192              		@ link register save eliminated.
+ 223:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 193              		.loc 1 223 5 view .LVU51
+ 224:common/prog/MSP/mcal/muart.c **** 
+ 225:common/prog/MSP/mcal/muart.c ****     enum MCAL_Status status = handle->status;
+ 194              		.loc 1 225 5 view .LVU52
+ 195              		.loc 1 225 22 is_stmt 0 view .LVU53
+ 196 0000 0279     		ldrb	r2, [r0, #4]
+ 222:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 197              		.loc 1 222 1 view .LVU54
+ 198 0002 0300     		movs	r3, r0
+ 199              		.loc 1 225 22 view .LVU55
+ 200 0004 D0B2     		uxtb	r0, r2
+ 201              	.LVL16:
+ 226:common/prog/MSP/mcal/muart.c ****     
+ 227:common/prog/MSP/mcal/muart.c ****     if(status == MCAL_STATUS_READY)
+ 202              		.loc 1 227 5 is_stmt 1 view .LVU56
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 11
+
+
+ 203              		.loc 1 227 7 is_stmt 0 view .LVU57
+ 204 0006 012A     		cmp	r2, #1
+ 205 0008 03D1     		bne	.L10
+ 228:common/prog/MSP/mcal/muart.c ****     {
+ 229:common/prog/MSP/mcal/muart.c ****         if(MCOM_isWriteBusy(&handle->transfer))
+ 206              		.loc 1 229 9 is_stmt 1 view .LVU58
+ 207              	.LVL17:
+ 208              	.LBB88:
+ 209              	.LBI88:
+ 121:common/prog/MSP/mcal/mcom.h **** {
+ 210              		.loc 2 121 20 view .LVU59
+ 211              	.LBB89:
+ 123:common/prog/MSP/mcal/mcom.h **** }
+ 212              		.loc 2 123 5 view .LVU60
+ 123:common/prog/MSP/mcal/mcom.h **** }
+ 213              		.loc 2 123 40 is_stmt 0 view .LVU61
+ 214 000a 1B7D     		ldrb	r3, [r3, #20]
+ 215              	.LVL18:
+ 123:common/prog/MSP/mcal/mcom.h **** }
+ 216              		.loc 2 123 40 view .LVU62
+ 217              	.LBE89:
+ 218              	.LBE88:
+ 219              		.loc 1 229 11 view .LVU63
+ 220 000c 012B     		cmp	r3, #1
+ 221 000e 00D1     		bne	.L10
+ 230:common/prog/MSP/mcal/muart.c ****         {
+ 231:common/prog/MSP/mcal/muart.c ****             status = MCAL_STATUS_BUSY;
+ 222              		.loc 1 231 20 view .LVU64
+ 223 0010 0320     		movs	r0, #3
+ 224              	.LVL19:
+ 225              	.L10:
+ 232:common/prog/MSP/mcal/muart.c ****         }
+ 233:common/prog/MSP/mcal/muart.c ****     }
+ 234:common/prog/MSP/mcal/muart.c ****     
+ 235:common/prog/MSP/mcal/muart.c ****     return status;
+ 226              		.loc 1 235 5 is_stmt 1 view .LVU65
+ 236:common/prog/MSP/mcal/muart.c **** }
+ 227              		.loc 1 236 1 is_stmt 0 view .LVU66
+ 228              		@ sp needed
+ 229 0012 7047     		bx	lr
+ 230              		.cfi_endproc
+ 231              	.LFE110:
+ 233              		.section	.text.MUART_getError,"ax",%progbits
+ 234              		.align	1
+ 235              		.global	MUART_getError
+ 236              		.syntax unified
+ 237              		.code	16
+ 238              		.thumb_func
+ 240              	MUART_getError:
+ 241              	.LVL20:
+ 242              	.LFB111:
+ 237:common/prog/MSP/mcal/muart.c **** 
+ 238:common/prog/MSP/mcal/muart.c **** 
+ 239:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_getError(const struct MUART_Handle *handle)
+ 240:common/prog/MSP/mcal/muart.c **** {
+ 243              		.loc 1 240 1 is_stmt 1 view -0
+ 244              		.cfi_startproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 12
+
+
+ 245              		@ args = 0, pretend = 0, frame = 0
+ 246              		@ frame_needed = 0, uses_anonymous_args = 0
+ 247              		@ link register save eliminated.
+ 241:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 248              		.loc 1 241 5 view .LVU68
+ 242:common/prog/MSP/mcal/muart.c ****     return handle->error;
+ 249              		.loc 1 242 5 view .LVU69
+ 250              		.loc 1 242 18 is_stmt 0 view .LVU70
+ 251 0000 4079     		ldrb	r0, [r0, #5]
+ 252              	.LVL21:
+ 243:common/prog/MSP/mcal/muart.c **** }
+ 253              		.loc 1 243 1 view .LVU71
+ 254              		@ sp needed
+ 242:common/prog/MSP/mcal/muart.c ****     return handle->error;
+ 255              		.loc 1 242 18 view .LVU72
+ 256 0002 40B2     		sxtb	r0, r0
+ 257              		.loc 1 243 1 view .LVU73
+ 258 0004 7047     		bx	lr
+ 259              		.cfi_endproc
+ 260              	.LFE111:
+ 262              		.section	.text.MUART_clearError,"ax",%progbits
+ 263              		.align	1
+ 264              		.global	MUART_clearError
+ 265              		.syntax unified
+ 266              		.code	16
+ 267              		.thumb_func
+ 269              	MUART_clearError:
+ 270              	.LVL22:
+ 271              	.LFB112:
+ 244:common/prog/MSP/mcal/muart.c **** 
+ 245:common/prog/MSP/mcal/muart.c **** 
+ 246:common/prog/MSP/mcal/muart.c **** void MUART_clearError(struct MUART_Handle *handle)
+ 247:common/prog/MSP/mcal/muart.c **** {
+ 272              		.loc 1 247 1 is_stmt 1 view -0
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 0
+ 275              		@ frame_needed = 0, uses_anonymous_args = 0
+ 276              		@ link register save eliminated.
+ 248:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 277              		.loc 1 248 5 view .LVU75
+ 249:common/prog/MSP/mcal/muart.c **** 
+ 250:common/prog/MSP/mcal/muart.c ****     handle->error = MCAL_OK;
+ 278              		.loc 1 250 5 view .LVU76
+ 279              		.loc 1 250 19 is_stmt 0 view .LVU77
+ 280 0000 0023     		movs	r3, #0
+ 251:common/prog/MSP/mcal/muart.c **** }
+ 281              		.loc 1 251 1 view .LVU78
+ 282              		@ sp needed
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 283              		.loc 1 250 19 view .LVU79
+ 284 0002 4371     		strb	r3, [r0, #5]
+ 285              		.loc 1 251 1 view .LVU80
+ 286 0004 7047     		bx	lr
+ 287              		.cfi_endproc
+ 288              	.LFE112:
+ 290              		.section	.text.MUART_enable,"ax",%progbits
+ 291              		.align	1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 13
+
+
+ 292              		.global	MUART_enable
+ 293              		.syntax unified
+ 294              		.code	16
+ 295              		.thumb_func
+ 297              	MUART_enable:
+ 298              	.LVL23:
+ 299              	.LFB113:
+ 252:common/prog/MSP/mcal/muart.c **** 
+ 253:common/prog/MSP/mcal/muart.c **** 
+ 254:common/prog/MSP/mcal/muart.c **** void MUART_enable(struct MUART_Handle *handle)
+ 255:common/prog/MSP/mcal/muart.c **** {
+ 300              		.loc 1 255 1 is_stmt 1 view -0
+ 301              		.cfi_startproc
+ 302              		@ args = 0, pretend = 0, frame = 0
+ 303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 256:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 304              		.loc 1 256 5 view .LVU82
+ 257:common/prog/MSP/mcal/muart.c **** 
+ 258:common/prog/MSP/mcal/muart.c ****     MUART_enableChannel(handle->channel);
+ 305              		.loc 1 258 5 view .LVU83
+ 255:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 306              		.loc 1 255 1 is_stmt 0 view .LVU84
+ 307 0000 10B5     		push	{r4, lr}
+ 308              	.LCFI0:
+ 309              		.cfi_def_cfa_offset 8
+ 310              		.cfi_offset 4, -8
+ 311              		.cfi_offset 14, -4
+ 255:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 312              		.loc 1 255 1 view .LVU85
+ 313 0002 0400     		movs	r4, r0
+ 259:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_READY;
+ 260:common/prog/MSP/mcal/muart.c **** }
+ 314              		.loc 1 260 1 view .LVU86
+ 315              		@ sp needed
+ 258:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_READY;
+ 316              		.loc 1 258 5 view .LVU87
+ 317 0004 0068     		ldr	r0, [r0]
+ 318              	.LVL24:
+ 258:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_READY;
+ 319              		.loc 1 258 5 view .LVU88
+ 320 0006 FFF7FEFF 		bl	MUART_enableChannel
+ 321              	.LVL25:
+ 259:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_READY;
+ 322              		.loc 1 259 5 is_stmt 1 view .LVU89
+ 259:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_READY;
+ 323              		.loc 1 259 20 is_stmt 0 view .LVU90
+ 324 000a 0123     		movs	r3, #1
+ 325 000c 2371     		strb	r3, [r4, #4]
+ 326              	.LVL26:
+ 327              		.loc 1 260 1 view .LVU91
+ 328 000e 10BD     		pop	{r4, pc}
+ 329              		.cfi_endproc
+ 330              	.LFE113:
+ 332              		.section	.text.MUART_disable,"ax",%progbits
+ 333              		.align	1
+ 334              		.global	MUART_disable
+ 335              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 14
+
+
+ 336              		.code	16
+ 337              		.thumb_func
+ 339              	MUART_disable:
+ 340              	.LVL27:
+ 341              	.LFB114:
+ 261:common/prog/MSP/mcal/muart.c **** 
+ 262:common/prog/MSP/mcal/muart.c **** 
+ 263:common/prog/MSP/mcal/muart.c **** void MUART_disable(struct MUART_Handle *handle)
+ 264:common/prog/MSP/mcal/muart.c **** {
+ 342              		.loc 1 264 1 is_stmt 1 view -0
+ 343              		.cfi_startproc
+ 344              		@ args = 0, pretend = 0, frame = 0
+ 345              		@ frame_needed = 0, uses_anonymous_args = 0
+ 265:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 346              		.loc 1 265 5 view .LVU93
+ 266:common/prog/MSP/mcal/muart.c **** 
+ 267:common/prog/MSP/mcal/muart.c ****     MUART_disableChannel(handle->channel);
+ 347              		.loc 1 267 5 view .LVU94
+ 264:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 348              		.loc 1 264 1 is_stmt 0 view .LVU95
+ 349 0000 10B5     		push	{r4, lr}
+ 350              	.LCFI1:
+ 351              		.cfi_def_cfa_offset 8
+ 352              		.cfi_offset 4, -8
+ 353              		.cfi_offset 14, -4
+ 264:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 354              		.loc 1 264 1 view .LVU96
+ 355 0002 0400     		movs	r4, r0
+ 268:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 269:common/prog/MSP/mcal/muart.c **** }
+ 356              		.loc 1 269 1 view .LVU97
+ 357              		@ sp needed
+ 267:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 358              		.loc 1 267 5 view .LVU98
+ 359 0004 0068     		ldr	r0, [r0]
+ 360              	.LVL28:
+ 267:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 361              		.loc 1 267 5 view .LVU99
+ 362 0006 FFF7FEFF 		bl	MUART_disableChannel
+ 363              	.LVL29:
+ 268:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 364              		.loc 1 268 5 is_stmt 1 view .LVU100
+ 268:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 365              		.loc 1 268 20 is_stmt 0 view .LVU101
+ 366 000a 0423     		movs	r3, #4
+ 367 000c 2371     		strb	r3, [r4, #4]
+ 368              	.LVL30:
+ 369              		.loc 1 269 1 view .LVU102
+ 370 000e 10BD     		pop	{r4, pc}
+ 371              		.cfi_endproc
+ 372              	.LFE114:
+ 374              		.section	.text.MUART_read,"ax",%progbits
+ 375              		.align	1
+ 376              		.global	MUART_read
+ 377              		.syntax unified
+ 378              		.code	16
+ 379              		.thumb_func
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 15
+
+
+ 381              	MUART_read:
+ 382              	.LVL31:
+ 383              	.LFB115:
+ 270:common/prog/MSP/mcal/muart.c **** 
+ 271:common/prog/MSP/mcal/muart.c **** 
+ 272:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_read(struct MUART_Handle *handle, uint8_t buffer[], uint16_t length)
+ 273:common/prog/MSP/mcal/muart.c **** {
+ 384              		.loc 1 273 1 is_stmt 1 view -0
+ 385              		.cfi_startproc
+ 386              		@ args = 0, pretend = 0, frame = 0
+ 387              		@ frame_needed = 0, uses_anonymous_args = 0
+ 274:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 388              		.loc 1 274 5 view .LVU104
+ 275:common/prog/MSP/mcal/muart.c ****     MCAL_assert(buffer != NULL);
+ 389              		.loc 1 275 5 view .LVU105
+ 276:common/prog/MSP/mcal/muart.c ****     
+ 277:common/prog/MSP/mcal/muart.c ****     MUART_clearError(handle);
+ 390              		.loc 1 277 5 view .LVU106
+ 391              	.LBB90:
+ 392              	.LBI90:
+ 246:common/prog/MSP/mcal/muart.c **** {
+ 393              		.loc 1 246 6 view .LVU107
+ 394              	.LBB91:
+ 248:common/prog/MSP/mcal/muart.c **** 
+ 395              		.loc 1 248 5 view .LVU108
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 396              		.loc 1 250 5 view .LVU109
+ 397              	.LBE91:
+ 398              	.LBE90:
+ 273:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 399              		.loc 1 273 1 is_stmt 0 view .LVU110
+ 400 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 401              	.LCFI2:
+ 402              		.cfi_def_cfa_offset 24
+ 403              		.cfi_offset 3, -24
+ 404              		.cfi_offset 4, -20
+ 405              		.cfi_offset 5, -16
+ 406              		.cfi_offset 6, -12
+ 407              		.cfi_offset 7, -8
+ 408              		.cfi_offset 14, -4
+ 409              	.LBB94:
+ 410              	.LBB92:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 411              		.loc 1 250 19 view .LVU111
+ 412 0002 0023     		movs	r3, #0
+ 413              	.LBE92:
+ 414              	.LBE94:
+ 273:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 415              		.loc 1 273 1 view .LVU112
+ 416 0004 0400     		movs	r4, r0
+ 417              	.LBB95:
+ 418              	.LBB93:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 419              		.loc 1 250 19 view .LVU113
+ 420 0006 4371     		strb	r3, [r0, #5]
+ 421              	.LVL32:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 16
+
+
+ 422              		.loc 1 250 19 view .LVU114
+ 423              	.LBE93:
+ 424              	.LBE95:
+ 278:common/prog/MSP/mcal/muart.c ****     
+ 279:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+ 425              		.loc 1 279 5 is_stmt 1 view .LVU115
+ 426              	.LBB96:
+ 427              		.loc 1 279 5 view .LVU116
+ 428 0008 0079     		ldrb	r0, [r0, #4]
+ 429              	.LVL33:
+ 430              		.loc 1 279 5 is_stmt 0 view .LVU117
+ 431              	.LBE96:
+ 273:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 432              		.loc 1 273 1 view .LVU118
+ 433 000a 0E00     		movs	r6, r1
+ 434              	.LBB97:
+ 435              		.loc 1 279 5 view .LVU119
+ 436 000c C0B2     		uxtb	r0, r0
+ 437              	.LBE97:
+ 273:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 438              		.loc 1 273 1 view .LVU120
+ 439 000e 1700     		movs	r7, r2
+ 440              	.LBB98:
+ 441              		.loc 1 279 5 view .LVU121
+ 442 0010 FFF7FEFF 		bl	MCAL_checkReady
+ 443              	.LVL34:
+ 444              		.loc 1 279 5 view .LVU122
+ 445 0014 051E     		subs	r5, r0, #0
+ 446              	.LVL35:
+ 447              		.loc 1 279 5 is_stmt 1 view .LVU123
+ 448 0016 0CD1     		bne	.L16
+ 449              	.LBE98:
+ 450              		.loc 1 279 5 discriminator 2 view .LVU124
+ 451              		.loc 1 279 58 discriminator 2 view .LVU125
+ 280:common/prog/MSP/mcal/muart.c ****     
+ 281:common/prog/MSP/mcal/muart.c ****     if(MCOM_isReadReady(&handle->transfer))
+ 452              		.loc 1 281 5 discriminator 2 view .LVU126
+ 453              	.LVL36:
+ 454              	.LBB99:
+ 455              	.LBI99:
+ 103:common/prog/MSP/mcal/mcom.h **** {
+ 456              		.loc 2 103 20 discriminator 2 view .LVU127
+ 457              	.LBB100:
+ 105:common/prog/MSP/mcal/mcom.h **** }
+ 458              		.loc 2 105 5 discriminator 2 view .LVU128
+ 105:common/prog/MSP/mcal/mcom.h **** }
+ 459              		.loc 2 105 39 is_stmt 0 discriminator 2 view .LVU129
+ 460 0018 237A     		ldrb	r3, [r4, #8]
+ 461              	.LBE100:
+ 462              	.LBE99:
+ 463              		.loc 1 281 7 discriminator 2 view .LVU130
+ 464 001a 002B     		cmp	r3, #0
+ 465 001c 0BD1     		bne	.L17
+ 282:common/prog/MSP/mcal/muart.c ****     {
+ 283:common/prog/MSP/mcal/muart.c ****         MCOM_setReadBuffer(&handle->transfer, buffer, length);
+ 466              		.loc 1 283 9 is_stmt 1 view .LVU131
+ 467 001e 2000     		movs	r0, r4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 17
+
+
+ 468              	.LVL37:
+ 469              		.loc 1 283 9 is_stmt 0 view .LVU132
+ 470 0020 3100     		movs	r1, r6
+ 471 0022 0830     		adds	r0, r0, #8
+ 472 0024 3A00     		movs	r2, r7
+ 473 0026 FFF7FEFF 		bl	MCOM_setReadBuffer
+ 474              	.LVL38:
+ 284:common/prog/MSP/mcal/muart.c ****         MUART_IRQ_enableEvent(handle->channel, MCAL_EVENT_READ_BYTE);
+ 475              		.loc 1 284 9 is_stmt 1 view .LVU133
+ 476 002a 1021     		movs	r1, #16
+ 477 002c 2068     		ldr	r0, [r4]
+ 478 002e FFF7FEFF 		bl	MUART_IRQ_enableEvent
+ 479              	.LVL39:
+ 285:common/prog/MSP/mcal/muart.c ****         
+ 286:common/prog/MSP/mcal/muart.c ****         return MCAL_OK;
+ 480              		.loc 1 286 9 view .LVU134
+ 481              	.L16:
+ 287:common/prog/MSP/mcal/muart.c ****     }
+ 288:common/prog/MSP/mcal/muart.c ****     else
+ 289:common/prog/MSP/mcal/muart.c ****     {
+ 290:common/prog/MSP/mcal/muart.c ****         return MCAL_ERROR_BUSY;
+ 291:common/prog/MSP/mcal/muart.c ****     }
+ 292:common/prog/MSP/mcal/muart.c **** }
+ 482              		.loc 1 292 1 is_stmt 0 view .LVU135
+ 483              		@ sp needed
+ 484 0032 2800     		movs	r0, r5
+ 485              	.LVL40:
+ 486              	.LVL41:
+ 487              		.loc 1 292 1 view .LVU136
+ 488 0034 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 489              	.LVL42:
+ 490              	.L17:
+ 290:common/prog/MSP/mcal/muart.c ****     }
+ 491              		.loc 1 290 16 view .LVU137
+ 492 0036 0225     		movs	r5, #2
+ 493 0038 FBE7     		b	.L16
+ 494              		.cfi_endproc
+ 495              	.LFE115:
+ 497              		.section	.text.MUART_finishRead,"ax",%progbits
+ 498              		.align	1
+ 499              		.global	MUART_finishRead
+ 500              		.syntax unified
+ 501              		.code	16
+ 502              		.thumb_func
+ 504              	MUART_finishRead:
+ 505              	.LVL43:
+ 506              	.LFB117:
+ 293:common/prog/MSP/mcal/muart.c **** 
+ 294:common/prog/MSP/mcal/muart.c **** 
+ 295:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_write(struct MUART_Handle *handle, const uint8_t buffer[], uint16_t length)
+ 296:common/prog/MSP/mcal/muart.c **** {
+ 297:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 298:common/prog/MSP/mcal/muart.c ****     MCAL_assert(buffer != NULL);
+ 299:common/prog/MSP/mcal/muart.c ****     
+ 300:common/prog/MSP/mcal/muart.c ****     MUART_clearError(handle);
+ 301:common/prog/MSP/mcal/muart.c ****     
+ 302:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 18
+
+
+ 303:common/prog/MSP/mcal/muart.c ****     
+ 304:common/prog/MSP/mcal/muart.c ****     if(MCOM_isWriteReady(&handle->transfer))
+ 305:common/prog/MSP/mcal/muart.c ****     {
+ 306:common/prog/MSP/mcal/muart.c ****         MCOM_setWriteBuffer(&handle->transfer, buffer, length);
+ 307:common/prog/MSP/mcal/muart.c ****         (void)MUART_enableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+ 308:common/prog/MSP/mcal/muart.c ****         return MCAL_OK;
+ 309:common/prog/MSP/mcal/muart.c ****     }
+ 310:common/prog/MSP/mcal/muart.c ****     else
+ 311:common/prog/MSP/mcal/muart.c ****     {
+ 312:common/prog/MSP/mcal/muart.c ****         return MCAL_ERROR_BUSY;
+ 313:common/prog/MSP/mcal/muart.c ****     }
+ 314:common/prog/MSP/mcal/muart.c **** }
+ 315:common/prog/MSP/mcal/muart.c **** 
+ 316:common/prog/MSP/mcal/muart.c **** 
+ 317:common/prog/MSP/mcal/muart.c **** void MUART_finishRead(struct MUART_Handle *handle)
+ 318:common/prog/MSP/mcal/muart.c **** {
+ 507              		.loc 1 318 1 is_stmt 1 view -0
+ 508              		.cfi_startproc
+ 509              		@ args = 0, pretend = 0, frame = 0
+ 510              		@ frame_needed = 0, uses_anonymous_args = 0
+ 511              		@ link register save eliminated.
+ 319:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 512              		.loc 1 319 5 view .LVU139
+ 320:common/prog/MSP/mcal/muart.c ****     
+ 321:common/prog/MSP/mcal/muart.c ****     if(MCOM_isReadBusy(&handle->transfer))
+ 513              		.loc 1 321 5 view .LVU140
+ 514              	.LBB101:
+ 515              	.LBI101:
+ 115:common/prog/MSP/mcal/mcom.h **** {
+ 516              		.loc 2 115 20 view .LVU141
+ 517              	.LBB102:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 518              		.loc 2 117 5 view .LVU142
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 519              		.loc 2 117 39 is_stmt 0 view .LVU143
+ 520 0000 037A     		ldrb	r3, [r0, #8]
+ 521 0002 DAB2     		uxtb	r2, r3
+ 522              	.LVL44:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 523              		.loc 2 117 39 view .LVU144
+ 524              	.LBE102:
+ 525              	.LBE101:
+ 526              		.loc 1 321 7 view .LVU145
+ 527 0004 012B     		cmp	r3, #1
+ 528 0006 00D1     		bne	.L18
+ 322:common/prog/MSP/mcal/muart.c ****     {
+ 323:common/prog/MSP/mcal/muart.c ****         handle->finishRead = true;
+ 529              		.loc 1 323 9 is_stmt 1 view .LVU146
+ 530              		.loc 1 323 28 is_stmt 0 view .LVU147
+ 531 0008 8271     		strb	r2, [r0, #6]
+ 532              	.L18:
+ 324:common/prog/MSP/mcal/muart.c ****     }
+ 325:common/prog/MSP/mcal/muart.c **** }
+ 533              		.loc 1 325 1 view .LVU148
+ 534              		@ sp needed
+ 535 000a 7047     		bx	lr
+ 536              		.cfi_endproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 19
+
+
+ 537              	.LFE117:
+ 539              		.section	.text.MUART_enableEvent,"ax",%progbits
+ 540              		.align	1
+ 541              		.global	MUART_enableEvent
+ 542              		.syntax unified
+ 543              		.code	16
+ 544              		.thumb_func
+ 546              	MUART_enableEvent:
+ 547              	.LVL45:
+ 548              	.LFB121:
+ 326:common/prog/MSP/mcal/muart.c **** 
+ 327:common/prog/MSP/mcal/muart.c **** 
+ 328:common/prog/MSP/mcal/muart.c **** int32_t MUART_writeByte(const struct MUART_Handle *handle, uint8_t data)
+ 329:common/prog/MSP/mcal/muart.c **** {
+ 330:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 331:common/prog/MSP/mcal/muart.c **** 
+ 332:common/prog/MSP/mcal/muart.c ****     if(MUART_isEnabled(handle))
+ 333:common/prog/MSP/mcal/muart.c ****     {
+ 334:common/prog/MSP/mcal/muart.c ****         if(MUART_isEvent(handle->channel, MCAL_EVENT_WRITE_BYTE))
+ 335:common/prog/MSP/mcal/muart.c ****         {
+ 336:common/prog/MSP/mcal/muart.c ****             MUART_writeDataReg(handle->channel, (uint32_t)data);
+ 337:common/prog/MSP/mcal/muart.c ****             return 1;
+ 338:common/prog/MSP/mcal/muart.c ****         }
+ 339:common/prog/MSP/mcal/muart.c ****     }
+ 340:common/prog/MSP/mcal/muart.c ****     
+ 341:common/prog/MSP/mcal/muart.c ****     return -1;
+ 342:common/prog/MSP/mcal/muart.c **** }
+ 343:common/prog/MSP/mcal/muart.c **** 
+ 344:common/prog/MSP/mcal/muart.c **** 
+ 345:common/prog/MSP/mcal/muart.c **** int32_t MUART_readByte(const struct MUART_Handle *handle)
+ 346:common/prog/MSP/mcal/muart.c **** {
+ 347:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 348:common/prog/MSP/mcal/muart.c **** 
+ 349:common/prog/MSP/mcal/muart.c ****     if(MUART_isEnabled(handle))
+ 350:common/prog/MSP/mcal/muart.c ****     {
+ 351:common/prog/MSP/mcal/muart.c ****         if(MUART_isEvent(handle->channel, MCAL_EVENT_READ_BYTE))
+ 352:common/prog/MSP/mcal/muart.c ****         {
+ 353:common/prog/MSP/mcal/muart.c ****             return (int32_t)MUART_readDataReg(handle->channel);
+ 354:common/prog/MSP/mcal/muart.c ****         }
+ 355:common/prog/MSP/mcal/muart.c ****     }
+ 356:common/prog/MSP/mcal/muart.c **** 
+ 357:common/prog/MSP/mcal/muart.c ****     return -1;
+ 358:common/prog/MSP/mcal/muart.c **** }
+ 359:common/prog/MSP/mcal/muart.c **** 
+ 360:common/prog/MSP/mcal/muart.c **** 
+ 361:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_writeBlocking(const struct MUART_Handle *handle, const uint8_t *buffer, uint1
+ 362:common/prog/MSP/mcal/muart.c **** {
+ 363:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 364:common/prog/MSP/mcal/muart.c ****     MCAL_assert(buffer != NULL);
+ 365:common/prog/MSP/mcal/muart.c ****     
+ 366:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MCAL_checkReady(handle->status));
+ 367:common/prog/MSP/mcal/muart.c ****     
+ 368:common/prog/MSP/mcal/muart.c ****     if(MCOM_isWriteReady(&handle->transfer))
+ 369:common/prog/MSP/mcal/muart.c ****     {   /*Axivion Next Line MisraC2012-14.2 : Loop counter not modified by intention in third claus
+ 370:common/prog/MSP/mcal/muart.c ****         for (uint8_t n = 0; n < length;)
+ 371:common/prog/MSP/mcal/muart.c ****         {
+ 372:common/prog/MSP/mcal/muart.c ****             if(MUART_writeByte(handle, buffer[n]) > 0)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 20
+
+
+ 373:common/prog/MSP/mcal/muart.c ****             {
+ 374:common/prog/MSP/mcal/muart.c ****                 n++;
+ 375:common/prog/MSP/mcal/muart.c ****             }
+ 376:common/prog/MSP/mcal/muart.c ****         }
+ 377:common/prog/MSP/mcal/muart.c ****         return MCAL_OK;
+ 378:common/prog/MSP/mcal/muart.c ****     }
+ 379:common/prog/MSP/mcal/muart.c ****     else
+ 380:common/prog/MSP/mcal/muart.c ****     {
+ 381:common/prog/MSP/mcal/muart.c ****         return MCAL_ERROR_BUSY;
+ 382:common/prog/MSP/mcal/muart.c ****     }
+ 383:common/prog/MSP/mcal/muart.c **** }
+ 384:common/prog/MSP/mcal/muart.c **** 
+ 385:common/prog/MSP/mcal/muart.c **** 
+ 386:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_enableEvent(struct MUART_Handle *handle, MCAL_Callback_t *callback, enum MCAL
+ 387:common/prog/MSP/mcal/muart.c **** {
+ 549              		.loc 1 387 1 is_stmt 1 view -0
+ 550              		.cfi_startproc
+ 551              		@ args = 0, pretend = 0, frame = 0
+ 552              		@ frame_needed = 0, uses_anonymous_args = 0
+ 388:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 553              		.loc 1 388 5 view .LVU150
+ 389:common/prog/MSP/mcal/muart.c ****     
+ 390:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 554              		.loc 1 390 5 view .LVU151
+ 391:common/prog/MSP/mcal/muart.c ****     
+ 392:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MCAL_checkInitialized(handle->status));
+ 555              		.loc 1 392 5 view .LVU152
+ 556              	.LBB111:
+ 557              		.loc 1 392 5 view .LVU153
+ 558              	.LBE111:
+ 387:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 559              		.loc 1 387 1 is_stmt 0 view .LVU154
+ 560 0000 70B5     		push	{r4, r5, r6, lr}
+ 561              	.LCFI3:
+ 562              		.cfi_def_cfa_offset 16
+ 563              		.cfi_offset 4, -16
+ 564              		.cfi_offset 5, -12
+ 565              		.cfi_offset 6, -8
+ 566              		.cfi_offset 14, -4
+ 567              	.LBB116:
+ 568              		.loc 1 392 5 view .LVU155
+ 569 0002 0379     		ldrb	r3, [r0, #4]
+ 570              	.LVL46:
+ 571              	.LBB112:
+ 572              	.LBI112:
+ 573              		.file 3 "common/prog/MSP/mcal/mcal.h"
+   1:common/prog/MSP/mcal/mcal.h **** /*******************************************************************************
+   2:common/prog/MSP/mcal/mcal.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/mcal.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/mcal.h ****  *
+   5:common/prog/MSP/mcal/mcal.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/mcal.h ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/mcal.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/mcal.h ****  *
+   9:common/prog/MSP/mcal/mcal.h ****  *******************************************************************************
+  10:common/prog/MSP/mcal/mcal.h ****  *  PROJECT          Generic SW
+  11:common/prog/MSP/mcal/mcal.h ****  *  COMP_ABBREV      MCAL
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 21
+
+
+  12:common/prog/MSP/mcal/mcal.h ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/mcal.h **** 
+  14:common/prog/MSP/mcal/mcal.h **** 
+  15:common/prog/MSP/mcal/mcal.h **** #ifndef MCAL_H
+  16:common/prog/MSP/mcal/mcal.h **** #define MCAL_H
+  17:common/prog/MSP/mcal/mcal.h **** 
+  18:common/prog/MSP/mcal/mcal.h **** #if defined(__cplusplus) && !defined(MOCK_IT)
+  19:common/prog/MSP/mcal/mcal.h **** extern "C" {
+  20:common/prog/MSP/mcal/mcal.h **** #endif //__cplusplus
+  21:common/prog/MSP/mcal/mcal.h **** 
+  22:common/prog/MSP/mcal/mcal.h **** 
+  23:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  24:common/prog/MSP/mcal/mcal.h **** /* DOCUMENTATION                                                              */
+  25:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  26:common/prog/MSP/mcal/mcal.h **** /** \file
+  27:common/prog/MSP/mcal/mcal.h ****  *
+  28:common/prog/MSP/mcal/mcal.h ****  *  \ingroup  MCAL
+  29:common/prog/MSP/mcal/mcal.h ****  *
+  30:common/prog/MSP/mcal/mcal.h ****  *  \brief    Public definitions and declarations for unit MCAL.
+  31:common/prog/MSP/mcal/mcal.h ****  *
+  32:common/prog/MSP/mcal/mcal.h ****  */
+  33:common/prog/MSP/mcal/mcal.h **** 
+  34:common/prog/MSP/mcal/mcal.h **** 
+  35:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  36:common/prog/MSP/mcal/mcal.h **** /* INCLUDES                                                                   */
+  37:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  38:common/prog/MSP/mcal/mcal.h **** #include "BSH_stdinc.h"
+  39:common/prog/MSP/mcal/mcal.h **** #include <stdint.h>
+  40:common/prog/MSP/mcal/mcal.h **** #include <stdbool.h>
+  41:common/prog/MSP/mcal/mcal.h **** #include "std_lib/std_callback.h"
+  42:common/prog/MSP/mcal/mcal.h **** 
+  43:common/prog/MSP/mcal/mcal.h **** #include "mcal_types.h"
+  44:common/prog/MSP/mcal/mcal.h **** 
+  45:common/prog/MSP/mcal/mcal.h **** 
+  46:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  47:common/prog/MSP/mcal/mcal.h **** /* PUBLIC INLINE FUNCTION DEFINITIONS                                         */
+  48:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  49:common/prog/MSP/mcal/mcal.h **** 
+  50:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_Module MCAL_getEventSource(const struct MCAL_EventResponse *eventResponse)
+  51:common/prog/MSP/mcal/mcal.h **** {
+  52:common/prog/MSP/mcal/mcal.h ****     return eventResponse->eventSource;
+  53:common/prog/MSP/mcal/mcal.h **** }
+  54:common/prog/MSP/mcal/mcal.h **** 
+  55:common/prog/MSP/mcal/mcal.h **** 
+  56:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_Event MCAL_getEventType(const struct MCAL_EventResponse *eventResponse)
+  57:common/prog/MSP/mcal/mcal.h **** {
+  58:common/prog/MSP/mcal/mcal.h ****     return eventResponse->eventType;
+  59:common/prog/MSP/mcal/mcal.h **** }
+  60:common/prog/MSP/mcal/mcal.h **** 
+  61:common/prog/MSP/mcal/mcal.h **** 
+  62:common/prog/MSP/mcal/mcal.h **** static inline const struct MCAL_EventData *MCAL_getEventData(const struct MCAL_EventResponse *event
+  63:common/prog/MSP/mcal/mcal.h **** {
+  64:common/prog/MSP/mcal/mcal.h ****     return &eventResponse->eventData;
+  65:common/prog/MSP/mcal/mcal.h **** }
+  66:common/prog/MSP/mcal/mcal.h **** 
+  67:common/prog/MSP/mcal/mcal.h **** 
+  68:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_DataType MCAL_getEventDataType(const struct MCAL_EventResponse *eventRespon
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 22
+
+
+  69:common/prog/MSP/mcal/mcal.h **** {
+  70:common/prog/MSP/mcal/mcal.h ****     return eventResponse->eventData.dataType;
+  71:common/prog/MSP/mcal/mcal.h **** }
+  72:common/prog/MSP/mcal/mcal.h **** 
+  73:common/prog/MSP/mcal/mcal.h **** 
+  74:common/prog/MSP/mcal/mcal.h **** /** \brief    Functions for setting event data.
+  75:common/prog/MSP/mcal/mcal.h ****  *
+  76:common/prog/MSP/mcal/mcal.h ****  *  \details  These functions are intended to be used when passing event data using callback.
+  77:common/prog/MSP/mcal/mcal.h ****  * 
+  78:common/prog/MSP/mcal/mcal.h ****  */
+  79:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_uint8(struct MCAL_EventData *eventData, uint8_t data)
+  80:common/prog/MSP/mcal/mcal.h **** {
+  81:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_UINT8;
+  82:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint8 = data;
+  83:common/prog/MSP/mcal/mcal.h **** }
+  84:common/prog/MSP/mcal/mcal.h **** 
+  85:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_uint16(struct MCAL_EventData *eventData, uint16_t data)
+  86:common/prog/MSP/mcal/mcal.h **** {
+  87:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_UINT16;
+  88:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint16 = data;
+  89:common/prog/MSP/mcal/mcal.h **** }
+  90:common/prog/MSP/mcal/mcal.h **** 
+  91:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_uint32(struct MCAL_EventData *eventData, uint32_t data)
+  92:common/prog/MSP/mcal/mcal.h **** {
+  93:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_UINT32;
+  94:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint32 = data;
+  95:common/prog/MSP/mcal/mcal.h **** }
+  96:common/prog/MSP/mcal/mcal.h **** 
+  97:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_int8(struct MCAL_EventData *eventData, int8_t data)
+  98:common/prog/MSP/mcal/mcal.h **** {
+  99:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_INT8;
+ 100:common/prog/MSP/mcal/mcal.h ****     eventData->data.int8 = data;
+ 101:common/prog/MSP/mcal/mcal.h **** }
+ 102:common/prog/MSP/mcal/mcal.h **** 
+ 103:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_int16(struct MCAL_EventData *eventData, int16_t data)
+ 104:common/prog/MSP/mcal/mcal.h **** {
+ 105:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_INT16;
+ 106:common/prog/MSP/mcal/mcal.h ****     eventData->data.int16 = data;
+ 107:common/prog/MSP/mcal/mcal.h **** }
+ 108:common/prog/MSP/mcal/mcal.h **** 
+ 109:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_int32(struct MCAL_EventData *eventData, int32_t data)
+ 110:common/prog/MSP/mcal/mcal.h **** {
+ 111:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_INT32;
+ 112:common/prog/MSP/mcal/mcal.h ****     eventData->data.int32 = data;
+ 113:common/prog/MSP/mcal/mcal.h **** }
+ 114:common/prog/MSP/mcal/mcal.h **** 
+ 115:common/prog/MSP/mcal/mcal.h **** static inline void MCAL_setEventData_error(struct MCAL_EventData *eventData, enum MCAL_Error error)
+ 116:common/prog/MSP/mcal/mcal.h **** {
+ 117:common/prog/MSP/mcal/mcal.h ****     eventData->dataType = MCAL_DATA_TYPE_ERROR_VALUE;
+ 118:common/prog/MSP/mcal/mcal.h ****     eventData->data.error = error;
+ 119:common/prog/MSP/mcal/mcal.h **** }
+ 120:common/prog/MSP/mcal/mcal.h **** 
+ 121:common/prog/MSP/mcal/mcal.h **** 
+ 122:common/prog/MSP/mcal/mcal.h **** /** \brief    Functions for simple checking of status.
+ 123:common/prog/MSP/mcal/mcal.h ****  *
+ 124:common/prog/MSP/mcal/mcal.h ****  *  \param    status: status to check
+ 125:common/prog/MSP/mcal/mcal.h ****  *  \return   false if status does not correspond.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 23
+
+
+ 126:common/prog/MSP/mcal/mcal.h ****  */
+ 127:common/prog/MSP/mcal/mcal.h **** static inline bool MCAL_isInitialized(enum MCAL_Status status)
+ 128:common/prog/MSP/mcal/mcal.h **** {
+ 129:common/prog/MSP/mcal/mcal.h ****     return (status != MCAL_STATUS_RESET) ? true : false;
+ 130:common/prog/MSP/mcal/mcal.h **** }
+ 131:common/prog/MSP/mcal/mcal.h **** 
+ 132:common/prog/MSP/mcal/mcal.h **** static inline bool MCAL_isReady(enum MCAL_Status status)
+ 133:common/prog/MSP/mcal/mcal.h **** {
+ 134:common/prog/MSP/mcal/mcal.h ****     return (status == MCAL_STATUS_READY) ? true : false;
+ 135:common/prog/MSP/mcal/mcal.h **** }
+ 136:common/prog/MSP/mcal/mcal.h **** 
+ 137:common/prog/MSP/mcal/mcal.h **** static inline bool MCAL_isDisabled(enum MCAL_Status status)
+ 138:common/prog/MSP/mcal/mcal.h **** {
+ 139:common/prog/MSP/mcal/mcal.h ****     return (status == MCAL_STATUS_DISABLED) ? true : false;
+ 140:common/prog/MSP/mcal/mcal.h **** }
+ 141:common/prog/MSP/mcal/mcal.h **** 
+ 142:common/prog/MSP/mcal/mcal.h **** static inline bool MCAL_isBusy(enum MCAL_Status status)
+ 143:common/prog/MSP/mcal/mcal.h **** {
+ 144:common/prog/MSP/mcal/mcal.h ****     return (status == MCAL_STATUS_BUSY) ? true : false;
+ 145:common/prog/MSP/mcal/mcal.h **** }
+ 146:common/prog/MSP/mcal/mcal.h **** 
+ 147:common/prog/MSP/mcal/mcal.h **** 
+ 148:common/prog/MSP/mcal/mcal.h **** 
+ 149:common/prog/MSP/mcal/mcal.h **** /** \brief    Functions for advanced simple checking of status.
+ 150:common/prog/MSP/mcal/mcal.h ****  *
+ 151:common/prog/MSP/mcal/mcal.h ****  *  \details  Difference to simple checking is, that these function also return
+ 152:common/prog/MSP/mcal/mcal.h ****  *            error value. These functions can be used together with MCAL_RETURN_ON_ERROR
+ 153:common/prog/MSP/mcal/mcal.h ****  *            and MCAL_BREAK_ON_ERROR macros to return from function or break from loop
+ 154:common/prog/MSP/mcal/mcal.h ****  *            on error
+ 155:common/prog/MSP/mcal/mcal.h ****  * 
+ 156:common/prog/MSP/mcal/mcal.h ****  *  \param    status: status to check
+ 157:common/prog/MSP/mcal/mcal.h ****  *  \return   MCAL_OK if status correspond, specific error value otherwise.
+ 158:common/prog/MSP/mcal/mcal.h ****  */
+ 159:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_Error MCAL_checkInitialized(enum MCAL_Status status)
+ 574              		.loc 3 159 31 is_stmt 1 view .LVU156
+ 575              	.LBB113:
+ 160:common/prog/MSP/mcal/mcal.h **** {
+ 161:common/prog/MSP/mcal/mcal.h ****     return (MCAL_isInitialized(status)) ? MCAL_OK : MCAL_ERROR_NOT_INITIALIZED;
+ 576              		.loc 3 161 5 view .LVU157
+ 577              	.LBE113:
+ 578              	.LBE112:
+ 579              	.LBE116:
+ 387:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 580              		.loc 1 387 1 is_stmt 0 view .LVU158
+ 581 0004 0400     		movs	r4, r0
+ 582 0006 1500     		movs	r5, r2
+ 583              	.LBB117:
+ 584              	.LBB115:
+ 585              	.LBB114:
+ 586              		.loc 3 161 51 view .LVU159
+ 587 0008 0A20     		movs	r0, #10
+ 588              	.LVL47:
+ 589              		.loc 3 161 51 view .LVU160
+ 590 000a 002B     		cmp	r3, #0
+ 591 000c 11D0     		beq	.L21
+ 592              	.LVL48:
+ 593              		.loc 3 161 51 view .LVU161
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 24
+
+
+ 594              	.LBE114:
+ 595              	.LBE115:
+ 596              	.LBE117:
+ 597              	.LBB118:
+ 598              	.LBI118:
+ 386:common/prog/MSP/mcal/muart.c **** {
+ 599              		.loc 1 386 17 is_stmt 1 view .LVU162
+ 600              		.loc 1 392 5 view .LVU163
+ 601              	.LBB119:
+ 602              		.loc 1 392 5 view .LVU164
+ 603              		.loc 1 392 64 view .LVU165
+ 393:common/prog/MSP/mcal/muart.c ****     
+ 394:common/prog/MSP/mcal/muart.c ****     if(callback != NULL)
+ 604              		.loc 1 394 5 view .LVU166
+ 605              		.loc 1 394 7 is_stmt 0 view .LVU167
+ 606 000e 0029     		cmp	r1, #0
+ 607 0010 03D0     		beq	.L22
+ 395:common/prog/MSP/mcal/muart.c ****     {
+ 396:common/prog/MSP/mcal/muart.c ****         MCAL_enableEvent(&handle->cbList, callback, event);
+ 608              		.loc 1 396 9 is_stmt 1 view .LVU168
+ 609 0012 2000     		movs	r0, r4
+ 610 0014 2030     		adds	r0, r0, #32
+ 611 0016 FFF7FEFF 		bl	MCAL_enableEvent
+ 612              	.LVL49:
+ 613              	.L22:
+ 397:common/prog/MSP/mcal/muart.c ****     }
+ 398:common/prog/MSP/mcal/muart.c ****     eventMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+ 614              		.loc 1 398 5 view .LVU169
+ 615              		.loc 1 398 17 is_stmt 0 view .LVU170
+ 616 001a 2900     		movs	r1, r5
+ 617 001c 2068     		ldr	r0, [r4]
+ 618 001e FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ 619              	.LVL50:
+ 399:common/prog/MSP/mcal/muart.c ****     handle->enabledEvents |= eventMask;
+ 620              		.loc 1 399 5 is_stmt 1 view .LVU171
+ 621              		.loc 1 399 27 is_stmt 0 view .LVU172
+ 622 0022 636A     		ldr	r3, [r4, #36]
+ 400:common/prog/MSP/mcal/muart.c ****     
+ 401:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_enableEvent(handle->channel, event);
+ 623              		.loc 1 401 5 view .LVU173
+ 624 0024 2900     		movs	r1, r5
+ 399:common/prog/MSP/mcal/muart.c ****     handle->enabledEvents |= eventMask;
+ 625              		.loc 1 399 27 view .LVU174
+ 626 0026 1843     		orrs	r0, r3
+ 627              	.LVL51:
+ 399:common/prog/MSP/mcal/muart.c ****     handle->enabledEvents |= eventMask;
+ 628              		.loc 1 399 27 view .LVU175
+ 629 0028 6062     		str	r0, [r4, #36]
+ 630              		.loc 1 401 5 is_stmt 1 view .LVU176
+ 631 002a 2068     		ldr	r0, [r4]
+ 632 002c FFF7FEFF 		bl	MUART_IRQ_enableEvent
+ 633              	.LVL52:
+ 402:common/prog/MSP/mcal/muart.c ****     
+ 403:common/prog/MSP/mcal/muart.c ****     return MCAL_OK;
+ 634              		.loc 1 403 5 view .LVU177
+ 401:common/prog/MSP/mcal/muart.c ****     
+ 635              		.loc 1 401 5 is_stmt 0 view .LVU178
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 25
+
+
+ 636 0030 0020     		movs	r0, #0
+ 637              	.L21:
+ 401:common/prog/MSP/mcal/muart.c ****     
+ 638              		.loc 1 401 5 view .LVU179
+ 639              	.LBE119:
+ 640              	.LBE118:
+ 404:common/prog/MSP/mcal/muart.c **** }
+ 641              		.loc 1 404 1 view .LVU180
+ 642              		@ sp needed
+ 643              	.LVL53:
+ 644              	.LVL54:
+ 645              		.loc 1 404 1 view .LVU181
+ 646 0032 70BD     		pop	{r4, r5, r6, pc}
+ 647              		.cfi_endproc
+ 648              	.LFE121:
+ 650              		.section	.text.MUART_write,"ax",%progbits
+ 651              		.align	1
+ 652              		.global	MUART_write
+ 653              		.syntax unified
+ 654              		.code	16
+ 655              		.thumb_func
+ 657              	MUART_write:
+ 658              	.LVL55:
+ 659              	.LFB116:
+ 296:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 660              		.loc 1 296 1 is_stmt 1 view -0
+ 661              		.cfi_startproc
+ 662              		@ args = 0, pretend = 0, frame = 0
+ 663              		@ frame_needed = 0, uses_anonymous_args = 0
+ 297:common/prog/MSP/mcal/muart.c ****     MCAL_assert(buffer != NULL);
+ 664              		.loc 1 297 5 view .LVU183
+ 298:common/prog/MSP/mcal/muart.c ****     
+ 665              		.loc 1 298 5 view .LVU184
+ 300:common/prog/MSP/mcal/muart.c ****     
+ 666              		.loc 1 300 5 view .LVU185
+ 667              	.LBB120:
+ 668              	.LBI120:
+ 246:common/prog/MSP/mcal/muart.c **** {
+ 669              		.loc 1 246 6 view .LVU186
+ 670              	.LBB121:
+ 248:common/prog/MSP/mcal/muart.c **** 
+ 671              		.loc 1 248 5 view .LVU187
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 672              		.loc 1 250 5 view .LVU188
+ 673              	.LBE121:
+ 674              	.LBE120:
+ 296:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 675              		.loc 1 296 1 is_stmt 0 view .LVU189
+ 676 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 677              	.LCFI4:
+ 678              		.cfi_def_cfa_offset 24
+ 679              		.cfi_offset 3, -24
+ 680              		.cfi_offset 4, -20
+ 681              		.cfi_offset 5, -16
+ 682              		.cfi_offset 6, -12
+ 683              		.cfi_offset 7, -8
+ 684              		.cfi_offset 14, -4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 26
+
+
+ 685              	.LBB124:
+ 686              	.LBB122:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 687              		.loc 1 250 19 view .LVU190
+ 688 0002 0023     		movs	r3, #0
+ 689              	.LBE122:
+ 690              	.LBE124:
+ 296:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 691              		.loc 1 296 1 view .LVU191
+ 692 0004 0400     		movs	r4, r0
+ 693              	.LBB125:
+ 694              	.LBB123:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 695              		.loc 1 250 19 view .LVU192
+ 696 0006 4371     		strb	r3, [r0, #5]
+ 697              	.LVL56:
+ 250:common/prog/MSP/mcal/muart.c **** }
+ 698              		.loc 1 250 19 view .LVU193
+ 699              	.LBE123:
+ 700              	.LBE125:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 701              		.loc 1 302 5 is_stmt 1 view .LVU194
+ 702              	.LBB126:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 703              		.loc 1 302 5 view .LVU195
+ 704 0008 0079     		ldrb	r0, [r0, #4]
+ 705              	.LVL57:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 706              		.loc 1 302 5 is_stmt 0 view .LVU196
+ 707              	.LBE126:
+ 296:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 708              		.loc 1 296 1 view .LVU197
+ 709 000a 0E00     		movs	r6, r1
+ 710              	.LBB127:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 711              		.loc 1 302 5 view .LVU198
+ 712 000c C0B2     		uxtb	r0, r0
+ 713              	.LBE127:
+ 296:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 714              		.loc 1 296 1 view .LVU199
+ 715 000e 1700     		movs	r7, r2
+ 716              	.LBB128:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 717              		.loc 1 302 5 view .LVU200
+ 718 0010 FFF7FEFF 		bl	MCAL_checkReady
+ 719              	.LVL58:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 720              		.loc 1 302 5 view .LVU201
+ 721 0014 051E     		subs	r5, r0, #0
+ 722              	.LVL59:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 723              		.loc 1 302 5 is_stmt 1 view .LVU202
+ 724 0016 0DD1     		bne	.L28
+ 725              	.LBE128:
+ 302:common/prog/MSP/mcal/muart.c ****     
+ 726              		.loc 1 302 5 discriminator 2 view .LVU203
+ 302:common/prog/MSP/mcal/muart.c ****     
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 27
+
+
+ 727              		.loc 1 302 58 discriminator 2 view .LVU204
+ 304:common/prog/MSP/mcal/muart.c ****     {
+ 728              		.loc 1 304 5 discriminator 2 view .LVU205
+ 729              	.LVL60:
+ 730              	.LBB129:
+ 731              	.LBI129:
+ 109:common/prog/MSP/mcal/mcom.h **** {
+ 732              		.loc 2 109 20 discriminator 2 view .LVU206
+ 733              	.LBB130:
+ 111:common/prog/MSP/mcal/mcom.h **** }
+ 734              		.loc 2 111 5 discriminator 2 view .LVU207
+ 111:common/prog/MSP/mcal/mcom.h **** }
+ 735              		.loc 2 111 40 is_stmt 0 discriminator 2 view .LVU208
+ 736 0018 237D     		ldrb	r3, [r4, #20]
+ 737              	.LBE130:
+ 738              	.LBE129:
+ 304:common/prog/MSP/mcal/muart.c ****     {
+ 739              		.loc 1 304 7 discriminator 2 view .LVU209
+ 740 001a 002B     		cmp	r3, #0
+ 741 001c 0CD1     		bne	.L29
+ 306:common/prog/MSP/mcal/muart.c ****         (void)MUART_enableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+ 742              		.loc 1 306 9 is_stmt 1 view .LVU210
+ 743 001e 2000     		movs	r0, r4
+ 744              	.LVL61:
+ 306:common/prog/MSP/mcal/muart.c ****         (void)MUART_enableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+ 745              		.loc 1 306 9 is_stmt 0 view .LVU211
+ 746 0020 3A00     		movs	r2, r7
+ 747 0022 3100     		movs	r1, r6
+ 748 0024 0830     		adds	r0, r0, #8
+ 749 0026 FFF7FEFF 		bl	MCOM_setWriteBuffer
+ 750              	.LVL62:
+ 307:common/prog/MSP/mcal/muart.c ****         return MCAL_OK;
+ 751              		.loc 1 307 9 is_stmt 1 view .LVU212
+ 307:common/prog/MSP/mcal/muart.c ****         return MCAL_OK;
+ 752              		.loc 1 307 15 is_stmt 0 view .LVU213
+ 753 002a 2022     		movs	r2, #32
+ 754 002c 2900     		movs	r1, r5
+ 755 002e 2000     		movs	r0, r4
+ 756 0030 FFF7FEFF 		bl	MUART_enableEvent
+ 757              	.LVL63:
+ 308:common/prog/MSP/mcal/muart.c ****     }
+ 758              		.loc 1 308 9 is_stmt 1 view .LVU214
+ 759              	.L28:
+ 314:common/prog/MSP/mcal/muart.c **** 
+ 760              		.loc 1 314 1 is_stmt 0 view .LVU215
+ 761              		@ sp needed
+ 762 0034 2800     		movs	r0, r5
+ 763              	.LVL64:
+ 764              	.LVL65:
+ 314:common/prog/MSP/mcal/muart.c **** 
+ 765              		.loc 1 314 1 view .LVU216
+ 766 0036 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 767              	.LVL66:
+ 768              	.L29:
+ 312:common/prog/MSP/mcal/muart.c ****     }
+ 769              		.loc 1 312 16 view .LVU217
+ 770 0038 0225     		movs	r5, #2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 28
+
+
+ 771 003a FBE7     		b	.L28
+ 772              		.cfi_endproc
+ 773              	.LFE116:
+ 775              		.section	.text.MUART_disableEvent,"ax",%progbits
+ 776              		.align	1
+ 777              		.global	MUART_disableEvent
+ 778              		.syntax unified
+ 779              		.code	16
+ 780              		.thumb_func
+ 782              	MUART_disableEvent:
+ 783              	.LVL67:
+ 784              	.LFB122:
+ 405:common/prog/MSP/mcal/muart.c **** 
+ 406:common/prog/MSP/mcal/muart.c **** 
+ 407:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_disableEvent(struct MUART_Handle *handle, MCAL_Callback_t *callback, enum MCA
+ 408:common/prog/MSP/mcal/muart.c **** {
+ 785              		.loc 1 408 1 is_stmt 1 view -0
+ 786              		.cfi_startproc
+ 787              		@ args = 0, pretend = 0, frame = 0
+ 788              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 789              		.loc 1 409 5 view .LVU219
+ 410:common/prog/MSP/mcal/muart.c ****     
+ 411:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 790              		.loc 1 411 5 view .LVU220
+ 412:common/prog/MSP/mcal/muart.c ****     
+ 413:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MCAL_checkInitialized(handle->status));
+ 791              		.loc 1 413 5 view .LVU221
+ 792              	.LBB139:
+ 793              		.loc 1 413 5 view .LVU222
+ 794              	.LBE139:
+ 408:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 795              		.loc 1 408 1 is_stmt 0 view .LVU223
+ 796 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 797              	.LCFI5:
+ 798              		.cfi_def_cfa_offset 24
+ 799              		.cfi_offset 3, -24
+ 800              		.cfi_offset 4, -20
+ 801              		.cfi_offset 5, -16
+ 802              		.cfi_offset 6, -12
+ 803              		.cfi_offset 7, -8
+ 804              		.cfi_offset 14, -4
+ 805              	.LBB144:
+ 806              		.loc 1 413 5 view .LVU224
+ 807 0002 0379     		ldrb	r3, [r0, #4]
+ 808              	.LVL68:
+ 809              	.LBB140:
+ 810              	.LBI140:
+ 159:common/prog/MSP/mcal/mcal.h **** {
+ 811              		.loc 3 159 31 is_stmt 1 view .LVU225
+ 812              	.LBB141:
+ 813              		.loc 3 161 5 view .LVU226
+ 814              	.LBE141:
+ 815              	.LBE140:
+ 816              	.LBE144:
+ 408:common/prog/MSP/mcal/muart.c ****     uint32_t eventMask;
+ 817              		.loc 1 408 1 is_stmt 0 view .LVU227
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 29
+
+
+ 818 0004 0400     		movs	r4, r0
+ 819 0006 0E00     		movs	r6, r1
+ 820 0008 1500     		movs	r5, r2
+ 821              	.LBB145:
+ 822              	.LBB143:
+ 823              	.LBB142:
+ 824              		.loc 3 161 51 view .LVU228
+ 825 000a 0A27     		movs	r7, #10
+ 826 000c 002B     		cmp	r3, #0
+ 827 000e 11D0     		beq	.L31
+ 828              	.LVL69:
+ 829              		.loc 3 161 51 view .LVU229
+ 830              	.LBE142:
+ 831              	.LBE143:
+ 832              	.LBE145:
+ 833              	.LBB146:
+ 834              	.LBI146:
+ 407:common/prog/MSP/mcal/muart.c **** {
+ 835              		.loc 1 407 17 is_stmt 1 view .LVU230
+ 836              		.loc 1 413 5 view .LVU231
+ 837              	.LBB147:
+ 838              		.loc 1 413 5 view .LVU232
+ 839              		.loc 1 413 64 view .LVU233
+ 414:common/prog/MSP/mcal/muart.c **** 
+ 415:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_disableEvent(handle->channel, event);
+ 840              		.loc 1 415 5 view .LVU234
+ 841 0010 1100     		movs	r1, r2
+ 842              	.LVL70:
+ 843              		.loc 1 415 5 is_stmt 0 view .LVU235
+ 844 0012 0068     		ldr	r0, [r0]
+ 845              	.LVL71:
+ 846              		.loc 1 415 5 view .LVU236
+ 847 0014 FFF7FEFF 		bl	MUART_IRQ_disableEvent
+ 848              	.LVL72:
+ 416:common/prog/MSP/mcal/muart.c ****     
+ 417:common/prog/MSP/mcal/muart.c ****     eventMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+ 849              		.loc 1 417 5 is_stmt 1 view .LVU237
+ 850              		.loc 1 417 17 is_stmt 0 view .LVU238
+ 851 0018 2900     		movs	r1, r5
+ 852 001a 2068     		ldr	r0, [r4]
+ 853 001c FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ 854              	.LVL73:
+ 418:common/prog/MSP/mcal/muart.c ****     handle->enabledEvents &= ~eventMask;
+ 855              		.loc 1 418 5 is_stmt 1 view .LVU239
+ 856 0020 0027     		movs	r7, #0
+ 857              		.loc 1 418 27 is_stmt 0 view .LVU240
+ 858 0022 636A     		ldr	r3, [r4, #36]
+ 859 0024 8343     		bics	r3, r0
+ 860 0026 6362     		str	r3, [r4, #36]
+ 419:common/prog/MSP/mcal/muart.c ****     
+ 420:common/prog/MSP/mcal/muart.c ****     if(callback != NULL)
+ 861              		.loc 1 420 5 is_stmt 1 view .LVU241
+ 862              		.loc 1 420 7 is_stmt 0 view .LVU242
+ 863 0028 BE42     		cmp	r6, r7
+ 864 002a 03D0     		beq	.L31
+ 421:common/prog/MSP/mcal/muart.c ****     {
+ 422:common/prog/MSP/mcal/muart.c ****         MCAL_disableEvent(callback, event);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 30
+
+
+ 865              		.loc 1 422 9 is_stmt 1 view .LVU243
+ 866 002c 2900     		movs	r1, r5
+ 867 002e 3000     		movs	r0, r6
+ 868              	.LVL74:
+ 869              		.loc 1 422 9 is_stmt 0 view .LVU244
+ 870 0030 FFF7FEFF 		bl	MCAL_disableEvent
+ 871              	.LVL75:
+ 872              	.L31:
+ 873              		.loc 1 422 9 view .LVU245
+ 874              	.LBE147:
+ 875              	.LBE146:
+ 423:common/prog/MSP/mcal/muart.c ****     }
+ 424:common/prog/MSP/mcal/muart.c ****     return MCAL_OK;
+ 425:common/prog/MSP/mcal/muart.c **** }
+ 876              		.loc 1 425 1 view .LVU246
+ 877              		@ sp needed
+ 878 0034 3800     		movs	r0, r7
+ 879              	.LVL76:
+ 880              	.LVL77:
+ 881              	.LVL78:
+ 882              		.loc 1 425 1 view .LVU247
+ 883 0036 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 884              		.cfi_endproc
+ 885              	.LFE122:
+ 887              		.section	.text.MUART_getHandle,"ax",%progbits
+ 888              		.align	1
+ 889              		.global	MUART_getHandle
+ 890              		.syntax unified
+ 891              		.code	16
+ 892              		.thumb_func
+ 894              	MUART_getHandle:
+ 895              	.LVL79:
+ 896              	.LFB123:
+ 426:common/prog/MSP/mcal/muart.c **** 
+ 427:common/prog/MSP/mcal/muart.c **** 
+ 428:common/prog/MSP/mcal/muart.c **** struct MUART_Handle* MUART_getHandle(const void *handlePtr)
+ 429:common/prog/MSP/mcal/muart.c **** {
+ 897              		.loc 1 429 1 is_stmt 1 view -0
+ 898              		.cfi_startproc
+ 899              		@ args = 0, pretend = 0, frame = 0
+ 900              		@ frame_needed = 0, uses_anonymous_args = 0
+ 901              		@ link register save eliminated.
+ 430:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handlePtr != NULL);
+ 902              		.loc 1 430 5 view .LVU249
+ 431:common/prog/MSP/mcal/muart.c ****     
+ 432:common/prog/MSP/mcal/muart.c ****   #ifndef NDEBUG
+ 433:common/prog/MSP/mcal/muart.c ****     struct MUART_Handle *handle;
+ 434:common/prog/MSP/mcal/muart.c ****     for(uint8_t n = 0; n < (uint8_t)MUART_IRQ_CNT; n++)
+ 435:common/prog/MSP/mcal/muart.c ****     {
+ 436:common/prog/MSP/mcal/muart.c ****         handle = MUART_IRQ_HandleTable[n];
+ 437:common/prog/MSP/mcal/muart.c ****         
+ 438:common/prog/MSP/mcal/muart.c ****         while(handle != NULL)
+ 439:common/prog/MSP/mcal/muart.c ****         {
+ 440:common/prog/MSP/mcal/muart.c ****             if((void *)handle == handlePtr)
+ 441:common/prog/MSP/mcal/muart.c ****             {
+ 442:common/prog/MSP/mcal/muart.c ****                 return handle;
+ 443:common/prog/MSP/mcal/muart.c ****             }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 31
+
+
+ 444:common/prog/MSP/mcal/muart.c ****           #ifdef MUART_MULTIPLE_HANDLES_PER_IRQ
+ 445:common/prog/MSP/mcal/muart.c ****             handle = handle->nextHandle;
+ 446:common/prog/MSP/mcal/muart.c ****           #else
+ 447:common/prog/MSP/mcal/muart.c ****             break;
+ 448:common/prog/MSP/mcal/muart.c ****           #endif
+ 449:common/prog/MSP/mcal/muart.c ****         }
+ 450:common/prog/MSP/mcal/muart.c ****     }
+ 451:common/prog/MSP/mcal/muart.c ****     return NULL;
+ 452:common/prog/MSP/mcal/muart.c ****   #else
+ 453:common/prog/MSP/mcal/muart.c ****     /* Note 926:  Conversion between object pointer and void pointer
+ 454:common/prog/MSP/mcal/muart.c ****        Note 9005: Cast removes const qualification
+ 455:common/prog/MSP/mcal/muart.c ****        Uncritical in this case */
+ 456:common/prog/MSP/mcal/muart.c ****     return (struct MUART_Handle*)handlePtr;/*lint !e9005 !e926 */
+ 903              		.loc 1 456 5 view .LVU250
+ 457:common/prog/MSP/mcal/muart.c ****   #endif
+ 458:common/prog/MSP/mcal/muart.c **** }
+ 904              		.loc 1 458 1 is_stmt 0 view .LVU251
+ 905              		@ sp needed
+ 906 0000 7047     		bx	lr
+ 907              		.cfi_endproc
+ 908              	.LFE123:
+ 910              		.section	.text.MUART_isEvent,"ax",%progbits
+ 911              		.align	1
+ 912              		.global	MUART_isEvent
+ 913              		.syntax unified
+ 914              		.code	16
+ 915              		.thumb_func
+ 917              	MUART_isEvent:
+ 918              	.LVL80:
+ 919              	.LFB124:
+ 459:common/prog/MSP/mcal/muart.c **** 
+ 460:common/prog/MSP/mcal/muart.c **** 
+ 461:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 462:common/prog/MSP/mcal/muart.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 463:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 464:common/prog/MSP/mcal/muart.c **** 
+ 465:common/prog/MSP/mcal/muart.c **** bool MUART_isEvent(const struct MUART_Channel *channel, enum MCAL_Event event)
+ 466:common/prog/MSP/mcal/muart.c **** {
+ 920              		.loc 1 466 1 is_stmt 1 view -0
+ 921              		.cfi_startproc
+ 922              		@ args = 0, pretend = 0, frame = 0
+ 923              		@ frame_needed = 0, uses_anonymous_args = 0
+ 467:common/prog/MSP/mcal/muart.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 924              		.loc 1 467 5 view .LVU253
+ 466:common/prog/MSP/mcal/muart.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 925              		.loc 1 466 1 is_stmt 0 view .LVU254
+ 926 0000 70B5     		push	{r4, r5, r6, lr}
+ 927              	.LCFI6:
+ 928              		.cfi_def_cfa_offset 16
+ 929              		.cfi_offset 4, -16
+ 930              		.cfi_offset 5, -12
+ 931              		.cfi_offset 6, -8
+ 932              		.cfi_offset 14, -4
+ 466:common/prog/MSP/mcal/muart.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 933              		.loc 1 466 1 view .LVU255
+ 934 0002 0E00     		movs	r6, r1
+ 468:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 32
+
+
+ 469:common/prog/MSP/mcal/muart.c ****     
+ 470:common/prog/MSP/mcal/muart.c ****     return (((status & eventStatusMask) != 0U) ? true : false);
+ 471:common/prog/MSP/mcal/muart.c **** }
+ 935              		.loc 1 471 1 view .LVU256
+ 936              		@ sp needed
+ 466:common/prog/MSP/mcal/muart.c ****     uint32_t status = MUART_getStatusReg(channel);
+ 937              		.loc 1 466 1 view .LVU257
+ 938 0004 0400     		movs	r4, r0
+ 467:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 939              		.loc 1 467 23 view .LVU258
+ 940 0006 FFF7FEFF 		bl	MUART_getStatusReg
+ 941              	.LVL81:
+ 468:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 942              		.loc 1 468 32 view .LVU259
+ 943 000a 3100     		movs	r1, r6
+ 467:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 944              		.loc 1 467 23 view .LVU260
+ 945 000c 0500     		movs	r5, r0
+ 946              	.LVL82:
+ 468:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 947              		.loc 1 468 5 is_stmt 1 view .LVU261
+ 468:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 948              		.loc 1 468 32 is_stmt 0 view .LVU262
+ 949 000e 2000     		movs	r0, r4
+ 950              	.LVL83:
+ 468:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(channel, event);
+ 951              		.loc 1 468 32 view .LVU263
+ 952 0010 FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ 953              	.LVL84:
+ 470:common/prog/MSP/mcal/muart.c **** }
+ 954              		.loc 1 470 5 is_stmt 1 view .LVU264
+ 470:common/prog/MSP/mcal/muart.c **** }
+ 955              		.loc 1 470 22 is_stmt 0 view .LVU265
+ 956 0014 2840     		ands	r0, r5
+ 957              	.LVL85:
+ 470:common/prog/MSP/mcal/muart.c **** }
+ 958              		.loc 1 470 55 view .LVU266
+ 959 0016 431E     		subs	r3, r0, #1
+ 960 0018 9841     		sbcs	r0, r0, r3
+ 961 001a C0B2     		uxtb	r0, r0
+ 962              	.LVL86:
+ 963              	.LVL87:
+ 964              	.LVL88:
+ 965              		.loc 1 471 1 view .LVU267
+ 966 001c 70BD     		pop	{r4, r5, r6, pc}
+ 967              		.cfi_endproc
+ 968              	.LFE124:
+ 970              		.section	.text.MUART_writeByte,"ax",%progbits
+ 971              		.align	1
+ 972              		.global	MUART_writeByte
+ 973              		.syntax unified
+ 974              		.code	16
+ 975              		.thumb_func
+ 977              	MUART_writeByte:
+ 978              	.LVL89:
+ 979              	.LFB118:
+ 329:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 33
+
+
+ 980              		.loc 1 329 1 is_stmt 1 view -0
+ 981              		.cfi_startproc
+ 982              		@ args = 0, pretend = 0, frame = 0
+ 983              		@ frame_needed = 0, uses_anonymous_args = 0
+ 330:common/prog/MSP/mcal/muart.c **** 
+ 984              		.loc 1 330 5 view .LVU269
+ 332:common/prog/MSP/mcal/muart.c ****     {
+ 985              		.loc 1 332 5 view .LVU270
+ 986              	.LBB154:
+ 987              	.LBI154:
+ 125:common/prog/MSP/mcal/muart.c **** {
+ 988              		.loc 1 125 13 view .LVU271
+ 989              	.LBB155:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 990              		.loc 1 127 5 view .LVU272
+ 991              	.LBE155:
+ 992              	.LBE154:
+ 329:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 993              		.loc 1 329 1 is_stmt 0 view .LVU273
+ 994 0000 70B5     		push	{r4, r5, r6, lr}
+ 995              	.LCFI7:
+ 996              		.cfi_def_cfa_offset 16
+ 997              		.cfi_offset 4, -16
+ 998              		.cfi_offset 5, -12
+ 999              		.cfi_offset 6, -8
+ 1000              		.cfi_offset 14, -4
+ 1001              	.LBB158:
+ 1002              	.LBB156:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1003              		.loc 1 127 19 view .LVU274
+ 1004 0002 0379     		ldrb	r3, [r0, #4]
+ 1005              	.LBE156:
+ 1006              	.LBE158:
+ 329:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1007              		.loc 1 329 1 view .LVU275
+ 1008 0004 0400     		movs	r4, r0
+ 1009 0006 0E00     		movs	r6, r1
+ 1010              	.LBB159:
+ 1011              	.LBB157:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1012              		.loc 1 127 19 view .LVU276
+ 1013 0008 DDB2     		uxtb	r5, r3
+ 1014              	.LVL90:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1015              		.loc 1 127 19 view .LVU277
+ 1016              	.LBE157:
+ 1017              	.LBE159:
+ 332:common/prog/MSP/mcal/muart.c ****     {
+ 1018              		.loc 1 332 7 view .LVU278
+ 1019 000a 012B     		cmp	r3, #1
+ 1020 000c 02D0     		beq	.L38
+ 1021              	.LVL91:
+ 1022              	.L40:
+ 341:common/prog/MSP/mcal/muart.c **** }
+ 1023              		.loc 1 341 12 view .LVU279
+ 1024 000e 0120     		movs	r0, #1
+ 1025 0010 4042     		rsbs	r0, r0, #0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 34
+
+
+ 1026              	.L37:
+ 342:common/prog/MSP/mcal/muart.c **** 
+ 1027              		.loc 1 342 1 view .LVU280
+ 1028              		@ sp needed
+ 1029              	.LVL92:
+ 342:common/prog/MSP/mcal/muart.c **** 
+ 1030              		.loc 1 342 1 view .LVU281
+ 1031 0012 70BD     		pop	{r4, r5, r6, pc}
+ 1032              	.LVL93:
+ 1033              	.L38:
+ 1034              	.LBB160:
+ 1035              	.LBI160:
+ 328:common/prog/MSP/mcal/muart.c **** {
+ 1036              		.loc 1 328 9 is_stmt 1 view .LVU282
+ 1037              	.LBB161:
+ 334:common/prog/MSP/mcal/muart.c ****         {
+ 1038              		.loc 1 334 9 view .LVU283
+ 334:common/prog/MSP/mcal/muart.c ****         {
+ 1039              		.loc 1 334 12 is_stmt 0 view .LVU284
+ 1040 0014 2021     		movs	r1, #32
+ 1041              	.LVL94:
+ 334:common/prog/MSP/mcal/muart.c ****         {
+ 1042              		.loc 1 334 12 view .LVU285
+ 1043 0016 0068     		ldr	r0, [r0]
+ 1044              	.LVL95:
+ 334:common/prog/MSP/mcal/muart.c ****         {
+ 1045              		.loc 1 334 12 view .LVU286
+ 1046 0018 FFF7FEFF 		bl	MUART_isEvent
+ 1047              	.LVL96:
+ 334:common/prog/MSP/mcal/muart.c ****         {
+ 1048              		.loc 1 334 11 view .LVU287
+ 1049 001c 0028     		cmp	r0, #0
+ 1050 001e F6D0     		beq	.L40
+ 336:common/prog/MSP/mcal/muart.c ****             return 1;
+ 1051              		.loc 1 336 13 is_stmt 1 view .LVU288
+ 1052 0020 2068     		ldr	r0, [r4]
+ 1053 0022 3100     		movs	r1, r6
+ 1054 0024 FFF7FEFF 		bl	MUART_writeDataReg
+ 1055              	.LVL97:
+ 337:common/prog/MSP/mcal/muart.c ****         }
+ 1056              		.loc 1 337 13 view .LVU289
+ 337:common/prog/MSP/mcal/muart.c ****         }
+ 1057              		.loc 1 337 20 is_stmt 0 view .LVU290
+ 1058 0028 2800     		movs	r0, r5
+ 1059              	.LVL98:
+ 337:common/prog/MSP/mcal/muart.c ****         }
+ 1060              		.loc 1 337 20 view .LVU291
+ 1061 002a F2E7     		b	.L37
+ 1062              	.LBE161:
+ 1063              	.LBE160:
+ 1064              		.cfi_endproc
+ 1065              	.LFE118:
+ 1067              		.section	.text.MUART_writeBlocking,"ax",%progbits
+ 1068              		.align	1
+ 1069              		.global	MUART_writeBlocking
+ 1070              		.syntax unified
+ 1071              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 35
+
+
+ 1072              		.thumb_func
+ 1074              	MUART_writeBlocking:
+ 1075              	.LVL99:
+ 1076              	.LFB120:
+ 362:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1077              		.loc 1 362 1 is_stmt 1 view -0
+ 1078              		.cfi_startproc
+ 1079              		@ args = 0, pretend = 0, frame = 8
+ 1080              		@ frame_needed = 0, uses_anonymous_args = 0
+ 363:common/prog/MSP/mcal/muart.c ****     MCAL_assert(buffer != NULL);
+ 1081              		.loc 1 363 5 view .LVU293
+ 364:common/prog/MSP/mcal/muart.c ****     
+ 1082              		.loc 1 364 5 view .LVU294
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1083              		.loc 1 366 5 view .LVU295
+ 1084              	.LBB162:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1085              		.loc 1 366 5 view .LVU296
+ 1086              	.LBE162:
+ 362:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1087              		.loc 1 362 1 is_stmt 0 view .LVU297
+ 1088 0000 F7B5     		push	{r0, r1, r2, r4, r5, r6, r7, lr}
+ 1089              	.LCFI8:
+ 1090              		.cfi_def_cfa_offset 32
+ 1091              		.cfi_offset 0, -32
+ 1092              		.cfi_offset 1, -28
+ 1093              		.cfi_offset 2, -24
+ 1094              		.cfi_offset 4, -20
+ 1095              		.cfi_offset 5, -16
+ 1096              		.cfi_offset 6, -12
+ 1097              		.cfi_offset 7, -8
+ 1098              		.cfi_offset 14, -4
+ 362:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1099              		.loc 1 362 1 view .LVU298
+ 1100 0002 0192     		str	r2, [sp, #4]
+ 1101 0004 0600     		movs	r6, r0
+ 1102              	.LBB163:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1103              		.loc 1 366 5 view .LVU299
+ 1104 0006 0079     		ldrb	r0, [r0, #4]
+ 1105              	.LVL100:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1106              		.loc 1 366 5 view .LVU300
+ 1107              	.LBE163:
+ 362:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1108              		.loc 1 362 1 view .LVU301
+ 1109 0008 0F00     		movs	r7, r1
+ 1110              	.LBB164:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1111              		.loc 1 366 5 view .LVU302
+ 1112 000a C0B2     		uxtb	r0, r0
+ 1113 000c FFF7FEFF 		bl	MCAL_checkReady
+ 1114              	.LVL101:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1115              		.loc 1 366 5 view .LVU303
+ 1116 0010 051E     		subs	r5, r0, #0
+ 1117              	.LVL102:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 36
+
+
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1118              		.loc 1 366 5 is_stmt 1 view .LVU304
+ 1119 0012 04D1     		bne	.L45
+ 1120              	.LBE164:
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1121              		.loc 1 366 5 discriminator 2 view .LVU305
+ 366:common/prog/MSP/mcal/muart.c ****     
+ 1122              		.loc 1 366 58 discriminator 2 view .LVU306
+ 368:common/prog/MSP/mcal/muart.c ****     {   /*Axivion Next Line MisraC2012-14.2 : Loop counter not modified by intention in third claus
+ 1123              		.loc 1 368 5 discriminator 2 view .LVU307
+ 1124              	.LVL103:
+ 1125              	.LBB165:
+ 1126              	.LBI165:
+ 109:common/prog/MSP/mcal/mcom.h **** {
+ 1127              		.loc 2 109 20 discriminator 2 view .LVU308
+ 1128              	.LBB166:
+ 111:common/prog/MSP/mcal/mcom.h **** }
+ 1129              		.loc 2 111 5 discriminator 2 view .LVU309
+ 111:common/prog/MSP/mcal/mcom.h **** }
+ 1130              		.loc 2 111 40 is_stmt 0 discriminator 2 view .LVU310
+ 1131 0014 337D     		ldrb	r3, [r6, #20]
+ 1132 0016 DCB2     		uxtb	r4, r3
+ 1133              	.LVL104:
+ 111:common/prog/MSP/mcal/mcom.h **** }
+ 1134              		.loc 2 111 40 discriminator 2 view .LVU311
+ 1135              	.LBE166:
+ 1136              	.LBE165:
+ 368:common/prog/MSP/mcal/muart.c ****     {   /*Axivion Next Line MisraC2012-14.2 : Loop counter not modified by intention in third claus
+ 1137              		.loc 1 368 7 discriminator 2 view .LVU312
+ 1138 0018 002B     		cmp	r3, #0
+ 1139 001a 0AD0     		beq	.L46
+ 381:common/prog/MSP/mcal/muart.c ****     }
+ 1140              		.loc 1 381 16 view .LVU313
+ 1141 001c 0235     		adds	r5, r5, #2
+ 1142              	.LVL105:
+ 1143              	.L45:
+ 383:common/prog/MSP/mcal/muart.c **** 
+ 1144              		.loc 1 383 1 view .LVU314
+ 1145 001e 2800     		movs	r0, r5
+ 1146              		@ sp needed
+ 1147              	.LVL106:
+ 1148              	.LVL107:
+ 383:common/prog/MSP/mcal/muart.c **** 
+ 1149              		.loc 1 383 1 view .LVU315
+ 1150 0020 FEBD     		pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+ 1151              	.LVL108:
+ 1152              	.L48:
+ 1153              	.LBB167:
+ 372:common/prog/MSP/mcal/muart.c ****             {
+ 1154              		.loc 1 372 13 is_stmt 1 view .LVU316
+ 372:common/prog/MSP/mcal/muart.c ****             {
+ 1155              		.loc 1 372 16 is_stmt 0 view .LVU317
+ 1156 0022 3000     		movs	r0, r6
+ 1157 0024 395D     		ldrb	r1, [r7, r4]
+ 1158 0026 FFF7FEFF 		bl	MUART_writeByte
+ 1159              	.LVL109:
+ 372:common/prog/MSP/mcal/muart.c ****             {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 37
+
+
+ 1160              		.loc 1 372 15 view .LVU318
+ 1161 002a 0028     		cmp	r0, #0
+ 1162 002c 01DD     		ble	.L46
+ 374:common/prog/MSP/mcal/muart.c ****             }
+ 1163              		.loc 1 374 17 is_stmt 1 view .LVU319
+ 374:common/prog/MSP/mcal/muart.c ****             }
+ 1164              		.loc 1 374 18 is_stmt 0 view .LVU320
+ 1165 002e 0134     		adds	r4, r4, #1
+ 1166              	.LVL110:
+ 374:common/prog/MSP/mcal/muart.c ****             }
+ 1167              		.loc 1 374 18 view .LVU321
+ 1168 0030 E4B2     		uxtb	r4, r4
+ 1169              	.LVL111:
+ 1170              	.L46:
+ 370:common/prog/MSP/mcal/muart.c ****         {
+ 1171              		.loc 1 370 31 is_stmt 1 discriminator 1 view .LVU322
+ 1172 0032 019B     		ldr	r3, [sp, #4]
+ 1173 0034 9C42     		cmp	r4, r3
+ 1174 0036 F4D3     		bcc	.L48
+ 1175 0038 F1E7     		b	.L45
+ 1176              	.LBE167:
+ 1177              		.cfi_endproc
+ 1178              	.LFE120:
+ 1180              		.section	.text.MUART_readByte,"ax",%progbits
+ 1181              		.align	1
+ 1182              		.global	MUART_readByte
+ 1183              		.syntax unified
+ 1184              		.code	16
+ 1185              		.thumb_func
+ 1187              	MUART_readByte:
+ 1188              	.LVL112:
+ 1189              	.LFB119:
+ 346:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1190              		.loc 1 346 1 view -0
+ 1191              		.cfi_startproc
+ 1192              		@ args = 0, pretend = 0, frame = 0
+ 1193              		@ frame_needed = 0, uses_anonymous_args = 0
+ 347:common/prog/MSP/mcal/muart.c **** 
+ 1194              		.loc 1 347 5 view .LVU324
+ 349:common/prog/MSP/mcal/muart.c ****     {
+ 1195              		.loc 1 349 5 view .LVU325
+ 1196              	.LBB168:
+ 1197              	.LBI168:
+ 125:common/prog/MSP/mcal/muart.c **** {
+ 1198              		.loc 1 125 13 view .LVU326
+ 1199              	.LBB169:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1200              		.loc 1 127 5 view .LVU327
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1201              		.loc 1 127 5 is_stmt 0 view .LVU328
+ 1202              	.LBE169:
+ 1203              	.LBE168:
+ 346:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1204              		.loc 1 346 1 view .LVU329
+ 1205 0000 10B5     		push	{r4, lr}
+ 1206              	.LCFI9:
+ 1207              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 38
+
+
+ 1208              		.cfi_offset 4, -8
+ 1209              		.cfi_offset 14, -4
+ 1210              	.LBB171:
+ 1211              	.LBB170:
+ 127:common/prog/MSP/mcal/muart.c **** }
+ 1212              		.loc 1 127 19 view .LVU330
+ 1213 0002 0379     		ldrb	r3, [r0, #4]
+ 1214              	.LBE170:
+ 1215              	.LBE171:
+ 346:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1216              		.loc 1 346 1 view .LVU331
+ 1217 0004 0400     		movs	r4, r0
+ 349:common/prog/MSP/mcal/muart.c ****     {
+ 1218              		.loc 1 349 7 view .LVU332
+ 1219 0006 012B     		cmp	r3, #1
+ 1220 0008 02D0     		beq	.L53
+ 1221              	.LVL113:
+ 1222              	.L55:
+ 357:common/prog/MSP/mcal/muart.c **** }
+ 1223              		.loc 1 357 12 view .LVU333
+ 1224 000a 0120     		movs	r0, #1
+ 1225 000c 4042     		rsbs	r0, r0, #0
+ 1226              	.L52:
+ 358:common/prog/MSP/mcal/muart.c **** 
+ 1227              		.loc 1 358 1 view .LVU334
+ 1228              		@ sp needed
+ 1229              	.LVL114:
+ 358:common/prog/MSP/mcal/muart.c **** 
+ 1230              		.loc 1 358 1 view .LVU335
+ 1231 000e 10BD     		pop	{r4, pc}
+ 1232              	.LVL115:
+ 1233              	.L53:
+ 351:common/prog/MSP/mcal/muart.c ****         {
+ 1234              		.loc 1 351 9 is_stmt 1 view .LVU336
+ 351:common/prog/MSP/mcal/muart.c ****         {
+ 1235              		.loc 1 351 12 is_stmt 0 view .LVU337
+ 1236 0010 1021     		movs	r1, #16
+ 1237 0012 0068     		ldr	r0, [r0]
+ 1238              	.LVL116:
+ 351:common/prog/MSP/mcal/muart.c ****         {
+ 1239              		.loc 1 351 12 view .LVU338
+ 1240 0014 FFF7FEFF 		bl	MUART_isEvent
+ 1241              	.LVL117:
+ 351:common/prog/MSP/mcal/muart.c ****         {
+ 1242              		.loc 1 351 11 view .LVU339
+ 1243 0018 0028     		cmp	r0, #0
+ 1244 001a F6D0     		beq	.L55
+ 353:common/prog/MSP/mcal/muart.c ****         }
+ 1245              		.loc 1 353 13 is_stmt 1 view .LVU340
+ 353:common/prog/MSP/mcal/muart.c ****         }
+ 1246              		.loc 1 353 29 is_stmt 0 view .LVU341
+ 1247 001c 2068     		ldr	r0, [r4]
+ 1248 001e FFF7FEFF 		bl	MUART_readDataReg
+ 1249              	.LVL118:
+ 353:common/prog/MSP/mcal/muart.c ****         }
+ 1250              		.loc 1 353 20 view .LVU342
+ 1251 0022 F4E7     		b	.L52
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 39
+
+
+ 1252              		.cfi_endproc
+ 1253              	.LFE119:
+ 1255              		.section	.text.MUART_configurePins,"ax",%progbits
+ 1256              		.align	1
+ 1257              		.global	MUART_configurePins
+ 1258              		.syntax unified
+ 1259              		.code	16
+ 1260              		.thumb_func
+ 1262              	MUART_configurePins:
+ 1263              	.LVL119:
+ 1264              	.LFB126:
+ 472:common/prog/MSP/mcal/muart.c **** 
+ 473:common/prog/MSP/mcal/muart.c **** 
+ 474:common/prog/MSP/mcal/muart.c **** static void MUART_IRQ_registerHandle(struct MUART_Handle *handle)
+ 475:common/prog/MSP/mcal/muart.c **** {
+ 476:common/prog/MSP/mcal/muart.c ****     enum MUART_IRQ_Index index = MUART_IRQ_getIndex(handle->channel);
+ 477:common/prog/MSP/mcal/muart.c ****     /* Note 661 MUART_IRQ_getIndex never returns out of bounds index*/
+ 478:common/prog/MSP/mcal/muart.c ****     if(MUART_IRQ_HandleTable[index] == NULL)/*lint !e661 */
+ 479:common/prog/MSP/mcal/muart.c ****     {
+ 480:common/prog/MSP/mcal/muart.c ****         MUART_IRQ_HandleTable[index] = handle;/*lint !e661 */
+ 481:common/prog/MSP/mcal/muart.c ****     }
+ 482:common/prog/MSP/mcal/muart.c ****   #ifdef MUART_MULTIPLE_HANDLES_PER_IRQ
+ 483:common/prog/MSP/mcal/muart.c ****     else
+ 484:common/prog/MSP/mcal/muart.c ****     {
+ 485:common/prog/MSP/mcal/muart.c ****         struct MUART_Handle *handleEntry = MUART_IRQ_HandleTable[index];
+ 486:common/prog/MSP/mcal/muart.c ****         while(handleEntry->nextHandle != NULL)
+ 487:common/prog/MSP/mcal/muart.c ****         {
+ 488:common/prog/MSP/mcal/muart.c ****             handleEntry = handleEntry->nextHandle;
+ 489:common/prog/MSP/mcal/muart.c ****         }
+ 490:common/prog/MSP/mcal/muart.c ****         handleEntry->nextHandle = handle;
+ 491:common/prog/MSP/mcal/muart.c ****     }
+ 492:common/prog/MSP/mcal/muart.c ****     handle->nextHandle = NULL;
+ 493:common/prog/MSP/mcal/muart.c ****   #endif
+ 494:common/prog/MSP/mcal/muart.c **** }
+ 495:common/prog/MSP/mcal/muart.c **** 
+ 496:common/prog/MSP/mcal/muart.c **** 
+ 497:common/prog/MSP/mcal/muart.c **** enum MCAL_Error MUART_configurePins(const struct MDIO_Channel *rxPin, const struct MDIO_Channel *tx
+ 498:common/prog/MSP/mcal/muart.c **** {
+ 1265              		.loc 1 498 1 is_stmt 1 view -0
+ 1266              		.cfi_startproc
+ 1267              		@ args = 0, pretend = 0, frame = 8
+ 1268              		@ frame_needed = 0, uses_anonymous_args = 0
+ 499:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1269              		.loc 1 499 5 view .LVU344
+ 500:common/prog/MSP/mcal/muart.c ****     
+ 501:common/prog/MSP/mcal/muart.c ****     cfg.outputState = MDIO_OUTPUT_STATE_HIGH;
+ 1270              		.loc 1 501 5 view .LVU345
+ 498:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1271              		.loc 1 498 1 is_stmt 0 view .LVU346
+ 1272 0000 37B5     		push	{r0, r1, r2, r4, r5, lr}
+ 1273              	.LCFI10:
+ 1274              		.cfi_def_cfa_offset 24
+ 1275              		.cfi_offset 0, -24
+ 1276              		.cfi_offset 1, -20
+ 1277              		.cfi_offset 2, -16
+ 1278              		.cfi_offset 4, -12
+ 1279              		.cfi_offset 5, -8
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 40
+
+
+ 1280              		.cfi_offset 14, -4
+ 499:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1281              		.loc 1 499 24 view .LVU347
+ 1282 0002 0A4B     		ldr	r3, .L64
+ 498:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1283              		.loc 1 498 1 view .LVU348
+ 1284 0004 0400     		movs	r4, r0
+ 499:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1285              		.loc 1 499 24 view .LVU349
+ 1286 0006 0193     		str	r3, [sp, #4]
+ 502:common/prog/MSP/mcal/muart.c ****     
+ 503:common/prog/MSP/mcal/muart.c ****     if(txPin != NULL)
+ 1287              		.loc 1 503 5 is_stmt 1 view .LVU350
+ 498:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1288              		.loc 1 498 1 is_stmt 0 view .LVU351
+ 1289 0008 0800     		movs	r0, r1
+ 1290              	.LVL120:
+ 498:common/prog/MSP/mcal/muart.c ****     struct MDIO_Config cfg = MDIO_CFG_ALTERNATE_FUNCTION;
+ 1291              		.loc 1 498 1 view .LVU352
+ 1292 000a 01AD     		add	r5, sp, #4
+ 1293              		.loc 1 503 7 view .LVU353
+ 1294 000c 0029     		cmp	r1, #0
+ 1295 000e 07D1     		bne	.L60
+ 1296              	.LVL121:
+ 1297              	.L63:
+ 504:common/prog/MSP/mcal/muart.c ****     {
+ 505:common/prog/MSP/mcal/muart.c ****         MCAL_RETURN_ON_ERROR(MDIO_init(txPin, &cfg));
+ 1298              		.loc 1 505 9 is_stmt 1 view .LVU354
+ 1299              		.loc 1 505 53 view .LVU355
+ 506:common/prog/MSP/mcal/muart.c ****     }
+ 507:common/prog/MSP/mcal/muart.c ****     
+ 508:common/prog/MSP/mcal/muart.c ****     cfg.pullType = MDIO_PULL_UP;
+ 1300              		.loc 1 508 5 view .LVU356
+ 1301              		.loc 1 508 18 is_stmt 0 view .LVU357
+ 1302 0010 0123     		movs	r3, #1
+ 509:common/prog/MSP/mcal/muart.c ****     
+ 510:common/prog/MSP/mcal/muart.c ****     if(rxPin != NULL)
+ 511:common/prog/MSP/mcal/muart.c ****     {
+ 512:common/prog/MSP/mcal/muart.c ****         MCAL_RETURN_ON_ERROR(MDIO_init(rxPin, &cfg));
+ 513:common/prog/MSP/mcal/muart.c ****     }
+ 514:common/prog/MSP/mcal/muart.c ****     
+ 515:common/prog/MSP/mcal/muart.c ****     return MCAL_OK;
+ 1303              		.loc 1 515 12 view .LVU358
+ 1304 0012 201E     		subs	r0, r4, #0
+ 508:common/prog/MSP/mcal/muart.c ****     
+ 1305              		.loc 1 508 18 view .LVU359
+ 1306 0014 6B70     		strb	r3, [r5, #1]
+ 510:common/prog/MSP/mcal/muart.c ****     {
+ 1307              		.loc 1 510 5 is_stmt 1 view .LVU360
+ 510:common/prog/MSP/mcal/muart.c ****     {
+ 1308              		.loc 1 510 7 is_stmt 0 view .LVU361
+ 1309 0016 08D0     		beq	.L62
+ 1310              	.LVL122:
+ 512:common/prog/MSP/mcal/muart.c ****     }
+ 1311              		.loc 1 512 9 is_stmt 1 view .LVU362
+ 1312              	.LBB172:
+ 512:common/prog/MSP/mcal/muart.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 41
+
+
+ 1313              		.loc 1 512 9 view .LVU363
+ 1314 0018 2900     		movs	r1, r5
+ 1315 001a FFF7FEFF 		bl	MDIO_init
+ 1316              	.LVL123:
+ 512:common/prog/MSP/mcal/muart.c ****     }
+ 1317              		.loc 1 512 9 view .LVU364
+ 1318 001e 04E0     		b	.L62
+ 1319              	.LVL124:
+ 1320              	.L60:
+ 512:common/prog/MSP/mcal/muart.c ****     }
+ 1321              		.loc 1 512 9 is_stmt 0 view .LVU365
+ 1322              	.LBE172:
+ 505:common/prog/MSP/mcal/muart.c ****     }
+ 1323              		.loc 1 505 9 is_stmt 1 view .LVU366
+ 1324              	.LBB173:
+ 505:common/prog/MSP/mcal/muart.c ****     }
+ 1325              		.loc 1 505 9 view .LVU367
+ 1326 0020 2900     		movs	r1, r5
+ 1327 0022 FFF7FEFF 		bl	MDIO_init
+ 1328              	.LVL125:
+ 505:common/prog/MSP/mcal/muart.c ****     }
+ 1329              		.loc 1 505 9 view .LVU368
+ 1330 0026 0028     		cmp	r0, #0
+ 1331 0028 F2D0     		beq	.L63
+ 1332              	.LVL126:
+ 1333              	.L62:
+ 505:common/prog/MSP/mcal/muart.c ****     }
+ 1334              		.loc 1 505 9 is_stmt 0 view .LVU369
+ 1335              	.LBE173:
+ 516:common/prog/MSP/mcal/muart.c **** }
+ 1336              		.loc 1 516 1 view .LVU370
+ 1337              		@ sp needed
+ 1338              	.LVL127:
+ 1339              		.loc 1 516 1 view .LVU371
+ 1340 002a 3EBD     		pop	{r1, r2, r3, r4, r5, pc}
+ 1341              	.L65:
+ 1342              		.align	2
+ 1343              	.L64:
+ 1344 002c 02000002 		.word	33554434
+ 1345              		.cfi_endproc
+ 1346              	.LFE126:
+ 1348              		.section	.text.MUART_init,"ax",%progbits
+ 1349              		.align	1
+ 1350              		.global	MUART_init
+ 1351              		.syntax unified
+ 1352              		.code	16
+ 1353              		.thumb_func
+ 1355              	MUART_init:
+ 1356              	.LVL128:
+ 1357              	.LFB107:
+ 143:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1358              		.loc 1 143 1 is_stmt 1 view -0
+ 1359              		.cfi_startproc
+ 1360              		@ args = 0, pretend = 0, frame = 0
+ 1361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144:common/prog/MSP/mcal/muart.c ****     MCAL_assert(channel != NULL);
+ 1362              		.loc 1 144 5 view .LVU373
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 42
+
+
+ 145:common/prog/MSP/mcal/muart.c ****     MCAL_assert(cfg != NULL);
+ 1363              		.loc 1 145 5 view .LVU374
+ 146:common/prog/MSP/mcal/muart.c ****     
+ 1364              		.loc 1 146 5 view .LVU375
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1365              		.loc 1 148 5 view .LVU376
+ 1366              	.LBB178:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1367              		.loc 1 148 5 view .LVU377
+ 1368              	.LBE178:
+ 143:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1369              		.loc 1 143 1 is_stmt 0 view .LVU378
+ 1370 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1371              	.LCFI11:
+ 1372              		.cfi_def_cfa_offset 24
+ 1373              		.cfi_offset 3, -24
+ 1374              		.cfi_offset 4, -20
+ 1375              		.cfi_offset 5, -16
+ 1376              		.cfi_offset 6, -12
+ 1377              		.cfi_offset 7, -8
+ 1378              		.cfi_offset 14, -4
+ 143:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1379              		.loc 1 143 1 view .LVU379
+ 1380 0002 0E00     		movs	r6, r1
+ 1381 0004 0400     		movs	r4, r0
+ 1382              	.LBB179:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1383              		.loc 1 148 5 view .LVU380
+ 1384 0006 1100     		movs	r1, r2
+ 1385              	.LVL129:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1386              		.loc 1 148 5 view .LVU381
+ 1387 0008 3000     		movs	r0, r6
+ 1388              	.LVL130:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1389              		.loc 1 148 5 view .LVU382
+ 1390              	.LBE179:
+ 143:common/prog/MSP/mcal/muart.c ****     MCAL_assert(handle != NULL);
+ 1391              		.loc 1 143 1 view .LVU383
+ 1392 000a 1700     		movs	r7, r2
+ 1393              	.LBB180:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1394              		.loc 1 148 5 view .LVU384
+ 1395 000c FFF7FEFF 		bl	MUART_configure
+ 1396              	.LVL131:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1397              		.loc 1 148 5 view .LVU385
+ 1398 0010 051E     		subs	r5, r0, #0
+ 1399              	.LVL132:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1400              		.loc 1 148 5 is_stmt 1 view .LVU386
+ 1401 0012 19D1     		bne	.L67
+ 1402              	.LBE180:
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1403              		.loc 1 148 5 discriminator 2 view .LVU387
+ 148:common/prog/MSP/mcal/muart.c ****     MCAL_RETURN_ON_ERROR(MUART_configurePins(channel->rxPin, channel->txPin));
+ 1404              		.loc 1 148 56 discriminator 2 view .LVU388
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 43
+
+
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1405              		.loc 1 149 5 discriminator 2 view .LVU389
+ 1406              	.LBB181:
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1407              		.loc 1 149 5 discriminator 2 view .LVU390
+ 1408 0014 B168     		ldr	r1, [r6, #8]
+ 1409 0016 7068     		ldr	r0, [r6, #4]
+ 1410              	.LVL133:
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1411              		.loc 1 149 5 is_stmt 0 discriminator 2 view .LVU391
+ 1412 0018 FFF7FEFF 		bl	MUART_configurePins
+ 1413              	.LVL134:
+ 1414 001c 051E     		subs	r5, r0, #0
+ 1415              	.LVL135:
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1416              		.loc 1 149 5 is_stmt 1 discriminator 2 view .LVU392
+ 1417 001e 13D1     		bne	.L67
+ 1418              	.LBE181:
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1419              		.loc 1 149 5 discriminator 2 view .LVU393
+ 149:common/prog/MSP/mcal/muart.c **** 
+ 1420              		.loc 1 149 78 discriminator 2 view .LVU394
+ 151:common/prog/MSP/mcal/muart.c **** 
+ 1421              		.loc 1 151 5 discriminator 2 view .LVU395
+ 153:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_registerHandle(handle);
+ 1422              		.loc 1 153 5 is_stmt 0 discriminator 2 view .LVU396
+ 1423 0020 3000     		movs	r0, r6
+ 1424              	.LVL136:
+ 151:common/prog/MSP/mcal/muart.c **** 
+ 1425              		.loc 1 151 21 discriminator 2 view .LVU397
+ 1426 0022 2660     		str	r6, [r4]
+ 153:common/prog/MSP/mcal/muart.c ****     MUART_IRQ_registerHandle(handle);
+ 1427              		.loc 1 153 5 is_stmt 1 discriminator 2 view .LVU398
+ 1428 0024 FFF7FEFF 		bl	MUART_IRQ_enable
+ 1429              	.LVL137:
+ 154:common/prog/MSP/mcal/muart.c **** 
+ 1430              		.loc 1 154 5 discriminator 2 view .LVU399
+ 1431              	.LBB182:
+ 1432              	.LBI182:
+ 474:common/prog/MSP/mcal/muart.c **** {
+ 1433              		.loc 1 474 13 discriminator 2 view .LVU400
+ 1434              	.LBB183:
+ 476:common/prog/MSP/mcal/muart.c ****     /* Note 661 MUART_IRQ_getIndex never returns out of bounds index*/
+ 1435              		.loc 1 476 5 discriminator 2 view .LVU401
+ 476:common/prog/MSP/mcal/muart.c ****     /* Note 661 MUART_IRQ_getIndex never returns out of bounds index*/
+ 1436              		.loc 1 476 34 is_stmt 0 discriminator 2 view .LVU402
+ 1437 0028 2068     		ldr	r0, [r4]
+ 1438 002a FFF7FEFF 		bl	MUART_IRQ_getIndex
+ 1439              	.LVL138:
+ 478:common/prog/MSP/mcal/muart.c ****     {
+ 1440              		.loc 1 478 5 is_stmt 1 discriminator 2 view .LVU403
+ 478:common/prog/MSP/mcal/muart.c ****     {
+ 1441              		.loc 1 478 29 is_stmt 0 discriminator 2 view .LVU404
+ 1442 002e 074B     		ldr	r3, .L69
+ 1443 0030 8000     		lsls	r0, r0, #2
+ 1444              	.LVL139:
+ 478:common/prog/MSP/mcal/muart.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 44
+
+
+ 1445              		.loc 1 478 7 discriminator 2 view .LVU405
+ 1446 0032 C258     		ldr	r2, [r0, r3]
+ 1447 0034 002A     		cmp	r2, #0
+ 1448 0036 00D1     		bne	.L68
+ 480:common/prog/MSP/mcal/muart.c ****     }
+ 1449              		.loc 1 480 9 is_stmt 1 view .LVU406
+ 480:common/prog/MSP/mcal/muart.c ****     }
+ 1450              		.loc 1 480 38 is_stmt 0 view .LVU407
+ 1451 0038 C450     		str	r4, [r0, r3]
+ 1452              	.L68:
+ 1453              	.LVL140:
+ 480:common/prog/MSP/mcal/muart.c ****     }
+ 1454              		.loc 1 480 38 view .LVU408
+ 1455              	.LBE183:
+ 1456              	.LBE182:
+ 156:common/prog/MSP/mcal/muart.c ****     handle->cbList = NULL;
+ 1457              		.loc 1 156 5 is_stmt 1 view .LVU409
+ 156:common/prog/MSP/mcal/muart.c ****     handle->cbList = NULL;
+ 1458              		.loc 1 156 29 is_stmt 0 view .LVU410
+ 1459 003a 7B68     		ldr	r3, [r7, #4]
+ 158:common/prog/MSP/mcal/muart.c ****     handle->error = MCAL_OK;
+ 1460              		.loc 1 158 20 view .LVU411
+ 1461 003c 0422     		movs	r2, #4
+ 156:common/prog/MSP/mcal/muart.c ****     handle->cbList = NULL;
+ 1462              		.loc 1 156 29 view .LVU412
+ 1463 003e A362     		str	r3, [r4, #40]
+ 157:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 1464              		.loc 1 157 5 is_stmt 1 view .LVU413
+ 157:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 1465              		.loc 1 157 20 is_stmt 0 view .LVU414
+ 1466 0040 0023     		movs	r3, #0
+ 158:common/prog/MSP/mcal/muart.c ****     handle->error = MCAL_OK;
+ 1467              		.loc 1 158 20 view .LVU415
+ 1468 0042 2271     		strb	r2, [r4, #4]
+ 157:common/prog/MSP/mcal/muart.c ****     handle->status = MCAL_STATUS_DISABLED;
+ 1469              		.loc 1 157 20 view .LVU416
+ 1470 0044 2362     		str	r3, [r4, #32]
+ 158:common/prog/MSP/mcal/muart.c ****     handle->error = MCAL_OK;
+ 1471              		.loc 1 158 5 is_stmt 1 view .LVU417
+ 159:common/prog/MSP/mcal/muart.c ****     
+ 1472              		.loc 1 159 5 view .LVU418
+ 159:common/prog/MSP/mcal/muart.c ****     
+ 1473              		.loc 1 159 19 is_stmt 0 view .LVU419
+ 1474 0046 6371     		strb	r3, [r4, #5]
+ 166:common/prog/MSP/mcal/muart.c **** }
+ 1475              		.loc 1 166 5 is_stmt 1 view .LVU420
+ 1476              	.LVL141:
+ 1477              	.L67:
+ 167:common/prog/MSP/mcal/muart.c **** 
+ 1478              		.loc 1 167 1 is_stmt 0 view .LVU421
+ 1479 0048 2800     		movs	r0, r5
+ 1480              		@ sp needed
+ 1481              	.LVL142:
+ 1482              	.LVL143:
+ 1483              	.LVL144:
+ 167:common/prog/MSP/mcal/muart.c **** 
+ 1484              		.loc 1 167 1 view .LVU422
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 45
+
+
+ 1485 004a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1486              	.L70:
+ 1487              		.align	2
+ 1488              	.L69:
+ 1489 004c 00000000 		.word	.LANCHOR0
+ 1490              		.cfi_endproc
+ 1491              	.LFE107:
+ 1493              		.section	.text.MUART_IRQ_Handler,"ax",%progbits
+ 1494              		.align	1
+ 1495              		.global	MUART_IRQ_Handler
+ 1496              		.syntax unified
+ 1497              		.code	16
+ 1498              		.thumb_func
+ 1500              	MUART_IRQ_Handler:
+ 1501              	.LVL145:
+ 1502              	.LFB131:
+ 517:common/prog/MSP/mcal/muart.c **** 
+ 518:common/prog/MSP/mcal/muart.c **** 
+ 519:common/prog/MSP/mcal/muart.c **** static void MUART_handleReadEvent(struct MUART_Handle *handle, uint8_t data)
+ 520:common/prog/MSP/mcal/muart.c **** {
+ 521:common/prog/MSP/mcal/muart.c ****     
+ 522:common/prog/MSP/mcal/muart.c ****     if(MCOM_isReadBusy(&handle->transfer))
+ 523:common/prog/MSP/mcal/muart.c ****     {
+ 524:common/prog/MSP/mcal/muart.c ****         MCOM_pushByte(&handle->transfer, data);
+ 525:common/prog/MSP/mcal/muart.c ****     }
+ 526:common/prog/MSP/mcal/muart.c ****     if(MCOM_isReadComplete(&handle->transfer) || handle->finishRead)
+ 527:common/prog/MSP/mcal/muart.c ****     {
+ 528:common/prog/MSP/mcal/muart.c ****         struct MCAL_EventData eventData;
+ 529:common/prog/MSP/mcal/muart.c ****         uint16_t readDataLen = MCOM_getNumOfReadData(&handle->transfer);
+ 530:common/prog/MSP/mcal/muart.c **** 
+ 531:common/prog/MSP/mcal/muart.c ****         handle->finishRead = false;
+ 532:common/prog/MSP/mcal/muart.c ****         MCAL_setEventData_uint16(&eventData, readDataLen);
+ 533:common/prog/MSP/mcal/muart.c ****         MCOM_setReadReady(&handle->transfer);
+ 534:common/prog/MSP/mcal/muart.c ****         MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_COMPLETE, &eventDat
+ 535:common/prog/MSP/mcal/muart.c ****     }
+ 536:common/prog/MSP/mcal/muart.c **** }
+ 537:common/prog/MSP/mcal/muart.c **** 
+ 538:common/prog/MSP/mcal/muart.c **** 
+ 539:common/prog/MSP/mcal/muart.c **** static void MUART_handleWriteEvent(struct MUART_Handle *handle)
+ 540:common/prog/MSP/mcal/muart.c **** {
+ 541:common/prog/MSP/mcal/muart.c ****     if(MCOM_isWriteBusy(&handle->transfer))
+ 542:common/prog/MSP/mcal/muart.c ****     {
+ 543:common/prog/MSP/mcal/muart.c ****         uint8_t data = MCOM_popByte(&handle->transfer);
+ 544:common/prog/MSP/mcal/muart.c ****         MUART_writeDataReg(handle->channel, (uint32_t)data);
+ 545:common/prog/MSP/mcal/muart.c ****         
+ 546:common/prog/MSP/mcal/muart.c ****         if(MCOM_isWriteComplete(&handle->transfer))
+ 547:common/prog/MSP/mcal/muart.c ****         {
+ 548:common/prog/MSP/mcal/muart.c ****             (void)MUART_disableEvent(handle, NULL, MCAL_EVENT_WRITE_BYTE);
+ 549:common/prog/MSP/mcal/muart.c ****             MCOM_setWriteReady(&handle->transfer);
+ 550:common/prog/MSP/mcal/muart.c ****             MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_WRITE_COMPLETE, NULL
+ 551:common/prog/MSP/mcal/muart.c ****         }
+ 552:common/prog/MSP/mcal/muart.c ****     }
+ 553:common/prog/MSP/mcal/muart.c **** }
+ 554:common/prog/MSP/mcal/muart.c **** 
+ 555:common/prog/MSP/mcal/muart.c **** 
+ 556:common/prog/MSP/mcal/muart.c **** static void MUART_handleErrorEvent(struct MUART_Handle *handle)
+ 557:common/prog/MSP/mcal/muart.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 46
+
+
+ 558:common/prog/MSP/mcal/muart.c ****     struct MCAL_EventData eventData;
+ 559:common/prog/MSP/mcal/muart.c ****     enum MCAL_Error error = MUART_getChannelError(handle->channel);
+ 560:common/prog/MSP/mcal/muart.c **** 
+ 561:common/prog/MSP/mcal/muart.c ****     MUART_clearErrorReg(handle->channel);
+ 562:common/prog/MSP/mcal/muart.c ****     
+ 563:common/prog/MSP/mcal/muart.c ****     if(MCOM_isReadBusy(&handle->transfer))
+ 564:common/prog/MSP/mcal/muart.c ****     {
+ 565:common/prog/MSP/mcal/muart.c ****         handle->error = error;
+ 566:common/prog/MSP/mcal/muart.c ****         MCOM_setReadReady(&handle->transfer);
+ 567:common/prog/MSP/mcal/muart.c ****     }
+ 568:common/prog/MSP/mcal/muart.c **** 
+ 569:common/prog/MSP/mcal/muart.c ****     MCAL_setEventData_error(&eventData, error);
+ 570:common/prog/MSP/mcal/muart.c ****     MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_ERROR, &eventData);
+ 571:common/prog/MSP/mcal/muart.c **** }
+ 572:common/prog/MSP/mcal/muart.c **** 
+ 573:common/prog/MSP/mcal/muart.c **** 
+ 574:common/prog/MSP/mcal/muart.c **** static bool MUART_isEventPending(const struct MUART_Handle *handle, enum MCAL_Event event, uint32_t
+ 575:common/prog/MSP/mcal/muart.c **** {
+ 576:common/prog/MSP/mcal/muart.c ****     uint32_t eventStatusMask = MUART_getStatusRegMaskForEvent(handle->channel, event);
+ 577:common/prog/MSP/mcal/muart.c **** 
+ 578:common/prog/MSP/mcal/muart.c ****     return ((status & eventStatusMask) != 0u) ? true : false;
+ 579:common/prog/MSP/mcal/muart.c **** }
+ 580:common/prog/MSP/mcal/muart.c **** 
+ 581:common/prog/MSP/mcal/muart.c **** 
+ 582:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 583:common/prog/MSP/mcal/muart.c **** /* INTERRUPT SERVICE ROUTINES                                                 */
+ 584:common/prog/MSP/mcal/muart.c **** /******************************************************************************/
+ 585:common/prog/MSP/mcal/muart.c **** 
+ 586:common/prog/MSP/mcal/muart.c **** void MUART_IRQ_Handler(enum MUART_IRQ_Index index)
+ 587:common/prog/MSP/mcal/muart.c **** {
+ 1503              		.loc 1 587 1 is_stmt 1 view -0
+ 1504              		.cfi_startproc
+ 1505              		@ args = 0, pretend = 0, frame = 16
+ 1506              		@ frame_needed = 0, uses_anonymous_args = 0
+ 588:common/prog/MSP/mcal/muart.c ****     struct MUART_Handle *handle = NULL;
+ 1507              		.loc 1 588 5 view .LVU424
+ 589:common/prog/MSP/mcal/muart.c ****     if(index < MUART_IRQ_CNT)
+ 1508              		.loc 1 589 5 view .LVU425
+ 587:common/prog/MSP/mcal/muart.c ****     struct MUART_Handle *handle = NULL;
+ 1509              		.loc 1 587 1 is_stmt 0 view .LVU426
+ 1510 0000 7FB5     		push	{r0, r1, r2, r3, r4, r5, r6, lr}
+ 1511              	.LCFI12:
+ 1512              		.cfi_def_cfa_offset 32
+ 1513              		.cfi_offset 0, -32
+ 1514              		.cfi_offset 1, -28
+ 1515              		.cfi_offset 2, -24
+ 1516              		.cfi_offset 3, -20
+ 1517              		.cfi_offset 4, -16
+ 1518              		.cfi_offset 5, -12
+ 1519              		.cfi_offset 6, -8
+ 1520              		.cfi_offset 14, -4
+ 1521              		.loc 1 589 7 view .LVU427
+ 1522 0002 0328     		cmp	r0, #3
+ 1523 0004 4ED8     		bhi	.L71
+ 590:common/prog/MSP/mcal/muart.c ****     {
+ 591:common/prog/MSP/mcal/muart.c ****         handle = MUART_IRQ_HandleTable[index];
+ 1524              		.loc 1 591 9 is_stmt 1 view .LVU428
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 47
+
+
+ 1525              		.loc 1 591 16 is_stmt 0 view .LVU429
+ 1526 0006 3E4B     		ldr	r3, .L97
+ 1527 0008 8000     		lsls	r0, r0, #2
+ 1528              	.LVL146:
+ 1529              		.loc 1 591 16 view .LVU430
+ 1530 000a C458     		ldr	r4, [r0, r3]
+ 1531              	.LVL147:
+ 592:common/prog/MSP/mcal/muart.c ****     }
+ 593:common/prog/MSP/mcal/muart.c ****     
+ 594:common/prog/MSP/mcal/muart.c ****     while(handle != NULL)
+ 1532              		.loc 1 594 5 is_stmt 1 view .LVU431
+ 1533              		.loc 1 594 18 view .LVU432
+ 1534 000c 002C     		cmp	r4, #0
+ 1535 000e 49D0     		beq	.L71
+ 1536              	.LBB224:
+ 595:common/prog/MSP/mcal/muart.c ****     {
+ 596:common/prog/MSP/mcal/muart.c ****         uint32_t status = MUART_getStatusReg(handle->channel);
+ 1537              		.loc 1 596 9 view .LVU433
+ 1538              		.loc 1 596 27 is_stmt 0 view .LVU434
+ 1539 0010 2068     		ldr	r0, [r4]
+ 1540 0012 FFF7FEFF 		bl	MUART_getStatusReg
+ 1541              	.LVL148:
+ 597:common/prog/MSP/mcal/muart.c ****         status &= handle->enabledEvents;
+ 1542              		.loc 1 597 9 is_stmt 1 view .LVU435
+ 1543              	.LBB225:
+ 1544              	.LBB226:
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1545              		.loc 1 576 32 is_stmt 0 view .LVU436
+ 1546 0016 8021     		movs	r1, #128
+ 1547              	.LBE226:
+ 1548              	.LBE225:
+ 1549              		.loc 1 597 25 view .LVU437
+ 1550 0018 656A     		ldr	r5, [r4, #36]
+ 1551              	.LBB229:
+ 1552              	.LBB227:
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1553              		.loc 1 576 32 view .LVU438
+ 1554 001a C905     		lsls	r1, r1, #23
+ 1555              	.LBE227:
+ 1556              	.LBE229:
+ 1557              		.loc 1 597 16 view .LVU439
+ 1558 001c 0540     		ands	r5, r0
+ 1559              	.LVL149:
+ 598:common/prog/MSP/mcal/muart.c ****         
+ 599:common/prog/MSP/mcal/muart.c ****         if(MUART_isEventPending(handle, MCAL_EVENT_ERROR, status))
+ 1560              		.loc 1 599 9 is_stmt 1 view .LVU440
+ 1561              	.LBB230:
+ 1562              	.LBI225:
+ 574:common/prog/MSP/mcal/muart.c **** {
+ 1563              		.loc 1 574 13 view .LVU441
+ 1564              	.LBB228:
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1565              		.loc 1 576 5 view .LVU442
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1566              		.loc 1 576 32 is_stmt 0 view .LVU443
+ 1567 001e 2068     		ldr	r0, [r4]
+ 1568 0020 FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 48
+
+
+ 1569              	.LVL150:
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1570              		.loc 1 578 5 is_stmt 1 view .LVU444
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1571              		.loc 1 578 5 is_stmt 0 view .LVU445
+ 1572              	.LBE228:
+ 1573              	.LBE230:
+ 1574              		.loc 1 599 11 view .LVU446
+ 1575 0024 2842     		tst	r0, r5
+ 1576 0026 3ED0     		beq	.L75
+ 600:common/prog/MSP/mcal/muart.c ****         {
+ 601:common/prog/MSP/mcal/muart.c ****             MUART_handleErrorEvent(handle);
+ 1577              		.loc 1 601 13 is_stmt 1 view .LVU447
+ 1578              	.LVL151:
+ 1579              	.LBB231:
+ 1580              	.LBI231:
+ 556:common/prog/MSP/mcal/muart.c **** {
+ 1581              		.loc 1 556 13 view .LVU448
+ 1582              	.LBB232:
+ 558:common/prog/MSP/mcal/muart.c ****     enum MCAL_Error error = MUART_getChannelError(handle->channel);
+ 1583              		.loc 1 558 5 view .LVU449
+ 559:common/prog/MSP/mcal/muart.c **** 
+ 1584              		.loc 1 559 5 view .LVU450
+ 559:common/prog/MSP/mcal/muart.c **** 
+ 1585              		.loc 1 559 29 is_stmt 0 view .LVU451
+ 1586 0028 2068     		ldr	r0, [r4]
+ 1587 002a FFF7FEFF 		bl	MUART_getChannelError
+ 1588              	.LVL152:
+ 1589 002e 0600     		movs	r6, r0
+ 1590              	.LVL153:
+ 561:common/prog/MSP/mcal/muart.c ****     
+ 1591              		.loc 1 561 5 is_stmt 1 view .LVU452
+ 1592 0030 2068     		ldr	r0, [r4]
+ 1593 0032 FFF7FEFF 		bl	MUART_clearErrorReg
+ 1594              	.LVL154:
+ 563:common/prog/MSP/mcal/muart.c ****     {
+ 1595              		.loc 1 563 5 view .LVU453
+ 1596              	.LBB233:
+ 1597              	.LBI233:
+ 115:common/prog/MSP/mcal/mcom.h **** {
+ 1598              		.loc 2 115 20 view .LVU454
+ 1599              	.LBB234:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 1600              		.loc 2 117 5 view .LVU455
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 1601              		.loc 2 117 39 is_stmt 0 view .LVU456
+ 1602 0036 237A     		ldrb	r3, [r4, #8]
+ 1603              	.LBE234:
+ 1604              	.LBE233:
+ 563:common/prog/MSP/mcal/muart.c ****     {
+ 1605              		.loc 1 563 7 view .LVU457
+ 1606 0038 012B     		cmp	r3, #1
+ 1607 003a 02D1     		bne	.L76
+ 565:common/prog/MSP/mcal/muart.c ****         MCOM_setReadReady(&handle->transfer);
+ 1608              		.loc 1 565 9 is_stmt 1 view .LVU458
+ 1609              	.LBB235:
+ 1610              	.LBB236:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 49
+
+
+ 130:common/prog/MSP/mcal/mcom.h **** }
+ 131:common/prog/MSP/mcal/mcom.h **** 
+ 132:common/prog/MSP/mcal/mcom.h **** 
+ 133:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isReadComplete(const struct MCOM_Transfer *transfer)
+ 134:common/prog/MSP/mcal/mcom.h **** {
+ 135:common/prog/MSP/mcal/mcom.h ****     return (transfer->readBufferHandle.status == MCOM_STATUS_COMPLETE);
+ 136:common/prog/MSP/mcal/mcom.h **** }
+ 137:common/prog/MSP/mcal/mcom.h **** 
+ 138:common/prog/MSP/mcal/mcom.h **** 
+ 139:common/prog/MSP/mcal/mcom.h **** static inline bool MCOM_isWriteComplete(const struct MCOM_Transfer *transfer)
+ 140:common/prog/MSP/mcal/mcom.h **** {
+ 141:common/prog/MSP/mcal/mcom.h ****     return (transfer->writeBufferHandle.status == MCOM_STATUS_COMPLETE);
+ 142:common/prog/MSP/mcal/mcom.h **** }
+ 143:common/prog/MSP/mcal/mcom.h **** 
+ 144:common/prog/MSP/mcal/mcom.h **** 
+ 145:common/prog/MSP/mcal/mcom.h **** static inline void MCOM_setReadComplete(struct MCOM_Transfer *transfer)
+ 146:common/prog/MSP/mcal/mcom.h **** {
+ 147:common/prog/MSP/mcal/mcom.h ****     transfer->readBufferHandle.status = MCOM_STATUS_COMPLETE;
+ 148:common/prog/MSP/mcal/mcom.h **** }
+ 149:common/prog/MSP/mcal/mcom.h **** 
+ 150:common/prog/MSP/mcal/mcom.h **** 
+ 151:common/prog/MSP/mcal/mcom.h **** static inline void MCOM_setWriteComplete(struct MCOM_Transfer *transfer)
+ 152:common/prog/MSP/mcal/mcom.h **** {
+ 153:common/prog/MSP/mcal/mcom.h ****     transfer->writeBufferHandle.status = MCOM_STATUS_COMPLETE;
+ 154:common/prog/MSP/mcal/mcom.h **** }
+ 155:common/prog/MSP/mcal/mcom.h **** 
+ 156:common/prog/MSP/mcal/mcom.h **** 
+ 157:common/prog/MSP/mcal/mcom.h **** static inline void MCOM_setReadReady(struct MCOM_Transfer *transfer)
+ 158:common/prog/MSP/mcal/mcom.h **** {
+ 159:common/prog/MSP/mcal/mcom.h ****     transfer->readBufferHandle.status = MCOM_STATUS_READY;
+ 1611              		.loc 2 159 39 is_stmt 0 view .LVU459
+ 1612 003c 0023     		movs	r3, #0
+ 1613              	.LBE236:
+ 1614              	.LBE235:
+ 565:common/prog/MSP/mcal/muart.c ****         MCOM_setReadReady(&handle->transfer);
+ 1615              		.loc 1 565 23 view .LVU460
+ 1616 003e 6671     		strb	r6, [r4, #5]
+ 566:common/prog/MSP/mcal/muart.c ****     }
+ 1617              		.loc 1 566 9 is_stmt 1 view .LVU461
+ 1618              	.LVL155:
+ 1619              	.LBB238:
+ 1620              	.LBI235:
+ 157:common/prog/MSP/mcal/mcom.h **** {
+ 1621              		.loc 2 157 20 view .LVU462
+ 1622              	.LBB237:
+ 1623              		.loc 2 159 5 view .LVU463
+ 1624              		.loc 2 159 39 is_stmt 0 view .LVU464
+ 1625 0040 2372     		strb	r3, [r4, #8]
+ 1626              	.LVL156:
+ 1627              	.L76:
+ 1628              		.loc 2 159 39 view .LVU465
+ 1629              	.LBE237:
+ 1630              	.LBE238:
+ 569:common/prog/MSP/mcal/muart.c ****     MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_ERROR, &eventData);
+ 1631              		.loc 1 569 5 is_stmt 1 view .LVU466
+ 1632              	.LBB239:
+ 1633              	.LBI239:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 50
+
+
+ 115:common/prog/MSP/mcal/mcal.h **** {
+ 1634              		.loc 3 115 20 view .LVU467
+ 1635              	.LBB240:
+ 117:common/prog/MSP/mcal/mcal.h ****     eventData->data.error = error;
+ 1636              		.loc 3 117 5 view .LVU468
+ 117:common/prog/MSP/mcal/mcal.h ****     eventData->data.error = error;
+ 1637              		.loc 3 117 25 is_stmt 0 view .LVU469
+ 1638 0042 6A46     		mov	r2, sp
+ 1639 0044 0723     		movs	r3, #7
+ 118:common/prog/MSP/mcal/mcal.h **** }
+ 1640              		.loc 3 118 27 view .LVU470
+ 1641 0046 1673     		strb	r6, [r2, #12]
+ 117:common/prog/MSP/mcal/mcal.h ****     eventData->data.error = error;
+ 1642              		.loc 3 117 25 view .LVU471
+ 1643 0048 1372     		strb	r3, [r2, #8]
+ 118:common/prog/MSP/mcal/mcal.h **** }
+ 1644              		.loc 3 118 5 is_stmt 1 view .LVU472
+ 1645              	.LVL157:
+ 118:common/prog/MSP/mcal/mcal.h **** }
+ 1646              		.loc 3 118 5 is_stmt 0 view .LVU473
+ 1647              	.LBE240:
+ 1648              	.LBE239:
+ 570:common/prog/MSP/mcal/muart.c **** }
+ 1649              		.loc 1 570 5 is_stmt 1 view .LVU474
+ 1650 004a 8022     		movs	r2, #128
+ 1651 004c 02AB     		add	r3, sp, #8
+ 1652 004e D205     		lsls	r2, r2, #23
+ 1653              	.LVL158:
+ 1654              	.L96:
+ 570:common/prog/MSP/mcal/muart.c **** }
+ 1655              		.loc 1 570 5 is_stmt 0 view .LVU475
+ 1656              	.LBE232:
+ 1657              	.LBE231:
+ 1658              	.LBB241:
+ 1659              	.LBB242:
+ 1660              	.LBB243:
+ 1661              	.LBB244:
+ 534:common/prog/MSP/mcal/muart.c ****     }
+ 1662              		.loc 1 534 9 view .LVU476
+ 1663 0050 0321     		movs	r1, #3
+ 1664 0052 206A     		ldr	r0, [r4, #32]
+ 1665 0054 FFF7FEFF 		bl	MCAL_invokeCallbacks
+ 1666              	.LVL159:
+ 1667              	.L77:
+ 534:common/prog/MSP/mcal/muart.c ****     }
+ 1668              		.loc 1 534 9 view .LVU477
+ 1669              	.LBE244:
+ 1670              	.LBE243:
+ 1671              	.LBE242:
+ 1672              	.LBE241:
+ 602:common/prog/MSP/mcal/muart.c ****         }
+ 603:common/prog/MSP/mcal/muart.c ****         else if(MUART_isEventPending(handle, MCAL_EVENT_READ_BYTE, status))
+ 604:common/prog/MSP/mcal/muart.c ****         {
+ 605:common/prog/MSP/mcal/muart.c ****             struct MCAL_EventData eventData;
+ 606:common/prog/MSP/mcal/muart.c ****             uint8_t data = (uint8_t)MUART_readDataReg(handle->channel);
+ 607:common/prog/MSP/mcal/muart.c **** 
+ 608:common/prog/MSP/mcal/muart.c ****             MCAL_setEventData_uint8(&eventData, data);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 51
+
+
+ 609:common/prog/MSP/mcal/muart.c ****             MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_BYTE, &eventDat
+ 610:common/prog/MSP/mcal/muart.c ****             MUART_handleReadEvent(handle, data);
+ 611:common/prog/MSP/mcal/muart.c ****         }
+ 612:common/prog/MSP/mcal/muart.c ****         else
+ 613:common/prog/MSP/mcal/muart.c ****         {
+ 614:common/prog/MSP/mcal/muart.c ****             /* Nothing to do */
+ 615:common/prog/MSP/mcal/muart.c ****         }
+ 1673              		.loc 1 615 9 is_stmt 1 view .LVU478
+ 616:common/prog/MSP/mcal/muart.c ****         
+ 617:common/prog/MSP/mcal/muart.c ****         if(MUART_isEventPending(handle, MCAL_EVENT_WRITE_BYTE, status))
+ 1674              		.loc 1 617 9 view .LVU479
+ 1675              	.LBB270:
+ 1676              	.LBI270:
+ 574:common/prog/MSP/mcal/muart.c **** {
+ 1677              		.loc 1 574 13 view .LVU480
+ 1678              	.LBB271:
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1679              		.loc 1 576 5 view .LVU481
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1680              		.loc 1 576 32 is_stmt 0 view .LVU482
+ 1681 0058 2021     		movs	r1, #32
+ 1682 005a 2068     		ldr	r0, [r4]
+ 1683 005c FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ 1684              	.LVL160:
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1685              		.loc 1 578 5 is_stmt 1 view .LVU483
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1686              		.loc 1 578 5 is_stmt 0 view .LVU484
+ 1687              	.LBE271:
+ 1688              	.LBE270:
+ 1689              		.loc 1 617 11 view .LVU485
+ 1690 0060 2842     		tst	r0, r5
+ 1691 0062 1FD0     		beq	.L71
+ 618:common/prog/MSP/mcal/muart.c ****         {
+ 619:common/prog/MSP/mcal/muart.c ****             MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_WRITE_BYTE, NULL);
+ 1692              		.loc 1 619 13 is_stmt 1 view .LVU486
+ 1693 0064 0023     		movs	r3, #0
+ 1694 0066 2022     		movs	r2, #32
+ 1695 0068 0321     		movs	r1, #3
+ 1696 006a 206A     		ldr	r0, [r4, #32]
+ 1697 006c FFF7FEFF 		bl	MCAL_invokeCallbacks
+ 1698              	.LVL161:
+ 620:common/prog/MSP/mcal/muart.c ****             MUART_handleWriteEvent(handle);
+ 1699              		.loc 1 620 13 view .LVU487
+ 1700              	.LBB272:
+ 1701              	.LBI272:
+ 539:common/prog/MSP/mcal/muart.c **** {
+ 1702              		.loc 1 539 13 view .LVU488
+ 1703              	.LBB273:
+ 541:common/prog/MSP/mcal/muart.c ****     {
+ 1704              		.loc 1 541 5 view .LVU489
+ 1705              	.LBB274:
+ 1706              	.LBI274:
+ 121:common/prog/MSP/mcal/mcom.h **** {
+ 1707              		.loc 2 121 20 view .LVU490
+ 1708              	.LBB275:
+ 123:common/prog/MSP/mcal/mcom.h **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 52
+
+
+ 1709              		.loc 2 123 5 view .LVU491
+ 123:common/prog/MSP/mcal/mcom.h **** }
+ 1710              		.loc 2 123 40 is_stmt 0 view .LVU492
+ 1711 0070 237D     		ldrb	r3, [r4, #20]
+ 1712              	.LBE275:
+ 1713              	.LBE274:
+ 541:common/prog/MSP/mcal/muart.c ****     {
+ 1714              		.loc 1 541 7 view .LVU493
+ 1715 0072 012B     		cmp	r3, #1
+ 1716 0074 16D1     		bne	.L71
+ 1717              	.LBB276:
+ 543:common/prog/MSP/mcal/muart.c ****         MUART_writeDataReg(handle->channel, (uint32_t)data);
+ 1718              		.loc 1 543 9 is_stmt 1 view .LVU494
+ 543:common/prog/MSP/mcal/muart.c ****         MUART_writeDataReg(handle->channel, (uint32_t)data);
+ 1719              		.loc 1 543 24 is_stmt 0 view .LVU495
+ 1720 0076 2000     		movs	r0, r4
+ 1721 0078 0830     		adds	r0, r0, #8
+ 1722 007a FFF7FEFF 		bl	MCOM_popByte
+ 1723              	.LVL162:
+ 1724 007e 0100     		movs	r1, r0
+ 1725              	.LVL163:
+ 544:common/prog/MSP/mcal/muart.c ****         
+ 1726              		.loc 1 544 9 is_stmt 1 view .LVU496
+ 1727 0080 2068     		ldr	r0, [r4]
+ 1728 0082 FFF7FEFF 		bl	MUART_writeDataReg
+ 1729              	.LVL164:
+ 546:common/prog/MSP/mcal/muart.c ****         {
+ 1730              		.loc 1 546 9 view .LVU497
+ 1731              	.LBB277:
+ 1732              	.LBI277:
+ 139:common/prog/MSP/mcal/mcom.h **** {
+ 1733              		.loc 2 139 20 view .LVU498
+ 1734              	.LBB278:
+ 141:common/prog/MSP/mcal/mcom.h **** }
+ 1735              		.loc 2 141 5 view .LVU499
+ 141:common/prog/MSP/mcal/mcom.h **** }
+ 1736              		.loc 2 141 40 is_stmt 0 view .LVU500
+ 1737 0086 237D     		ldrb	r3, [r4, #20]
+ 1738              	.LBE278:
+ 1739              	.LBE277:
+ 546:common/prog/MSP/mcal/muart.c ****         {
+ 1740              		.loc 1 546 11 view .LVU501
+ 1741 0088 022B     		cmp	r3, #2
+ 1742 008a 0BD1     		bne	.L71
+ 548:common/prog/MSP/mcal/muart.c ****             MCOM_setWriteReady(&handle->transfer);
+ 1743              		.loc 1 548 13 is_stmt 1 view .LVU502
+ 548:common/prog/MSP/mcal/muart.c ****             MCOM_setWriteReady(&handle->transfer);
+ 1744              		.loc 1 548 19 is_stmt 0 view .LVU503
+ 1745 008c 2022     		movs	r2, #32
+ 1746 008e 0021     		movs	r1, #0
+ 1747 0090 2000     		movs	r0, r4
+ 1748 0092 FFF7FEFF 		bl	MUART_disableEvent
+ 1749              	.LVL165:
+ 549:common/prog/MSP/mcal/muart.c ****             MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_WRITE_COMPLETE, NULL
+ 1750              		.loc 1 549 13 is_stmt 1 view .LVU504
+ 1751              	.LBB279:
+ 1752              	.LBI279:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 53
+
+
+ 160:common/prog/MSP/mcal/mcom.h **** }
+ 161:common/prog/MSP/mcal/mcom.h **** 
+ 162:common/prog/MSP/mcal/mcom.h **** 
+ 163:common/prog/MSP/mcal/mcom.h **** static inline void MCOM_setWriteReady(struct MCOM_Transfer *transfer)
+ 1753              		.loc 2 163 20 view .LVU505
+ 1754              	.LBB280:
+ 164:common/prog/MSP/mcal/mcom.h **** {
+ 165:common/prog/MSP/mcal/mcom.h ****     transfer->writeBufferHandle.status = MCOM_STATUS_READY;
+ 1755              		.loc 2 165 5 view .LVU506
+ 1756              		.loc 2 165 40 is_stmt 0 view .LVU507
+ 1757 0096 0023     		movs	r3, #0
+ 1758              	.LBE280:
+ 1759              	.LBE279:
+ 550:common/prog/MSP/mcal/muart.c ****         }
+ 1760              		.loc 1 550 13 view .LVU508
+ 1761 0098 8022     		movs	r2, #128
+ 1762 009a 0321     		movs	r1, #3
+ 1763 009c 206A     		ldr	r0, [r4, #32]
+ 1764              	.LBB282:
+ 1765              	.LBB281:
+ 1766              		.loc 2 165 40 view .LVU509
+ 1767 009e 2375     		strb	r3, [r4, #20]
+ 1768              	.LVL166:
+ 1769              		.loc 2 165 40 view .LVU510
+ 1770              	.LBE281:
+ 1771              	.LBE282:
+ 550:common/prog/MSP/mcal/muart.c ****         }
+ 1772              		.loc 1 550 13 is_stmt 1 view .LVU511
+ 1773 00a0 FFF7FEFF 		bl	MCAL_invokeCallbacks
+ 1774              	.LVL167:
+ 1775              	.L71:
+ 550:common/prog/MSP/mcal/muart.c ****         }
+ 1776              		.loc 1 550 13 is_stmt 0 view .LVU512
+ 1777              	.LBE276:
+ 1778              	.LBE273:
+ 1779              	.LBE272:
+ 1780              	.LBE224:
+ 621:common/prog/MSP/mcal/muart.c ****         }
+ 622:common/prog/MSP/mcal/muart.c **** 
+ 623:common/prog/MSP/mcal/muart.c ****         
+ 624:common/prog/MSP/mcal/muart.c ****         // Get next handle if multiple channels share the same IRQ
+ 625:common/prog/MSP/mcal/muart.c ****       #ifdef MUART_MULTIPLE_HANDLES_PER_IRQ
+ 626:common/prog/MSP/mcal/muart.c ****         handle = handle->nextHandle;
+ 627:common/prog/MSP/mcal/muart.c ****       #else
+ 628:common/prog/MSP/mcal/muart.c ****         break;
+ 629:common/prog/MSP/mcal/muart.c ****       #endif
+ 630:common/prog/MSP/mcal/muart.c ****     }
+ 631:common/prog/MSP/mcal/muart.c **** }
+ 1781              		.loc 1 631 1 view .LVU513
+ 1782              		@ sp needed
+ 1783 00a4 7FBD     		pop	{r0, r1, r2, r3, r4, r5, r6, pc}
+ 1784              	.LVL168:
+ 1785              	.L75:
+ 1786              	.LBB286:
+ 603:common/prog/MSP/mcal/muart.c ****         {
+ 1787              		.loc 1 603 14 is_stmt 1 view .LVU514
+ 1788              	.LBB283:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 54
+
+
+ 1789              	.LBI283:
+ 574:common/prog/MSP/mcal/muart.c **** {
+ 1790              		.loc 1 574 13 view .LVU515
+ 1791              	.LBB284:
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1792              		.loc 1 576 5 view .LVU516
+ 576:common/prog/MSP/mcal/muart.c **** 
+ 1793              		.loc 1 576 32 is_stmt 0 view .LVU517
+ 1794 00a6 1021     		movs	r1, #16
+ 1795 00a8 2068     		ldr	r0, [r4]
+ 1796 00aa FFF7FEFF 		bl	MUART_getStatusRegMaskForEvent
+ 1797              	.LVL169:
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1798              		.loc 1 578 5 is_stmt 1 view .LVU518
+ 578:common/prog/MSP/mcal/muart.c **** }
+ 1799              		.loc 1 578 5 is_stmt 0 view .LVU519
+ 1800              	.LBE284:
+ 1801              	.LBE283:
+ 603:common/prog/MSP/mcal/muart.c ****         {
+ 1802              		.loc 1 603 16 view .LVU520
+ 1803 00ae 2842     		tst	r0, r5
+ 1804 00b0 D2D0     		beq	.L77
+ 1805              	.LBB285:
+ 605:common/prog/MSP/mcal/muart.c ****             uint8_t data = (uint8_t)MUART_readDataReg(handle->channel);
+ 1806              		.loc 1 605 13 is_stmt 1 view .LVU521
+ 606:common/prog/MSP/mcal/muart.c **** 
+ 1807              		.loc 1 606 13 view .LVU522
+ 606:common/prog/MSP/mcal/muart.c **** 
+ 1808              		.loc 1 606 37 is_stmt 0 view .LVU523
+ 1809 00b2 2068     		ldr	r0, [r4]
+ 1810 00b4 FFF7FEFF 		bl	MUART_readDataReg
+ 1811              	.LVL170:
+ 1812              	.LBB263:
+ 1813              	.LBB264:
+  81:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint8 = data;
+ 1814              		.loc 3 81 25 view .LVU524
+ 1815 00b8 6A46     		mov	r2, sp
+ 1816 00ba 0123     		movs	r3, #1
+ 1817              	.LBE264:
+ 1818              	.LBE263:
+ 606:common/prog/MSP/mcal/muart.c **** 
+ 1819              		.loc 1 606 21 view .LVU525
+ 1820 00bc C6B2     		uxtb	r6, r0
+ 1821              	.LVL171:
+ 608:common/prog/MSP/mcal/muart.c ****             MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_BYTE, &eventDat
+ 1822              		.loc 1 608 13 is_stmt 1 view .LVU526
+ 1823              	.LBB267:
+ 1824              	.LBI263:
+  79:common/prog/MSP/mcal/mcal.h **** {
+ 1825              		.loc 3 79 20 view .LVU527
+ 1826              	.LBB265:
+  81:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint8 = data;
+ 1827              		.loc 3 81 5 view .LVU528
+  81:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint8 = data;
+ 1828              		.loc 3 81 25 is_stmt 0 view .LVU529
+ 1829 00be 1370     		strb	r3, [r2]
+  82:common/prog/MSP/mcal/mcal.h **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 55
+
+
+ 1830              		.loc 3 82 5 is_stmt 1 view .LVU530
+  82:common/prog/MSP/mcal/mcal.h **** }
+ 1831              		.loc 3 82 27 is_stmt 0 view .LVU531
+ 1832 00c0 1671     		strb	r6, [r2, #4]
+ 1833              	.LVL172:
+  82:common/prog/MSP/mcal/mcal.h **** }
+ 1834              		.loc 3 82 27 view .LVU532
+ 1835              	.LBE265:
+ 1836              	.LBE267:
+ 609:common/prog/MSP/mcal/muart.c ****             MUART_handleReadEvent(handle, data);
+ 1837              		.loc 1 609 13 is_stmt 1 view .LVU533
+ 1838              	.LBB268:
+ 1839              	.LBB266:
+  82:common/prog/MSP/mcal/mcal.h **** }
+ 1840              		.loc 3 82 27 is_stmt 0 view .LVU534
+ 1841 00c2 6B46     		mov	r3, sp
+ 1842              	.LBE266:
+ 1843              	.LBE268:
+ 609:common/prog/MSP/mcal/muart.c ****             MUART_handleReadEvent(handle, data);
+ 1844              		.loc 1 609 13 view .LVU535
+ 1845 00c4 1022     		movs	r2, #16
+ 1846 00c6 0321     		movs	r1, #3
+ 1847 00c8 206A     		ldr	r0, [r4, #32]
+ 1848 00ca FFF7FEFF 		bl	MCAL_invokeCallbacks
+ 1849              	.LVL173:
+ 610:common/prog/MSP/mcal/muart.c ****         }
+ 1850              		.loc 1 610 13 is_stmt 1 view .LVU536
+ 1851              	.LBB269:
+ 1852              	.LBI242:
+ 519:common/prog/MSP/mcal/muart.c **** {
+ 1853              		.loc 1 519 13 view .LVU537
+ 1854              	.LBB262:
+ 522:common/prog/MSP/mcal/muart.c ****     {
+ 1855              		.loc 1 522 5 view .LVU538
+ 1856              	.LBB257:
+ 1857              	.LBI257:
+ 115:common/prog/MSP/mcal/mcom.h **** {
+ 1858              		.loc 2 115 20 view .LVU539
+ 1859              	.LBB258:
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 1860              		.loc 2 117 5 view .LVU540
+ 117:common/prog/MSP/mcal/mcom.h **** }
+ 1861              		.loc 2 117 39 is_stmt 0 view .LVU541
+ 1862 00ce 237A     		ldrb	r3, [r4, #8]
+ 1863              	.LBE258:
+ 1864              	.LBE257:
+ 522:common/prog/MSP/mcal/muart.c ****     {
+ 1865              		.loc 1 522 7 view .LVU542
+ 1866 00d0 012B     		cmp	r3, #1
+ 1867 00d2 04D1     		bne	.L78
+ 524:common/prog/MSP/mcal/muart.c ****     }
+ 1868              		.loc 1 524 9 is_stmt 1 view .LVU543
+ 1869 00d4 2000     		movs	r0, r4
+ 1870 00d6 3100     		movs	r1, r6
+ 1871 00d8 0830     		adds	r0, r0, #8
+ 1872 00da FFF7FEFF 		bl	MCOM_pushByte
+ 1873              	.LVL174:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 56
+
+
+ 1874              	.L78:
+ 526:common/prog/MSP/mcal/muart.c ****     {
+ 1875              		.loc 1 526 5 view .LVU544
+ 1876              	.LBB259:
+ 1877              	.LBI259:
+ 133:common/prog/MSP/mcal/mcom.h **** {
+ 1878              		.loc 2 133 20 view .LVU545
+ 1879              	.LBB260:
+ 135:common/prog/MSP/mcal/mcom.h **** }
+ 1880              		.loc 2 135 5 view .LVU546
+ 135:common/prog/MSP/mcal/mcom.h **** }
+ 1881              		.loc 2 135 39 is_stmt 0 view .LVU547
+ 1882 00de 237A     		ldrb	r3, [r4, #8]
+ 1883              	.LBE260:
+ 1884              	.LBE259:
+ 526:common/prog/MSP/mcal/muart.c ****     {
+ 1885              		.loc 1 526 7 view .LVU548
+ 1886 00e0 022B     		cmp	r3, #2
+ 1887 00e2 02D0     		beq	.L79
+ 526:common/prog/MSP/mcal/muart.c ****     {
+ 1888              		.loc 1 526 56 view .LVU549
+ 1889 00e4 A379     		ldrb	r3, [r4, #6]
+ 526:common/prog/MSP/mcal/muart.c ****     {
+ 1890              		.loc 1 526 47 view .LVU550
+ 1891 00e6 002B     		cmp	r3, #0
+ 1892 00e8 B6D0     		beq	.L77
+ 1893              	.L79:
+ 1894              	.LBB261:
+ 528:common/prog/MSP/mcal/muart.c ****         uint16_t readDataLen = MCOM_getNumOfReadData(&handle->transfer);
+ 1895              		.loc 1 528 9 is_stmt 1 view .LVU551
+ 529:common/prog/MSP/mcal/muart.c **** 
+ 1896              		.loc 1 529 9 view .LVU552
+ 1897              	.LVL175:
+ 1898              	.LBB245:
+ 1899              	.LBI245:
+ 166:common/prog/MSP/mcal/mcom.h **** }
+ 167:common/prog/MSP/mcal/mcom.h **** 
+ 168:common/prog/MSP/mcal/mcom.h **** 
+ 169:common/prog/MSP/mcal/mcom.h **** static inline uint16_t MCOM_getNumOfReadData(const struct MCOM_Transfer *transfer)
+ 1900              		.loc 2 169 24 view .LVU553
+ 1901              	.LBB246:
+ 170:common/prog/MSP/mcal/mcom.h **** {
+ 171:common/prog/MSP/mcal/mcom.h ****     return transfer->readBufferHandle.index;
+ 1902              		.loc 2 171 5 view .LVU554
+ 1903              		.loc 2 171 5 is_stmt 0 view .LVU555
+ 1904              	.LBE246:
+ 1905              	.LBE245:
+ 531:common/prog/MSP/mcal/muart.c ****         MCAL_setEventData_uint16(&eventData, readDataLen);
+ 1906              		.loc 1 531 28 view .LVU556
+ 1907 00ea 0023     		movs	r3, #0
+ 1908              	.LBB248:
+ 1909              	.LBB249:
+  87:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint16 = data;
+ 1910              		.loc 3 87 25 view .LVU557
+ 1911 00ec 6846     		mov	r0, sp
+ 1912 00ee 0221     		movs	r1, #2
+ 1913              	.LBE249:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 57
+
+
+ 1914              	.LBE248:
+ 1915              	.LBB251:
+ 1916              	.LBB247:
+ 1917              		.loc 2 171 38 view .LVU558
+ 1918 00f0 628A     		ldrh	r2, [r4, #18]
+ 1919              	.LVL176:
+ 1920              		.loc 2 171 38 view .LVU559
+ 1921              	.LBE247:
+ 1922              	.LBE251:
+ 531:common/prog/MSP/mcal/muart.c ****         MCAL_setEventData_uint16(&eventData, readDataLen);
+ 1923              		.loc 1 531 9 is_stmt 1 view .LVU560
+ 531:common/prog/MSP/mcal/muart.c ****         MCAL_setEventData_uint16(&eventData, readDataLen);
+ 1924              		.loc 1 531 28 is_stmt 0 view .LVU561
+ 1925 00f2 A371     		strb	r3, [r4, #6]
+ 532:common/prog/MSP/mcal/muart.c ****         MCOM_setReadReady(&handle->transfer);
+ 1926              		.loc 1 532 9 is_stmt 1 view .LVU562
+ 1927              	.LVL177:
+ 1928              	.LBB252:
+ 1929              	.LBI248:
+  85:common/prog/MSP/mcal/mcal.h **** {
+ 1930              		.loc 3 85 20 view .LVU563
+ 1931              	.LBB250:
+  87:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint16 = data;
+ 1932              		.loc 3 87 5 view .LVU564
+  88:common/prog/MSP/mcal/mcal.h **** }
+ 1933              		.loc 3 88 28 is_stmt 0 view .LVU565
+ 1934 00f4 8281     		strh	r2, [r0, #12]
+  87:common/prog/MSP/mcal/mcal.h ****     eventData->data.uint16 = data;
+ 1935              		.loc 3 87 25 view .LVU566
+ 1936 00f6 0172     		strb	r1, [r0, #8]
+  88:common/prog/MSP/mcal/mcal.h **** }
+ 1937              		.loc 3 88 5 is_stmt 1 view .LVU567
+ 1938              	.LVL178:
+  88:common/prog/MSP/mcal/mcal.h **** }
+ 1939              		.loc 3 88 5 is_stmt 0 view .LVU568
+ 1940              	.LBE250:
+ 1941              	.LBE252:
+ 533:common/prog/MSP/mcal/muart.c ****         MCAL_invokeCallbacks(handle->cbList, MCAL_MODULE_MUART, MCAL_EVENT_READ_COMPLETE, &eventDat
+ 1942              		.loc 1 533 9 is_stmt 1 view .LVU569
+ 1943              	.LBB253:
+ 1944              	.LBI253:
+ 157:common/prog/MSP/mcal/mcom.h **** {
+ 1945              		.loc 2 157 20 view .LVU570
+ 1946              	.LBB254:
+ 159:common/prog/MSP/mcal/mcom.h **** }
+ 1947              		.loc 2 159 5 view .LVU571
+ 1948              	.LBE254:
+ 1949              	.LBE253:
+ 534:common/prog/MSP/mcal/muart.c ****     }
+ 1950              		.loc 1 534 9 is_stmt 0 view .LVU572
+ 1951 00f8 4022     		movs	r2, #64
+ 1952              	.LVL179:
+ 1953              	.LBB256:
+ 1954              	.LBB255:
+ 159:common/prog/MSP/mcal/mcom.h **** }
+ 1955              		.loc 2 159 39 view .LVU573
+ 1956 00fa 2372     		strb	r3, [r4, #8]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccdIDAuD.s 			page 58
+
+
+ 1957              	.LVL180:
+ 159:common/prog/MSP/mcal/mcom.h **** }
+ 1958              		.loc 2 159 39 view .LVU574
+ 1959              	.LBE255:
+ 1960              	.LBE256:
+ 534:common/prog/MSP/mcal/muart.c ****     }
+ 1961              		.loc 1 534 9 is_stmt 1 view .LVU575
+ 1962 00fc 02AB     		add	r3, sp, #8
+ 1963 00fe A7E7     		b	.L96
+ 1964              	.L98:
+ 1965              		.align	2
+ 1966              	.L97:
+ 1967 0100 00000000 		.word	.LANCHOR0
+ 1968              	.LBE261:
+ 1969              	.LBE262:
+ 1970              	.LBE269:
+ 1971              	.LBE285:
+ 1972              	.LBE286:
+ 1973              		.cfi_endproc
+ 1974              	.LFE131:
+ 1976              		.section	.bss.MUART_IRQ_HandleTable,"aw",%nobits
+ 1977              		.align	2
+ 1978              		.set	.LANCHOR0,. + 0
+ 1981              	MUART_IRQ_HandleTable:
+ 1982 0000 00000000 		.space	16
+ 1982      00000000 
+ 1982      00000000 
+ 1982      00000000 
+ 1983              		.text
+ 1984              	.Letext0:
+ 1985              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 1986              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 1987              		.file 6 "common/prog/std_lib/std_callback.h"
+ 1988              		.file 7 "common/prog/MSP/mcal/mcal_types.h"
+ 1989              		.file 8 "common/prog/MSP/mcal/muart_types.h"
+ 1990              		.file 9 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 1991              		.file 10 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 1992              		.file 11 "common/prog/MSP/mcal/mdio_types.h"
+ 1993              		.file 12 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 1994              		.file 13 "common/prog/MSP/mcal/msup.h"
+ 1995              		.file 14 "common/prog/MSP/mcal/sh30f/muart_mc.h"
+ 1996              		.file 15 "common/prog/MSP/mcal/muart.h"
+ 1997              		.file 16 "common/prog/MSP/mcal/muart_priv.h"
+ 1998              		.file 17 "common/prog/MSP/mcal/mdio.h"

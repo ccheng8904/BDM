@@ -1,0 +1,246 @@
+
+out/BootManager/prog/firmware_update/mem_drv/mem_drv.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MEMDRV_entryCheck:
+
+00000000 <MEMDRV_entryCheck>:
+static enum MAL_Status MEMDRV_entryCheck(uint32_t addr, uint32_t size)
+{
+    enum MAL_Status status = MEMDRV_lastError;
+
+    // reset last error after once reported
+    MEMDRV_lastError = MAL_ST_OK;
+   0:	2200      	movs	r2, #0
+{
+   2:	b510      	push	{r4, lr}
+    enum MAL_Status status = MEMDRV_lastError;
+   4:	4b07      	ldr	r3, [pc, #28]	; (24 <MEMDRV_entryCheck+0x24>)
+   6:	781c      	ldrb	r4, [r3, #0]
+    MEMDRV_lastError = MAL_ST_OK;
+   8:	701a      	strb	r2, [r3, #0]
+
+    if (MEMDRV_driver == NULL)
+   a:	4b07      	ldr	r3, [pc, #28]	; (28 <MEMDRV_entryCheck+0x28>)
+   c:	681b      	ldr	r3, [r3, #0]
+   e:	4293      	cmp	r3, r2
+  10:	d006      	beq.n	20 <MEMDRV_entryCheck+0x20>
+    {
+        return MAL_ST_SETUP_MODULE_ERROR;
+    }
+    if(!MEMDRV_driver->isAddrRangeValid(addr,size))
+  12:	689b      	ldr	r3, [r3, #8]
+  14:	4798      	blx	r3
+  16:	2800      	cmp	r0, #0
+  18:	d100      	bne.n	1c <MEMDRV_entryCheck+0x1c>
+    {
+        return MAL_ST_OUT_OF_RANGE_ERROR;
+  1a:	2408      	movs	r4, #8
+    }
+
+    return status;
+}
+  1c:	0020      	movs	r0, r4
+  1e:	bd10      	pop	{r4, pc}
+        return MAL_ST_SETUP_MODULE_ERROR;
+  20:	2406      	movs	r4, #6
+  22:	e7fb      	b.n	1c <MEMDRV_entryCheck+0x1c>
+	...
+
+Disassembly of section .text.MEMDRV_readBlock:
+
+00000000 <MEMDRV_readBlock>:
+
+
+/** returns true if open memory driver */
+static bool MEMDRV_isInternalMemory(void)
+{
+    return (MEMDRV_driver->read == NULL);
+   0:	4b05      	ldr	r3, [pc, #20]	; (18 <MEMDRV_readBlock+0x18>)
+{
+   2:	b510      	push	{r4, lr}
+    return (MEMDRV_driver->read == NULL);
+   4:	681b      	ldr	r3, [r3, #0]
+   6:	68db      	ldr	r3, [r3, #12]
+    if(MEMDRV_isInternalMemory())
+   8:	2b00      	cmp	r3, #0
+   a:	d102      	bne.n	12 <MEMDRV_readBlock+0x12>
+        return COMA_read(addr,size,data);
+   c:	f7ff fffe 	bl	0 <COMA_read>
+}
+  10:	bd10      	pop	{r4, pc}
+        return MEMDRV_driver->read(addr,size,data);
+  12:	4798      	blx	r3
+  14:	e7fc      	b.n	10 <MEMDRV_readBlock+0x10>
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MEMDRV_open:
+
+00000000 <MEMDRV_open>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+    for(uint8_t i = 0; MEMDRV_driverTable[i].driver != NULL; i++)
+   2:	2200      	movs	r2, #0
+   4:	250c      	movs	r5, #12
+   6:	4c0d      	ldr	r4, [pc, #52]	; (3c <MEMDRV_open+0x3c>)
+   8:	0029      	movs	r1, r5
+   a:	4351      	muls	r1, r2
+   c:	590b      	ldr	r3, [r1, r4]
+   e:	2b00      	cmp	r3, #0
+  10:	d10d      	bne.n	2e <MEMDRV_open+0x2e>
+    MEMDRV_driver = MEMDRV_getDriver(driverId);
+  12:	4a0b      	ldr	r2, [pc, #44]	; (40 <MEMDRV_open+0x40>)
+    return MAL_ST_SETUP_MODULE_ERROR;
+  14:	2006      	movs	r0, #6
+    MEMDRV_driver = MEMDRV_getDriver(driverId);
+  16:	6013      	str	r3, [r2, #0]
+    if(MEMDRV_driver != NULL)
+  18:	2b00      	cmp	r3, #0
+  1a:	d007      	beq.n	2c <MEMDRV_open+0x2c>
+        if(!MEMDRV_isInternalMemory())
+  1c:	68da      	ldr	r2, [r3, #12]
+  1e:	2a00      	cmp	r2, #0
+  20:	d001      	beq.n	26 <MEMDRV_open+0x26>
+            MEMDRV_driver->init();
+  22:	681b      	ldr	r3, [r3, #0]
+  24:	4798      	blx	r3
+        MEMDRV_lastError = MAL_ST_OK;
+  26:	2000      	movs	r0, #0
+  28:	4b06      	ldr	r3, [pc, #24]	; (44 <MEMDRV_open+0x44>)
+  2a:	7018      	strb	r0, [r3, #0]
+}
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+        if (MEMDRV_driverTable[i].driverID == driverId)
+  2e:	1861      	adds	r1, r4, r1
+  30:	7909      	ldrb	r1, [r1, #4]
+  32:	4281      	cmp	r1, r0
+  34:	d0ed      	beq.n	12 <MEMDRV_open+0x12>
+    for(uint8_t i = 0; MEMDRV_driverTable[i].driver != NULL; i++)
+  36:	3201      	adds	r2, #1
+  38:	b2d2      	uxtb	r2, r2
+  3a:	e7e5      	b.n	8 <MEMDRV_open+0x8>
+	...
+
+Disassembly of section .text.MEMDRV_read:
+
+00000000 <MEMDRV_read>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0005      	movs	r5, r0
+   4:	000e      	movs	r6, r1
+   6:	0017      	movs	r7, r2
+    enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+   8:	f7ff fffe 	bl	0 <MEMDRV_read>
+   c:	1e04      	subs	r4, r0, #0
+    if(status == MAL_ST_OK)
+   e:	d107      	bne.n	20 <MEMDRV_read+0x20>
+        if(!MEMDRV_readBlock(addr,size,data))
+  10:	003a      	movs	r2, r7
+  12:	0031      	movs	r1, r6
+  14:	0028      	movs	r0, r5
+  16:	f7ff fffe 	bl	0 <MEMDRV_read>
+  1a:	2800      	cmp	r0, #0
+  1c:	d100      	bne.n	20 <MEMDRV_read+0x20>
+            status =  MAL_ST_READ_ERROR;
+  1e:	340b      	adds	r4, #11
+}
+  20:	0020      	movs	r0, r4
+  22:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+
+Disassembly of section .text.MEMDRV_calcCrc:
+
+00000000 <MEMDRV_calcCrc>:
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b0a3      	sub	sp, #140	; 0x8c
+   4:	0006      	movs	r6, r0
+   6:	000c      	movs	r4, r1
+   8:	0015      	movs	r5, r2
+    enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+   a:	f7ff fffe 	bl	0 <MEMDRV_calcCrc>
+   e:	9001      	str	r0, [sp, #4]
+    if(status == MAL_ST_OK)
+  10:	2800      	cmp	r0, #0
+  12:	d108      	bne.n	26 <MEMDRV_calcCrc+0x26>
+static inline CRC_crc_t CRC_Init( void )
+{
+#ifdef crc_16bit_width
+    return CRC_Ccitt_Init();
+#else
+    return CRC_Ethernet_Init();
+  14:	f7ff fffe 	bl	0 <CRC_Ethernet_Init>
+        *crc = CRC_Init();
+  18:	6028      	str	r0, [r5, #0]
+        while((size > 0u) && (status == MAL_ST_OK))
+  1a:	2c00      	cmp	r4, #0
+  1c:	d109      	bne.n	32 <MEMDRV_calcCrc+0x32>
+static inline CRC_crc_t CRC_Finish( CRC_crc_t crc )
+{
+#ifdef crc_16bit_width
+    return CRC_Ccitt_Finish( crc );
+#else
+    return CRC_Ethernet_Finish( crc );
+  1e:	6828      	ldr	r0, [r5, #0]
+  20:	f7ff fffe 	bl	0 <CRC_Ethernet_Finish>
+        *crc = CRC_Finish(*crc);
+  24:	6028      	str	r0, [r5, #0]
+}
+  26:	9801      	ldr	r0, [sp, #4]
+  28:	b023      	add	sp, #140	; 0x8c
+  2a:	bdf0      	pop	{r4, r5, r6, r7, pc}
+          return MAL_ST_READ_ERROR;
+  2c:	230b      	movs	r3, #11
+  2e:	9301      	str	r3, [sp, #4]
+  30:	e7f3      	b.n	1a <MEMDRV_calcCrc+0x1a>
+        while((size > 0u) && (status == MAL_ST_OK))
+  32:	9b01      	ldr	r3, [sp, #4]
+  34:	2b00      	cmp	r3, #0
+  36:	d1f2      	bne.n	1e <MEMDRV_calcCrc+0x1e>
+
+
+/** returns the minimum of the parameters */
+static uint32_t MEMDRV_min(uint32_t val1, uint32_t val2)
+{
+    return ((val1>val2) ? val2 : val1);
+  38:	0027      	movs	r7, r4
+  3a:	2c80      	cmp	r4, #128	; 0x80
+  3c:	d900      	bls.n	40 <MEMDRV_calcCrc+0x40>
+  3e:	2780      	movs	r7, #128	; 0x80
+    if(!MEMDRV_readBlock(*addr, readSize, readBuffer))
+  40:	0039      	movs	r1, r7
+  42:	0030      	movs	r0, r6
+  44:	aa02      	add	r2, sp, #8
+  46:	f7ff fffe 	bl	0 <MEMDRV_calcCrc>
+  4a:	2800      	cmp	r0, #0
+  4c:	d0ee      	beq.n	2c <MEMDRV_calcCrc+0x2c>
+    return CRC_Ethernet_Update(crc, len, data );
+  4e:	0039      	movs	r1, r7
+  50:	6828      	ldr	r0, [r5, #0]
+  52:	aa02      	add	r2, sp, #8
+  54:	f7ff fffe 	bl	0 <CRC_Ethernet_Update>
+    *size -= readSize;
+  58:	1be4      	subs	r4, r4, r7
+    *crc   = CRC_Update(*crc, readSize, readBuffer);
+  5a:	6028      	str	r0, [r5, #0]
+    *addr += readSize;
+  5c:	19f6      	adds	r6, r6, r7
+    return MAL_ST_OK;
+  5e:	e7dc      	b.n	1a <MEMDRV_calcCrc+0x1a>
+
+Disassembly of section .text.MEMDRV_close:
+
+00000000 <MEMDRV_close>:
+{
+   0:	b510      	push	{r4, lr}
+    MEMDRV_driver->deinit();
+   2:	4c03      	ldr	r4, [pc, #12]	; (10 <MEMDRV_close+0x10>)
+   4:	6823      	ldr	r3, [r4, #0]
+   6:	685b      	ldr	r3, [r3, #4]
+   8:	4798      	blx	r3
+    MEMDRV_driver = NULL;
+   a:	2000      	movs	r0, #0
+   c:	6020      	str	r0, [r4, #0]
+}
+   e:	bd10      	pop	{r4, pc}
+  10:	00000000 	.word	0x00000000

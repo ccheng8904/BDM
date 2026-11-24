@@ -1,0 +1,73 @@
+BEGIN {
+   doxyout[0] = "Searching for include files...";
+   doxyout[1] = "Searching for example files...";
+   doxyout[2] = "Searching for images...";
+   doxyout[3] = "Searching for dot files...";
+   doxyout[4] = "Searching for msc files...";
+   doxyout[5] = "Searching for dia files...";
+   doxyout[6] = "Searching for files to exclude";
+   doxyout[7] = "Searching INPUT for files to process...";
+   doxyout[8] = "Reading and parsing tag files";
+   doxyout[9] = "Parsing files";
+   doxyout[10] = "Building group list...";
+   doxyout[11] = "Building directory list...";
+   doxyout[12] = "Building namespace list...";
+   doxyout[13] = "Building file list...";
+   doxyout[14] = "Building class list...";
+   doxyout[15] = "Associating documentation with classes...";
+   doxyout[16] = "Computing nesting relations for classes...";
+   doxyout[17] = "Building example list...";
+   doxyout[18] = "Searching for enumerations...";
+   doxyout[19] = "Searching for documented typedefs...";
+   doxyout[20] = "Searching for members imported via using declarations...";
+   doxyout[21] = "Searching for included using directives...";
+   doxyout[22] = "Searching for documented variables...";
+   doxyout[23] = "Building interface member list...";
+   doxyout[24] = "Building member list...";
+   doxyout[25] = "Searching for friends...";
+   doxyout[26] = "Searching for documented defines...";
+   doxyout[27] = "Computing class inheritance relations...";
+   doxyout[28] = "Computing class usage relations...";
+   doxyout[29] = "Flushing cached template relations that have become invalid...";
+   doxyout[30] = "Creating members for template instances...";
+   doxyout[31] = "Computing class relations...";
+   doxyout[32] = "Add enum values to enums...";
+   doxyout[33] = "Searching for member function documentation...";
+   doxyout[34] = "Building page list...";
+   doxyout[35] = "Search for main page...";
+   doxyout[36] = "Computing page relations...";
+   doxyout[37] = "Determining the scope of groups...";
+   doxyout[38] = "Sorting lists...";
+   doxyout[39] = "Freeing entry tree";
+   doxyout[40] = "Determining which enums are documented";
+   doxyout[41] = "Computing member relations...";
+   doxyout[42] = "Building full member lists recursively...";
+   doxyout[43] = "Adding members to member groups.";
+   doxyout[44] = "Distributing member group documentation.";
+   doxyout[45] = "Computing member references...";
+   doxyout[46] = "Inheriting documentation...";
+   doxyout[47] = "Generating disk names...";
+   doxyout[48] = "Adding source references...";
+   doxyout[49] = "Adding xrefitems...";
+   doxyout[50] = "Sorting member lists...";
+   doxyout[51] = "Computing dependencies between directories...";
+   doxyout[52] = "Generating citations page...";
+   doxyout[53] = "Counting data structures...";
+   doxyout[54] = "Resolving user defined references...";
+   doxyout[55] = "Finding anchors and sections in the documentation...";
+   doxyout[56] = "Transferring function references...";
+   doxyout[57] = "Combining using relations...";
+   doxyout[58] = "Adding members to index pages...";
+   doxyout[59] = "Generating style sheet...";
+   doxyout[60] = "Generating search indices...";
+   doxyout[61] = "Generating example documentation...";
+   doxyout[62] = "Generating file sources...";
+   doxyout[63] = "finalizing index lists...";
+   doxyout[64] = "writing tag file...";
+   doxyout[65] = "Running dot...";
+   doxyout[66] = "finished...";
+}
+{for (i in doxyout)
+    if($0 == doxyout[i])
+        print $0
+}

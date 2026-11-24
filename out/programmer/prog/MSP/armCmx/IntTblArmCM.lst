@@ -1,0 +1,115 @@
+
+out/programmer/prog/MSP/armCmx/IntTblArmCM.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.ITBL_vSpuriousIsr:
+
+00000000 <ITBL_vSpuriousIsr>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+#if !defined(NO_ISR_SUPPORT) || defined(need_ModuleHeader)
+void ITBL_vSpuriousIsr(void)
+{
+   0:	b510      	push	{r4, lr}
+ */
+__STATIC_FORCEINLINE uint32_t __get_IPSR(void)
+{
+  uint32_t result;
+
+  __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+   2:	f3ef 8005 	mrs	r0, IPSR
+    /* Call user modifiable Spurious Interrupt Handle function */
+    SpuriousIsr_Handler(__get_IPSR());
+   6:	f7ff fffe 	bl	0 <SpuriousIsr_Handler>
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.ITBL_vResetHandler:
+
+00000000 <ITBL_vResetHandler>:
+#endif
+
+void ITBL_vResetHandler(void)
+{
+   0:	b510      	push	{r4, lr}
+  \details Assigns the given value to the Main Stack Pointer (MSP).
+  \param [in]    topOfMainStack  Main Stack Pointer value to set
+ */
+__STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
+{
+  __ASM volatile ("MSR msp, %0" : : "r" (topOfMainStack) : );
+   2:	4b0d      	ldr	r3, [pc, #52]	; (38 <ITBL_vResetHandler+0x38>)
+   4:	f383 8808 	msr	MSP, r3
+#endif
+#endif
+
+#if !defined(CORTEX_M0) && !defined(NO_ISR_SUPPORT)
+    /* Set VTOR in case not Cortex M0 and ISR support is enabled */
+    SCB->VTOR = VTOR_VALUE;  //lint !e923 works fine on cortexM
+   8:	4b0c      	ldr	r3, [pc, #48]	; (3c <ITBL_vResetHandler+0x3c>)
+   a:	4a0d      	ldr	r2, [pc, #52]	; (40 <ITBL_vResetHandler+0x40>)
+        
+        /* Copy data segment from ROM to RAM */
+        /*lint -e{923, 9033}  cast tested to work correctly for ARM CortexMx */
+        for(uint32_t index = 0u; index < (DATA_SIZE/sizeof(uint32_t)); index++)
+        {
+            dst[index] = src[index];
+   c:	480d      	ldr	r0, [pc, #52]	; (44 <ITBL_vResetHandler+0x44>)
+    SCB->VTOR = VTOR_VALUE;  //lint !e923 works fine on cortexM
+   e:	6093      	str	r3, [r2, #8]
+        for(uint32_t index = 0u; index < (DATA_SIZE/sizeof(uint32_t)); index++)
+  10:	4a0d      	ldr	r2, [pc, #52]	; (48 <ITBL_vResetHandler+0x48>)
+            dst[index] = src[index];
+  12:	490e      	ldr	r1, [pc, #56]	; (4c <ITBL_vResetHandler+0x4c>)
+        for(uint32_t index = 0u; index < (DATA_SIZE/sizeof(uint32_t)); index++)
+  14:	1a12      	subs	r2, r2, r0
+  16:	0892      	lsrs	r2, r2, #2
+            dst[index] = src[index];
+  18:	0092      	lsls	r2, r2, #2
+  1a:	f7ff fffe 	bl	0 <memcpy>
+        }
+        
+        dst = BSS_START;
+        /* Zero out bss data segment */
+        /*lint -e{923, 9033}  cast tested to work correctly for ARM CortexMx */
+        for(uint32_t index = 0u; index < (BSS_SIZE/sizeof(uint32_t)); index++)
+  1e:	4a0c      	ldr	r2, [pc, #48]	; (50 <ITBL_vResetHandler+0x50>)
+  20:	480c      	ldr	r0, [pc, #48]	; (54 <ITBL_vResetHandler+0x54>)
+        {
+            dst[index] = 0u;
+  22:	2100      	movs	r1, #0
+        for(uint32_t index = 0u; index < (BSS_SIZE/sizeof(uint32_t)); index++)
+  24:	1a12      	subs	r2, r2, r0
+  26:	0892      	lsrs	r2, r2, #2
+            dst[index] = 0u;
+  28:	0092      	lsls	r2, r2, #2
+  2a:	f7ff fffe 	bl	0 <memset>
+        }
+        
+        /* Call static objects constructors */
+        __libc_init_array();
+  2e:	f7ff fffe 	bl	0 <__libc_init_array>
+        
+        /* Jump to main application */
+        (void)main();
+  32:	f7ff fffe 	bl	0 <main>
+        for(;;) {} /* Endless loop - no return from main */
+  36:	e7fe      	b.n	36 <ITBL_vResetHandler+0x36>
+	...
+  40:	e000ed00 	.word	0xe000ed00
+	...
+
+Disassembly of section .text.ITBL_StartApplication:
+
+00000000 <ITBL_StartApplication>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    BMDAT_setIsrTableAddr(startAddress);
+   4:	f7ff fffe 	bl	0 <BMDAT_setIsrTableAddr>
+    itbl_app[1](); // call the application
+   8:	6863      	ldr	r3, [r4, #4]
+   a:	4798      	blx	r3
+}
+   c:	bd10      	pop	{r4, pc}

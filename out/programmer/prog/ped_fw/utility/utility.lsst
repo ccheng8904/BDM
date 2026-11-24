@@ -1,0 +1,1428 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"utility.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.UTI_vMemFill,"ax",%progbits
+  18              		.align	1
+  19              		.global	UTI_vMemFill
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	UTI_vMemFill:
+  25              	.LVL0:
+  26              	.LFB2:
+  27              		.file 1 "common/prog/ped_fw/utility/utility.c"
+   1:common/prog/ped_fw/utility/utility.c **** /*******************************************************************************
+   2:common/prog/ped_fw/utility/utility.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/utility/utility.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/utility/utility.c ****  *
+   5:common/prog/ped_fw/utility/utility.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/utility/utility.c ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/utility/utility.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/utility/utility.c ****  *
+   9:common/prog/ped_fw/utility/utility.c ****  *******************************************************************************
+  10:common/prog/ped_fw/utility/utility.c ****  *  PROJECT          PP PED Framework
+  11:common/prog/ped_fw/utility/utility.c ****  *  COMP_ABBREV      UTI
+  12:common/prog/ped_fw/utility/utility.c ****  ******************************************************************************/
+  13:common/prog/ped_fw/utility/utility.c **** 
+  14:common/prog/ped_fw/utility/utility.c **** 
+  15:common/prog/ped_fw/utility/utility.c **** /******************************************************************************/
+  16:common/prog/ped_fw/utility/utility.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/ped_fw/utility/utility.c **** /******************************************************************************/
+  18:common/prog/ped_fw/utility/utility.c **** /** \file
+  19:common/prog/ped_fw/utility/utility.c ****  *
+  20:common/prog/ped_fw/utility/utility.c ****  *  \brief    Implementation of utility library (common functions)
+  21:common/prog/ped_fw/utility/utility.c ****  *
+  22:common/prog/ped_fw/utility/utility.c ****  */
+  23:common/prog/ped_fw/utility/utility.c **** 
+  24:common/prog/ped_fw/utility/utility.c **** 
+  25:common/prog/ped_fw/utility/utility.c **** /******************************************************************************/
+  26:common/prog/ped_fw/utility/utility.c **** /* INCLUDES                                                                   */
+  27:common/prog/ped_fw/utility/utility.c **** /******************************************************************************/
+  28:common/prog/ped_fw/utility/utility.c **** #include "bsh_stdinc.h"
+  29:common/prog/ped_fw/utility/utility.c **** #include <stdint.h>
+  30:common/prog/ped_fw/utility/utility.c **** #include <stdbool.h>
+  31:common/prog/ped_fw/utility/utility.c **** #include "utility.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 2
+
+
+  32:common/prog/ped_fw/utility/utility.c **** 
+  33:common/prog/ped_fw/utility/utility.c **** 
+  34:common/prog/ped_fw/utility/utility.c **** void UTI_vMemFill(uint8_t * const pucDestination, const uint8_t ucFillValue, uint16_t uiLength)
+  35:common/prog/ped_fw/utility/utility.c **** {
+  28              		.loc 1 35 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  36:common/prog/ped_fw/utility/utility.c ****    while (uiLength > 0U)
+  33              		.loc 1 36 4 view .LVU1
+  34              	.L2:
+  35              		.loc 1 36 20 view .LVU2
+  36 0000 002A     		cmp	r2, #0
+  37 0002 00D1     		bne	.L3
+  37:common/prog/ped_fw/utility/utility.c ****    {
+  38:common/prog/ped_fw/utility/utility.c ****       uiLength--;
+  39:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = ucFillValue;
+  40:common/prog/ped_fw/utility/utility.c ****    }
+  41:common/prog/ped_fw/utility/utility.c **** }
+  38              		.loc 1 41 1 is_stmt 0 view .LVU3
+  39              		@ sp needed
+  40 0004 7047     		bx	lr
+  41              	.L3:
+  38:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = ucFillValue;
+  42              		.loc 1 38 7 is_stmt 1 view .LVU4
+  38:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = ucFillValue;
+  43              		.loc 1 38 15 is_stmt 0 view .LVU5
+  44 0006 013A     		subs	r2, r2, #1
+  45              	.LVL1:
+  38:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = ucFillValue;
+  46              		.loc 1 38 15 view .LVU6
+  47 0008 92B2     		uxth	r2, r2
+  48              	.LVL2:
+  39:common/prog/ped_fw/utility/utility.c ****    }
+  49              		.loc 1 39 7 is_stmt 1 view .LVU7
+  39:common/prog/ped_fw/utility/utility.c ****    }
+  50              		.loc 1 39 32 is_stmt 0 view .LVU8
+  51 000a 8154     		strb	r1, [r0, r2]
+  52 000c F8E7     		b	.L2
+  53              		.cfi_endproc
+  54              	.LFE2:
+  56              		.section	.text.UTI_vMemCopy,"ax",%progbits
+  57              		.align	1
+  58              		.global	UTI_vMemCopy
+  59              		.syntax unified
+  60              		.code	16
+  61              		.thumb_func
+  63              	UTI_vMemCopy:
+  64              	.LVL3:
+  65              	.LFB3:
+  42:common/prog/ped_fw/utility/utility.c **** 
+  43:common/prog/ped_fw/utility/utility.c **** 
+  44:common/prog/ped_fw/utility/utility.c **** void UTI_vMemCopy(const uint8_t * const pucSource, uint8_t * const pucDestination, uint16_t uiLengt
+  45:common/prog/ped_fw/utility/utility.c **** {
+  66              		.loc 1 45 1 is_stmt 1 view -0
+  67              		.cfi_startproc
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 3
+
+
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70              		@ link register save eliminated.
+  46:common/prog/ped_fw/utility/utility.c ****    while (uiLength > 0U)
+  71              		.loc 1 46 4 view .LVU10
+  72              	.L5:
+  73              		.loc 1 46 20 view .LVU11
+  74 0000 002A     		cmp	r2, #0
+  75 0002 00D1     		bne	.L6
+  47:common/prog/ped_fw/utility/utility.c ****    {
+  48:common/prog/ped_fw/utility/utility.c ****       uiLength--;
+  49:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = pucSource[uiLength];
+  50:common/prog/ped_fw/utility/utility.c ****    }
+  51:common/prog/ped_fw/utility/utility.c **** }
+  76              		.loc 1 51 1 is_stmt 0 view .LVU12
+  77              		@ sp needed
+  78 0004 7047     		bx	lr
+  79              	.L6:
+  48:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = pucSource[uiLength];
+  80              		.loc 1 48 7 is_stmt 1 view .LVU13
+  48:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = pucSource[uiLength];
+  81              		.loc 1 48 15 is_stmt 0 view .LVU14
+  82 0006 013A     		subs	r2, r2, #1
+  83              	.LVL4:
+  48:common/prog/ped_fw/utility/utility.c ****       pucDestination[uiLength] = pucSource[uiLength];
+  84              		.loc 1 48 15 view .LVU15
+  85 0008 92B2     		uxth	r2, r2
+  86              	.LVL5:
+  49:common/prog/ped_fw/utility/utility.c ****    }
+  87              		.loc 1 49 7 is_stmt 1 view .LVU16
+  49:common/prog/ped_fw/utility/utility.c ****    }
+  88              		.loc 1 49 43 is_stmt 0 view .LVU17
+  89 000a 835C     		ldrb	r3, [r0, r2]
+  49:common/prog/ped_fw/utility/utility.c ****    }
+  90              		.loc 1 49 32 view .LVU18
+  91 000c 8B54     		strb	r3, [r1, r2]
+  92 000e F7E7     		b	.L5
+  93              		.cfi_endproc
+  94              	.LFE3:
+  96              		.section	.text.UTI_bIsMemEqual,"ax",%progbits
+  97              		.align	1
+  98              		.global	UTI_bIsMemEqual
+  99              		.syntax unified
+ 100              		.code	16
+ 101              		.thumb_func
+ 103              	UTI_bIsMemEqual:
+ 104              	.LVL6:
+ 105              	.LFB4:
+  52:common/prog/ped_fw/utility/utility.c **** 
+  53:common/prog/ped_fw/utility/utility.c **** 
+  54:common/prog/ped_fw/utility/utility.c **** bool UTI_bIsMemEqual(const uint8_t * const pucSource1, const uint8_t * const pucSource2, uint16_t u
+  55:common/prog/ped_fw/utility/utility.c **** {
+ 106              		.loc 1 55 1 is_stmt 1 view -0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+  56:common/prog/ped_fw/utility/utility.c ****    const uint8_t* puc1 = pucSource1;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 4
+
+
+ 110              		.loc 1 56 4 view .LVU20
+  57:common/prog/ped_fw/utility/utility.c ****    const uint8_t* puc2 = pucSource2;
+ 111              		.loc 1 57 4 view .LVU21
+  58:common/prog/ped_fw/utility/utility.c **** 
+  59:common/prog/ped_fw/utility/utility.c ****    while (uiLength > 0U)
+ 112              		.loc 1 59 4 view .LVU22
+ 113              		.loc 1 59 10 is_stmt 0 view .LVU23
+ 114 0000 0023     		movs	r3, #0
+  55:common/prog/ped_fw/utility/utility.c ****    const uint8_t* puc1 = pucSource1;
+ 115              		.loc 1 55 1 view .LVU24
+ 116 0002 30B5     		push	{r4, r5, lr}
+ 117              	.LCFI0:
+ 118              		.cfi_def_cfa_offset 12
+ 119              		.cfi_offset 4, -12
+ 120              		.cfi_offset 5, -8
+ 121              		.cfi_offset 14, -4
+  60:common/prog/ped_fw/utility/utility.c ****    {
+  61:common/prog/ped_fw/utility/utility.c ****       uiLength--;
+  62:common/prog/ped_fw/utility/utility.c ****       if (*puc1 != *puc2)
+ 122              		.loc 1 62 20 view .LVU25
+ 123 0004 0139     		subs	r1, r1, #1
+ 124              	.LVL7:
+ 125              	.L8:
+  59:common/prog/ped_fw/utility/utility.c ****    {
+ 126              		.loc 1 59 20 is_stmt 1 view .LVU26
+ 127 0006 9A42     		cmp	r2, r3
+ 128 0008 01D1     		bne	.L10
+  63:common/prog/ped_fw/utility/utility.c ****       {
+  64:common/prog/ped_fw/utility/utility.c ****          return false;
+  65:common/prog/ped_fw/utility/utility.c ****       }
+  66:common/prog/ped_fw/utility/utility.c ****       puc1++;
+  67:common/prog/ped_fw/utility/utility.c ****       /* Msg(4:0489) Increment or decrement operation performed on pointer.
+  68:common/prog/ped_fw/utility/utility.c ****          Code is tested, not dangerous
+  69:common/prog/ped_fw/utility/utility.c ****       */
+  70:common/prog/ped_fw/utility/utility.c ****       puc2++;
+  71:common/prog/ped_fw/utility/utility.c ****       /* Msg(4:0489) Increment or decrement operation performed on pointer.
+  72:common/prog/ped_fw/utility/utility.c ****          Code is tested, not dangerous
+  73:common/prog/ped_fw/utility/utility.c ****       */
+  74:common/prog/ped_fw/utility/utility.c ****    }
+  75:common/prog/ped_fw/utility/utility.c ****    return true;
+ 129              		.loc 1 75 11 is_stmt 0 view .LVU27
+ 130 000a 0120     		movs	r0, #1
+ 131              	.LVL8:
+ 132              	.L9:
+  76:common/prog/ped_fw/utility/utility.c **** }
+ 133              		.loc 1 76 1 view .LVU28
+ 134              		@ sp needed
+ 135 000c 30BD     		pop	{r4, r5, pc}
+ 136              	.LVL9:
+ 137              	.L10:
+  61:common/prog/ped_fw/utility/utility.c ****       if (*puc1 != *puc2)
+ 138              		.loc 1 61 7 is_stmt 1 view .LVU29
+  62:common/prog/ped_fw/utility/utility.c ****       {
+ 139              		.loc 1 62 7 view .LVU30
+  62:common/prog/ped_fw/utility/utility.c ****       {
+ 140              		.loc 1 62 11 is_stmt 0 view .LVU31
+ 141 000e C45C     		ldrb	r4, [r0, r3]
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 5
+
+
+  62:common/prog/ped_fw/utility/utility.c ****       {
+ 142              		.loc 1 62 10 view .LVU32
+ 143 0010 0133     		adds	r3, r3, #1
+ 144              	.LVL10:
+  62:common/prog/ped_fw/utility/utility.c ****       {
+ 145              		.loc 1 62 10 view .LVU33
+ 146 0012 CD5C     		ldrb	r5, [r1, r3]
+ 147 0014 A542     		cmp	r5, r4
+ 148 0016 F6D0     		beq	.L8
+  64:common/prog/ped_fw/utility/utility.c ****       }
+ 149              		.loc 1 64 17 view .LVU34
+ 150 0018 0020     		movs	r0, #0
+ 151              	.LVL11:
+  64:common/prog/ped_fw/utility/utility.c ****       }
+ 152              		.loc 1 64 17 view .LVU35
+ 153 001a F7E7     		b	.L9
+ 154              		.cfi_endproc
+ 155              	.LFE4:
+ 157              		.section	.text.UTI_vSetBit,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	UTI_vSetBit
+ 160              		.syntax unified
+ 161              		.code	16
+ 162              		.thumb_func
+ 164              	UTI_vSetBit:
+ 165              	.LVL12:
+ 166              	.LFB5:
+  77:common/prog/ped_fw/utility/utility.c **** 
+  78:common/prog/ped_fw/utility/utility.c **** 
+  79:common/prog/ped_fw/utility/utility.c **** void UTI_vSetBit(uint8_t* pucBitField, uint16_t uiBitId, bool bOnOff)
+  80:common/prog/ped_fw/utility/utility.c **** {
+ 167              		.loc 1 80 1 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+  81:common/prog/ped_fw/utility/utility.c ****    uint8_t ucByte;
+ 171              		.loc 1 81 4 view .LVU37
+  82:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBitMask;
+ 172              		.loc 1 82 4 view .LVU38
+  83:common/prog/ped_fw/utility/utility.c ****       ucByte = (uint8_t)(uiBitId / (uint16_t)8U);
+ 173              		.loc 1 83 7 view .LVU39
+  84:common/prog/ped_fw/utility/utility.c ****    pucBitField +=ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+ 174              		.loc 1 84 4 view .LVU40
+ 175              	.LBB18:
+ 176              	.LBB19:
+ 177              		.file 2 "common/prog/ped_fw/utility/utility.h"
+   1:common/prog/ped_fw/utility/utility.h **** /*******************************************************************************
+   2:common/prog/ped_fw/utility/utility.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/utility/utility.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/utility/utility.h ****  *
+   5:common/prog/ped_fw/utility/utility.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/utility/utility.h ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/utility/utility.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/utility/utility.h ****  *
+   9:common/prog/ped_fw/utility/utility.h ****  *******************************************************************************
+  10:common/prog/ped_fw/utility/utility.h ****  *  PROJECT          PP PED Framework
+  11:common/prog/ped_fw/utility/utility.h ****  *  COMP_ABBREV      UTI
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 6
+
+
+  12:common/prog/ped_fw/utility/utility.h ****  ******************************************************************************/
+  13:common/prog/ped_fw/utility/utility.h **** 
+  14:common/prog/ped_fw/utility/utility.h **** #ifndef UTILITY_H
+  15:common/prog/ped_fw/utility/utility.h **** #define UTILITY_H
+  16:common/prog/ped_fw/utility/utility.h **** 
+  17:common/prog/ped_fw/utility/utility.h **** #ifdef __cplusplus
+  18:common/prog/ped_fw/utility/utility.h **** extern "C" {
+  19:common/prog/ped_fw/utility/utility.h **** #endif
+  20:common/prog/ped_fw/utility/utility.h **** 
+  21:common/prog/ped_fw/utility/utility.h **** /******************************************************************************/
+  22:common/prog/ped_fw/utility/utility.h **** /* DOCUMENTATION                                                              */
+  23:common/prog/ped_fw/utility/utility.h **** /******************************************************************************/
+  24:common/prog/ped_fw/utility/utility.h **** /** \file
+  25:common/prog/ped_fw/utility/utility.h ****  *
+  26:common/prog/ped_fw/utility/utility.h ****  *  \brief    Public declarations and definitions of utility library
+  27:common/prog/ped_fw/utility/utility.h ****  *  
+  28:common/prog/ped_fw/utility/utility.h ****  *  \details  \section intro Introduction
+  29:common/prog/ped_fw/utility/utility.h ****  *
+  30:common/prog/ped_fw/utility/utility.h ****  *
+  31:common/prog/ped_fw/utility/utility.h ****  *   The utility library provides some common used functions and macros.\n
+  32:common/prog/ped_fw/utility/utility.h ****  *   Nearly all other libraries are using utility.lib.\n
+  33:common/prog/ped_fw/utility/utility.h ****  *   \n
+  34:common/prog/ped_fw/utility/utility.h ****  *   
+  35:common/prog/ped_fw/utility/utility.h ****  *   There are 3 groups of functions:
+  36:common/prog/ped_fw/utility/utility.h ****  *   
+  37:common/prog/ped_fw/utility/utility.h ****  *   \section group1 Memory Functions
+  38:common/prog/ped_fw/utility/utility.h ****  *   
+  39:common/prog/ped_fw/utility/utility.h ****  *   - UTI_vMemCopy(const uint8_t *pucSource, uint8_t *pucDestination, uint16_t uiLength)
+  40:common/prog/ped_fw/utility/utility.h ****  *   - UTI_bIsMemEqual(const uint8_t *pucSource1, const uint8_t *pucSource2, uint16_t uiLength)
+  41:common/prog/ped_fw/utility/utility.h ****  *   
+  42:common/prog/ped_fw/utility/utility.h ****  *   
+  43:common/prog/ped_fw/utility/utility.h ****  *   \section group2 Bit Functions/Macros
+  44:common/prog/ped_fw/utility/utility.h ****  *   
+  45:common/prog/ped_fw/utility/utility.h ****  *   - UTI_SET(VAR1,VAR2)
+  46:common/prog/ped_fw/utility/utility.h ****  *   - UTI_RES(VAR1,VAR2)
+  47:common/prog/ped_fw/utility/utility.h ****  *   - UTI_TEST(VAR1,VAR2)
+  48:common/prog/ped_fw/utility/utility.h ****  *   - UTI_vSetBit(uint8_t* pucBitField, uint16_t uiBitId, bool bOnOff)
+  49:common/prog/ped_fw/utility/utility.h ****  *   - UTI_bGetBit(const uint8_t* pucBitField, uint16_t uiBitId)
+  50:common/prog/ped_fw/utility/utility.h ****  *   - UTI_vSetBitField(uint8_t* pucBitField, uint16_t uiBitFieldId,  uint8_t ucBitCount, uint8_t u
+  51:common/prog/ped_fw/utility/utility.h ****  *   - UTI_ucGetBitField(const uint8_t* pucBitField, uint16_t uiBitFieldId, uint8_t ucBitCount)
+  52:common/prog/ped_fw/utility/utility.h ****  *   - UTI_ucShiftLeft(uint8_t ucValue, uint8_t ucShift);
+  53:common/prog/ped_fw/utility/utility.h ****  *   - UTI_ucShiftRight(uint8_t ucValue, uint8_t ucShift);
+  54:common/prog/ped_fw/utility/utility.h ****  *   
+  55:common/prog/ped_fw/utility/utility.h ****  *   \section group3 Filter Functions
+  56:common/prog/ped_fw/utility/utility.h ****  *   
+  57:common/prog/ped_fw/utility/utility.h ****  *   - UTI_vIIRFilter(uint16_t *pucAccu, uint8_t ucValue, uint8_t ucDampPlus, uint8_t ucDampMinus);
+  58:common/prog/ped_fw/utility/utility.h ****  *   
+  59:common/prog/ped_fw/utility/utility.h ****  *   
+  60:common/prog/ped_fw/utility/utility.h ****  */
+  61:common/prog/ped_fw/utility/utility.h **** 
+  62:common/prog/ped_fw/utility/utility.h **** 
+  63:common/prog/ped_fw/utility/utility.h **** /******************************************************************************/
+  64:common/prog/ped_fw/utility/utility.h **** /* INCLUDES                                                                   */
+  65:common/prog/ped_fw/utility/utility.h **** /******************************************************************************/
+  66:common/prog/ped_fw/utility/utility.h **** #include "bsh_stdinc.h"
+  67:common/prog/ped_fw/utility/utility.h **** #include <stdint.h>
+  68:common/prog/ped_fw/utility/utility.h **** #include <stdbool.h>
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 7
+
+
+  69:common/prog/ped_fw/utility/utility.h **** 
+  70:common/prog/ped_fw/utility/utility.h **** 
+  71:common/prog/ped_fw/utility/utility.h **** 
+  72:common/prog/ped_fw/utility/utility.h **** 
+  73:common/prog/ped_fw/utility/utility.h **** 
+  74:common/prog/ped_fw/utility/utility.h **** /* DEFINITIONS ************************************************************************************
+  75:common/prog/ped_fw/utility/utility.h **** /*lint -save -e9026 "Function-like macro defined..." cannot be solved with function */
+  76:common/prog/ped_fw/utility/utility.h **** 
+  77:common/prog/ped_fw/utility/utility.h **** #define UTI_SET(VAR1,VAR2)  ((VAR1)|=(VAR2)) ///< Macro sets bit mask VAR2 in VAR1
+  78:common/prog/ped_fw/utility/utility.h **** #define UTI_RES(VAR1,VAR2)  ((VAR1)&=~(VAR2))///< Macro resets bit mask VAR2 in VAR1
+  79:common/prog/ped_fw/utility/utility.h **** #define UTI_RES8(VAR1,VAR2)  ((VAR1)&=(uint8_t)~(VAR2))///< Macro resets bit mask VAR2 in VAR1 (8-B
+  80:common/prog/ped_fw/utility/utility.h **** #define UTI_RES16(VAR1,VAR2)  ((VAR1)&=(uint16_t)~(VAR2))///< Macro resets bit mask VAR2 in VAR1 (1
+  81:common/prog/ped_fw/utility/utility.h **** #define UTI_RES32(VAR1,VAR2)  ((VAR1)&=(uint32_t)~(VAR2))///< Macro resets bit mask VAR2 in VAR1 (3
+  82:common/prog/ped_fw/utility/utility.h **** #define UTI_TEST(VAR1,VAR2) ((VAR1)&(VAR2))  ///< Macro tests bit mask VAR2 in VAR1, if mask VAR1 i
+  83:common/prog/ped_fw/utility/utility.h **** 
+  84:common/prog/ped_fw/utility/utility.h **** #define UTI_NELEMENTS(arr)  (sizeof(arr)/sizeof((arr)[0]))///< Macro computes number of elements of
+  85:common/prog/ped_fw/utility/utility.h **** 
+  86:common/prog/ped_fw/utility/utility.h **** #define UTI_MIN(a,b) (((a)<(b))?(a):(b)) ///< Macro computes the minimum from values a and b
+  87:common/prog/ped_fw/utility/utility.h **** #define UTI_MAX(a,b) (((a)>(b))?(a):(b)) ///< Macro computes the maximum from values a and b
+  88:common/prog/ped_fw/utility/utility.h **** 
+  89:common/prog/ped_fw/utility/utility.h **** #define UTI_WORD_FLOOR(size) ((size)&(~3u)) ///< Macro aligns input size to the nearest lower multi
+  90:common/prog/ped_fw/utility/utility.h **** #define UTI_WORD_CEIL(size)  ((((size)%4u)!=0u)?(UTI_WORD_FLOOR((size)+4u)):(size)) ///< Macro alig
+  91:common/prog/ped_fw/utility/utility.h **** 
+  92:common/prog/ped_fw/utility/utility.h **** /*lint -restore -e9026 */
+  93:common/prog/ped_fw/utility/utility.h **** 
+  94:common/prog/ped_fw/utility/utility.h **** /* GLOBAL FUNCTIONS *******************************************************************************
+  95:common/prog/ped_fw/utility/utility.h **** 
+  96:common/prog/ped_fw/utility/utility.h **** /** 
+  97:common/prog/ped_fw/utility/utility.h **** Fills memory by desired value
+  98:common/prog/ped_fw/utility/utility.h **** 
+  99:common/prog/ped_fw/utility/utility.h **** \param pucDestination: Target of memory to copy\n
+ 100:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t * const
+ 101:common/prog/ped_fw/utility/utility.h **** 
+ 102:common/prog/ped_fw/utility/utility.h **** \param ucFillValue: Value to fill the array\n
+ 103:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t
+ 104:common/prog/ped_fw/utility/utility.h **** 
+ 105:common/prog/ped_fw/utility/utility.h **** \param uiLength: Number of bytes to fill\n
+ 106:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t
+ 107:common/prog/ped_fw/utility/utility.h **** 
+ 108:common/prog/ped_fw/utility/utility.h **** \b Usage: \n
+ 109:common/prog/ped_fw/utility/utility.h **** static unsigned int MAIN_auiArray[33];  \n
+ 110:common/prog/ped_fw/utility/utility.h **** \n
+ 111:common/prog/ped_fw/utility/utility.h **** UTI_vMemFill((const uint8_t*)MAIN_auiArray,0x55,sizeof(MAIN_auiArray));  \n
+ 112:common/prog/ped_fw/utility/utility.h **** \n
+ 113:common/prog/ped_fw/utility/utility.h **** 
+ 114:common/prog/ped_fw/utility/utility.h **** \return None
+ 115:common/prog/ped_fw/utility/utility.h **** */
+ 116:common/prog/ped_fw/utility/utility.h **** extern void UTI_vMemFill(uint8_t * const pucDestination, const uint8_t ucFillValue, uint16_t uiLeng
+ 117:common/prog/ped_fw/utility/utility.h **** 
+ 118:common/prog/ped_fw/utility/utility.h **** 
+ 119:common/prog/ped_fw/utility/utility.h **** /** 
+ 120:common/prog/ped_fw/utility/utility.h **** Copies memory from source to destination
+ 121:common/prog/ped_fw/utility/utility.h **** 
+ 122:common/prog/ped_fw/utility/utility.h **** \param pucSource: Source of memory to copy\n
+ 123:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t* const
+ 124:common/prog/ped_fw/utility/utility.h **** 
+ 125:common/prog/ped_fw/utility/utility.h **** \param pucDestination: Target of memory to copy\n
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 8
+
+
+ 126:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t * const
+ 127:common/prog/ped_fw/utility/utility.h **** 
+ 128:common/prog/ped_fw/utility/utility.h **** \param uiLength: Number of bytes to copy\n
+ 129:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t
+ 130:common/prog/ped_fw/utility/utility.h **** 
+ 131:common/prog/ped_fw/utility/utility.h **** \return None
+ 132:common/prog/ped_fw/utility/utility.h **** */
+ 133:common/prog/ped_fw/utility/utility.h **** extern void UTI_vMemCopy(const uint8_t * const pucSource, uint8_t * const pucDestination, uint16_t 
+ 134:common/prog/ped_fw/utility/utility.h **** 
+ 135:common/prog/ped_fw/utility/utility.h **** 
+ 136:common/prog/ped_fw/utility/utility.h **** /** 
+ 137:common/prog/ped_fw/utility/utility.h **** Compares ucLength bytes of buffer pucSource1 and pucSource2 and returns true if they are equal
+ 138:common/prog/ped_fw/utility/utility.h **** 
+ 139:common/prog/ped_fw/utility/utility.h **** \b Note: true means !0
+ 140:common/prog/ped_fw/utility/utility.h **** \param pucSource1: first source of memory to compare\n
+ 141:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t* const
+ 142:common/prog/ped_fw/utility/utility.h **** 
+ 143:common/prog/ped_fw/utility/utility.h **** \param pucSource2: second source of memory to compare\n
+ 144:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t* const
+ 145:common/prog/ped_fw/utility/utility.h **** 
+ 146:common/prog/ped_fw/utility/utility.h **** \param uiLength: Number of bytes to compare\n
+ 147:common/prog/ped_fw/utility/utility.h **** \b type:  uint16_t\n
+ 148:common/prog/ped_fw/utility/utility.h **** \b range: 0..0xFFFF
+ 149:common/prog/ped_fw/utility/utility.h **** 
+ 150:common/prog/ped_fw/utility/utility.h **** \return result of comparison\n
+ 151:common/prog/ped_fw/utility/utility.h **** \b type: bool\n
+ 152:common/prog/ped_fw/utility/utility.h **** \b range: 0=not equal, all others = not equal
+ 153:common/prog/ped_fw/utility/utility.h **** 
+ 154:common/prog/ped_fw/utility/utility.h **** */
+ 155:common/prog/ped_fw/utility/utility.h **** extern bool UTI_bIsMemEqual(const uint8_t * const pucSource1, const uint8_t * const pucSource2, uin
+ 156:common/prog/ped_fw/utility/utility.h **** 
+ 157:common/prog/ped_fw/utility/utility.h **** 
+ 158:common/prog/ped_fw/utility/utility.h **** /**
+ 159:common/prog/ped_fw/utility/utility.h **** \brief Sets/resets one bit in an array of bits
+ 160:common/prog/ped_fw/utility/utility.h **** 
+ 161:common/prog/ped_fw/utility/utility.h **** This function supports bit-arrays up to 2048 bits (256Byte). Depend on bOnOff bit number uiBitId
+ 162:common/prog/ped_fw/utility/utility.h **** will be set/reset in array pucBitField.
+ 163:common/prog/ped_fw/utility/utility.h **** 
+ 164:common/prog/ped_fw/utility/utility.h **** \param pucBitField: pointer to the array of bits\n
+ 165:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t*
+ 166:common/prog/ped_fw/utility/utility.h **** 
+ 167:common/prog/ped_fw/utility/utility.h **** \param uiBitId: ID (position) of bit to be set/reset\n
+ 168:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t\n
+ 169:common/prog/ped_fw/utility/utility.h **** \b range: 0..2047 (0x0000..0x07FF)\n
+ 170:common/prog/ped_fw/utility/utility.h **** 
+ 171:common/prog/ped_fw/utility/utility.h **** \param bOnOff: specify weather set or reset the bit\n
+ 172:common/prog/ped_fw/utility/utility.h **** \b type: bool\n
+ 173:common/prog/ped_fw/utility/utility.h **** \b range: 0:reset, other: set\n
+ 174:common/prog/ped_fw/utility/utility.h **** 
+ 175:common/prog/ped_fw/utility/utility.h **** \return None
+ 176:common/prog/ped_fw/utility/utility.h **** 
+ 177:common/prog/ped_fw/utility/utility.h **** \sa UTI_bGetBit()
+ 178:common/prog/ped_fw/utility/utility.h **** */
+ 179:common/prog/ped_fw/utility/utility.h **** extern void UTI_vSetBit(uint8_t* pucBitField, uint16_t uiBitId, bool bOnOff);
+ 180:common/prog/ped_fw/utility/utility.h **** 
+ 181:common/prog/ped_fw/utility/utility.h **** 
+ 182:common/prog/ped_fw/utility/utility.h **** /**
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 9
+
+
+ 183:common/prog/ped_fw/utility/utility.h **** Tests the state of a bit in an bit array.
+ 184:common/prog/ped_fw/utility/utility.h **** 
+ 185:common/prog/ped_fw/utility/utility.h **** This function supports bit-arrays up to 2048 bits (256Byte).\n
+ 186:common/prog/ped_fw/utility/utility.h **** Returns the state of bit number uiBitId of bit-array pucBitField.
+ 187:common/prog/ped_fw/utility/utility.h **** 
+ 188:common/prog/ped_fw/utility/utility.h **** \param pucBitField: pointer to the array of bits\n
+ 189:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t*
+ 190:common/prog/ped_fw/utility/utility.h **** 
+ 191:common/prog/ped_fw/utility/utility.h **** \param uiBitId: ID (position) of bit to be set/reset\n
+ 192:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t\n
+ 193:common/prog/ped_fw/utility/utility.h **** \b range: 0..2047 (0x0000..0x07FF)\n
+ 194:common/prog/ped_fw/utility/utility.h **** 
+ 195:common/prog/ped_fw/utility/utility.h **** \return state of bit\n
+ 196:common/prog/ped_fw/utility/utility.h **** \b type: bool\n
+ 197:common/prog/ped_fw/utility/utility.h **** \b range: 0: bit cleared, other: bit set
+ 198:common/prog/ped_fw/utility/utility.h **** 
+ 199:common/prog/ped_fw/utility/utility.h **** \sa UTI_vSetBit()
+ 200:common/prog/ped_fw/utility/utility.h **** */
+ 201:common/prog/ped_fw/utility/utility.h **** extern bool UTI_bGetBit(const uint8_t* pucBitField, uint16_t uiBitId);
+ 202:common/prog/ped_fw/utility/utility.h **** 
+ 203:common/prog/ped_fw/utility/utility.h **** 
+ 204:common/prog/ped_fw/utility/utility.h **** /**
+ 205:common/prog/ped_fw/utility/utility.h **** Copies n-bits in an arrray of n-bit values.
+ 206:common/prog/ped_fw/utility/utility.h **** 
+ 207:common/prog/ped_fw/utility/utility.h **** In the parameter \<ucValue\> there are \<ucBitCount\> right orientated bits. These bits are copied 
+ 208:common/prog/ped_fw/utility/utility.h **** This function is used to save RAM by using all bits of a byte.\n 
+ 209:common/prog/ped_fw/utility/utility.h **** If you need e.g. to save 100 4-Bit values you can use one byte for each value. Using this kind of b
+ 210:common/prog/ped_fw/utility/utility.h **** 
+ 211:common/prog/ped_fw/utility/utility.h **** \param pucBitField: pointer to the array of ucValue-bits\n
+ 212:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t*
+ 213:common/prog/ped_fw/utility/utility.h **** 
+ 214:common/prog/ped_fw/utility/utility.h **** \param uiBitFieldId: Index (position) of bit field  to be set\n
+ 215:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t\n
+ 216:common/prog/ped_fw/utility/utility.h **** \b range: (0..2047)/ \<ucBitCount\> \n
+ 217:common/prog/ped_fw/utility/utility.h **** 
+ 218:common/prog/ped_fw/utility/utility.h **** \param ucBitCount: number of bits to be bundled in array
+ 219:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t
+ 220:common/prog/ped_fw/utility/utility.h **** \b range: [1..(8)], for 8 use normal  array (if known at compile time)!
+ 221:common/prog/ped_fw/utility/utility.h **** 
+ 222:common/prog/ped_fw/utility/utility.h **** \param ucValue: right orientated bitfield to be set in array
+ 223:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t
+ 224:common/prog/ped_fw/utility/utility.h **** \b range: [0.. 1<<\<ucBitCount\> -1]
+ 225:common/prog/ped_fw/utility/utility.h **** 
+ 226:common/prog/ped_fw/utility/utility.h **** 
+ 227:common/prog/ped_fw/utility/utility.h **** \note This function saves RAM but uses more ROM, so do not use this function to save just 2 bytes o
+ 228:common/prog/ped_fw/utility/utility.h **** \sa UTI_ucGetBitField(), UTI_bGetBit()
+ 229:common/prog/ped_fw/utility/utility.h **** */
+ 230:common/prog/ped_fw/utility/utility.h **** extern void UTI_vSetBitField(uint8_t* pucBitField, uint16_t uiBitFieldId,  uint8_t ucBitCount, uint
+ 231:common/prog/ped_fw/utility/utility.h **** 
+ 232:common/prog/ped_fw/utility/utility.h **** 
+ 233:common/prog/ped_fw/utility/utility.h **** /**
+ 234:common/prog/ped_fw/utility/utility.h **** Returns n-bits from an arrray of n-bit values.
+ 235:common/prog/ped_fw/utility/utility.h **** 
+ 236:common/prog/ped_fw/utility/utility.h **** This Function returns \<ucBitCount\> right orientated bits from an array of bitfields.
+ 237:common/prog/ped_fw/utility/utility.h **** It is used to save RAM by using all bits of a byte.\n
+ 238:common/prog/ped_fw/utility/utility.h **** If you need e.g. to save 100 4-Bit values you can use one byte for each value. Using this kind of b
+ 239:common/prog/ped_fw/utility/utility.h **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 10
+
+
+ 240:common/prog/ped_fw/utility/utility.h **** \param pucBitField: pointer to the array of ucValue-bits\n
+ 241:common/prog/ped_fw/utility/utility.h **** \b type: const uint8_t*
+ 242:common/prog/ped_fw/utility/utility.h **** 
+ 243:common/prog/ped_fw/utility/utility.h **** \param uiBitFieldId: Index (position) of bit field  to be read\n
+ 244:common/prog/ped_fw/utility/utility.h **** \b type: uint16_t\n
+ 245:common/prog/ped_fw/utility/utility.h **** \b range: (0..2047)/ucBitCount\n
+ 246:common/prog/ped_fw/utility/utility.h **** 
+ 247:common/prog/ped_fw/utility/utility.h **** \param ucBitCount: number of bits to be bundled in array\n
+ 248:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t\n
+ 249:common/prog/ped_fw/utility/utility.h **** \b range: [1..(8)], for 8 use normal  array (if known at compile time)!\n
+ 250:common/prog/ped_fw/utility/utility.h **** 
+ 251:common/prog/ped_fw/utility/utility.h **** \return right orientated bitfield from index position specified by  uiBitFieldId\n
+ 252:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t\n
+ 253:common/prog/ped_fw/utility/utility.h **** \b range: [0.. 1<<(ucBitCount) -1]
+ 254:common/prog/ped_fw/utility/utility.h **** 
+ 255:common/prog/ped_fw/utility/utility.h **** 
+ 256:common/prog/ped_fw/utility/utility.h **** \note This function saves RAM but uses more ROM, so do not use this function to save just 2 bytes o
+ 257:common/prog/ped_fw/utility/utility.h ****       For 1 bit width fields use function UTI_vSetBit()!
+ 258:common/prog/ped_fw/utility/utility.h **** \sa UTI_vSetBitField(), UTI_vSetBit()
+ 259:common/prog/ped_fw/utility/utility.h **** 
+ 260:common/prog/ped_fw/utility/utility.h **** */
+ 261:common/prog/ped_fw/utility/utility.h **** extern uint8_t UTI_ucGetBitField(const uint8_t* pucBitField, uint16_t uiBitFieldId, uint8_t ucBitCo
+ 262:common/prog/ped_fw/utility/utility.h **** 
+ 263:common/prog/ped_fw/utility/utility.h **** 
+ 264:common/prog/ped_fw/utility/utility.h **** /**
+ 265:common/prog/ped_fw/utility/utility.h **** This functions implements an 8 bit level shifter to left.
+ 266:common/prog/ped_fw/utility/utility.h **** 
+ 267:common/prog/ped_fw/utility/utility.h **** UTI_ucShiftLeft shifts the value \<ucValue\> ucShift times to left.
+ 268:common/prog/ped_fw/utility/utility.h **** For non HC08 controllers this is not more than a macro. For Metrowerks HC08 level shifting is optim
+ 269:common/prog/ped_fw/utility/utility.h **** When the parameter ucShift is a variable the codesize will be increase.\n
+ 270:common/prog/ped_fw/utility/utility.h **** Using this function/macro will force a function call instead inlining again and again.\n
+ 271:common/prog/ped_fw/utility/utility.h **** Use this macro/function, when parameter ucShift is not known at compile time, else use shift operat
+ 272:common/prog/ped_fw/utility/utility.h **** 
+ 273:common/prog/ped_fw/utility/utility.h **** \param ucValue: value to be shifted\n
+ 274:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t
+ 275:common/prog/ped_fw/utility/utility.h **** 
+ 276:common/prog/ped_fw/utility/utility.h **** \param ucShift: number of shift operations to left\n
+ 277:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t\n
+ 278:common/prog/ped_fw/utility/utility.h **** \b range: 0x00..0xFF (for more than 7, result is allways zero)
+ 279:common/prog/ped_fw/utility/utility.h **** 
+ 280:common/prog/ped_fw/utility/utility.h **** \sa UTI_ucShiftRight()
+ 281:common/prog/ped_fw/utility/utility.h **** */
+ 282:common/prog/ped_fw/utility/utility.h **** static inline uint8_t UTI_ucShiftLeft(uint8_t ucValue, uint8_t ucShift)
+ 283:common/prog/ped_fw/utility/utility.h **** {
+ 284:common/prog/ped_fw/utility/utility.h ****     return ((uint8_t)(ucValue<<ucShift));
+ 178              		.loc 2 284 30 is_stmt 0 view .LVU41
+ 179 0000 0723     		movs	r3, #7
+ 180              	.LBE19:
+ 181              	.LBE18:
+  80:common/prog/ped_fw/utility/utility.c ****    uint8_t ucByte;
+ 182              		.loc 1 80 1 view .LVU42
+ 183 0002 30B5     		push	{r4, r5, lr}
+ 184              	.LCFI1:
+ 185              		.cfi_def_cfa_offset 12
+ 186              		.cfi_offset 4, -12
+ 187              		.cfi_offset 5, -8
+ 188              		.cfi_offset 14, -4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 11
+
+
+  83:common/prog/ped_fw/utility/utility.c ****    pucBitField +=ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+ 189              		.loc 1 83 16 view .LVU43
+ 190 0004 CC08     		lsrs	r4, r1, #3
+ 191              		.loc 1 84 16 view .LVU44
+ 192 0006 E4B2     		uxtb	r4, r4
+ 193              	.LBB24:
+ 194              	.LBB20:
+ 195              		.loc 2 284 30 view .LVU45
+ 196 0008 1940     		ands	r1, r3
+ 197              	.LVL13:
+ 198              		.loc 2 284 30 view .LVU46
+ 199              	.LBE20:
+ 200              	.LBE24:
+ 201              		.loc 1 84 16 view .LVU47
+ 202 000a 0519     		adds	r5, r0, r4
+ 203              	.LVL14:
+  85:common/prog/ped_fw/utility/utility.c ****    ucBitMask = UTI_ucShiftLeft(1u, (uint8_t)(uiBitId % (uint16_t)8U));
+ 204              		.loc 1 85 4 is_stmt 1 view .LVU48
+ 205              	.LBB25:
+ 206              	.LBI18:
+ 282:common/prog/ped_fw/utility/utility.h **** {
+ 207              		.loc 2 282 23 view .LVU49
+ 208              	.LBB21:
+ 209              		.loc 2 284 5 view .LVU50
+ 210              		.loc 2 284 30 is_stmt 0 view .LVU51
+ 211 000c 063B     		subs	r3, r3, #6
+ 212              	.LBE21:
+ 213              	.LBE25:
+  86:common/prog/ped_fw/utility/utility.c ****    if (bOnOff)
+  87:common/prog/ped_fw/utility/utility.c ****    {
+  88:common/prog/ped_fw/utility/utility.c ****       *pucBitField |= ucBitMask;
+ 214              		.loc 1 88 20 view .LVU52
+ 215 000e 005D     		ldrb	r0, [r0, r4]
+ 216              	.LBB26:
+ 217              	.LBB22:
+ 218              		.loc 2 284 30 view .LVU53
+ 219 0010 8B40     		lsls	r3, r3, r1
+ 220              	.LBE22:
+ 221              	.LBE26:
+  89:common/prog/ped_fw/utility/utility.c ****    }
+  90:common/prog/ped_fw/utility/utility.c ****    else
+  91:common/prog/ped_fw/utility/utility.c ****    {
+  92:common/prog/ped_fw/utility/utility.c ****       *pucBitField &= (uint8_t)(~ucBitMask);
+ 222              		.loc 1 92 20 view .LVU54
+ 223 0012 0100     		movs	r1, r0
+ 224              	.LBB27:
+ 225              	.LBB23:
+ 226              		.loc 2 284 13 view .LVU55
+ 227 0014 DBB2     		uxtb	r3, r3
+ 228              	.LVL15:
+ 229              		.loc 2 284 13 view .LVU56
+ 230              	.LBE23:
+ 231              	.LBE27:
+  86:common/prog/ped_fw/utility/utility.c ****    if (bOnOff)
+ 232              		.loc 1 86 4 is_stmt 1 view .LVU57
+ 233              		.loc 1 92 20 is_stmt 0 view .LVU58
+ 234 0016 9943     		bics	r1, r3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 12
+
+
+  86:common/prog/ped_fw/utility/utility.c ****    if (bOnOff)
+ 235              		.loc 1 86 7 view .LVU59
+ 236 0018 002A     		cmp	r2, #0
+ 237 001a 01D0     		beq	.L14
+  88:common/prog/ped_fw/utility/utility.c ****    }
+ 238              		.loc 1 88 7 is_stmt 1 view .LVU60
+  88:common/prog/ped_fw/utility/utility.c ****    }
+ 239              		.loc 1 88 20 is_stmt 0 view .LVU61
+ 240 001c 0100     		movs	r1, r0
+ 241 001e 1943     		orrs	r1, r3
+ 242              	.L14:
+ 243 0020 2970     		strb	r1, [r5]
+  93:common/prog/ped_fw/utility/utility.c ****    }
+  94:common/prog/ped_fw/utility/utility.c **** }
+ 244              		.loc 1 94 1 view .LVU62
+ 245              		@ sp needed
+ 246              	.LVL16:
+ 247              		.loc 1 94 1 view .LVU63
+ 248 0022 30BD     		pop	{r4, r5, pc}
+ 249              		.cfi_endproc
+ 250              	.LFE5:
+ 252              		.section	.text.UTI_bGetBit,"ax",%progbits
+ 253              		.align	1
+ 254              		.global	UTI_bGetBit
+ 255              		.syntax unified
+ 256              		.code	16
+ 257              		.thumb_func
+ 259              	UTI_bGetBit:
+ 260              	.LVL17:
+ 261              	.LFB6:
+  95:common/prog/ped_fw/utility/utility.c **** 
+  96:common/prog/ped_fw/utility/utility.c **** 
+  97:common/prog/ped_fw/utility/utility.c **** bool UTI_bGetBit(const uint8_t* pucBitField, uint16_t uiBitId)
+  98:common/prog/ped_fw/utility/utility.c **** {
+ 262              		.loc 1 98 1 is_stmt 1 view -0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 266              		@ link register save eliminated.
+  99:common/prog/ped_fw/utility/utility.c ****    uint8_t ucByte;
+ 267              		.loc 1 99 4 view .LVU65
+ 100:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBit;
+ 268              		.loc 1 100 4 view .LVU66
+ 101:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBitMask;
+ 269              		.loc 1 101 4 view .LVU67
+ 102:common/prog/ped_fw/utility/utility.c ****    ucByte = (uint8_t)(uiBitId / (uint16_t)8U);
+ 270              		.loc 1 102 4 view .LVU68
+ 103:common/prog/ped_fw/utility/utility.c ****    ucBit  = (uint8_t)(uiBitId % (uint16_t)8U);
+ 271              		.loc 1 103 4 view .LVU69
+ 104:common/prog/ped_fw/utility/utility.c ****    pucBitField += ucByte; //lint !e9016  Pointer arithmetic MisraC2012 18.4 advisory
+ 272              		.loc 1 104 4 view .LVU70
+ 105:common/prog/ped_fw/utility/utility.c ****    ucBitMask = (uint8_t)(1U << ucBit);
+ 273              		.loc 1 105 4 view .LVU71
+ 106:common/prog/ped_fw/utility/utility.c ****    return ( ((*pucBitField & ucBitMask) == 0u) ? false : true );
+ 274              		.loc 1 106 4 view .LVU72
+ 105:common/prog/ped_fw/utility/utility.c ****    ucBitMask = (uint8_t)(1U << ucBit);
+ 275              		.loc 1 105 29 is_stmt 0 view .LVU73
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 13
+
+
+ 276 0000 0723     		movs	r3, #7
+ 107:common/prog/ped_fw/utility/utility.c **** }
+ 277              		.loc 1 107 1 view .LVU74
+ 278              		@ sp needed
+ 102:common/prog/ped_fw/utility/utility.c ****    ucBit  = (uint8_t)(uiBitId % (uint16_t)8U);
+ 279              		.loc 1 102 13 view .LVU75
+ 280 0002 CA08     		lsrs	r2, r1, #3
+ 105:common/prog/ped_fw/utility/utility.c ****    return ( ((*pucBitField & ucBitMask) == 0u) ? false : true );
+ 281              		.loc 1 105 29 view .LVU76
+ 282 0004 1940     		ands	r1, r3
+ 283              	.LVL18:
+ 105:common/prog/ped_fw/utility/utility.c ****    return ( ((*pucBitField & ucBitMask) == 0u) ? false : true );
+ 284              		.loc 1 105 29 view .LVU77
+ 285 0006 063B     		subs	r3, r3, #6
+ 286 0008 8B40     		lsls	r3, r3, r1
+ 104:common/prog/ped_fw/utility/utility.c ****    ucBitMask = (uint8_t)(1U << ucBit);
+ 287              		.loc 1 104 16 view .LVU78
+ 288 000a D2B2     		uxtb	r2, r2
+ 106:common/prog/ped_fw/utility/utility.c **** }
+ 289              		.loc 1 106 56 view .LVU79
+ 290 000c 825C     		ldrb	r2, [r0, r2]
+ 291 000e 1340     		ands	r3, r2
+ 292 0010 5A1E     		subs	r2, r3, #1
+ 293 0012 9341     		sbcs	r3, r3, r2
+ 294 0014 D8B2     		uxtb	r0, r3
+ 295              	.LVL19:
+ 296              		.loc 1 107 1 view .LVU80
+ 297 0016 7047     		bx	lr
+ 298              		.cfi_endproc
+ 299              	.LFE6:
+ 301              		.section	.text.UTI_vSetBitField,"ax",%progbits
+ 302              		.align	1
+ 303              		.global	UTI_vSetBitField
+ 304              		.syntax unified
+ 305              		.code	16
+ 306              		.thumb_func
+ 308              	UTI_vSetBitField:
+ 309              	.LVL20:
+ 310              	.LFB7:
+ 108:common/prog/ped_fw/utility/utility.c **** 
+ 109:common/prog/ped_fw/utility/utility.c **** 
+ 110:common/prog/ped_fw/utility/utility.c **** void UTI_vSetBitField(uint8_t* pucBitField, uint16_t uiBitFieldId, uint8_t ucBitCount, uint8_t ucVa
+ 111:common/prog/ped_fw/utility/utility.c **** {
+ 311              		.loc 1 111 1 is_stmt 1 view -0
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 0
+ 314              		@ frame_needed = 0, uses_anonymous_args = 0
+ 112:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBitPos;
+ 315              		.loc 1 112 4 view .LVU82
+ 113:common/prog/ped_fw/utility/utility.c ****    uint8_t* pucPtr;
+ 316              		.loc 1 113 4 view .LVU83
+ 114:common/prog/ped_fw/utility/utility.c ****    
+ 115:common/prog/ped_fw/utility/utility.c ****    ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+ 317              		.loc 1 115 4 view .LVU84
+ 111:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBitPos;
+ 318              		.loc 1 111 1 is_stmt 0 view .LVU85
+ 319 0000 70B5     		push	{r4, r5, r6, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 14
+
+
+ 320              	.LCFI2:
+ 321              		.cfi_def_cfa_offset 16
+ 322              		.cfi_offset 4, -16
+ 323              		.cfi_offset 5, -12
+ 324              		.cfi_offset 6, -8
+ 325              		.cfi_offset 14, -4
+ 116:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 117:common/prog/ped_fw/utility/utility.c ****    pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+ 118:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucByt
+ 326              		.loc 1 118 14 view .LVU86
+ 327 0002 0724     		movs	r4, #7
+ 119:common/prog/ped_fw/utility/utility.c ****    *pucPtr |=          UTI_ucShiftLeft( ucValue,ucBitPos);  //sets bits
+ 120:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+ 121:common/prog/ped_fw/utility/utility.c ****    pucPtr++;
+ 122:common/prog/ped_fw/utility/utility.c ****    *pucPtr |=          UTI_ucShiftRight( ucValue,(uint8_t)(8U-ucBitPos)); //sets bits
+ 123:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftRight((uint8_t)~ucValue,(uint8_t)(8U-ucBitPos)));//resets bits
+ 124:common/prog/ped_fw/utility/utility.c **** }
+ 328              		.loc 1 124 1 view .LVU87
+ 329              		@ sp needed
+ 115:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 330              		.loc 1 115 13 view .LVU88
+ 331 0004 5143     		muls	r1, r2
+ 332              	.LVL21:
+ 115:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 333              		.loc 1 115 13 view .LVU89
+ 334 0006 C9B2     		uxtb	r1, r1
+ 335              	.LVL22:
+ 117:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucByt
+ 336              		.loc 1 117 4 is_stmt 1 view .LVU90
+ 117:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucByt
+ 337              		.loc 1 117 27 is_stmt 0 view .LVU91
+ 338 0008 CA08     		lsrs	r2, r1, #3
+ 339              	.LVL23:
+ 118:common/prog/ped_fw/utility/utility.c ****    *pucPtr |=          UTI_ucShiftLeft( ucValue,ucBitPos);  //sets bits
+ 340              		.loc 1 118 14 view .LVU92
+ 341 000a 2140     		ands	r1, r4
+ 342              	.LVL24:
+ 120:common/prog/ped_fw/utility/utility.c ****    pucPtr++;
+ 343              		.loc 1 120 26 view .LVU93
+ 344 000c DC43     		mvns	r4, r3
+ 345              	.LBB28:
+ 346              	.LBB29:
+ 347              		.loc 2 284 30 view .LVU94
+ 348 000e 1E00     		movs	r6, r3
+ 349              	.LBE29:
+ 350              	.LBE28:
+ 351              	.LBB32:
+ 352              	.LBB33:
+ 353 0010 E4B2     		uxtb	r4, r4
+ 354              	.LBE33:
+ 355              	.LBE32:
+ 117:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                      //calculate start bit position in ucByt
+ 356              		.loc 1 117 11 view .LVU95
+ 357 0012 8518     		adds	r5, r0, r2
+ 358              	.LVL25:
+ 118:common/prog/ped_fw/utility/utility.c ****    *pucPtr |=          UTI_ucShiftLeft( ucValue,ucBitPos);  //sets bits
+ 359              		.loc 1 118 4 is_stmt 1 view .LVU96
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 15
+
+
+ 119:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+ 360              		.loc 1 119 4 view .LVU97
+ 361              	.LBB37:
+ 362              	.LBI28:
+ 282:common/prog/ped_fw/utility/utility.h **** {
+ 363              		.loc 2 282 23 view .LVU98
+ 364              	.LBB30:
+ 365              		.loc 2 284 5 view .LVU99
+ 366              		.loc 2 284 5 is_stmt 0 view .LVU100
+ 367              	.LBE30:
+ 368              	.LBE37:
+ 120:common/prog/ped_fw/utility/utility.c ****    pucPtr++;
+ 369              		.loc 1 120 4 is_stmt 1 view .LVU101
+ 370              	.LBB38:
+ 371              	.LBI32:
+ 282:common/prog/ped_fw/utility/utility.h **** {
+ 372              		.loc 2 282 23 view .LVU102
+ 373              	.LBB34:
+ 374              		.loc 2 284 5 view .LVU103
+ 375              		.loc 2 284 5 is_stmt 0 view .LVU104
+ 376              	.LBE34:
+ 377              	.LBE38:
+ 119:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+ 378              		.loc 1 119 12 view .LVU105
+ 379 0014 825C     		ldrb	r2, [r0, r2]
+ 380              	.LBB39:
+ 381              	.LBB35:
+ 382              		.loc 2 284 30 view .LVU106
+ 383 0016 2000     		movs	r0, r4
+ 384              	.LVL26:
+ 385              		.loc 2 284 30 view .LVU107
+ 386              	.LBE35:
+ 387              	.LBE39:
+ 388              	.LBB40:
+ 389              	.LBB31:
+ 390 0018 8E40     		lsls	r6, r6, r1
+ 391              	.LBE31:
+ 392              	.LBE40:
+ 393              	.LBB41:
+ 394              	.LBB36:
+ 395 001a 8840     		lsls	r0, r0, r1
+ 396              	.LBE36:
+ 397              	.LBE41:
+ 119:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftLeft((uint8_t)~ucValue, ucBitPos)); //resets bits
+ 398              		.loc 1 119 12 view .LVU108
+ 399 001c 3243     		orrs	r2, r6
+ 120:common/prog/ped_fw/utility/utility.c ****    pucPtr++;
+ 400              		.loc 1 120 12 view .LVU109
+ 401 001e 8243     		bics	r2, r0
+ 402 0020 2A70     		strb	r2, [r5]
+ 121:common/prog/ped_fw/utility/utility.c ****    *pucPtr |=          UTI_ucShiftRight( ucValue,(uint8_t)(8U-ucBitPos)); //sets bits
+ 403              		.loc 1 121 4 is_stmt 1 view .LVU110
+ 404              	.LVL27:
+ 122:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftRight((uint8_t)~ucValue,(uint8_t)(8U-ucBitPos)));//resets bits
+ 405              		.loc 1 122 4 view .LVU111
+ 406              	.LBB42:
+ 407              	.LBI42:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 16
+
+
+ 285:common/prog/ped_fw/utility/utility.h **** }
+ 286:common/prog/ped_fw/utility/utility.h **** 
+ 287:common/prog/ped_fw/utility/utility.h **** 
+ 288:common/prog/ped_fw/utility/utility.h **** /**
+ 289:common/prog/ped_fw/utility/utility.h **** This functions implements an 8 bit level shifter to right
+ 290:common/prog/ped_fw/utility/utility.h **** 
+ 291:common/prog/ped_fw/utility/utility.h **** UTI_ucShiftLeft shifts the value \<ucValue\> \<ucShift\>-times to right.
+ 292:common/prog/ped_fw/utility/utility.h **** For non HC08 controllers this is not more than a macro. For Metrowerks HC08 level shifting is optim
+ 293:common/prog/ped_fw/utility/utility.h **** When the parameter ucShift is a variable the codesize will be increase.\n
+ 294:common/prog/ped_fw/utility/utility.h **** Using this function/macro will force a function call instead inlining again and again.\n
+ 295:common/prog/ped_fw/utility/utility.h **** Use this macro/function, when parameter ucShift is not known at compile time, else use shift operat
+ 296:common/prog/ped_fw/utility/utility.h **** 
+ 297:common/prog/ped_fw/utility/utility.h **** \param ucValue: value to be shifted\n
+ 298:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t
+ 299:common/prog/ped_fw/utility/utility.h **** 
+ 300:common/prog/ped_fw/utility/utility.h **** \param ucShift: number of shift operations to right\n
+ 301:common/prog/ped_fw/utility/utility.h **** \b type: uint8_t\n
+ 302:common/prog/ped_fw/utility/utility.h **** \b range: 0x00..0xFF (for more than 7, result is allways zero)
+ 303:common/prog/ped_fw/utility/utility.h **** 
+ 304:common/prog/ped_fw/utility/utility.h **** \sa UTI_ucShiftLeft()
+ 305:common/prog/ped_fw/utility/utility.h **** */
+ 306:common/prog/ped_fw/utility/utility.h **** static inline uint8_t UTI_ucShiftRight(uint8_t ucValue, uint8_t ucShift)
+ 408              		.loc 2 306 23 view .LVU112
+ 409              	.LBB43:
+ 307:common/prog/ped_fw/utility/utility.h **** {
+ 308:common/prog/ped_fw/utility/utility.h ****     return ((uint8_t)(ucValue>>ucShift));
+ 410              		.loc 2 308 5 view .LVU113
+ 411              	.LBE43:
+ 412              	.LBE42:
+ 122:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftRight((uint8_t)~ucValue,(uint8_t)(8U-ucBitPos)));//resets bits
+ 413              		.loc 1 122 24 is_stmt 0 view .LVU114
+ 414 0022 0822     		movs	r2, #8
+ 415 0024 521A     		subs	r2, r2, r1
+ 416              	.LBB46:
+ 417              	.LBB44:
+ 418              		.loc 2 308 30 view .LVU115
+ 419 0026 D2B2     		uxtb	r2, r2
+ 420              	.LVL28:
+ 421              		.loc 2 308 30 view .LVU116
+ 422              	.LBE44:
+ 423              	.LBE46:
+ 123:common/prog/ped_fw/utility/utility.c **** }
+ 424              		.loc 1 123 4 is_stmt 1 view .LVU117
+ 425              	.LBB47:
+ 426              	.LBI47:
+ 306:common/prog/ped_fw/utility/utility.h **** {
+ 427              		.loc 2 306 23 view .LVU118
+ 428              	.LBB48:
+ 429              		.loc 2 308 5 view .LVU119
+ 430              		.loc 2 308 5 is_stmt 0 view .LVU120
+ 431              	.LBE48:
+ 432              	.LBE47:
+ 433              	.LBB50:
+ 434              	.LBB45:
+ 435              		.loc 2 308 30 view .LVU121
+ 436 0028 1341     		asrs	r3, r3, r2
+ 437              	.LVL29:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 17
+
+
+ 438              		.loc 2 308 30 view .LVU122
+ 439 002a 1900     		movs	r1, r3
+ 440              	.LVL30:
+ 441              		.loc 2 308 30 view .LVU123
+ 442              	.LBE45:
+ 443              	.LBE50:
+ 444              	.LBB51:
+ 445              	.LBB49:
+ 446 002c 1441     		asrs	r4, r4, r2
+ 447              	.LBE49:
+ 448              	.LBE51:
+ 122:common/prog/ped_fw/utility/utility.c ****    *pucPtr &= (uint8_t)(~UTI_ucShiftRight((uint8_t)~ucValue,(uint8_t)(8U-ucBitPos)));//resets bits
+ 449              		.loc 1 122 12 view .LVU124
+ 450 002e 6B78     		ldrb	r3, [r5, #1]
+ 451 0030 0B43     		orrs	r3, r1
+ 123:common/prog/ped_fw/utility/utility.c **** }
+ 452              		.loc 1 123 12 view .LVU125
+ 453 0032 A343     		bics	r3, r4
+ 454 0034 6B70     		strb	r3, [r5, #1]
+ 455              	.LVL31:
+ 456              		.loc 1 124 1 view .LVU126
+ 457 0036 70BD     		pop	{r4, r5, r6, pc}
+ 458              		.cfi_endproc
+ 459              	.LFE7:
+ 461              		.section	.text.UTI_ucGetBitField,"ax",%progbits
+ 462              		.align	1
+ 463              		.global	UTI_ucGetBitField
+ 464              		.syntax unified
+ 465              		.code	16
+ 466              		.thumb_func
+ 468              	UTI_ucGetBitField:
+ 469              	.LVL32:
+ 470              	.LFB8:
+ 125:common/prog/ped_fw/utility/utility.c **** 
+ 126:common/prog/ped_fw/utility/utility.c **** 
+ 127:common/prog/ped_fw/utility/utility.c **** uint8_t UTI_ucGetBitField(const uint8_t* pucBitField, uint16_t uiBitFieldId, uint8_t ucBitCount)
+ 128:common/prog/ped_fw/utility/utility.c **** {
+ 471              		.loc 1 128 1 is_stmt 1 view -0
+ 472              		.cfi_startproc
+ 473              		@ args = 0, pretend = 0, frame = 0
+ 474              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:common/prog/ped_fw/utility/utility.c ****    uint8_t ucData;
+ 475              		.loc 1 129 4 view .LVU128
+ 130:common/prog/ped_fw/utility/utility.c ****    uint8_t ucBitPos;
+ 476              		.loc 1 130 4 view .LVU129
+ 131:common/prog/ped_fw/utility/utility.c ****    const uint8_t* pucPtr;
+ 477              		.loc 1 131 4 view .LVU130
+ 132:common/prog/ped_fw/utility/utility.c ****    
+ 133:common/prog/ped_fw/utility/utility.c ****    ucBitPos = (uint8_t)(uiBitFieldId * ucBitCount); //calculate absolute bit position
+ 478              		.loc 1 133 4 view .LVU131
+ 134:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 135:common/prog/ped_fw/utility/utility.c ****    pucPtr = pucBitField + (uint8_t)(ucBitPos / (uint8_t)8U);  //calculate pointer in bitfield
+ 136:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucB
+ 479              		.loc 1 136 14 is_stmt 0 view .LVU132
+ 480 0000 0723     		movs	r3, #7
+ 133:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 481              		.loc 1 133 13 view .LVU133
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 18
+
+
+ 482 0002 5143     		muls	r1, r2
+ 483              	.LVL33:
+ 128:common/prog/ped_fw/utility/utility.c ****    uint8_t ucData;
+ 484              		.loc 1 128 1 view .LVU134
+ 485 0004 10B5     		push	{r4, lr}
+ 486              	.LCFI3:
+ 487              		.cfi_def_cfa_offset 8
+ 488              		.cfi_offset 4, -8
+ 489              		.cfi_offset 14, -4
+ 133:common/prog/ped_fw/utility/utility.c ****    //lint -e{9016}  Pointer arithmetic MisraC2012 18.4 advisory
+ 490              		.loc 1 133 13 view .LVU135
+ 491 0006 C9B2     		uxtb	r1, r1
+ 492              	.LVL34:
+ 135:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucB
+ 493              		.loc 1 135 4 is_stmt 1 view .LVU136
+ 135:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucB
+ 494              		.loc 1 135 27 is_stmt 0 view .LVU137
+ 495 0008 CC08     		lsrs	r4, r1, #3
+ 135:common/prog/ped_fw/utility/utility.c ****    ucBitPos  = ucBitPos % (uint8_t)8U;                        //calculate start bit position in ucB
+ 496              		.loc 1 135 11 view .LVU138
+ 497 000a 0419     		adds	r4, r0, r4
+ 498              	.LVL35:
+ 499              		.loc 1 136 4 is_stmt 1 view .LVU139
+ 500              		.loc 1 136 14 is_stmt 0 view .LVU140
+ 501 000c 1940     		ands	r1, r3
+ 502              	.LVL36:
+ 137:common/prog/ped_fw/utility/utility.c **** 
+ 138:common/prog/ped_fw/utility/utility.c **** 
+ 139:common/prog/ped_fw/utility/utility.c ****    ucData = UTI_ucShiftRight(*pucPtr,ucBitPos);
+ 503              		.loc 1 139 4 is_stmt 1 view .LVU141
+ 504              	.LBB52:
+ 505              	.LBI52:
+ 306:common/prog/ped_fw/utility/utility.h **** {
+ 506              		.loc 2 306 23 view .LVU142
+ 507              	.LBB53:
+ 508              		.loc 2 308 5 view .LVU143
+ 509              		.loc 2 308 5 is_stmt 0 view .LVU144
+ 510              	.LBE53:
+ 511              	.LBE52:
+ 140:common/prog/ped_fw/utility/utility.c **** 
+ 141:common/prog/ped_fw/utility/utility.c ****    pucPtr++;
+ 512              		.loc 1 141 4 is_stmt 1 view .LVU145
+ 142:common/prog/ped_fw/utility/utility.c **** 
+ 143:common/prog/ped_fw/utility/utility.c ****    ucData |=UTI_ucShiftLeft(*pucPtr,(uint8_t)(8U-ucBitPos));
+ 513              		.loc 1 143 4 view .LVU146
+ 514              	.LBB55:
+ 515              	.LBI55:
+ 282:common/prog/ped_fw/utility/utility.h **** {
+ 516              		.loc 2 282 23 view .LVU147
+ 517              	.LBB56:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 518              		.loc 2 284 5 view .LVU148
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 519              		.loc 2 284 5 is_stmt 0 view .LVU149
+ 520              	.LBE56:
+ 521              	.LBE55:
+ 522              		.loc 1 143 13 view .LVU150
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 19
+
+
+ 523 000e 0133     		adds	r3, r3, #1
+ 524              	.LBB59:
+ 525              	.LBB57:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 526              		.loc 2 284 30 view .LVU151
+ 527 0010 6078     		ldrb	r0, [r4, #1]
+ 528              	.LVL37:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 529              		.loc 2 284 30 view .LVU152
+ 530              	.LBE57:
+ 531              	.LBE59:
+ 532              		.loc 1 143 13 view .LVU153
+ 533 0012 5B1A     		subs	r3, r3, r1
+ 534              	.LBB60:
+ 535              	.LBB58:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 536              		.loc 2 284 30 view .LVU154
+ 537 0014 DBB2     		uxtb	r3, r3
+ 538 0016 9840     		lsls	r0, r0, r3
+ 539              	.LBE58:
+ 540              	.LBE60:
+ 144:common/prog/ped_fw/utility/utility.c ****    ucData &=(uint8_t)(~UTI_ucShiftLeft(0xFFU,ucBitCount));
+ 145:common/prog/ped_fw/utility/utility.c **** 
+ 146:common/prog/ped_fw/utility/utility.c ****    return ucData;
+ 147:common/prog/ped_fw/utility/utility.c **** }
+ 541              		.loc 1 147 1 view .LVU155
+ 542              		@ sp needed
+ 543              	.LBB61:
+ 544              	.LBB54:
+ 545              		.loc 2 308 30 view .LVU156
+ 546 0018 2378     		ldrb	r3, [r4]
+ 547 001a 0B41     		asrs	r3, r3, r1
+ 548              	.LBE54:
+ 549              	.LBE61:
+ 143:common/prog/ped_fw/utility/utility.c ****    ucData &=(uint8_t)(~UTI_ucShiftLeft(0xFFU,ucBitCount));
+ 550              		.loc 1 143 11 view .LVU157
+ 551 001c 1843     		orrs	r0, r3
+ 552              	.LBB62:
+ 553              	.LBB63:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 554              		.loc 2 284 30 view .LVU158
+ 555 001e FF23     		movs	r3, #255
+ 556 0020 9340     		lsls	r3, r3, r2
+ 557              	.LBE63:
+ 558              	.LBE62:
+ 143:common/prog/ped_fw/utility/utility.c ****    ucData &=(uint8_t)(~UTI_ucShiftLeft(0xFFU,ucBitCount));
+ 559              		.loc 1 143 11 view .LVU159
+ 560 0022 C0B2     		uxtb	r0, r0
+ 561              	.LVL38:
+ 144:common/prog/ped_fw/utility/utility.c ****    ucData &=(uint8_t)(~UTI_ucShiftLeft(0xFFU,ucBitCount));
+ 562              		.loc 1 144 4 is_stmt 1 view .LVU160
+ 563              	.LBB65:
+ 564              	.LBI62:
+ 282:common/prog/ped_fw/utility/utility.h **** {
+ 565              		.loc 2 282 23 view .LVU161
+ 566              	.LBB64:
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 20
+
+
+ 567              		.loc 2 284 5 view .LVU162
+ 284:common/prog/ped_fw/utility/utility.h **** }
+ 568              		.loc 2 284 5 is_stmt 0 view .LVU163
+ 569              	.LBE64:
+ 570              	.LBE65:
+ 146:common/prog/ped_fw/utility/utility.c **** }
+ 571              		.loc 1 146 4 is_stmt 1 view .LVU164
+ 146:common/prog/ped_fw/utility/utility.c **** }
+ 572              		.loc 1 146 11 is_stmt 0 view .LVU165
+ 573 0024 9843     		bics	r0, r3
+ 574              	.LVL39:
+ 575              	.LVL40:
+ 576              		.loc 1 147 1 view .LVU166
+ 577 0026 10BD     		pop	{r4, pc}
+ 578              		.cfi_endproc
+ 579              	.LFE8:
+ 581              		.global	__aeabi_uidiv
+ 582              		.global	__aeabi_idiv
+ 583              		.section	.text.UTI_vIIRFilter,"ax",%progbits
+ 584              		.align	1
+ 585              		.global	UTI_vIIRFilter
+ 586              		.syntax unified
+ 587              		.code	16
+ 588              		.thumb_func
+ 590              	UTI_vIIRFilter:
+ 591              	.LVL41:
+ 592              	.LFB9:
+ 148:common/prog/ped_fw/utility/utility.c **** 
+ 149:common/prog/ped_fw/utility/utility.c **** 
+ 150:common/prog/ped_fw/utility/utility.c **** void UTI_vIIRFilter(uint16_t *puiAccu, uint8_t ucValue, uint8_t ucDampPlus, uint8_t ucDampMinus)
+ 151:common/prog/ped_fw/utility/utility.c **** {
+ 593              		.loc 1 151 1 is_stmt 1 view -0
+ 594              		.cfi_startproc
+ 595              		@ args = 0, pretend = 0, frame = 0
+ 596              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152:common/prog/ped_fw/utility/utility.c ****    uint16_t uiAccu = *puiAccu;
+ 597              		.loc 1 152 4 view .LVU168
+ 151:common/prog/ped_fw/utility/utility.c ****    uint16_t uiAccu = *puiAccu;
+ 598              		.loc 1 151 1 is_stmt 0 view .LVU169
+ 599 0000 70B5     		push	{r4, r5, r6, lr}
+ 600              	.LCFI4:
+ 601              		.cfi_def_cfa_offset 16
+ 602              		.cfi_offset 4, -16
+ 603              		.cfi_offset 5, -12
+ 604              		.cfi_offset 6, -8
+ 605              		.cfi_offset 14, -4
+ 151:common/prog/ped_fw/utility/utility.c ****    uint16_t uiAccu = *puiAccu;
+ 606              		.loc 1 151 1 view .LVU170
+ 607 0002 0600     		movs	r6, r0
+ 608 0004 0800     		movs	r0, r1
+ 609              	.LVL42:
+ 610              		.loc 1 152 13 view .LVU171
+ 611 0006 3588     		ldrh	r5, [r6]
+ 612              	.LVL43:
+ 153:common/prog/ped_fw/utility/utility.c **** 
+ 154:common/prog/ped_fw/utility/utility.c ****    uint16_t uiValue=(uint16_t)(ucValue) << 8U;
+ 613              		.loc 1 154 4 is_stmt 1 view .LVU172
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 21
+
+
+ 151:common/prog/ped_fw/utility/utility.c ****    uint16_t uiAccu = *puiAccu;
+ 614              		.loc 1 151 1 is_stmt 0 view .LVU173
+ 615 0008 1100     		movs	r1, r2
+ 616              	.LVL44:
+ 617              		.loc 1 154 13 view .LVU174
+ 618 000a 0002     		lsls	r0, r0, #8
+ 619              	.LVL45:
+ 155:common/prog/ped_fw/utility/utility.c ****    if ( uiValue >= uiAccu )
+ 620              		.loc 1 155 4 is_stmt 1 view .LVU175
+ 621              		.loc 1 155 7 is_stmt 0 view .LVU176
+ 622 000c 8542     		cmp	r5, r0
+ 623 000e 09D8     		bhi	.L19
+ 156:common/prog/ped_fw/utility/utility.c ****    {
+ 157:common/prog/ped_fw/utility/utility.c ****       if (ucDampPlus != 0U)
+ 624              		.loc 1 157 7 is_stmt 1 view .LVU177
+ 625              		.loc 1 157 10 is_stmt 0 view .LVU178
+ 626 0010 002A     		cmp	r2, #0
+ 627 0012 05D0     		beq	.L20
+ 158:common/prog/ped_fw/utility/utility.c ****       {
+ 159:common/prog/ped_fw/utility/utility.c ****          uiAccu += (uint16_t)(uiValue-uiAccu) / ucDampPlus;
+ 628              		.loc 1 159 10 is_stmt 1 view .LVU179
+ 629              		.loc 1 159 20 is_stmt 0 view .LVU180
+ 630 0014 401B     		subs	r0, r0, r5
+ 631              	.LVL46:
+ 632              		.loc 1 159 20 view .LVU181
+ 633 0016 80B2     		uxth	r0, r0
+ 634              		.loc 1 159 47 view .LVU182
+ 635 0018 FFF7FEFF 		bl	__aeabi_idiv
+ 636              	.LVL47:
+ 637              		.loc 1 159 17 view .LVU183
+ 638 001c 4519     		adds	r5, r0, r5
+ 639              	.LVL48:
+ 640              	.L27:
+ 160:common/prog/ped_fw/utility/utility.c ****       }
+ 161:common/prog/ped_fw/utility/utility.c ****    }
+ 162:common/prog/ped_fw/utility/utility.c ****    else
+ 163:common/prog/ped_fw/utility/utility.c ****    {
+ 164:common/prog/ped_fw/utility/utility.c ****       if (ucDampMinus != 0U)
+ 165:common/prog/ped_fw/utility/utility.c ****       {
+ 166:common/prog/ped_fw/utility/utility.c ****          uiAccu -= (uint16_t)(uiAccu - uiValue) / ucDampMinus;
+ 641              		.loc 1 166 17 view .LVU184
+ 642 001e ADB2     		uxth	r5, r5
+ 643              	.LVL49:
+ 644              	.L20:
+ 167:common/prog/ped_fw/utility/utility.c ****       }
+ 168:common/prog/ped_fw/utility/utility.c ****    }
+ 169:common/prog/ped_fw/utility/utility.c ****    *puiAccu = uiAccu;
+ 645              		.loc 1 169 4 is_stmt 1 view .LVU185
+ 646              		.loc 1 169 13 is_stmt 0 view .LVU186
+ 647 0020 3580     		strh	r5, [r6]
+ 170:common/prog/ped_fw/utility/utility.c **** }
+ 648              		.loc 1 170 1 view .LVU187
+ 649              		@ sp needed
+ 650              	.LVL50:
+ 651              	.LVL51:
+ 652              		.loc 1 170 1 view .LVU188
+ 653 0022 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 22
+
+
+ 654              	.LVL52:
+ 655              	.L19:
+ 164:common/prog/ped_fw/utility/utility.c ****       {
+ 656              		.loc 1 164 7 is_stmt 1 view .LVU189
+ 164:common/prog/ped_fw/utility/utility.c ****       {
+ 657              		.loc 1 164 10 is_stmt 0 view .LVU190
+ 658 0024 002B     		cmp	r3, #0
+ 659 0026 FBD0     		beq	.L20
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 660              		.loc 1 166 10 is_stmt 1 view .LVU191
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 661              		.loc 1 166 20 is_stmt 0 view .LVU192
+ 662 0028 281A     		subs	r0, r5, r0
+ 663              	.LVL53:
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 664              		.loc 1 166 49 view .LVU193
+ 665 002a 1900     		movs	r1, r3
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 666              		.loc 1 166 20 view .LVU194
+ 667 002c 80B2     		uxth	r0, r0
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 668              		.loc 1 166 49 view .LVU195
+ 669 002e FFF7FEFF 		bl	__aeabi_idiv
+ 670              	.LVL54:
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 671              		.loc 1 166 17 view .LVU196
+ 672 0032 2D1A     		subs	r5, r5, r0
+ 673              	.LVL55:
+ 166:common/prog/ped_fw/utility/utility.c ****       }
+ 674              		.loc 1 166 17 view .LVU197
+ 675 0034 F3E7     		b	.L27
+ 676              		.cfi_endproc
+ 677              	.LFE9:
+ 679              		.section	.text.UTI_vIIRFilter16Bit,"ax",%progbits
+ 680              		.align	1
+ 681              		.global	UTI_vIIRFilter16Bit
+ 682              		.syntax unified
+ 683              		.code	16
+ 684              		.thumb_func
+ 686              	UTI_vIIRFilter16Bit:
+ 687              	.LVL56:
+ 688              	.LFB10:
+ 171:common/prog/ped_fw/utility/utility.c **** 
+ 172:common/prog/ped_fw/utility/utility.c **** void UTI_vIIRFilter16Bit(uint32_t *pulAccu, uint16_t uiValue, uint8_t ucDampPlus, uint8_t ucDampMin
+ 173:common/prog/ped_fw/utility/utility.c **** {
+ 689              		.loc 1 173 1 is_stmt 1 view -0
+ 690              		.cfi_startproc
+ 691              		@ args = 0, pretend = 0, frame = 0
+ 692              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174:common/prog/ped_fw/utility/utility.c ****   uint32_t accu;
+ 693              		.loc 1 174 3 view .LVU199
+ 175:common/prog/ped_fw/utility/utility.c ****   uint32_t value;
+ 694              		.loc 1 175 3 view .LVU200
+ 176:common/prog/ped_fw/utility/utility.c **** 
+ 177:common/prog/ped_fw/utility/utility.c ****   accu = *pulAccu;
+ 695              		.loc 1 177 3 view .LVU201
+ 173:common/prog/ped_fw/utility/utility.c ****   uint32_t accu;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 23
+
+
+ 696              		.loc 1 173 1 is_stmt 0 view .LVU202
+ 697 0000 70B5     		push	{r4, r5, r6, lr}
+ 698              	.LCFI5:
+ 699              		.cfi_def_cfa_offset 16
+ 700              		.cfi_offset 4, -16
+ 701              		.cfi_offset 5, -12
+ 702              		.cfi_offset 6, -8
+ 703              		.cfi_offset 14, -4
+ 173:common/prog/ped_fw/utility/utility.c ****   uint32_t accu;
+ 704              		.loc 1 173 1 view .LVU203
+ 705 0002 0600     		movs	r6, r0
+ 706 0004 0800     		movs	r0, r1
+ 707              	.LVL57:
+ 708              		.loc 1 177 8 view .LVU204
+ 709 0006 3568     		ldr	r5, [r6]
+ 710              	.LVL58:
+ 178:common/prog/ped_fw/utility/utility.c ****   value = (uint32_t)(uiValue) << (uint32_t)16U;
+ 711              		.loc 1 178 3 is_stmt 1 view .LVU205
+ 173:common/prog/ped_fw/utility/utility.c ****   uint32_t accu;
+ 712              		.loc 1 173 1 is_stmt 0 view .LVU206
+ 713 0008 1100     		movs	r1, r2
+ 714              	.LVL59:
+ 715              		.loc 1 178 9 view .LVU207
+ 716 000a 0004     		lsls	r0, r0, #16
+ 717              	.LVL60:
+ 179:common/prog/ped_fw/utility/utility.c **** 
+ 180:common/prog/ped_fw/utility/utility.c ****   if ( value >= accu )
+ 718              		.loc 1 180 3 is_stmt 1 view .LVU208
+ 719              		.loc 1 180 6 is_stmt 0 view .LVU209
+ 720 000c 8542     		cmp	r5, r0
+ 721 000e 07D8     		bhi	.L29
+ 181:common/prog/ped_fw/utility/utility.c ****   {
+ 182:common/prog/ped_fw/utility/utility.c ****     if (ucDampPlus != 0U)
+ 722              		.loc 1 182 5 is_stmt 1 view .LVU210
+ 723              		.loc 1 182 8 is_stmt 0 view .LVU211
+ 724 0010 002A     		cmp	r2, #0
+ 725 0012 03D0     		beq	.L30
+ 183:common/prog/ped_fw/utility/utility.c ****     {
+ 184:common/prog/ped_fw/utility/utility.c ****       accu += (value - accu) / ucDampPlus;
+ 726              		.loc 1 184 7 is_stmt 1 view .LVU212
+ 727              		.loc 1 184 22 is_stmt 0 view .LVU213
+ 728 0014 401B     		subs	r0, r0, r5
+ 729              	.LVL61:
+ 730              		.loc 1 184 30 view .LVU214
+ 731 0016 FFF7FEFF 		bl	__aeabi_uidiv
+ 732              	.LVL62:
+ 733              		.loc 1 184 12 view .LVU215
+ 734 001a 2D18     		adds	r5, r5, r0
+ 735              	.LVL63:
+ 736              	.L30:
+ 185:common/prog/ped_fw/utility/utility.c ****     }
+ 186:common/prog/ped_fw/utility/utility.c ****   }
+ 187:common/prog/ped_fw/utility/utility.c ****   else
+ 188:common/prog/ped_fw/utility/utility.c ****   {
+ 189:common/prog/ped_fw/utility/utility.c ****     if (ucDampMinus != 0U)
+ 190:common/prog/ped_fw/utility/utility.c ****     {
+ 191:common/prog/ped_fw/utility/utility.c ****       accu -= (accu - value) / ucDampMinus;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccb69Ehh.s 			page 24
+
+
+ 192:common/prog/ped_fw/utility/utility.c ****     }
+ 193:common/prog/ped_fw/utility/utility.c ****   }
+ 194:common/prog/ped_fw/utility/utility.c ****   *pulAccu = accu;
+ 737              		.loc 1 194 3 is_stmt 1 view .LVU216
+ 738              		.loc 1 194 12 is_stmt 0 view .LVU217
+ 739 001c 3560     		str	r5, [r6]
+ 195:common/prog/ped_fw/utility/utility.c **** }
+ 740              		.loc 1 195 1 view .LVU218
+ 741              		@ sp needed
+ 742              	.LVL64:
+ 743              	.LVL65:
+ 744              		.loc 1 195 1 view .LVU219
+ 745 001e 70BD     		pop	{r4, r5, r6, pc}
+ 746              	.LVL66:
+ 747              	.L29:
+ 189:common/prog/ped_fw/utility/utility.c ****     {
+ 748              		.loc 1 189 5 is_stmt 1 view .LVU220
+ 189:common/prog/ped_fw/utility/utility.c ****     {
+ 749              		.loc 1 189 8 is_stmt 0 view .LVU221
+ 750 0020 002B     		cmp	r3, #0
+ 751 0022 FBD0     		beq	.L30
+ 191:common/prog/ped_fw/utility/utility.c ****     }
+ 752              		.loc 1 191 7 is_stmt 1 view .LVU222
+ 191:common/prog/ped_fw/utility/utility.c ****     }
+ 753              		.loc 1 191 21 is_stmt 0 view .LVU223
+ 754 0024 281A     		subs	r0, r5, r0
+ 755              	.LVL67:
+ 191:common/prog/ped_fw/utility/utility.c ****     }
+ 756              		.loc 1 191 30 view .LVU224
+ 757 0026 1900     		movs	r1, r3
+ 758 0028 FFF7FEFF 		bl	__aeabi_uidiv
+ 759              	.LVL68:
+ 191:common/prog/ped_fw/utility/utility.c ****     }
+ 760              		.loc 1 191 12 view .LVU225
+ 761 002c 2D1A     		subs	r5, r5, r0
+ 762              	.LVL69:
+ 191:common/prog/ped_fw/utility/utility.c ****     }
+ 763              		.loc 1 191 12 view .LVU226
+ 764 002e F5E7     		b	.L30
+ 765              		.cfi_endproc
+ 766              	.LFE10:
+ 768              		.text
+ 769              	.Letext0:
+ 770              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 771              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi

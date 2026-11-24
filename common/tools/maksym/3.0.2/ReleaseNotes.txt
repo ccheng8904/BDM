@@ -1,0 +1,300 @@
+        ------------------------
+        Release Notes for Maksym
+        ------------------------
+		
+v3.0.2 - 29. oct 2021
+---------------------
+   * Fixed extraction of data member location (DW_FORM_exprloc).
+
+v3.0.1 - 16. feb 2021
+---------------------
+   * Fixed the data type extraction for the -TENG option (searching in the .debug_types section).
+		
+v3.0.0 - 25. jan 2021
+---------------------
+   * Added the .debug_types section processing in DWARF Debugging Format (for each type defined in a compilation unit, a contribution may be made to a type unit).
+   * Removed the XCOFF Debugging Format processing (xcoff_iar_mid8c4d and xcoff_iar_mid996f).
+		
+v2.58 - 16. nov 2020
+--------------------
+   * Fixed the difference between symbol address in the symbol table and debug section (name mangling) for Keil ARM Complier (armcc).
+		
+v2.57 - 31. aug 2020
+--------------------
+   * Added the list of sections into a metric output.
+ 
+v2.56 - 11. feb 2020
+--------------------
+   * Fixed parsing the last structure member in a compilation unit.
+   
+v2.55 - 11. dec 2019
+--------------------
+   * Fixed missing some symbols for armclamg -lto. The missing address is taken from the symbol table.
+   
+v2.54 - 5. sep 2019
+-------------------
+   * Fixed the GetDwarfBaseType() function in dump_elf.c (the type reference can be specified in DW_AT_specification or DW_AT_abstract_origin).		
+		
+v2.53 - 10. jul 2019
+--------------------
+   * Fixed parsing structure members in dwarf_keil_mid0028.dll (ARM Compiler 6.12 Tool: armclang).		
+
+v2.52 - 7. mar 2019
+-------------------
+   * Fixed problem with the compilation unit path, e.g. ../../folder1/../../folder2/file1.h.		
+
+v2.51 - 9. jan 2019
+-------------------
+   * Updated address calculation of class members in a derived class (_vptr).
+   * Added artificial formal parameters to a function signature (a compiler adds a reference to the object for which the function is called as an artificial formal parameter for non-static member functions).
+		
+v2.50 - 5. dec 2018
+-------------------
+   * Fixed calculation of addresses of class members in a derived class. The virtual table pointer was not counted (_vptr).
+   * Fixed signature version 2008 for pointer to array.
+   * Changed the separator '_' to '-' in the 2016 signature data type for -TENG=Register (Sy2 format).
+   * Removed Access column and basic data type info from Sy2 format.
+
+v2.49 - 18. jul 2018
+--------------------
+   * Fixed the termination of reading of members in an abstract data type for some specific cases.
+   * Fixed the abstract data type size in its definition for the signature version 2016 (byte size -> bit size).
+   * Added the new additional option "-SIGNVER 2008F" to generate the "F" signature for the float data type ("D", "LD" for double, long double). Now there are "-SIGNVER {2008|2016|2008F}".
+
+v2.48 - 18. jun 2018
+--------------------
+   * Added a new command line option -SWREV.
+   * Added the sh_offset member to the _CommonSection structure.
+   * Fixed a value of the is_const attribute for -PSYD option.
+     The typedef_type element is not generated and his child element didn't copy the value of the is_const attribute.
+
+v2.47 - 31. aug 2017
+--------------------
+   * Fixed the signature for typedef void MyType. The previous assumption was wrong.
+   * If a type specifier in not specified in a typedef the default type is int. The DW_TAG_typedef is without DW_AT_type for typedef void MyType.
+
+v2.46 - 28. aug 2017
+--------------------
+   * Fixed the processing a typedef without a type specifier. E.g. typedef MyType;
+
+v2.45 - 25. jul 2017
+--------------------
+   * Fixed the signature for the char data type. Used DW_ATE_unsigned_char info if the char data type is default unsigned.
+
+v2.44 - 10. jul 2017
+--------------------
+   * Added the _Bool built-in data type into the dwarf_gnu_mid0003.dll.
+   * Added option "-TREE" to generate the tree strucure of debug information entries. 
+   * Fixed generation of the tree structure of debug information entries.
+
+v2.44 Beta 1 - 20. mar 2017
+---------------------------
+   * Fixed generating class members (functions, data) if a null entry (A chain of sibling entries is terminated by a null entry.) is used instead of a sibling reference.
+     E.g. IAR C/C++ Compiler for RL78
+   
+v2.43 - 2. mar 2017
+-------------------
+   * Added the new additional option "-SIGNVER {2008|2016}" to generate a new signature of symbols. 
+     E.g. maksym -TENG=Register file.elf -SIGNVER 2016 >file.syr
+   * Updated the name of an anonymous structure/union by a typedef name. E.g. typedef struct { ... } TypeName;
+   * Fixed the number of registered variables for option "-TENG=Register".   
+   
+v2.43 Beta 5 - 8. feb 2017
+--------------------------
+   * Updated the generation PSYD. Added data types to structure/union members. Typedefs are ignored.
+   
+v2.43 Beta 4 - 1. feb 2017
+--------------------------
+   * Removed forgotted "BREAK".
+
+v2.43 Beta 3 - 31. jan 2017
+---------------------------
+   * Fixed the generation METRIC=XML. The replacement special characters '<', '>', '&' by predefined entities '&lt;', '&gt;', '&amp;' for functions. It was only for variables.
+   
+v2.43 Beta 2 - 3. nov 2016
+--------------------------
+   * Fixed generation of signatures (pointer to void, pointer to volatile void, void was not in DWARF).
+   
+v2.43 Beta 1 - 12. oct 2016
+---------------------------
+   * Added the new format of signature (signature_2016) to PSYD. Old atribute "signature" was renamed to "signature_2008".
+   * Added option -OFFSET <value> to add positive value to or subtract negative value from all absolute addresses.
+   * Added the wchar_t type.
+   * Fixed the generation of symbols with zero address. Symbols which are not in the symbol table are not generated.
+   * Fixed the data accessibility (Access in TENG=Register format file).
+   * Fixed signature of DW_TAG_enumeration_type (signed, unsigned).
+   
+v2.42 - 14. jun 2016
+--------------------
+   * Fixed the termination an inheritance entry which is derived from itself. (iar rx)
+   * Fixed the generation class members. The members which have set the flag declaration are not generated. (iar rx)  
+   
+v2.41 - 15. may 2016
+--------------------
+   * Fixed the termination embeded structure types comparing sibling references (sibling reference to NULL Debug Information Entry).
+   
+v2.41 Beta 2 - 10. feb 2016
+---------------------------
+   * Added the processing DW_AT_containing_type to generate the class members.
+   
+v2.41 Beta 1 - 22. jan 2016
+---------------------------
+   * Fixed the generation the members of the anonymous structures. The member identifier (Object0x??) generated by the Maksym is omitted.
+   
+v2.40 - 11. dec 2015
+--------------------
+   * Changed the extracting symbols:
+     - Symbols with zero address are extracted by default.
+     - Unnamed symbols (e.g. anonymous structure, enumaration) are not extracted.
+   * Added the processing DW_TAG_class_type, DW_TAG_inheritance. 
+     - Generation static member variables and member functions, pattern <Class>_<Member>. 
+     - Instance members (also inherited members) are displayed the same way as DW_TAG_structure_type.
+     - Overloaded functions are distinguished by adding a list of parameter types as suffic to the name.
+   * Added the processing DW_AT_specification and DW_AT_abstract_origin.   
+  
+v2.39 - 11. nov 2015
+--------------------
+   * Fixed the generation METRIC=XML. The ELF segments used to calculate memory usage.
+   * Fixed the filtering already generated functions for dwarf_keil_mid0028.dll. The member orig_location was added.
+   * Fixed the parsing of DW_AT_high_pc. The value of the attribute may be address or constant.
+   * Renamed library dwarf_codewarrior_mid004.dll to dwarf_freescale_mid0004.dll and updated tengsio.ini.   
+   
+v2.38 - 23. sep 2015
+--------------------
+   * Fixed the TEng signature. Data type "unsigned char" was mapped to "B" instead of "UC" for some platforms.
+   
+v2.37 - 16. sep 2015
+--------------------
+   * Added the processing DWARF Debugging Format version 4.0.
+   * Fixed the creating an abbreviation table. The size of the table was fixed to 256 rows. Now the size is reallocated as needed.
+   
+v2.36 - 28. july 2015
+---------------------
+   * Fixed the signature for the negative enumerator values. It was always unsigned signature "U".
+   * Added the extension SIGN for option -PSYD to add signature attribute to output. Example: -PSYD=SIGN.  
+   
+v2.35 - 14. july 2015
+---------------------
+   * Fixed the bitmask value in the bit field members for option -PSYD. The negative value was present.
+   
+v2.34 - 04. may 2015
+--------------------
+   * Fixed the replacing special characters in the symbol name for -METRIC=XML output. For anonymous function the ICCRL8 generates "<Unnamed 0>".   
+   
+v2.33 - 27. apr 2015
+--------------------
+   * Fixed the referencing of entries for DW_FORM_ref_addr in DW_AT_specification (only DWARF_DREF_DIIDX).   
+   
+v2.32 - 13. apr 2015
+-----
+   * Fixed the resolving location (offset) of the members of a symbol. Added DW_FORM_data1, DW_FORM_data2, DW_FORM_data4 attribute encoding to DW_TAG_member processing.
+   * Fixed the bitmask computing. The signature is obtained from DW_AT_byte_size (not DW_AT_type) and location is DW_AT_data_member_location.
+   * Fixed the generation symbols from the same compilation unit to the separated unit blocks.
+   * Updated the checking DWARF version of compilation units. Not supported are skipped. Only warning, not error.
+   * Updated PSYD format.
+   * Renamed library dwarf_realview_mid0028.dll to dwarf_keil_mid0028.dll and updated tengsio.ini.
+   
+v2.31 - 4. mar 2015
+-----
+   * Added option -PSYD (generate Project Symbol Description).   
+   
+v2.30 - 5. dec 2014
+-----
+   * Fixed the processing structure and union type with specified sibling DIE in dwarf_iar_mid00ad.dll.
+   
+v2.29 - 6. oct 2014
+-----
+   * Fixed the processing structure and union type with specified sibling DIE in dwarf_iar_mid0003.dll.
+   
+v2.28 - 5. sep 2014
+-----
+   * Added the processing symbol names with wildcard characters specified in the white list or black list in a control file. 
+   
+v2.27 - 12. mar 2014
+-----
+   * Fixed the checking compliant DWARF version. Maksym crashed for unsupported DWARF version.
+   
+v2.26 - 20. jan 2014
+-----   
+   * Fixed the processing symbols with address zero. The symbols with address zero are searched in symbol table of object file, not only in debug information section.
+
+v2.25 - 18. dec 2013
+-----
+   * Fixed the processing symbols with DW_AT_specification attribute.
+   * Fixed the calculation the dimension of a multidimensional array (module FlatTypeResolver, function GetSubrangeSize()).
+   
+v2.24 - 18. oct 2012
+-----
+   * Updated dump_elf.dll. Fixed the processing undefined attribute. (15. may 2013)
+   * Fixed the bug in function FilterRedefinedSymbols in UtilityFunctions.c. The plus one char is needed for size definition of symbol name to remove (malloc). (3.10.2012)
+   * Release build with option compiler option Optimization Maximize Speed (/O2).
+   
+v2.23 - 7. may 2012
+-----
+   * Updated dwarf_iar_mid1c20.dll. Fixed circle reference by set onlyTypeMembers to 1. (12. july 2012)
+   * Updated dwarf_keil_mid00a5.dll. 
+     The 8051 has Harvard architecture. KEIL C51 linker uses the highest two bytes to specify memory type (program or data).
+	 The bytes are different for elf and map file. Map file is winner.
+   * Updated dwarf reader architecture. Common functions was moved from dwarf specific c-files to UtilityFunctions.c file
+     (removed repetition of source code).
+   * Fixed the referencing of entries. Attribute for endocing DW_FORM_ref_addr has just one meaning. Reference to entry in the same or a different compilation unit (DWARF_DREF_DIIDX).
+   * Fixed the size of structure members if they doesn't contain DW_AT_byte_size attribute.	 
+
+v2.22 - 6. dec 2011
+-----
+   * Fixed the generation METRIC=XML. The replacement special characters '<', '>', '&' by predefined entities '&lt;', '&gt;', '&amp;'.
+   * Added dwarf reader for IAR linker and RL78 microcontroller dwarf_iar_mid00c5.dll. (13. march 2012)
+   * Added dwarf reader for KEIL and PSoC3, library dwarf_keil_mid00a5.dll. (13. may 2012)
+   * Updated dump_elf.dll. Added the processing DW_AT_specification.
+   
+v2.21 - 9. nov 2011
+-----
+   * Fixed the assignment the symbols to ROM area (missing debug information, that is const).
+   * The list of modules is not ignored for option -SYC.
+   
+v2.20 - 08. aug 2011
+-----
+   * Symbols, which have type pointer to structure/union, are not extracted. Value of pointer is unknown 
+     and addresses of members are determined by using offset. Therefore the addresses of members will be incorrect.
+
+v2.19 - 30. jun 2011
+-----
+   * Fixed the displaying enum value for STM32 Keil compiler. (-TENG, dump_elf.dll)
+   
+v2.18 - 13. jun 2011
+-----
+   * Fixed the displaying the compilation units. Only compilation units with symbols are displayed (-TENG).
+   * Fixed the renaming variables of abstract type. Only variable name to rename not members.
+
+V2.17 - 7. jun 2011
+-----
+   * Added the new option -METRIC=XML. (07. mar 2011)
+     For correct distinguishing the source files to generic, system or application is important file path.
+     1. For generic the file path must start R:\SW_lib\sw\Release
+     2. For application the important is folder where is source file with main function
+     3. For system all files which do not meet the first two rules   
+   * Added dwarf 3.0 tags and attributes. (12. apr 2011)
+   * Fixed the displaying type members for all compilers. Function PrintTypeMembers in UtilityFunction.c. (2. may 2011)
+   * Added the displaying type members for option -TENG. (1. june 2011)
+   * Fixed the displaying unnamed struct/union for option -TENG. The name is composed of the word "Object" and its position index in the object file. (6. june 2011)
+
+V2.16 - 31. jan 2011
+-----
+   * Added the new option to import symbols from other symbol file (-I).
+   * Added the new option to handle symbols according to white, black, check, rename and replace symbol list (-CF).
+   * Added the support for Atmel AVR 8-bit platform (dwarf_gnu_mid0053.dll).
+   * Added the support for Renesas Rx platform (dwarf_iar_mid00ad.dll).
+   * Added the support for Renesas 78K0 platform (xcoff_iar_mid8c4d.dll).
+   * Fixed. Variable with signed type was used insted of unsigned type to store reference address to sibling symbol.
+
+V2.15 - 21. sep 2010
+-----
+   * Fixed the pointer sizes for STM32 microcontroller, ARM KEIL compiler.
+
+V2.14 - 08. jun 2010
+-----
+   * Fixed even addresses of functions to odd addresses if such are in the symbol table (STM32 microcontroller, ARM KEIL compiler). 
+
+V2.13 - 27. may 2010
+-----
+   * Changed generated subroutines according to calling conventions for metrowerks_mid_0047.

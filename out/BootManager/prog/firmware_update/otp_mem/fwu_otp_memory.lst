@@ -1,0 +1,164 @@
+
+out/BootManager/prog/firmware_update/otp_mem/fwu_otp_memory.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.OTP_writeProductionTime:
+
+00000000 <OTP_writeProductionTime>:
+/*lint -save -e928 cast from pointer to pointer */
+#ifdef FWU_OTP_MEMORY_START_ADDRESS
+bool OTP_writeProductionTime(const struct DBPL_ProductionTime* const productionTime)
+{
+    return OTP_writeFlash(OTP_Data.productionTime.raw_data, sizeof(struct DBPL_ProductionTime), (const uint8_t*)productionTime);
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.OTP_writeTracingID:
+
+00000000 <OTP_writeTracingID>:
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.OTP_writeHardwareVersion:
+
+00000000 <OTP_writeHardwareVersion>:
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.OTP_getProductionTime:
+
+00000000 <OTP_getProductionTime>:
+
+
+const struct DBPL_ProductionTime* OTP_getProductionTime(void)
+{
+  #ifdef FWU_OTP_MEMORY_START_ADDRESS
+    return &OTP_Data.productionTime.value;
+   0:	4800      	ldr	r0, [pc, #0]	; (4 <OTP_getProductionTime+0x4>)
+  #else
+    return NULL;
+  #endif
+}
+   2:	4770      	bx	lr
+   4:	00000000 	.word	0x00000000
+
+Disassembly of section .text.OTP_getTracingID:
+
+00000000 <OTP_getTracingID>:
+
+
+const struct DBPL_TracingId* OTP_getTracingID(void)
+{
+  #ifdef FWU_OTP_MEMORY_START_ADDRESS
+    return &OTP_Data.tracingID.value;
+   0:	4800      	ldr	r0, [pc, #0]	; (4 <OTP_getTracingID+0x4>)
+  #else
+    return NULL;
+  #endif
+}
+   2:	4770      	bx	lr
+   4:	0000000c 	.word	0x0000000c
+
+Disassembly of section .text.OTP_getHardwareVersion:
+
+00000000 <OTP_getHardwareVersion>:
+
+
+const struct FWU_hw_version_s* OTP_getHardwareVersion(void)
+{
+  #ifdef FWU_OTP_MEMORY_START_ADDRESS
+    return &OTP_Data.hardwareVersion.value;
+   0:	4800      	ldr	r0, [pc, #0]	; (4 <OTP_getHardwareVersion+0x4>)
+  #else
+    return NULL;
+  #endif
+}
+   2:	4770      	bx	lr
+   4:	0000002c 	.word	0x0000002c
+
+Disassembly of section .text.OTP_writeFirmwareIDs:
+
+00000000 <OTP_writeFirmwareIDs>:
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.OTP_initializeFirmwareIDArray:
+
+00000000 <OTP_initializeFirmwareIDArray>:
+    return OTP_writeFlash(OTP_Data.fwIdArray.raw_data, (sizeof(struct MAL_fw_id_array)), (const uint8_t*)firmwareIDs);
+}
+
+
+void OTP_initializeFirmwareIDArray(struct MAL_fw_id_array* const firmwareIDArray)
+{
+   0:	b510      	push	{r4, lr}
+    //memset((void*)firmwareIDArray, OTP_UNFLASHED_BYTE, sizeof(struct MAL_fw_id_array));
+    UTI_vMemFill((uint8_t *)firmwareIDArray, OTP_UNFLASHED_BYTE, (uint16_t)sizeof(struct MAL_fw_id_array));
+   2:	2268      	movs	r2, #104	; 0x68
+   4:	2100      	movs	r1, #0
+   6:	f7ff fffe 	bl	0 <UTI_vMemFill>
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.OTP_isEmpty:
+
+00000000 <OTP_isEmpty>:
+    (void)size;
+    return false;
+}
+#else
+{
+    for(uint32_t n = 0; n < size; n++)
+   0:	1841      	adds	r1, r0, r1
+   2:	4288      	cmp	r0, r1
+   4:	d101      	bne.n	a <OTP_isEmpty+0xa>
+        {
+            return false;
+        }
+    }
+    
+    return true;
+   6:	2001      	movs	r0, #1
+}
+   8:	4770      	bx	lr
+        if(addr[n] != OTP_UNFLASHED_BYTE)
+   a:	3001      	adds	r0, #1
+   c:	1e43      	subs	r3, r0, #1
+   e:	781b      	ldrb	r3, [r3, #0]
+  10:	2b00      	cmp	r3, #0
+  12:	d0f6      	beq.n	2 <OTP_isEmpty+0x2>
+            return false;
+  14:	2000      	movs	r0, #0
+  16:	e7f7      	b.n	8 <OTP_isEmpty+0x8>
+
+Disassembly of section .text.OTP_getFirmwareIDs:
+
+00000000 <OTP_getFirmwareIDs>:
+{
+   0:	b510      	push	{r4, lr}
+    return OTP_isEmpty(OTP_Data.fwIdArray.raw_data, sizeof(OTP_id_array_t)) ? NULL : &(OTP_Data.fwIdArray.value);
+   2:	4c05      	ldr	r4, [pc, #20]	; (18 <OTP_getFirmwareIDs+0x18>)
+   4:	2168      	movs	r1, #104	; 0x68
+   6:	0020      	movs	r0, r4
+   8:	f7ff fffe 	bl	0 <OTP_getFirmwareIDs>
+   c:	4243      	negs	r3, r0
+   e:	4158      	adcs	r0, r3
+  10:	4240      	negs	r0, r0
+  12:	4020      	ands	r0, r4
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000044 	.word	0x00000044
+
+Disassembly of section .text.OTP_writeFlash:
+
+00000000 <OTP_writeFlash>:
+{
+    (void)*addr;
+    (void)size;
+    (void)*data;
+    return false;
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr

@@ -1,0 +1,150 @@
+; Maksym 3.0.2 - Symbol Extraction from ELF/DWARF Executables (Fri Oct 29 10:41:50 2021)
+; (c) 2021 B/S/H/
+
+
+; Loaded DWARF Library: E:\project\example\MD370R\common\tools\maksym\3.0.2\dwarf_keil_mid0028.dll
+; Origin:               E:\project\example\MD370R\out\lromLoader\bin\lromLoader.elf
+; Created at:           Wed Nov 18 17:06:03 2026
+; Encoding little_endian
+
+BEGIN
+
+
+MDHD_ModuleHeader F00
+MDHD_ModuleHeader_crc_expected F00
+MDHD_ModuleHeader_ISRtbl_ptr F04
+MDHD_ModuleHeader_size F08
+MDHD_ModuleHeader_executionAddress F0C
+MDHD_ModuleHeader_sw_version F10
+MDHD_ModuleHeader_sw_version_version F10
+MDHD_ModuleHeader_sw_version_version_ID F10
+MDHD_ModuleHeader_sw_version_version_major F18
+MDHD_ModuleHeader_sw_version_version_minor F1A
+MDHD_ModuleHeader_sw_version_version_revision F1C
+MDHD_ModuleHeader_sw_version_version_build F1E
+MDHD_ModuleHeader_reserved F22
+MDHD_ModuleHeader_hw_id_array F24
+TIM_uiGetCircleMicroSeconds F81
+_TIM_bGetInitConfig F39
+INT_StackFrame 20000000
+HardFault_Handler F8D
+MDIOA15_MUART0_TX 183C
+MDIOA15_MUART0_TX_port 183C
+MDIOA15_MUART0_TX_pin 1840
+MDIOA15_MUART0_TX_scfg 1841
+MDIOA15_MUART0_TX_scfg_altFunc 1841
+MDIOA15_MUART0_TX_scfg_speed 1842
+MDIOB0_MUART0_RX 1844
+MDIOB0_MUART0_RX_port 1844
+MDIOB0_MUART0_RX_pin 1848
+MDIOB0_MUART0_RX_scfg 1849
+MDIOB0_MUART0_RX_scfg_altFunc 1849
+MDIOB0_MUART0_RX_scfg_speed 184A
+MUART0_RX_PB0_TX_PA15 184C
+MUART0_RX_PB0_TX_PA15_muart 184C
+MUART0_RX_PB0_TX_PA15_rxPin 1850
+MUART0_RX_PB0_TX_PA15_txPin 1854
+MDIO_configureOutputState FBB
+MDIO_init FA3
+MDIOA 1858
+MDIOA_GPIOx 1858
+MDIOA_portIndex 185C
+MDIOB 1860
+MDIOB_GPIOx 1860
+MDIOB_portIndex 1864
+MDIO_resetPort 10FD
+MDIO_setPort 10F7
+MDIO_configure 10AD
+MDIO_configureSpeed 104F
+MDIO_configureMode 102F
+MDIO_configurePullType 100F
+MDIO_configureOutputType FDD
+MDIO_enablePort FD7
+MDIO_getPort FD9
+MDIO_configureAlternateFunction 1075
+MUART_configurePins 1124
+MUART_isEvent 1105
+MUART0 1868
+MUART0_USARTx 1868
+MUART0_index 186C
+MUART0_IRQn 186D
+MUART0_clockCfg 1870
+MUART0_clockCfg_RcuEnr 1870
+MUART0_clockCfg_RcuEnr_regPtr 1870
+MUART0_clockCfg_RcuEnr_bitFieldMask 1874
+MUART_getChannelError 12BF
+MUART_getStatusRegMaskForEvent 12A5
+MUART_readDataReg 1293
+MUART_writeDataReg 128B
+MUART_disableChannel 125D
+MUART_enableChannel 124D
+MUART_configureBaudrate 1271
+MUART_configure 121D
+MUART_enableClock 11FD
+MUART_configurePeriphBaudrate 11C1
+MUART_configurePeriphParity 1199
+MUART_configurePeriphStopBits 1181
+MUART_configurePeriphDataBits 1155
+MUART_getStatusReg 129D
+MWDT_initConfigStruct 12E9
+MWDT_trigger 12E1
+MWDT_LocalMwdtCfg 20000004
+MWDT_initConfigStructMWDT 131D
+mwdtCfg 1878
+mwdtCfg_mode 1878
+mwdtCfg_upperTimeLimit 187A
+mwdtCfg_lowerTimeLimit 187C
+mwdtCfg_debugConfig 187E
+MWDT_triggerWDT 12F1
+MSUP_generateReset 132D
+ITBL_fixedVectors 0
+ITBL_coreVectors F28
+ITBL_vResetHandler 1349
+RCC_APB0PeriphClockOnOff 135D
+TIM_OnOff 13CD
+TIM_INTConfig 13B9
+TIM_Init 138D
+TIM_StructInit 1381
+Main 13E1
+BLMLP_msgBuffer 20000008
+BLMLP_handleMessageLoop 13ED
+BLSRV_idString 18B0
+BLSRV_cmdServiceTbl 1880
+BLSRV_cmdServiceTbl_cmd 1880
+BLSRV_cmdServiceTbl_service 1884
+BLSRV_pageAddress 2000000C
+BLSRV_storeData 14A5
+BLSRV_jumpLoader 1455
+BLSRV_selfIdent 148D
+BLSRV_setBaudRate 1471
+BLSRV_invalidCommand 1435
+BLSRV_setPage 1441
+BLSRV_doCommandService 14D9
+BLSRV_init 14D5
+BLCOM_rxErrorFlag 20000012
+BLCOM_firstFrameReceived 2000000F
+BLCOM_checksum 2000000E
+BLCOM_timer 20000016
+BLCOM_reloadTime 20000010
+BLCOM_timeStamp 20000014
+MuartHandleConfig 18D0
+MuartHandleConfig_dataBits 18D0
+MuartHandleConfig_parity 18D1
+MuartHandleConfig_stopBits 18D2
+MuartHandleConfig_baudrate 18D4
+BLCOM_receiveData 1515
+BLCOM_init 16E5
+BLCOM_setBaudrate 16D1
+BLCOM_sendAck 16BD
+BLCOM_sendBuffer 167D
+BLCOM_sendByte 1629
+BLCOM_receiveFrame 1559
+
+END
+
+
+IntegerSize			4
+LongDoubleSize		8
+FarPointerSize		4
+NearPointerSize		4
+GenericPointerSize	4

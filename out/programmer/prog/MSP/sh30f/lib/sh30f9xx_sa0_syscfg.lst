@@ -1,0 +1,489 @@
+
+out/programmer/prog/MSP/sh30f/lib/sh30f9xx_sa0_syscfg.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.SYSCFG_BODInit:
+
+00000000 <SYSCFG_BODInit>:
+  * @param  SYSCFG_BOD_Level: Specifie the BOD voltage threshold.
+  *          This parameter can be a value of @ref SYSCFGBODLevel_Type.
+  * @retval None
+  */
+void SYSCFG_BODInit(SYSCFGBODMode_Type SYSCFG_BOD_Mode, SYSCFGBODLevel_Type SYSCFG_BOD_Level)
+{
+   0:	b510      	push	{r4, lr}
+
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_BOD_MODE(SYSCFG_BOD_Mode));
+    assert_param(IS_SYSCFG_BOD_LEVEL(SYSCFG_BOD_Level));
+
+    SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_BODMD_Msk | SYSCFG_PWRCR_VBOD_Msk);
+   2:	246f      	movs	r4, #111	; 0x6f
+   4:	4b04      	ldr	r3, [pc, #16]	; (18 <SYSCFG_BODInit+0x18>)
+
+    temp = ((uint32_t)SYSCFG_BOD_Mode << 5) | (uint32_t)SYSCFG_BOD_Level;
+   6:	0140      	lsls	r0, r0, #5
+    SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_BODMD_Msk | SYSCFG_PWRCR_VBOD_Msk);
+   8:	681a      	ldr	r2, [r3, #0]
+   a:	43a2      	bics	r2, r4
+   c:	601a      	str	r2, [r3, #0]
+    SYSCFG->PWRCR.V32 |= temp;
+   e:	681a      	ldr	r2, [r3, #0]
+  10:	4311      	orrs	r1, r2
+  12:	4308      	orrs	r0, r1
+  14:	6018      	str	r0, [r3, #0]
+}
+  16:	bd10      	pop	{r4, pc}
+  18:	40040400 	.word	0x40040400
+
+Disassembly of section .text.SYSCFG_BODINTConfig:
+
+00000000 <SYSCFG_BODINTConfig>:
+void SYSCFG_BODINTConfig(FunctionalState NewState)
+{
+    /* Check the parameters */
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	4b05      	ldr	r3, [pc, #20]	; (18 <SYSCFG_BODINTConfig+0x18>)
+   2:	2280      	movs	r2, #128	; 0x80
+    {
+        SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_BODIE_Msk;
+   4:	6819      	ldr	r1, [r3, #0]
+    if (NewState != SH_DISABLE)
+   6:	2800      	cmp	r0, #0
+   8:	d002      	beq.n	10 <SYSCFG_BODINTConfig+0x10>
+        SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_BODIE_Msk;
+   a:	430a      	orrs	r2, r1
+   c:	601a      	str	r2, [r3, #0]
+    }
+    else
+    {
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODIE_Msk;
+    }
+}
+   e:	4770      	bx	lr
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODIE_Msk;
+  10:	4391      	bics	r1, r2
+  12:	6019      	str	r1, [r3, #0]
+}
+  14:	e7fb      	b.n	e <SYSCFG_BODINTConfig+0xe>
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	40040400 	.word	0x40040400
+
+Disassembly of section .text.SYSCFG_VLVRInit:
+
+00000000 <SYSCFG_VLVRInit>:
+{
+    uint32_t temp = 0;
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_VLVR_LEVEL(SYSCFG_VLVR_Level));
+
+    SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_VLVR_Msk);
+   0:	4b04      	ldr	r3, [pc, #16]	; (14 <SYSCFG_VLVRInit+0x14>)
+   2:	4905      	ldr	r1, [pc, #20]	; (18 <SYSCFG_VLVRInit+0x18>)
+   4:	681a      	ldr	r2, [r3, #0]
+
+    temp = ((uint32_t)SYSCFG_VLVR_Level << 9);
+   6:	0240      	lsls	r0, r0, #9
+    SYSCFG->PWRCR.V32 &= ~(SYSCFG_PWRCR_VLVR_Msk);
+   8:	400a      	ands	r2, r1
+   a:	601a      	str	r2, [r3, #0]
+    SYSCFG->PWRCR.V32 |= temp;
+   c:	681a      	ldr	r2, [r3, #0]
+   e:	4310      	orrs	r0, r2
+  10:	6018      	str	r0, [r3, #0]
+}
+  12:	4770      	bx	lr
+  14:	40040400 	.word	0x40040400
+  18:	fffff9ff 	.word	0xfffff9ff
+
+Disassembly of section .text.SYSCFG_VLVRConfig:
+
+00000000 <SYSCFG_VLVRConfig>:
+void SYSCFG_VLVRConfig(FunctionalState NewState)
+{
+    /* Check the parameters */
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	4b06      	ldr	r3, [pc, #24]	; (1c <SYSCFG_VLVRConfig+0x1c>)
+   2:	2800      	cmp	r0, #0
+   4:	d005      	beq.n	12 <SYSCFG_VLVRConfig+0x12>
+    {
+        SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_LVREN_Msk;
+   6:	2280      	movs	r2, #128	; 0x80
+   8:	6819      	ldr	r1, [r3, #0]
+   a:	0112      	lsls	r2, r2, #4
+   c:	430a      	orrs	r2, r1
+    }
+    else
+    {
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_LVREN_Msk;
+   e:	601a      	str	r2, [r3, #0]
+    }
+}
+  10:	4770      	bx	lr
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_LVREN_Msk;
+  12:	681a      	ldr	r2, [r3, #0]
+  14:	4902      	ldr	r1, [pc, #8]	; (20 <SYSCFG_VLVRConfig+0x20>)
+  16:	400a      	ands	r2, r1
+  18:	e7f9      	b.n	e <SYSCFG_VLVRConfig+0xe>
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	40040400 	.word	0x40040400
+  20:	fffff7ff 	.word	0xfffff7ff
+
+Disassembly of section .text.SYSCFG_BODOnOff:
+
+00000000 <SYSCFG_BODOnOff>:
+void SYSCFG_BODOnOff(CmdState OnOffState)
+{
+    /* Check the parameters */
+    assert_param(IS_CMD_STATE(OnOffState));
+
+    if (OnOffState != SH_OFF)
+   0:	4b06      	ldr	r3, [pc, #24]	; (1c <SYSCFG_BODOnOff+0x1c>)
+   2:	2800      	cmp	r0, #0
+   4:	d005      	beq.n	12 <SYSCFG_BODOnOff+0x12>
+    {
+        SYSCFG->PWRCR.V32 |= SYSCFG_PWRCR_BODEN_Msk;
+   6:	2280      	movs	r2, #128	; 0x80
+   8:	6819      	ldr	r1, [r3, #0]
+   a:	0052      	lsls	r2, r2, #1
+   c:	430a      	orrs	r2, r1
+    }
+    else
+    {
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODEN_Msk;
+   e:	601a      	str	r2, [r3, #0]
+    }
+}
+  10:	4770      	bx	lr
+        SYSCFG->PWRCR.V32 &= ~SYSCFG_PWRCR_BODEN_Msk;
+  12:	681a      	ldr	r2, [r3, #0]
+  14:	4902      	ldr	r1, [pc, #8]	; (20 <SYSCFG_BODOnOff+0x20>)
+  16:	400a      	ands	r2, r1
+  18:	e7f9      	b.n	e <SYSCFG_BODOnOff+0xe>
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	40040400 	.word	0x40040400
+  20:	fffffeff 	.word	0xfffffeff
+
+Disassembly of section .text.SYSCFG_BODGetFlagStatus:
+
+00000000 <SYSCFG_BODGetFlagStatus>:
+    FlagStatus bitStatus;
+
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_BOD_FLAG(BOD_Flag));
+
+    if ((SYSCFG->PWRSR.V32 & BOD_Flag) != SH_RESET)
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <SYSCFG_BODGetFlagStatus+0x10>)
+   2:	685b      	ldr	r3, [r3, #4]
+   4:	4003      	ands	r3, r0
+   6:	1e5a      	subs	r2, r3, #1
+   8:	4193      	sbcs	r3, r2
+    else
+    {
+        bitStatus = SH_RESET;
+    }
+
+    return bitStatus;
+   a:	b2d8      	uxtb	r0, r3
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	40040400 	.word	0x40040400
+
+Disassembly of section .text.SYSCFG_BODIntClearFlag:
+
+00000000 <SYSCFG_BODIntClearFlag>:
+  * @retval None
+  */
+void SYSCFG_BODIntClearFlag(void)
+{
+    /* Clear BODIF bit */
+    SYSCFG->PWRSR.V32 &= ~SYSCFG_PWRSR_BODIF_Msk;
+   0:	2101      	movs	r1, #1
+   2:	4a02      	ldr	r2, [pc, #8]	; (c <SYSCFG_BODIntClearFlag+0xc>)
+   4:	6853      	ldr	r3, [r2, #4]
+   6:	438b      	bics	r3, r1
+   8:	6053      	str	r3, [r2, #4]
+}
+   a:	4770      	bx	lr
+   c:	40040400 	.word	0x40040400
+
+Disassembly of section .text.SYSCFG_EnterSLEEPMode:
+
+00000000 <SYSCFG_EnterSLEEPMode>:
+{
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_SLEEP_ENTRY(SYSCFG_SLEEPEntry));
+
+    /* Select SLEEP mode entry */
+    if (SYSCFG_SLEEPEntry == SYSCFG_SLEEPEntry_WFI)
+   0:	2800      	cmp	r0, #0
+   2:	d101      	bne.n	8 <SYSCFG_EnterSLEEPMode+0x8>
+    {
+        /* Request Wait For Interrupt */
+        __WFI();
+   4:	bf30      	wfi
+        /* Request Wait For Event */
+        __SEV();
+        __WFE();
+        __WFE();
+    }
+}
+   6:	4770      	bx	lr
+        __SEV();
+   8:	bf40      	sev
+        __WFE();
+   a:	bf20      	wfe
+        __WFE();
+   c:	bf20      	wfe
+}
+   e:	e7fa      	b.n	6 <SYSCFG_EnterSLEEPMode+0x6>
+
+Disassembly of section .text.SYSCFG_EnterSTOPMode:
+
+00000000 <SYSCFG_EnterSTOPMode>:
+{
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_SLOP_ENTRY(SYSCFG_STOPEntry));
+
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+   0:	2204      	movs	r2, #4
+   2:	4b08      	ldr	r3, [pc, #32]	; (24 <SYSCFG_EnterSTOPMode+0x24>)
+   4:	6919      	ldr	r1, [r3, #16]
+   6:	430a      	orrs	r2, r1
+   8:	611a      	str	r2, [r3, #16]
+
+    /* Select STOP mode entry */
+    if (SYSCFG_STOPEntry == SYSCFG_STOPEntry_WFI)
+   a:	2800      	cmp	r0, #0
+   c:	d105      	bne.n	1a <SYSCFG_EnterSTOPMode+0x1a>
+    {
+        /* Request Wait For Interrupt */
+        __WFI();
+   e:	bf30      	wfi
+        __SEV();
+        __WFE();		
+        __WFE();
+    }
+    /* Reset SLEEPDEEP bit of Cortex System Control Register */
+    SCB->SCR &= (uint32_t) ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);
+  10:	2104      	movs	r1, #4
+  12:	691a      	ldr	r2, [r3, #16]
+  14:	438a      	bics	r2, r1
+  16:	611a      	str	r2, [r3, #16]
+}
+  18:	4770      	bx	lr
+        __SEV();
+  1a:	bf40      	sev
+        __WFE();		
+  1c:	bf20      	wfe
+        __WFE();
+  1e:	bf20      	wfe
+  20:	e7f6      	b.n	10 <SYSCFG_EnterSTOPMode+0x10>
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	e000ed00 	.word	0xe000ed00
+
+Disassembly of section .text.SYSCFG_NMIInterruptTriggerConfig:
+
+00000000 <SYSCFG_NMIInterruptTriggerConfig>:
+  *            @arg SH_ENABLE
+  *            @arg SH_DISABLE
+  * @retval None
+  */
+void SYSCFG_NMIInterruptTriggerConfig(uint16_t TriggerSource, FunctionalState NewState)
+{
+   0:	b510      	push	{r4, lr}
+
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_NMI_TRIGGER_SOURCE(TriggerSource));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    temp = SYSCFG->SAFR.V32 & (uint32_t)0x0000FFFF;
+   2:	4c06      	ldr	r4, [pc, #24]	; (1c <SYSCFG_NMIInterruptTriggerConfig+0x1c>)
+   4:	4b06      	ldr	r3, [pc, #24]	; (20 <SYSCFG_NMIInterruptTriggerConfig+0x20>)
+   6:	68a2      	ldr	r2, [r4, #8]
+   8:	b292      	uxth	r2, r2
+
+    if (NewState != SH_DISABLE)
+   a:	2900      	cmp	r1, #0
+   c:	d003      	beq.n	16 <SYSCFG_NMIInterruptTriggerConfig+0x16>
+    {
+        temp |= ((uint32_t)0x5AA5 << 16) | TriggerSource;
+   e:	4310      	orrs	r0, r2
+  10:	4303      	orrs	r3, r0
+    }
+    else
+    {
+        temp &= ~TriggerSource;
+        temp |= ((uint32_t)0x5AA5 << 16);
+        SYSCFG->SAFR.V32 = temp;
+  12:	60a3      	str	r3, [r4, #8]
+    }
+}
+  14:	bd10      	pop	{r4, pc}
+        temp &= ~TriggerSource;
+  16:	4382      	bics	r2, r0
+        temp |= ((uint32_t)0x5AA5 << 16);
+  18:	4313      	orrs	r3, r2
+  1a:	e7fa      	b.n	12 <SYSCFG_NMIInterruptTriggerConfig+0x12>
+  1c:	40040400 	.word	0x40040400
+  20:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.SYSCFG_SWJPinConfig:
+
+00000000 <SYSCFG_SWJPinConfig>:
+    uint32_t temp = 0;
+
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_SWJ_PIN_MODE(SWJPin_Mode));
+
+    temp = SYSCFG->SAFR.V32 & (~SYSCFG_SAFR_SWJCFG_Msk);
+   0:	2120      	movs	r1, #32
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <SYSCFG_SWJPinConfig+0x14>)
+
+    temp |= (uint32_t)(SWJPin_Mode << 5);
+   4:	0140      	lsls	r0, r0, #5
+    temp = SYSCFG->SAFR.V32 & (~SYSCFG_SAFR_SWJCFG_Msk);
+   6:	6893      	ldr	r3, [r2, #8]
+   8:	438b      	bics	r3, r1
+    temp |= (uint32_t)(SWJPin_Mode << 5);
+   a:	4318      	orrs	r0, r3
+    SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+   c:	4b02      	ldr	r3, [pc, #8]	; (18 <SYSCFG_SWJPinConfig+0x18>)
+   e:	4303      	orrs	r3, r0
+  10:	6093      	str	r3, [r2, #8]
+}
+  12:	4770      	bx	lr
+  14:	40040400 	.word	0x40040400
+  18:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.SYSCFG_OSCPinConfig:
+
+00000000 <SYSCFG_OSCPinConfig>:
+    uint32_t temp = 0;
+
+    /* Check the parameter */
+    assert_param(IS_SYSCFG_OSC_PIN_MODE(OSCPin_Mode));
+
+    temp = SYSCFG->SAFR.V32 & (~SYSCFG_SAFR_OSCCFG_Msk);
+   0:	2103      	movs	r1, #3
+   2:	4a04      	ldr	r2, [pc, #16]	; (14 <SYSCFG_OSCPinConfig+0x14>)
+   4:	6893      	ldr	r3, [r2, #8]
+   6:	438b      	bics	r3, r1
+
+    temp |= (uint32_t)OSCPin_Mode;
+   8:	4303      	orrs	r3, r0
+    SYSCFG->SAFR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+   a:	4803      	ldr	r0, [pc, #12]	; (18 <SYSCFG_OSCPinConfig+0x18>)
+   c:	4318      	orrs	r0, r3
+   e:	6090      	str	r0, [r2, #8]
+}
+  10:	4770      	bx	lr
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	40040400 	.word	0x40040400
+  18:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.SYSCFG_SRAMLockConfig:
+
+00000000 <SYSCFG_SRAMLockConfig>:
+
+    /* Check the parameters */
+    assert_param(IS_SYSCFG_SRAM_SECTOR(SectorNum));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	4a06      	ldr	r2, [pc, #24]	; (1c <SYSCFG_SRAMLockConfig+0x1c>)
+   2:	4b07      	ldr	r3, [pc, #28]	; (20 <SYSCFG_SRAMLockConfig+0x20>)
+   4:	2900      	cmp	r1, #0
+   6:	d004      	beq.n	12 <SYSCFG_SRAMLockConfig+0x12>
+    {
+        SYSCFG->SRAMLOCK.V32 |= ((uint32_t)0x5AA5 << 16) | SectorNum;
+   8:	68d1      	ldr	r1, [r2, #12]
+   a:	4308      	orrs	r0, r1
+   c:	4303      	orrs	r3, r0
+    }
+    else
+    {
+        temp = SYSCFG->SRAMLOCK.V32 & (~SectorNum);
+        SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+   e:	60d3      	str	r3, [r2, #12]
+    }
+}
+  10:	4770      	bx	lr
+        temp = SYSCFG->SRAMLOCK.V32 & (~SectorNum);
+  12:	68d1      	ldr	r1, [r2, #12]
+  14:	4381      	bics	r1, r0
+        SYSCFG->SRAMLOCK.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+  16:	430b      	orrs	r3, r1
+  18:	e7f9      	b.n	e <SYSCFG_SRAMLockConfig+0xe>
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	40040400 	.word	0x40040400
+  20:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.SYSCFG_DBGPeriphConfig:
+
+00000000 <SYSCFG_DBGPeriphConfig>:
+
+    /* Check the parameters */
+    assert_param(IS_DBG_PERIPH(DBG_Periph));
+    assert_param(IS_FUNCTION_STATE(NewState));
+
+    if (NewState != SH_DISABLE)
+   0:	4a06      	ldr	r2, [pc, #24]	; (1c <SYSCFG_DBGPeriphConfig+0x1c>)
+   2:	4b07      	ldr	r3, [pc, #28]	; (20 <SYSCFG_DBGPeriphConfig+0x20>)
+   4:	2900      	cmp	r1, #0
+   6:	d004      	beq.n	12 <SYSCFG_DBGPeriphConfig+0x12>
+    {
+        SYSCFG->DBGCR.V32 |= ((uint32_t)0x5AA5 << 16) | DBG_Periph;
+   8:	6911      	ldr	r1, [r2, #16]
+   a:	4308      	orrs	r0, r1
+   c:	4303      	orrs	r3, r0
+    }
+    else
+    {
+        temp = SYSCFG->DBGCR.V32 & (~DBG_Periph);
+        SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+   e:	6113      	str	r3, [r2, #16]
+    }
+}
+  10:	4770      	bx	lr
+        temp = SYSCFG->DBGCR.V32 & (~DBG_Periph);
+  12:	6911      	ldr	r1, [r2, #16]
+  14:	4381      	bics	r1, r0
+        SYSCFG->DBGCR.V32 = ((uint32_t)0x5AA5 << 16) | temp;
+  16:	430b      	orrs	r3, r1
+  18:	e7f9      	b.n	e <SYSCFG_DBGPeriphConfig+0xe>
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	40040400 	.word	0x40040400
+  20:	5aa50000 	.word	0x5aa50000
+
+Disassembly of section .text.SYSCFG_DBGLowPowerConfig:
+
+00000000 <SYSCFG_DBGLowPowerConfig>:
+   0:	b510      	push	{r4, lr}
+   2:	f7ff fffe 	bl	0 <SYSCFG_DBGLowPowerConfig>
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.SYSCFG_GPIOBCRConfig:
+
+00000000 <SYSCFG_GPIOBCRConfig>:
+void SYSCFG_GPIOBCRConfig(uint8_t GPIOB_Clock_Source)
+{
+    /* Check the parameters */
+    assert_param(IS_GPIOB_CLOCK_SOURCE(GPIOB_Clock_Source));
+
+    SYSCFG->GPIOBCR.V32 = ((uint32_t)0x5AA5 << 16) | GPIOB_Clock_Source;
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <SYSCFG_GPIOBCRConfig+0xc>)
+   2:	4a03      	ldr	r2, [pc, #12]	; (10 <SYSCFG_GPIOBCRConfig+0x10>)
+   4:	4303      	orrs	r3, r0
+   6:	6153      	str	r3, [r2, #20]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	5aa50000 	.word	0x5aa50000
+  10:	40040400 	.word	0x40040400

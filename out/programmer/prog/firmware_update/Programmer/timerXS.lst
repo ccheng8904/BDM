@@ -1,0 +1,87 @@
+
+out/programmer/prog/firmware_update/Programmer/timerXS.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._TIM_bIsBaseTimerDown:
+
+00000000 <_TIM_bIsBaseTimerDown>:
+/******************************************************************************/
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+BOOL _TIM_bIsBaseTimerDown(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   /* Is base time down? */
+   while ( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) >= BASE_TICKS_PER_US )
+   2:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   6:	4c0f      	ldr	r4, [pc, #60]	; (44 <_TIM_bIsBaseTimerDown+0x44>)
+   8:	4d0f      	ldr	r5, [pc, #60]	; (48 <_TIM_bIsBaseTimerDown+0x48>)
+   a:	8823      	ldrh	r3, [r4, #0]
+   c:	1ac0      	subs	r0, r0, r3
+   e:	b280      	uxth	r0, r0
+  10:	42a8      	cmp	r0, r5
+  12:	d801      	bhi.n	18 <_TIM_bIsBaseTimerDown+0x18>
+      if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+      {
+          return TRUE;
+      }
+   }
+   return FALSE;
+  14:	2000      	movs	r0, #0
+}
+  16:	bd70      	pop	{r4, r5, r6, pc}
+      HSUP_vDisableInt();
+  18:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+      TIM_uiTimeOld  += BASE_TICKS_PER_US;
+  1c:	490b      	ldr	r1, [pc, #44]	; (4c <_TIM_bIsBaseTimerDown+0x4c>)
+  1e:	8823      	ldrh	r3, [r4, #0]
+      TIM_tCircleTime += BASE_TICKS_PER_US;
+  20:	4a0b      	ldr	r2, [pc, #44]	; (50 <_TIM_bIsBaseTimerDown+0x50>)
+      TIM_uiTimeOld  += BASE_TICKS_PER_US;
+  22:	185b      	adds	r3, r3, r1
+  24:	8023      	strh	r3, [r4, #0]
+      TIM_tCircleTime += BASE_TICKS_PER_US;
+  26:	6813      	ldr	r3, [r2, #0]
+  28:	185b      	adds	r3, r3, r1
+  2a:	6013      	str	r3, [r2, #0]
+      HSUP_vEnableInt();
+  2c:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+      if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+  30:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+  34:	8823      	ldrh	r3, [r4, #0]
+  36:	1ac0      	subs	r0, r0, r3
+  38:	b280      	uxth	r0, r0
+  3a:	42a8      	cmp	r0, r5
+  3c:	d8e1      	bhi.n	2 <_TIM_bIsBaseTimerDown+0x2>
+          return TRUE;
+  3e:	2001      	movs	r0, #1
+  40:	e7e9      	b.n	16 <_TIM_bIsBaseTimerDown+0x16>
+  42:	46c0      	nop			; (mov r8, r8)
+  44:	00000000 	.word	0x00000000
+  48:	0000270f 	.word	0x0000270f
+  4c:	00002710 	.word	0x00002710
+  50:	00000000 	.word	0x00000000
+
+Disassembly of section .text.TIM_u32GetCircleMicroSeconds:
+
+00000000 <TIM_u32GetCircleMicroSeconds>:
+
+
+uint32 TIM_u32GetCircleMicroSeconds(void)
+{
+   0:	b510      	push	{r4, lr}
+   uint16_t elapsedTime = (uint16_t)(TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld);
+   2:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   6:	4b04      	ldr	r3, [pc, #16]	; (18 <TIM_u32GetCircleMicroSeconds+0x18>)
+   8:	881b      	ldrh	r3, [r3, #0]
+   a:	1ac0      	subs	r0, r0, r3
+   return TIM_tCircleTime + (uint32)elapsedTime;
+   c:	4b03      	ldr	r3, [pc, #12]	; (1c <TIM_u32GetCircleMicroSeconds+0x1c>)
+   e:	b280      	uxth	r0, r0
+  10:	681b      	ldr	r3, [r3, #0]
+  12:	18c0      	adds	r0, r0, r3
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+	...

@@ -1,0 +1,2804 @@
+
+out/programmer/prog/dbus/dbuspresentation.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DBPL_vSendResponse:
+
+00000000 <DBPL_vSendResponse>:
+}
+
+/** Service function used for all response service messages (all outgoing presentation layer messages) */
+static void DBPL_vSendResponse(uint8_t ucDataLen, uint8_t *pucData)
+{
+   for (uint8_t i = 0; i < ucDataLen; i++)
+   0:	2300      	movs	r3, #0
+{
+   2:	b510      	push	{r4, lr}
+   {
+      pucData[i] = DBPL_tMessageBuffer.aucData[i];
+   4:	4c04      	ldr	r4, [pc, #16]	; (18 <DBPL_vSendResponse+0x18>)
+   for (uint8_t i = 0; i < ucDataLen; i++)
+   6:	b2da      	uxtb	r2, r3
+   8:	4290      	cmp	r0, r2
+   a:	d800      	bhi.n	e <DBPL_vSendResponse+0xe>
+   }
+}
+   c:	bd10      	pop	{r4, pc}
+      pucData[i] = DBPL_tMessageBuffer.aucData[i];
+   e:	5ce2      	ldrb	r2, [r4, r3]
+  10:	54ca      	strb	r2, [r1, r3]
+   for (uint8_t i = 0; i < ucDataLen; i++)
+  12:	3301      	adds	r3, #1
+  14:	e7f7      	b.n	6 <DBPL_vSendResponse+0x6>
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000004 	.word	0x00000004
+
+Disassembly of section .text.DBPL_bIsSendingPowerMgmtMsg:
+
+00000000 <DBPL_bIsSendingPowerMgmtMsg>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_WAKEUP) ? true : false;
+   0:	4b07      	ldr	r3, [pc, #28]	; (20 <DBPL_bIsSendingPowerMgmtMsg+0x20>)
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+}
+
+static bool DBPL_bIsSendingPowerMgmtMsg(void)
+{
+    return ((DBPL_bIsSendingPowerMgmtWakeup() == true) || (DBPL_bIsSendingPowerMgmtWakeupComplete() == true) || (DBPL_bIsSendingPowerMgmtNodeReset() == true)) ? true : false;
+   2:	4a08      	ldr	r2, [pc, #32]	; (24 <DBPL_bIsSendingPowerMgmtMsg+0x24>)
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_WAKEUP) ? true : false;
+   4:	8819      	ldrh	r1, [r3, #0]
+    return ((DBPL_bIsSendingPowerMgmtWakeup() == true) || (DBPL_bIsSendingPowerMgmtWakeupComplete() == true) || (DBPL_bIsSendingPowerMgmtNodeReset() == true)) ? true : false;
+   6:	2001      	movs	r0, #1
+   8:	4291      	cmp	r1, r2
+   a:	d008      	beq.n	1e <DBPL_bIsSendingPowerMgmtMsg+0x1e>
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_WAKEUP_COMPLETE) ? true : false;
+   c:	8819      	ldrh	r1, [r3, #0]
+    return ((DBPL_bIsSendingPowerMgmtWakeup() == true) || (DBPL_bIsSendingPowerMgmtWakeupComplete() == true) || (DBPL_bIsSendingPowerMgmtNodeReset() == true)) ? true : false;
+   e:	4a06      	ldr	r2, [pc, #24]	; (28 <DBPL_bIsSendingPowerMgmtMsg+0x28>)
+  10:	4291      	cmp	r1, r2
+  12:	d004      	beq.n	1e <DBPL_bIsSendingPowerMgmtMsg+0x1e>
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_NODE_RESET) ? true : false;
+  14:	8818      	ldrh	r0, [r3, #0]
+    return ((DBPL_bIsSendingPowerMgmtWakeup() == true) || (DBPL_bIsSendingPowerMgmtWakeupComplete() == true) || (DBPL_bIsSendingPowerMgmtNodeReset() == true)) ? true : false;
+  16:	4b05      	ldr	r3, [pc, #20]	; (2c <DBPL_bIsSendingPowerMgmtMsg+0x2c>)
+  18:	18c0      	adds	r0, r0, r3
+  1a:	4243      	negs	r3, r0
+  1c:	4158      	adcs	r0, r3
+}
+  1e:	4770      	bx	lr
+  20:	00000000 	.word	0x00000000
+  24:	0000f320 	.word	0x0000f320
+  28:	0000f322 	.word	0x0000f322
+  2c:	ffff0cdc 	.word	0xffff0cdc
+
+Disassembly of section .text.DBPL_vReadTestStateRepairCntRequest:
+
+00000000 <DBPL_vReadTestStateRepairCntRequest>:
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_LEN;
+   0:	2203      	movs	r2, #3
+{
+   2:	b513      	push	{r0, r1, r4, lr}
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_LEN;
+   4:	4b13      	ldr	r3, [pc, #76]	; (54 <DBPL_vReadTestStateRepairCntRequest+0x54>)
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+   6:	4c14      	ldr	r4, [pc, #80]	; (58 <DBPL_vReadTestStateRepairCntRequest+0x58>)
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_LEN;
+   8:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_TESTST_REPAIRCNT_RESPONSE;
+   a:	3217      	adds	r2, #23
+   c:	70a2      	strb	r2, [r4, #2]
+   e:	3a27      	subs	r2, #39	; 0x27
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  10:	4669      	mov	r1, sp
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_TESTST_REPAIRCNT_RESPONSE;
+  12:	70e2      	strb	r2, [r4, #3]
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  14:	2200      	movs	r2, #0
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  16:	23c0      	movs	r3, #192	; 0xc0
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  18:	718a      	strb	r2, [r1, #6]
+    uint8_t repairCnt = DBPL_INVALID_REPAIR_CNT;
+  1a:	3208      	adds	r2, #8
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  1c:	7063      	strb	r3, [r4, #1]
+    uint8_t repairCnt = DBPL_INVALID_REPAIR_CNT;
+  1e:	71ca      	strb	r2, [r1, #7]
+    if(ucDataLen == 0U)
+  20:	2800      	cmp	r0, #0
+  22:	d105      	bne.n	30 <DBPL_vReadTestStateRepairCntRequest+0x30>
+        DBPL_tMessageBuffer.aucData[DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_STATUS] = (uint8_t)DBPL_tReadTestStateRepairCnt(&readState, &repairCnt); /*lint !e934 "Taking address of near auto variable". Here no problem*/
+  24:	466b      	mov	r3, sp
+  26:	3107      	adds	r1, #7
+  28:	1d98      	adds	r0, r3, #6
+  2a:	f7ff fffe 	bl	0 <DBPL_tReadTestStateRepairCnt>
+  2e:	0003      	movs	r3, r0
+  30:	7123      	strb	r3, [r4, #4]
+    DBPL_tMessageBuffer.aucData[DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_TEST_STATE] = (uint8_t)readState;
+  32:	466b      	mov	r3, sp
+  34:	799b      	ldrb	r3, [r3, #6]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  36:	2203      	movs	r2, #3
+    DBPL_tMessageBuffer.aucData[DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_TEST_STATE] = (uint8_t)readState;
+  38:	7163      	strb	r3, [r4, #5]
+    DBPL_tMessageBuffer.aucData[DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_REPAIR_CNT] = repairCnt;
+  3a:	466b      	mov	r3, sp
+  3c:	79db      	ldrb	r3, [r3, #7]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  3e:	20ff      	movs	r0, #255	; 0xff
+    DBPL_tMessageBuffer.aucData[DBPL_READ_TEST_STATE_REPAIR_CNT_RESPONSE_REPAIR_CNT] = repairCnt;
+  40:	71a3      	strb	r3, [r4, #6]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  42:	4b06      	ldr	r3, [pc, #24]	; (5c <DBPL_vReadTestStateRepairCntRequest+0x5c>)
+  44:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  46:	4b06      	ldr	r3, [pc, #24]	; (60 <DBPL_vReadTestStateRepairCntRequest+0x60>)
+  48:	3a02      	subs	r2, #2
+  4a:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  4c:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  50:	bd13      	pop	{r0, r1, r4, pc}
+  52:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vWriteTestStateRequest:
+
+00000000 <DBPL_vWriteTestStateRequest>:
+{
+   0:	b537      	push	{r0, r1, r2, r4, r5, lr}
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_LEN;
+   2:	2203      	movs	r2, #3
+   4:	4b14      	ldr	r3, [pc, #80]	; (58 <DBPL_vWriteTestStateRequest+0x58>)
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+   6:	4c15      	ldr	r4, [pc, #84]	; (5c <DBPL_vWriteTestStateRequest+0x5c>)
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_LEN;
+   8:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_TESTST_REPAIRCNT_RESPONSE;
+   a:	3217      	adds	r2, #23
+   c:	70a2      	strb	r2, [r4, #2]
+   e:	3a27      	subs	r2, #39	; 0x27
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  10:	466d      	mov	r5, sp
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_TESTST_REPAIRCNT_RESPONSE;
+  12:	70e2      	strb	r2, [r4, #3]
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  14:	2200      	movs	r2, #0
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  16:	23c0      	movs	r3, #192	; 0xc0
+    enum DBPL_TestState readState = DBPL_TestStateFailed;
+  18:	71aa      	strb	r2, [r5, #6]
+    uint8_t repairCnt = DBPL_INVALID_REPAIR_CNT;
+  1a:	3208      	adds	r2, #8
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  1c:	7063      	strb	r3, [r4, #1]
+    uint8_t repairCnt = DBPL_INVALID_REPAIR_CNT;
+  1e:	71ea      	strb	r2, [r5, #7]
+    if(ucDataLen == (uint8_t)DBPL_WRITE_TEST_STATE_REQUEST_LEN)
+  20:	2801      	cmp	r0, #1
+  22:	d108      	bne.n	36 <DBPL_vWriteTestStateRequest+0x36>
+        if(pucData[DBPL_WRITE_TEST_STATE_REQUEST_TEST_STATE] < (uint8_t)DBPL_TestStateCnt)
+  24:	7808      	ldrb	r0, [r1, #0]
+  26:	3b0f      	subs	r3, #15
+  28:	2801      	cmp	r0, #1
+  2a:	d804      	bhi.n	36 <DBPL_vWriteTestStateRequest+0x36>
+            DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteTestState(receivedState, &readState, &repairCnt); /*lint !e934 "Taking address of near auto variable". Here no problem*/
+  2c:	1dea      	adds	r2, r5, #7
+  2e:	1da9      	adds	r1, r5, #6
+  30:	f7ff fffe 	bl	0 <DBPL_tWriteTestState>
+  34:	0003      	movs	r3, r0
+            DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_STATUS] = (uint8_t)DBPL_ProductionStatusParam1Error;
+  36:	7123      	strb	r3, [r4, #4]
+    DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_TEST_STATE] = (uint8_t)readState;
+  38:	466b      	mov	r3, sp
+  3a:	799b      	ldrb	r3, [r3, #6]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  3c:	2203      	movs	r2, #3
+    DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_TEST_STATE] = (uint8_t)readState;
+  3e:	7163      	strb	r3, [r4, #5]
+    DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_REPAIR_CNT] = repairCnt;
+  40:	466b      	mov	r3, sp
+  42:	79db      	ldrb	r3, [r3, #7]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  44:	20ff      	movs	r0, #255	; 0xff
+    DBPL_tMessageBuffer.aucData[DBPL_WRITE_TEST_STATE_REPAIR_CNT_RESPONSE_REPAIR_CNT] = repairCnt;
+  46:	71a3      	strb	r3, [r4, #6]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  48:	4b05      	ldr	r3, [pc, #20]	; (60 <DBPL_vWriteTestStateRequest+0x60>)
+  4a:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  4c:	4b05      	ldr	r3, [pc, #20]	; (64 <DBPL_vWriteTestStateRequest+0x64>)
+  4e:	3a02      	subs	r2, #2
+  50:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  52:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  56:	bd37      	pop	{r0, r1, r2, r4, r5, pc}
+	...
+
+Disassembly of section .text.DBPL_vPowerResurgeMsg:
+
+00000000 <DBPL_vPowerResurgeMsg>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_POWER_RESURGE_LEN)
+   2:	2801      	cmp	r0, #1
+   4:	d102      	bne.n	c <DBPL_vPowerResurgeMsg+0xc>
+        DBPL_vPowerResurgeNotificationHasBeenReceived(pucData[DBPL_POWER_RESURGE_SENDER]);
+   6:	7808      	ldrb	r0, [r1, #0]
+   8:	f7ff fffe 	bl	0 <DBPL_vPowerResurgeNotificationHasBeenReceived>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+   c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  10:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vWakeupSentResponse:
+
+00000000 <DBPL_vWakeupSentResponse>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_WAKEUP_SENT_RESPONSE_LEN)
+   2:	2801      	cmp	r0, #1
+   4:	d102      	bne.n	c <DBPL_vWakeupSentResponse+0xc>
+        DBPL_vWakeupSentResponseReceived(pucData[DBPL_WAKEUP_SENT_RESPONSE_SENDER]);
+   6:	7808      	ldrb	r0, [r1, #0]
+   8:	f7ff fffe 	bl	0 <DBPL_vWakeupSentResponseReceived>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+   c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  10:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vResetTriggerRequest:
+
+00000000 <DBPL_vResetTriggerRequest>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_RESET_TRIGGER_REQUEST_LEN)
+   2:	2801      	cmp	r0, #1
+   4:	d10a      	bne.n	1c <DBPL_vResetTriggerRequest+0x1c>
+        DBPL_setResetTriggerTimer(CONVERT_10MS_TO_1MS((uint16_t)pucData[DBPL_RESET_TRIGGER_REQUEST_TIME]));
+   6:	230a      	movs	r3, #10
+   8:	780a      	ldrb	r2, [r1, #0]
+   a:	435a      	muls	r2, r3
+ *
+ * \param resetTriggerTime = delay represented in ms.
+*/
+static void DBPL_setResetTriggerTimer(uint16_t resetTriggerTime)
+{
+    if(resetTriggerTime != 0u)
+   c:	4b08      	ldr	r3, [pc, #32]	; (30 <DBPL_vResetTriggerRequest+0x30>)
+   e:	2a00      	cmp	r2, #0
+  10:	d007      	beq.n	22 <DBPL_vResetTriggerRequest+0x22>
+    {
+        STIM_ReloadTimer(&DBPL_resetTriggerTimer, (uint32_t)resetTriggerTime);
+  12:	605a      	str	r2, [r3, #4]
+ *
+ *  \param    timer: pointer to timer instance
+ */
+static inline void STIM_ResetTimer(struct STIM_Timer *timer)
+{
+    timer->currentTime_ms = 0U;
+  14:	2200      	movs	r2, #0
+  16:	601a      	str	r2, [r3, #0]
+    timer->status = 0U;
+  18:	721a      	strb	r2, [r3, #8]
+    timer->enabled = true;
+  1a:	7258      	strb	r0, [r3, #9]
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  1c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  20:	bd10      	pop	{r4, pc}
+        STIM_EnableTimer(&DBPL_resetTriggerTimer);
+    }
+    else
+    {   // no delay required, execute action immediately
+        STIM_DisableTimer(&DBPL_resetTriggerTimer);
+        (void)STDCB_ExecuteCallbacks(DBPL_resetTriggerTimer.cbList, (uint32_t)STIM_STATUS_TRIGGERED, 0);
+  22:	0001      	movs	r1, r0
+  24:	68d8      	ldr	r0, [r3, #12]
+    timer->enabled = false;
+  26:	725a      	strb	r2, [r3, #9]
+  28:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+  2c:	e7f6      	b.n	1c <DBPL_vResetTriggerRequest+0x1c>
+  2e:	46c0      	nop			; (mov r8, r8)
+  30:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vFactoryReset:
+
+00000000 <DBPL_vFactoryReset>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == 0U)
+   2:	2800      	cmp	r0, #0
+   4:	d101      	bne.n	a <DBPL_vFactoryReset+0xa>
+        DBPL_vDoFactoryReset();
+   6:	f7ff fffe 	bl	0 <DBPL_vDoFactoryReset>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+   a:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vReadProductionTimeRequest:
+
+00000000 <DBPL_vReadProductionTimeRequest>:
+{
+   0:	b530      	push	{r4, r5, lr}
+   2:	b085      	sub	sp, #20
+    struct DBPL_ProductionTime readTime = {.date = {0}, .clock = {0}};
+   4:	220a      	movs	r2, #10
+{
+   6:	0005      	movs	r5, r0
+    struct DBPL_ProductionTime readTime = {.date = {0}, .clock = {0}};
+   8:	4911      	ldr	r1, [pc, #68]	; (50 <DBPL_vReadProductionTimeRequest+0x50>)
+   a:	a801      	add	r0, sp, #4
+   c:	f7ff fffe 	bl	0 <memcpy>
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_READ_PRODUCTION_TIME_RESPONSE_LEN;
+  10:	220b      	movs	r2, #11
+  12:	4b10      	ldr	r3, [pc, #64]	; (54 <DBPL_vReadProductionTimeRequest+0x54>)
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  14:	20c0      	movs	r0, #192	; 0xc0
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_READ_PRODUCTION_TIME_RESPONSE_LEN;
+  16:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  18:	2317      	movs	r3, #23
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  1a:	4c0f      	ldr	r4, [pc, #60]	; (58 <DBPL_vReadProductionTimeRequest+0x58>)
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  1c:	70a3      	strb	r3, [r4, #2]
+  1e:	3b24      	subs	r3, #36	; 0x24
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  20:	7060      	strb	r0, [r4, #1]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  22:	70e3      	strb	r3, [r4, #3]
+    if(ucDataLen == 0U)
+  24:	2d00      	cmp	r5, #0
+  26:	d102      	bne.n	2e <DBPL_vReadProductionTimeRequest+0x2e>
+        DBPL_tMessageBuffer.aucData[DBPL_READ_PRODUCTION_TIME_RESPONSE_STATUS] = (uint8_t)DBPL_tReadProductionTime(&readTime); /*lint !e934 "Taking address of near auto variable". Here no problem*/
+  28:	a801      	add	r0, sp, #4
+  2a:	f7ff fffe 	bl	0 <DBPL_tReadProductionTime>
+  2e:	7120      	strb	r0, [r4, #4]
+        DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_READ_PRODUCTION_TIME_RESPONSE_TIME_OFFSET) + index] = ((uint8_t*)&(readTime))[index]; /*lint !e928 "cast from pointer to pointer". Both types are in fact, byte arrays, so not critical.*/
+  30:	a901      	add	r1, sp, #4
+  32:	220a      	movs	r2, #10
+  34:	1d60      	adds	r0, r4, #5
+  36:	f7ff fffe 	bl	0 <memcpy>
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  3a:	2203      	movs	r2, #3
+  3c:	4b07      	ldr	r3, [pc, #28]	; (5c <DBPL_vReadProductionTimeRequest+0x5c>)
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  3e:	20ff      	movs	r0, #255	; 0xff
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  40:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  42:	4b07      	ldr	r3, [pc, #28]	; (60 <DBPL_vReadProductionTimeRequest+0x60>)
+  44:	3a02      	subs	r2, #2
+  46:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  48:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  4c:	b005      	add	sp, #20
+  4e:	bd30      	pop	{r4, r5, pc}
+	...
+
+Disassembly of section .text.DBPL_baudRateTimerElapsed:
+
+00000000 <DBPL_baudRateTimerElapsed>:
+static int32_t DBPL_baudRateTimerElapsed(void *obj, uint32_t flags, int32_t eventData)
+{
+    //only to prevent lint warnings
+    (void)obj; (void)flags; (void)eventData;
+    
+    DBPL_uBaudRate = (uint16_t)DBPL_uDefaultBaudRate;
+   0:	4b05      	ldr	r3, [pc, #20]	; (18 <DBPL_baudRateTimerElapsed+0x18>)
+{
+   2:	b510      	push	{r4, lr}
+    DBPL_uBaudRate = (uint16_t)DBPL_uDefaultBaudRate;
+   4:	881a      	ldrh	r2, [r3, #0]
+   6:	4b05      	ldr	r3, [pc, #20]	; (1c <DBPL_baudRateTimerElapsed+0x1c>)
+   8:	801a      	strh	r2, [r3, #0]
+    DBPL_vConfigureBaudrate(DBPL_uBaudRate);
+   a:	8818      	ldrh	r0, [r3, #0]
+   c:	b280      	uxth	r0, r0
+   e:	f7ff fffe 	bl	0 <DBPL_vConfigureBaudrate>
+    return 0;
+}
+  12:	2000      	movs	r0, #0
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vUpdateModeTransitionRequest:
+
+00000000 <DBPL_vUpdateModeTransitionRequest>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == 0U)
+   2:	2800      	cmp	r0, #0
+   4:	d101      	bne.n	a <DBPL_vUpdateModeTransitionRequest+0xa>
+        DBPL_vSetUpdateMode();
+   6:	f7ff fffe 	bl	0 <DBPL_vSetUpdateMode>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+   a:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vSilentModeTransitionRequestBroadcast:
+
+00000000 <DBPL_vSilentModeTransitionRequestBroadcast>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == 0U)
+   2:	2800      	cmp	r0, #0
+   4:	d107      	bne.n	16 <DBPL_vSilentModeTransitionRequestBroadcast+0x16>
+        if(DLL_isSilentMode() == false)
+   6:	f7ff fffe 	bl	0 <DLL_isSilentMode>
+   a:	2800      	cmp	r0, #0
+   c:	d103      	bne.n	16 <DBPL_vSilentModeTransitionRequestBroadcast+0x16>
+            DLL_vSetSilentMode();
+   e:	f7ff fffe 	bl	0 <DLL_vSetSilentMode>
+            DBPL_vSilentModeHasBeenEntered();
+  12:	f7ff fffe 	bl	0 <DBPL_vSilentModeHasBeenEntered>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  16:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  1a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_vWriteProductionTimeRequest:
+
+00000000 <DBPL_vWriteProductionTimeRequest>:
+{
+   0:	b57f      	push	{r0, r1, r2, r3, r4, r5, r6, lr}
+    struct DBPL_ProductionTime writtenTime = {.date = {0}, .clock = {0}};
+   2:	220a      	movs	r2, #10
+{
+   4:	0006      	movs	r6, r0
+   6:	000d      	movs	r5, r1
+    struct DBPL_ProductionTime writtenTime = {.date = {0}, .clock = {0}};
+   8:	a801      	add	r0, sp, #4
+   a:	4911      	ldr	r1, [pc, #68]	; (50 <DBPL_vWriteProductionTimeRequest+0x50>)
+   c:	f7ff fffe 	bl	0 <memcpy>
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_PRODUCTION_TIME_RESPONSE_LEN;
+  10:	220b      	movs	r2, #11
+  12:	4b10      	ldr	r3, [pc, #64]	; (54 <DBPL_vWriteProductionTimeRequest+0x54>)
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  14:	20c0      	movs	r0, #192	; 0xc0
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_PRODUCTION_TIME_RESPONSE_LEN;
+  16:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  18:	2317      	movs	r3, #23
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  1a:	4c0f      	ldr	r4, [pc, #60]	; (58 <DBPL_vWriteProductionTimeRequest+0x58>)
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  1c:	70a3      	strb	r3, [r4, #2]
+  1e:	3b24      	subs	r3, #36	; 0x24
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  20:	7060      	strb	r0, [r4, #1]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_PROD_TIME_RESPONSE;
+  22:	70e3      	strb	r3, [r4, #3]
+    if(ucDataLen == (uint8_t)sizeof(struct DBPL_ProductionTime))
+  24:	2e0a      	cmp	r6, #10
+  26:	d103      	bne.n	30 <DBPL_vWriteProductionTimeRequest+0x30>
+        DBPL_tMessageBuffer.aucData[DBPL_WRITE_PRODUCTION_TIME_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteProductionTime((const void*)pucData, &writtenTime); /*lint !e934 "Taking address of near auto variable". Here no problem*/
+  28:	0028      	movs	r0, r5
+  2a:	a901      	add	r1, sp, #4
+  2c:	f7ff fffe 	bl	0 <DBPL_tWriteProductionTime>
+  30:	7120      	strb	r0, [r4, #4]
+        DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_WRITE_PRODUCTION_TIME_RESPONSE_TIME_OFFSET) + index] = ((uint8_t*)&(writtenTime))[index]; /*lint !e928 "cast from pointer to pointer". Both types are in fact, byte arrays, so not critical.*/
+  32:	a901      	add	r1, sp, #4
+  34:	220a      	movs	r2, #10
+  36:	1d60      	adds	r0, r4, #5
+  38:	f7ff fffe 	bl	0 <memcpy>
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  3c:	2203      	movs	r2, #3
+  3e:	4b07      	ldr	r3, [pc, #28]	; (5c <DBPL_vWriteProductionTimeRequest+0x5c>)
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  40:	20ff      	movs	r0, #255	; 0xff
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  42:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  44:	4b06      	ldr	r3, [pc, #24]	; (60 <DBPL_vWriteProductionTimeRequest+0x60>)
+  46:	3a02      	subs	r2, #2
+  48:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  4a:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  4e:	bd7f      	pop	{r0, r1, r2, r3, r4, r5, r6, pc}
+	...
+
+Disassembly of section .text.DBPL_vWriteTracingIdRequest:
+
+00000000 <DBPL_vWriteTracingIdRequest>:
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_TRACING_ID_RESPONSE_LEN;
+   0:	2201      	movs	r2, #1
+   2:	4b0d      	ldr	r3, [pc, #52]	; (38 <DBPL_vWriteTracingIdRequest+0x38>)
+{
+   4:	b510      	push	{r4, lr}
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_TRACING_ID_RESPONSE_LEN;
+   6:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+   8:	23c0      	movs	r3, #192	; 0xc0
+   a:	4c0c      	ldr	r4, [pc, #48]	; (3c <DBPL_vWriteTracingIdRequest+0x3c>)
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WRITE_TRACING_ID_RESPONSE;
+   c:	3214      	adds	r2, #20
+   e:	70a2      	strb	r2, [r4, #2]
+  10:	3a22      	subs	r2, #34	; 0x22
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  12:	7063      	strb	r3, [r4, #1]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WRITE_TRACING_ID_RESPONSE;
+  14:	70e2      	strb	r2, [r4, #3]
+    if(ucDataLen == (uint8_t)sizeof(struct DBPL_TracingId))
+  16:	281d      	cmp	r0, #29
+  18:	d103      	bne.n	22 <DBPL_vWriteTracingIdRequest+0x22>
+        DBPL_tMessageBuffer.aucData[DBPL_WRITE_TRACING_ID_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteTracingId((const void*)pucData);
+  1a:	0008      	movs	r0, r1
+  1c:	f7ff fffe 	bl	0 <DBPL_tWriteTracingId>
+  20:	0003      	movs	r3, r0
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  22:	2203      	movs	r2, #3
+        DBPL_tMessageBuffer.aucData[DBPL_WRITE_TRACING_ID_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteTracingId((const void*)pucData);
+  24:	7123      	strb	r3, [r4, #4]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  26:	4b06      	ldr	r3, [pc, #24]	; (40 <DBPL_vWriteTracingIdRequest+0x40>)
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  28:	20ff      	movs	r0, #255	; 0xff
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  2a:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  2c:	4b05      	ldr	r3, [pc, #20]	; (44 <DBPL_vWriteTracingIdRequest+0x44>)
+  2e:	3a02      	subs	r2, #2
+  30:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  32:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  36:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DBPL_vWriteEcuConfigHwRequest:
+
+00000000 <DBPL_vWriteEcuConfigHwRequest>:
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_ECU_CONFIG_HW_RESPONSE_LEN;
+   0:	2201      	movs	r2, #1
+   2:	4b0d      	ldr	r3, [pc, #52]	; (38 <DBPL_vWriteEcuConfigHwRequest+0x38>)
+{
+   4:	b510      	push	{r4, lr}
+    DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WRITE_ECU_CONFIG_HW_RESPONSE_LEN;
+   6:	701a      	strb	r2, [r3, #0]
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+   8:	23c0      	movs	r3, #192	; 0xc0
+   a:	4c0c      	ldr	r4, [pc, #48]	; (3c <DBPL_vWriteEcuConfigHwRequest+0x3c>)
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WRITE_ECU_CONFIG_HW_RESPONSE;
+   c:	3212      	adds	r2, #18
+   e:	70a2      	strb	r2, [r4, #2]
+  10:	3a20      	subs	r2, #32
+    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_PRODUCTION_RESPONSE_ADDRESS;
+  12:	7063      	strb	r3, [r4, #1]
+    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WRITE_ECU_CONFIG_HW_RESPONSE;
+  14:	70e2      	strb	r2, [r4, #3]
+    if(ucDataLen == (uint8_t)sizeof(struct STDV_version))
+  16:	2812      	cmp	r0, #18
+  18:	d103      	bne.n	22 <DBPL_vWriteEcuConfigHwRequest+0x22>
+        DBPL_tMessageBuffer.aucData[DBPL_WRITE_ECU_CONFIG_HW_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteEcuConfigHw((const void*)pucData);
+  1a:	0008      	movs	r0, r1
+  1c:	f7ff fffe 	bl	0 <DBPL_tWriteEcuConfigHw>
+  20:	0003      	movs	r3, r0
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  22:	2203      	movs	r2, #3
+        DBPL_tMessageBuffer.aucData[DBPL_WRITE_ECU_CONFIG_HW_RESPONSE_STATUS] = (uint8_t)DBPL_tWriteEcuConfigHw((const void*)pucData);
+  24:	7123      	strb	r3, [r4, #4]
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  26:	4b06      	ldr	r3, [pc, #24]	; (40 <DBPL_vWriteEcuConfigHwRequest+0x40>)
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  28:	20ff      	movs	r0, #255	; 0xff
+    DBPL_ucRepetitions = DBPL_PRODUCTION_MSG_SEND_RETRIES;
+  2a:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = true;
+  2c:	4b05      	ldr	r3, [pc, #20]	; (44 <DBPL_vWriteEcuConfigHwRequest+0x44>)
+  2e:	3a02      	subs	r2, #2
+  30:	701a      	strb	r2, [r3, #0]
+    DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  32:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  36:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DBPL_offlineTimerElapsed:
+
+00000000 <DBPL_offlineTimerElapsed>:
+}
+#endif /* DBUS2_UPDATE || DBUS2_UPDATE_HSI */
+
+/** \brief Callback function: Switch to default baudrate after timer overflow. */
+static int32_t DBPL_offlineTimerElapsed(void *obj, uint32_t flags, int32_t eventData)
+{
+   0:	b510      	push	{r4, lr}
+    //only to prevent lint warnings
+    (void)obj; (void)flags; (void)eventData;
+    
+    #if defined(MCAL_MSUP_INCLUDED)
+        MSUP_generateReset();
+   2:	f7ff fffe 	bl	0 <MSUP_generateReset>
+    #else
+        HSUP_vGenerateReset();
+    #endif
+    
+    return 0;
+}
+   6:	2000      	movs	r0, #0
+   8:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_resetTriggerTimerElapsed:
+
+00000000 <DBPL_resetTriggerTimerElapsed>:
+{
+   0:	b510      	push	{r4, lr}
+    DBM_UART_vEnableRxEvent();
+   2:	f7ff fffe 	bl	0 <DBM_UART_vEnableRxEvent>
+    DBPL_vLeaveUpdateMode();
+   6:	f7ff fffe 	bl	0 <DBPL_vLeaveUpdateMode>
+}
+   a:	2000      	movs	r0, #0
+   c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_setResetTimer:
+
+00000000 <DBPL_setResetTimer>:
+{
+   0:	0002      	movs	r2, r0
+   2:	b510      	push	{r4, lr}
+   4:	4b07      	ldr	r3, [pc, #28]	; (24 <DBPL_setResetTimer+0x24>)
+    if(resetDelay != 0u)
+   6:	2800      	cmp	r0, #0
+   8:	d006      	beq.n	18 <DBPL_setResetTimer+0x18>
+    timer->currentTime_ms = 0U;
+   a:	2200      	movs	r2, #0
+   c:	601a      	str	r2, [r3, #0]
+    timer->status = 0U;
+   e:	721a      	strb	r2, [r3, #8]
+    timer->enabled = true;
+  10:	3201      	adds	r2, #1
+        STIM_ReloadTimer(&DBPL_tOfflineDelayTimer, (uint32_t)resetDelay);
+  12:	6058      	str	r0, [r3, #4]
+  14:	725a      	strb	r2, [r3, #9]
+}
+  16:	bd10      	pop	{r4, pc}
+    timer->enabled = false;
+  18:	7258      	strb	r0, [r3, #9]
+        (void)STDCB_ExecuteCallbacks(DBPL_tOfflineDelayTimer.cbList, (uint32_t)STIM_STATUS_TRIGGERED, 0);
+  1a:	2101      	movs	r1, #1
+  1c:	68d8      	ldr	r0, [r3, #12]
+  1e:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+}
+  22:	e7f8      	b.n	16 <DBPL_setResetTimer+0x16>
+  24:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vGoOfflineService:
+
+00000000 <DBPL_vGoOfflineService>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0006      	movs	r6, r0
+   4:	000f      	movs	r7, r1
+   if(ucDataLen == (uint8_t)DBPL_GOFFL_LEN)
+   6:	2803      	cmp	r0, #3
+   8:	d110      	bne.n	2c <DBPL_vGoOfflineService+0x2c>
+       if (DLL_bIsCurrentNode(ucTgAdr) != false)
+   a:	7808      	ldrb	r0, [r1, #0]
+   c:	f7ff fffe 	bl	0 <DLL_bIsCurrentNode>
+  10:	4d13      	ldr	r5, [pc, #76]	; (60 <DBPL_vGoOfflineService+0x60>)
+  12:	1e04      	subs	r4, r0, #0
+  14:	d00d      	beq.n	32 <DBPL_vGoOfflineService+0x32>
+           DBPL_TaskState = DBPL_OFFLINE_WAIT_FOR_RESET;
+  16:	2302      	movs	r3, #2
+  18:	702b      	strb	r3, [r5, #0]
+           DBPL_vEnterBootloaderMode(); //Interface, which can notify bootloader application that the flash programmer is expected, hence a long timeout can be used after reset.
+  1a:	f7ff fffe 	bl	0 <DBPL_vEnterBootloaderMode>
+           DLL_vGoOffline();
+  1e:	f7ff fffe 	bl	0 <DLL_vGoOffline>
+           DBPL_setResetTimer(CONVERT_10MS_TO_1MS((uint16_t)pucData[DBPL_GOFFL_RESET_DELAY]));
+  22:	230a      	movs	r3, #10
+  24:	7878      	ldrb	r0, [r7, #1]
+  26:	4358      	muls	r0, r3
+  28:	f7ff fffe 	bl	0 <DBPL_vGoOfflineService>
+   DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  2c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  30:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+           offlineTime_2sec = DBPL_ucPossiblyChangeTimerBase(pucData[DBPL_GOFFL_OFFLINE_DELAY]);
+  32:	78b8      	ldrb	r0, [r7, #2]
+  34:	f7ff fffe 	bl	0 <DBPL_ucPossiblyChangeTimerBase>
+           if (offlineTime_2sec != 0U)
+  38:	2800      	cmp	r0, #0
+  3a:	d00b      	beq.n	54 <DBPL_vGoOfflineService+0x54>
+    STIM_ReloadTimer(&DBPL_tOfflineDelayTimer, STIM_TIME_SEC((uint32_t)offlineTime));
+  3c:	21fa      	movs	r1, #250	; 0xfa
+               DBPL_setOfflineTimer(CONVERT_2S_TO_1S((uint16_t)offlineTime_2sec));
+  3e:	0040      	lsls	r0, r0, #1
+    STIM_ReloadTimer(&DBPL_tOfflineDelayTimer, STIM_TIME_SEC((uint32_t)offlineTime));
+  40:	b283      	uxth	r3, r0
+  42:	0089      	lsls	r1, r1, #2
+  44:	434b      	muls	r3, r1
+ *  \param    timer:    pointer to timer instance
+ *  \param    time_ms:  desired time to be set
+ */
+static inline void STIM_SetTargetTime(struct STIM_Timer *timer, STIM_Time_t time_ms)
+{
+    timer->targetTime_ms = time_ms;
+  46:	4a07      	ldr	r2, [pc, #28]	; (64 <DBPL_vGoOfflineService+0x64>)
+  48:	2602      	movs	r6, #2
+  4a:	6053      	str	r3, [r2, #4]
+    timer->enabled = true;
+  4c:	2301      	movs	r3, #1
+    timer->currentTime_ms = 0U;
+  4e:	6014      	str	r4, [r2, #0]
+    timer->status = 0U;
+  50:	7214      	strb	r4, [r2, #8]
+    timer->enabled = true;
+  52:	7253      	strb	r3, [r2, #9]
+               DBPL_TaskState = DBPL_OFFLINE_WAIT_FOR_RESET;
+  54:	702e      	strb	r6, [r5, #0]
+           DLL_vGoOffline();
+  56:	f7ff fffe 	bl	0 <DLL_vGoOffline>
+           DBPL_vGoOffline(); //Function defined in the excess template, which allows for system dependent actions upon entering offline mode.
+  5a:	f7ff fffe 	bl	0 <DBPL_vGoOffline>
+  5e:	e7e5      	b.n	2c <DBPL_vGoOfflineService+0x2c>
+	...
+
+Disassembly of section .text.DBPL_vResetExecute:
+
+00000000 <DBPL_vResetExecute>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_RESETEXECUTE_LEN)
+   2:	2801      	cmp	r0, #1
+   4:	d107      	bne.n	16 <DBPL_vResetExecute+0x16>
+        DBPL_setResetTimer(CONVERT_10MS_TO_1MS((uint16_t)pucData[DBPL_RESETEXECUTE_TIME]));
+   6:	230a      	movs	r3, #10
+   8:	7808      	ldrb	r0, [r1, #0]
+   a:	4358      	muls	r0, r3
+   c:	f7ff fffe 	bl	0 <DBPL_vResetExecute>
+        DBPL_TaskState = DBPL_OFFLINE_WAIT_FOR_RESET;
+  10:	2202      	movs	r2, #2
+  12:	4b02      	ldr	r3, [pc, #8]	; (1c <DBPL_vResetExecute+0x1c>)
+  14:	701a      	strb	r2, [r3, #0]
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  16:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  1a:	bd10      	pop	{r4, pc}
+  1c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_setBaudRateTimer:
+
+00000000 <DBPL_setBaudRateTimer>:
+{
+   0:	0002      	movs	r2, r0
+   2:	b510      	push	{r4, lr}
+   4:	4b07      	ldr	r3, [pc, #28]	; (24 <DBPL_setBaudRateTimer+0x24>)
+    if(baudRateTime != 0u)
+   6:	2800      	cmp	r0, #0
+   8:	d006      	beq.n	18 <DBPL_setBaudRateTimer+0x18>
+    timer->currentTime_ms = 0U;
+   a:	2200      	movs	r2, #0
+   c:	601a      	str	r2, [r3, #0]
+    timer->status = 0U;
+   e:	721a      	strb	r2, [r3, #8]
+    timer->enabled = true;
+  10:	3201      	adds	r2, #1
+    timer->targetTime_ms = time_ms;
+  12:	6058      	str	r0, [r3, #4]
+    timer->enabled = true;
+  14:	725a      	strb	r2, [r3, #9]
+}
+  16:	bd10      	pop	{r4, pc}
+    timer->enabled = false;
+  18:	7258      	strb	r0, [r3, #9]
+        (void)STDCB_ExecuteCallbacks(DBPL_baudRateTimer.cbList, (uint32_t)STIM_STATUS_TRIGGERED, 0);
+  1a:	2101      	movs	r1, #1
+  1c:	68d8      	ldr	r0, [r3, #12]
+  1e:	f7ff fffe 	bl	0 <STDCB_ExecuteCallbacks>
+}
+  22:	e7f8      	b.n	16 <DBPL_setBaudRateTimer+0x16>
+  24:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vBaudrateTriggerRequest:
+
+00000000 <DBPL_vBaudrateTriggerRequest>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_BAUD_RATE_TRIGGER_LEN)
+   2:	2802      	cmp	r0, #2
+   4:	d10f      	bne.n	26 <DBPL_vBaudrateTriggerRequest+0x26>
+        if(DBPL_uBaudRate != (uint16_t)DBPL_uDefaultBaudRate)
+   6:	4b09      	ldr	r3, [pc, #36]	; (2c <DBPL_vBaudrateTriggerRequest+0x2c>)
+   8:	4a09      	ldr	r2, [pc, #36]	; (30 <DBPL_vBaudrateTriggerRequest+0x30>)
+   a:	881b      	ldrh	r3, [r3, #0]
+   c:	8812      	ldrh	r2, [r2, #0]
+   e:	429a      	cmp	r2, r3
+  10:	d009      	beq.n	26 <DBPL_vBaudrateTriggerRequest+0x26>
+            DBPL_setBaudRateTimer(CONVERT_10MS_TO_1MS((uint32_t)time_trigger_10ms));
+  12:	784b      	ldrb	r3, [r1, #1]
+  14:	780a      	ldrb	r2, [r1, #0]
+  16:	021b      	lsls	r3, r3, #8
+  18:	4313      	orrs	r3, r2
+  1a:	ba5b      	rev16	r3, r3
+  1c:	b29b      	uxth	r3, r3
+  1e:	3008      	adds	r0, #8
+  20:	4358      	muls	r0, r3
+  22:	f7ff fffe 	bl	0 <DBPL_vBaudrateTriggerRequest>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  26:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  2a:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DBPL_vBaudrateTransitionRequest:
+
+00000000 <DBPL_vBaudrateTransitionRequest>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == 0U)
+   2:	2800      	cmp	r0, #0
+   4:	d10c      	bne.n	20 <DBPL_vBaudrateTransitionRequest+0x20>
+        DBPL_vConfigureBaudrate(DBPL_uBaudRate);
+   6:	4c08      	ldr	r4, [pc, #32]	; (28 <DBPL_vBaudrateTransitionRequest+0x28>)
+   8:	8820      	ldrh	r0, [r4, #0]
+   a:	b280      	uxth	r0, r0
+   c:	f7ff fffe 	bl	0 <DBPL_vConfigureBaudrate>
+        if(DBPL_uBaudRate != (uint16_t)DBPL_uDefaultBaudRate)
+  10:	4a06      	ldr	r2, [pc, #24]	; (2c <DBPL_vBaudrateTransitionRequest+0x2c>)
+  12:	8823      	ldrh	r3, [r4, #0]
+  14:	8812      	ldrh	r2, [r2, #0]
+  16:	429a      	cmp	r2, r3
+  18:	d002      	beq.n	20 <DBPL_vBaudrateTransitionRequest+0x20>
+            DBPL_setBaudRateTimer(CONVERT_10MS_TO_1MS(DBPL_STANDARD_BAUD_RESET_TIME_10MS));
+  1a:	4805      	ldr	r0, [pc, #20]	; (30 <DBPL_vBaudrateTransitionRequest+0x30>)
+  1c:	f7ff fffe 	bl	0 <DBPL_vBaudrateTransitionRequest>
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  20:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  24:	bd10      	pop	{r4, pc}
+  26:	46c0      	nop			; (mov r8, r8)
+	...
+  30:	000088b8 	.word	0x000088b8
+
+Disassembly of section .text.DBPL_vEcuSwSubmoduleReadRequest:
+
+00000000 <DBPL_vEcuSwSubmoduleReadRequest>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	b08a      	sub	sp, #40	; 0x28
+    if(ucDataLen == (uint8_t)DBPL_ECU_SW_SUBMODULE_READ_REQUEST_LEN)
+   4:	280a      	cmp	r0, #10
+   6:	d133      	bne.n	70 <DBPL_vEcuSwSubmoduleReadRequest+0x70>
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_LEN;
+   8:	2228      	movs	r2, #40	; 0x28
+   a:	4b1b      	ldr	r3, [pc, #108]	; (78 <DBPL_vEcuSwSubmoduleReadRequest+0x78>)
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+   c:	4c1b      	ldr	r4, [pc, #108]	; (7c <DBPL_vEcuSwSubmoduleReadRequest+0x7c>)
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_LEN;
+   e:	701a      	strb	r2, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  10:	780b      	ldrb	r3, [r1, #0]
+        readResult = DBPL_tGetSwSubmoduleReadResult(&pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SW_ID], pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_OBJ_NUM]);
+  12:	7a4a      	ldrb	r2, [r1, #9]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  14:	7063      	strb	r3, [r4, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_SW_SUBMODULE_READ_RESPONSE;
+  16:	2313      	movs	r3, #19
+        readResult = DBPL_tGetSwSubmoduleReadResult(&pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SW_ID], pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_OBJ_NUM]);
+  18:	4668      	mov	r0, sp
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_SW_SUBMODULE_READ_RESPONSE;
+  1a:	70a3      	strb	r3, [r4, #2]
+        readResult = DBPL_tGetSwSubmoduleReadResult(&pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SW_ID], pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_OBJ_NUM]);
+  1c:	3101      	adds	r1, #1
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_SW_SUBMODULE_READ_RESPONSE;
+  1e:	3b1e      	subs	r3, #30
+  20:	70e3      	strb	r3, [r4, #3]
+        readResult = DBPL_tGetSwSubmoduleReadResult(&pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_SW_ID], pucData[DBPL_ECU_SW_SUBMODULE_READ_REQUEST_OBJ_NUM]);
+  22:	f7ff fffe 	bl	0 <DBPL_tGetSwSubmoduleReadResult>
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  26:	4b16      	ldr	r3, [pc, #88]	; (80 <DBPL_vEcuSwSubmoduleReadRequest+0x80>)
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_version))[index];
+  28:	0020      	movs	r0, r4
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  2a:	781b      	ldrb	r3, [r3, #0]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_version))[index];
+  2c:	2212      	movs	r2, #18
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  2e:	7123      	strb	r3, [r4, #4]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_STATUS] = (uint8_t)readResult.status;
+  30:	466b      	mov	r3, sp
+  32:	781b      	ldrb	r3, [r3, #0]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_version))[index];
+  34:	3008      	adds	r0, #8
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_STATUS] = (uint8_t)readResult.status;
+  36:	7163      	strb	r3, [r4, #5]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_OBJ_ID_NUMBER] = readResult.objIdNumber;
+  38:	466b      	mov	r3, sp
+  3a:	785b      	ldrb	r3, [r3, #1]
+  3c:	71a3      	strb	r3, [r4, #6]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_OBJ_COUNT] = readResult.objCount;
+  3e:	466b      	mov	r3, sp
+  40:	789b      	ldrb	r3, [r3, #2]
+  42:	71e3      	strb	r3, [r4, #7]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_version))[index];
+  44:	466b      	mov	r3, sp
+  46:	1cd9      	adds	r1, r3, #3
+  48:	f7ff fffe 	bl	0 <memcpy>
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_SW_SUBMODULE_READ_RESPONSE_SW_SUBMODULE_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_submodule_version))[index];
+  4c:	0020      	movs	r0, r4
+  4e:	2115      	movs	r1, #21
+  50:	2212      	movs	r2, #18
+  52:	301a      	adds	r0, #26
+  54:	4469      	add	r1, sp
+  56:	f7ff fffe 	bl	0 <memcpy>
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  5a:	2203      	movs	r2, #3
+  5c:	4b09      	ldr	r3, [pc, #36]	; (84 <DBPL_vEcuSwSubmoduleReadRequest+0x84>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  5e:	20ff      	movs	r0, #255	; 0xff
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  60:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  62:	4b09      	ldr	r3, [pc, #36]	; (88 <DBPL_vEcuSwSubmoduleReadRequest+0x88>)
+  64:	3a02      	subs	r2, #2
+  66:	701a      	strb	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  68:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  6c:	b00a      	add	sp, #40	; 0x28
+  6e:	bd10      	pop	{r4, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  70:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  74:	e7fa      	b.n	6c <DBPL_vEcuSwSubmoduleReadRequest+0x6c>
+  76:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vEcuConfigReadRequest:
+
+00000000 <DBPL_vEcuConfigReadRequest>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	b08a      	sub	sp, #40	; 0x28
+    if(ucDataLen == (uint8_t)DBPL_ECU_CONFIG_READ_REQUEST_LEN)
+   4:	2802      	cmp	r0, #2
+   6:	d132      	bne.n	6e <DBPL_vEcuConfigReadRequest+0x6e>
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_LEN;
+   8:	2228      	movs	r2, #40	; 0x28
+   a:	4b1a      	ldr	r3, [pc, #104]	; (74 <DBPL_vEcuConfigReadRequest+0x74>)
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_CONFIG_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+   c:	4c1a      	ldr	r4, [pc, #104]	; (78 <DBPL_vEcuConfigReadRequest+0x78>)
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_LEN;
+   e:	701a      	strb	r2, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_CONFIG_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  10:	780b      	ldrb	r3, [r1, #0]
+        readResult = DBPL_tGetEcuConfigReadResult(pucData[DBPL_ECU_CONFIG_READ_REQUEST_OBJ_ID]);
+  12:	4668      	mov	r0, sp
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_CONFIG_READ_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  14:	7063      	strb	r3, [r4, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_CONFIG_READ_RESPONSE;
+  16:	2311      	movs	r3, #17
+  18:	70a3      	strb	r3, [r4, #2]
+  1a:	3b1c      	subs	r3, #28
+  1c:	70e3      	strb	r3, [r4, #3]
+        readResult = DBPL_tGetEcuConfigReadResult(pucData[DBPL_ECU_CONFIG_READ_REQUEST_OBJ_ID]);
+  1e:	7849      	ldrb	r1, [r1, #1]
+  20:	f7ff fffe 	bl	0 <DBPL_tGetEcuConfigReadResult>
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  24:	4b15      	ldr	r3, [pc, #84]	; (7c <DBPL_vEcuConfigReadRequest+0x7c>)
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  26:	0020      	movs	r0, r4
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  28:	781b      	ldrb	r3, [r3, #0]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  2a:	2115      	movs	r1, #21
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  2c:	7123      	strb	r3, [r4, #4]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_STATUS] = (uint8_t)readResult.status;
+  2e:	466b      	mov	r3, sp
+  30:	781b      	ldrb	r3, [r3, #0]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  32:	2212      	movs	r2, #18
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_STATUS] = (uint8_t)readResult.status;
+  34:	7163      	strb	r3, [r4, #5]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_OBJ_ID_NUMBER] = readResult.objIdNumber;
+  36:	466b      	mov	r3, sp
+  38:	785b      	ldrb	r3, [r3, #1]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  3a:	4469      	add	r1, sp
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_OBJ_ID_NUMBER] = readResult.objIdNumber;
+  3c:	71a3      	strb	r3, [r4, #6]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_OBJ_COUNT] = readResult.objCount;
+  3e:	466b      	mov	r3, sp
+  40:	789b      	ldrb	r3, [r3, #2]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  42:	3008      	adds	r0, #8
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_CONFIG_READ_RESPONSE_OBJ_COUNT] = readResult.objCount;
+  44:	71e3      	strb	r3, [r4, #7]
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_HW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.hw_version))[index];
+  46:	f7ff fffe 	bl	0 <memcpy>
+            DBPL_tMessageBuffer.aucData[((uint8_t)DBPL_ECU_CONFIG_READ_RESPONSE_SW_ID_1) + index] = ((uint8_t*)&(readResult.identificationObject.sw_version))[index];
+  4a:	466b      	mov	r3, sp
+  4c:	0020      	movs	r0, r4
+  4e:	2212      	movs	r2, #18
+  50:	1cd9      	adds	r1, r3, #3
+  52:	301a      	adds	r0, #26
+  54:	f7ff fffe 	bl	0 <memcpy>
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  58:	2203      	movs	r2, #3
+  5a:	4b09      	ldr	r3, [pc, #36]	; (80 <DBPL_vEcuConfigReadRequest+0x80>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  5c:	20ff      	movs	r0, #255	; 0xff
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  5e:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  60:	4b08      	ldr	r3, [pc, #32]	; (84 <DBPL_vEcuConfigReadRequest+0x84>)
+  62:	3a02      	subs	r2, #2
+  64:	701a      	strb	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  66:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  6a:	b00a      	add	sp, #40	; 0x28
+  6c:	bd10      	pop	{r4, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  6e:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  72:	e7fa      	b.n	6a <DBPL_vEcuConfigReadRequest+0x6a>
+	...
+
+Disassembly of section .text.DBPL_vReturnFromSilentModeRequest:
+
+00000000 <DBPL_vReturnFromSilentModeRequest>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+    if(ucDataLen == (uint8_t)DBPL_RETURN_FROM_SILENT_MODE_REQUEST_LEN)
+   6:	2801      	cmp	r0, #1
+   8:	d114      	bne.n	34 <DBPL_vReturnFromSilentModeRequest+0x34>
+        DLL_vUnsetSilentMode();
+   a:	f7ff fffe 	bl	0 <DLL_vUnsetSilentMode>
+        DBPL_ucNumberOfBytesInMessage = 0U;
+   e:	2200      	movs	r2, #0
+  10:	4b0a      	ldr	r3, [pc, #40]	; (3c <DBPL_vReturnFromSilentModeRequest+0x3c>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  12:	20ff      	movs	r0, #255	; 0xff
+        DBPL_ucNumberOfBytesInMessage = 0U;
+  14:	701a      	strb	r2, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_RETURN_FROM_SILENT_MODE_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  16:	782a      	ldrb	r2, [r5, #0]
+  18:	4b09      	ldr	r3, [pc, #36]	; (40 <DBPL_vReturnFromSilentModeRequest+0x40>)
+  1a:	705a      	strb	r2, [r3, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_RETURN_FROM_SILENT_MODE_RESPONSE;
+  1c:	220f      	movs	r2, #15
+  1e:	709a      	strb	r2, [r3, #2]
+  20:	3a1a      	subs	r2, #26
+  22:	70da      	strb	r2, [r3, #3]
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  24:	4b07      	ldr	r3, [pc, #28]	; (44 <DBPL_vReturnFromSilentModeRequest+0x44>)
+  26:	320e      	adds	r2, #14
+  28:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  2a:	4b07      	ldr	r3, [pc, #28]	; (48 <DBPL_vReturnFromSilentModeRequest+0x48>)
+  2c:	701c      	strb	r4, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  2e:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  32:	bd70      	pop	{r4, r5, r6, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  34:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  38:	e7fb      	b.n	32 <DBPL_vReturnFromSilentModeRequest+0x32>
+  3a:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vBaudrateVerifyRequest:
+
+00000000 <DBPL_vBaudrateVerifyRequest>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0005      	movs	r5, r0
+   4:	000e      	movs	r6, r1
+    if(ucDataLen == (uint8_t)DBPL_BAUD_RATE_VERIFY_REQ_LEN)
+   6:	2803      	cmp	r0, #3
+   8:	d123      	bne.n	52 <DBPL_vBaudrateVerifyRequest+0x52>
+        baud = (((uint16_t)pucData[DBPL_BAUD_RATE_VERIFY_REQ_BAUD_HI]<<8)|(uint16_t)pucData[DBPL_BAUD_RATE_VERIFY_REQ_BAUD_LO]);
+   a:	788c      	ldrb	r4, [r1, #2]
+   c:	784b      	ldrb	r3, [r1, #1]
+   e:	0224      	lsls	r4, r4, #8
+  10:	431c      	orrs	r4, r3
+  12:	ba64      	rev16	r4, r4
+  14:	b2a0      	uxth	r0, r4
+        if(DBPL_bIsRequestedBaudValid(baud))
+  16:	f7ff fffe 	bl	0 <DBPL_bIsRequestedBaudValid>
+  1a:	2800      	cmp	r0, #0
+  1c:	d019      	beq.n	52 <DBPL_vBaudrateVerifyRequest+0x52>
+            DBPL_uBaudRate = baud;
+  1e:	4b0e      	ldr	r3, [pc, #56]	; (58 <DBPL_vBaudrateVerifyRequest+0x58>)
+  20:	801c      	strh	r4, [r3, #0]
+            delay_10ms = DBPL_ulGetBaudrateTransitionDelay();
+  22:	f7ff fffe 	bl	0 <DBPL_ulGetBaudrateTransitionDelay>
+            DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_BAUD_RATE_VERIFY_RESP_LEN;
+  26:	2202      	movs	r2, #2
+  28:	4b0c      	ldr	r3, [pc, #48]	; (5c <DBPL_vBaudrateVerifyRequest+0x5c>)
+  2a:	701a      	strb	r2, [r3, #0]
+            DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_BAUD_RATE_VERIFY_REQ_SENDER]; //Save the target address of the requesting communication partner.
+  2c:	7832      	ldrb	r2, [r6, #0]
+  2e:	4b0c      	ldr	r3, [pc, #48]	; (60 <DBPL_vBaudrateVerifyRequest+0x60>)
+  30:	705a      	strb	r2, [r3, #1]
+            DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_BAUDRATE_VERIFY_RESPONSE;
+  32:	2208      	movs	r2, #8
+  34:	709a      	strb	r2, [r3, #2]
+  36:	3a13      	subs	r2, #19
+  38:	70da      	strb	r2, [r3, #3]
+            DBPL_tMessageBuffer.aucData[DBPL_BAUD_RATE_VERIFY_RESP_DELAY_MS_HI] = (uint8_t)(delay_10ms>>8);
+  3a:	0a02      	lsrs	r2, r0, #8
+  3c:	711a      	strb	r2, [r3, #4]
+            DBPL_bSendMsg = true;
+  3e:	2201      	movs	r2, #1
+            DBPL_tMessageBuffer.aucData[DBPL_BAUD_RATE_VERIFY_RESP_DELAY_MS_LO] = (uint8_t)delay_10ms;
+  40:	7158      	strb	r0, [r3, #5]
+            DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  42:	4b08      	ldr	r3, [pc, #32]	; (64 <DBPL_vBaudrateVerifyRequest+0x64>)
+            DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  44:	20ff      	movs	r0, #255	; 0xff
+            DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  46:	701d      	strb	r5, [r3, #0]
+            DBPL_bSendMsg = true;
+  48:	4b07      	ldr	r3, [pc, #28]	; (68 <DBPL_vBaudrateVerifyRequest+0x68>)
+  4a:	701a      	strb	r2, [r3, #0]
+            DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  4c:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  50:	bd70      	pop	{r4, r5, r6, pc}
+            DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  52:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  56:	e7fb      	b.n	50 <DBPL_vBaudrateVerifyRequest+0x50>
+	...
+
+Disassembly of section .text.DBPL_vUpdateModeVerifyRequest:
+
+00000000 <DBPL_vUpdateModeVerifyRequest>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+    if(ucDataLen == (uint8_t)DBPL_UPDATE_MODE_VERIFY_REQ_LEN)
+   6:	2801      	cmp	r0, #1
+   8:	d11b      	bne.n	42 <DBPL_vUpdateModeVerifyRequest+0x42>
+        if(DBPL_bIsUpdateModePossible())
+   a:	f7ff fffe 	bl	0 <DBPL_bIsUpdateModePossible>
+   e:	2800      	cmp	r0, #0
+  10:	d017      	beq.n	42 <DBPL_vUpdateModeVerifyRequest+0x42>
+            delay_10ms = DBPL_ulGetUpdateTransitionDelay();
+  12:	f7ff fffe 	bl	0 <DBPL_ulGetUpdateTransitionDelay>
+            DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_UPDATE_MODE_VERIFY_RESP_LEN;
+  16:	2202      	movs	r2, #2
+  18:	4b0b      	ldr	r3, [pc, #44]	; (48 <DBPL_vUpdateModeVerifyRequest+0x48>)
+  1a:	701a      	strb	r2, [r3, #0]
+            DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_UPDATE_MODE_VERIFY_REQ_SENDER]; //Save the target address of the requesting communication partner.
+  1c:	782a      	ldrb	r2, [r5, #0]
+  1e:	4b0b      	ldr	r3, [pc, #44]	; (4c <DBPL_vUpdateModeVerifyRequest+0x4c>)
+  20:	705a      	strb	r2, [r3, #1]
+            DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_UPDATE_MODE_VERIFY_RESPONSE;
+  22:	2205      	movs	r2, #5
+  24:	709a      	strb	r2, [r3, #2]
+  26:	3a10      	subs	r2, #16
+  28:	70da      	strb	r2, [r3, #3]
+            DBPL_tMessageBuffer.aucData[DBPL_UPDATE_MODE_VERIFY_RESP_DELAY_MS_HI] = (uint8_t)(delay_10ms>>8);
+  2a:	0a02      	lsrs	r2, r0, #8
+  2c:	711a      	strb	r2, [r3, #4]
+            DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  2e:	2203      	movs	r2, #3
+            DBPL_tMessageBuffer.aucData[DBPL_UPDATE_MODE_VERIFY_RESP_DELAY_MS_LO] = (uint8_t)delay_10ms;
+  30:	7158      	strb	r0, [r3, #5]
+            DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  32:	4b07      	ldr	r3, [pc, #28]	; (50 <DBPL_vUpdateModeVerifyRequest+0x50>)
+            DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  34:	20ff      	movs	r0, #255	; 0xff
+            DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  36:	701a      	strb	r2, [r3, #0]
+            DBPL_bSendMsg = true;
+  38:	4b06      	ldr	r3, [pc, #24]	; (54 <DBPL_vUpdateModeVerifyRequest+0x54>)
+  3a:	701c      	strb	r4, [r3, #0]
+            DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  3c:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  40:	bd70      	pop	{r4, r5, r6, pc}
+            DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  42:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  46:	e7fb      	b.n	40 <DBPL_vUpdateModeVerifyRequest+0x40>
+	...
+
+Disassembly of section .text.DBPL_vSilentModeTransitionRequest:
+
+00000000 <DBPL_vSilentModeTransitionRequest>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	000c      	movs	r4, r1
+    if(ucDataLen == (uint8_t)DBPL_SILENT_MODE_TRANSITION_REQUEST_LEN)
+   4:	2801      	cmp	r0, #1
+   6:	d11b      	bne.n	40 <DBPL_vSilentModeTransitionRequest+0x40>
+        if(DLL_isSilentMode() == false)
+   8:	f7ff fffe 	bl	0 <DLL_isSilentMode>
+   c:	2800      	cmp	r0, #0
+   e:	d103      	bne.n	18 <DBPL_vSilentModeTransitionRequest+0x18>
+            DLL_vSetSilentMode();
+  10:	f7ff fffe 	bl	0 <DLL_vSetSilentMode>
+            DBPL_vSilentModeHasBeenEntered();
+  14:	f7ff fffe 	bl	0 <DBPL_vSilentModeHasBeenEntered>
+        DBPL_ucNumberOfBytesInMessage = 0U;
+  18:	2200      	movs	r2, #0
+  1a:	4b0b      	ldr	r3, [pc, #44]	; (48 <DBPL_vSilentModeTransitionRequest+0x48>)
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_SILENT_MODE_TRANSITION_RESPONSE;
+  1c:	210b      	movs	r1, #11
+        DBPL_ucNumberOfBytesInMessage = 0U;
+  1e:	701a      	strb	r2, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_SILENT_MODE_TRANSITION_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  20:	7822      	ldrb	r2, [r4, #0]
+  22:	4b0a      	ldr	r3, [pc, #40]	; (4c <DBPL_vSilentModeTransitionRequest+0x4c>)
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_SILENT_MODE_TRANSITION_RESPONSE;
+  24:	4249      	negs	r1, r1
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_SILENT_MODE_TRANSITION_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  26:	705a      	strb	r2, [r3, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_SILENT_MODE_TRANSITION_RESPONSE;
+  28:	2203      	movs	r2, #3
+  2a:	70d9      	strb	r1, [r3, #3]
+  2c:	709a      	strb	r2, [r3, #2]
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  2e:	4b08      	ldr	r3, [pc, #32]	; (50 <DBPL_vSilentModeTransitionRequest+0x50>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  30:	20ff      	movs	r0, #255	; 0xff
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  32:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  34:	4b07      	ldr	r3, [pc, #28]	; (54 <DBPL_vSilentModeTransitionRequest+0x54>)
+  36:	3a02      	subs	r2, #2
+  38:	701a      	strb	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  3a:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  3e:	bd10      	pop	{r4, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  40:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  44:	e7fb      	b.n	3e <DBPL_vSilentModeTransitionRequest+0x3e>
+  46:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vEcuUniqueIdReadRequest:
+
+00000000 <DBPL_vEcuUniqueIdReadRequest>:
+{
+   0:	b573      	push	{r0, r1, r4, r5, r6, lr}
+   2:	0005      	movs	r5, r0
+   4:	000e      	movs	r6, r1
+    if(ucDataLen == (uint8_t)DBPL_ECU_UNIQUE_ID_REQUEST_LEN)
+   6:	2801      	cmp	r0, #1
+   8:	d123      	bne.n	52 <DBPL_vEcuUniqueIdReadRequest+0x52>
+        struct DBPL_EcuUniqueIdReadResult result =
+   a:	466c      	mov	r4, sp
+   c:	0022      	movs	r2, r4
+   e:	4b12      	ldr	r3, [pc, #72]	; (58 <DBPL_vEcuUniqueIdReadRequest+0x58>)
+  10:	330c      	adds	r3, #12
+  12:	cb03      	ldmia	r3!, {r0, r1}
+  14:	c203      	stmia	r2!, {r0, r1}
+        DBPL_tGetUniqueIdReadResult(maxReadableUniqueIdLen, &result);/*lint !e934 Taking address fully intended.*/
+  16:	0021      	movs	r1, r4
+  18:	2080      	movs	r0, #128	; 0x80
+  1a:	f7ff fffe 	bl	0 <DBPL_tGetUniqueIdReadResult>
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_ECU_UNIQUE_ID_RESPONSE_DATAOFFSET + result.uniqueIdLen;
+  1e:	7862      	ldrb	r2, [r4, #1]
+  20:	4b0e      	ldr	r3, [pc, #56]	; (5c <DBPL_vEcuUniqueIdReadRequest+0x5c>)
+  22:	1cd1      	adds	r1, r2, #3
+  24:	7019      	strb	r1, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_UNIQUE_ID_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  26:	7831      	ldrb	r1, [r6, #0]
+  28:	4b0d      	ldr	r3, [pc, #52]	; (60 <DBPL_vEcuUniqueIdReadRequest+0x60>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  2a:	20ff      	movs	r0, #255	; 0xff
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ECU_UNIQUE_ID_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  2c:	7059      	strb	r1, [r3, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_UNIQUE_ID_READ_RES;
+  2e:	2109      	movs	r1, #9
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_UNIQUE_ID_RESPONSE_ID_LEN] = result.uniqueIdLen;
+  30:	719a      	strb	r2, [r3, #6]
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  32:	2203      	movs	r2, #3
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_ECU_UNIQUE_ID_READ_RES;
+  34:	7099      	strb	r1, [r3, #2]
+  36:	3916      	subs	r1, #22
+  38:	70d9      	strb	r1, [r3, #3]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_UNIQUE_ID_RESPONSE_SENDER] = DBPL_ucNodeAddrToRespondFrom;
+  3a:	490a      	ldr	r1, [pc, #40]	; (64 <DBPL_vEcuUniqueIdReadRequest+0x64>)
+  3c:	7809      	ldrb	r1, [r1, #0]
+  3e:	7119      	strb	r1, [r3, #4]
+        DBPL_tMessageBuffer.aucData[DBPL_ECU_UNIQUE_ID_RESPONSE_STATUS] = (uint8_t)result.status;
+  40:	7821      	ldrb	r1, [r4, #0]
+  42:	7159      	strb	r1, [r3, #5]
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  44:	4b08      	ldr	r3, [pc, #32]	; (68 <DBPL_vEcuUniqueIdReadRequest+0x68>)
+  46:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  48:	4b08      	ldr	r3, [pc, #32]	; (6c <DBPL_vEcuUniqueIdReadRequest+0x6c>)
+  4a:	701d      	strb	r5, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  4c:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  50:	bd73      	pop	{r0, r1, r4, r5, r6, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  52:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  56:	e7fb      	b.n	50 <DBPL_vEcuUniqueIdReadRequest+0x50>
+	...
+
+Disassembly of section .text.DBPL_vHsiProtocolRequest:
+
+00000000 <DBPL_vHsiProtocolRequest>:
+{
+   0:	0002      	movs	r2, r0
+   2:	b510      	push	{r4, lr}
+   4:	0008      	movs	r0, r1
+    if(ucDataLen >= (uint8_t)DBPL_HSI_PROTOCOL_REQUEST_OFFSET)
+   6:	2a00      	cmp	r2, #0
+   8:	d00e      	beq.n	28 <DBPL_vHsiProtocolRequest+0x28>
+    return timer->targetTime_ms - timer->currentTime_ms;
+   a:	4b09      	ldr	r3, [pc, #36]	; (30 <DBPL_vHsiProtocolRequest+0x30>)
+        DBPL_hsiBaudRateTime = DBPL_getBaudRateTimer();
+   c:	4909      	ldr	r1, [pc, #36]	; (34 <DBPL_vHsiProtocolRequest+0x34>)
+   e:	681c      	ldr	r4, [r3, #0]
+  10:	685b      	ldr	r3, [r3, #4]
+  12:	1b1b      	subs	r3, r3, r4
+  14:	b29b      	uxth	r3, r3
+  16:	600b      	str	r3, [r1, #0]
+        DBPL_ucHsiSenderAddress = pucData[DBPL_HSI_PROTOCOL_REQUEST_SENDER];
+  18:	7801      	ldrb	r1, [r0, #0]
+  1a:	4b07      	ldr	r3, [pc, #28]	; (38 <DBPL_vHsiProtocolRequest+0x38>)
+        DBPL_vHSI_DataIndication((void*)&pucData[DBPL_HSI_PROTOCOL_REQUEST_OFFSET], DBPL_ulHsiFrameLen);
+  1c:	3001      	adds	r0, #1
+        DBPL_ucHsiSenderAddress = pucData[DBPL_HSI_PROTOCOL_REQUEST_SENDER];
+  1e:	7019      	strb	r1, [r3, #0]
+        DBPL_ulHsiFrameLen = (uint32_t)ucDataLen - (uint32_t)DBPL_HSI_PROTOCOL_REQUEST_OFFSET;
+  20:	1e51      	subs	r1, r2, #1
+        DBPL_vHSI_DataIndication((void*)&pucData[DBPL_HSI_PROTOCOL_REQUEST_OFFSET], DBPL_ulHsiFrameLen);
+  22:	f7ff fffe 	bl	0 <DBPL_vHSI_DataIndication>
+}
+  26:	bd10      	pop	{r4, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  28:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  2c:	e7fb      	b.n	26 <DBPL_vHsiProtocolRequest+0x26>
+  2e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vWakeupSentRequest:
+
+00000000 <DBPL_vWakeupSentRequest>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   4:	000d      	movs	r5, r1
+    if((ucDataLen == (uint8_t)DBPL_WAKEUP_SENT_REQUEST_LEN) && (DBPL_bWakeupBreakSent == true) && (DBPL_bIsNodeToBeWokenUp(pucData[DBPL_WAKEUP_SENT_REQUEST_SENDER]) == true))
+   6:	2801      	cmp	r0, #1
+   8:	d11d      	bne.n	46 <DBPL_vWakeupSentRequest+0x46>
+   a:	4b10      	ldr	r3, [pc, #64]	; (4c <DBPL_vWakeupSentRequest+0x4c>)
+   c:	781b      	ldrb	r3, [r3, #0]
+   e:	2b00      	cmp	r3, #0
+  10:	d019      	beq.n	46 <DBPL_vWakeupSentRequest+0x46>
+  12:	7808      	ldrb	r0, [r1, #0]
+  14:	f7ff fffe 	bl	0 <DBPL_bIsNodeToBeWokenUp>
+  18:	2800      	cmp	r0, #0
+  1a:	d014      	beq.n	46 <DBPL_vWakeupSentRequest+0x46>
+  1c:	782b      	ldrb	r3, [r5, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_WAKEUP_SENT_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  1e:	4d0c      	ldr	r5, [pc, #48]	; (50 <DBPL_vWakeupSentRequest+0x50>)
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WAKEUP_SENT_RESPONSE_LEN;
+  20:	4a0c      	ldr	r2, [pc, #48]	; (54 <DBPL_vWakeupSentRequest+0x54>)
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_WAKEUP_SENT_REQUEST_SENDER]; //Save the target address of the requesting communication partner.
+  22:	706b      	strb	r3, [r5, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WAKEUP_SENT_RESPONSE;
+  24:	2307      	movs	r3, #7
+  26:	70ab      	strb	r3, [r5, #2]
+  28:	3b14      	subs	r3, #20
+        DBPL_ucNumberOfBytesInMessage = (uint8_t)DBPL_WAKEUP_SENT_RESPONSE_LEN;
+  2a:	7014      	strb	r4, [r2, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_WAKEUP_SENT_RESPONSE;
+  2c:	70eb      	strb	r3, [r5, #3]
+        DBPL_tMessageBuffer.aucData[DBPL_WAKEUP_SENT_RESPONSE_SENDER] = DBPL_ucGetOwnAddressToInformOtherNodes();
+  2e:	f7ff fffe 	bl	0 <DBPL_ucGetOwnAddressToInformOtherNodes>
+        DBPL_ucRepetitions = DBPL_POWER_MSG_SEND_RETRIES;
+  32:	2205      	movs	r2, #5
+  34:	4b08      	ldr	r3, [pc, #32]	; (58 <DBPL_vWakeupSentRequest+0x58>)
+        DBPL_tMessageBuffer.aucData[DBPL_WAKEUP_SENT_RESPONSE_SENDER] = DBPL_ucGetOwnAddressToInformOtherNodes();
+  36:	7128      	strb	r0, [r5, #4]
+        DBPL_ucRepetitions = DBPL_POWER_MSG_SEND_RETRIES;
+  38:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  3a:	4b08      	ldr	r3, [pc, #32]	; (5c <DBPL_vWakeupSentRequest+0x5c>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  3c:	20ff      	movs	r0, #255	; 0xff
+        DBPL_bSendMsg = true;
+  3e:	701c      	strb	r4, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  40:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  44:	bd70      	pop	{r4, r5, r6, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  46:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  4a:	e7fb      	b.n	44 <DBPL_vWakeupSentRequest+0x44>
+	...
+
+Disassembly of section .text.DBPL_ucGetModuleIndex:
+
+00000000 <DBPL_ucGetModuleIndex>:
+{
+   0:	0002      	movs	r2, r0
+   for (uint8_t ucModuleIndex = 0; ucModuleIndex < DBPL_ucNumberOfElements; ucModuleIndex++)
+   2:	2000      	movs	r0, #0
+{
+   4:	b510      	push	{r4, lr}
+   for (uint8_t ucModuleIndex = 0; ucModuleIndex < DBPL_ucNumberOfElements; ucModuleIndex++)
+   6:	4b08      	ldr	r3, [pc, #32]	; (28 <DBPL_ucGetModuleIndex+0x28>)
+   8:	7819      	ldrb	r1, [r3, #0]
+   a:	4b08      	ldr	r3, [pc, #32]	; (2c <DBPL_ucGetModuleIndex+0x2c>)
+   c:	4281      	cmp	r1, r0
+   e:	d101      	bne.n	14 <DBPL_ucGetModuleIndex+0x14>
+   return 0U;      //If the requested module is not found in the table, the first index (0) is returned.
+  10:	2000      	movs	r0, #0
+}
+  12:	bd10      	pop	{r4, pc}
+      if (DBPL_tModuleDict[ucModuleIndex].ucModule == ucMemoryModule)
+  14:	330e      	adds	r3, #14
+  16:	001c      	movs	r4, r3
+  18:	3c0e      	subs	r4, #14
+  1a:	7824      	ldrb	r4, [r4, #0]
+  1c:	4294      	cmp	r4, r2
+  1e:	d0f8      	beq.n	12 <DBPL_ucGetModuleIndex+0x12>
+   for (uint8_t ucModuleIndex = 0; ucModuleIndex < DBPL_ucNumberOfElements; ucModuleIndex++)
+  20:	3001      	adds	r0, #1
+  22:	b2c0      	uxtb	r0, r0
+  24:	e7f2      	b.n	c <DBPL_ucGetModuleIndex+0xc>
+  26:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vSetMemoryModule:
+
+00000000 <DBPL_vSetMemoryModule>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen == (uint8_t)DBPL_SETMODULE_LEN)
+   2:	2801      	cmp	r0, #1
+   4:	d107      	bne.n	16 <DBPL_vSetMemoryModule+0x16>
+        DBPL_ucMemoryModule = pucData[DBPL_SETMODULE_NUMBER];
+   6:	780c      	ldrb	r4, [r1, #0]
+        if (DBPL_ucGetModuleIndex(DBPL_ucMemoryModule) == 0U)
+   8:	0020      	movs	r0, r4
+   a:	f7ff fffe 	bl	0 <DBPL_vSetMemoryModule>
+   e:	4b04      	ldr	r3, [pc, #16]	; (20 <DBPL_vSetMemoryModule+0x20>)
+  10:	2800      	cmp	r0, #0
+  12:	d003      	beq.n	1c <DBPL_vSetMemoryModule+0x1c>
+        DBPL_ucMemoryModule = pucData[DBPL_SETMODULE_NUMBER];
+  14:	701c      	strb	r4, [r3, #0]
+    DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  16:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  1a:	bd10      	pop	{r4, pc}
+            DBPL_ucMemoryModule = 0U;
+  1c:	7018      	strb	r0, [r3, #0]
+  1e:	e7fa      	b.n	16 <DBPL_vSetMemoryModule+0x16>
+  20:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_bDoesAppSpecificRepetitionTimeoutApply:
+
+00000000 <DBPL_bDoesAppSpecificRepetitionTimeoutApply>:
+    return (uiUserCode >= (uint16_t)BAL_FIRST_SERVICE_MSGID) ? false : true;
+   0:	2300      	movs	r3, #0
+   2:	4a02      	ldr	r2, [pc, #8]	; (c <DBPL_bDoesAppSpecificRepetitionTimeoutApply+0xc>)
+   4:	4282      	cmp	r2, r0
+   6:	415b      	adcs	r3, r3
+   8:	b2d8      	uxtb	r0, r3
+}
+   a:	4770      	bx	lr
+   c:	0000efff 	.word	0x0000efff
+
+Disassembly of section .text.DBPL_bIsOfflineMode:
+
+00000000 <DBPL_bIsOfflineMode>:
+    return (DBPL_TaskState >= DBPL_OFFLINE_WAIT_FOR_RESET) ? true : false;
+   0:	2001      	movs	r0, #1
+   2:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsOfflineMode+0x10>)
+   4:	781b      	ldrb	r3, [r3, #0]
+   6:	4298      	cmp	r0, r3
+   8:	4180      	sbcs	r0, r0
+   a:	4240      	negs	r0, r0
+}
+   c:	4770      	bx	lr
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_ucGetCurrentMemoryModule:
+
+00000000 <DBPL_ucGetCurrentMemoryModule>:
+    return DBPL_ucMemoryModule;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBPL_ucGetCurrentMemoryModule+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_bSendWakeupSentRequest:
+
+00000000 <DBPL_bSendWakeupSentRequest>:
+    return false;
+   0:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <DBPL_bSendWakeupSentRequest+0x1c>)
+{
+   4:	b510      	push	{r4, lr}
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   6:	881a      	ldrh	r2, [r3, #0]
+   8:	4282      	cmp	r2, r0
+   a:	d105      	bne.n	18 <DBPL_bSendWakeupSentRequest+0x18>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_WAKEUP_SENT_REQUEST;
+   c:	4a04      	ldr	r2, [pc, #16]	; (20 <DBPL_bSendWakeupSentRequest+0x20>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+   e:	30ff      	adds	r0, #255	; 0xff
+        DBPL_uiSendPowerMsgUserTrigger = MSG_WAKEUP_SENT_REQUEST;
+  10:	801a      	strh	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+  12:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+        return true;
+  16:	2001      	movs	r0, #1
+}
+  18:	bd10      	pop	{r4, pc}
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	00000000 	.word	0x00000000
+  20:	fffff306 	.word	0xfffff306
+
+Disassembly of section .text.DBPL_bSendPowerFailMsg:
+
+00000000 <DBPL_bSendPowerFailMsg>:
+    return false;
+   0:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <DBPL_bSendPowerFailMsg+0x1c>)
+{
+   4:	b510      	push	{r4, lr}
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   6:	881a      	ldrh	r2, [r3, #0]
+   8:	4282      	cmp	r2, r0
+   a:	d105      	bne.n	18 <DBPL_bSendPowerFailMsg+0x18>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_FAIL;
+   c:	4a04      	ldr	r2, [pc, #16]	; (20 <DBPL_bSendPowerFailMsg+0x20>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+   e:	30ff      	adds	r0, #255	; 0xff
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_FAIL;
+  10:	801a      	strh	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+  12:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+        return true;
+  16:	2001      	movs	r0, #1
+}
+  18:	bd10      	pop	{r4, pc}
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	00000000 	.word	0x00000000
+  20:	fffff310 	.word	0xfffff310
+
+Disassembly of section .text.DBPL_bSendPowerResurgeMsg:
+
+00000000 <DBPL_bSendPowerResurgeMsg>:
+    return false;
+   0:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   2:	4b06      	ldr	r3, [pc, #24]	; (1c <DBPL_bSendPowerResurgeMsg+0x1c>)
+{
+   4:	b510      	push	{r4, lr}
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   6:	881a      	ldrh	r2, [r3, #0]
+   8:	4282      	cmp	r2, r0
+   a:	d105      	bne.n	18 <DBPL_bSendPowerResurgeMsg+0x18>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_RESURGE;
+   c:	4a04      	ldr	r2, [pc, #16]	; (20 <DBPL_bSendPowerResurgeMsg+0x20>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+   e:	30ff      	adds	r0, #255	; 0xff
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_RESURGE;
+  10:	801a      	strh	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+  12:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+        return true;
+  16:	2001      	movs	r0, #1
+}
+  18:	bd10      	pop	{r4, pc}
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	00000000 	.word	0x00000000
+  20:	fffff311 	.word	0xfffff311
+
+Disassembly of section .text.DBPL_bSendPowerMgmtWakeup:
+
+00000000 <DBPL_bSendPowerMgmtWakeup>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    return false;
+   4:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   6:	4b06      	ldr	r3, [pc, #24]	; (20 <DBPL_bSendPowerMgmtWakeup+0x20>)
+   8:	881a      	ldrh	r2, [r3, #0]
+   a:	4282      	cmp	r2, r0
+   c:	d107      	bne.n	1e <DBPL_bSendPowerMgmtWakeup+0x1e>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_WAKEUP;
+   e:	4a05      	ldr	r2, [pc, #20]	; (24 <DBPL_bSendPowerMgmtWakeup+0x24>)
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+  10:	30ff      	adds	r0, #255	; 0xff
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_WAKEUP;
+  12:	801a      	strh	r2, [r3, #0]
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_PWR );
+  14:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+        return true;
+  18:	2001      	movs	r0, #1
+        DBPL_ucPowerMgmtMsgTargetAddr  = ucTargetAddr;
+  1a:	4b03      	ldr	r3, [pc, #12]	; (28 <DBPL_bSendPowerMgmtWakeup+0x28>)
+  1c:	701c      	strb	r4, [r3, #0]
+}
+  1e:	bd10      	pop	{r4, pc}
+  20:	00000000 	.word	0x00000000
+  24:	fffff320 	.word	0xfffff320
+  28:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_bSendPowerMgmtWakeupComplete:
+
+00000000 <DBPL_bSendPowerMgmtWakeupComplete>:
+{
+   0:	0003      	movs	r3, r0
+    return false;
+   2:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   4:	4a04      	ldr	r2, [pc, #16]	; (18 <DBPL_bSendPowerMgmtWakeupComplete+0x18>)
+   6:	8811      	ldrh	r1, [r2, #0]
+   8:	4281      	cmp	r1, r0
+   a:	d104      	bne.n	16 <DBPL_bSendPowerMgmtWakeupComplete+0x16>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_WAKEUP_COMPLETE;
+   c:	4903      	ldr	r1, [pc, #12]	; (1c <DBPL_bSendPowerMgmtWakeupComplete+0x1c>)
+        return true;
+   e:	3001      	adds	r0, #1
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_WAKEUP_COMPLETE;
+  10:	8011      	strh	r1, [r2, #0]
+        DBPL_ucPowerMgmtMsgTargetAddr  = ucTargetAddr;
+  12:	4a03      	ldr	r2, [pc, #12]	; (20 <DBPL_bSendPowerMgmtWakeupComplete+0x20>)
+  14:	7013      	strb	r3, [r2, #0]
+}
+  16:	4770      	bx	lr
+  18:	00000000 	.word	0x00000000
+  1c:	fffff322 	.word	0xfffff322
+  20:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_bSendPowerMgmtNodeReset:
+
+00000000 <DBPL_bSendPowerMgmtNodeReset>:
+{
+   0:	0003      	movs	r3, r0
+    return false;
+   2:	2000      	movs	r0, #0
+    if(DBPL_uiSendPowerMsgUserTrigger == 0U)
+   4:	4a04      	ldr	r2, [pc, #16]	; (18 <DBPL_bSendPowerMgmtNodeReset+0x18>)
+   6:	8811      	ldrh	r1, [r2, #0]
+   8:	4281      	cmp	r1, r0
+   a:	d104      	bne.n	16 <DBPL_bSendPowerMgmtNodeReset+0x16>
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_NODE_RESET;
+   c:	4903      	ldr	r1, [pc, #12]	; (1c <DBPL_bSendPowerMgmtNodeReset+0x1c>)
+        return true;
+   e:	3001      	adds	r0, #1
+        DBPL_uiSendPowerMsgUserTrigger = MSG_POWER_MGMT_NODE_RESET;
+  10:	8011      	strh	r1, [r2, #0]
+        DBPL_ucPowerMgmtMsgTargetAddr  = ucTargetAddr;
+  12:	4a03      	ldr	r2, [pc, #12]	; (20 <DBPL_bSendPowerMgmtNodeReset+0x20>)
+  14:	7013      	strb	r3, [r2, #0]
+}
+  16:	4770      	bx	lr
+  18:	00000000 	.word	0x00000000
+  1c:	fffff324 	.word	0xfffff324
+  20:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_bIsSendingWakeupSentRequest:
+
+00000000 <DBPL_bIsSendingWakeupSentRequest>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_WAKEUP_SENT_REQUEST) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingWakeupSentRequest+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingWakeupSentRequest+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0cfa 	.word	0xffff0cfa
+
+Disassembly of section .text.DBPL_bIsSendingPowerFail:
+
+00000000 <DBPL_bIsSendingPowerFail>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_FAIL) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingPowerFail+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingPowerFail+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0cf0 	.word	0xffff0cf0
+
+Disassembly of section .text.DBPL_bIsSendingPowerResurge:
+
+00000000 <DBPL_bIsSendingPowerResurge>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_RESURGE) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingPowerResurge+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingPowerResurge+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0cef 	.word	0xffff0cef
+
+Disassembly of section .text.DBPL_bIsSendingPowerMgmtWakeup:
+
+00000000 <DBPL_bIsSendingPowerMgmtWakeup>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_WAKEUP) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingPowerMgmtWakeup+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingPowerMgmtWakeup+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0ce0 	.word	0xffff0ce0
+
+Disassembly of section .text.DBPL_bIsSendingPowerMgmtWakeupComplete:
+
+00000000 <DBPL_bIsSendingPowerMgmtWakeupComplete>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_WAKEUP_COMPLETE) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingPowerMgmtWakeupComplete+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingPowerMgmtWakeupComplete+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0cde 	.word	0xffff0cde
+
+Disassembly of section .text.DBPL_bIsSendingPowerMgmtNodeReset:
+
+00000000 <DBPL_bIsSendingPowerMgmtNodeReset>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_MGMT_NODE_RESET) ? true : false;
+   0:	4b03      	ldr	r3, [pc, #12]	; (10 <DBPL_bIsSendingPowerMgmtNodeReset+0x10>)
+   2:	8818      	ldrh	r0, [r3, #0]
+   4:	4b03      	ldr	r3, [pc, #12]	; (14 <DBPL_bIsSendingPowerMgmtNodeReset+0x14>)
+   6:	18c0      	adds	r0, r0, r3
+   8:	4243      	negs	r3, r0
+   a:	4158      	adcs	r0, r3
+   c:	b2c0      	uxtb	r0, r0
+}
+   e:	4770      	bx	lr
+  10:	00000000 	.word	0x00000000
+  14:	ffff0cdc 	.word	0xffff0cdc
+
+Disassembly of section .text.DBPL_bIsSendingPowerMsg:
+
+00000000 <DBPL_bIsSendingPowerMsg>:
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_WAKEUP_SENT_REQUEST) ? true : false;
+   0:	4b09      	ldr	r3, [pc, #36]	; (28 <DBPL_bIsSendingPowerMsg+0x28>)
+    return ((DBPL_bIsSendingWakeupSentRequest() == true) || (DBPL_bIsSendingPowerFail() == true) || (DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingPowerMgmtMsg() == true)) ? true : false;
+   2:	4a0a      	ldr	r2, [pc, #40]	; (2c <DBPL_bIsSendingPowerMsg+0x2c>)
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_WAKEUP_SENT_REQUEST) ? true : false;
+   4:	8819      	ldrh	r1, [r3, #0]
+    return ((DBPL_bIsSendingWakeupSentRequest() == true) || (DBPL_bIsSendingPowerFail() == true) || (DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingPowerMgmtMsg() == true)) ? true : false;
+   6:	2001      	movs	r0, #1
+{
+   8:	b510      	push	{r4, lr}
+    return ((DBPL_bIsSendingWakeupSentRequest() == true) || (DBPL_bIsSendingPowerFail() == true) || (DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingPowerMgmtMsg() == true)) ? true : false;
+   a:	4291      	cmp	r1, r2
+   c:	d009      	beq.n	22 <DBPL_bIsSendingPowerMsg+0x22>
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_FAIL) ? true : false;
+   e:	8819      	ldrh	r1, [r3, #0]
+    return ((DBPL_bIsSendingWakeupSentRequest() == true) || (DBPL_bIsSendingPowerFail() == true) || (DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingPowerMgmtMsg() == true)) ? true : false;
+  10:	4a07      	ldr	r2, [pc, #28]	; (30 <DBPL_bIsSendingPowerMsg+0x30>)
+  12:	4291      	cmp	r1, r2
+  14:	d005      	beq.n	22 <DBPL_bIsSendingPowerMsg+0x22>
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_RESURGE) ? true : false;
+  16:	881a      	ldrh	r2, [r3, #0]
+    return ((DBPL_bIsSendingWakeupSentRequest() == true) || (DBPL_bIsSendingPowerFail() == true) || (DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingPowerMgmtMsg() == true)) ? true : false;
+  18:	4b06      	ldr	r3, [pc, #24]	; (34 <DBPL_bIsSendingPowerMsg+0x34>)
+  1a:	429a      	cmp	r2, r3
+  1c:	d001      	beq.n	22 <DBPL_bIsSendingPowerMsg+0x22>
+  1e:	f7ff fffe 	bl	0 <DBPL_bIsSendingPowerMsg>
+  22:	2301      	movs	r3, #1
+  24:	4018      	ands	r0, r3
+}
+  26:	bd10      	pop	{r4, pc}
+  28:	00000000 	.word	0x00000000
+  2c:	0000f306 	.word	0x0000f306
+  30:	0000f310 	.word	0x0000f310
+  34:	0000f311 	.word	0x0000f311
+
+Disassembly of section .text.DBPL_HandleTask:
+
+00000000 <DBPL_HandleTask>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+    if (DBPL_TaskState == DBPL_INIT)
+   2:	4e4a      	ldr	r6, [pc, #296]	; (12c <DBPL_HandleTask+0x12c>)
+   4:	7834      	ldrb	r4, [r6, #0]
+   6:	2c00      	cmp	r4, #0
+   8:	d130      	bne.n	6c <DBPL_HandleTask+0x6c>
+    return STDCB_InitCallback(callback, functionPtr, objectPtr, (uint32_t) statusMask);
+   a:	4d49      	ldr	r5, [pc, #292]	; (130 <DBPL_HandleTask+0x130>)
+   c:	2301      	movs	r3, #1
+   e:	0022      	movs	r2, r4
+  10:	0028      	movs	r0, r5
+  12:	4948      	ldr	r1, [pc, #288]	; (134 <DBPL_HandleTask+0x134>)
+  14:	f7ff fffe 	bl	0 <STDCB_InitCallback>
+    (void)STIM_InitTimer(&DBPL_baudRateTimer, STIM_PROCESSING_SCHEDULER,
+  18:	9501      	str	r5, [sp, #4]
+  1a:	2501      	movs	r5, #1
+  1c:	0023      	movs	r3, r4
+  1e:	0029      	movs	r1, r5
+  20:	4a45      	ldr	r2, [pc, #276]	; (138 <DBPL_HandleTask+0x138>)
+  22:	4846      	ldr	r0, [pc, #280]	; (13c <DBPL_HandleTask+0x13c>)
+  24:	9500      	str	r5, [sp, #0]
+  26:	f7ff fffe 	bl	0 <STIM_InitTimer>
+  2a:	4f45      	ldr	r7, [pc, #276]	; (140 <DBPL_HandleTask+0x140>)
+  2c:	002b      	movs	r3, r5
+  2e:	0022      	movs	r2, r4
+  30:	0038      	movs	r0, r7
+  32:	4944      	ldr	r1, [pc, #272]	; (144 <DBPL_HandleTask+0x144>)
+  34:	f7ff fffe 	bl	0 <STDCB_InitCallback>
+    (void)STIM_InitTimer(&DBPL_resetTriggerTimer, STIM_PROCESSING_SCHEDULER,
+  38:	0023      	movs	r3, r4
+  3a:	0022      	movs	r2, r4
+  3c:	0029      	movs	r1, r5
+  3e:	9701      	str	r7, [sp, #4]
+  40:	4841      	ldr	r0, [pc, #260]	; (148 <DBPL_HandleTask+0x148>)
+  42:	9400      	str	r4, [sp, #0]
+  44:	f7ff fffe 	bl	0 <STIM_InitTimer>
+  48:	4f40      	ldr	r7, [pc, #256]	; (14c <DBPL_HandleTask+0x14c>)
+  4a:	002b      	movs	r3, r5
+  4c:	0022      	movs	r2, r4
+  4e:	4940      	ldr	r1, [pc, #256]	; (150 <DBPL_HandleTask+0x150>)
+  50:	0038      	movs	r0, r7
+  52:	f7ff fffe 	bl	0 <STDCB_InitCallback>
+    (void)STIM_InitTimer(&DBPL_tOfflineDelayTimer, STIM_PROCESSING_SCHEDULER, 
+  56:	0023      	movs	r3, r4
+  58:	0022      	movs	r2, r4
+  5a:	0029      	movs	r1, r5
+  5c:	483d      	ldr	r0, [pc, #244]	; (154 <DBPL_HandleTask+0x154>)
+  5e:	9701      	str	r7, [sp, #4]
+  60:	9400      	str	r4, [sp, #0]
+  62:	f7ff fffe 	bl	0 <STIM_InitTimer>
+        DBPL_TaskState = DBPL_ONLINE;
+  66:	7035      	strb	r5, [r6, #0]
+}
+  68:	2001      	movs	r0, #1
+  6a:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+    else if (DBPL_TaskState == DBPL_ONLINE)
+  6c:	2c01      	cmp	r4, #1
+  6e:	d1fb      	bne.n	68 <DBPL_HandleTask+0x68>
+        DBM_UART_vDisableRxEvent();
+  70:	f7ff fffe 	bl	0 <DBM_UART_vDisableRxEvent>
+        if(DBLK_IsDbusLockActive() == false)
+  74:	f7ff fffe 	bl	0 <DBLK_IsDbusLockActive>
+  78:	2800      	cmp	r0, #0
+  7a:	d11e      	bne.n	ba <DBPL_HandleTask+0xba>
+            if(DBPL_bSendMsg == false)
+  7c:	4d36      	ldr	r5, [pc, #216]	; (158 <DBPL_HandleTask+0x158>)
+  7e:	782e      	ldrb	r6, [r5, #0]
+  80:	2e00      	cmp	r6, #0
+  82:	d138      	bne.n	f6 <DBPL_HandleTask+0xf6>
+                if(DBPL_bIsSendingPowerMsg() == false)
+  84:	f7ff fffe 	bl	0 <DBPL_HandleTask>
+  88:	2800      	cmp	r0, #0
+  8a:	d119      	bne.n	c0 <DBPL_HandleTask+0xc0>
+                    DBPL_ptReceivedMessage = DLL_ptReceiveMessage();
+  8c:	f7ff fffe 	bl	0 <DLL_ptReceiveMessage>
+                    if (DBPL_ptReceivedMessage != NULL) //Check whether there is a new message for distribution
+  90:	2800      	cmp	r0, #0
+  92:	d00f      	beq.n	b4 <DBPL_HandleTask+0xb4>
+                        DBPL_ucNodeAddrToRespondFrom = DBPL_ptReceivedMessage->tBusIdentifier.ucTargetAddress;
+  94:	4b31      	ldr	r3, [pc, #196]	; (15c <DBPL_HandleTask+0x15c>)
+  96:	7842      	ldrb	r2, [r0, #1]
+  98:	701a      	strb	r2, [r3, #0]
+                        uint16_t rxMsgId = DBPL_ptReceivedMessage->tBusIdentifier.tMessageIdentifier;
+  9a:	78c4      	ldrb	r4, [r0, #3]
+  9c:	7883      	ldrb	r3, [r0, #2]
+  9e:	0224      	lsls	r4, r4, #8
+  a0:	431c      	orrs	r4, r3
+                        if (BAL_bDispatchRcvdDbus2Msg(DBPL_ptReceivedMessage) != false)
+  a2:	f7ff fffe 	bl	0 <BAL_bDispatchRcvdDbus2Msg>
+  a6:	2800      	cmp	r0, #0
+  a8:	d002      	beq.n	b0 <DBPL_HandleTask+0xb0>
+                            if (!isServiceMsg) //Check if message lies within the range 0xF000-0xFFFF, which is the region for service messages
+  aa:	4b2d      	ldr	r3, [pc, #180]	; (160 <DBPL_HandleTask+0x160>)
+  ac:	429c      	cmp	r4, r3
+  ae:	d801      	bhi.n	b4 <DBPL_HandleTask+0xb4>
+                                DLL_vReleaseDataFromReceivedMessage(); //The data has been read (possibly saved), message may be released from the input buffer.
+  b0:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+            if (DBPL_bSendMsg != false)
+  b4:	782b      	ldrb	r3, [r5, #0]
+  b6:	2b00      	cmp	r3, #0
+  b8:	d11d      	bne.n	f6 <DBPL_HandleTask+0xf6>
+                    DBM_UART_vEnableRxEvent();
+  ba:	f7ff fffe 	bl	0 <DBM_UART_vEnableRxEvent>
+                    return TASK_INITIALISED;
+  be:	e7d3      	b.n	68 <DBPL_HandleTask+0x68>
+                    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = DBPL_uiSendPowerMsgUserTrigger;
+  c0:	4a28      	ldr	r2, [pc, #160]	; (164 <DBPL_HandleTask+0x164>)
+                    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = 0U;
+  c2:	4c29      	ldr	r4, [pc, #164]	; (168 <DBPL_HandleTask+0x168>)
+                    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = DBPL_uiSendPowerMsgUserTrigger;
+  c4:	8813      	ldrh	r3, [r2, #0]
+                    DBPL_ucNumberOfBytesInMessage = 0U;
+  c6:	4929      	ldr	r1, [pc, #164]	; (16c <DBPL_HandleTask+0x16c>)
+                    DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = DBPL_uiSendPowerMsgUserTrigger;
+  c8:	70a3      	strb	r3, [r4, #2]
+  ca:	0a1b      	lsrs	r3, r3, #8
+  cc:	70e3      	strb	r3, [r4, #3]
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_POWER_RESURGE) ? true : false;
+  ce:	8810      	ldrh	r0, [r2, #0]
+                    if ((DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingWakeupSentRequest() == true))
+  d0:	4b27      	ldr	r3, [pc, #156]	; (170 <DBPL_HandleTask+0x170>)
+                    DBPL_ucNumberOfBytesInMessage = 0U;
+  d2:	700e      	strb	r6, [r1, #0]
+                    DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = 0U;
+  d4:	7066      	strb	r6, [r4, #1]
+                    if ((DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingWakeupSentRequest() == true))
+  d6:	4298      	cmp	r0, r3
+  d8:	d003      	beq.n	e2 <DBPL_HandleTask+0xe2>
+    return (DBPL_uiSendPowerMsgUserTrigger == MSG_WAKEUP_SENT_REQUEST) ? true : false;
+  da:	8812      	ldrh	r2, [r2, #0]
+                    if ((DBPL_bIsSendingPowerResurge() == true) || (DBPL_bIsSendingWakeupSentRequest() == true))
+  dc:	4b25      	ldr	r3, [pc, #148]	; (174 <DBPL_HandleTask+0x174>)
+  de:	429a      	cmp	r2, r3
+  e0:	d11c      	bne.n	11c <DBPL_HandleTask+0x11c>
+                        DBPL_ucNumberOfBytesInMessage = (uint8_t)sizeof(uint8_t);/*Only our own node address*/
+  e2:	2301      	movs	r3, #1
+  e4:	700b      	strb	r3, [r1, #0]
+                        DBPL_tMessageBuffer.aucData[0] = DBPL_ucGetOwnAddressToInformOtherNodes();
+  e6:	f7ff fffe 	bl	0 <DBPL_ucGetOwnAddressToInformOtherNodes>
+  ea:	7120      	strb	r0, [r4, #4]
+                    DBPL_ucRepetitions = DBPL_POWER_MSG_SEND_RETRIES;
+  ec:	2205      	movs	r2, #5
+  ee:	4b22      	ldr	r3, [pc, #136]	; (178 <DBPL_HandleTask+0x178>)
+  f0:	701a      	strb	r2, [r3, #0]
+                    DBPL_bSendMsg = true;
+  f2:	2301      	movs	r3, #1
+  f4:	702b      	strb	r3, [r5, #0]
+                if (DLL_bTransmitMessage(DBPL_tMessageBuffer.tBusIdentifier, DBPL_vSendResponse, DBPL_ucNumberOfBytesInMessage, DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier) != false)
+  f6:	4d1c      	ldr	r5, [pc, #112]	; (168 <DBPL_HandleTask+0x168>)
+  f8:	4a1c      	ldr	r2, [pc, #112]	; (16c <DBPL_HandleTask+0x16c>)
+  fa:	786e      	ldrb	r6, [r5, #1]
+  fc:	78ec      	ldrb	r4, [r5, #3]
+  fe:	78a8      	ldrb	r0, [r5, #2]
+ 100:	782f      	ldrb	r7, [r5, #0]
+ 102:	0236      	lsls	r6, r6, #8
+ 104:	0223      	lsls	r3, r4, #8
+ 106:	433e      	orrs	r6, r7
+ 108:	0405      	lsls	r5, r0, #16
+ 10a:	4303      	orrs	r3, r0
+ 10c:	4335      	orrs	r5, r6
+ 10e:	0620      	lsls	r0, r4, #24
+ 110:	7812      	ldrb	r2, [r2, #0]
+ 112:	491a      	ldr	r1, [pc, #104]	; (17c <DBPL_HandleTask+0x17c>)
+ 114:	4328      	orrs	r0, r5
+ 116:	f7ff fffe 	bl	0 <DLL_bTransmitMessage>
+ 11a:	e7ce      	b.n	ba <DBPL_HandleTask+0xba>
+                    else if (DBPL_bIsSendingPowerMgmtMsg() == true)
+ 11c:	f7ff fffe 	bl	0 <DBPL_HandleTask>
+ 120:	2800      	cmp	r0, #0
+ 122:	d0e3      	beq.n	ec <DBPL_HandleTask+0xec>
+                        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_ucPowerMgmtMsgTargetAddr;
+ 124:	4b16      	ldr	r3, [pc, #88]	; (180 <DBPL_HandleTask+0x180>)
+ 126:	781b      	ldrb	r3, [r3, #0]
+ 128:	7063      	strb	r3, [r4, #1]
+ 12a:	e7df      	b.n	ec <DBPL_HandleTask+0xec>
+	...
+ 138:	000088b8 	.word	0x000088b8
+	...
+ 160:	0000efff 	.word	0x0000efff
+	...
+ 170:	0000f311 	.word	0x0000f311
+ 174:	0000f306 	.word	0x0000f306
+	...
+
+Disassembly of section .text.DBPL_vStopRepeatServiceMsg:
+
+00000000 <DBPL_vStopRepeatServiceMsg>:
+{
+   0:	b510      	push	{r4, lr}
+    if(DBPL_bIsSendingPowerMsg() == true)
+   2:	f7ff fffe 	bl	0 <DBPL_vStopRepeatServiceMsg>
+   6:	2800      	cmp	r0, #0
+   8:	d008      	beq.n	1c <DBPL_vStopRepeatServiceMsg+0x1c>
+        DBPL_uiSendPowerMsgUserTrigger = 0U;
+   a:	2200      	movs	r2, #0
+   c:	4b05      	ldr	r3, [pc, #20]	; (24 <DBPL_vStopRepeatServiceMsg+0x24>)
+   e:	801a      	strh	r2, [r3, #0]
+    DBPL_ucRepetitions = 0U;
+  10:	2200      	movs	r2, #0
+  12:	4b05      	ldr	r3, [pc, #20]	; (28 <DBPL_vStopRepeatServiceMsg+0x28>)
+  14:	701a      	strb	r2, [r3, #0]
+    DBPL_bSendMsg = false;            //Reset flag
+  16:	4b05      	ldr	r3, [pc, #20]	; (2c <DBPL_vStopRepeatServiceMsg+0x2c>)
+  18:	701a      	strb	r2, [r3, #0]
+}
+  1a:	bd10      	pop	{r4, pc}
+        DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  1c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+  20:	e7f6      	b.n	10 <DBPL_vStopRepeatServiceMsg+0x10>
+  22:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vDecrementRepeatServiceMsg:
+
+00000000 <DBPL_vDecrementRepeatServiceMsg>:
+{
+   0:	b510      	push	{r4, lr}
+    if(DBPL_ucRepetitions > 0U)
+   2:	4a09      	ldr	r2, [pc, #36]	; (28 <DBPL_vDecrementRepeatServiceMsg+0x28>)
+   4:	7813      	ldrb	r3, [r2, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d002      	beq.n	10 <DBPL_vDecrementRepeatServiceMsg+0x10>
+        DBPL_ucRepetitions--;
+   a:	3b01      	subs	r3, #1
+   c:	7013      	strb	r3, [r2, #0]
+}
+   e:	bd10      	pop	{r4, pc}
+        if(DBPL_bIsSendingPowerMsg() == true)
+  10:	f7ff fffe 	bl	0 <DBPL_vDecrementRepeatServiceMsg>
+  14:	2800      	cmp	r0, #0
+  16:	d004      	beq.n	22 <DBPL_vDecrementRepeatServiceMsg+0x22>
+            DBPL_vNotifyNonDeliverablePowerMessage(DBPL_uiSendPowerMsgUserTrigger);
+  18:	4b04      	ldr	r3, [pc, #16]	; (2c <DBPL_vDecrementRepeatServiceMsg+0x2c>)
+  1a:	8818      	ldrh	r0, [r3, #0]
+  1c:	b280      	uxth	r0, r0
+  1e:	f7ff fffe 	bl	0 <DBPL_vNotifyNonDeliverablePowerMessage>
+        DBPL_vStopRepeatServiceMsg();
+  22:	f7ff fffe 	bl	0 <DBPL_vDecrementRepeatServiceMsg>
+}
+  26:	e7f2      	b.n	e <DBPL_vDecrementRepeatServiceMsg+0xe>
+	...
+
+Disassembly of section .text.DBPL_bIsReceivedMessageIdPowerFail:
+
+00000000 <DBPL_bIsReceivedMessageIdPowerFail>:
+    return (msgId == MSG_POWER_FAIL) ? true : false;
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <DBPL_bIsReceivedMessageIdPowerFail+0xc>)
+   2:	18c0      	adds	r0, r0, r3
+   4:	4243      	negs	r3, r0
+   6:	4158      	adcs	r0, r3
+   8:	b2c0      	uxtb	r0, r0
+}
+   a:	4770      	bx	lr
+   c:	ffff0cf0 	.word	0xffff0cf0
+
+Disassembly of section .text.DBPL_bReadMemory:
+
+00000000 <DBPL_bReadMemory>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	0016      	movs	r6, r2
+   4:	001f      	movs	r7, r3
+   6:	0005      	movs	r5, r0
+   8:	9101      	str	r1, [sp, #4]
+   ucModuleIndex = DBPL_ucGetModuleIndex(ucMemoryModule);
+   a:	f7ff fffe 	bl	0 <DBPL_bReadMemory>
+   return (DBPL_tModuleDict[ucModuleIndex].tComReadFunction(ucMemoryModule, uiAddress, ucDataLength, pucMessageData));
+   e:	230e      	movs	r3, #14
+  10:	4343      	muls	r3, r0
+  12:	4a09      	ldr	r2, [pc, #36]	; (38 <DBPL_bReadMemory+0x38>)
+  14:	9901      	ldr	r1, [sp, #4]
+  16:	18d0      	adds	r0, r2, r3
+  18:	7882      	ldrb	r2, [r0, #2]
+  1a:	7843      	ldrb	r3, [r0, #1]
+  1c:	0212      	lsls	r2, r2, #8
+  1e:	431a      	orrs	r2, r3
+  20:	78c3      	ldrb	r3, [r0, #3]
+  22:	7904      	ldrb	r4, [r0, #4]
+  24:	041b      	lsls	r3, r3, #16
+  26:	4313      	orrs	r3, r2
+  28:	0624      	lsls	r4, r4, #24
+  2a:	0032      	movs	r2, r6
+  2c:	0028      	movs	r0, r5
+  2e:	431c      	orrs	r4, r3
+  30:	003b      	movs	r3, r7
+  32:	47a0      	blx	r4
+}
+  34:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  36:	46c0      	nop			; (mov r8, r8)
+  38:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vReadRequest:
+
+00000000 <DBPL_vReadRequest>:
+   if((ucDataLen == (uint8_t)DBPL_READ_REQ_MODULE_NUM) || (ucDataLen == (uint8_t)DBPL_READ_REQ_MAX_LEN))
+   0:	1f03      	subs	r3, r0, #4
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+   4:	000c      	movs	r4, r1
+   if((ucDataLen == (uint8_t)DBPL_READ_REQ_MODULE_NUM) || (ucDataLen == (uint8_t)DBPL_READ_REQ_MAX_LEN))
+   6:	2b01      	cmp	r3, #1
+   8:	d834      	bhi.n	74 <DBPL_vReadRequest+0x74>
+       ucDataLength = pucData[DBPL_READ_REQ_NBR_BYTES];
+   a:	784d      	ldrb	r5, [r1, #1]
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_READ_REQ_NBR_BYTES] + (uint8_t)DBPL_READ_RESP_DATA_OFFSET; //Length of data part of message
+   c:	4a1b      	ldr	r2, [pc, #108]	; (7c <DBPL_vReadRequest+0x7c>)
+   e:	1cab      	adds	r3, r5, #2
+  10:	b2db      	uxtb	r3, r3
+  12:	7013      	strb	r3, [r2, #0]
+       if (ucDataLen == (uint8_t)DBPL_READ_REQ_MAX_LEN)
+  14:	2805      	cmp	r0, #5
+  16:	d123      	bne.n	60 <DBPL_vReadRequest+0x60>
+           ucMemoryModule = pucData[DBPL_READ_REQ_MODULE_NUM];
+  18:	7908      	ldrb	r0, [r1, #4]
+       if ((DBPL_ucNumberOfBytesInMessage) > DBPL_ucSizeOfDataBufferIn_tBusMessage)
+  1a:	2b83      	cmp	r3, #131	; 0x83
+  1c:	d902      	bls.n	24 <DBPL_vReadRequest+0x24>
+           DBPL_ucNumberOfBytesInMessage = DBPL_ucSizeOfDataBufferIn_tBusMessage;
+  1e:	2383      	movs	r3, #131	; 0x83
+           ucDataLength = DBPL_ucNumberOfBytesInMessage - (uint8_t)DBPL_READ_RESP_DATA_OFFSET;
+  20:	2581      	movs	r5, #129	; 0x81
+           DBPL_ucNumberOfBytesInMessage = DBPL_ucSizeOfDataBufferIn_tBusMessage;
+  22:	7013      	strb	r3, [r2, #0]
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ_RESP_DATA_OFFSET]) == DBPL_DONE)
+  24:	78e1      	ldrb	r1, [r4, #3]
+  26:	78a2      	ldrb	r2, [r4, #2]
+  28:	0209      	lsls	r1, r1, #8
+  2a:	4311      	orrs	r1, r2
+  2c:	ba49      	rev16	r1, r1
+  2e:	002a      	movs	r2, r5
+  30:	4b13      	ldr	r3, [pc, #76]	; (80 <DBPL_vReadRequest+0x80>)
+  32:	b289      	uxth	r1, r1
+  34:	f7ff fffe 	bl	0 <DBPL_vReadRequest>
+  38:	2800      	cmp	r0, #0
+  3a:	d014      	beq.n	66 <DBPL_vReadRequest+0x66>
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_READ_REQ_SA];
+  3c:	7822      	ldrb	r2, [r4, #0]
+  3e:	4b11      	ldr	r3, [pc, #68]	; (84 <DBPL_vReadRequest+0x84>)
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  40:	20ff      	movs	r0, #255	; 0xff
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_READ_REQ_SA];
+  42:	705a      	strb	r2, [r3, #1]
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_READ_RESPONSE;
+  44:	2200      	movs	r2, #0
+  46:	709a      	strb	r2, [r3, #2]
+  48:	3a0f      	subs	r2, #15
+  4a:	70da      	strb	r2, [r3, #3]
+           DBPL_tMessageBuffer.aucData[DBPL_READ_RESP_SA] = DBPL_ucNodeAddrToRespondFrom;
+  4c:	4a0e      	ldr	r2, [pc, #56]	; (88 <DBPL_vReadRequest+0x88>)
+           DBPL_tMessageBuffer.aucData[DBPL_READ_RESP_NBR_BYTES] = ucDataLength;
+  4e:	715d      	strb	r5, [r3, #5]
+           DBPL_tMessageBuffer.aucData[DBPL_READ_RESP_SA] = DBPL_ucNodeAddrToRespondFrom;
+  50:	7812      	ldrb	r2, [r2, #0]
+  52:	711a      	strb	r2, [r3, #4]
+           DBPL_bSendMsg = true;
+  54:	2201      	movs	r2, #1
+  56:	4b0d      	ldr	r3, [pc, #52]	; (8c <DBPL_vReadRequest+0x8c>)
+  58:	701a      	strb	r2, [r3, #0]
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  5a:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  5e:	bd70      	pop	{r4, r5, r6, pc}
+           ucMemoryModule = DBPL_ucMemoryModule;
+  60:	490b      	ldr	r1, [pc, #44]	; (90 <DBPL_vReadRequest+0x90>)
+  62:	7808      	ldrb	r0, [r1, #0]
+  64:	e7d9      	b.n	1a <DBPL_vReadRequest+0x1a>
+           if (DBPL_bInvalidReadProcess != false)
+  66:	4b0b      	ldr	r3, [pc, #44]	; (94 <DBPL_vReadRequest+0x94>)
+  68:	781a      	ldrb	r2, [r3, #0]
+  6a:	2a00      	cmp	r2, #0
+  6c:	d0f7      	beq.n	5e <DBPL_vReadRequest+0x5e>
+               DBPL_bInvalidReadProcess = false;
+  6e:	7018      	strb	r0, [r3, #0]
+               DBPL_bSendMsg = false;
+  70:	4b06      	ldr	r3, [pc, #24]	; (8c <DBPL_vReadRequest+0x8c>)
+  72:	7018      	strb	r0, [r3, #0]
+       DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  74:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  78:	e7f1      	b.n	5e <DBPL_vReadRequest+0x5e>
+  7a:	46c0      	nop			; (mov r8, r8)
+  7c:	00000000 	.word	0x00000000
+  80:	00000006 	.word	0x00000006
+	...
+
+Disassembly of section .text.DBPL_vReadRequest32:
+
+00000000 <DBPL_vReadRequest32>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   if((ucDataLen == (uint8_t)DBPL_READ32_REQ_MODULE_NUM) || (ucDataLen == (uint8_t)DBPL_READ32_REQ_MAX_LEN))
+   2:	1f83      	subs	r3, r0, #6
+{
+   4:	000c      	movs	r4, r1
+   if((ucDataLen == (uint8_t)DBPL_READ32_REQ_MODULE_NUM) || (ucDataLen == (uint8_t)DBPL_READ32_REQ_MAX_LEN))
+   6:	2b01      	cmp	r3, #1
+   8:	d840      	bhi.n	8c <DBPL_vReadRequest32+0x8c>
+       ucDataLength = pucData[DBPL_READ32_REQ_NBR_BYTES];
+   a:	784d      	ldrb	r5, [r1, #1]
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_READ32_REQ_NBR_BYTES] + (uint8_t)DBPL_READ32_RESP_DATA_OFFSET;
+   c:	4a21      	ldr	r2, [pc, #132]	; (94 <DBPL_vReadRequest32+0x94>)
+   e:	1cab      	adds	r3, r5, #2
+  10:	b2db      	uxtb	r3, r3
+  12:	7013      	strb	r3, [r2, #0]
+       if (ucDataLen == (uint8_t)DBPL_READ32_REQ_MAX_LEN)
+  14:	2807      	cmp	r0, #7
+  16:	d12c      	bne.n	72 <DBPL_vReadRequest32+0x72>
+           ucMemoryModule = pucData[DBPL_READ32_REQ_MODULE_NUM];
+  18:	7988      	ldrb	r0, [r1, #6]
+       if ((DBPL_ucNumberOfBytesInMessage) > DBPL_ucSizeOfDataBufferIn_tBusMessage)
+  1a:	2b83      	cmp	r3, #131	; 0x83
+  1c:	d902      	bls.n	24 <DBPL_vReadRequest32+0x24>
+           DBPL_ucNumberOfBytesInMessage = DBPL_ucSizeOfDataBufferIn_tBusMessage;
+  1e:	2383      	movs	r3, #131	; 0x83
+           ucDataLength = DBPL_ucNumberOfBytesInMessage - (uint8_t)DBPL_READ32_RESP_DATA_OFFSET;
+  20:	2581      	movs	r5, #129	; 0x81
+           DBPL_ucNumberOfBytesInMessage = DBPL_ucSizeOfDataBufferIn_tBusMessage;
+  22:	7013      	strb	r3, [r2, #0]
+       DBPL_uiPage = ((uint16_t)pucData[DBPL_READ32_REQ_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_READ32_REQ_ADR2]);
+  24:	78e3      	ldrb	r3, [r4, #3]
+  26:	78a2      	ldrb	r2, [r4, #2]
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  28:	7961      	ldrb	r1, [r4, #5]
+       DBPL_uiPage = ((uint16_t)pucData[DBPL_READ32_REQ_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_READ32_REQ_ADR2]);
+  2a:	021b      	lsls	r3, r3, #8
+  2c:	4313      	orrs	r3, r2
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  2e:	7922      	ldrb	r2, [r4, #4]
+  30:	0209      	lsls	r1, r1, #8
+       uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  32:	4e19      	ldr	r6, [pc, #100]	; (98 <DBPL_vReadRequest32+0x98>)
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  34:	4311      	orrs	r1, r2
+       DBPL_uiPage = ((uint16_t)pucData[DBPL_READ32_REQ_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_READ32_REQ_ADR2]);
+  36:	ba5b      	rev16	r3, r3
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  38:	ba49      	rev16	r1, r1
+       uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  3a:	8837      	ldrh	r7, [r6, #0]
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  3c:	002a      	movs	r2, r5
+       DBPL_uiPage = ((uint16_t)pucData[DBPL_READ32_REQ_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_READ32_REQ_ADR2]);
+  3e:	8033      	strh	r3, [r6, #0]
+       if (DBPL_bReadMemory(ucMemoryModule, DBPL_uiAddress, ucDataLength, &DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_DATA_OFFSET]) == DBPL_DONE)
+  40:	b289      	uxth	r1, r1
+  42:	4b16      	ldr	r3, [pc, #88]	; (9c <DBPL_vReadRequest32+0x9c>)
+  44:	f7ff fffe 	bl	0 <DBPL_vReadRequest32>
+  48:	2800      	cmp	r0, #0
+  4a:	d015      	beq.n	78 <DBPL_vReadRequest32+0x78>
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_READ_RESPONSE32;
+  4c:	210f      	movs	r1, #15
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_READ32_REQ_SA]; //Save the target address of the requesting communication partner.
+  4e:	7822      	ldrb	r2, [r4, #0]
+  50:	4b13      	ldr	r3, [pc, #76]	; (a0 <DBPL_vReadRequest32+0xa0>)
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_READ_RESPONSE32;
+  52:	4249      	negs	r1, r1
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_READ32_REQ_SA]; //Save the target address of the requesting communication partner.
+  54:	705a      	strb	r2, [r3, #1]
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_READ_RESPONSE32;
+  56:	2201      	movs	r2, #1
+  58:	70d9      	strb	r1, [r3, #3]
+           DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_SA] = DBPL_ucNodeAddrToRespondFrom;
+  5a:	4912      	ldr	r1, [pc, #72]	; (a4 <DBPL_vReadRequest32+0xa4>)
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_READ_RESPONSE32;
+  5c:	709a      	strb	r2, [r3, #2]
+           DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_SA] = DBPL_ucNodeAddrToRespondFrom;
+  5e:	7809      	ldrb	r1, [r1, #0]
+           DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_NBR_BYTES] = ucDataLength;
+  60:	715d      	strb	r5, [r3, #5]
+           DBPL_tMessageBuffer.aucData[DBPL_READ32_RESP_SA] = DBPL_ucNodeAddrToRespondFrom;
+  62:	7119      	strb	r1, [r3, #4]
+           DBPL_bSendMsg = true;
+  64:	4b10      	ldr	r3, [pc, #64]	; (a8 <DBPL_vReadRequest32+0xa8>)
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  66:	20ff      	movs	r0, #255	; 0xff
+           DBPL_bSendMsg = true;
+  68:	701a      	strb	r2, [r3, #0]
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  6a:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+       DBPL_uiPage = uiPageNumberToBeRestoredAfterCommandExecution;
+  6e:	8037      	strh	r7, [r6, #0]
+}
+  70:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+           ucMemoryModule = DBPL_ucMemoryModule;
+  72:	490e      	ldr	r1, [pc, #56]	; (ac <DBPL_vReadRequest32+0xac>)
+  74:	7808      	ldrb	r0, [r1, #0]
+  76:	e7d0      	b.n	1a <DBPL_vReadRequest32+0x1a>
+           if (DBPL_bInvalidReadProcess != false)
+  78:	4b0d      	ldr	r3, [pc, #52]	; (b0 <DBPL_vReadRequest32+0xb0>)
+  7a:	781a      	ldrb	r2, [r3, #0]
+  7c:	2a00      	cmp	r2, #0
+  7e:	d0f6      	beq.n	6e <DBPL_vReadRequest32+0x6e>
+               DBPL_bInvalidReadProcess = false;
+  80:	7018      	strb	r0, [r3, #0]
+               DBPL_bSendMsg = false;
+  82:	4b09      	ldr	r3, [pc, #36]	; (a8 <DBPL_vReadRequest32+0xa8>)
+  84:	7018      	strb	r0, [r3, #0]
+               DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  86:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+  8a:	e7f0      	b.n	6e <DBPL_vReadRequest32+0x6e>
+       DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  8c:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  90:	e7ee      	b.n	70 <DBPL_vReadRequest32+0x70>
+  92:	46c0      	nop			; (mov r8, r8)
+	...
+  9c:	00000006 	.word	0x00000006
+	...
+
+Disassembly of section .text.DBPL_bWriteMemory:
+
+00000000 <DBPL_bWriteMemory>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	0016      	movs	r6, r2
+   4:	001f      	movs	r7, r3
+   6:	0005      	movs	r5, r0
+   8:	9101      	str	r1, [sp, #4]
+   ucModuleIndex = DBPL_ucGetModuleIndex(ucMemoryModule);
+   a:	f7ff fffe 	bl	0 <DBPL_bWriteMemory>
+   return (DBPL_tModuleDict[ucModuleIndex].tComWriteFunction(ucMemoryModule, uiAddress, ucDataLength, pucMessageData));
+   e:	230e      	movs	r3, #14
+  10:	4343      	muls	r3, r0
+  12:	4a09      	ldr	r2, [pc, #36]	; (38 <DBPL_bWriteMemory+0x38>)
+  14:	9901      	ldr	r1, [sp, #4]
+  16:	18d0      	adds	r0, r2, r3
+  18:	7982      	ldrb	r2, [r0, #6]
+  1a:	7943      	ldrb	r3, [r0, #5]
+  1c:	0212      	lsls	r2, r2, #8
+  1e:	431a      	orrs	r2, r3
+  20:	79c3      	ldrb	r3, [r0, #7]
+  22:	7a04      	ldrb	r4, [r0, #8]
+  24:	041b      	lsls	r3, r3, #16
+  26:	4313      	orrs	r3, r2
+  28:	0624      	lsls	r4, r4, #24
+  2a:	0032      	movs	r2, r6
+  2c:	0028      	movs	r0, r5
+  2e:	431c      	orrs	r4, r3
+  30:	003b      	movs	r3, r7
+  32:	47a0      	blx	r4
+}
+  34:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  36:	46c0      	nop			; (mov r8, r8)
+  38:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vWriteRequest:
+
+00000000 <DBPL_vWriteRequest>:
+{
+   0:	b510      	push	{r4, lr}
+   if(ucDataLen >= (uint8_t)DBPL_BUFFER_START)
+   2:	2802      	cmp	r0, #2
+   4:	d908      	bls.n	18 <DBPL_vWriteRequest+0x18>
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_WRITE_NBR_BYTES];
+   6:	780a      	ldrb	r2, [r1, #0]
+   8:	4b0f      	ldr	r3, [pc, #60]	; (48 <DBPL_vWriteRequest+0x48>)
+       if((ucDataLen == ((uint8_t)DBPL_BUFFER_START + DBPL_ucNumberOfBytesInMessage + 1U)) || (ucDataLen == ((uint8_t)DBPL_BUFFER_START + DBPL_ucNumberOfBytesInMessage)))
+   a:	1d14      	adds	r4, r2, #4
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_WRITE_NBR_BYTES];
+   c:	701a      	strb	r2, [r3, #0]
+       if((ucDataLen == ((uint8_t)DBPL_BUFFER_START + DBPL_ucNumberOfBytesInMessage + 1U)) || (ucDataLen == ((uint8_t)DBPL_BUFFER_START + DBPL_ucNumberOfBytesInMessage)))
+   e:	1cd3      	adds	r3, r2, #3
+  10:	42a0      	cmp	r0, r4
+  12:	d004      	beq.n	1e <DBPL_vWriteRequest+0x1e>
+  14:	4298      	cmp	r0, r3
+  16:	d014      	beq.n	42 <DBPL_vWriteRequest+0x42>
+                   DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  18:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  1c:	bd10      	pop	{r4, pc}
+               ucMemoryModule = pucData[((uint8_t)DBPL_BUFFER_START) + DBPL_ucNumberOfBytesInMessage];
+  1e:	5cc8      	ldrb	r0, [r1, r3]
+           if (DBPL_bWriteMemory(ucMemoryModule, DBPL_uiAddress, DBPL_ucNumberOfBytesInMessage, &pucData[DBPL_BUFFER_START]) == DBPL_DONE)
+  20:	784c      	ldrb	r4, [r1, #1]
+  22:	1ccb      	adds	r3, r1, #3
+  24:	7889      	ldrb	r1, [r1, #2]
+  26:	0209      	lsls	r1, r1, #8
+  28:	4321      	orrs	r1, r4
+  2a:	ba49      	rev16	r1, r1
+  2c:	b289      	uxth	r1, r1
+  2e:	f7ff fffe 	bl	0 <DBPL_vWriteRequest>
+  32:	2800      	cmp	r0, #0
+  34:	d1f0      	bne.n	18 <DBPL_vWriteRequest+0x18>
+               if(DBPL_bInvalidWriteProcess != false)
+  36:	4b05      	ldr	r3, [pc, #20]	; (4c <DBPL_vWriteRequest+0x4c>)
+  38:	781a      	ldrb	r2, [r3, #0]
+  3a:	2a00      	cmp	r2, #0
+  3c:	d0ee      	beq.n	1c <DBPL_vWriteRequest+0x1c>
+                   DBPL_bInvalidWriteProcess = false;
+  3e:	7018      	strb	r0, [r3, #0]
+  40:	e7ea      	b.n	18 <DBPL_vWriteRequest+0x18>
+               ucMemoryModule = DBPL_ucMemoryModule;
+  42:	4b03      	ldr	r3, [pc, #12]	; (50 <DBPL_vWriteRequest+0x50>)
+  44:	7818      	ldrb	r0, [r3, #0]
+  46:	e7eb      	b.n	20 <DBPL_vWriteRequest+0x20>
+	...
+
+Disassembly of section .text.DBPL_vWriteRequest32:
+
+00000000 <DBPL_vWriteRequest32>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   if(ucDataLen >= (uint8_t)DBPL_WRITE32_DATA_OFFSET)
+   2:	2804      	cmp	r0, #4
+   4:	d908      	bls.n	18 <DBPL_vWriteRequest32+0x18>
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_WRITE32_NBR_BYTES];
+   6:	780a      	ldrb	r2, [r1, #0]
+   8:	4b15      	ldr	r3, [pc, #84]	; (60 <DBPL_vWriteRequest32+0x60>)
+       if((ucDataLen == ((uint8_t)DBPL_WRITE32_DATA_OFFSET + DBPL_ucNumberOfBytesInMessage + 1U)) || (ucDataLen == ((uint8_t)DBPL_WRITE32_DATA_OFFSET + DBPL_ucNumberOfBytesInMessage)))
+   a:	1d94      	adds	r4, r2, #6
+       DBPL_ucNumberOfBytesInMessage = pucData[DBPL_WRITE32_NBR_BYTES];
+   c:	701a      	strb	r2, [r3, #0]
+       if((ucDataLen == ((uint8_t)DBPL_WRITE32_DATA_OFFSET + DBPL_ucNumberOfBytesInMessage + 1U)) || (ucDataLen == ((uint8_t)DBPL_WRITE32_DATA_OFFSET + DBPL_ucNumberOfBytesInMessage)))
+   e:	1d53      	adds	r3, r2, #5
+  10:	42a0      	cmp	r0, r4
+  12:	d004      	beq.n	1e <DBPL_vWriteRequest32+0x1e>
+  14:	4298      	cmp	r0, r3
+  16:	d01a      	beq.n	4e <DBPL_vWriteRequest32+0x4e>
+           DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  18:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  1c:	e016      	b.n	4c <DBPL_vWriteRequest32+0x4c>
+               ucMemoryModule = pucData[((uint8_t)DBPL_WRITE32_DATA_OFFSET) + DBPL_ucNumberOfBytesInMessage];
+  1e:	5cc8      	ldrb	r0, [r1, r3]
+           DBPL_uiPage = ((uint16_t)pucData[DBPL_WRITE32_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_WRITE32_ADR2]);
+  20:	788b      	ldrb	r3, [r1, #2]
+  22:	784e      	ldrb	r6, [r1, #1]
+  24:	021b      	lsls	r3, r3, #8
+           uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  26:	4c0f      	ldr	r4, [pc, #60]	; (64 <DBPL_vWriteRequest32+0x64>)
+           DBPL_uiPage = ((uint16_t)pucData[DBPL_WRITE32_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_WRITE32_ADR2]);
+  28:	4333      	orrs	r3, r6
+  2a:	ba5b      	rev16	r3, r3
+           if (DBPL_bWriteMemory(ucMemoryModule, DBPL_uiAddress, DBPL_ucNumberOfBytesInMessage, &pucData[DBPL_WRITE32_DATA_OFFSET]) == DBPL_DONE)
+  2c:	78ce      	ldrb	r6, [r1, #3]
+           uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  2e:	8825      	ldrh	r5, [r4, #0]
+           DBPL_uiPage = ((uint16_t)pucData[DBPL_WRITE32_ADRHIGH]<<8)|((uint16_t)pucData[DBPL_WRITE32_ADR2]);
+  30:	8023      	strh	r3, [r4, #0]
+           if (DBPL_bWriteMemory(ucMemoryModule, DBPL_uiAddress, DBPL_ucNumberOfBytesInMessage, &pucData[DBPL_WRITE32_DATA_OFFSET]) == DBPL_DONE)
+  32:	1d4b      	adds	r3, r1, #5
+  34:	7909      	ldrb	r1, [r1, #4]
+  36:	0209      	lsls	r1, r1, #8
+  38:	4331      	orrs	r1, r6
+  3a:	ba49      	rev16	r1, r1
+  3c:	b289      	uxth	r1, r1
+  3e:	f7ff fffe 	bl	0 <DBPL_vWriteRequest32>
+  42:	2800      	cmp	r0, #0
+  44:	d006      	beq.n	54 <DBPL_vWriteRequest32+0x54>
+                   DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  46:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+           DBPL_uiPage = uiPageNumberToBeRestoredAfterCommandExecution;
+  4a:	8025      	strh	r5, [r4, #0]
+}
+  4c:	bd70      	pop	{r4, r5, r6, pc}
+               ucMemoryModule = DBPL_ucMemoryModule;
+  4e:	4b06      	ldr	r3, [pc, #24]	; (68 <DBPL_vWriteRequest32+0x68>)
+  50:	7818      	ldrb	r0, [r3, #0]
+  52:	e7e5      	b.n	20 <DBPL_vWriteRequest32+0x20>
+               if(DBPL_bInvalidWriteProcess != false)
+  54:	4b05      	ldr	r3, [pc, #20]	; (6c <DBPL_vWriteRequest32+0x6c>)
+  56:	781a      	ldrb	r2, [r3, #0]
+  58:	2a00      	cmp	r2, #0
+  5a:	d0f6      	beq.n	4a <DBPL_vWriteRequest32+0x4a>
+                   DBPL_bInvalidWriteProcess = false;
+  5c:	7018      	strb	r0, [r3, #0]
+  5e:	e7f2      	b.n	46 <DBPL_vWriteRequest32+0x46>
+	...
+
+Disassembly of section .text.DBPL_bGetIdAddress:
+
+00000000 <DBPL_bGetIdAddress>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   4:	0004      	movs	r4, r0
+   ucModuleIndex = DBPL_ucGetModuleIndex(ucMemoryModule);
+   6:	f7ff fffe 	bl	0 <DBPL_bGetIdAddress>
+   return (DBPL_tModuleDict[ucModuleIndex].tIdFunction(ucMemoryModule, puiIdAddress));
+   a:	220e      	movs	r2, #14
+   c:	4342      	muls	r2, r0
+   e:	4b08      	ldr	r3, [pc, #32]	; (30 <DBPL_bGetIdAddress+0x30>)
+  10:	0020      	movs	r0, r4
+  12:	189b      	adds	r3, r3, r2
+  14:	7a99      	ldrb	r1, [r3, #10]
+  16:	7a5a      	ldrb	r2, [r3, #9]
+  18:	0209      	lsls	r1, r1, #8
+  1a:	4311      	orrs	r1, r2
+  1c:	7ada      	ldrb	r2, [r3, #11]
+  1e:	7b1b      	ldrb	r3, [r3, #12]
+  20:	0412      	lsls	r2, r2, #16
+  22:	430a      	orrs	r2, r1
+  24:	061b      	lsls	r3, r3, #24
+  26:	0029      	movs	r1, r5
+  28:	4313      	orrs	r3, r2
+  2a:	4798      	blx	r3
+}
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+  2e:	46c0      	nop			; (mov r8, r8)
+  30:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vIdentityRequest:
+
+00000000 <DBPL_vIdentityRequest>:
+   if((ucDataLen == (uint8_t)DBPL_ID_REQ_MEM_MODULE) || (ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN))
+   0:	1e43      	subs	r3, r0, #1
+{
+   2:	b573      	push	{r0, r1, r4, r5, r6, lr}
+   4:	000c      	movs	r4, r1
+   if((ucDataLen == (uint8_t)DBPL_ID_REQ_MEM_MODULE) || (ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN))
+   6:	2b01      	cmp	r3, #1
+   8:	d826      	bhi.n	58 <DBPL_vIdentityRequest+0x58>
+       if(ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN)
+   a:	2802      	cmp	r0, #2
+   c:	d121      	bne.n	52 <DBPL_vIdentityRequest+0x52>
+           ucMemoryModule = pucData[DBPL_ID_REQ_MEM_MODULE];
+   e:	784d      	ldrb	r5, [r1, #1]
+       DBPL_ucNumberOfBytesInMessage = DBPL_ID_RESP_LEN;
+  10:	2204      	movs	r2, #4
+  12:	4b13      	ldr	r3, [pc, #76]	; (60 <DBPL_vIdentityRequest+0x60>)
+       if (DBPL_bGetIdAddress(ucMemoryModule, &addressOfString) == DBPL_DONE)/*lint !e934 : Taking address of near auto variable 'addressOfString'. -> This is intended, and the value copied is elsewhere, before function returns.*/
+  14:	0028      	movs	r0, r5
+       DBPL_ucNumberOfBytesInMessage = DBPL_ID_RESP_LEN;
+  16:	701a      	strb	r2, [r3, #0]
+       if (DBPL_bGetIdAddress(ucMemoryModule, &addressOfString) == DBPL_DONE)/*lint !e934 : Taking address of near auto variable 'addressOfString'. -> This is intended, and the value copied is elsewhere, before function returns.*/
+  18:	466b      	mov	r3, sp
+  1a:	1d9e      	adds	r6, r3, #6
+  1c:	0031      	movs	r1, r6
+  1e:	f7ff fffe 	bl	0 <DBPL_vIdentityRequest>
+  22:	2800      	cmp	r0, #0
+  24:	d014      	beq.n	50 <DBPL_vIdentityRequest+0x50>
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ID_REQ_SOURCE]; //Save the target address of the requesting communication partner.
+  26:	7822      	ldrb	r2, [r4, #0]
+  28:	4b0e      	ldr	r3, [pc, #56]	; (64 <DBPL_vIdentityRequest+0x64>)
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  2a:	20ff      	movs	r0, #255	; 0xff
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ID_REQ_SOURCE]; //Save the target address of the requesting communication partner.
+  2c:	705a      	strb	r2, [r3, #1]
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_IDENTITY_RESPONSE;
+  2e:	2200      	movs	r2, #0
+  30:	709a      	strb	r2, [r3, #2]
+  32:	3a02      	subs	r2, #2
+  34:	70da      	strb	r2, [r3, #3]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRS] = (uint8_t) (DBPL_ucNodeAddrToRespondFrom);
+  36:	4a0c      	ldr	r2, [pc, #48]	; (68 <DBPL_vIdentityRequest+0x68>)
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_MODL] = ucMemoryModule;
+  38:	715d      	strb	r5, [r3, #5]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRS] = (uint8_t) (DBPL_ucNodeAddrToRespondFrom);
+  3a:	7812      	ldrb	r2, [r2, #0]
+  3c:	711a      	strb	r2, [r3, #4]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRH] = (uint8_t)(addressOfString>>8);
+  3e:	8832      	ldrh	r2, [r6, #0]
+  40:	0a11      	lsrs	r1, r2, #8
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRL] = (uint8_t)addressOfString;
+  42:	71da      	strb	r2, [r3, #7]
+           DBPL_bSendMsg = true;
+  44:	2201      	movs	r2, #1
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRH] = (uint8_t)(addressOfString>>8);
+  46:	7199      	strb	r1, [r3, #6]
+           DBPL_bSendMsg = true;
+  48:	4b08      	ldr	r3, [pc, #32]	; (6c <DBPL_vIdentityRequest+0x6c>)
+  4a:	701a      	strb	r2, [r3, #0]
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  4c:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  50:	bd73      	pop	{r0, r1, r4, r5, r6, pc}
+           ucMemoryModule = DBPL_ucMemoryModule;
+  52:	4b07      	ldr	r3, [pc, #28]	; (70 <DBPL_vIdentityRequest+0x70>)
+  54:	781d      	ldrb	r5, [r3, #0]
+  56:	e7db      	b.n	10 <DBPL_vIdentityRequest+0x10>
+       DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  58:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  5c:	e7f8      	b.n	50 <DBPL_vIdentityRequest+0x50>
+  5e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBPL_vIdentityRequest32:
+
+00000000 <DBPL_vIdentityRequest32>:
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   if((ucDataLen == (uint8_t)DBPL_ID_REQ_MEM_MODULE) || (ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN))
+   2:	1e43      	subs	r3, r0, #1
+{
+   4:	000d      	movs	r5, r1
+   6:	b085      	sub	sp, #20
+   if((ucDataLen == (uint8_t)DBPL_ID_REQ_MEM_MODULE) || (ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN))
+   8:	2b01      	cmp	r3, #1
+   a:	d832      	bhi.n	72 <DBPL_vIdentityRequest32+0x72>
+       if(ucDataLen == (uint8_t)DBPL_ID_REQ_MAX_LEN)
+   c:	2802      	cmp	r0, #2
+   e:	d12d      	bne.n	6c <DBPL_vIdentityRequest32+0x6c>
+           ucMemoryModule = pucData[DBPL_ID_REQ_MEM_MODULE];
+  10:	784e      	ldrb	r6, [r1, #1]
+       uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  12:	4c19      	ldr	r4, [pc, #100]	; (78 <DBPL_vIdentityRequest32+0x78>)
+       DBPL_ucNumberOfBytesInMessage = DBPL_ID_RESP_LEN;
+  14:	2206      	movs	r2, #6
+       uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  16:	8823      	ldrh	r3, [r4, #0]
+       if (DBPL_bGetIdAddress(ucMemoryModule, &lowerTwoBytesOfAddrOfString) == DBPL_DONE)/*lint !e934 : Taking address of near auto variable 'lowerTwoBytesOfAddrOfString'. -> This is intended, and the value is copied elsewhere, before function returns.*/
+  18:	0030      	movs	r0, r6
+       uiPageNumberToBeRestoredAfterCommandExecution = DBPL_uiPage;
+  1a:	9301      	str	r3, [sp, #4]
+       DBPL_uiPage = 0U; //Important, in case uiPage is not used by ID-Response
+  1c:	2300      	movs	r3, #0
+  1e:	8023      	strh	r3, [r4, #0]
+       DBPL_ucNumberOfBytesInMessage = DBPL_ID_RESP_LEN;
+  20:	4b16      	ldr	r3, [pc, #88]	; (7c <DBPL_vIdentityRequest32+0x7c>)
+  22:	701a      	strb	r2, [r3, #0]
+       if (DBPL_bGetIdAddress(ucMemoryModule, &lowerTwoBytesOfAddrOfString) == DBPL_DONE)/*lint !e934 : Taking address of near auto variable 'lowerTwoBytesOfAddrOfString'. -> This is intended, and the value is copied elsewhere, before function returns.*/
+  24:	ab02      	add	r3, sp, #8
+  26:	189f      	adds	r7, r3, r2
+  28:	0039      	movs	r1, r7
+  2a:	f7ff fffe 	bl	0 <DBPL_vIdentityRequest32>
+  2e:	2800      	cmp	r0, #0
+  30:	d018      	beq.n	64 <DBPL_vIdentityRequest32+0x64>
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ID_REQ_SOURCE]; //Save the target address of the requesting communication partner.
+  32:	782a      	ldrb	r2, [r5, #0]
+  34:	4b12      	ldr	r3, [pc, #72]	; (80 <DBPL_vIdentityRequest32+0x80>)
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  36:	20ff      	movs	r0, #255	; 0xff
+           DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = pucData[DBPL_ID_REQ_SOURCE]; //Save the target address of the requesting communication partner.
+  38:	705a      	strb	r2, [r3, #1]
+           DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_IDENTITY_RESPONSE;
+  3a:	2200      	movs	r2, #0
+  3c:	709a      	strb	r2, [r3, #2]
+  3e:	3a02      	subs	r2, #2
+  40:	70da      	strb	r2, [r3, #3]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRS] = DBPL_ucNodeAddrToRespondFrom;
+  42:	4a10      	ldr	r2, [pc, #64]	; (84 <DBPL_vIdentityRequest32+0x84>)
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_MODL] = ucMemoryModule;
+  44:	715e      	strb	r6, [r3, #5]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRS] = DBPL_ucNodeAddrToRespondFrom;
+  46:	7812      	ldrb	r2, [r2, #0]
+  48:	711a      	strb	r2, [r3, #4]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRHH] = (uint8_t)(DBPL_uiPage>>8);
+  4a:	8822      	ldrh	r2, [r4, #0]
+  4c:	0a11      	lsrs	r1, r2, #8
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRHL] = (uint8_t)DBPL_uiPage;
+  4e:	71da      	strb	r2, [r3, #7]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRLH] = (uint8_t)(lowerTwoBytesOfAddrOfString>>8);
+  50:	883a      	ldrh	r2, [r7, #0]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRHH] = (uint8_t)(DBPL_uiPage>>8);
+  52:	7199      	strb	r1, [r3, #6]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRLL] = (uint8_t)lowerTwoBytesOfAddrOfString;
+  54:	725a      	strb	r2, [r3, #9]
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRLH] = (uint8_t)(lowerTwoBytesOfAddrOfString>>8);
+  56:	0a11      	lsrs	r1, r2, #8
+           DBPL_bSendMsg = true;
+  58:	2201      	movs	r2, #1
+           DBPL_tMessageBuffer.aucData[DBPL_ID_RESP_ADRLH] = (uint8_t)(lowerTwoBytesOfAddrOfString>>8);
+  5a:	7219      	strb	r1, [r3, #8]
+           DBPL_bSendMsg = true;
+  5c:	4b0a      	ldr	r3, [pc, #40]	; (88 <DBPL_vIdentityRequest32+0x88>)
+  5e:	701a      	strb	r2, [r3, #0]
+           DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  60:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+       DBPL_uiPage = uiPageNumberToBeRestoredAfterCommandExecution;
+  64:	9b01      	ldr	r3, [sp, #4]
+  66:	8023      	strh	r3, [r4, #0]
+}
+  68:	b005      	add	sp, #20
+  6a:	bdf0      	pop	{r4, r5, r6, r7, pc}
+           ucMemoryModule = DBPL_ucMemoryModule;
+  6c:	4b07      	ldr	r3, [pc, #28]	; (8c <DBPL_vIdentityRequest32+0x8c>)
+  6e:	781e      	ldrb	r6, [r3, #0]
+  70:	e7cf      	b.n	12 <DBPL_vIdentityRequest32+0x12>
+       DLL_vReleaseDataFromReceivedMessage(); //Data has been picked up, new incoming data may be saved in the buffer.
+  72:	f7ff fffe 	bl	0 <DLL_vReleaseDataFromReceivedMessage>
+}
+  76:	e7f7      	b.n	68 <DBPL_vIdentityRequest32+0x68>
+	...
+
+Disassembly of section .text.DBPL_vNotifyWakeupBreakSent:
+
+00000000 <DBPL_vNotifyWakeupBreakSent>:
+    DBPL_bWakeupBreakSent = true;
+   0:	2201      	movs	r2, #1
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <DBPL_vNotifyWakeupBreakSent+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vUnNotifyWakeupBreakSent:
+
+00000000 <DBPL_vUnNotifyWakeupBreakSent>:
+    DBPL_bWakeupBreakSent = false;
+   0:	2200      	movs	r2, #0
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <DBPL_vUnNotifyWakeupBreakSent+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_uiGetStandardBaudRate:
+
+00000000 <DBPL_uiGetStandardBaudRate>:
+    return (uint16_t)DBPL_uDefaultBaudRate;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBPL_uiGetStandardBaudRate+0x8>)
+   2:	8818      	ldrh	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_vSendHsiProtocolResponse:
+
+00000000 <DBPL_vSendHsiProtocolResponse>:
+{
+   0:	b510      	push	{r4, lr}
+    if(ucDataLen <= DBPL_ucSizeOfDataBufferIn_tBusMessage)
+   2:	2983      	cmp	r1, #131	; 0x83
+   4:	d81a      	bhi.n	3c <DBPL_vSendHsiProtocolResponse+0x3c>
+        DBPL_ucNumberOfBytesInMessage = ucDataLen;
+   6:	4b10      	ldr	r3, [pc, #64]	; (48 <DBPL_vSendHsiProtocolResponse+0x48>)
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_ucHsiSenderAddress; //Save the target address of the requesting communication partner.
+   8:	4a10      	ldr	r2, [pc, #64]	; (4c <DBPL_vSendHsiProtocolResponse+0x4c>)
+        DBPL_ucNumberOfBytesInMessage = ucDataLen;
+   a:	7019      	strb	r1, [r3, #0]
+        DBPL_tMessageBuffer.tBusIdentifier.ucTargetAddress = DBPL_ucHsiSenderAddress; //Save the target address of the requesting communication partner.
+   c:	7812      	ldrb	r2, [r2, #0]
+   e:	4b10      	ldr	r3, [pc, #64]	; (50 <DBPL_vSendHsiProtocolResponse+0x50>)
+  10:	1841      	adds	r1, r0, r1
+  12:	705a      	strb	r2, [r3, #1]
+        DBPL_tMessageBuffer.tBusIdentifier.tMessageIdentifier = MSG_HSI_PROTOCOL_RESPONSE;
+  14:	220d      	movs	r2, #13
+  16:	709a      	strb	r2, [r3, #2]
+  18:	3a18      	subs	r2, #24
+  1a:	70da      	strb	r2, [r3, #3]
+        for (uint8_t index = 0; index < ucDataLen; index++)
+  1c:	3301      	adds	r3, #1
+  1e:	4288      	cmp	r0, r1
+  20:	d10d      	bne.n	3e <DBPL_vSendHsiProtocolResponse+0x3e>
+        DBPL_ucRepetitions = DBPL_UPDATE_MSG_SEND_RETRIES;
+  22:	2203      	movs	r2, #3
+  24:	4b0b      	ldr	r3, [pc, #44]	; (54 <DBPL_vSendHsiProtocolResponse+0x54>)
+  26:	701a      	strb	r2, [r3, #0]
+        DBPL_bSendMsg = true;
+  28:	4b0b      	ldr	r3, [pc, #44]	; (58 <DBPL_vSendHsiProtocolResponse+0x58>)
+  2a:	3a02      	subs	r2, #2
+  2c:	701a      	strb	r2, [r3, #0]
+        DBPL_setBaudRateTimer(DBPL_hsiBaudRateTime);
+  2e:	4b0b      	ldr	r3, [pc, #44]	; (5c <DBPL_vSendHsiProtocolResponse+0x5c>)
+  30:	6818      	ldr	r0, [r3, #0]
+  32:	f7ff fffe 	bl	0 <DBPL_vSendHsiProtocolResponse>
+        DBR_RunEventdrivenDbusTask( DBR_ED_TASK_DBPL_TX );
+  36:	20ff      	movs	r0, #255	; 0xff
+  38:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+}
+  3c:	bd10      	pop	{r4, pc}
+            DBPL_tMessageBuffer.aucData[index] = ucData[index];
+  3e:	7802      	ldrb	r2, [r0, #0]
+  40:	3001      	adds	r0, #1
+  42:	70da      	strb	r2, [r3, #3]
+        for (uint8_t index = 0; index < ucDataLen; index++)
+  44:	e7ea      	b.n	1c <DBPL_vSendHsiProtocolResponse+0x1c>
+  46:	46c0      	nop			; (mov r8, r8)
+	...

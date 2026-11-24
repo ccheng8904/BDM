@@ -1,0 +1,109 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccpEpRkB.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"prog_user_task_config.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.PRG_bUserHandleTask,"ax",%progbits
+  18              		.align	1
+  19              		.global	PRG_bUserHandleTask
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	PRG_bUserHandleTask:
+  25              	.LFB0:
+  26              		.file 1 "app/prog/firmware_update/Programmer/prog_user_task_config.c"
+   1:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /*******************************************************************************
+   2:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  Copyright (c) 2020 BSH Hausgeraete GmbH,
+   3:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *
+   5:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  All rights reserved. This program and the accompanying materials
+   6:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  are protected by international copyright laws.
+   7:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  Please contact copyright holder for licensing information.
+   8:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *
+   9:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *******************************************************************************
+  10:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  PROJECT          Generic SW
+  11:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  ******************************************************************************/
+  12:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  13:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  14:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  15:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /* DOCUMENTATION                                                              */
+  16:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  17:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /** \file
+  18:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *
+  19:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  \ingroup  firmware_update
+  20:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *
+  21:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  \brief    configuration file for user-defined handle function inside Programmer
+  22:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *
+  23:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  *  \details  section shall be filled by developers
+  24:app/prog/firmware_update/Programmer/prog_user_task_config.c ****  */
+  25:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  26:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  27:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  28:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /* INCLUDES                                                                   */
+  29:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  30:app/prog/firmware_update/Programmer/prog_user_task_config.c **** #include "bsh_stdinc.h"
+  31:app/prog/firmware_update/Programmer/prog_user_task_config.c **** #include "firmware_update/Programmer/prog_user_task.h"
+  32:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccpEpRkB.s 			page 2
+
+
+  33:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  34:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /* PUBLIC DATA DEFINITIONS                                                   */
+  35:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  36:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  37:app/prog/firmware_update/Programmer/prog_user_task_config.c **** 
+  38:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  39:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  40:app/prog/firmware_update/Programmer/prog_user_task_config.c **** /******************************************************************************/
+  41:app/prog/firmware_update/Programmer/prog_user_task_config.c **** bool PRG_bUserHandleTask(void)
+  42:app/prog/firmware_update/Programmer/prog_user_task_config.c **** {
+  27              		.loc 1 42 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  43:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     /*
+  44:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     BE CAREFUL!
+  45:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     - SIZE OF FUNCTION
+  46:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        User-specific code will inflate Programmer's size which may 
+  47:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        result in overlapping with other memory sections. In such cases 
+  48:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        enlargement of Programmer's reserved space might be needed.
+  49:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     - DURATION TIME OF FUNCTION
+  50:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        Be aware of keeping optimized code in user specific function. Not well
+  51:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        optimized user specific function can affect a runtime of Programmer.
+  52:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     - STATES OF FUNCTION
+  53:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        Be aware of fact that return values of user specific function are ignored.
+  54:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        The user specific function call is performed in simple endless loop unlike
+  55:app/prog/firmware_update/Programmer/prog_user_task_config.c ****        a call in the scheduler.
+  56:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     */
+  57:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     
+  58:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     /*
+  59:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     Add user specific code there.
+  60:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     */
+  61:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     
+  62:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     // HWDT_vTrigger();
+  63:app/prog/firmware_update/Programmer/prog_user_task_config.c ****     return true; // return value is ignored in the Programmer's scheduler
+  32              		.loc 1 63 5 view .LVU1
+  64:app/prog/firmware_update/Programmer/prog_user_task_config.c **** }
+  33              		.loc 1 64 1 is_stmt 0 view .LVU2
+  34 0000 0120     		movs	r0, #1
+  35              		@ sp needed
+  36 0002 7047     		bx	lr
+  37              		.cfi_endproc
+  38              	.LFE0:
+  40              		.text
+  41              	.Letext0:

@@ -1,0 +1,39 @@
+
+out/BootManager/prog/FuncSafe/armCmx/fs_registers_checks_arm_cmx.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.FSF_vRegistercheck:
+
+00000000 <FSF_vRegistercheck>:
+ * \param none
+ * \return none
+ *
+ */
+void FSF_vRegistercheck(void)
+{
+   0:	b510      	push	{r4, lr}
+    FSF_do_xPSRandR14LinkRegisterCheck();
+   2:	f7ff fffe 	bl	0 <FSF_do_xPSRandR14LinkRegisterCheck>
+
+    FSF_doGeneralPurposeR0_R12RegisterCheck();
+   6:	f7ff fffe 	bl	0 <FSF_doGeneralPurposeR0_R12RegisterCheck>
+
+    FSF_doStackPointerR13RegisterCheck();
+   a:	f7ff fffe 	bl	0 <FSF_doStackPointerR13RegisterCheck>
+}
+   e:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vRegOpercheck:
+
+00000000 <FSF_vRegOpercheck>:
+ * \param none
+ * \return none
+ *
+ */
+void FSF_vRegOpercheck(void)
+{
+   0:	b510      	push	{r4, lr}
+    FSF_doGeneralPurposeR0_R12RegisterCheck();
+   2:	f7ff fffe 	bl	0 <FSF_doGeneralPurposeR0_R12RegisterCheck>
+}
+   6:	bd10      	pop	{r4, pc}

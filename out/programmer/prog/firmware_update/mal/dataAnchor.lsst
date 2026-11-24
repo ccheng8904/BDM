@@ -1,0 +1,41 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cczB3zwi.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dataAnchor.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	MAL_FwuOptBytes
+  18              		.global	MAL_DataAnchor
+  19              		.section	.FWU_DATA_ANCHOR,"a"
+  20              		.align	2
+  23              	MAL_DataAnchor:
+  24 0000 00000000 		.space	8
+  24      00000000 
+  25              		.section	.FWU_OPT_BYTES,"a"
+  28              	MAL_FwuOptBytes:
+  29 0000 EA       		.byte	-22
+  30 0001 EA       		.byte	-22
+  31 0002 FF       		.byte	-1
+  32 0003 FF       		.byte	-1
+  33              		.text
+  34              	.Letext0:
+  35              		.file 1 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+  36              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+  37              		.file 3 "app/prog/firmware_update/mal/module_administration_cfg.h"
+  38              		.file 4 "common/prog/firmware_update/mal/moduleAdministration.h"
+  39              		.file 5 "common/prog/firmware_update/mal/fwu_opt_bytes.h"
+  40              		.file 6 "common/prog/firmware_update/mal/dataAnchor.c"
+  41              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

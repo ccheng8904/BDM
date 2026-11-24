@@ -1,0 +1,1698 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mem_drv.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MEMDRV_entryCheck,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  23              	MEMDRV_entryCheck:
+  24              	.LVL0:
+  25              	.LFB70:
+  26              		.file 1 "common/prog/firmware_update/mem_drv/mem_drv.c"
+   1:common/prog/firmware_update/mem_drv/mem_drv.c **** /*******************************************************************************
+   2:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+   5:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+   9:common/prog/firmware_update/mem_drv/mem_drv.c ****  *******************************************************************************
+  10:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  PROJECT          Generic SW
+  11:common/prog/firmware_update/mem_drv/mem_drv.c ****  ******************************************************************************/
+  12:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  13:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  14:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  15:common/prog/firmware_update/mem_drv/mem_drv.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  17:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \file
+  18:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+  19:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \ingroup  firmware_update
+  20:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+  21:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \brief    Implementation of memory driver
+  22:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+  23:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+  24:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  25:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  26:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  27:common/prog/firmware_update/mem_drv/mem_drv.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  29:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "bsh_stdinc.h"
+  30:common/prog/firmware_update/mem_drv/mem_drv.c **** #include <stdint.h>
+  31:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "mem_drv.h"
+  32:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "mem_utility/ring_buffer.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 2
+
+
+  33:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "firmware_update/mal/mal_statuses.h"
+  34:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "utility.h"
+  35:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "hwdt.h"
+  36:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "hsup.h"
+  37:common/prog/firmware_update/mem_drv/mem_drv.c **** #define COMA_UNIT
+  38:common/prog/firmware_update/mem_drv/mem_drv.c **** #include "firmware_update/mem_drv/com_mal.h"
+  39:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  40:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  41:common/prog/firmware_update/mem_drv/mem_drv.c **** /* PRIVATE DEFINITIONS                                                        */
+  42:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  43:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef MEMDRV_READ_BUFFER_SIZE
+  44:common/prog/firmware_update/mem_drv/mem_drv.c ****     #define MEMDRV_READ_BUFFER_SIZE  0x80u ///< size of read buffer
+  45:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+  46:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  47:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef FWU_MEM_DRV_READ_ONLY
+  48:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  49:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef MEMDRV_RBUF_SIZE
+  50:common/prog/firmware_update/mem_drv/mem_drv.c ****     #define MEMDRV_RBUF_SIZE 400u ///< size of ring data buffer
+  51:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+  52:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef MEMDRV_WRITE_BUFFER_SIZE
+  53:common/prog/firmware_update/mem_drv/mem_drv.c ****     #define MEMDRV_WRITE_BUFFER_SIZE 0x80u ///< size of write buffer
+  54:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+  55:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  56:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  57:common/prog/firmware_update/mem_drv/mem_drv.c **** /* PRIVATE FUNCTION DECLARATIONS                                              */
+  58:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  59:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeBuffered(uint32_t *size, const uint8_t **data);
+  60:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeBlock(void);
+  61:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeAtomic(uint32_t *addr, uint32_t *size, const uint8_t **data);
+  62:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_eraseAtomic(uint32_t *addr, uint32_t *size);
+  63:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_isEvenDataLeft(void);
+  64:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_waitForOperationComplete(void);
+  65:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_disableInt(void);
+  66:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_enableInt(void);
+  67:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+  68:common/prog/firmware_update/mem_drv/mem_drv.c **** static const struct MEMDRV_driver_s* MEMDRV_getDriver(enum MAL_DriverID_e driverId);
+  69:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_isInternalMemory(void);
+  70:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_entryCheck(uint32_t addr, uint32_t size);
+  71:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_calcCrcAtomic(uint32_t *addr, uint32_t *size, CRC_crc_t *crc);
+  72:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_readBlock(uint32_t addr, uint32_t size, uint8_t *data);
+  73:common/prog/firmware_update/mem_drv/mem_drv.c **** static uint32_t MEMDRV_min(uint32_t val1, uint32_t val2);
+  74:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  75:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  76:common/prog/firmware_update/mem_drv/mem_drv.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  77:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  78:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef FWU_MEM_DRV_READ_ONLY
+  79:common/prog/firmware_update/mem_drv/mem_drv.c ****     static struct RBUF_ringBuffer MEMDRV_rb; ///< ring buffer context
+  80:common/prog/firmware_update/mem_drv/mem_drv.c ****     static uint32_t MEMDRV_writeAddr;        ///< next address to write
+  81:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+  82:common/prog/firmware_update/mem_drv/mem_drv.c ****     static enum MAL_Status MEMDRV_lastError;     ///< latest occurred error
+  83:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  84:common/prog/firmware_update/mem_drv/mem_drv.c **** /** pointer to active driver */
+  85:common/prog/firmware_update/mem_drv/mem_drv.c **** static const struct MEMDRV_driver_s * MEMDRV_driver = NULL;
+  86:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  87:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+  88:common/prog/firmware_update/mem_drv/mem_drv.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+  89:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 3
+
+
+  90:common/prog/firmware_update/mem_drv/mem_drv.c **** /*lint -e934 "Taking address of near auto variable [MISRA 2012 Rule 1.3, required]", relevant for D
+  91:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+  92:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_open(enum MAL_DriverID_e driverId)
+  93:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+  94:common/prog/firmware_update/mem_drv/mem_drv.c ****   #ifndef FWU_MEM_DRV_READ_ONLY
+  95:common/prog/firmware_update/mem_drv/mem_drv.c ****     static uint8_t  MEMDRV_ringData[MEMDRV_RBUF_SIZE]; ///< ring data buffer
+  96:common/prog/firmware_update/mem_drv/mem_drv.c ****     RBUF_init(&MEMDRV_rb, MEMDRV_ringData, MEMDRV_RBUF_SIZE);
+  97:common/prog/firmware_update/mem_drv/mem_drv.c ****   #endif
+  98:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = MEMDRV_getDriver(driverId);
+  99:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver != NULL)
+ 100:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 101:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifdef FWU_MEM_DRV_READ_ONLY
+ 102:common/prog/firmware_update/mem_drv/mem_drv.c ****         if(!MEMDRV_isInternalMemory())
+ 103:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+ 104:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 105:common/prog/firmware_update/mem_drv/mem_drv.c ****             MEMDRV_driver->init();
+ 106:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 107:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 108:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_lastError = MAL_ST_OK;
+ 109:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_OK;
+ 110:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 111:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_SETUP_MODULE_ERROR;
+ 112:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 113:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 114:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 115:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_read(uint32_t addr, uint32_t size, uint8_t *data)
+ 116:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 117:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 118:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 119:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 120:common/prog/firmware_update/mem_drv/mem_drv.c ****         if(!MEMDRV_readBlock(addr,size,data))
+ 121:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 122:common/prog/firmware_update/mem_drv/mem_drv.c ****             status =  MAL_ST_READ_ERROR;
+ 123:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 124:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 125:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 126:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 127:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 128:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 129:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_calcCrc(uint32_t addr, uint32_t size, CRC_crc_t *crc)
+ 130:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 131:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 132:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 133:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 134:common/prog/firmware_update/mem_drv/mem_drv.c ****         *crc = CRC_Init();
+ 135:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size > 0u) && (status == MAL_ST_OK))
+ 136:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 137:common/prog/firmware_update/mem_drv/mem_drv.c ****             status = MEMDRV_calcCrcAtomic(&addr, &size, crc);
+ 138:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 139:common/prog/firmware_update/mem_drv/mem_drv.c ****         *crc = CRC_Finish(*crc);
+ 140:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 141:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 142:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 143:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 144:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 145:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_close(void)
+ 146:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 4
+
+
+ 147:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status;
+ 148:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef FWU_MEM_DRV_READ_ONLY
+ 149:common/prog/firmware_update/mem_drv/mem_drv.c ****     status = MEMDRV_flush();
+ 150:common/prog/firmware_update/mem_drv/mem_drv.c **** #else
+ 151:common/prog/firmware_update/mem_drv/mem_drv.c ****     status = MAL_ST_OK;
+ 152:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+ 153:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver->deinit();
+ 154:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = NULL;
+ 155:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 156:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 157:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 158:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef FWU_MEM_DRV_READ_ONLY
+ 159:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MEMDRV_timeout_e MEMDRV_getTimeout(void)
+ 160:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 161:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MEMDRV_driver->timeOutPwr2;
+ 162:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 163:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 164:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 165:common/prog/firmware_update/mem_drv/mem_drv.c **** void MEMDRV_schedule(void)
+ 166:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 167:common/prog/firmware_update/mem_drv/mem_drv.c ****     if((MEMDRV_driver != NULL) && (MEMDRV_driver->allowInterrupts))
+ 168:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 169:common/prog/firmware_update/mem_drv/mem_drv.c ****         enum MAL_Status status = MEMDRV_writeBlock();
+ 170:common/prog/firmware_update/mem_drv/mem_drv.c ****         if(status != MAL_ST_OK)
+ 171:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 172:common/prog/firmware_update/mem_drv/mem_drv.c ****             MEMDRV_lastError = status;
+ 173:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 174:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 175:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 176:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 177:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 178:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_eraseRange(uint32_t addr, uint32_t size)
+ 179:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 180:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr, size);
+ 181:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 182:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 183:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_disableInt();
+ 184:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size > 0u) && (status == MAL_ST_OK))
+ 185:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 186:common/prog/firmware_update/mem_drv/mem_drv.c ****             status = MEMDRV_eraseAtomic(&addr, &size);
+ 187:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 188:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_driver->reset();
+ 189:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_enableInt();
+ 190:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 191:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 192:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 193:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 194:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 195:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_write(uint32_t addr, uint32_t size, const uint8_t *data)
+ 196:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 197:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr, size);
+ 198:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 199:common/prog/firmware_update/mem_drv/mem_drv.c ****     {   // correct write address with possible content in ring buffer
+ 200:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_writeAddr = addr - RBUF_getBytesToRead(&MEMDRV_rb);
+ 201:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size > 0u) && (status == MAL_ST_OK))
+ 202:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 203:common/prog/firmware_update/mem_drv/mem_drv.c ****             status = MEMDRV_writeBuffered(&size, &data);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 5
+
+
+ 204:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 205:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 206:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 207:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 208:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 209:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 210:common/prog/firmware_update/mem_drv/mem_drv.c **** enum MAL_Status MEMDRV_flush(void)
+ 211:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 212:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MAL_ST_OK;
+ 213:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint16_t bytesToWrite = (uint16_t)RBUF_getBytesToRead(&MEMDRV_rb);
+ 214:common/prog/firmware_update/mem_drv/mem_drv.c ****     
+ 215:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(bytesToWrite > 0u)
+ 216:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 217:common/prog/firmware_update/mem_drv/mem_drv.c ****         status = MEMDRV_entryCheck(MEMDRV_writeAddr, bytesToWrite);
+ 218:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((status == MAL_ST_OK) && (RBUF_getBytesToRead(&MEMDRV_rb) > 0u))
+ 219:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 220:common/prog/firmware_update/mem_drv/mem_drv.c ****             if(MEMDRV_isEvenDataLeft())
+ 221:common/prog/firmware_update/mem_drv/mem_drv.c ****             {
+ 222:common/prog/firmware_update/mem_drv/mem_drv.c ****                 status = MEMDRV_writeBlock();
+ 223:common/prog/firmware_update/mem_drv/mem_drv.c ****             }
+ 224:common/prog/firmware_update/mem_drv/mem_drv.c ****             else
+ 225:common/prog/firmware_update/mem_drv/mem_drv.c ****             {
+ 226:common/prog/firmware_update/mem_drv/mem_drv.c ****                 status = MAL_ST_WRITE_BUFFER_DATA_LEFT;
+ 227:common/prog/firmware_update/mem_drv/mem_drv.c ****             }
+ 228:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 229:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 230:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 231:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver->reset();
+ 232:common/prog/firmware_update/mem_drv/mem_drv.c ****     RBUF_reset(&MEMDRV_rb);
+ 233:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 234:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 235:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 236:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+ 237:common/prog/firmware_update/mem_drv/mem_drv.c **** /* PRIVATE FUNCTION DEFINITIONS                                               */
+ 238:common/prog/firmware_update/mem_drv/mem_drv.c **** /******************************************************************************/
+ 239:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 240:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief Writes a block of data to the ring buffer.
+ 241:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details If there is not enough space inside ring buffer the a data block
+ 242:common/prog/firmware_update/mem_drv/mem_drv.c ****  *           will be written to according memory
+ 243:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size[in,out] in: number of bytes to write, out: number of bytes left
+ 244:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param data[in,out] in: pointer to data to place in ring buffer, out: next byte
+ 245:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return result of operation [MAL_ST_WRITE_ERROR, MAL_ST_OK]
+ 246:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 247:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeBuffered(uint32_t *size, const uint8_t **data)
+ 248:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 249:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status  status = MAL_ST_OK;
+ 250:common/prog/firmware_update/mem_drv/mem_drv.c ****     // write as much as possible to ring buffer
+ 251:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t wrSize = RBUF_writeBuffN(&MEMDRV_rb, *data, (RBUF_size_t)*size);
+ 252:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 253:common/prog/firmware_update/mem_drv/mem_drv.c ****     *data += wrSize; /*lint !e9016 "Pointer arithmetic MisraC2012 18.4 advisory" tested to work cor
+ 254:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size -= wrSize;
+ 255:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(*size > 0u)
+ 256:common/prog/firmware_update/mem_drv/mem_drv.c ****     {   /* ring buffer couldn't take all data, so write a block to flash */
+ 257:common/prog/firmware_update/mem_drv/mem_drv.c ****         status = MEMDRV_writeBlock(); // write a block to flash
+ 258:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 259:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 260:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 6
+
+
+ 261:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 262:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 263:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief Writes a block of data from ring buffer to according memory.
+ 264:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details This interface writes at most MEMDRV_WRITE_BUFFER_SIZE bytes
+ 265:common/prog/firmware_update/mem_drv/mem_drv.c ****  *           to the according memory. rest smaller than minimal write block
+ 266:common/prog/firmware_update/mem_drv/mem_drv.c ****  *           is ignored.
+ 267:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return result of operation [MAL_ST_WRITE_ERROR, MAL_ST_OK]
+ 268:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 269:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeBlock(void)
+ 270:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 271:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status  status = MAL_ST_OK;
+ 272:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint8_t  buf[MEMDRV_WRITE_BUFFER_SIZE];
+ 273:common/prog/firmware_update/mem_drv/mem_drv.c ****     const uint8_t  *data  = buf;
+ 274:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 275:common/prog/firmware_update/mem_drv/mem_drv.c ****     // copy data form ring to linear buffer
+ 276:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t size = RBUF_readBuffN(&MEMDRV_rb, buf, (RBUF_size_t)MEMDRV_WRITE_BUFFER_SIZE);
+ 277:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(size > 0u)
+ 278:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 279:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_disableInt();
+ 280:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size >= MEMDRV_driver->writeBlockSize) && (status == MAL_ST_OK))
+ 281:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 282:common/prog/firmware_update/mem_drv/mem_drv.c ****             status = MEMDRV_writeAtomic(&MEMDRV_writeAddr, &size, &data);
+ 283:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 284:common/prog/firmware_update/mem_drv/mem_drv.c ****         // copy unwritten data back to ring buffer
+ 285:common/prog/firmware_update/mem_drv/mem_drv.c ****         (void)RBUF_writeBuff(&MEMDRV_rb, data, (RBUF_size_t)size);
+ 286:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_driver->reset();
+ 287:common/prog/firmware_update/mem_drv/mem_drv.c ****         MEMDRV_enableInt();
+ 288:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 289:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 290:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 291:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 292:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 293:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief Writes an atomic block of data from ring buffer to according memory.
+ 294:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details The memory driver decides how much bytes will be written.
+ 295:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param addr[in,out] in: start addr to write, out: next addr
+ 296:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size[in,out] in: number of bytes to write, out: number of bytes left
+ 297:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param data[in,out] in: pointer to data to place in ring buffer, out: next byte
+ 298:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return result of operation [MAL_ST_WRITE_ERROR, MAL_ST_OK]
+ 299:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 300:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_writeAtomic(uint32_t *addr, uint32_t *size, const uint8_t **data)
+ 301:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 302:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t writtenSize = MEMDRV_driver->write(*addr, *size, *data);
+ 303:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_waitForOperationComplete();
+ 304:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver->isError() || (writtenSize == 0u))
+ 305:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 306:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_WRITE_ERROR;
+ 307:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 308:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size  = ((*size > writtenSize) ? (uint32_t)(*size-writtenSize) : 0u);
+ 309:common/prog/firmware_update/mem_drv/mem_drv.c ****     *addr += writtenSize;
+ 310:common/prog/firmware_update/mem_drv/mem_drv.c ****     *data += writtenSize; /*lint !e9016 "Pointer arithmetic not allowed", MIRA advisory 18.4 */
+ 311:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_OK;
+ 312:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 313:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 314:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 315:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief Erases an atomic block inside according memory.
+ 316:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details The memory driver decides how much bytes will be erased.
+ 317:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param addr[in,out] in: start addr to erase, out: next erase addr
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 7
+
+
+ 318:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size[in,out] in: number of bytes to erase, out: number of bytes left
+ 319:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return result of operation [MAL_ST_ERASE_ERROR, MAL_ST_OK]
+ 320:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 321:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_eraseAtomic(uint32_t *addr, uint32_t *size)
+ 322:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 323:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t erasedSize = MEMDRV_driver->erase(*addr, *size);
+ 324:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_waitForOperationComplete();
+ 325:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver->isError() || (erasedSize == 0u))
+ 326:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 327:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_ERASE_ERROR;
+ 328:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 329:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size  = ((*size > erasedSize) ? (uint32_t)(*size-erasedSize) : 0u);
+ 330:common/prog/firmware_update/mem_drv/mem_drv.c ****     *addr += erasedSize;
+ 331:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_OK;
+ 332:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 333:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 334:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 335:common/prog/firmware_update/mem_drv/mem_drv.c **** /** Checks if even data is left in buffer.
+ 336:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details Underlying memory may have a minimal write block size,
+ 337:common/prog/firmware_update/mem_drv/mem_drv.c ****  *           smaller blocks cannot be written to the memory.
+ 338:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return true if enough data available for a write, otherwise false
+ 339:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 340:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_isEvenDataLeft(void)
+ 341:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 342:common/prog/firmware_update/mem_drv/mem_drv.c ****     return (RBUF_getBytesToRead(&MEMDRV_rb) >= MEMDRV_driver->writeBlockSize);
+ 343:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 344:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 345:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 346:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 347:common/prog/firmware_update/mem_drv/mem_drv.c **** /** Waits until on going operation has been finished
+ 348:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \note This interface triggers the watchdog as
+ 349:common/prog/firmware_update/mem_drv/mem_drv.c ****  *        e.g. flash operation may take some time.
+ 350:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 351:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_waitForOperationComplete(void)
+ 352:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 353:common/prog/firmware_update/mem_drv/mem_drv.c ****     while(MEMDRV_driver->isBusy())
+ 354:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 355:common/prog/firmware_update/mem_drv/mem_drv.c ****         HWDT_vTrigger();
+ 356:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 357:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 358:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 359:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 360:common/prog/firmware_update/mem_drv/mem_drv.c **** /** disable all interrupts if needed by selected memory driver */
+ 361:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_disableInt(void)
+ 362:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 363:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(!MEMDRV_driver->allowInterrupts)
+ 364:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 365:common/prog/firmware_update/mem_drv/mem_drv.c ****         HSUP_vDisableInt();
+ 366:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 367:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 368:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 369:common/prog/firmware_update/mem_drv/mem_drv.c **** /** enables all interrupts if needed by selected memory driver */
+ 370:common/prog/firmware_update/mem_drv/mem_drv.c **** static void MEMDRV_enableInt(void)
+ 371:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 372:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(!MEMDRV_driver->allowInterrupts)
+ 373:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 374:common/prog/firmware_update/mem_drv/mem_drv.c ****         HSUP_vEnableInt();
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 8
+
+
+ 375:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 376:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 377:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 378:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif // FWU_MEM_DRV_READ_ONLY
+ 379:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 380:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief    Search for a valid driver for given driverID.
+ 381:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+ 382:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param    driverID: identifier of requested memory driver
+ 383:common/prog/firmware_update/mem_drv/mem_drv.c ****  *
+ 384:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return   pointer to the responsible memory driver,
+ 385:common/prog/firmware_update/mem_drv/mem_drv.c ****               or NULL when no driver found.
+ 386:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 387:common/prog/firmware_update/mem_drv/mem_drv.c **** static const struct MEMDRV_driver_s* MEMDRV_getDriver(enum MAL_DriverID_e driverId)
+ 388:common/prog/firmware_update/mem_drv/mem_drv.c **** {   // search in MEMDRV_driverTable until end mark (NULL) is reached
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     for(uint8_t i = 0; MEMDRV_driverTable[i].driver != NULL; i++)
+ 390:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 391:common/prog/firmware_update/mem_drv/mem_drv.c ****         if (MEMDRV_driverTable[i].driverID == driverId)
+ 392:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 393:common/prog/firmware_update/mem_drv/mem_drv.c ****             return MEMDRV_driverTable[i].driver;
+ 394:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 395:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 396:common/prog/firmware_update/mem_drv/mem_drv.c ****     return NULL; // no driver found for specified memory
+ 397:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 398:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 399:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 400:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 401:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief checks common error conditions
+ 402:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param addr physical address given by public interface
+ 403:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size size in bytes given by public interface
+ 404:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return MAL_ST_OK if there is no problem
+ 405:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 406:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_entryCheck(uint32_t addr, uint32_t size)
+ 407:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+  27              		.loc 1 407 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 408:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_lastError;
+  31              		.loc 1 408 5 view .LVU1
+ 409:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 410:common/prog/firmware_update/mem_drv/mem_drv.c ****     // reset last error after once reported
+ 411:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_lastError = MAL_ST_OK;
+  32              		.loc 1 411 22 is_stmt 0 view .LVU2
+  33 0000 0022     		movs	r2, #0
+ 407:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_lastError;
+  34              		.loc 1 407 1 view .LVU3
+  35 0002 10B5     		push	{r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 14, -4
+ 408:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_lastError;
+  40              		.loc 1 408 21 view .LVU4
+  41 0004 074B     		ldr	r3, .L4
+  42 0006 1C78     		ldrb	r4, [r3]
+  43              	.LVL1:
+  44              		.loc 1 411 5 is_stmt 1 view .LVU5
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 9
+
+
+  45              		.loc 1 411 22 is_stmt 0 view .LVU6
+  46 0008 1A70     		strb	r2, [r3]
+ 412:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 413:common/prog/firmware_update/mem_drv/mem_drv.c ****     if (MEMDRV_driver == NULL)
+  47              		.loc 1 413 5 is_stmt 1 view .LVU7
+  48              		.loc 1 413 23 is_stmt 0 view .LVU8
+  49 000a 074B     		ldr	r3, .L4+4
+  50 000c 1B68     		ldr	r3, [r3]
+  51              		.loc 1 413 8 view .LVU9
+  52 000e 9342     		cmp	r3, r2
+  53 0010 06D0     		beq	.L3
+ 414:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 415:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_SETUP_MODULE_ERROR;
+ 416:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 417:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(!MEMDRV_driver->isAddrRangeValid(addr,size))
+  54              		.loc 1 417 5 is_stmt 1 view .LVU10
+  55              		.loc 1 417 9 is_stmt 0 view .LVU11
+  56 0012 9B68     		ldr	r3, [r3, #8]
+  57 0014 9847     		blx	r3
+  58              	.LVL2:
+  59              		.loc 1 417 7 view .LVU12
+  60 0016 0028     		cmp	r0, #0
+  61 0018 00D1     		bne	.L2
+ 418:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 419:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_OUT_OF_RANGE_ERROR;
+  62              		.loc 1 419 16 view .LVU13
+  63 001a 0824     		movs	r4, #8
+  64              	.LVL3:
+  65              	.L2:
+ 420:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 421:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 422:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 423:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+  66              		.loc 1 423 1 view .LVU14
+  67              		@ sp needed
+  68 001c 2000     		movs	r0, r4
+  69 001e 10BD     		pop	{r4, pc}
+  70              	.LVL4:
+  71              	.L3:
+ 415:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+  72              		.loc 1 415 16 view .LVU15
+  73 0020 0624     		movs	r4, #6
+  74              	.LVL5:
+ 415:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+  75              		.loc 1 415 16 view .LVU16
+  76 0022 FBE7     		b	.L2
+  77              	.L5:
+  78              		.align	2
+  79              	.L4:
+  80 0024 00000000 		.word	.LANCHOR0
+  81 0028 00000000 		.word	.LANCHOR1
+  82              		.cfi_endproc
+  83              	.LFE70:
+  85              		.section	.text.MEMDRV_readBlock,"ax",%progbits
+  86              		.align	1
+  87              		.syntax unified
+  88              		.code	16
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 10
+
+
+  89              		.thumb_func
+  91              	MEMDRV_readBlock:
+  92              	.LVL6:
+  93              	.LFB72:
+ 424:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 425:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 426:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief Calculates the CRC for a block inside according memory.
+ 427:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \details The memory driver decides how much bytes will be erased.
+ 428:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param addr[in,out] in: start addr to calculate CRC, out: next addr
+ 429:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size[in,out] in: number of bytes to calculate, out: number of bytes left
+ 430:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return result of operation [MAL_ST_READ_ERROR, MAL_ST_OK]
+ 431:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 432:common/prog/firmware_update/mem_drv/mem_drv.c **** static enum MAL_Status MEMDRV_calcCrcAtomic(uint32_t *addr, uint32_t *size, CRC_crc_t *crc)
+ 433:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 434:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint8_t readBuffer[MEMDRV_READ_BUFFER_SIZE];
+ 435:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t readSize = MEMDRV_min(MEMDRV_READ_BUFFER_SIZE, *size);
+ 436:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(!MEMDRV_readBlock(*addr, readSize, readBuffer))
+ 437:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 438:common/prog/firmware_update/mem_drv/mem_drv.c ****           return MAL_ST_READ_ERROR;
+ 439:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 440:common/prog/firmware_update/mem_drv/mem_drv.c ****     *crc   = CRC_Update(*crc, readSize, readBuffer);
+ 441:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size -= readSize;
+ 442:common/prog/firmware_update/mem_drv/mem_drv.c ****     *addr += readSize;
+ 443:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_OK;
+ 444:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 445:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 446:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 447:common/prog/firmware_update/mem_drv/mem_drv.c **** /** \brief reads a number of bytes
+ 448:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param addr physical address
+ 449:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param size size in bytes to be read
+ 450:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \param data pointer to data buffer to copy the read data
+ 451:common/prog/firmware_update/mem_drv/mem_drv.c ****  *  \return true if reading successfully, false otherwise
+ 452:common/prog/firmware_update/mem_drv/mem_drv.c ****  */
+ 453:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_readBlock(uint32_t addr, uint32_t size, uint8_t *data)
+ 454:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+  94              		.loc 1 454 1 is_stmt 1 view -0
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 0
+  97              		@ frame_needed = 0, uses_anonymous_args = 0
+ 455:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_isInternalMemory())
+  98              		.loc 1 455 5 view .LVU18
+  99              	.LBB14:
+ 100              	.LBI14:
+ 456:common/prog/firmware_update/mem_drv/mem_drv.c ****     {   // just copy the data
+ 457:common/prog/firmware_update/mem_drv/mem_drv.c ****         return COMA_read(addr,size,data);
+ 458:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 459:common/prog/firmware_update/mem_drv/mem_drv.c ****     else
+ 460:common/prog/firmware_update/mem_drv/mem_drv.c ****     {   // read from external memory
+ 461:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MEMDRV_driver->read(addr,size,data);
+ 462:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 463:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 464:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 465:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 466:common/prog/firmware_update/mem_drv/mem_drv.c **** /** returns true if open memory driver */
+ 467:common/prog/firmware_update/mem_drv/mem_drv.c **** static bool MEMDRV_isInternalMemory(void)
+ 101              		.loc 1 467 13 view .LVU19
+ 102              	.LBB15:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 11
+
+
+ 468:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 469:common/prog/firmware_update/mem_drv/mem_drv.c ****     return (MEMDRV_driver->read == NULL);
+ 103              		.loc 1 469 5 view .LVU20
+ 104              		.loc 1 469 26 is_stmt 0 view .LVU21
+ 105 0000 054B     		ldr	r3, .L9
+ 106              	.LBE15:
+ 107              	.LBE14:
+ 454:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_isInternalMemory())
+ 108              		.loc 1 454 1 view .LVU22
+ 109 0002 10B5     		push	{r4, lr}
+ 110              	.LCFI1:
+ 111              		.cfi_def_cfa_offset 8
+ 112              		.cfi_offset 4, -8
+ 113              		.cfi_offset 14, -4
+ 114              	.LBB17:
+ 115              	.LBB16:
+ 116              		.loc 1 469 26 view .LVU23
+ 117 0004 1B68     		ldr	r3, [r3]
+ 118 0006 DB68     		ldr	r3, [r3, #12]
+ 119              	.LBE16:
+ 120              	.LBE17:
+ 455:common/prog/firmware_update/mem_drv/mem_drv.c ****     {   // just copy the data
+ 121              		.loc 1 455 7 view .LVU24
+ 122 0008 002B     		cmp	r3, #0
+ 123 000a 02D1     		bne	.L7
+ 457:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 124              		.loc 1 457 9 is_stmt 1 view .LVU25
+ 457:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 125              		.loc 1 457 16 is_stmt 0 view .LVU26
+ 126 000c FFF7FEFF 		bl	COMA_read
+ 127              	.LVL7:
+ 128              	.L8:
+ 463:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 129              		.loc 1 463 1 view .LVU27
+ 130              		@ sp needed
+ 131 0010 10BD     		pop	{r4, pc}
+ 132              	.LVL8:
+ 133              	.L7:
+ 134              	.LBB18:
+ 135              	.LBI18:
+ 453:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 136              		.loc 1 453 13 is_stmt 1 view .LVU28
+ 137              	.LBB19:
+ 461:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 138              		.loc 1 461 9 view .LVU29
+ 461:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 139              		.loc 1 461 16 is_stmt 0 view .LVU30
+ 140 0012 9847     		blx	r3
+ 141              	.LVL9:
+ 461:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 142              		.loc 1 461 16 view .LVU31
+ 143 0014 FCE7     		b	.L8
+ 144              	.L10:
+ 145 0016 C046     		.align	2
+ 146              	.L9:
+ 147 0018 00000000 		.word	.LANCHOR1
+ 148              	.LBE19:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 12
+
+
+ 149              	.LBE18:
+ 150              		.cfi_endproc
+ 151              	.LFE72:
+ 153              		.section	.text.MEMDRV_open,"ax",%progbits
+ 154              		.align	1
+ 155              		.global	MEMDRV_open
+ 156              		.syntax unified
+ 157              		.code	16
+ 158              		.thumb_func
+ 160              	MEMDRV_open:
+ 161              	.LVL10:
+ 162              	.LFB65:
+  93:common/prog/firmware_update/mem_drv/mem_drv.c ****   #ifndef FWU_MEM_DRV_READ_ONLY
+ 163              		.loc 1 93 1 is_stmt 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+  98:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver != NULL)
+ 167              		.loc 1 98 5 view .LVU33
+ 168              	.LBB25:
+ 169              	.LBI25:
+ 387:common/prog/firmware_update/mem_drv/mem_drv.c **** {   // search in MEMDRV_driverTable until end mark (NULL) is reached
+ 170              		.loc 1 387 38 view .LVU34
+ 171              	.LBB26:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 172              		.loc 1 389 5 view .LVU35
+ 173              	.LBB27:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 174              		.loc 1 389 9 view .LVU36
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 175              		.loc 1 389 9 is_stmt 0 view .LVU37
+ 176              	.LBE27:
+ 177              	.LBE26:
+ 178              	.LBE25:
+  93:common/prog/firmware_update/mem_drv/mem_drv.c ****   #ifndef FWU_MEM_DRV_READ_ONLY
+ 179              		.loc 1 93 1 view .LVU38
+ 180 0000 70B5     		push	{r4, r5, r6, lr}
+ 181              	.LCFI2:
+ 182              		.cfi_def_cfa_offset 16
+ 183              		.cfi_offset 4, -16
+ 184              		.cfi_offset 5, -12
+ 185              		.cfi_offset 6, -8
+ 186              		.cfi_offset 14, -4
+ 187              	.LBB32:
+ 188              	.LBB30:
+ 189              	.LBB28:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 190              		.loc 1 389 17 view .LVU39
+ 191 0002 0022     		movs	r2, #0
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 192              		.loc 1 389 45 view .LVU40
+ 193 0004 0C25     		movs	r5, #12
+ 194 0006 0D4C     		ldr	r4, .L21
+ 195              	.LVL11:
+ 196              	.L12:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 197              		.loc 1 389 53 is_stmt 1 view .LVU41
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 13
+
+
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 198              		.loc 1 389 45 is_stmt 0 view .LVU42
+ 199 0008 2900     		movs	r1, r5
+ 200 000a 5143     		muls	r1, r2
+ 201 000c 0B59     		ldr	r3, [r1, r4]
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 202              		.loc 1 389 53 view .LVU43
+ 203 000e 002B     		cmp	r3, #0
+ 204 0010 0DD1     		bne	.L14
+ 205              	.L13:
+ 206              	.LVL12:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 207              		.loc 1 389 53 view .LVU44
+ 208              	.LBE28:
+ 209              	.LBE30:
+ 210              	.LBE32:
+  98:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver != NULL)
+ 211              		.loc 1 98 19 view .LVU45
+ 212 0012 0B4A     		ldr	r2, .L21+4
+ 111:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 213              		.loc 1 111 12 view .LVU46
+ 214 0014 0620     		movs	r0, #6
+ 215              	.LVL13:
+  98:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(MEMDRV_driver != NULL)
+ 216              		.loc 1 98 19 view .LVU47
+ 217 0016 1360     		str	r3, [r2]
+  99:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 218              		.loc 1 99 5 is_stmt 1 view .LVU48
+  99:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 219              		.loc 1 99 7 is_stmt 0 view .LVU49
+ 220 0018 002B     		cmp	r3, #0
+ 221 001a 07D0     		beq	.L15
+ 102:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+ 222              		.loc 1 102 9 is_stmt 1 view .LVU50
+ 223              	.LBB33:
+ 224              	.LBI33:
+ 467:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 225              		.loc 1 467 13 view .LVU51
+ 226              	.LBB34:
+ 227              		.loc 1 469 5 view .LVU52
+ 228              	.LBE34:
+ 229              	.LBE33:
+ 102:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+ 230              		.loc 1 102 11 is_stmt 0 view .LVU53
+ 231 001c DA68     		ldr	r2, [r3, #12]
+ 232 001e 002A     		cmp	r2, #0
+ 233 0020 01D0     		beq	.L16
+ 105:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 234              		.loc 1 105 13 is_stmt 1 view .LVU54
+ 235 0022 1B68     		ldr	r3, [r3]
+ 236 0024 9847     		blx	r3
+ 237              	.LVL14:
+ 238              	.L16:
+ 108:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_OK;
+ 239              		.loc 1 108 9 view .LVU55
+ 108:common/prog/firmware_update/mem_drv/mem_drv.c ****         return MAL_ST_OK;
+ 240              		.loc 1 108 26 is_stmt 0 view .LVU56
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 14
+
+
+ 241 0026 0020     		movs	r0, #0
+ 242 0028 064B     		ldr	r3, .L21+8
+ 243 002a 1870     		strb	r0, [r3]
+ 109:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 244              		.loc 1 109 9 is_stmt 1 view .LVU57
+ 245              	.L15:
+ 112:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 246              		.loc 1 112 1 is_stmt 0 view .LVU58
+ 247              		@ sp needed
+ 248 002c 70BD     		pop	{r4, r5, r6, pc}
+ 249              	.LVL15:
+ 250              	.L14:
+ 251              	.LBB35:
+ 252              	.LBB31:
+ 253              	.LBB29:
+ 391:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 254              		.loc 1 391 9 is_stmt 1 view .LVU59
+ 391:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 255              		.loc 1 391 34 is_stmt 0 view .LVU60
+ 256 002e 6118     		adds	r1, r4, r1
+ 391:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 257              		.loc 1 391 12 view .LVU61
+ 258 0030 0979     		ldrb	r1, [r1, #4]
+ 259 0032 8142     		cmp	r1, r0
+ 260 0034 EDD0     		beq	.L13
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 261              		.loc 1 389 63 is_stmt 1 view .LVU62
+ 262 0036 0132     		adds	r2, r2, #1
+ 263              	.LVL16:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 264              		.loc 1 389 63 is_stmt 0 view .LVU63
+ 265 0038 D2B2     		uxtb	r2, r2
+ 266              	.LVL17:
+ 389:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 267              		.loc 1 389 63 view .LVU64
+ 268 003a E5E7     		b	.L12
+ 269              	.L22:
+ 270              		.align	2
+ 271              	.L21:
+ 272 003c 00000000 		.word	MEMDRV_driverTable
+ 273 0040 00000000 		.word	.LANCHOR1
+ 274 0044 00000000 		.word	.LANCHOR0
+ 275              	.LBE29:
+ 276              	.LBE31:
+ 277              	.LBE35:
+ 278              		.cfi_endproc
+ 279              	.LFE65:
+ 281              		.section	.text.MEMDRV_read,"ax",%progbits
+ 282              		.align	1
+ 283              		.global	MEMDRV_read
+ 284              		.syntax unified
+ 285              		.code	16
+ 286              		.thumb_func
+ 288              	MEMDRV_read:
+ 289              	.LVL18:
+ 290              	.LFB66:
+ 116:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 15
+
+
+ 291              		.loc 1 116 1 is_stmt 1 view -0
+ 292              		.cfi_startproc
+ 293              		@ args = 0, pretend = 0, frame = 0
+ 294              		@ frame_needed = 0, uses_anonymous_args = 0
+ 117:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 295              		.loc 1 117 5 view .LVU66
+ 116:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 296              		.loc 1 116 1 is_stmt 0 view .LVU67
+ 297 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 298              	.LCFI3:
+ 299              		.cfi_def_cfa_offset 24
+ 300              		.cfi_offset 3, -24
+ 301              		.cfi_offset 4, -20
+ 302              		.cfi_offset 5, -16
+ 303              		.cfi_offset 6, -12
+ 304              		.cfi_offset 7, -8
+ 305              		.cfi_offset 14, -4
+ 116:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 306              		.loc 1 116 1 view .LVU68
+ 307 0002 0500     		movs	r5, r0
+ 308 0004 0E00     		movs	r6, r1
+ 309 0006 1700     		movs	r7, r2
+ 117:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 310              		.loc 1 117 30 view .LVU69
+ 311 0008 FFF7FEFF 		bl	MEMDRV_entryCheck
+ 312              	.LVL19:
+ 117:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 313              		.loc 1 117 30 view .LVU70
+ 314 000c 041E     		subs	r4, r0, #0
+ 315              	.LVL20:
+ 118:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 316              		.loc 1 118 5 is_stmt 1 view .LVU71
+ 118:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 317              		.loc 1 118 7 is_stmt 0 view .LVU72
+ 318 000e 07D1     		bne	.L24
+ 120:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 319              		.loc 1 120 9 is_stmt 1 view .LVU73
+ 120:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 320              		.loc 1 120 13 is_stmt 0 view .LVU74
+ 321 0010 3A00     		movs	r2, r7
+ 322 0012 3100     		movs	r1, r6
+ 323 0014 2800     		movs	r0, r5
+ 324              	.LVL21:
+ 120:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 325              		.loc 1 120 13 view .LVU75
+ 326 0016 FFF7FEFF 		bl	MEMDRV_readBlock
+ 327              	.LVL22:
+ 120:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 328              		.loc 1 120 11 view .LVU76
+ 329 001a 0028     		cmp	r0, #0
+ 330 001c 00D1     		bne	.L24
+ 122:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 331              		.loc 1 122 20 view .LVU77
+ 332 001e 0B34     		adds	r4, r4, #11
+ 333              	.LVL23:
+ 334              	.L24:
+ 125:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 16
+
+
+ 335              		.loc 1 125 5 is_stmt 1 view .LVU78
+ 126:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 336              		.loc 1 126 1 is_stmt 0 view .LVU79
+ 337 0020 2000     		movs	r0, r4
+ 338              		@ sp needed
+ 339              	.LVL24:
+ 340              	.LVL25:
+ 341              	.LVL26:
+ 342              	.LVL27:
+ 126:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 343              		.loc 1 126 1 view .LVU80
+ 344 0022 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 345              		.cfi_endproc
+ 346              	.LFE66:
+ 348              		.section	.text.MEMDRV_calcCrc,"ax",%progbits
+ 349              		.align	1
+ 350              		.global	MEMDRV_calcCrc
+ 351              		.syntax unified
+ 352              		.code	16
+ 353              		.thumb_func
+ 355              	MEMDRV_calcCrc:
+ 356              	.LVL28:
+ 357              	.LFB67:
+ 130:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 358              		.loc 1 130 1 is_stmt 1 view -0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 136
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 362              		.loc 1 131 5 view .LVU82
+ 130:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 363              		.loc 1 130 1 is_stmt 0 view .LVU83
+ 364 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 365              	.LCFI4:
+ 366              		.cfi_def_cfa_offset 20
+ 367              		.cfi_offset 4, -20
+ 368              		.cfi_offset 5, -16
+ 369              		.cfi_offset 6, -12
+ 370              		.cfi_offset 7, -8
+ 371              		.cfi_offset 14, -4
+ 372 0002 A3B0     		sub	sp, sp, #140
+ 373              	.LCFI5:
+ 374              		.cfi_def_cfa_offset 160
+ 130:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status = MEMDRV_entryCheck(addr,size);
+ 375              		.loc 1 130 1 view .LVU84
+ 376 0004 0600     		movs	r6, r0
+ 377 0006 0C00     		movs	r4, r1
+ 378 0008 1500     		movs	r5, r2
+ 131:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 379              		.loc 1 131 30 view .LVU85
+ 380 000a FFF7FEFF 		bl	MEMDRV_entryCheck
+ 381              	.LVL29:
+ 131:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(status == MAL_ST_OK)
+ 382              		.loc 1 131 30 view .LVU86
+ 383 000e 0190     		str	r0, [sp, #4]
+ 384              	.LVL30:
+ 132:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 17
+
+
+ 385              		.loc 1 132 5 is_stmt 1 view .LVU87
+ 132:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 386              		.loc 1 132 7 is_stmt 0 view .LVU88
+ 387 0010 0028     		cmp	r0, #0
+ 388 0012 08D1     		bne	.L26
+ 134:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size > 0u) && (status == MAL_ST_OK))
+ 389              		.loc 1 134 9 is_stmt 1 view .LVU89
+ 390              	.LBB46:
+ 391              	.LBI46:
+ 392              		.file 2 "common/prog/ped_fw/stdcrc/StdCrc.h"
+   1:common/prog/ped_fw/stdcrc/StdCrc.h **** /*******************************************************************************
+   2:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   5:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  are protected by international copyright laws.
+   7:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+   9:common/prog/ped_fw/stdcrc/StdCrc.h ****  *******************************************************************************
+  10:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  PROJECT          PP PED Framework
+  11:common/prog/ped_fw/stdcrc/StdCrc.h ****  *  COMP_ABBREV      CRC
+  12:common/prog/ped_fw/stdcrc/StdCrc.h ****  ******************************************************************************/
+  13:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  14:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef STDCRC_H
+  15:common/prog/ped_fw/stdcrc/StdCrc.h **** #define STDCRC_H
+  16:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  17:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef __cplusplus
+  18:common/prog/ped_fw/stdcrc/StdCrc.h **** extern "C" {
+  19:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+  20:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  21:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  22:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  23:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  24:common/prog/ped_fw/stdcrc/StdCrc.h **** /* DOCUMENTATION                                                                                  *
+  25:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+  26:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  27:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  28:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  29:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  30:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  31:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  32:common/prog/ped_fw/stdcrc/StdCrc.h **** /**
+  33:common/prog/ped_fw/stdcrc/StdCrc.h **** \if StdCrc
+  34:common/prog/ped_fw/stdcrc/StdCrc.h **** \mainpage Common used Functions and Definitions
+  35:common/prog/ped_fw/stdcrc/StdCrc.h **** \else
+  36:common/prog/ped_fw/stdcrc/StdCrc.h **** \file 
+  37:common/prog/ped_fw/stdcrc/StdCrc.h ****  \brief Public declarations and definitions of StdCrc library
+  38:common/prog/ped_fw/stdcrc/StdCrc.h **** \endif
+  39:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  40:common/prog/ped_fw/stdcrc/StdCrc.h **** \section intro Introduction
+  41:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  42:common/prog/ped_fw/stdcrc/StdCrc.h **** The StdCrc library provides functions for Ethernet-CRC and CCITT-CRC.\n
+  43:common/prog/ped_fw/stdcrc/StdCrc.h **** There is a generic SW-Implementation as well as implementations using a peripheral CRC.
+  44:common/prog/ped_fw/stdcrc/StdCrc.h **** The provided interfaces should be used instead of project specific solutions.
+  45:common/prog/ped_fw/stdcrc/StdCrc.h **** The HW-implementation is optimized for speed, but generic SW-implementation is more suitable for pr
+  46:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  47:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ccitt 16-Bit CCITT-CRC Interfaces
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 18
+
+
+  48:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  49:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Init( void )
+  50:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data )
+  51:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value )
+  52:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value )
+  53:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Finish( uint16_t crc )
+  54:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data )
+  55:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  56:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  57:common/prog/ped_fw/stdcrc/StdCrc.h **** \section ethernet 32-Bit Ethernet-CRC Interfaces
+  58:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  59:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Init( void )
+  60:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data )
+  61:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value )
+  62:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Finish( uint32_t crc )
+  63:common/prog/ped_fw/stdcrc/StdCrc.h **** - uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data )
+  64:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  65:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  66:common/prog/ped_fw/stdcrc/StdCrc.h **** */
+  67:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  68:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -save -e9059 "C comment contains C++ comment"
+  69:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Codeblock with comments needed. Tested with various parsers to work correctly
+  70:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+  71:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  72:common/prog/ped_fw/stdcrc/StdCrc.h ****  /*------------------------  CRC calculation example start ------------------------
+  73:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC16 (Ethernet type) value by using HW implementation.
+  74:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  75:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC16 is possible to calculate over a specific data area by using function CRC_Ccitt_Calc(length
+  76:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+  77:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  78:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  79:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result = CRC_Ccitt_Calc(8,Pointer);
+  80:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  81:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation.
+  82:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  83:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  84:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+  85:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation and
+  86:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ccitt_Finish() after the implementation to get successful result.
+  87:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  88:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+  89:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ethernet_Init();
+  90:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+  91:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+  92:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_Update(Crc16Result, SizeOf(Pointer) , Pointer);
+  93:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+  94:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+  95:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+  96:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC16 is possible to calculate over a specific data area partially by using function CRC_Ccitt_U
+  97:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC16 byte per byte.
+  98:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ccitt_Init() before the implementation
+  99:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ccitt_Finish() after the implementation to get successful result.
+ 100:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 101:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;
+ 102:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Init();
+ 103:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i<required length;i++)    // cycle over a specific memory area
+ 104:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 19
+
+
+ 105:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 106:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc16Result  = CRC_Ccitt_UpdateByte(Crc16Result, ByteVariable);
+ 107:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 108:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc16Result  = CRC_Ccitt_Finish(Crc16Result);
+ 109:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 110:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------------------------------------------------------------------
+ 111:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 112:common/prog/ped_fw/stdcrc/StdCrc.h **** How to calculate CRC32 (Ethernet type) value by using HW implementation.
+ 113:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 114:common/prog/ped_fw/stdcrc/StdCrc.h **** 1. CRC32 is possible to calculate over a specific data area by using function CRC_Ethernet_Calc(len
+ 115:common/prog/ped_fw/stdcrc/StdCrc.h **** which return a calculated result.
+ 116:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 117:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 118:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result = CRC_Ethernet_Calc(8,Pointer);
+ 119:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 120:common/prog/ped_fw/stdcrc/StdCrc.h **** For a big data areas is better to use partial calculation. Calculation over whole flash 0x10000000 
+ 121:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 122:common/prog/ped_fw/stdcrc/StdCrc.h **** 2. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 123:common/prog/ped_fw/stdcrc/StdCrc.h **** it is possible to specify the length of data in bytes, which will be used to calculation.
+ 124:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation and
+ 125:common/prog/ped_fw/stdcrc/StdCrc.h **** CRC_Ethernet_Finish() after the implementation to get successful result.
+ 126:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 127:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint32_t *)0x10000000;           // pointer to a specific address
+ 128:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 129:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i=0;i< required length ;i++)        // cycle over a specific memory area
+ 130:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 131:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_Update(Crc32Result, SizeOf(Pointer) , Pointer);
+ 132:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 133:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 134:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 135:common/prog/ped_fw/stdcrc/StdCrc.h **** 3. CRC32 is possible to calculate over a specific data area partially by using function CRC_Etherne
+ 136:common/prog/ped_fw/stdcrc/StdCrc.h **** this function is used to calculate CRC32 byte per byte.
+ 137:common/prog/ped_fw/stdcrc/StdCrc.h **** To use mentioned function, it is required to call CRC_Ethernet_Init() before the implementation
+ 138:common/prog/ped_fw/stdcrc/StdCrc.h **** and CRC_Ethernet_Finish() after the implementation to get successful result.
+ 139:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 140:common/prog/ped_fw/stdcrc/StdCrc.h **** Pointer = (uint8_t *)0x10000000;          // pointer to a specific address
+ 141:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Init();
+ 142:common/prog/ped_fw/stdcrc/StdCrc.h ****     for(i = 0;i< required length ;i++)    // cycle over a specific memory area 
+ 143:common/prog/ped_fw/stdcrc/StdCrc.h ****     {
+ 144:common/prog/ped_fw/stdcrc/StdCrc.h ****     ByteVariable = *Pointer;
+ 145:common/prog/ped_fw/stdcrc/StdCrc.h ****     Crc32Result  = CRC_Ethernet_UpdateByte(Crc32Result, ByteVariable);
+ 146:common/prog/ped_fw/stdcrc/StdCrc.h ****     *Pointer++;  }
+ 147:common/prog/ped_fw/stdcrc/StdCrc.h **** Crc32Result  = CRC_Ethernet_Finish(Crc32Result);
+ 148:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 149:common/prog/ped_fw/stdcrc/StdCrc.h **** ------------------------  CRC calculation example end ------------------------*/
+ 150:common/prog/ped_fw/stdcrc/StdCrc.h **** /*lint -restore -e9059 */
+ 151:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 152:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 153:common/prog/ped_fw/stdcrc/StdCrc.h **** /* INCLUDES                                                                                       *
+ 154:common/prog/ped_fw/stdcrc/StdCrc.h **** /**************************************************************************************************
+ 155:common/prog/ped_fw/stdcrc/StdCrc.h **** #include "bsh_stdinc.h"
+ 156:common/prog/ped_fw/stdcrc/StdCrc.h **** #include <stdint.h>
+ 157:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 158:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 159:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 160:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC TYPE DEFINITIONS                                                    */
+ 161:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 20
+
+
+ 162:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 163:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 164:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint16_t CRC_crc_t; ///< data type for platform crc
+ 165:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 166:common/prog/ped_fw/stdcrc/StdCrc.h **** typedef uint32_t CRC_crc_t; ///< data type for platform crc
+ 167:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 168:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 169:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 170:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 171:common/prog/ped_fw/stdcrc/StdCrc.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+ 172:common/prog/ped_fw/stdcrc/StdCrc.h **** /******************************************************************************/
+ 173:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 174:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 175:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the CCITT CRC calculation
+ 176:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 177:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 178:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 179:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 180:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 181:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 182:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Init( void );
+ 183:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 184:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 185:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 186:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 187:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a data block
+ 188:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 189:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 190:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 191:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 192:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 193:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 194:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 195:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 196:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 197:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 198:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 199:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 200:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 201:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 202:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Update( uint16_t crc, uint32_t len, const uint8_t *data );
+ 203:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 204:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 205:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 206:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 207:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte
+ 208:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 209:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 210:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 211:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 212:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 213:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 214:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 215:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 216:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 217:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 218:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 21
+
+
+ 219:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 220:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByte( uint16_t crc, uint8_t value );
+ 221:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 222:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 223:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 224:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the CCITT CRC for a single byte (optimized for speed)
+ 225:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 226:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 227:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 228:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 229:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ccitt_Init must be called before calling this interface. After all data is proces
+ 230:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 231:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 232:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 233:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 234:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 235:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 236:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 237:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_UpdateByteFast( uint16_t crc, uint8_t value );
+ 238:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 239:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 240:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 241:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 242:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the CCITT CRC calculation.
+ 243:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 244:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ccitt_UpdateByte or \ref CRC_Ccitt_Up
+ 245:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 246:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note In case of CCITT this interface does no influence the CRC.
+ 247:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 248:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 249:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 250:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 251:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 252:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 253:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Finish( uint16_t crc );
+ 254:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 255:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 256:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 257:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 258:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the CCITT CRC for the complete data block
+ 259:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 260:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 261:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 262:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 263:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 264:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 265:common/prog/ped_fw/stdcrc/StdCrc.h **** uint16_t CRC_Ccitt_Calc( uint32_t len, const uint8_t *data );
+ 266:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 267:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 268:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 269:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 270:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 271:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the Ethernet CRC calculation
+ 272:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 273:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 274:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 275:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 22
+
+
+ 276:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 277:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 278:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Init( void );
+ 279:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 280:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 281:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 282:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 283:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 284:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 285:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 286:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 287:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 288:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 289:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 290:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 291:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 292:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 293:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 294:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 295:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 296:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Update( uint32_t crc, uint32_t len, const uint8_t *data );
+ 297:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 298:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 299:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 300:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 301:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the Ethernet CRC for a single byte
+ 302:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 303:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 304:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 305:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 306:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Ethernet_Init must be called before calling this interface. After all data is pro
+ 307:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 308:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 309:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 310:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 311:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 312:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 313:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 314:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_UpdateByte( uint32_t crc, uint8_t value );
+ 315:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 316:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 317:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 318:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 319:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the Ethernet CRC calculation.
+ 320:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 321:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 322:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 323:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 324:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 325:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 326:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 327:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Finish( uint32_t crc );
+ 328:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 329:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 330:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 331:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 332:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Calculates the Ethernet CRC for the complete data block
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 23
+
+
+ 333:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 334:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 335:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 336:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 337:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return CRC value
+ 338:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 339:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 340:common/prog/ped_fw/stdcrc/StdCrc.h **** uint32_t CRC_Ethernet_Calc( uint32_t len, const uint8_t *data );
+ 341:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 342:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 343:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 344:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 345:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Initializes the platform CRC calculation
+ 346:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 347:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note This function also initializes a possible used CRC hardware unit
+ 348:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 349:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return initializer for CRC
+ 350:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 351:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 352:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 353:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Init( void )
+ 393              		.loc 2 353 25 view .LVU90
+ 394              	.LBB47:
+ 354:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 355:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 356:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Init();
+ 357:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 358:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Init();
+ 395              		.loc 2 358 5 view .LVU91
+ 396              		.loc 2 358 12 is_stmt 0 view .LVU92
+ 397 0014 FFF7FEFF 		bl	CRC_Ethernet_Init
+ 398              	.LVL31:
+ 399              		.loc 2 358 12 view .LVU93
+ 400              	.LBE47:
+ 401              	.LBE46:
+ 134:common/prog/firmware_update/mem_drv/mem_drv.c ****         while((size > 0u) && (status == MAL_ST_OK))
+ 402              		.loc 1 134 14 view .LVU94
+ 403 0018 2860     		str	r0, [r5]
+ 135:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 404              		.loc 1 135 9 is_stmt 1 view .LVU95
+ 405              	.LVL32:
+ 406              	.L27:
+ 135:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 407              		.loc 1 135 27 view .LVU96
+ 408 001a 002C     		cmp	r4, #0
+ 409 001c 09D1     		bne	.L30
+ 410              	.L32:
+ 139:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 411              		.loc 1 139 9 view .LVU97
+ 412              	.LVL33:
+ 413              	.LBB48:
+ 414              	.LBI48:
+ 359:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 360:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 361:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 362:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Init( void );
+ 363:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 24
+
+
+ 364:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 365:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 366:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 367:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a data block
+ 368:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 369:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 370:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if it takes to much time or complete data unknown.
+ 371:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 372:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 373:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 374:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 375:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 376:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] len: length of data block
+ 377:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] data: pointer to data block
+ 378:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 379:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 380:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 381:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 382:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 383:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data )
+ 384:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 385:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 386:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Update(crc, len, data );
+ 387:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Update(crc, len, data );
+ 389:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 390:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 391:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 392:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data );
+ 393:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 394:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 395:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 396:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 397:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Updates the platform CRC for a single byte
+ 398:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 399:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface shall be used if the CRC cannot be calculated in a single step.
+ 400:common/prog/ped_fw/stdcrc/StdCrc.h ****  * For instance if CRC must be updated on the fly for an ongoing data reception
+ 401:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 402:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \note \ref CRC_Init must be called before calling this interface. After all data is processed in
+ 403:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 404:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 405:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] value: data value to update the CRC
+ 406:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 407:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 408:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 409:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 410:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 411:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value )
+ 412:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 413:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 414:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_UpdateByte(crc, value );
+ 415:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 416:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_UpdateByte(crc, value );
+ 417:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 418:common/prog/ped_fw/stdcrc/StdCrc.h **** }
+ 419:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 420:common/prog/ped_fw/stdcrc/StdCrc.h **** extern CRC_crc_t CRC_UpdateByte( CRC_crc_t crc, uint8_t value );
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 25
+
+
+ 421:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 422:common/prog/ped_fw/stdcrc/StdCrc.h **** 
+ 423:common/prog/ped_fw/stdcrc/StdCrc.h **** /*!
+ 424:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \brief
+ 425:common/prog/ped_fw/stdcrc/StdCrc.h ****  * Finishes the platform CRC calculation.
+ 426:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 427:common/prog/ped_fw/stdcrc/StdCrc.h ****  * This interface finishes the CRC calculation after \ref CRC_Ethernet_UpdateByte or \ref CRC_Ether
+ 428:common/prog/ped_fw/stdcrc/StdCrc.h ****  *
+ 429:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \param[in] crc: current CRC value
+ 430:common/prog/ped_fw/stdcrc/StdCrc.h ****  * 
+ 431:common/prog/ped_fw/stdcrc/StdCrc.h ****  * \return new CRC value
+ 432:common/prog/ped_fw/stdcrc/StdCrc.h ****  */
+ 433:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifndef UNIT_TEST_INST
+ 434:common/prog/ped_fw/stdcrc/StdCrc.h **** static inline CRC_crc_t CRC_Finish( CRC_crc_t crc )
+ 415              		.loc 2 434 25 view .LVU98
+ 416              	.LBB49:
+ 435:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 436:common/prog/ped_fw/stdcrc/StdCrc.h **** #ifdef crc_16bit_width
+ 437:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ccitt_Finish( crc );
+ 438:common/prog/ped_fw/stdcrc/StdCrc.h **** #else
+ 439:common/prog/ped_fw/stdcrc/StdCrc.h ****     return CRC_Ethernet_Finish( crc );
+ 417              		.loc 2 439 5 view .LVU99
+ 418              		.loc 2 439 12 is_stmt 0 view .LVU100
+ 419 001e 2868     		ldr	r0, [r5]
+ 420 0020 FFF7FEFF 		bl	CRC_Ethernet_Finish
+ 421              	.LVL34:
+ 422              		.loc 2 439 12 view .LVU101
+ 423              	.LBE49:
+ 424              	.LBE48:
+ 139:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 425              		.loc 1 139 14 view .LVU102
+ 426 0024 2860     		str	r0, [r5]
+ 427              	.LVL35:
+ 428              	.L26:
+ 141:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 429              		.loc 1 141 5 is_stmt 1 view .LVU103
+ 142:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 430              		.loc 1 142 1 is_stmt 0 view .LVU104
+ 431 0026 0198     		ldr	r0, [sp, #4]
+ 432 0028 23B0     		add	sp, sp, #140
+ 433              		@ sp needed
+ 434              	.LVL36:
+ 435              	.LVL37:
+ 436              	.LVL38:
+ 142:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 437              		.loc 1 142 1 view .LVU105
+ 438 002a F0BD     		pop	{r4, r5, r6, r7, pc}
+ 439              	.LVL39:
+ 440              	.L33:
+ 441              	.LBB50:
+ 442              	.LBB51:
+ 438:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 443              		.loc 1 438 18 view .LVU106
+ 444 002c 0B23     		movs	r3, #11
+ 445 002e 0193     		str	r3, [sp, #4]
+ 446              	.LVL40:
+ 438:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 26
+
+
+ 447              		.loc 1 438 18 view .LVU107
+ 448 0030 F3E7     		b	.L27
+ 449              	.LVL41:
+ 450              	.L30:
+ 438:common/prog/firmware_update/mem_drv/mem_drv.c ****     }
+ 451              		.loc 1 438 18 view .LVU108
+ 452              	.LBE51:
+ 453              	.LBE50:
+ 135:common/prog/firmware_update/mem_drv/mem_drv.c ****         {
+ 454              		.loc 1 135 27 discriminator 1 view .LVU109
+ 455 0032 019B     		ldr	r3, [sp, #4]
+ 456 0034 002B     		cmp	r3, #0
+ 457 0036 F2D1     		bne	.L32
+ 137:common/prog/firmware_update/mem_drv/mem_drv.c ****         }
+ 458              		.loc 1 137 13 is_stmt 1 view .LVU110
+ 459              	.LVL42:
+ 460              	.LBB57:
+ 461              	.LBI50:
+ 432:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 462              		.loc 1 432 24 view .LVU111
+ 463              	.LBB56:
+ 434:common/prog/firmware_update/mem_drv/mem_drv.c ****     uint32_t readSize = MEMDRV_min(MEMDRV_READ_BUFFER_SIZE, *size);
+ 464              		.loc 1 434 5 view .LVU112
+ 435:common/prog/firmware_update/mem_drv/mem_drv.c ****     if(!MEMDRV_readBlock(*addr, readSize, readBuffer))
+ 465              		.loc 1 435 5 view .LVU113
+ 466              	.LBB52:
+ 467              	.LBI52:
+ 470:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 471:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 472:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 473:common/prog/firmware_update/mem_drv/mem_drv.c **** /** returns the minimum of the parameters */
+ 474:common/prog/firmware_update/mem_drv/mem_drv.c **** static uint32_t MEMDRV_min(uint32_t val1, uint32_t val2)
+ 468              		.loc 1 474 17 view .LVU114
+ 469              	.LBB53:
+ 475:common/prog/firmware_update/mem_drv/mem_drv.c **** {
+ 476:common/prog/firmware_update/mem_drv/mem_drv.c ****     return ((val1>val2) ? val2 : val1);
+ 470              		.loc 1 476 5 view .LVU115
+ 471              		.loc 1 476 32 is_stmt 0 view .LVU116
+ 472 0038 2700     		movs	r7, r4
+ 473 003a 802C     		cmp	r4, #128
+ 474 003c 00D9     		bls	.L28
+ 475              		.loc 1 476 32 view .LVU117
+ 476 003e 8027     		movs	r7, #128
+ 477              	.L28:
+ 478              	.LVL43:
+ 479              		.loc 1 476 32 view .LVU118
+ 480              	.LBE53:
+ 481              	.LBE52:
+ 436:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 482              		.loc 1 436 5 is_stmt 1 view .LVU119
+ 436:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 483              		.loc 1 436 9 is_stmt 0 view .LVU120
+ 484 0040 3900     		movs	r1, r7
+ 485 0042 3000     		movs	r0, r6
+ 486 0044 02AA     		add	r2, sp, #8
+ 487 0046 FFF7FEFF 		bl	MEMDRV_readBlock
+ 488              	.LVL44:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 27
+
+
+ 436:common/prog/firmware_update/mem_drv/mem_drv.c ****     {
+ 489              		.loc 1 436 7 view .LVU121
+ 490 004a 0028     		cmp	r0, #0
+ 491 004c EED0     		beq	.L33
+ 440:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size -= readSize;
+ 492              		.loc 1 440 5 is_stmt 1 view .LVU122
+ 493              	.LVL45:
+ 494              	.LBB54:
+ 495              	.LBI54:
+ 383:common/prog/ped_fw/stdcrc/StdCrc.h **** {
+ 496              		.loc 2 383 25 view .LVU123
+ 497              	.LBB55:
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 498              		.loc 2 388 5 view .LVU124
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 499              		.loc 2 388 12 is_stmt 0 view .LVU125
+ 500 004e 3900     		movs	r1, r7
+ 501 0050 2868     		ldr	r0, [r5]
+ 502 0052 02AA     		add	r2, sp, #8
+ 503              	.LVL46:
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 504              		.loc 2 388 12 view .LVU126
+ 505 0054 FFF7FEFF 		bl	CRC_Ethernet_Update
+ 506              	.LVL47:
+ 388:common/prog/ped_fw/stdcrc/StdCrc.h **** #endif
+ 507              		.loc 2 388 12 view .LVU127
+ 508              	.LBE55:
+ 509              	.LBE54:
+ 441:common/prog/firmware_update/mem_drv/mem_drv.c ****     *addr += readSize;
+ 510              		.loc 1 441 11 view .LVU128
+ 511 0058 E41B     		subs	r4, r4, r7
+ 512              	.LVL48:
+ 440:common/prog/firmware_update/mem_drv/mem_drv.c ****     *size -= readSize;
+ 513              		.loc 1 440 12 view .LVU129
+ 514 005a 2860     		str	r0, [r5]
+ 441:common/prog/firmware_update/mem_drv/mem_drv.c ****     *addr += readSize;
+ 515              		.loc 1 441 5 is_stmt 1 view .LVU130
+ 516              	.LVL49:
+ 442:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_OK;
+ 517              		.loc 1 442 5 view .LVU131
+ 442:common/prog/firmware_update/mem_drv/mem_drv.c ****     return MAL_ST_OK;
+ 518              		.loc 1 442 11 is_stmt 0 view .LVU132
+ 519 005c F619     		adds	r6, r6, r7
+ 520              	.LVL50:
+ 443:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 521              		.loc 1 443 5 is_stmt 1 view .LVU133
+ 443:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 522              		.loc 1 443 12 is_stmt 0 view .LVU134
+ 523 005e DCE7     		b	.L27
+ 524              	.LBE56:
+ 525              	.LBE57:
+ 526              		.cfi_endproc
+ 527              	.LFE67:
+ 529              		.section	.text.MEMDRV_close,"ax",%progbits
+ 530              		.align	1
+ 531              		.global	MEMDRV_close
+ 532              		.syntax unified
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 28
+
+
+ 533              		.code	16
+ 534              		.thumb_func
+ 536              	MEMDRV_close:
+ 537              	.LFB68:
+ 146:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status;
+ 538              		.loc 1 146 1 is_stmt 1 view -0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 0
+ 541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147:common/prog/firmware_update/mem_drv/mem_drv.c **** #ifndef FWU_MEM_DRV_READ_ONLY
+ 542              		.loc 1 147 5 view .LVU136
+ 151:common/prog/firmware_update/mem_drv/mem_drv.c **** #endif
+ 543              		.loc 1 151 5 view .LVU137
+ 544              	.LVL51:
+ 153:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = NULL;
+ 545              		.loc 1 153 5 view .LVU138
+ 146:common/prog/firmware_update/mem_drv/mem_drv.c ****     enum MAL_Status status;
+ 546              		.loc 1 146 1 is_stmt 0 view .LVU139
+ 547 0000 10B5     		push	{r4, lr}
+ 548              	.LCFI6:
+ 549              		.cfi_def_cfa_offset 8
+ 550              		.cfi_offset 4, -8
+ 551              		.cfi_offset 14, -4
+ 153:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = NULL;
+ 552              		.loc 1 153 18 view .LVU140
+ 553 0002 034C     		ldr	r4, .L35
+ 156:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 554              		.loc 1 156 1 view .LVU141
+ 555              		@ sp needed
+ 153:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = NULL;
+ 556              		.loc 1 153 18 view .LVU142
+ 557 0004 2368     		ldr	r3, [r4]
+ 153:common/prog/firmware_update/mem_drv/mem_drv.c ****     MEMDRV_driver = NULL;
+ 558              		.loc 1 153 5 view .LVU143
+ 559 0006 5B68     		ldr	r3, [r3, #4]
+ 560 0008 9847     		blx	r3
+ 561              	.LVL52:
+ 154:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 562              		.loc 1 154 5 is_stmt 1 view .LVU144
+ 154:common/prog/firmware_update/mem_drv/mem_drv.c ****     return status;
+ 563              		.loc 1 154 19 is_stmt 0 view .LVU145
+ 564 000a 0020     		movs	r0, #0
+ 565 000c 2060     		str	r0, [r4]
+ 155:common/prog/firmware_update/mem_drv/mem_drv.c **** }
+ 566              		.loc 1 155 5 is_stmt 1 view .LVU146
+ 156:common/prog/firmware_update/mem_drv/mem_drv.c **** 
+ 567              		.loc 1 156 1 is_stmt 0 view .LVU147
+ 568 000e 10BD     		pop	{r4, pc}
+ 569              	.L36:
+ 570              		.align	2
+ 571              	.L35:
+ 572 0010 00000000 		.word	.LANCHOR1
+ 573              		.cfi_endproc
+ 574              	.LFE68:
+ 576              		.section	.bss.MEMDRV_driver,"aw",%nobits
+ 577              		.align	2
+ 578              		.set	.LANCHOR1,. + 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccmMaSLa.s 			page 29
+
+
+ 581              	MEMDRV_driver:
+ 582 0000 00000000 		.space	4
+ 583              		.section	.bss.MEMDRV_lastError,"aw",%nobits
+ 584              		.set	.LANCHOR0,. + 0
+ 587              	MEMDRV_lastError:
+ 588 0000 00       		.space	1
+ 589              		.text
+ 590              	.Letext0:
+ 591              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 592              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 593              		.file 5 "common/prog/firmware_update/mal/mal_statuses.h"
+ 594              		.file 6 "app/prog/firmware_update/mal/module_administration_cfg.h"
+ 595              		.file 7 "common/prog/firmware_update/mem_drv/mem_drv.h"
+ 596              		.file 8 "common/prog/firmware_update/mem_drv/com_mal.h"
+ 597              		.file 9 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

@@ -1,0 +1,291 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccyNkNFt.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"fsReg.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.FSF_vRegister_OneTimeCheck,"ax",%progbits
+  18              		.align	1
+  19              		.global	FSF_vRegister_OneTimeCheck
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	FSF_vRegister_OneTimeCheck:
+  25              	.LFB69:
+  26              		.file 1 "common/prog/FuncSafe/fsReg.c"
+   1:common/prog/FuncSafe/fsReg.c **** /*******************************************************************************
+   2:common/prog/FuncSafe/fsReg.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/FuncSafe/fsReg.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/FuncSafe/fsReg.c ****  *
+   5:common/prog/FuncSafe/fsReg.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/FuncSafe/fsReg.c ****  *  are protected by international copyright laws.
+   7:common/prog/FuncSafe/fsReg.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/FuncSafe/fsReg.c ****  *
+   9:common/prog/FuncSafe/fsReg.c ****  *******************************************************************************
+  10:common/prog/FuncSafe/fsReg.c ****  *  PROJECT          SW_LIB
+  11:common/prog/FuncSafe/fsReg.c ****  *  COMP_ABBREV      FSF
+  12:common/prog/FuncSafe/fsReg.c ****  ******************************************************************************/
+  13:common/prog/FuncSafe/fsReg.c **** 
+  14:common/prog/FuncSafe/fsReg.c **** /******************************************************************************/
+  15:common/prog/FuncSafe/fsReg.c **** /* DOCUMENTATION                                                              */
+  16:common/prog/FuncSafe/fsReg.c **** /******************************************************************************/
+  17:common/prog/FuncSafe/fsReg.c **** /** \file fsReg.c
+  18:common/prog/FuncSafe/fsReg.c ****  *
+  19:common/prog/FuncSafe/fsReg.c ****  *  \ingroup  <DOXY_GROUP_FSF_REG>
+  20:common/prog/FuncSafe/fsReg.c ****  *
+  21:common/prog/FuncSafe/fsReg.c ****  *  \brief    Implementation of package fsReg of library functional safety.
+  22:common/prog/FuncSafe/fsReg.c ****  *
+  23:common/prog/FuncSafe/fsReg.c ****  *  \details  Work registers and the condition codes (flags) of a
+  24:common/prog/FuncSafe/fsReg.c **** specific controller are checked by this task. This task is thought to be so-called one-time check a
+  25:common/prog/FuncSafe/fsReg.c **** continuous check while operational work.
+  26:common/prog/FuncSafe/fsReg.c **** \n
+  27:common/prog/FuncSafe/fsReg.c **** \n
+  28:common/prog/FuncSafe/fsReg.c **** <b>Functional Safety Register Check Component - Top-Level Design</b>
+  29:common/prog/FuncSafe/fsReg.c **** \n
+  30:common/prog/FuncSafe/fsReg.c **** \n
+  31:common/prog/FuncSafe/fsReg.c **** \li<b>Package Model </b>\n
+  32:common/prog/FuncSafe/fsReg.c **** \image html Package_Register.jpg
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccyNkNFt.s 			page 2
+
+
+  33:common/prog/FuncSafe/fsReg.c **** \n
+  34:common/prog/FuncSafe/fsReg.c **** <b>Description </b>\n
+  35:common/prog/FuncSafe/fsReg.c **** The fsReg package provides the parts outlined in the model. By compilation switch, the Reg task may
+  36:common/prog/FuncSafe/fsReg.c **** the usual operating mode or in test harness mode. When running in the usual operating mode, the tes
+  37:common/prog/FuncSafe/fsReg.c **** will not be linked to the package. When running in test harness mode, stub services are provided, s
+  38:common/prog/FuncSafe/fsReg.c **** Register checking interface is separated from being called and only the test server will be able to
+  39:common/prog/FuncSafe/fsReg.c **** \n
+  40:common/prog/FuncSafe/fsReg.c **** <b>Rationale </b>\n
+  41:common/prog/FuncSafe/fsReg.c **** Checking the program counter register and the stack pointer register at normal operational work is 
+  42:common/prog/FuncSafe/fsReg.c **** as these registers get checked during program execution and calling functions and passing parameter
+  43:common/prog/FuncSafe/fsReg.c **** checking work registers depends on the type of controller, so the real task is implemented using as
+  44:common/prog/FuncSafe/fsReg.c **** This high level language part is only meant to be a portable wrapper function on its top. So, its i
+  45:common/prog/FuncSafe/fsReg.c **** mind that names of entry points can't be changed freely, except they get normalized for all types o
+  46:common/prog/FuncSafe/fsReg.c **** \n
+  47:common/prog/FuncSafe/fsReg.c **** \n
+  48:common/prog/FuncSafe/fsReg.c **** \n
+  49:common/prog/FuncSafe/fsReg.c **** \li<b>Input Document Reference(s) </b>\n
+  50:common/prog/FuncSafe/fsReg.c **** \n
+  51:common/prog/FuncSafe/fsReg.c **** <TABLE style="text-align: center">
+  52:common/prog/FuncSafe/fsReg.c **** <TR style="background-color:rgb(255,255,206)">
+  53:common/prog/FuncSafe/fsReg.c **** <TD>Reference</TD>
+  54:common/prog/FuncSafe/fsReg.c **** <TD>Ducument Title</TD>
+  55:common/prog/FuncSafe/fsReg.c **** <TD>Document Reference Name/Number</TD>
+  56:common/prog/FuncSafe/fsReg.c **** <TD>Version</TD>
+  57:common/prog/FuncSafe/fsReg.c **** <TD>Status</TD>
+  58:common/prog/FuncSafe/fsReg.c **** <TD>Release Date</TD>
+  59:common/prog/FuncSafe/fsReg.c **** </TR>
+  60:common/prog/FuncSafe/fsReg.c **** <TR>
+  61:common/prog/FuncSafe/fsReg.c **** <TD> [1] </TD>
+  62:common/prog/FuncSafe/fsReg.c **** <TD> Functional Safety Software Design document </TD>
+  63:common/prog/FuncSafe/fsReg.c **** <TD> FuncSafeSWSpec.pdf / 5560 0000003770 </TD>
+  64:common/prog/FuncSafe/fsReg.c **** <TD> Version 2.0 </TD>
+  65:common/prog/FuncSafe/fsReg.c **** <TD> Proposed </TD>
+  66:common/prog/FuncSafe/fsReg.c **** <TD> 08.05.2008 </TD>
+  67:common/prog/FuncSafe/fsReg.c **** </TR>
+  68:common/prog/FuncSafe/fsReg.c **** <TR>
+  69:common/prog/FuncSafe/fsReg.c **** <TD> [2] </TD>
+  70:common/prog/FuncSafe/fsReg.c **** <TD> Generic Functional Safety Software Specification</TD>
+  71:common/prog/FuncSafe/fsReg.c **** <TD> GenericFuncSafeSpec.pdf / 5560 0000007751 </TD>
+  72:common/prog/FuncSafe/fsReg.c **** <TD> Version 2.0 </TD>
+  73:common/prog/FuncSafe/fsReg.c **** <TD> Proposed </TD>
+  74:common/prog/FuncSafe/fsReg.c **** <TD> 08.05.2008 </TD>
+  75:common/prog/FuncSafe/fsReg.c **** </TR>
+  76:common/prog/FuncSafe/fsReg.c **** </TABLE>
+  77:common/prog/FuncSafe/fsReg.c **** \n
+  78:common/prog/FuncSafe/fsReg.c **** */
+  79:common/prog/FuncSafe/fsReg.c **** 
+  80:common/prog/FuncSafe/fsReg.c **** #include "bsh_stdinc.h"
+  81:common/prog/FuncSafe/fsReg.c **** 
+  82:common/prog/FuncSafe/fsReg.c **** #include "LibTypes.h"
+  83:common/prog/FuncSafe/fsReg.c **** #include "FuncSafe/fSafe.h"
+  84:common/prog/FuncSafe/fsReg.c **** #include "FuncSafe/fSafeXS.h"
+  85:common/prog/FuncSafe/fsReg.c **** #include "FuncSafe/fspriv.h"
+  86:common/prog/FuncSafe/fsReg.c **** #include "hsup.h"
+  87:common/prog/FuncSafe/fsReg.c **** 
+  88:common/prog/FuncSafe/fsReg.c **** /* Local macros ***********************************************************************************
+  89:common/prog/FuncSafe/fsReg.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccyNkNFt.s 			page 3
+
+
+  90:common/prog/FuncSafe/fsReg.c **** /* Local type definitions *************************************************************************
+  91:common/prog/FuncSafe/fsReg.c **** 
+  92:common/prog/FuncSafe/fsReg.c **** /* Local prototypes *******************************************************************************
+  93:common/prog/FuncSafe/fsReg.c **** 
+  94:common/prog/FuncSafe/fsReg.c **** /* RAM/ROM Variable definitions *******************************************************************
+  95:common/prog/FuncSafe/fsReg.c **** 
+  96:common/prog/FuncSafe/fsReg.c **** /* static function definitions ********************************************************************
+  97:common/prog/FuncSafe/fsReg.c **** 
+  98:common/prog/FuncSafe/fsReg.c **** // The Register One-time check handler
+  99:common/prog/FuncSafe/fsReg.c **** void FSF_vRegister_OneTimeCheck (void)
+ 100:common/prog/FuncSafe/fsReg.c **** {
+  27              		.loc 1 100 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101:common/prog/FuncSafe/fsReg.c **** #if !defined(TH_FSCOM)
+ 102:common/prog/FuncSafe/fsReg.c ****    FSF_vRegistercheck();
+  31              		.loc 1 102 4 view .LVU1
+ 100:common/prog/FuncSafe/fsReg.c **** #if !defined(TH_FSCOM)
+  32              		.loc 1 100 1 is_stmt 0 view .LVU2
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 102 4 view .LVU3
+  39 0002 FFF7FEFF 		bl	FSF_vRegistercheck
+  40              	.LVL0:
+ 103:common/prog/FuncSafe/fsReg.c **** #else
+ 104:common/prog/FuncSafe/fsReg.c ****    TH_FSFP_PushOutPar(TP_FSF_vRegister_OneTimeCheck);
+ 105:common/prog/FuncSafe/fsReg.c **** #endif
+ 106:common/prog/FuncSafe/fsReg.c **** }
+  41              		.loc 1 106 1 view .LVU4
+  42              		@ sp needed
+  43 0006 10BD     		pop	{r4, pc}
+  44              		.cfi_endproc
+  45              	.LFE69:
+  47              		.section	.text.FSF_vReg_FatalException,"ax",%progbits
+  48              		.align	1
+  49              		.global	FSF_vReg_FatalException
+  50              		.syntax unified
+  51              		.code	16
+  52              		.thumb_func
+  54              	FSF_vReg_FatalException:
+  55              	.LFB70:
+ 107:common/prog/FuncSafe/fsReg.c **** 
+ 108:common/prog/FuncSafe/fsReg.c **** //The Register Fatal Exception
+ 109:common/prog/FuncSafe/fsReg.c **** void FSF_vReg_FatalException(void)
+ 110:common/prog/FuncSafe/fsReg.c **** {
+  56              		.loc 1 110 1 is_stmt 1 view -0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+ 111:common/prog/FuncSafe/fsReg.c ****    FSF_vReportFatal();
+  60              		.loc 1 111 4 view .LVU6
+ 110:common/prog/FuncSafe/fsReg.c ****    FSF_vReportFatal();
+  61              		.loc 1 110 1 is_stmt 0 view .LVU7
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccyNkNFt.s 			page 4
+
+
+  62 0000 10B5     		push	{r4, lr}
+  63              	.LCFI1:
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 4, -8
+  66              		.cfi_offset 14, -4
+  67              		.loc 1 111 4 view .LVU8
+  68 0002 FFF7FEFF 		bl	FSF_vReportFatal
+  69              	.LVL1:
+ 112:common/prog/FuncSafe/fsReg.c **** }
+  70              		.loc 1 112 1 view .LVU9
+  71              		@ sp needed
+  72 0006 10BD     		pop	{r4, pc}
+  73              		.cfi_endproc
+  74              	.LFE70:
+  76              		.section	.text.FSF_ucRegHandleTask,"ax",%progbits
+  77              		.align	1
+  78              		.global	FSF_ucRegHandleTask
+  79              		.syntax unified
+  80              		.code	16
+  81              		.thumb_func
+  83              	FSF_ucRegHandleTask:
+  84              	.LFB71:
+ 113:common/prog/FuncSafe/fsReg.c **** 
+ 114:common/prog/FuncSafe/fsReg.c **** /** The Register Channel Task.
+ 115:common/prog/FuncSafe/fsReg.c ****     CPU work registers are saved and checked against stuck-at faults and comparable faults.
+ 116:common/prog/FuncSafe/fsReg.c ****     After this check, they get restored again. So, this check does not change the content
+ 117:common/prog/FuncSafe/fsReg.c ****     of the work registers from the callers point of view. In case of a fault, there is no
+ 118:common/prog/FuncSafe/fsReg.c ****     return here!
+ 119:common/prog/FuncSafe/fsReg.c **** 
+ 120:common/prog/FuncSafe/fsReg.c ****     \return uint8_t   state of register channel task
+ 121:common/prog/FuncSafe/fsReg.c **** 
+ 122:common/prog/FuncSafe/fsReg.c ****     \pre    None
+ 123:common/prog/FuncSafe/fsReg.c ****     \post   Conditions for the CPU registers are fulfilled
+ 124:common/prog/FuncSafe/fsReg.c **** */
+ 125:common/prog/FuncSafe/fsReg.c **** uint8_t FSF_ucRegHandleTask(void)
+ 126:common/prog/FuncSafe/fsReg.c **** {
+  85              		.loc 1 126 1 is_stmt 1 view -0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127:common/prog/FuncSafe/fsReg.c **** /*======================================================================
+ 128:common/prog/FuncSafe/fsReg.c ****     TP_FSF_ISR_INT_Disabled
+ 129:common/prog/FuncSafe/fsReg.c **** ======================================================================*/
+ 130:common/prog/FuncSafe/fsReg.c **** #ifdef TH_FSCOM
+ 131:common/prog/FuncSafe/fsReg.c ****    TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Disabled);
+ 132:common/prog/FuncSafe/fsReg.c **** #else
+ 133:common/prog/FuncSafe/fsReg.c ****    HSUP_vDisableInt();
+  89              		.loc 1 133 22 view .LVU11
+ 134:common/prog/FuncSafe/fsReg.c **** #endif
+ 135:common/prog/FuncSafe/fsReg.c **** 
+ 136:common/prog/FuncSafe/fsReg.c **** /*======================================================================
+ 137:common/prog/FuncSafe/fsReg.c ****     TP_FSF_vReg_OperCheck
+ 138:common/prog/FuncSafe/fsReg.c **** ======================================================================*/
+ 139:common/prog/FuncSafe/fsReg.c **** #ifdef TH_FSCOM
+ 140:common/prog/FuncSafe/fsReg.c ****    TH_FSFP_PushOutPar(TP_FSF_vReg_OperCheck);
+ 141:common/prog/FuncSafe/fsReg.c **** #endif
+ 142:common/prog/FuncSafe/fsReg.c **** 
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccyNkNFt.s 			page 5
+
+
+ 143:common/prog/FuncSafe/fsReg.c ****    FSF_vRegOpercheck();
+  90              		.loc 1 143 4 view .LVU12
+ 126:common/prog/FuncSafe/fsReg.c **** /*======================================================================
+  91              		.loc 1 126 1 is_stmt 0 view .LVU13
+  92 0000 10B5     		push	{r4, lr}
+  93              	.LCFI2:
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 4, -8
+  96              		.cfi_offset 14, -4
+  97              		.loc 1 143 4 view .LVU14
+  98 0002 FFF7FEFF 		bl	FSF_vRegOpercheck
+  99              	.LVL2:
+ 144:common/prog/FuncSafe/fsReg.c **** 
+ 145:common/prog/FuncSafe/fsReg.c **** /*======================================================================
+ 146:common/prog/FuncSafe/fsReg.c ****     TP_FSF_ISR_INT_Enabled
+ 147:common/prog/FuncSafe/fsReg.c **** ======================================================================*/
+ 148:common/prog/FuncSafe/fsReg.c **** #ifdef TH_FSCOM
+ 149:common/prog/FuncSafe/fsReg.c ****    TH_FSFP_PushOutPar(TP_FSF_ISR_INT_Enabled);
+ 150:common/prog/FuncSafe/fsReg.c **** #else
+ 151:common/prog/FuncSafe/fsReg.c ****    HSUP_vEnableInt();
+ 100              		.loc 1 151 21 is_stmt 1 view .LVU15
+ 152:common/prog/FuncSafe/fsReg.c **** #endif
+ 153:common/prog/FuncSafe/fsReg.c **** 
+ 154:common/prog/FuncSafe/fsReg.c ****    FSF_vReportSuccess((uint8_t)FSF_REG_TEST);
+ 101              		.loc 1 154 4 view .LVU16
+ 155:common/prog/FuncSafe/fsReg.c **** 
+ 156:common/prog/FuncSafe/fsReg.c ****    return (uint8_t)TASK_INITIALISED;
+ 157:common/prog/FuncSafe/fsReg.c **** }
+ 102              		.loc 1 157 1 is_stmt 0 view .LVU17
+ 103              		@ sp needed
+ 154:common/prog/FuncSafe/fsReg.c **** 
+ 104              		.loc 1 154 4 view .LVU18
+ 105 0006 0020     		movs	r0, #0
+ 106 0008 FFF7FEFF 		bl	FSF_vReportSuccess
+ 107              	.LVL3:
+ 156:common/prog/FuncSafe/fsReg.c **** }
+ 108              		.loc 1 156 4 is_stmt 1 view .LVU19
+ 109              		.loc 1 157 1 is_stmt 0 view .LVU20
+ 110 000c 0120     		movs	r0, #1
+ 111 000e 10BD     		pop	{r4, pc}
+ 112              		.cfi_endproc
+ 113              	.LFE71:
+ 115              		.text
+ 116              	.Letext0:
+ 117              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 118              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 119              		.file 4 "app/prog/FuncSafe/fSafeXS.h"
+ 120              		.file 5 "common/prog/FuncSafe/fSafe.h"

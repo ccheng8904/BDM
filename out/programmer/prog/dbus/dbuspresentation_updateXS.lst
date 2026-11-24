@@ -1,0 +1,359 @@
+
+out/programmer/prog/dbus/dbuspresentation_updateXS.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DBPL_bIsUpdateModePossible:
+
+00000000 <DBPL_bIsUpdateModePossible>:
+#if IS_UPDATE_POSSIBLE>0U
+    return true;
+#else
+    return false;
+#endif
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vSetUpdateMode:
+
+00000000 <DBPL_vSetUpdateMode>:
+
+void DBPL_vSetUpdateMode(void)
+{
+   0:	b510      	push	{r4, lr}
+#if defined(REMOTE_FIRMWARE_UPDATE)
+    BMDAT_setBootModule(MAL_PROGRAMMER_ID);
+   2:	4802      	ldr	r0, [pc, #8]	; (c <DBPL_vSetUpdateMode+0xc>)
+   4:	f7ff fffe 	bl	0 <BMDAT_setBootModule>
+    #else
+        HSUP_vGenerateReset();
+    #endif
+#endif
+#endif
+}
+   8:	bd10      	pop	{r4, pc}
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00005510 	.word	0x00005510
+
+Disassembly of section .text.DBPL_vLeaveUpdateMode:
+
+00000000 <DBPL_vLeaveUpdateMode>:
+
+void DBPL_vLeaveUpdateMode(void)
+{
+   0:	b510      	push	{r4, lr}
+#if defined(REMOTE_FIRMWARE_UPDATE)
+    BMDAT_setBaudRate(0u);
+   2:	2000      	movs	r0, #0
+   4:	f7ff fffe 	bl	0 <BMDAT_setBaudRate>
+    BMDAT_setBootModule(MAL_PRODUCT_APP1);
+   8:	2088      	movs	r0, #136	; 0x88
+   a:	0180      	lsls	r0, r0, #6
+   c:	f7ff fffe 	bl	0 <BMDAT_setBootModule>
+#endif
+    #if defined(MCAL_MSUP_INCLUDED)
+        MSUP_generateReset();
+  10:	f7ff fffe 	bl	0 <MSUP_generateReset>
+    #else
+        HSUP_vGenerateReset();
+    #endif
+}
+  14:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_ulGetUpdateTransitionDelay:
+
+00000000 <DBPL_ulGetUpdateTransitionDelay>:
+
+uint16_t DBPL_ulGetUpdateTransitionDelay(void)
+{
+    return (uint16_t)UPDATE_TRANSITION_DELAY_10MS;
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_bIsRequestedBaudValid:
+
+00000000 <DBPL_bIsRequestedBaudValid>:
+
+bool DBPL_bIsRequestedBaudValid(uint16_t baud)
+{
+   0:	0003      	movs	r3, r0
+    uint8_t numOfElements=((uint8_t)sizeof(baud_lookup_table)/(uint8_t)sizeof(enum DBPL_BaudRate));
+    for(i=0;i<numOfElements;i++)
+    {   /*lint -e{661,662} no out of bound access here! */
+        if(baud==(uint16_t)baud_lookup_table[i])
+        {
+            ret=true;
+   2:	2001      	movs	r0, #1
+        if(baud==(uint16_t)baud_lookup_table[i])
+   4:	2b60      	cmp	r3, #96	; 0x60
+   6:	d011      	beq.n	2c <DBPL_bIsRequestedBaudValid+0x2c>
+   8:	2bc0      	cmp	r3, #192	; 0xc0
+   a:	d00f      	beq.n	2c <DBPL_bIsRequestedBaudValid+0x2c>
+   c:	22c0      	movs	r2, #192	; 0xc0
+   e:	0052      	lsls	r2, r2, #1
+  10:	4293      	cmp	r3, r2
+  12:	d00b      	beq.n	2c <DBPL_bIsRequestedBaudValid+0x2c>
+  14:	32c0      	adds	r2, #192	; 0xc0
+  16:	4293      	cmp	r3, r2
+  18:	d008      	beq.n	2c <DBPL_bIsRequestedBaudValid+0x2c>
+  1a:	2290      	movs	r2, #144	; 0x90
+  1c:	00d2      	lsls	r2, r2, #3
+  1e:	4293      	cmp	r3, r2
+  20:	d004      	beq.n	2c <DBPL_bIsRequestedBaudValid+0x2c>
+  22:	4a03      	ldr	r2, [pc, #12]	; (30 <DBPL_bIsRequestedBaudValid+0x30>)
+  24:	189b      	adds	r3, r3, r2
+  26:	425a      	negs	r2, r3
+  28:	4153      	adcs	r3, r2
+  2a:	b2d8      	uxtb	r0, r3
+            break;
+        }
+    }
+    return ret;
+}
+  2c:	4770      	bx	lr
+  2e:	46c0      	nop			; (mov r8, r8)
+  30:	fffffb1e 	.word	0xfffffb1e
+
+Disassembly of section .text.DBPL_ulGetBaudrateTransitionDelay:
+
+00000000 <DBPL_ulGetBaudrateTransitionDelay>:
+
+uint16_t DBPL_ulGetBaudrateTransitionDelay(void)
+{
+    return (uint16_t)BAUDRATE_TRANSITION_DELAY_10MS;
+}
+   0:	2001      	movs	r0, #1
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBPL_vConfigureBaudrate:
+
+00000000 <DBPL_vConfigureBaudrate>:
+
+void DBPL_vConfigureBaudrate(uint16_t baud)
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+    if(DBPL_bIsRequestedBaudValid(baud))
+   4:	f7ff fffe 	bl	0 <DBPL_vConfigureBaudrate>
+   8:	2800      	cmp	r0, #0
+   a:	d007      	beq.n	1c <DBPL_vConfigureBaudrate+0x1c>
+    {
+#if defined(REMOTE_FIRMWARE_UPDATE)
+        BMDAT_setBaudRate(baud);
+   c:	0020      	movs	r0, r4
+   e:	f7ff fffe 	bl	0 <BMDAT_setBaudRate>
+#endif
+        DBM_PERIPH_vSetBaudRate(DLL_ucGetStandardUartConfigIndex(), baud);
+  12:	f7ff fffe 	bl	0 <DLL_ucGetStandardUartConfigIndex>
+  16:	0021      	movs	r1, r4
+  18:	f7ff fffe 	bl	0 <DBM_PERIPH_vSetBaudRate>
+    }
+}
+  1c:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBPL_uGetUsBitTimeForBaudRate:
+
+00000000 <DBPL_uGetUsBitTimeForBaudRate>:
+
+#ifndef DBM_DBUSCAN
+uint16_t DBPL_uGetUsBitTimeForBaudRate(uint16_t baud)
+{
+   0:	0003      	movs	r3, r0
+    uint8_t numOfElements=((uint8_t)sizeof(bit_time_lookup_table)/(uint8_t)sizeof(enum DBPL_BitTimingUs));
+    for(uint8_t i=0;i<numOfElements;i++)
+    {   /*lint -e{661,662} no out of bound access here! */
+        if(baud==(uint16_t)baud_lookup_table[i])
+   2:	2860      	cmp	r0, #96	; 0x60
+   4:	d014      	beq.n	30 <DBPL_uGetUsBitTimeForBaudRate+0x30>
+   6:	28c0      	cmp	r0, #192	; 0xc0
+   8:	d014      	beq.n	34 <DBPL_uGetUsBitTimeForBaudRate+0x34>
+   a:	22c0      	movs	r2, #192	; 0xc0
+   c:	0052      	lsls	r2, r2, #1
+   e:	4290      	cmp	r0, r2
+  10:	d012      	beq.n	38 <DBPL_uGetUsBitTimeForBaudRate+0x38>
+  12:	32c0      	adds	r2, #192	; 0xc0
+  14:	4290      	cmp	r0, r2
+  16:	d011      	beq.n	3c <DBPL_uGetUsBitTimeForBaudRate+0x3c>
+  18:	2290      	movs	r2, #144	; 0x90
+  1a:	00d2      	lsls	r2, r2, #3
+  1c:	4290      	cmp	r0, r2
+  1e:	d00f      	beq.n	40 <DBPL_uGetUsBitTimeForBaudRate+0x40>
+  20:	4a08      	ldr	r2, [pc, #32]	; (44 <DBPL_uGetUsBitTimeForBaudRate+0x44>)
+        {
+            /*lint -e{661,662} no out of bound access here! */
+            return (uint16_t)bit_time_lookup_table[i];
+        }
+    }
+    return 0U;
+  22:	2000      	movs	r0, #0
+        if(baud==(uint16_t)baud_lookup_table[i])
+  24:	4293      	cmp	r3, r2
+  26:	d102      	bne.n	2e <DBPL_uGetUsBitTimeForBaudRate+0x2e>
+  28:	2305      	movs	r3, #5
+            return (uint16_t)bit_time_lookup_table[i];
+  2a:	4a07      	ldr	r2, [pc, #28]	; (48 <DBPL_uGetUsBitTimeForBaudRate+0x48>)
+  2c:	5cd0      	ldrb	r0, [r2, r3]
+}
+  2e:	4770      	bx	lr
+        if(baud==(uint16_t)baud_lookup_table[i])
+  30:	2300      	movs	r3, #0
+  32:	e7fa      	b.n	2a <DBPL_uGetUsBitTimeForBaudRate+0x2a>
+  34:	2301      	movs	r3, #1
+  36:	e7f8      	b.n	2a <DBPL_uGetUsBitTimeForBaudRate+0x2a>
+  38:	2302      	movs	r3, #2
+  3a:	e7f6      	b.n	2a <DBPL_uGetUsBitTimeForBaudRate+0x2a>
+  3c:	2303      	movs	r3, #3
+  3e:	e7f4      	b.n	2a <DBPL_uGetUsBitTimeForBaudRate+0x2a>
+  40:	2304      	movs	r3, #4
+  42:	e7f2      	b.n	2a <DBPL_uGetUsBitTimeForBaudRate+0x2a>
+  44:	000004e2 	.word	0x000004e2
+  48:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBPL_tGetEcuConfigReadResult:
+
+00000000 <DBPL_tGetEcuConfigReadResult>:
+#endif/*DBUS2_UPDATE or DBUS2_UPDATE_HSI*/
+
+
+#if (defined(DBUS2_UPDATE)||defined(DBUS2_UPDATE_HSI))&&defined(REMOTE_FIRMWARE_UPDATE)
+struct DBPL_EcuConfigReadResult DBPL_tGetEcuConfigReadResult(uint8_t objIdNumber)
+{   /* "partially initialized struct MisraC2012 9.3 required" other 2 elements initialized later */
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b08b      	sub	sp, #44	; 0x2c
+   4:	000c      	movs	r4, r1
+   6:	0007      	movs	r7, r0
+    struct DBPL_EcuConfigReadResult obj = {.identificationObject = {{{0}}}}; /*lint !e785 , C99 initialization, all zero! */
+   8:	2227      	movs	r2, #39	; 0x27
+   a:	2100      	movs	r1, #0
+   c:	4668      	mov	r0, sp
+   e:	f7ff fffe 	bl	0 <memset>
+    const struct MAL_ModuleHeader_s *module_header = NULL;
+
+    obj.objIdNumber = objIdNumber;
+    obj.objCount = EcuConfigCount;
+
+    if((objIdNumber > DBPL_UPDATE_ECU_CONFIG_UNSUPPORTED_OBJ_ID_NUMBER) && (objIdNumber <= EcuConfigCount))
+  12:	2c01      	cmp	r4, #1
+  14:	d112      	bne.n	3c <DBPL_tGetEcuConfigReadResult+0x3c>
+        {
+            module_header = BMMOD_GetMemModuleHeader(MAL_PRODUCT_APP1);
+        }
+        else if (objIdNumber == ProgrammerObjId)/*lint !e774 boolean condition always evaluates to 'true/false' */
+        {
+            module_header = BMMOD_GetMemModuleHeader(MAL_PROGRAMMER_ID);
+  16:	4817      	ldr	r0, [pc, #92]	; (74 <DBPL_tGetEcuConfigReadResult+0x74>)
+  18:	f7ff fffe 	bl	0 <BMMOD_GetMemModuleHeader>
+  1c:	0006      	movs	r6, r0
+        else
+        {
+            /* no action required */
+        }
+
+        hw_version = FWU_getHardwareVersion();
+  1e:	f7ff fffe 	bl	0 <FWU_getHardwareVersion>
+  22:	0005      	movs	r5, r0
+        /* no action required */
+    }
+
+    if(obj.status != DBPL_EcuStatusUnsupported)
+    {
+        if (module_header != NULL)
+  24:	2e00      	cmp	r6, #0
+  26:	d11b      	bne.n	60 <DBPL_tGetEcuConfigReadResult+0x60>
+        {   /* Copy SW ID and version string */
+            obj.identificationObject.sw_version = module_header->sw_version.version;
+        }
+        else
+        {
+            obj.status = DBPL_EcuStatusError;
+  28:	3620      	adds	r6, #32
+        }
+
+        if (hw_version != NULL)
+  2a:	2d00      	cmp	r5, #0
+  2c:	d009      	beq.n	42 <DBPL_tGetEcuConfigReadResult+0x42>
+        {
+            /* Copy HW version string */
+            obj.identificationObject.hw_version = hw_version->version;
+  2e:	2015      	movs	r0, #21
+  30:	2212      	movs	r2, #18
+  32:	1d29      	adds	r1, r5, #4
+  34:	4468      	add	r0, sp
+  36:	f7ff fffe 	bl	0 <memcpy>
+  3a:	e003      	b.n	44 <DBPL_tGetEcuConfigReadResult+0x44>
+    else if(objIdNumber == DBPL_UPDATE_ECU_CONFIG_UNSUPPORTED_OBJ_ID_NUMBER)
+  3c:	2621      	movs	r6, #33	; 0x21
+  3e:	2c00      	cmp	r4, #0
+  40:	d000      	beq.n	44 <DBPL_tGetEcuConfigReadResult+0x44>
+        }
+        else
+        {
+            obj.status = DBPL_EcuStatusError;
+  42:	2620      	movs	r6, #32
+        }
+    }
+
+    return obj;
+  44:	466b      	mov	r3, sp
+  46:	466a      	mov	r2, sp
+  48:	701e      	strb	r6, [r3, #0]
+  4a:	705c      	strb	r4, [r3, #1]
+  4c:	2301      	movs	r3, #1
+  4e:	4669      	mov	r1, sp
+  50:	7093      	strb	r3, [r2, #2]
+  52:	0038      	movs	r0, r7
+  54:	2227      	movs	r2, #39	; 0x27
+  56:	f7ff fffe 	bl	0 <memcpy>
+}
+  5a:	0038      	movs	r0, r7
+  5c:	b00b      	add	sp, #44	; 0x2c
+  5e:	bdf0      	pop	{r4, r5, r6, r7, pc}
+            obj.identificationObject.sw_version = module_header->sw_version.version;
+  60:	0031      	movs	r1, r6
+  62:	466b      	mov	r3, sp
+  64:	2212      	movs	r2, #18
+  66:	3110      	adds	r1, #16
+  68:	1cd8      	adds	r0, r3, #3
+  6a:	f7ff fffe 	bl	0 <memcpy>
+  6e:	0026      	movs	r6, r4
+  70:	e7db      	b.n	2a <DBPL_tGetEcuConfigReadResult+0x2a>
+  72:	46c0      	nop			; (mov r8, r8)
+  74:	00005510 	.word	0x00005510
+
+Disassembly of section .text.DBPL_tGetSwSubmoduleReadResult:
+
+00000000 <DBPL_tGetSwSubmoduleReadResult>:
+
+struct DBPL_SwSubmoduleReadResult DBPL_tGetSwSubmoduleReadResult(const uint8_t * const pucSwID, uint8_t objIdNumber)
+{   
+   0:	b510      	push	{r4, lr}
+   2:	b08a      	sub	sp, #40	; 0x28
+    obj.status = DBPL_EcuStatusUpdateModeActive; /*Programmer is running.*/
+#else
+    obj.status = DBPL_EcuStatusOK; /*Expected to be ok.*/
+#endif
+
+    return obj;    
+   4:	4669      	mov	r1, sp
+   6:	2301      	movs	r3, #1
+   8:	700b      	strb	r3, [r1, #0]
+   a:	466b      	mov	r3, sp
+{   
+   c:	0004      	movs	r4, r0
+    return obj;    
+   e:	704a      	strb	r2, [r1, #1]
+  10:	1c98      	adds	r0, r3, #2
+  12:	2225      	movs	r2, #37	; 0x25
+  14:	4905      	ldr	r1, [pc, #20]	; (2c <DBPL_tGetSwSubmoduleReadResult+0x2c>)
+  16:	f7ff fffe 	bl	0 <memcpy>
+  1a:	2227      	movs	r2, #39	; 0x27
+  1c:	4669      	mov	r1, sp
+  1e:	0020      	movs	r0, r4
+  20:	f7ff fffe 	bl	0 <memcpy>
+}
+  24:	0020      	movs	r0, r4
+  26:	b00a      	add	sp, #40	; 0x28
+  28:	bd10      	pop	{r4, pc}
+  2a:	46c0      	nop			; (mov r8, r8)
+  2c:	00000000 	.word	0x00000000

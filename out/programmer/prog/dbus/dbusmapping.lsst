@@ -1,0 +1,2256 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dbusmapping.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DBM_UART_vInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	DBM_UART_vInit
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	DBM_UART_vInit:
+  25              	.LVL0:
+  26              	.LFB115:
+  27              		.file 1 "app/prog/dbus/dbusmapping.c"
+   1:app/prog/dbus/dbusmapping.c **** /*******************************************************************************
+   2:app/prog/dbus/dbusmapping.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:app/prog/dbus/dbusmapping.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:app/prog/dbus/dbusmapping.c ****  *
+   5:app/prog/dbus/dbusmapping.c ****  *  All rights reserved. This program and the accompanying materials
+   6:app/prog/dbus/dbusmapping.c ****  *  are protected by international copyright laws.
+   7:app/prog/dbus/dbusmapping.c ****  *  Please contact copyright holder for licensing information.
+   8:app/prog/dbus/dbusmapping.c ****  *
+   9:app/prog/dbus/dbusmapping.c ****  *******************************************************************************
+  10:app/prog/dbus/dbusmapping.c ****  *  PROJECT          IC Dbus2
+  11:app/prog/dbus/dbusmapping.c ****  *  AUTHOR           Rune Holen
+  12:app/prog/dbus/dbusmapping.c ****  *  COMP_ABBREV      DBM
+  13:app/prog/dbus/dbusmapping.c ****  ******************************************************************************/
+  14:app/prog/dbus/dbusmapping.c **** 
+  15:app/prog/dbus/dbusmapping.c **** 
+  16:app/prog/dbus/dbusmapping.c **** /******************************************************************************/
+  17:app/prog/dbus/dbusmapping.c **** /* DOCUMENTATION                                                              */
+  18:app/prog/dbus/dbusmapping.c **** /******************************************************************************/
+  19:app/prog/dbus/dbusmapping.c **** /** \file
+  20:app/prog/dbus/dbusmapping.c ****  *     Mapping library for D-Bus-2 data link layer using one specific UART channel
+  21:app/prog/dbus/dbusmapping.c ****  *
+  22:app/prog/dbus/dbusmapping.c ****  *     The mapping layer needs about 40 byte extra ROM (RAM unchanged) for implementation of the fo
+  23:app/prog/dbus/dbusmapping.c ****  *     functions (compared to using macros, hence no mapping layer):
+  24:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vInit(uint8_t ucIndex)
+  25:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vEnable(void)
+  26:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vDisableTxEvent(void)
+  27:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vEnableTxEvent(void)
+  28:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vDisableRxEvent(void)
+  29:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vEnableRxEvent(void)
+  30:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_bIsRxError(void)
+  31:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_ucGetStatus(void)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 2
+
+
+  32:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_ucGetRxData(void)
+  33:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_vSetTxData(uint8_t Data)
+  34:app/prog/dbus/dbusmapping.c ****  *     \li DBM_UART_bIsRxOnGoing(void)\n\n
+  35:app/prog/dbus/dbusmapping.c ****  *     And in the \b opposite direction, mapping of:
+  36:app/prog/dbus/dbusmapping.c ****  *     \li DLL_vHandleRxEvent(void)
+  37:app/prog/dbus/dbusmapping.c ****  *     \li DLL_vHandleTxEvent(void)\n
+  38:app/prog/dbus/dbusmapping.c ****  *     through HUART<CHANNEL>_vHandleRxEvent() and HUART<CHANNEL>_vHandleTxEvent()
+  39:app/prog/dbus/dbusmapping.c ****  */
+  40:app/prog/dbus/dbusmapping.c **** 
+  41:app/prog/dbus/dbusmapping.c **** 
+  42:app/prog/dbus/dbusmapping.c **** /******************************************************************************/
+  43:app/prog/dbus/dbusmapping.c **** /* INCLUDES                                                                   */
+  44:app/prog/dbus/dbusmapping.c **** /******************************************************************************/
+  45:app/prog/dbus/dbusmapping.c **** #include "bsh_stdinc.h"
+  46:app/prog/dbus/dbusmapping.c **** 
+  47:app/prog/dbus/dbusmapping.c **** 
+  48:app/prog/dbus/dbusmapping.c **** /*   Available compiler switches (to be handled by the make process)
+  49:app/prog/dbus/dbusmapping.c **** __DBM_DBUS_MAPPING_INCLUDE_FUNCSAFE
+  50:app/prog/dbus/dbusmapping.c **** __DBM_USE_IRQ_FOR_IDLE_DETECTION
+  51:app/prog/dbus/dbusmapping.c **** __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+  52:app/prog/dbus/dbusmapping.c **** __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+  53:app/prog/dbus/dbusmapping.c **** __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+  54:app/prog/dbus/dbusmapping.c **** DBUS_UART_CHANNEL
+  55:app/prog/dbus/dbusmapping.c **** __DBM_EXCLUDE_ERROR_COUNTERS
+  56:app/prog/dbus/dbusmapping.c **** */
+  57:app/prog/dbus/dbusmapping.c **** #ifdef DOXY_DEVELOPERS_DOC
+  58:app/prog/dbus/dbusmapping.c **** /* Doxygen documentation of compiler switches */
+  59:app/prog/dbus/dbusmapping.c **** 
+  60:app/prog/dbus/dbusmapping.c **** /** Compiler switch. When defined functional safety is regarded.
+  61:app/prog/dbus/dbusmapping.c **** */ #define __DBM_DBUS_MAPPING_INCLUDE_FUNCSAFE
+  62:app/prog/dbus/dbusmapping.c **** 
+  63:app/prog/dbus/dbusmapping.c **** /** Compiler switch. When defined an external interrupt is used for
+  64:app/prog/dbus/dbusmapping.c ****     determining IDLE state. This is usedful for controller, which don't have
+  65:app/prog/dbus/dbusmapping.c ****     ReceiveOngoing or IDLE flags available.
+  66:app/prog/dbus/dbusmapping.c **** */ #define __DBM_USE_IRQ_FOR_IDLE_DETECTION
+  67:app/prog/dbus/dbusmapping.c **** 
+  68:app/prog/dbus/dbusmapping.c **** /** Compiler switch handled by the make process. When defined initally the
+  69:app/prog/dbus/dbusmapping.c ****     transmit interrupt handler will be called manually. This is due to the fact
+  70:app/prog/dbus/dbusmapping.c ****     that some controllers do not set the interrupt pending flag after enabling
+  71:app/prog/dbus/dbusmapping.c ****     the transmit interrupt, when the transmit buffer is empty.
+  72:app/prog/dbus/dbusmapping.c **** */ #define __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+  73:app/prog/dbus/dbusmapping.c **** 
+  74:app/prog/dbus/dbusmapping.c **** /** Compiler switch. When defined RxInterrupt is not disabled, when requested, but locked.
+  75:app/prog/dbus/dbusmapping.c **** */ #define __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+  76:app/prog/dbus/dbusmapping.c **** 
+  77:app/prog/dbus/dbusmapping.c **** /** Compiler switch. When defined TxInterrupt is not disabled, when requested, but locked.
+  78:app/prog/dbus/dbusmapping.c **** */ #define __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+  79:app/prog/dbus/dbusmapping.c **** 
+  80:app/prog/dbus/dbusmapping.c **** /** Compiler switch. Definition needed for mapping D-Bus-2 mapping layer to a specific DBUS_UART_CH
+  81:app/prog/dbus/dbusmapping.c **** */ #define DBUS_UART_CHANNEL 0
+  82:app/prog/dbus/dbusmapping.c **** 
+  83:app/prog/dbus/dbusmapping.c **** /** Compiler switch for removing the defined UART error counters. Usage introduced to the D-Bus-2 L
+  84:app/prog/dbus/dbusmapping.c **** */ #define __DBM_EXCLUDE_ERROR_COUNTERS
+  85:app/prog/dbus/dbusmapping.c **** #endif
+  86:app/prog/dbus/dbusmapping.c **** 
+  87:app/prog/dbus/dbusmapping.c **** #include "LibTypes.h"
+  88:app/prog/dbus/dbusmapping.c **** #ifdef PSOC
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 3
+
+
+  89:app/prog/dbus/dbusmapping.c **** #include "mapping.h"
+  90:app/prog/dbus/dbusmapping.c **** #endif
+  91:app/prog/dbus/dbusmapping.c **** #include "hsup.h"
+  92:app/prog/dbus/dbusmapping.c **** #include "timerlib.h" //Circulating timer.
+  93:app/prog/dbus/dbusmapping.c **** #if defined (PLATFORM_SUPPORTS_32BIT_HWTIMER)
+  94:app/prog/dbus/dbusmapping.c **** #include "timerMcXs.h" //32bit HW timer
+  95:app/prog/dbus/dbusmapping.c **** #endif //PLATFORM_SUPPORTS_32BIT_HWTIMER
+  96:app/prog/dbus/dbusmapping.c **** #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+  97:app/prog/dbus/dbusmapping.c **** /* FSF_vIsrDoEntry() and FSF_vIsrDoExit() */
+  98:app/prog/dbus/dbusmapping.c **** #include "fSafe.h"
+  99:app/prog/dbus/dbusmapping.c **** #endif
+ 100:app/prog/dbus/dbusmapping.c **** 
+ 101:app/prog/dbus/dbusmapping.c **** #include "dbusmapping.h"
+ 102:app/prog/dbus/dbusmapping.c **** 
+ 103:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 104:app/prog/dbus/dbusmapping.c ****     #include "mcal/mcal_includes.h"
+ 105:app/prog/dbus/dbusmapping.c ****     #include "mcal_channels.h"
+ 106:app/prog/dbus/dbusmapping.c **** #else
+ 107:app/prog/dbus/dbusmapping.c ****     #include "huart.h"
+ 108:app/prog/dbus/dbusmapping.c **** #endif
+ 109:app/prog/dbus/dbusmapping.c **** 
+ 110:app/prog/dbus/dbusmapping.c **** // switch off lint advisories for this file: #/## usage, function like macro
+ 111:app/prog/dbus/dbusmapping.c **** /*lint -e9023 -e9024 */
+ 112:app/prog/dbus/dbusmapping.c **** /*lint -e9026 Function-like macro... [MISRA 2012 Directive 4.9, advisory] */
+ 113:app/prog/dbus/dbusmapping.c **** /*lint -e9032 [MISRA 2012 Rule 10.7, required], behaviour required here for EFR32 error macros defi
+ 114:app/prog/dbus/dbusmapping.c **** /*lint -e774  -e731 -e835 -e587  Infos occurring for queries, not critical.*/
+ 115:app/prog/dbus/dbusmapping.c **** 
+ 116:app/prog/dbus/dbusmapping.c **** #ifndef DBM_MCAL
+ 117:app/prog/dbus/dbusmapping.c **** /*Macro definitions for building names of functions to map according to used channel (DBM_UART_CHAN
+ 118:app/prog/dbus/dbusmapping.c **** #define UART_HELPER(channel, function) channel ##function                   //lint !e9024 '#/##' op
+ 119:app/prog/dbus/dbusmapping.c **** #define MAP_UART(channel, function) UART_HELPER(HUART ##channel, function)  //lint !e9024 '#/##' op
+ 120:app/prog/dbus/dbusmapping.c **** #define DBM_MAP_UART(channel, function) MAP_UART(channel, function)
+ 121:app/prog/dbus/dbusmapping.c **** #endif
+ 122:app/prog/dbus/dbusmapping.c **** /**************************************************************************************************
+ 123:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+ 124:app/prog/dbus/dbusmapping.c **** #if (DBUS_UART_CHANNEL == 0)
+ 125:app/prog/dbus/dbusmapping.c **** #ifdef DBUS2_CONTROLLER_SPECIFIC_MAPPING
+ 126:app/prog/dbus/dbusmapping.c **** /* Section moved to dbusmappingMc.h */
+ 127:app/prog/dbus/dbusmapping.c **** #else
+ 128:app/prog/dbus/dbusmapping.c **** #error Please implement Initial Manual Tx Interrupt Call in the corresponding dbusmappingMc file
+ 129:app/prog/dbus/dbusmapping.c **** #endif
+ 130:app/prog/dbus/dbusmapping.c **** 
+ 131:app/prog/dbus/dbusmapping.c **** #elif (DBUS_UART_CHANNEL == 1)
+ 132:app/prog/dbus/dbusmapping.c **** #ifdef DBUS2_CONTROLLER_SPECIFIC_MAPPING
+ 133:app/prog/dbus/dbusmapping.c **** /* Section moved to dbusmappingMc.h */
+ 134:app/prog/dbus/dbusmapping.c **** #else
+ 135:app/prog/dbus/dbusmapping.c **** #error Please implement Initial Manual Tx Interrupt Call in the corresponding dbusmappingMc file
+ 136:app/prog/dbus/dbusmapping.c **** #endif
+ 137:app/prog/dbus/dbusmapping.c **** 
+ 138:app/prog/dbus/dbusmapping.c **** #elif (DBUS_UART_CHANNEL == 2)
+ 139:app/prog/dbus/dbusmapping.c **** #ifdef DBUS2_CONTROLLER_SPECIFIC_MAPPING
+ 140:app/prog/dbus/dbusmapping.c **** /* Section moved to dbusmappingMc.h */
+ 141:app/prog/dbus/dbusmapping.c **** #elif defined(__PSoC5LP)
+ 142:app/prog/dbus/dbusmapping.c **** #define DBM_UART_SET_TX_INTERRUPT() do {CYMAP_CY_INT_SET_PEND_REG |= CYMAP_ISR_UART_2_Tx__INTC_MASK
+ 143:app/prog/dbus/dbusmapping.c **** #else
+ 144:app/prog/dbus/dbusmapping.c **** #error Please implement Initial Manual Tx Interrupt Call in the corresponding dbusmappingMc file
+ 145:app/prog/dbus/dbusmapping.c **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 4
+
+
+ 146:app/prog/dbus/dbusmapping.c **** #endif
+ 147:app/prog/dbus/dbusmapping.c **** #endif // __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+ 148:app/prog/dbus/dbusmapping.c **** 
+ 149:app/prog/dbus/dbusmapping.c **** 
+ 150:app/prog/dbus/dbusmapping.c **** /**************************************************************************************************
+ 151:app/prog/dbus/dbusmapping.c **** /* Definition of derivative specific issues. */
+ 152:app/prog/dbus/dbusmapping.c **** /* Please make sure the error definition <Terror> is defined for all derivatives, which do not use 
+ 153:app/prog/dbus/dbusmapping.c **** /* The following definition will be redefined, when needed - otherwise the use of these definitions
+ 154:app/prog/dbus/dbusmapping.c **** #define DBM_UART_ENABLE_OTHER_INTERRUPTS()   do {} while(0)
+ 155:app/prog/dbus/dbusmapping.c **** 
+ 156:app/prog/dbus/dbusmapping.c **** 
+ 157:app/prog/dbus/dbusmapping.c **** /**************************************************************************************************
+ 158:app/prog/dbus/dbusmapping.c **** 
+ 159:app/prog/dbus/dbusmapping.c **** #if defined(DBUS2_CONTROLLER_SPECIFIC_MAPPING)
+ 160:app/prog/dbus/dbusmapping.c **** /*Section moved to dbusmappingMc.h*/
+ 161:app/prog/dbus/dbusmapping.c **** #else
+ 162:app/prog/dbus/dbusmapping.c **** #error Definitions for derivative needed
+ 163:app/prog/dbus/dbusmapping.c **** #endif
+ 164:app/prog/dbus/dbusmapping.c **** 
+ 165:app/prog/dbus/dbusmapping.c **** 
+ 166:app/prog/dbus/dbusmapping.c **** #ifndef DBM_DERIVATIVE_SPECIFIC_ERROR_TYPE
+ 167:app/prog/dbus/dbusmapping.c **** /** General typedef for Error definitions */
+ 168:app/prog/dbus/dbusmapping.c **** typedef uint8_t Terror;
+ 169:app/prog/dbus/dbusmapping.c **** #else
+ 170:app/prog/dbus/dbusmapping.c **** /** Derivative specific error definition (different from uint8_t) */
+ 171:app/prog/dbus/dbusmapping.c **** typedef DBM_DERIVATIVE_SPECIFIC_ERROR_TYPE Terror;
+ 172:app/prog/dbus/dbusmapping.c **** #endif
+ 173:app/prog/dbus/dbusmapping.c **** 
+ 174:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 175:app/prog/dbus/dbusmapping.c **** /*
+ 176:app/prog/dbus/dbusmapping.c **** The following section is used for Renesas adaptation:
+ 177:app/prog/dbus/dbusmapping.c **** Tx interrupt is not disabled, it is just locked, so that to
+ 178:app/prog/dbus/dbusmapping.c **** the overlaying layer the tx interrupt seems to be disabled..*/
+ 179:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that the tx event is NOT locked (the overlaying
+ 180:app/prog/dbus/dbusmapping.c ****    layer believes that the tx interrupt is re-enabled, because DBM_UART_vEnableTxEvent()
+ 181:app/prog/dbus/dbusmapping.c ****    has been called). */
+ 182:app/prog/dbus/dbusmapping.c **** #define DBM_UART_TX_EVENT_ENABLED            0
+ 183:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that the tx event is locked
+ 184:app/prog/dbus/dbusmapping.c ****    (the overlaying layer believes that the tx interrupt is disabled,
+ 185:app/prog/dbus/dbusmapping.c ****     because DBM_UART_vDisableTxEvent() has been called). */
+ 186:app/prog/dbus/dbusmapping.c **** #define DBM_UART_DISABLE_TX_EVENT            1
+ 187:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that a tx event has occurred during the
+ 188:app/prog/dbus/dbusmapping.c ****    time that it has been locked (the overlaying layer believes that the
+ 189:app/prog/dbus/dbusmapping.c ****    tx interrupt is currently disabled, because DBM_UART_vDisableTxEvent()
+ 190:app/prog/dbus/dbusmapping.c ****    has been called). */
+ 191:app/prog/dbus/dbusmapping.c **** #define DBM_UART_TX_EVENT_DURING_LOCK_STATE  2
+ 192:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_ucTxDisabled = 0U;
+ 193:app/prog/dbus/dbusmapping.c **** static bool DBM_UART_bTxEventAlreadyEnabled = 0U;
+ 194:app/prog/dbus/dbusmapping.c **** #endif //__DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 195:app/prog/dbus/dbusmapping.c **** 
+ 196:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 197:app/prog/dbus/dbusmapping.c **** /*
+ 198:app/prog/dbus/dbusmapping.c **** The following section is used for necessary Renesas adaptation:
+ 199:app/prog/dbus/dbusmapping.c **** Rx interrupt is not disabled, it is just locked,
+ 200:app/prog/dbus/dbusmapping.c **** so that to the overlaying layer the rx interrupt seems to be disabled.
+ 201:app/prog/dbus/dbusmapping.c **** */
+ 202:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that the rx event is NOT locked
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 5
+
+
+ 203:app/prog/dbus/dbusmapping.c ****    (the overlaying layer believes that the rx interrupt is re-enabled,
+ 204:app/prog/dbus/dbusmapping.c ****     because DBM_UART_vEnableRxEvent() has been called). */
+ 205:app/prog/dbus/dbusmapping.c **** #define DBM_UART_RX_EVENT_ENABLED            0
+ 206:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that the rx event is locked
+ 207:app/prog/dbus/dbusmapping.c ****    (the overlaying layer believes that the rx interrupt is disabled,
+ 208:app/prog/dbus/dbusmapping.c ****     because DBM_UART_vDisableRxEvent() has been called). */
+ 209:app/prog/dbus/dbusmapping.c **** #define DBM_UART_DISABLE_RX_EVENT            1
+ 210:app/prog/dbus/dbusmapping.c **** /** Value used for signalising that an rx event has occurred during the time
+ 211:app/prog/dbus/dbusmapping.c ****    that it has been locked (the overlaying layer believes that the rx interrupt
+ 212:app/prog/dbus/dbusmapping.c ****    is currently disabled, because DBM_UART_vDisableRxEvent() has been called). */
+ 213:app/prog/dbus/dbusmapping.c **** #define DBM_UART_RX_EVENT_DURING_LOCK_STATE  2
+ 214:app/prog/dbus/dbusmapping.c **** /** Status byte used for not calling the rx interrupt handler if the
+ 215:app/prog/dbus/dbusmapping.c ****     rx interrupt has been disabled (the UART interrupt is in fact not disabled,
+ 216:app/prog/dbus/dbusmapping.c ****     but the overlaying layer believes this...)
+ 217:app/prog/dbus/dbusmapping.c **** */
+ 218:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_ucRxDisabled = 0U;
+ 219:app/prog/dbus/dbusmapping.c **** 
+ 220:app/prog/dbus/dbusmapping.c **** 
+ 221:app/prog/dbus/dbusmapping.c **** /** Variable used for keeping a byte, which is received during the time that
+ 222:app/prog/dbus/dbusmapping.c ****     the rx interrupt is locked, according to the state of DBM_UART_ucRxDisabled.
+ 223:app/prog/dbus/dbusmapping.c **** */
+ 224:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_ucRxData;
+ 225:app/prog/dbus/dbusmapping.c **** 
+ 226:app/prog/dbus/dbusmapping.c **** /** Variable used for keeping possible errors, which occur during the time that
+ 227:app/prog/dbus/dbusmapping.c ****     the rx interrupt is locked, according to the state of DBM_UART_ucRxDisabled.
+ 228:app/prog/dbus/dbusmapping.c **** */
+ 229:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_ucRxError;
+ 230:app/prog/dbus/dbusmapping.c **** #endif // __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 231:app/prog/dbus/dbusmapping.c **** 
+ 232:app/prog/dbus/dbusmapping.c **** 
+ 233:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_EXCLUDE_ERROR_COUNTERS
+ 234:app/prog/dbus/dbusmapping.c **** /** Please note that the following error counters are incremented when the UART reports an error. A
+ 235:app/prog/dbus/dbusmapping.c **** static uint32_t DBM_UART_ulNoiseCounter = 0U; //!< Counter, which is incremented when corresponding
+ 236:app/prog/dbus/dbusmapping.c **** static uint32_t DBM_UART_ulFramingErrorCounter = 0U; //!< Counter, which is incremented when corres
+ 237:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_ucOverrunErrorCounter = 0U; //!< Counter, which is incremented when corresp
+ 238:app/prog/dbus/dbusmapping.c **** static uint32_t DBM_UART_ulBreakCounter = 0U; //!< Counter, which is incremented when corresponding
+ 239:app/prog/dbus/dbusmapping.c **** #endif
+ 240:app/prog/dbus/dbusmapping.c **** 
+ 241:app/prog/dbus/dbusmapping.c **** 
+ 242:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 243:app/prog/dbus/dbusmapping.c **** /** Port/pin mapping for DBM_UART channel */
+ 244:app/prog/dbus/dbusmapping.c **** static const struct MUART_Channel * const DBM_UART_dbusChannel = &DBUS_MUART_PORT;
+ 245:app/prog/dbus/dbusmapping.c **** static struct MUART_Handle DBM_UART_dbusHandle;
+ 246:app/prog/dbus/dbusmapping.c **** 
+ 247:app/prog/dbus/dbusmapping.c **** /** Variable to store last byte received by UART channel */
+ 248:app/prog/dbus/dbusmapping.c **** static uint8_t DBM_UART_lastRxByte;
+ 249:app/prog/dbus/dbusmapping.c **** 
+ 250:app/prog/dbus/dbusmapping.c **** /** HUART RX/TX interrupt Callback instance */
+ 251:app/prog/dbus/dbusmapping.c **** static MCAL_Callback_t DBM_UART_handleTxRxCb;
+ 252:app/prog/dbus/dbusmapping.c **** 
+ 253:app/prog/dbus/dbusmapping.c **** /** \brief  Common UART interrupt handler.
+ 254:app/prog/dbus/dbusmapping.c ****  *
+ 255:app/prog/dbus/dbusmapping.c ****  * \details Handler is mapping HUART interrupt calls to DBus RX/TX handlers.
+ 256:app/prog/dbus/dbusmapping.c ****  *
+ 257:app/prog/dbus/dbusmapping.c ****  * \param   PingMs If there are no messages to be sent and the communication still enabled, a ping 
+ 258:app/prog/dbus/dbusmapping.c ****  *
+ 259:app/prog/dbus/dbusmapping.c ****  * \note    Only possible, if protocol version is the same on both sides. Currently no ping mechani
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 6
+
+
+ 260:app/prog/dbus/dbusmapping.c **** */
+ 261:app/prog/dbus/dbusmapping.c **** /*lint -e{715} parameter not accessed : interface is defined by STDCB_CallbackFunction_t */
+ 262:app/prog/dbus/dbusmapping.c **** static void DBM_UART_handleTxRxCbFunc(void *obj, uint32_t flags, const struct MCAL_EventResponse *e
+ 263:app/prog/dbus/dbusmapping.c **** {
+ 264:app/prog/dbus/dbusmapping.c ****     if (MCAL_getEventType(eventResponse) == MCAL_EVENT_READ_BYTE)
+ 265:app/prog/dbus/dbusmapping.c ****     {
+ 266:app/prog/dbus/dbusmapping.c ****         DBM_UART_lastRxByte = MCAL_getEventData_uint8(eventResponse);
+ 267:app/prog/dbus/dbusmapping.c ****         DBM_UART_vHandleRxEvent();
+ 268:app/prog/dbus/dbusmapping.c ****     }
+ 269:app/prog/dbus/dbusmapping.c ****     else if (MCAL_getEventType(eventResponse) == MCAL_EVENT_WRITE_BYTE)
+ 270:app/prog/dbus/dbusmapping.c ****     {
+ 271:app/prog/dbus/dbusmapping.c ****         DBM_UART_vHandleTxEvent();
+ 272:app/prog/dbus/dbusmapping.c ****     }
+ 273:app/prog/dbus/dbusmapping.c ****     else
+ 274:app/prog/dbus/dbusmapping.c ****     {
+ 275:app/prog/dbus/dbusmapping.c ****         /* no valid event type */
+ 276:app/prog/dbus/dbusmapping.c ****     }
+ 277:app/prog/dbus/dbusmapping.c **** }  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_
+ 278:app/prog/dbus/dbusmapping.c **** 
+ 279:app/prog/dbus/dbusmapping.c **** #endif //DBM_MCAL
+ 280:app/prog/dbus/dbusmapping.c **** 
+ 281:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 282:app/prog/dbus/dbusmapping.c **** void DBM_UART_vInit(uint8_t ucIndex)
+ 283:app/prog/dbus/dbusmapping.c **** {
+  28              		.loc 1 283 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+ 284:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 285:app/prog/dbus/dbusmapping.c ****     (void)ucIndex;
+  32              		.loc 1 285 5 view .LVU1
+ 286:app/prog/dbus/dbusmapping.c ****     struct MUART_Config muartCfg = MUART_CFG_8N1(DBUS_DEFAULT_BAUDRATE*100u);
+  33              		.loc 1 286 5 view .LVU2
+ 283:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+  34              		.loc 1 283 1 is_stmt 0 view .LVU3
+  35 0000 13B5     		push	{r0, r1, r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 0, -16
+  39              		.cfi_offset 1, -12
+  40              		.cfi_offset 4, -8
+  41              		.cfi_offset 14, -4
+  42              		.loc 1 286 25 view .LVU4
+  43 0002 6A46     		mov	r2, sp
+ 287:app/prog/dbus/dbusmapping.c ****     (void)MUART_init(&DBM_UART_dbusHandle, DBM_UART_dbusChannel, &muartCfg);
+ 288:app/prog/dbus/dbusmapping.c ****     /* Callback initialization */
+ 289:app/prog/dbus/dbusmapping.c ****     MCAL_initCallback(&DBM_UART_handleTxRxCb, DBM_UART_handleTxRxCbFunc, &DBM_UART_dbusHandle);
+ 290:app/prog/dbus/dbusmapping.c **** #else
+ 291:app/prog/dbus/dbusmapping.c ****    /* HUART0_vInit(ucIndex) when DBUS_UART_CHANNEL is 0 */
+ 292:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vInit)(ucIndex);
+ 293:app/prog/dbus/dbusmapping.c **** #endif
+ 294:app/prog/dbus/dbusmapping.c **** 
+ 295:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+ 296:app/prog/dbus/dbusmapping.c ****    /* Disable interrupt */
+ 297:app/prog/dbus/dbusmapping.c ****    DBM_INT_DisableIrq();
+ 298:app/prog/dbus/dbusmapping.c ****    DBM_INT_Init(0U);
+ 299:app/prog/dbus/dbusmapping.c ****       /* Interrupt pending only on falling edges */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 7
+
+
+ 300:app/prog/dbus/dbusmapping.c ****    DBM_INT_SetIrqModeFalling();
+ 301:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 302:app/prog/dbus/dbusmapping.c ****    //The following variable must be reset if the initialisation is performed more than once.
+ 303:app/prog/dbus/dbusmapping.c ****    DBM_UART_bTxEventAlreadyEnabled = 0U;
+ 304:app/prog/dbus/dbusmapping.c **** #endif
+ 305:app/prog/dbus/dbusmapping.c **** #endif
+ 306:app/prog/dbus/dbusmapping.c **** }
+  44              		.loc 1 306 1 view .LVU5
+  45              		@ sp needed
+ 286:app/prog/dbus/dbusmapping.c ****     (void)MUART_init(&DBM_UART_dbusHandle, DBM_UART_dbusChannel, &muartCfg);
+  46              		.loc 1 286 25 view .LVU6
+  47 0004 1100     		movs	r1, r2
+  48 0006 0A4B     		ldr	r3, .L2
+  49 0008 11CB     		ldmia	r3!, {r0, r4}
+  50 000a 11C1     		stmia	r1!, {r0, r4}
+  51              	.LVL1:
+ 287:app/prog/dbus/dbusmapping.c ****     (void)MUART_init(&DBM_UART_dbusHandle, DBM_UART_dbusChannel, &muartCfg);
+  52              		.loc 1 287 5 is_stmt 1 view .LVU7
+ 287:app/prog/dbus/dbusmapping.c ****     (void)MUART_init(&DBM_UART_dbusHandle, DBM_UART_dbusChannel, &muartCfg);
+  53              		.loc 1 287 11 is_stmt 0 view .LVU8
+  54 000c 094C     		ldr	r4, .L2+4
+  55 000e 0A49     		ldr	r1, .L2+8
+  56 0010 2000     		movs	r0, r4
+  57 0012 FFF7FEFF 		bl	MUART_init
+  58              	.LVL2:
+ 289:app/prog/dbus/dbusmapping.c **** #else
+  59              		.loc 1 289 5 is_stmt 1 view .LVU9
+  60 0016 2200     		movs	r2, r4
+  61 0018 0849     		ldr	r1, .L2+12
+  62 001a 0948     		ldr	r0, .L2+16
+  63 001c FFF7FEFF 		bl	MCAL_initCallback
+  64              	.LVL3:
+ 297:app/prog/dbus/dbusmapping.c ****    DBM_INT_Init(0U);
+  65              		.loc 1 297 4 view .LVU10
+  66 0020 FFF7FEFF 		bl	DBM_INT_DisableIrq
+  67              	.LVL4:
+ 298:app/prog/dbus/dbusmapping.c ****       /* Interrupt pending only on falling edges */
+  68              		.loc 1 298 4 view .LVU11
+  69 0024 0020     		movs	r0, #0
+  70 0026 FFF7FEFF 		bl	DBM_INT_Init
+  71              	.LVL5:
+ 300:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+  72              		.loc 1 300 4 view .LVU12
+  73 002a FFF7FEFF 		bl	DBM_INT_SetIrqModeFalling
+  74              	.LVL6:
+  75              		.loc 1 306 1 is_stmt 0 view .LVU13
+  76 002e 13BD     		pop	{r0, r1, r4, pc}
+  77              	.L3:
+  78              		.align	2
+  79              	.L2:
+  80 0030 00000000 		.word	.LANCHOR0
+  81 0034 00000000 		.word	.LANCHOR1
+  82 0038 00000000 		.word	MUART0_RX_PB0_TX_PA15
+  83 003c 00000000 		.word	DBM_UART_handleTxRxCbFunc
+  84 0040 00000000 		.word	.LANCHOR2
+  85              		.cfi_endproc
+  86              	.LFE115:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 8
+
+
+  88              		.section	.text.DBM_UART_vEnable,"ax",%progbits
+  89              		.align	1
+  90              		.global	DBM_UART_vEnable
+  91              		.syntax unified
+  92              		.code	16
+  93              		.thumb_func
+  95              	DBM_UART_vEnable:
+  96              	.LFB116:
+ 307:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 308:app/prog/dbus/dbusmapping.c **** void DBM_UART_vEnable(void)
+ 309:app/prog/dbus/dbusmapping.c **** {
+  97              		.loc 1 309 1 is_stmt 1 view -0
+  98              		.cfi_startproc
+  99              		@ args = 0, pretend = 0, frame = 0
+ 100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310:app/prog/dbus/dbusmapping.c ****    /* HUART0_vEnable() when DBUS_UART_CHANNEL is 0 */
+ 311:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 101              		.loc 1 311 4 view .LVU15
+ 102              	.LBB44:
+ 103              	.LBI44:
+ 104              		.file 2 "common/prog/dbus/dbusmapping.h"
+   1:common/prog/dbus/dbusmapping.h **** /*******************************************************************************
+   2:common/prog/dbus/dbusmapping.h ****  *  Copyright (c) 2023 BSH Hausgeraete GmbH,
+   3:common/prog/dbus/dbusmapping.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/dbus/dbusmapping.h ****  *
+   5:common/prog/dbus/dbusmapping.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/dbus/dbusmapping.h ****  *  are protected by international copyright laws.
+   7:common/prog/dbus/dbusmapping.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/dbus/dbusmapping.h ****  *
+   9:common/prog/dbus/dbusmapping.h ****  *******************************************************************************
+  10:common/prog/dbus/dbusmapping.h **** *   PROJECT          IC DBUS
+  11:common/prog/dbus/dbusmapping.h **** *   COMP_ABBREV      DBM
+  12:common/prog/dbus/dbusmapping.h ****  ******************************************************************************/
+  13:common/prog/dbus/dbusmapping.h ****  
+  14:common/prog/dbus/dbusmapping.h ****  
+  15:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  16:common/prog/dbus/dbusmapping.h **** /* DOCUMENTATION                                                              */
+  17:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  18:common/prog/dbus/dbusmapping.h **** /** \file
+  19:common/prog/dbus/dbusmapping.h ****  *
+  20:common/prog/dbus/dbusmapping.h ****  *  \ingroup  IC DBUS
+  21:common/prog/dbus/dbusmapping.h ****  *
+  22:common/prog/dbus/dbusmapping.h ****  *  \brief    Mapping for D-Bus-2 data link layer
+  23:common/prog/dbus/dbusmapping.h ****  *
+  24:common/prog/dbus/dbusmapping.h ****  */
+  25:common/prog/dbus/dbusmapping.h **** 
+  26:common/prog/dbus/dbusmapping.h **** /**
+  27:common/prog/dbus/dbusmapping.h **** \if dbus2mapping
+  28:common/prog/dbus/dbusmapping.h **** \file 
+  29:common/prog/dbus/dbusmapping.h ****      See Mainpage for a description of the mapping layer
+  30:common/prog/dbus/dbusmapping.h **** \endif
+  31:common/prog/dbus/dbusmapping.h **** */
+  32:common/prog/dbus/dbusmapping.h **** 
+  33:common/prog/dbus/dbusmapping.h **** /**
+  34:common/prog/dbus/dbusmapping.h **** \if dbus2mapping
+  35:common/prog/dbus/dbusmapping.h **** \mainpage dbus2mapping
+  36:common/prog/dbus/dbusmapping.h **** \else
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 9
+
+
+  37:common/prog/dbus/dbusmapping.h **** \file
+  38:common/prog/dbus/dbusmapping.h ****      Mapping for D-Bus-2 data link layer.
+  39:common/prog/dbus/dbusmapping.h **** \endif
+  40:common/prog/dbus/dbusmapping.h **** 
+  41:common/prog/dbus/dbusmapping.h **** \section introdbus2mapping Mapping to UART
+  42:common/prog/dbus/dbusmapping.h **** 
+  43:common/prog/dbus/dbusmapping.h ****     Mapping library for D-Bus-2 data link layer using a dedicated UART (e.g. UART_0).
+  44:common/prog/dbus/dbusmapping.h **** 
+  45:common/prog/dbus/dbusmapping.h ****     For Freescale HC08 the mapping layer needs about 40 byte extra ROM (RAM unchanged) for implemen
+  46:common/prog/dbus/dbusmapping.h ****     functions (compared to using macros, hence no mapping layer):
+  47:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vInit(uint8_t ucIndex)
+  48:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vEnable(void)
+  49:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vDisableTxEvent(void)
+  50:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vEnableTxEvent(void)
+  51:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vDisableRxEvent(void)
+  52:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vEnableRxEvent(void)
+  53:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_bIsRxError(void)
+  54:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_ucGetStatus(void)
+  55:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_ucGetRxData(void)
+  56:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_vSetTxData(uint8_t ucData)
+  57:common/prog/dbus/dbusmapping.h ****     \li DBM_UART_bIsRxOnGoing(void)\n\n
+  58:common/prog/dbus/dbusmapping.h ****     And in the \b opposite direction, mapping of:
+  59:common/prog/dbus/dbusmapping.h ****     \li DLL_vHandleRxEvent(void)
+  60:common/prog/dbus/dbusmapping.h ****     \li DLL_vHandleTxEvent(void)\n
+  61:common/prog/dbus/dbusmapping.h ****     through HUARTn_vHandleRxEvent() and HUARTn_vHandleTxEvent() (n having the meaning of the dedica
+  62:common/prog/dbus/dbusmapping.h **** 
+  63:common/prog/dbus/dbusmapping.h ****     \image html mapping.gif
+  64:common/prog/dbus/dbusmapping.h **** */
+  65:common/prog/dbus/dbusmapping.h **** 
+  66:common/prog/dbus/dbusmapping.h **** #ifndef DBUSMAPPING_H__
+  67:common/prog/dbus/dbusmapping.h **** #define DBUSMAPPING_H__
+  68:common/prog/dbus/dbusmapping.h **** 
+  69:common/prog/dbus/dbusmapping.h **** #ifdef __cplusplus
+  70:common/prog/dbus/dbusmapping.h **** extern "C" {
+  71:common/prog/dbus/dbusmapping.h **** #endif
+  72:common/prog/dbus/dbusmapping.h **** 
+  73:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  74:common/prog/dbus/dbusmapping.h **** /* INCLUDES                                                                   */
+  75:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  76:common/prog/dbus/dbusmapping.h **** 
+  77:common/prog/dbus/dbusmapping.h **** #include "LibTypes.h"
+  78:common/prog/dbus/dbusmapping.h **** #include "LibDefines.h"
+  79:common/prog/dbus/dbusmapping.h **** #include "hsup.h"
+  80:common/prog/dbus/dbusmapping.h **** #include "dbusdll.h"
+  81:common/prog/dbus/dbusmapping.h **** 
+  82:common/prog/dbus/dbusmapping.h **** #ifdef DBM_MCAL
+  83:common/prog/dbus/dbusmapping.h **** #include "mcal/mcal_includes.h"
+  84:common/prog/dbus/dbusmapping.h **** #endif
+  85:common/prog/dbus/dbusmapping.h **** 
+  86:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  87:common/prog/dbus/dbusmapping.h **** /* MACRO DEFINITIONS                                                          */
+  88:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+  89:common/prog/dbus/dbusmapping.h **** 
+  90:common/prog/dbus/dbusmapping.h **** #ifdef DBM_MCAL
+  91:common/prog/dbus/dbusmapping.h ****     #define DBM_UART_NOISE_ERROR                MCAL_ERROR_NOISE
+  92:common/prog/dbus/dbusmapping.h ****     #define DBM_UART_RX_OVERRUN_ERROR           MCAL_ERROR_OVERFLOW
+  93:common/prog/dbus/dbusmapping.h ****     #define DBM_UART_FRAMING_ERROR              MCAL_ERROR_FRAMING
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 10
+
+
+  94:common/prog/dbus/dbusmapping.h ****     #define DBM_UART_PARITY_ERROR               MCAL_ERROR_PARITY
+  95:common/prog/dbus/dbusmapping.h ****     #ifdef MUART_EVENT_LIN_BREAK                // some platforms does not provide UART RX Break si
+  96:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_BREAK               MUART_EVENT_LIN_BREAK
+  97:common/prog/dbus/dbusmapping.h ****     #endif //MUART_EVENT_LIN_BREAK
+  98:common/prog/dbus/dbusmapping.h **** #else
+  99:common/prog/dbus/dbusmapping.h **** /* Axivion Disable Style MisraC2012-5.4: "Macro identifiers shall be distinct." - It works correctl
+ 100:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_NOISE_ERROR
+ 101:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_NOISE_ERROR       HUART_NOISE_ERROR //!<Mapping of definition from huart l
+ 102:common/prog/dbus/dbusmapping.h ****     #else
+ 103:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_NOISE_ERROR 0u
+ 104:common/prog/dbus/dbusmapping.h ****     #endif
+ 105:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_RX_OVERRUN_ERROR
+ 106:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_OVERRUN_ERROR  HUART_RX_OVERRUN_ERROR //!<Mapping of definition from hu
+ 107:common/prog/dbus/dbusmapping.h ****     #else
+ 108:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_OVERRUN_ERROR 0u
+ 109:common/prog/dbus/dbusmapping.h ****     #endif
+ 110:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_FRAMING_ERROR
+ 111:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_FRAMING_ERROR     HUART_FRAMING_ERROR //!<Mapping of definition from huart
+ 112:common/prog/dbus/dbusmapping.h ****     #else
+ 113:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_FRAMING_ERROR 0u
+ 114:common/prog/dbus/dbusmapping.h ****     #endif
+ 115:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_PARITY_ERROR
+ 116:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_PARITY_ERROR     HUART_PARITY_ERROR //!<Mapping of definition from huart l
+ 117:common/prog/dbus/dbusmapping.h ****     #else
+ 118:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_PARITY_ERROR 0u
+ 119:common/prog/dbus/dbusmapping.h ****     #endif
+ 120:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_RX_BREAK
+ 121:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_BREAK          HUART_RX_BREAK //!<Mapping of definition from huart libr
+ 122:common/prog/dbus/dbusmapping.h ****     #else
+ 123:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_BREAK 0u
+ 124:common/prog/dbus/dbusmapping.h ****     #endif
+ 125:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_RX_IDLE
+ 126:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_IDLE           HUART_RX_IDLE //!<Mapping of definition from huart libra
+ 127:common/prog/dbus/dbusmapping.h ****     #else
+ 128:common/prog/dbus/dbusmapping.h ****     #ifdef  HUART_IDLE
+ 129:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_IDLE           HUART_IDLE //!<Mapping of definition from huart library.
+ 130:common/prog/dbus/dbusmapping.h ****     #else
+ 131:common/prog/dbus/dbusmapping.h ****         #define DBM_UART_RX_IDLE 0u
+ 132:common/prog/dbus/dbusmapping.h ****     #endif
+ 133:common/prog/dbus/dbusmapping.h ****     #endif
+ 134:common/prog/dbus/dbusmapping.h ****     #define FS_ISR_DBUS2_TX 0u       //!< Identification for the D-Bus-2 transmit interrupt used by
+ 135:common/prog/dbus/dbusmapping.h ****     #define FS_ISR_DBUS2_RX 1u       //!< Identification for the D-Bus-2 receive interrupt used by 
+ 136:common/prog/dbus/dbusmapping.h **** /* Axivion Enable Style MisraC2012-5.4 */
+ 137:common/prog/dbus/dbusmapping.h **** #endif //DBM_MCAL
+ 138:common/prog/dbus/dbusmapping.h **** 
+ 139:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+ 140:common/prog/dbus/dbusmapping.h **** /* PUBLIC FUNCTION DECLARATIONS                                               */
+ 141:common/prog/dbus/dbusmapping.h **** /******************************************************************************/
+ 142:common/prog/dbus/dbusmapping.h **** 
+ 143:common/prog/dbus/dbusmapping.h **** void DBM_UART_vInit(uint8_t ucIndex); //!<Mapping from data link layer to UART.
+ 144:common/prog/dbus/dbusmapping.h **** void DBM_UART_vEnable(void); //!<Mapping from data link layer to UART.
+ 145:common/prog/dbus/dbusmapping.h **** void DBM_UART_vDisableTxEvent(void); //!<Mapping from data link layer to UART.
+ 146:common/prog/dbus/dbusmapping.h **** void DBM_UART_vEnableTxEvent(void); //!<Mapping from data link layer to UART.
+ 147:common/prog/dbus/dbusmapping.h **** void DBM_UART_vDisableRxEvent(void); //!<Mapping from data link layer to UART.
+ 148:common/prog/dbus/dbusmapping.h **** void DBM_UART_vEnableRxEvent(void); //!<Mapping from data link layer to UART.
+ 149:common/prog/dbus/dbusmapping.h **** bool DBM_UART_bIsRxError(void); //!<Mapping from data link layer to UART.
+ 150:common/prog/dbus/dbusmapping.h **** uint8_t DBM_UART_ucGetStatus(void); //!<Mapping from data link layer to UART.
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 11
+
+
+ 151:common/prog/dbus/dbusmapping.h **** uint8_t DBM_UART_ucGetRxData(void); //!<Mapping from data link layer to UART.
+ 152:common/prog/dbus/dbusmapping.h **** void DBM_UART_vSetTxData(uint8_t ucData); //!<Mapping from data link layer to UART.
+ 153:common/prog/dbus/dbusmapping.h **** bool DBM_UART_bIsRxOnGoing(void); //!<Mapping from data link layer to UART.
+ 154:common/prog/dbus/dbusmapping.h **** 
+ 155:common/prog/dbus/dbusmapping.h **** void DBM_PERIPH_vSetBaudRate(uint8_t ucIndex, uint16_t uiBaudRate); //!<Function needed to set baud
+ 156:common/prog/dbus/dbusmapping.h **** 
+ 157:common/prog/dbus/dbusmapping.h **** 
+ 158:common/prog/dbus/dbusmapping.h **** /* Statistics functions */
+ 159:common/prog/dbus/dbusmapping.h **** uint32_t DBM_UART_ulGetNoiseCounter(void); //!< Interface function for accessing the noise counter.
+ 160:common/prog/dbus/dbusmapping.h **** uint8_t DBM_UART_ucGetUartOverrunCounter(void);//!< Interface function for accessing the overrun co
+ 161:common/prog/dbus/dbusmapping.h **** uint32_t DBM_UART_ulGetUartFramingErrorCounter(void);//!< Interface function for accessing the fram
+ 162:common/prog/dbus/dbusmapping.h **** uint32_t DBM_UART_ulGetUartBreakCounter(void);//!< Interface function for accessing the break count
+ 163:common/prog/dbus/dbusmapping.h **** 
+ 164:common/prog/dbus/dbusmapping.h **** /* The following two functions are called in the interrupt. */
+ 165:common/prog/dbus/dbusmapping.h **** void DBM_UART_vHandleRxEvent(void); //!<Mapping from UART receive interrupt to the corresponding da
+ 166:common/prog/dbus/dbusmapping.h **** void DBM_UART_vHandleTxEvent(void); //!<Mapping from UART transmit interrupt to the corresponding d
+ 167:common/prog/dbus/dbusmapping.h **** 
+ 168:common/prog/dbus/dbusmapping.h **** /* Timer functions - timer(s) can be provided by timerlib, or e.g. OS */
+ 169:common/prog/dbus/dbusmapping.h **** /**
+ 170:common/prog/dbus/dbusmapping.h ****  \brief Function called by data link layer for getting the circulating timer tick.
+ 171:common/prog/dbus/dbusmapping.h ****         This value runs from 0x00 to 0xFFFFFFFF and then starts at 0x00 again.
+ 172:common/prog/dbus/dbusmapping.h ****  \return Circulating 32bit counter value\n
+ 173:common/prog/dbus/dbusmapping.h ****  type       : #uint32_t\n
+ 174:common/prog/dbus/dbusmapping.h ****  range      : 0x00000000...0xFFFFFFFF
+ 175:common/prog/dbus/dbusmapping.h **** */
+ 176:common/prog/dbus/dbusmapping.h **** uint32_t DBM_ulGetCircleMicroSeconds(void);
+ 177:common/prog/dbus/dbusmapping.h **** 
+ 178:common/prog/dbus/dbusmapping.h **** #ifndef DBM_EXTERNAL_INTERRUPT_MAPPING
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+ 105              		.loc 2 179 20 view .LVU16
+ 106              	.LBB45:
+ 107              		.loc 2 179 42 view .LVU17
+ 108              	.LBE45:
+ 109              	.LBE44:
+ 309:app/prog/dbus/dbusmapping.c ****    /* HUART0_vEnable() when DBUS_UART_CHANNEL is 0 */
+ 110              		.loc 1 309 1 is_stmt 0 view .LVU18
+ 111 0000 10B5     		push	{r4, lr}
+ 112              	.LCFI1:
+ 113              		.cfi_def_cfa_offset 8
+ 114              		.cfi_offset 4, -8
+ 115              		.cfi_offset 14, -4
+ 116              	.LBB47:
+ 117              	.LBB46:
+ 118              		.loc 2 179 42 view .LVU19
+ 119 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ 120              	.LVL7:
+ 121              	.LBE46:
+ 122              	.LBE47:
+ 312:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 313:app/prog/dbus/dbusmapping.c ****    MUART_enable(&DBM_UART_dbusHandle);
+ 123              		.loc 1 313 4 is_stmt 1 view .LVU20
+ 314:app/prog/dbus/dbusmapping.c **** #else
+ 315:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnable)();
+ 316:app/prog/dbus/dbusmapping.c **** #endif
+ 317:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 318:app/prog/dbus/dbusmapping.c **** }
+ 124              		.loc 1 318 1 is_stmt 0 view .LVU21
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 12
+
+
+ 125              		@ sp needed
+ 313:app/prog/dbus/dbusmapping.c **** #else
+ 126              		.loc 1 313 4 view .LVU22
+ 127 0006 0348     		ldr	r0, .L5
+ 128 0008 FFF7FEFF 		bl	MUART_enable
+ 129              	.LVL8:
+ 317:app/prog/dbus/dbusmapping.c **** }
+ 130              		.loc 1 317 4 is_stmt 1 view .LVU23
+ 131              	.LBB48:
+ 132              	.LBI48:
+ 180:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 133              		.loc 2 180 20 view .LVU24
+ 134              	.LBB49:
+ 135              		.loc 2 180 41 view .LVU25
+ 136 000c FFF7FEFF 		bl	HSUP_vEnableInt
+ 137              	.LVL9:
+ 138              	.LBE49:
+ 139              	.LBE48:
+ 140              		.loc 1 318 1 is_stmt 0 view .LVU26
+ 141 0010 10BD     		pop	{r4, pc}
+ 142              	.L6:
+ 143 0012 C046     		.align	2
+ 144              	.L5:
+ 145 0014 00000000 		.word	.LANCHOR1
+ 146              		.cfi_endproc
+ 147              	.LFE116:
+ 149              		.section	.text.DBM_UART_vDisableTxEvent,"ax",%progbits
+ 150              		.align	1
+ 151              		.global	DBM_UART_vDisableTxEvent
+ 152              		.syntax unified
+ 153              		.code	16
+ 154              		.thumb_func
+ 156              	DBM_UART_vDisableTxEvent:
+ 157              	.LFB117:
+ 319:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 320:app/prog/dbus/dbusmapping.c **** void DBM_UART_vDisableTxEvent(void)
+ 321:app/prog/dbus/dbusmapping.c **** {
+ 158              		.loc 1 321 1 is_stmt 1 view -0
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 323:app/prog/dbus/dbusmapping.c ****    /* HUART0_vDisableTxEvent(); when DBUS_UART_CHANNEL is 0 */
+ 324:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 162              		.loc 1 324 4 view .LVU28
+ 163              	.LBB50:
+ 164              	.LBI50:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 165              		.loc 2 179 20 view .LVU29
+ 166              	.LBB51:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 167              		.loc 2 179 42 view .LVU30
+ 168              	.LBE51:
+ 169              	.LBE50:
+ 321:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 170              		.loc 1 321 1 is_stmt 0 view .LVU31
+ 171 0000 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 13
+
+
+ 172              	.LCFI2:
+ 173              		.cfi_def_cfa_offset 8
+ 174              		.cfi_offset 4, -8
+ 175              		.cfi_offset 14, -4
+ 176              	.LBB53:
+ 177              	.LBB52:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 178              		.loc 2 179 42 view .LVU32
+ 179 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ 180              	.LVL10:
+ 181              	.LBE52:
+ 182              	.LBE53:
+ 325:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 326:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_WRITE_BYTE);
+ 183              		.loc 1 326 4 is_stmt 1 view .LVU33
+ 327:app/prog/dbus/dbusmapping.c **** #else
+ 328:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vDisableTxEvent)();
+ 329:app/prog/dbus/dbusmapping.c **** #endif
+ 330:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 331:app/prog/dbus/dbusmapping.c **** #else
+ 332:app/prog/dbus/dbusmapping.c ****    DBM_UART_ucTxDisabled = DBM_UART_DISABLE_TX_EVENT;
+ 333:app/prog/dbus/dbusmapping.c **** #endif
+ 334:app/prog/dbus/dbusmapping.c **** }
+ 184              		.loc 1 334 1 is_stmt 0 view .LVU34
+ 185              		@ sp needed
+ 326:app/prog/dbus/dbusmapping.c **** #else
+ 186              		.loc 1 326 10 view .LVU35
+ 187 0006 2022     		movs	r2, #32
+ 188 0008 0021     		movs	r1, #0
+ 189 000a 0348     		ldr	r0, .L8
+ 190 000c FFF7FEFF 		bl	MUART_disableEvent
+ 191              	.LVL11:
+ 330:app/prog/dbus/dbusmapping.c **** #else
+ 192              		.loc 1 330 4 is_stmt 1 view .LVU36
+ 193              	.LBB54:
+ 194              	.LBI54:
+ 195              		.loc 2 180 20 view .LVU37
+ 196              	.LBB55:
+ 197              		.loc 2 180 41 view .LVU38
+ 198 0010 FFF7FEFF 		bl	HSUP_vEnableInt
+ 199              	.LVL12:
+ 200              	.LBE55:
+ 201              	.LBE54:
+ 202              		.loc 1 334 1 is_stmt 0 view .LVU39
+ 203 0014 10BD     		pop	{r4, pc}
+ 204              	.L9:
+ 205 0016 C046     		.align	2
+ 206              	.L8:
+ 207 0018 00000000 		.word	.LANCHOR1
+ 208              		.cfi_endproc
+ 209              	.LFE117:
+ 211              		.section	.text.DBM_UART_vEnableTxEvent,"ax",%progbits
+ 212              		.align	1
+ 213              		.global	DBM_UART_vEnableTxEvent
+ 214              		.syntax unified
+ 215              		.code	16
+ 216              		.thumb_func
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 14
+
+
+ 218              	DBM_UART_vEnableTxEvent:
+ 219              	.LFB118:
+ 335:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 336:app/prog/dbus/dbusmapping.c **** void DBM_UART_vEnableTxEvent(void)
+ 337:app/prog/dbus/dbusmapping.c **** {
+ 220              		.loc 1 337 1 is_stmt 1 view -0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 0
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 338:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 339:app/prog/dbus/dbusmapping.c ****    /* HUART0_vEnableTxEvent(); when DBUS_UART_CHANNEL is 0 */
+ 340:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 224              		.loc 1 340 4 view .LVU41
+ 225              	.LBB56:
+ 226              	.LBI56:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 227              		.loc 2 179 20 view .LVU42
+ 228              	.LBB57:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 229              		.loc 2 179 42 view .LVU43
+ 230              	.LBE57:
+ 231              	.LBE56:
+ 337:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 232              		.loc 1 337 1 is_stmt 0 view .LVU44
+ 233 0000 10B5     		push	{r4, lr}
+ 234              	.LCFI3:
+ 235              		.cfi_def_cfa_offset 8
+ 236              		.cfi_offset 4, -8
+ 237              		.cfi_offset 14, -4
+ 238              	.LBB59:
+ 239              	.LBB58:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 240              		.loc 2 179 42 view .LVU45
+ 241 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ 242              	.LVL13:
+ 243              	.LBE58:
+ 244              	.LBE59:
+ 341:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 342:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_WRITE_BYTE);
+ 245              		.loc 1 342 4 is_stmt 1 view .LVU46
+ 343:app/prog/dbus/dbusmapping.c **** #else
+ 344:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnableTxEvent)();
+ 345:app/prog/dbus/dbusmapping.c **** #endif
+ 346:app/prog/dbus/dbusmapping.c **** #ifdef PSoC4
+ 347:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vSetTxEvent)();
+ 348:app/prog/dbus/dbusmapping.c **** #endif
+ 349:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+ 350:app/prog/dbus/dbusmapping.c ****     #ifdef DBM_MCAL
+ 351:app/prog/dbus/dbusmapping.c ****         /* Event MCAL_EVENT_WRITE_BYTE implies that "byte is being written" at this moment. 
+ 352:app/prog/dbus/dbusmapping.c ****            In reality however, this event happens when TX buffer becomes empty and therefore 
+ 353:app/prog/dbus/dbusmapping.c ****            it is possible to set a new byte for transmission */
+ 354:app/prog/dbus/dbusmapping.c ****         if(MUART_isEvent(DBM_UART_dbusChannel, MCAL_EVENT_WRITE_BYTE))
+ 355:app/prog/dbus/dbusmapping.c ****     #else
+ 356:app/prog/dbus/dbusmapping.c ****         //lint -e{9029} some platforms uses historic BOOL others bool, tested for both
+ 357:app/prog/dbus/dbusmapping.c ****         if (DBM_MAP_UART(DBUS_UART_CHANNEL, _bIsTxEvent)() == 0U) //if HUART0_bIsTxEvent()
+ 358:app/prog/dbus/dbusmapping.c ****     #endif
+ 359:app/prog/dbus/dbusmapping.c ****         {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 15
+
+
+ 360:app/prog/dbus/dbusmapping.c ****             /* Set TX Interrupt pending. - NB! For Stm32 the interrupt pending flag cannot be set, 
+ 361:app/prog/dbus/dbusmapping.c ****             DBM_UART_SET_TX_INTERRUPT();
+ 362:app/prog/dbus/dbusmapping.c ****         }
+ 363:app/prog/dbus/dbusmapping.c **** #endif
+ 364:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 365:app/prog/dbus/dbusmapping.c **** #else
+ 366:app/prog/dbus/dbusmapping.c ****    //__DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 367:app/prog/dbus/dbusmapping.c ****    if (DBM_UART_bTxEventAlreadyEnabled == 0U)
+ 368:app/prog/dbus/dbusmapping.c ****    {
+ 369:app/prog/dbus/dbusmapping.c ****       DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnableTxEvent)(); //Enable TxEvent
+ 370:app/prog/dbus/dbusmapping.c ****       DBM_UART_bTxEventAlreadyEnabled = 1U;
+ 371:app/prog/dbus/dbusmapping.c ****    }
+ 372:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 373:app/prog/dbus/dbusmapping.c ****    DBM_UART_ucTxDisabled = DBM_UART_TX_EVENT_ENABLED;
+ 374:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_INITIAL_MANUAL_TX_INT_CALL_NEEDED
+ 375:app/prog/dbus/dbusmapping.c ****    //lint -e{9029} some platforms uses historic BOOL others bool, tested for both
+ 376:app/prog/dbus/dbusmapping.c ****    if (DBM_MAP_UART(DBUS_UART_CHANNEL, _bIsTxEvent)() == 0U)
+ 377:app/prog/dbus/dbusmapping.c ****    {
+ 378:app/prog/dbus/dbusmapping.c ****       /* Set TX Interrupt pending. */
+ 379:app/prog/dbus/dbusmapping.c ****       DBM_UART_SET_TX_INTERRUPT();
+ 380:app/prog/dbus/dbusmapping.c ****    }
+ 381:app/prog/dbus/dbusmapping.c **** #endif
+ 382:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 383:app/prog/dbus/dbusmapping.c **** #endif
+ 384:app/prog/dbus/dbusmapping.c **** }
+ 246              		.loc 1 384 1 is_stmt 0 view .LVU47
+ 247              		@ sp needed
+ 342:app/prog/dbus/dbusmapping.c **** #else
+ 248              		.loc 1 342 10 view .LVU48
+ 249 0006 2022     		movs	r2, #32
+ 250 0008 0349     		ldr	r1, .L11
+ 251 000a 0448     		ldr	r0, .L11+4
+ 252 000c FFF7FEFF 		bl	MUART_enableEvent
+ 253              	.LVL14:
+ 364:app/prog/dbus/dbusmapping.c **** #else
+ 254              		.loc 1 364 4 is_stmt 1 view .LVU49
+ 255              	.LBB60:
+ 256              	.LBI60:
+ 257              		.loc 2 180 20 view .LVU50
+ 258              	.LBB61:
+ 259              		.loc 2 180 41 view .LVU51
+ 260 0010 FFF7FEFF 		bl	HSUP_vEnableInt
+ 261              	.LVL15:
+ 262              	.LBE61:
+ 263              	.LBE60:
+ 264              		.loc 1 384 1 is_stmt 0 view .LVU52
+ 265 0014 10BD     		pop	{r4, pc}
+ 266              	.L12:
+ 267 0016 C046     		.align	2
+ 268              	.L11:
+ 269 0018 00000000 		.word	.LANCHOR2
+ 270 001c 00000000 		.word	.LANCHOR1
+ 271              		.cfi_endproc
+ 272              	.LFE118:
+ 274              		.section	.text.DBM_UART_vDisableRxEvent,"ax",%progbits
+ 275              		.align	1
+ 276              		.global	DBM_UART_vDisableRxEvent
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 16
+
+
+ 277              		.syntax unified
+ 278              		.code	16
+ 279              		.thumb_func
+ 281              	DBM_UART_vDisableRxEvent:
+ 282              	.LFB119:
+ 385:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 386:app/prog/dbus/dbusmapping.c **** void DBM_UART_vDisableRxEvent(void)
+ 387:app/prog/dbus/dbusmapping.c **** {
+ 283              		.loc 1 387 1 is_stmt 1 view -0
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 0
+ 286              		@ frame_needed = 0, uses_anonymous_args = 0
+ 388:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 389:app/prog/dbus/dbusmapping.c ****    /* HUART0_vDisableRxEvent(); when DBUS_UART_CHANNEL is 0 */
+ 390:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 287              		.loc 1 390 4 view .LVU54
+ 288              	.LBB62:
+ 289              	.LBI62:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 290              		.loc 2 179 20 view .LVU55
+ 291              	.LBB63:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 292              		.loc 2 179 42 view .LVU56
+ 293              	.LBE63:
+ 294              	.LBE62:
+ 387:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 295              		.loc 1 387 1 is_stmt 0 view .LVU57
+ 296 0000 10B5     		push	{r4, lr}
+ 297              	.LCFI4:
+ 298              		.cfi_def_cfa_offset 8
+ 299              		.cfi_offset 4, -8
+ 300              		.cfi_offset 14, -4
+ 301              	.LBB65:
+ 302              	.LBB64:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 303              		.loc 2 179 42 view .LVU58
+ 304 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ 305              	.LVL16:
+ 306              	.LBE64:
+ 307              	.LBE65:
+ 391:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 392:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_ERROR);
+ 308              		.loc 1 392 4 is_stmt 1 view .LVU59
+ 393:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_READ_BYTE);
+ 394:app/prog/dbus/dbusmapping.c **** #else
+ 395:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vDisableRxEvent)();
+ 396:app/prog/dbus/dbusmapping.c **** #endif
+ 397:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 398:app/prog/dbus/dbusmapping.c **** #else
+ 399:app/prog/dbus/dbusmapping.c ****    //__DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 400:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_TUNNEL_MODE_SUPPORT
+ 401:app/prog/dbus/dbusmapping.c **** #error Tunnel mode is not supported when the Rx/Tx interrupts cannot be disabled (__DBM_DBUS_MAPPIN
+ 402:app/prog/dbus/dbusmapping.c **** #endif
+ 403:app/prog/dbus/dbusmapping.c ****    DBM_UART_ucRxDisabled = DBM_UART_DISABLE_RX_EVENT;
+ 404:app/prog/dbus/dbusmapping.c **** #endif
+ 405:app/prog/dbus/dbusmapping.c **** }
+ 309              		.loc 1 405 1 is_stmt 0 view .LVU60
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 17
+
+
+ 310              		@ sp needed
+ 392:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_READ_BYTE);
+ 311              		.loc 1 392 10 view .LVU61
+ 312 0006 8022     		movs	r2, #128
+ 313 0008 064C     		ldr	r4, .L14
+ 314 000a 0021     		movs	r1, #0
+ 315 000c 2000     		movs	r0, r4
+ 316 000e D205     		lsls	r2, r2, #23
+ 317 0010 FFF7FEFF 		bl	MUART_disableEvent
+ 318              	.LVL17:
+ 393:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_READ_BYTE);
+ 319              		.loc 1 393 4 is_stmt 1 view .LVU62
+ 393:app/prog/dbus/dbusmapping.c ****    (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_READ_BYTE);
+ 320              		.loc 1 393 10 is_stmt 0 view .LVU63
+ 321 0014 1022     		movs	r2, #16
+ 322 0016 0021     		movs	r1, #0
+ 323 0018 2000     		movs	r0, r4
+ 324 001a FFF7FEFF 		bl	MUART_disableEvent
+ 325              	.LVL18:
+ 397:app/prog/dbus/dbusmapping.c **** #else
+ 326              		.loc 1 397 4 is_stmt 1 view .LVU64
+ 327              	.LBB66:
+ 328              	.LBI66:
+ 329              		.loc 2 180 20 view .LVU65
+ 330              	.LBB67:
+ 331              		.loc 2 180 41 view .LVU66
+ 332 001e FFF7FEFF 		bl	HSUP_vEnableInt
+ 333              	.LVL19:
+ 334              	.LBE67:
+ 335              	.LBE66:
+ 336              		.loc 1 405 1 is_stmt 0 view .LVU67
+ 337 0022 10BD     		pop	{r4, pc}
+ 338              	.L15:
+ 339              		.align	2
+ 340              	.L14:
+ 341 0024 00000000 		.word	.LANCHOR1
+ 342              		.cfi_endproc
+ 343              	.LFE119:
+ 345              		.section	.text.DBM_UART_vEnableRxEvent,"ax",%progbits
+ 346              		.align	1
+ 347              		.global	DBM_UART_vEnableRxEvent
+ 348              		.syntax unified
+ 349              		.code	16
+ 350              		.thumb_func
+ 352              	DBM_UART_vEnableRxEvent:
+ 353              	.LFB120:
+ 406:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 407:app/prog/dbus/dbusmapping.c **** void DBM_UART_vEnableRxEvent(void)
+ 408:app/prog/dbus/dbusmapping.c **** {
+ 354              		.loc 1 408 1 is_stmt 1 view -0
+ 355              		.cfi_startproc
+ 356              		@ args = 0, pretend = 0, frame = 0
+ 357              		@ frame_needed = 0, uses_anonymous_args = 0
+ 409:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 410:app/prog/dbus/dbusmapping.c ****    /* HUART0_vEnableRxEvent(); when DBUS_UART_CHANNEL is 0 */
+ 411:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 358              		.loc 1 411 4 view .LVU69
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 18
+
+
+ 359              	.LBB68:
+ 360              	.LBI68:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 361              		.loc 2 179 20 view .LVU70
+ 362              	.LBB69:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 363              		.loc 2 179 42 view .LVU71
+ 364              	.LBE69:
+ 365              	.LBE68:
+ 408:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 366              		.loc 1 408 1 is_stmt 0 view .LVU72
+ 367 0000 10B5     		push	{r4, lr}
+ 368              	.LCFI5:
+ 369              		.cfi_def_cfa_offset 8
+ 370              		.cfi_offset 4, -8
+ 371              		.cfi_offset 14, -4
+ 372              	.LBB71:
+ 373              	.LBB70:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 374              		.loc 2 179 42 view .LVU73
+ 375 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ 376              	.LVL20:
+ 377              	.LBE70:
+ 378              	.LBE71:
+ 412:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 413:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_ERROR);
+ 379              		.loc 1 413 4 is_stmt 1 view .LVU74
+ 414:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_READ_BYTE);
+ 415:app/prog/dbus/dbusmapping.c **** #else
+ 416:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnableRxEvent)();
+ 417:app/prog/dbus/dbusmapping.c **** #endif
+ 418:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 419:app/prog/dbus/dbusmapping.c **** #else
+ 420:app/prog/dbus/dbusmapping.c ****    /* Enable RxEvent only once, as this will never be disabled again under this compiler switch set
+ 421:app/prog/dbus/dbusmapping.c ****    static uint8_t DBM_UART_bRxEventAlreadyEnabled;
+ 422:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 423:app/prog/dbus/dbusmapping.c ****    if (!DBM_UART_bRxEventAlreadyEnabled)
+ 424:app/prog/dbus/dbusmapping.c ****    {
+ 425:app/prog/dbus/dbusmapping.c ****       DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnableRxEvent)();
+ 426:app/prog/dbus/dbusmapping.c ****       DBM_UART_bRxEventAlreadyEnabled = 1U;
+ 427:app/prog/dbus/dbusmapping.c ****    }
+ 428:app/prog/dbus/dbusmapping.c ****    if (DBM_UART_ucRxDisabled == DBM_UART_RX_EVENT_DURING_LOCK_STATE)
+ 429:app/prog/dbus/dbusmapping.c ****    {
+ 430:app/prog/dbus/dbusmapping.c ****       DLL_vHandleRxEvent();
+ 431:app/prog/dbus/dbusmapping.c ****    }
+ 432:app/prog/dbus/dbusmapping.c ****    DBM_UART_ucRxDisabled = DBM_UART_RX_EVENT_ENABLED;
+ 433:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 434:app/prog/dbus/dbusmapping.c **** #endif
+ 435:app/prog/dbus/dbusmapping.c **** }
+ 380              		.loc 1 435 1 is_stmt 0 view .LVU75
+ 381              		@ sp needed
+ 413:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_READ_BYTE);
+ 382              		.loc 1 413 10 view .LVU76
+ 383 0006 8022     		movs	r2, #128
+ 384 0008 064C     		ldr	r4, .L17
+ 385 000a 0021     		movs	r1, #0
+ 386 000c 2000     		movs	r0, r4
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 19
+
+
+ 387 000e D205     		lsls	r2, r2, #23
+ 388 0010 FFF7FEFF 		bl	MUART_enableEvent
+ 389              	.LVL21:
+ 414:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_READ_BYTE);
+ 390              		.loc 1 414 4 is_stmt 1 view .LVU77
+ 414:app/prog/dbus/dbusmapping.c ****    (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_READ_BYTE);
+ 391              		.loc 1 414 10 is_stmt 0 view .LVU78
+ 392 0014 1022     		movs	r2, #16
+ 393 0016 0449     		ldr	r1, .L17+4
+ 394 0018 2000     		movs	r0, r4
+ 395 001a FFF7FEFF 		bl	MUART_enableEvent
+ 396              	.LVL22:
+ 418:app/prog/dbus/dbusmapping.c **** #else
+ 397              		.loc 1 418 4 is_stmt 1 view .LVU79
+ 398              	.LBB72:
+ 399              	.LBI72:
+ 400              		.loc 2 180 20 view .LVU80
+ 401              	.LBB73:
+ 402              		.loc 2 180 41 view .LVU81
+ 403 001e FFF7FEFF 		bl	HSUP_vEnableInt
+ 404              	.LVL23:
+ 405              	.LBE73:
+ 406              	.LBE72:
+ 407              		.loc 1 435 1 is_stmt 0 view .LVU82
+ 408 0022 10BD     		pop	{r4, pc}
+ 409              	.L18:
+ 410              		.align	2
+ 411              	.L17:
+ 412 0024 00000000 		.word	.LANCHOR1
+ 413 0028 00000000 		.word	.LANCHOR2
+ 414              		.cfi_endproc
+ 415              	.LFE120:
+ 417              		.section	.text.DBM_UART_bIsRxError,"ax",%progbits
+ 418              		.align	1
+ 419              		.global	DBM_UART_bIsRxError
+ 420              		.syntax unified
+ 421              		.code	16
+ 422              		.thumb_func
+ 424              	DBM_UART_bIsRxError:
+ 425              	.LFB121:
+ 436:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 437:app/prog/dbus/dbusmapping.c **** bool DBM_UART_bIsRxError(void)
+ 438:app/prog/dbus/dbusmapping.c **** {
+ 426              		.loc 1 438 1 is_stmt 1 view -0
+ 427              		.cfi_startproc
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 0, uses_anonymous_args = 0
+ 439:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetRxError(); when DBUS_UART_CHANNEL is 0 */
+ 440:app/prog/dbus/dbusmapping.c ****       Terror tError;
+ 430              		.loc 1 440 7 view .LVU84
+ 441:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 442:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 443:app/prog/dbus/dbusmapping.c **** #endif
+ 444:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 445:app/prog/dbus/dbusmapping.c ****    tError = (Terror)(MUART_getError(&DBM_UART_dbusHandle));  //lint !e571 suspicious cast, cast fro
+ 431              		.loc 1 445 4 view .LVU85
+ 438:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetRxError(); when DBUS_UART_CHANNEL is 0 */
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 20
+
+
+ 432              		.loc 1 438 1 is_stmt 0 view .LVU86
+ 433 0000 10B5     		push	{r4, lr}
+ 434              	.LCFI6:
+ 435              		.cfi_def_cfa_offset 8
+ 436              		.cfi_offset 4, -8
+ 437              		.cfi_offset 14, -4
+ 438              		.loc 1 445 22 view .LVU87
+ 439 0002 1048     		ldr	r0, .L35
+ 440 0004 FFF7FEFF 		bl	MUART_getError
+ 441              	.LVL24:
+ 442              		.loc 1 445 11 view .LVU88
+ 443 0008 83B2     		uxth	r3, r0
+ 444              	.LVL25:
+ 446:app/prog/dbus/dbusmapping.c **** #else
+ 447:app/prog/dbus/dbusmapping.c ****    tError = (Terror)DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxError)();
+ 448:app/prog/dbus/dbusmapping.c **** #endif
+ 449:app/prog/dbus/dbusmapping.c **** #ifdef DBM_UART_REMOVE_OVERRUN_ERROR
+ 450:app/prog/dbus/dbusmapping.c ****    /* This macro is only defined for Stm32F0 and Stm32F3 platforms and empty for others.
+ 451:app/prog/dbus/dbusmapping.c ****                   In case overrun errors must explicitly be removed on other platforms, macro must 
+ 452:app/prog/dbus/dbusmapping.c ****    DBM_UART_vRemoveOverrunError();
+ 453:app/prog/dbus/dbusmapping.c **** #endif
+ 454:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 455:app/prog/dbus/dbusmapping.c ****    if (DBM_UART_ucRxDisabled == DBM_UART_RX_EVENT_DURING_LOCK_STATE)
+ 456:app/prog/dbus/dbusmapping.c ****    {
+ 457:app/prog/dbus/dbusmapping.c ****       tError = DBM_UART_ucRxError;
+ 458:app/prog/dbus/dbusmapping.c ****    }
+ 459:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 460:app/prog/dbus/dbusmapping.c **** #endif
+ 461:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_EXCLUDE_ERROR_COUNTERS
+ 462:app/prog/dbus/dbusmapping.c ****    /* Error counters */
+ 463:app/prog/dbus/dbusmapping.c ****    if (tError != 0U)
+ 445              		.loc 1 463 4 is_stmt 1 view .LVU89
+ 446              		.loc 1 463 7 is_stmt 0 view .LVU90
+ 447 000a 002B     		cmp	r3, #0
+ 448 000c 13D0     		beq	.L21
+ 464:app/prog/dbus/dbusmapping.c ****    {
+ 465:app/prog/dbus/dbusmapping.c ****       /* NB! Break, Overrun and Framing-error variables are not limited at 255, these counters may 
+ 466:app/prog/dbus/dbusmapping.c ****       if ((tError & (Terror)DBM_UART_NOISE_ERROR) != 0U)   //lint !e587 !e774 always evaluates to F
+ 449              		.loc 1 466 7 is_stmt 1 view .LVU91
+ 450              		.loc 1 466 10 is_stmt 0 view .LVU92
+ 451 000e 0207     		lsls	r2, r0, #28
+ 452 0010 03D0     		beq	.L22
+ 467:app/prog/dbus/dbusmapping.c ****       {
+ 468:app/prog/dbus/dbusmapping.c ****          DBM_UART_ulNoiseCounter++;
+ 453              		.loc 1 468 10 is_stmt 1 view .LVU93
+ 454              		.loc 1 468 33 is_stmt 0 view .LVU94
+ 455 0012 0D49     		ldr	r1, .L35+4
+ 456 0014 0A68     		ldr	r2, [r1]
+ 457 0016 0132     		adds	r2, r2, #1
+ 458 0018 0A60     		str	r2, [r1]
+ 459              	.L22:
+ 469:app/prog/dbus/dbusmapping.c ****       }
+ 470:app/prog/dbus/dbusmapping.c ****       if ((tError & (Terror)DBM_UART_RX_OVERRUN_ERROR) != 0U)
+ 460              		.loc 1 470 7 is_stmt 1 view .LVU95
+ 461              		.loc 1 470 10 is_stmt 0 view .LVU96
+ 462 001a 0D22     		movs	r2, #13
+ 463 001c 1042     		tst	r0, r2
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 21
+
+
+ 464 001e 03D0     		beq	.L23
+ 471:app/prog/dbus/dbusmapping.c ****       {
+ 472:app/prog/dbus/dbusmapping.c ****          DBM_UART_ucOverrunErrorCounter++;
+ 465              		.loc 1 472 10 is_stmt 1 view .LVU97
+ 466              		.loc 1 472 40 is_stmt 0 view .LVU98
+ 467 0020 0A49     		ldr	r1, .L35+8
+ 468 0022 0A78     		ldrb	r2, [r1]
+ 469 0024 0132     		adds	r2, r2, #1
+ 470 0026 0A70     		strb	r2, [r1]
+ 471              	.L23:
+ 473:app/prog/dbus/dbusmapping.c ****       }
+ 474:app/prog/dbus/dbusmapping.c ****       if ((tError & (Terror)DBM_UART_FRAMING_ERROR) != 0U)
+ 472              		.loc 1 474 7 is_stmt 1 view .LVU99
+ 473              		.loc 1 474 10 is_stmt 0 view .LVU100
+ 474 0028 0C22     		movs	r2, #12
+ 475 002a 1042     		tst	r0, r2
+ 476 002c 03D0     		beq	.L21
+ 475:app/prog/dbus/dbusmapping.c ****       {
+ 476:app/prog/dbus/dbusmapping.c ****          DBM_UART_ulFramingErrorCounter++;
+ 477              		.loc 1 476 10 is_stmt 1 view .LVU101
+ 478              		.loc 1 476 40 is_stmt 0 view .LVU102
+ 479 002e 0849     		ldr	r1, .L35+12
+ 480 0030 0A68     		ldr	r2, [r1]
+ 481 0032 0132     		adds	r2, r2, #1
+ 482 0034 0A60     		str	r2, [r1]
+ 483              	.L21:
+ 477:app/prog/dbus/dbusmapping.c ****          /* A break also forces a framing error, hence it is adequate to check this only when frami
+ 478:app/prog/dbus/dbusmapping.c ****          #if defined(DBM_UART_RX_BREAK)
+ 479:app/prog/dbus/dbusmapping.c ****          if ((DBM_UART_ucGetStatus() & DBM_UART_RX_BREAK) != 0U)
+ 480:app/prog/dbus/dbusmapping.c ****          {
+ 481:app/prog/dbus/dbusmapping.c ****             DBM_UART_ulBreakCounter++;
+ 482:app/prog/dbus/dbusmapping.c ****          }
+ 483:app/prog/dbus/dbusmapping.c ****          #endif
+ 484:app/prog/dbus/dbusmapping.c ****       }
+ 485:app/prog/dbus/dbusmapping.c ****    }
+ 486:app/prog/dbus/dbusmapping.c **** #else
+ 487:app/prog/dbus/dbusmapping.c ****    //No Error counters
+ 488:app/prog/dbus/dbusmapping.c **** #endif
+ 489:app/prog/dbus/dbusmapping.c ****    if ((tError & ~(Terror)DBM_UART_NOISE_ERROR) == 0U) //Ignore noise errors
+ 484              		.loc 1 489 4 is_stmt 1 view .LVU103
+ 485              		.loc 1 489 16 is_stmt 0 view .LVU104
+ 486 0036 0F22     		movs	r2, #15
+ 490:app/prog/dbus/dbusmapping.c ****    {
+ 491:app/prog/dbus/dbusmapping.c ****       return false;   //No relevant error
+ 492:app/prog/dbus/dbusmapping.c ****    }
+ 493:app/prog/dbus/dbusmapping.c ****    else
+ 494:app/prog/dbus/dbusmapping.c ****    {
+ 495:app/prog/dbus/dbusmapping.c ****       return true;    //Relevant error(s) occurred
+ 496:app/prog/dbus/dbusmapping.c ****    }
+ 497:app/prog/dbus/dbusmapping.c **** }
+ 487              		.loc 1 497 1 view .LVU105
+ 488              		@ sp needed
+ 489:app/prog/dbus/dbusmapping.c ****    {
+ 489              		.loc 1 489 16 view .LVU106
+ 490 0038 9343     		bics	r3, r2
+ 491              	.LVL26:
+ 489:app/prog/dbus/dbusmapping.c ****    {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 22
+
+
+ 492              		.loc 1 489 7 view .LVU107
+ 493 003a 5A1E     		subs	r2, r3, #1
+ 494 003c 9341     		sbcs	r3, r3, r2
+ 495              		.loc 1 497 1 view .LVU108
+ 496 003e D8B2     		uxtb	r0, r3
+ 497              	.LVL27:
+ 498              		.loc 1 497 1 view .LVU109
+ 499 0040 10BD     		pop	{r4, pc}
+ 500              	.L36:
+ 501 0042 C046     		.align	2
+ 502              	.L35:
+ 503 0044 00000000 		.word	.LANCHOR1
+ 504 0048 00000000 		.word	.LANCHOR3
+ 505 004c 00000000 		.word	.LANCHOR4
+ 506 0050 00000000 		.word	.LANCHOR5
+ 507              		.cfi_endproc
+ 508              	.LFE121:
+ 510              		.section	.text.DBM_UART_ucGetStatus,"ax",%progbits
+ 511              		.align	1
+ 512              		.global	DBM_UART_ucGetStatus
+ 513              		.syntax unified
+ 514              		.code	16
+ 515              		.thumb_func
+ 517              	DBM_UART_ucGetStatus:
+ 518              	.LFB122:
+ 498:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 499:app/prog/dbus/dbusmapping.c **** uint8_t DBM_UART_ucGetStatus(void)
+ 500:app/prog/dbus/dbusmapping.c **** {
+ 519              		.loc 1 500 1 is_stmt 1 view -0
+ 520              		.cfi_startproc
+ 521              		@ args = 0, pretend = 0, frame = 0
+ 522              		@ frame_needed = 0, uses_anonymous_args = 0
+ 501:app/prog/dbus/dbusmapping.c ****    uint8_t ucStatus;
+ 523              		.loc 1 501 4 view .LVU111
+ 502:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 524              		.loc 1 502 4 view .LVU112
+ 525              	.LBB74:
+ 526              	.LBI74:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 527              		.loc 2 179 20 view .LVU113
+ 528              	.LBB75:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 529              		.loc 2 179 42 view .LVU114
+ 530              	.LBE75:
+ 531              	.LBE74:
+ 500:app/prog/dbus/dbusmapping.c ****    uint8_t ucStatus;
+ 532              		.loc 1 500 1 is_stmt 0 view .LVU115
+ 533 0000 10B5     		push	{r4, lr}
+ 534              	.LCFI7:
+ 535              		.cfi_def_cfa_offset 8
+ 536              		.cfi_offset 4, -8
+ 537              		.cfi_offset 14, -4
+ 538              	.LBB77:
+ 539              	.LBB76:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 540              		.loc 2 179 42 view .LVU116
+ 541 0002 FFF7FEFF 		bl	HSUP_vDisableInt
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 23
+
+
+ 542              	.LVL28:
+ 543              	.LBE76:
+ 544              	.LBE77:
+ 503:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 504:app/prog/dbus/dbusmapping.c ****    ucStatus = (uint8_t)MUART_getStatusReg(DBM_UART_dbusChannel);
+ 545              		.loc 1 504 4 is_stmt 1 view .LVU117
+ 505:app/prog/dbus/dbusmapping.c **** #else
+ 506:app/prog/dbus/dbusmapping.c ****    ucStatus = (uint8_t)DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetStatus)();
+ 507:app/prog/dbus/dbusmapping.c **** #endif
+ 508:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 509:app/prog/dbus/dbusmapping.c ****    return ucStatus;
+ 510:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetStatus(); when DBUS_UART_CHANNEL is 0  */
+ 511:app/prog/dbus/dbusmapping.c **** }
+ 546              		.loc 1 511 1 is_stmt 0 view .LVU118
+ 547              		@ sp needed
+ 504:app/prog/dbus/dbusmapping.c **** #else
+ 548              		.loc 1 504 24 view .LVU119
+ 549 0006 0448     		ldr	r0, .L38
+ 550 0008 FFF7FEFF 		bl	MUART_getStatusReg
+ 551              	.LVL29:
+ 552 000c 0400     		movs	r4, r0
+ 553              	.LVL30:
+ 508:app/prog/dbus/dbusmapping.c ****    return ucStatus;
+ 554              		.loc 1 508 4 is_stmt 1 view .LVU120
+ 555              	.LBB78:
+ 556              	.LBI78:
+ 557              		.loc 2 180 20 view .LVU121
+ 558              	.LBB79:
+ 559              		.loc 2 180 41 view .LVU122
+ 560 000e FFF7FEFF 		bl	HSUP_vEnableInt
+ 561              	.LVL31:
+ 562              	.LBE79:
+ 563              	.LBE78:
+ 509:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetStatus(); when DBUS_UART_CHANNEL is 0  */
+ 564              		.loc 1 509 4 view .LVU123
+ 509:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetStatus(); when DBUS_UART_CHANNEL is 0  */
+ 565              		.loc 1 509 11 is_stmt 0 view .LVU124
+ 566 0012 E0B2     		uxtb	r0, r4
+ 567              	.LVL32:
+ 568              		.loc 1 511 1 view .LVU125
+ 569 0014 10BD     		pop	{r4, pc}
+ 570              	.L39:
+ 571 0016 C046     		.align	2
+ 572              	.L38:
+ 573 0018 00000000 		.word	MUART0_RX_PB0_TX_PA15
+ 574              		.cfi_endproc
+ 575              	.LFE122:
+ 577              		.section	.text.DBM_UART_ucGetRxData,"ax",%progbits
+ 578              		.align	1
+ 579              		.global	DBM_UART_ucGetRxData
+ 580              		.syntax unified
+ 581              		.code	16
+ 582              		.thumb_func
+ 584              	DBM_UART_ucGetRxData:
+ 585              	.LFB123:
+ 512:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 513:app/prog/dbus/dbusmapping.c **** uint8_t DBM_UART_ucGetRxData(void)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 24
+
+
+ 514:app/prog/dbus/dbusmapping.c **** {
+ 586              		.loc 1 514 1 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 0
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 590              		@ link register save eliminated.
+ 515:app/prog/dbus/dbusmapping.c ****    /* return HUART0_ucGetRxData(); when DBUS_UART_CHANNEL is 0 */
+ 516:app/prog/dbus/dbusmapping.c ****    uint8_t ucData;
+ 591              		.loc 1 516 4 view .LVU127
+ 517:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 518:app/prog/dbus/dbusmapping.c ****    if (DBM_UART_ucRxDisabled != DBM_UART_RX_EVENT_DURING_LOCK_STATE)
+ 519:app/prog/dbus/dbusmapping.c ****    {
+ 520:app/prog/dbus/dbusmapping.c ****       DBM_DISABLE_INT();
+ 521:app/prog/dbus/dbusmapping.c ****       ucData = DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxData)();
+ 522:app/prog/dbus/dbusmapping.c ****       DBM_ENABLE_INT();
+ 523:app/prog/dbus/dbusmapping.c ****    }
+ 524:app/prog/dbus/dbusmapping.c ****    else
+ 525:app/prog/dbus/dbusmapping.c ****    {
+ 526:app/prog/dbus/dbusmapping.c ****       ucData = DBM_UART_ucRxData;
+ 527:app/prog/dbus/dbusmapping.c ****    }
+ 528:app/prog/dbus/dbusmapping.c **** #else
+ 529:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 530:app/prog/dbus/dbusmapping.c ****    ucData = DBM_UART_lastRxByte;
+ 592              		.loc 1 530 4 view .LVU128
+ 593              	.LVL33:
+ 531:app/prog/dbus/dbusmapping.c **** #else
+ 532:app/prog/dbus/dbusmapping.c ****    ucData = DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxData)();
+ 533:app/prog/dbus/dbusmapping.c **** #endif
+ 534:app/prog/dbus/dbusmapping.c **** #endif
+ 535:app/prog/dbus/dbusmapping.c ****    return ucData;
+ 594              		.loc 1 535 4 view .LVU129
+ 530:app/prog/dbus/dbusmapping.c **** #else
+ 595              		.loc 1 530 11 is_stmt 0 view .LVU130
+ 596 0000 014B     		ldr	r3, .L41
+ 536:app/prog/dbus/dbusmapping.c **** }
+ 597              		.loc 1 536 1 view .LVU131
+ 598              		@ sp needed
+ 535:app/prog/dbus/dbusmapping.c **** }
+ 599              		.loc 1 535 11 view .LVU132
+ 600 0002 1878     		ldrb	r0, [r3]
+ 601              		.loc 1 536 1 view .LVU133
+ 602 0004 7047     		bx	lr
+ 603              	.L42:
+ 604 0006 C046     		.align	2
+ 605              	.L41:
+ 606 0008 00000000 		.word	.LANCHOR6
+ 607              		.cfi_endproc
+ 608              	.LFE123:
+ 610              		.section	.text.DBM_UART_vSetTxData,"ax",%progbits
+ 611              		.align	1
+ 612              		.global	DBM_UART_vSetTxData
+ 613              		.syntax unified
+ 614              		.code	16
+ 615              		.thumb_func
+ 617              	DBM_UART_vSetTxData:
+ 618              	.LVL34:
+ 619              	.LFB124:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 25
+
+
+ 537:app/prog/dbus/dbusmapping.c **** void DBM_UART_vSetTxData(uint8_t ucData)
+ 538:app/prog/dbus/dbusmapping.c **** {
+ 620              		.loc 1 538 1 is_stmt 1 view -0
+ 621              		.cfi_startproc
+ 622              		@ args = 0, pretend = 0, frame = 0
+ 623              		@ frame_needed = 0, uses_anonymous_args = 0
+ 539:app/prog/dbus/dbusmapping.c ****    /* HUART0_vSetTxData(Data); when DBUS_UART_CHANNEL is 0 */
+ 540:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 541:app/prog/dbus/dbusmapping.c ****    DBM_DISABLE_INT();
+ 542:app/prog/dbus/dbusmapping.c **** #endif
+ 543:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 544:app/prog/dbus/dbusmapping.c ****    (void)MUART_writeByte(&DBM_UART_dbusHandle, ucData);
+ 624              		.loc 1 544 4 view .LVU135
+ 538:app/prog/dbus/dbusmapping.c ****    /* HUART0_vSetTxData(Data); when DBUS_UART_CHANNEL is 0 */
+ 625              		.loc 1 538 1 is_stmt 0 view .LVU136
+ 626 0000 10B5     		push	{r4, lr}
+ 627              	.LCFI8:
+ 628              		.cfi_def_cfa_offset 8
+ 629              		.cfi_offset 4, -8
+ 630              		.cfi_offset 14, -4
+ 631              		.loc 1 544 10 view .LVU137
+ 632 0002 034B     		ldr	r3, .L44
+ 538:app/prog/dbus/dbusmapping.c ****    /* HUART0_vSetTxData(Data); when DBUS_UART_CHANNEL is 0 */
+ 633              		.loc 1 538 1 view .LVU138
+ 634 0004 0100     		movs	r1, r0
+ 545:app/prog/dbus/dbusmapping.c **** #else
+ 546:app/prog/dbus/dbusmapping.c ****    DBM_MAP_UART(DBUS_UART_CHANNEL, _vSetTxData)(ucData);
+ 547:app/prog/dbus/dbusmapping.c **** #endif
+ 548:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 549:app/prog/dbus/dbusmapping.c ****    DBM_ENABLE_INT();
+ 550:app/prog/dbus/dbusmapping.c **** #endif
+ 551:app/prog/dbus/dbusmapping.c **** }
+ 635              		.loc 1 551 1 view .LVU139
+ 636              		@ sp needed
+ 544:app/prog/dbus/dbusmapping.c **** #else
+ 637              		.loc 1 544 10 view .LVU140
+ 638 0006 1800     		movs	r0, r3
+ 639              	.LVL35:
+ 544:app/prog/dbus/dbusmapping.c **** #else
+ 640              		.loc 1 544 10 view .LVU141
+ 641 0008 FFF7FEFF 		bl	MUART_writeByte
+ 642              	.LVL36:
+ 643              		.loc 1 551 1 view .LVU142
+ 644 000c 10BD     		pop	{r4, pc}
+ 645              	.L45:
+ 646 000e C046     		.align	2
+ 647              	.L44:
+ 648 0010 00000000 		.word	.LANCHOR1
+ 649              		.cfi_endproc
+ 650              	.LFE124:
+ 652              		.section	.text.DBM_UART_bIsRxOnGoing,"ax",%progbits
+ 653              		.align	1
+ 654              		.global	DBM_UART_bIsRxOnGoing
+ 655              		.syntax unified
+ 656              		.code	16
+ 657              		.thumb_func
+ 659              	DBM_UART_bIsRxOnGoing:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 26
+
+
+ 660              	.LFB125:
+ 552:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 553:app/prog/dbus/dbusmapping.c **** bool DBM_UART_bIsRxOnGoing(void)
+ 554:app/prog/dbus/dbusmapping.c **** {
+ 661              		.loc 1 554 1 is_stmt 1 view -0
+ 662              		.cfi_startproc
+ 663              		@ args = 0, pretend = 0, frame = 0
+ 664              		@ frame_needed = 0, uses_anonymous_args = 0
+ 555:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+ 556:app/prog/dbus/dbusmapping.c ****    //Check if RX Line is low
+ 557:app/prog/dbus/dbusmapping.c ****    //If RX Line is low a break is detected on DBus
+ 558:app/prog/dbus/dbusmapping.c ****    //Return True to avoid start send message during Break
+ 559:app/prog/dbus/dbusmapping.c ****     if(DBM_INT_bGetPin() == false)
+ 665              		.loc 1 559 5 view .LVU144
+ 554:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+ 666              		.loc 1 554 1 is_stmt 0 view .LVU145
+ 667 0000 10B5     		push	{r4, lr}
+ 668              	.LCFI9:
+ 669              		.cfi_def_cfa_offset 8
+ 670              		.cfi_offset 4, -8
+ 671              		.cfi_offset 14, -4
+ 672              		.loc 1 559 8 view .LVU146
+ 673 0002 FFF7FEFF 		bl	DBM_INT_bGetPin
+ 674              	.LVL37:
+ 675              		.loc 1 559 7 view .LVU147
+ 676 0006 0028     		cmp	r0, #0
+ 677 0008 04D1     		bne	.L47
+ 560:app/prog/dbus/dbusmapping.c ****    {
+ 561:app/prog/dbus/dbusmapping.c ****        DBM_INT_ClearIrq();        // Clear interrupt to avoid delay time after break
+ 678              		.loc 1 561 8 is_stmt 1 view .LVU148
+ 679 000a FFF7FEFF 		bl	DBM_INT_ClearIrq
+ 680              	.LVL38:
+ 562:app/prog/dbus/dbusmapping.c ****        return true;
+ 681              		.loc 1 562 8 view .LVU149
+ 682              		.loc 1 562 15 is_stmt 0 view .LVU150
+ 683 000e 0124     		movs	r4, #1
+ 684              	.L48:
+ 563:app/prog/dbus/dbusmapping.c ****    }
+ 564:app/prog/dbus/dbusmapping.c ****    else
+ 565:app/prog/dbus/dbusmapping.c ****    {
+ 566:app/prog/dbus/dbusmapping.c ****         DBM_DISABLE_INT();
+ 567:app/prog/dbus/dbusmapping.c ****         if (DBM_INT_IsIrqEvent() != false)
+ 568:app/prog/dbus/dbusmapping.c ****         {
+ 569:app/prog/dbus/dbusmapping.c ****                //Clear pending interrupt.
+ 570:app/prog/dbus/dbusmapping.c ****                //This implementation is only to avoid collisions on DBus
+ 571:app/prog/dbus/dbusmapping.c ****                DBM_INT_ClearIrq();
+ 572:app/prog/dbus/dbusmapping.c ****                DBM_ENABLE_INT();
+ 573:app/prog/dbus/dbusmapping.c ****                return true;
+ 574:app/prog/dbus/dbusmapping.c ****         }
+ 575:app/prog/dbus/dbusmapping.c ****         else
+ 576:app/prog/dbus/dbusmapping.c ****         {
+ 577:app/prog/dbus/dbusmapping.c ****                DBM_ENABLE_INT();
+ 578:app/prog/dbus/dbusmapping.c ****                return false;
+ 579:app/prog/dbus/dbusmapping.c ****         }
+ 580:app/prog/dbus/dbusmapping.c ****    }
+ 581:app/prog/dbus/dbusmapping.c **** #else
+ 582:app/prog/dbus/dbusmapping.c ****     #ifdef DBM_MCAL
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 27
+
+
+ 583:app/prog/dbus/dbusmapping.c ****         return MUART_isRxOngoing(DBM_UART_dbusChannel);
+ 584:app/prog/dbus/dbusmapping.c ****     #else
+ 585:app/prog/dbus/dbusmapping.c ****         return DBM_MAP_UART(DBUS_UART_CHANNEL, _bIsRxOnGoing)();
+ 586:app/prog/dbus/dbusmapping.c ****     #endif //DBM_MCAL
+ 587:app/prog/dbus/dbusmapping.c **** #endif
+ 588:app/prog/dbus/dbusmapping.c **** }
+ 685              		.loc 1 588 1 view .LVU151
+ 686              		@ sp needed
+ 687 0010 2000     		movs	r0, r4
+ 688 0012 10BD     		pop	{r4, pc}
+ 689              	.L47:
+ 566:app/prog/dbus/dbusmapping.c ****         if (DBM_INT_IsIrqEvent() != false)
+ 690              		.loc 1 566 9 is_stmt 1 view .LVU152
+ 691              	.LBB80:
+ 692              	.LBI80:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 693              		.loc 2 179 20 view .LVU153
+ 694              	.LBB81:
+ 179:common/prog/dbus/dbusmapping.h **** static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 695              		.loc 2 179 42 view .LVU154
+ 696 0014 FFF7FEFF 		bl	HSUP_vDisableInt
+ 697              	.LVL39:
+ 698              	.LBE81:
+ 699              	.LBE80:
+ 567:app/prog/dbus/dbusmapping.c ****         {
+ 700              		.loc 1 567 9 view .LVU155
+ 567:app/prog/dbus/dbusmapping.c ****         {
+ 701              		.loc 1 567 13 is_stmt 0 view .LVU156
+ 702 0018 FFF7FEFF 		bl	DBM_INT_IsIrqEvent
+ 703              	.LVL40:
+ 704 001c 041E     		subs	r4, r0, #0
+ 567:app/prog/dbus/dbusmapping.c ****         {
+ 705              		.loc 1 567 12 view .LVU157
+ 706 001e 01D0     		beq	.L49
+ 571:app/prog/dbus/dbusmapping.c ****                DBM_ENABLE_INT();
+ 707              		.loc 1 571 16 is_stmt 1 view .LVU158
+ 708 0020 FFF7FEFF 		bl	DBM_INT_ClearIrq
+ 709              	.LVL41:
+ 572:app/prog/dbus/dbusmapping.c ****                return true;
+ 710              		.loc 1 572 16 view .LVU159
+ 711              	.LBB82:
+ 712              	.LBI82:
+ 713              		.loc 2 180 20 view .LVU160
+ 714              	.LBB83:
+ 715              		.loc 2 180 41 view .LVU161
+ 716              	.L49:
+ 717              	.LBE83:
+ 718              	.LBE82:
+ 577:app/prog/dbus/dbusmapping.c ****                return false;
+ 719              		.loc 1 577 16 view .LVU162
+ 720              	.LBB84:
+ 721              	.LBI84:
+ 722              		.loc 2 180 20 view .LVU163
+ 723              	.LBB85:
+ 724              		.loc 2 180 41 view .LVU164
+ 725 0024 FFF7FEFF 		bl	HSUP_vEnableInt
+ 726              	.LVL42:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 28
+
+
+ 727              	.LBE85:
+ 728              	.LBE84:
+ 578:app/prog/dbus/dbusmapping.c ****         }
+ 729              		.loc 1 578 16 view .LVU165
+ 578:app/prog/dbus/dbusmapping.c ****         }
+ 730              		.loc 1 578 23 is_stmt 0 view .LVU166
+ 731 0028 F2E7     		b	.L48
+ 732              		.cfi_endproc
+ 733              	.LFE125:
+ 735              		.section	.text.DBM_UART_vHandleRxEvent,"ax",%progbits
+ 736              		.align	1
+ 737              		.global	DBM_UART_vHandleRxEvent
+ 738              		.syntax unified
+ 739              		.code	16
+ 740              		.thumb_func
+ 742              	DBM_UART_vHandleRxEvent:
+ 743              	.LFB126:
+ 589:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 590:app/prog/dbus/dbusmapping.c **** void DBM_UART_vHandleRxEvent(void)
+ 591:app/prog/dbus/dbusmapping.c **** {
+ 744              		.loc 1 591 1 is_stmt 1 view -0
+ 745              		.cfi_startproc
+ 746              		@ args = 0, pretend = 0, frame = 0
+ 747              		@ frame_needed = 0, uses_anonymous_args = 0
+ 592:app/prog/dbus/dbusmapping.c **** #ifdef DBM_UART_REMOVE_OVERRUN_ERROR
+ 593:app/prog/dbus/dbusmapping.c ****    uint8_t ucError;
+ 594:app/prog/dbus/dbusmapping.c **** #endif
+ 595:app/prog/dbus/dbusmapping.c ****     /* enable higher priority interrupts */
+ 596:app/prog/dbus/dbusmapping.c ****    DBM_UART_ENABLE_OTHER_INTERRUPTS();
+ 748              		.loc 1 596 4 view .LVU168
+ 749              		.loc 1 596 4 view .LVU169
+ 750              		.loc 1 596 4 view .LVU170
+ 597:app/prog/dbus/dbusmapping.c **** #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 598:app/prog/dbus/dbusmapping.c ****    /* Start time measurement */
+ 599:app/prog/dbus/dbusmapping.c ****    FSF_vIsrDoEntry(FS_ISR_DBUS2_RX);
+ 600:app/prog/dbus/dbusmapping.c **** #endif
+ 601:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+ 602:app/prog/dbus/dbusmapping.c ****    /* Clear pending interrupt. */
+ 603:app/prog/dbus/dbusmapping.c ****    DBM_INT_ClearIrq();
+ 751              		.loc 1 603 4 view .LVU171
+ 591:app/prog/dbus/dbusmapping.c **** #ifdef DBM_UART_REMOVE_OVERRUN_ERROR
+ 752              		.loc 1 591 1 is_stmt 0 view .LVU172
+ 753 0000 10B5     		push	{r4, lr}
+ 754              	.LCFI10:
+ 755              		.cfi_def_cfa_offset 8
+ 756              		.cfi_offset 4, -8
+ 757              		.cfi_offset 14, -4
+ 758              		.loc 1 603 4 view .LVU173
+ 759 0002 FFF7FEFF 		bl	DBM_INT_ClearIrq
+ 760              	.LVL43:
+ 604:app/prog/dbus/dbusmapping.c **** #endif
+ 605:app/prog/dbus/dbusmapping.c **** #ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+ 606:app/prog/dbus/dbusmapping.c ****    if (DBM_UART_ucRxDisabled != 0U)
+ 607:app/prog/dbus/dbusmapping.c ****    {
+ 608:app/prog/dbus/dbusmapping.c ****       DBM_UART_ucRxDisabled = DBM_UART_RX_EVENT_DURING_LOCK_STATE;
+ 609:app/prog/dbus/dbusmapping.c ****       DBM_UART_ucRxError    = DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxError)();
+ 610:app/prog/dbus/dbusmapping.c ****       DBM_UART_ucRxData     = DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxData)();
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 29
+
+
+ 611:app/prog/dbus/dbusmapping.c ****    }
+ 612:app/prog/dbus/dbusmapping.c ****    else
+ 613:app/prog/dbus/dbusmapping.c ****    {
+ 614:app/prog/dbus/dbusmapping.c ****       DLL_vHandleRxEvent();
+ 615:app/prog/dbus/dbusmapping.c ****    }
+ 616:app/prog/dbus/dbusmapping.c **** #else
+ 617:app/prog/dbus/dbusmapping.c ****    DLL_vHandleRxEvent();
+ 761              		.loc 1 617 4 is_stmt 1 view .LVU174
+ 618:app/prog/dbus/dbusmapping.c **** #endif
+ 619:app/prog/dbus/dbusmapping.c **** #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 620:app/prog/dbus/dbusmapping.c ****    /* Stop time measurement */
+ 621:app/prog/dbus/dbusmapping.c ****    FSF_vIsrDoExit(FS_ISR_DBUS2_RX);
+ 622:app/prog/dbus/dbusmapping.c **** #endif
+ 623:app/prog/dbus/dbusmapping.c **** #ifdef DBM_UART_REMOVE_OVERRUN_ERROR
+ 624:app/prog/dbus/dbusmapping.c ****    //Work-around for Renesas platform in the case a higher priority interrupt interrupts the receiv
+ 625:app/prog/dbus/dbusmapping.c ****    ucError = (uint8_t)DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxError)(); // dummy read to make sure 
+ 626:app/prog/dbus/dbusmapping.c ****    (void)ucError;
+ 627:app/prog/dbus/dbusmapping.c **** #endif
+ 628:app/prog/dbus/dbusmapping.c **** }
+ 762              		.loc 1 628 1 is_stmt 0 view .LVU175
+ 763              		@ sp needed
+ 617:app/prog/dbus/dbusmapping.c **** #endif
+ 764              		.loc 1 617 4 view .LVU176
+ 765 0006 FFF7FEFF 		bl	DLL_vHandleRxEvent
+ 766              	.LVL44:
+ 767              		.loc 1 628 1 view .LVU177
+ 768 000a 10BD     		pop	{r4, pc}
+ 769              		.cfi_endproc
+ 770              	.LFE126:
+ 772              		.section	.text.DBM_UART_handleTxRxCbFunc,"ax",%progbits
+ 773              		.align	1
+ 774              		.syntax unified
+ 775              		.code	16
+ 776              		.thumb_func
+ 778              	DBM_UART_handleTxRxCbFunc:
+ 779              	.LVL45:
+ 780              	.LFB114:
+ 263:app/prog/dbus/dbusmapping.c ****     if (MCAL_getEventType(eventResponse) == MCAL_EVENT_READ_BYTE)
+ 781              		.loc 1 263 1 is_stmt 1 view -0
+ 782              		.cfi_startproc
+ 783              		@ args = 0, pretend = 0, frame = 0
+ 784              		@ frame_needed = 0, uses_anonymous_args = 0
+ 264:app/prog/dbus/dbusmapping.c ****     {
+ 785              		.loc 1 264 5 view .LVU179
+ 786              	.LBB98:
+ 787              	.LBI98:
+ 788              		.file 3 "common/prog/MSP/mcal/mcal.h"
+   1:common/prog/MSP/mcal/mcal.h **** /*******************************************************************************
+   2:common/prog/MSP/mcal/mcal.h ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/MSP/mcal/mcal.h ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/MSP/mcal/mcal.h ****  *
+   5:common/prog/MSP/mcal/mcal.h ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/MSP/mcal/mcal.h ****  *  are protected by international copyright laws.
+   7:common/prog/MSP/mcal/mcal.h ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/MSP/mcal/mcal.h ****  *
+   9:common/prog/MSP/mcal/mcal.h ****  *******************************************************************************
+  10:common/prog/MSP/mcal/mcal.h ****  *  PROJECT          Generic SW
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 30
+
+
+  11:common/prog/MSP/mcal/mcal.h ****  *  COMP_ABBREV      MCAL
+  12:common/prog/MSP/mcal/mcal.h ****  ******************************************************************************/
+  13:common/prog/MSP/mcal/mcal.h **** 
+  14:common/prog/MSP/mcal/mcal.h **** 
+  15:common/prog/MSP/mcal/mcal.h **** #ifndef MCAL_H
+  16:common/prog/MSP/mcal/mcal.h **** #define MCAL_H
+  17:common/prog/MSP/mcal/mcal.h **** 
+  18:common/prog/MSP/mcal/mcal.h **** #if defined(__cplusplus) && !defined(MOCK_IT)
+  19:common/prog/MSP/mcal/mcal.h **** extern "C" {
+  20:common/prog/MSP/mcal/mcal.h **** #endif //__cplusplus
+  21:common/prog/MSP/mcal/mcal.h **** 
+  22:common/prog/MSP/mcal/mcal.h **** 
+  23:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  24:common/prog/MSP/mcal/mcal.h **** /* DOCUMENTATION                                                              */
+  25:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  26:common/prog/MSP/mcal/mcal.h **** /** \file
+  27:common/prog/MSP/mcal/mcal.h ****  *
+  28:common/prog/MSP/mcal/mcal.h ****  *  \ingroup  MCAL
+  29:common/prog/MSP/mcal/mcal.h ****  *
+  30:common/prog/MSP/mcal/mcal.h ****  *  \brief    Public definitions and declarations for unit MCAL.
+  31:common/prog/MSP/mcal/mcal.h ****  *
+  32:common/prog/MSP/mcal/mcal.h ****  */
+  33:common/prog/MSP/mcal/mcal.h **** 
+  34:common/prog/MSP/mcal/mcal.h **** 
+  35:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  36:common/prog/MSP/mcal/mcal.h **** /* INCLUDES                                                                   */
+  37:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  38:common/prog/MSP/mcal/mcal.h **** #include "BSH_stdinc.h"
+  39:common/prog/MSP/mcal/mcal.h **** #include <stdint.h>
+  40:common/prog/MSP/mcal/mcal.h **** #include <stdbool.h>
+  41:common/prog/MSP/mcal/mcal.h **** #include "std_lib/std_callback.h"
+  42:common/prog/MSP/mcal/mcal.h **** 
+  43:common/prog/MSP/mcal/mcal.h **** #include "mcal_types.h"
+  44:common/prog/MSP/mcal/mcal.h **** 
+  45:common/prog/MSP/mcal/mcal.h **** 
+  46:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  47:common/prog/MSP/mcal/mcal.h **** /* PUBLIC INLINE FUNCTION DEFINITIONS                                         */
+  48:common/prog/MSP/mcal/mcal.h **** /******************************************************************************/
+  49:common/prog/MSP/mcal/mcal.h **** 
+  50:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_Module MCAL_getEventSource(const struct MCAL_EventResponse *eventResponse)
+  51:common/prog/MSP/mcal/mcal.h **** {
+  52:common/prog/MSP/mcal/mcal.h ****     return eventResponse->eventSource;
+  53:common/prog/MSP/mcal/mcal.h **** }
+  54:common/prog/MSP/mcal/mcal.h **** 
+  55:common/prog/MSP/mcal/mcal.h **** 
+  56:common/prog/MSP/mcal/mcal.h **** static inline enum MCAL_Event MCAL_getEventType(const struct MCAL_EventResponse *eventResponse)
+ 789              		.loc 3 56 31 view .LVU180
+ 790              	.LBB99:
+  57:common/prog/MSP/mcal/mcal.h **** {
+  58:common/prog/MSP/mcal/mcal.h ****     return eventResponse->eventType;
+ 791              		.loc 3 58 5 view .LVU181
+ 792              		.loc 3 58 25 is_stmt 0 view .LVU182
+ 793 0000 5368     		ldr	r3, [r2, #4]
+ 794              	.LVL46:
+ 795              		.loc 3 58 25 view .LVU183
+ 796              	.LBE99:
+ 797              	.LBE98:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 31
+
+
+ 263:app/prog/dbus/dbusmapping.c ****     if (MCAL_getEventType(eventResponse) == MCAL_EVENT_READ_BYTE)
+ 798              		.loc 1 263 1 view .LVU184
+ 799 0002 1000     		movs	r0, r2
+ 800              	.LVL47:
+ 263:app/prog/dbus/dbusmapping.c ****     if (MCAL_getEventType(eventResponse) == MCAL_EVENT_READ_BYTE)
+ 801              		.loc 1 263 1 view .LVU185
+ 802 0004 10B5     		push	{r4, lr}
+ 803              	.LCFI11:
+ 804              		.cfi_def_cfa_offset 8
+ 805              		.cfi_offset 4, -8
+ 806              		.cfi_offset 14, -4
+ 264:app/prog/dbus/dbusmapping.c ****     {
+ 807              		.loc 1 264 8 view .LVU186
+ 808 0006 102B     		cmp	r3, #16
+ 809 0008 06D1     		bne	.L52
+ 810              	.LVL48:
+ 811              	.LBB100:
+ 812              	.LBI100:
+ 262:app/prog/dbus/dbusmapping.c **** {
+ 813              		.loc 1 262 13 is_stmt 1 view .LVU187
+ 814              	.LBB101:
+ 266:app/prog/dbus/dbusmapping.c ****         DBM_UART_vHandleRxEvent();
+ 815              		.loc 1 266 9 view .LVU188
+ 266:app/prog/dbus/dbusmapping.c ****         DBM_UART_vHandleRxEvent();
+ 816              		.loc 1 266 31 is_stmt 0 view .LVU189
+ 817 000a FFF7FEFF 		bl	MCAL_getEventData_uint8
+ 818              	.LVL49:
+ 266:app/prog/dbus/dbusmapping.c ****         DBM_UART_vHandleRxEvent();
+ 819              		.loc 1 266 29 view .LVU190
+ 820 000e 054B     		ldr	r3, .L54
+ 821 0010 1870     		strb	r0, [r3]
+ 267:app/prog/dbus/dbusmapping.c ****     }
+ 822              		.loc 1 267 9 is_stmt 1 view .LVU191
+ 823 0012 FFF7FEFF 		bl	DBM_UART_vHandleRxEvent
+ 824              	.LVL50:
+ 276:app/prog/dbus/dbusmapping.c **** }  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_
+ 825              		.loc 1 276 5 view .LVU192
+ 826              	.L51:
+ 276:app/prog/dbus/dbusmapping.c **** }  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_
+ 827              		.loc 1 276 5 is_stmt 0 view .LVU193
+ 828              	.LBE101:
+ 829              	.LBE100:
+ 277:app/prog/dbus/dbusmapping.c **** 
+ 830              		.loc 1 277 1 view .LVU194
+ 831              		@ sp needed
+ 832 0016 10BD     		pop	{r4, pc}
+ 833              	.LVL51:
+ 834              	.L52:
+ 269:app/prog/dbus/dbusmapping.c ****     {
+ 835              		.loc 1 269 10 is_stmt 1 view .LVU195
+ 269:app/prog/dbus/dbusmapping.c ****     {
+ 836              		.loc 1 269 13 is_stmt 0 view .LVU196
+ 837 0018 202B     		cmp	r3, #32
+ 838 001a FCD1     		bne	.L51
+ 271:app/prog/dbus/dbusmapping.c ****     }
+ 839              		.loc 1 271 9 is_stmt 1 view .LVU197
+ 840              	.LBB102:
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 32
+
+
+ 841              	.LBI102:
+ 629:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 630:app/prog/dbus/dbusmapping.c **** /* void HUART0_vHandleTxEvent(void) when DBUS_UART_CHANNEL is 0 */
+ 631:app/prog/dbus/dbusmapping.c **** void DBM_UART_vHandleTxEvent(void)
+ 842              		.loc 1 631 6 view .LVU198
+ 843              	.LBB103:
+ 632:app/prog/dbus/dbusmapping.c **** {
+ 633:app/prog/dbus/dbusmapping.c ****    /* Enable higher priority interrupts */
+ 634:app/prog/dbus/dbusmapping.c ****    DBM_UART_ENABLE_OTHER_INTERRUPTS();
+ 844              		.loc 1 634 4 view .LVU199
+ 845              		.loc 1 634 4 view .LVU200
+ 846              		.loc 1 634 4 view .LVU201
+ 635:app/prog/dbus/dbusmapping.c ****    #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 636:app/prog/dbus/dbusmapping.c ****    /* Start time measurement */
+ 637:app/prog/dbus/dbusmapping.c ****    FSF_vIsrDoEntry(FS_ISR_DBUS2_TX);
+ 638:app/prog/dbus/dbusmapping.c **** #endif
+ 639:app/prog/dbus/dbusmapping.c ****    #ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+ 640:app/prog/dbus/dbusmapping.c ****    if (!DBM_UART_ucTxDisabled)
+ 641:app/prog/dbus/dbusmapping.c ****    {
+ 642:app/prog/dbus/dbusmapping.c ****       DLL_vHandleTxEvent();
+ 643:app/prog/dbus/dbusmapping.c ****    }
+ 644:app/prog/dbus/dbusmapping.c ****    else
+ 645:app/prog/dbus/dbusmapping.c ****    {
+ 646:app/prog/dbus/dbusmapping.c ****       DBM_UART_ucTxDisabled = DBM_UART_TX_EVENT_DURING_LOCK_STATE;
+ 647:app/prog/dbus/dbusmapping.c ****    }
+ 648:app/prog/dbus/dbusmapping.c **** #else
+ 649:app/prog/dbus/dbusmapping.c ****    DLL_vHandleTxEvent();
+ 847              		.loc 1 649 4 view .LVU202
+ 848 001c FFF7FEFF 		bl	DLL_vHandleTxEvent
+ 849              	.LVL52:
+ 850              		.loc 1 649 4 is_stmt 0 view .LVU203
+ 851              	.LBE103:
+ 852              	.LBE102:
+ 276:app/prog/dbus/dbusmapping.c **** }  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_
+ 853              		.loc 1 276 5 is_stmt 1 view .LVU204
+ 277:app/prog/dbus/dbusmapping.c **** 
+ 854              		.loc 1 277 1 is_stmt 0 view .LVU205
+ 855 0020 F9E7     		b	.L51
+ 856              	.L55:
+ 857 0022 C046     		.align	2
+ 858              	.L54:
+ 859 0024 00000000 		.word	.LANCHOR6
+ 860              		.cfi_endproc
+ 861              	.LFE114:
+ 863              		.section	.text.DBM_UART_vHandleTxEvent,"ax",%progbits
+ 864              		.align	1
+ 865              		.global	DBM_UART_vHandleTxEvent
+ 866              		.syntax unified
+ 867              		.code	16
+ 868              		.thumb_func
+ 870              	DBM_UART_vHandleTxEvent:
+ 871              	.LFB127:
+ 632:app/prog/dbus/dbusmapping.c ****    /* Enable higher priority interrupts */
+ 872              		.loc 1 632 1 is_stmt 1 view -0
+ 873              		.cfi_startproc
+ 874              		@ args = 0, pretend = 0, frame = 0
+ 875              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 33
+
+
+ 634:app/prog/dbus/dbusmapping.c ****    #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 876              		.loc 1 634 4 view .LVU207
+ 634:app/prog/dbus/dbusmapping.c ****    #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 877              		.loc 1 634 4 view .LVU208
+ 634:app/prog/dbus/dbusmapping.c ****    #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 878              		.loc 1 634 4 view .LVU209
+ 879              		.loc 1 649 4 view .LVU210
+ 632:app/prog/dbus/dbusmapping.c ****    /* Enable higher priority interrupts */
+ 880              		.loc 1 632 1 is_stmt 0 view .LVU211
+ 881 0000 10B5     		push	{r4, lr}
+ 882              	.LCFI12:
+ 883              		.cfi_def_cfa_offset 8
+ 884              		.cfi_offset 4, -8
+ 885              		.cfi_offset 14, -4
+ 886              		.loc 1 649 4 view .LVU212
+ 887 0002 FFF7FEFF 		bl	DLL_vHandleTxEvent
+ 888              	.LVL53:
+ 650:app/prog/dbus/dbusmapping.c **** #endif
+ 651:app/prog/dbus/dbusmapping.c ****    #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+ 652:app/prog/dbus/dbusmapping.c ****    /* Stop time measurement */
+ 653:app/prog/dbus/dbusmapping.c ****    FSF_vIsrDoExit(FS_ISR_DBUS2_TX);
+ 654:app/prog/dbus/dbusmapping.c **** #endif
+ 655:app/prog/dbus/dbusmapping.c **** }
+ 889              		.loc 1 655 1 view .LVU213
+ 890              		@ sp needed
+ 891 0006 10BD     		pop	{r4, pc}
+ 892              		.cfi_endproc
+ 893              	.LFE127:
+ 895              		.section	.text.DBM_PERIPH_vSetBaudRate,"ax",%progbits
+ 896              		.align	1
+ 897              		.global	DBM_PERIPH_vSetBaudRate
+ 898              		.syntax unified
+ 899              		.code	16
+ 900              		.thumb_func
+ 902              	DBM_PERIPH_vSetBaudRate:
+ 903              	.LVL54:
+ 904              	.LFB128:
+ 656:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 657:app/prog/dbus/dbusmapping.c **** void DBM_PERIPH_vSetBaudRate(uint8_t ucIndex, uint16_t uiBaudRate)
+ 658:app/prog/dbus/dbusmapping.c **** {
+ 905              		.loc 1 658 1 is_stmt 1 view -0
+ 906              		.cfi_startproc
+ 907              		@ args = 0, pretend = 0, frame = 0
+ 908              		@ frame_needed = 0, uses_anonymous_args = 0
+ 659:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 660:app/prog/dbus/dbusmapping.c ****     (void)ucIndex;
+ 909              		.loc 1 660 5 view .LVU215
+ 661:app/prog/dbus/dbusmapping.c ****     MUART_configureBaudrate(DBM_UART_dbusChannel, ((uint32_t)uiBaudRate * 100u));
+ 910              		.loc 1 661 5 view .LVU216
+ 658:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ 911              		.loc 1 658 1 is_stmt 0 view .LVU217
+ 912 0000 10B5     		push	{r4, lr}
+ 913              	.LCFI13:
+ 914              		.cfi_def_cfa_offset 8
+ 915              		.cfi_offset 4, -8
+ 916              		.cfi_offset 14, -4
+ 658:app/prog/dbus/dbusmapping.c **** #ifdef DBM_MCAL
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 34
+
+
+ 917              		.loc 1 658 1 view .LVU218
+ 918 0002 0C00     		movs	r4, r1
+ 662:app/prog/dbus/dbusmapping.c **** #else
+ 663:app/prog/dbus/dbusmapping.c ****     (void)DBM_MAP_UART(DBUS_UART_CHANNEL, _bConfigure)(ucIndex,uiBaudRate,HUART_PARITY_NONE,HUART_S
+ 664:app/prog/dbus/dbusmapping.c **** #endif
+ 665:app/prog/dbus/dbusmapping.c ****     DLL_vSetupTimings(uiBaudRate);
+ 666:app/prog/dbus/dbusmapping.c **** }
+ 919              		.loc 1 666 1 view .LVU219
+ 920              		@ sp needed
+ 661:app/prog/dbus/dbusmapping.c **** #else
+ 921              		.loc 1 661 5 view .LVU220
+ 922 0004 6421     		movs	r1, #100
+ 923              	.LVL55:
+ 661:app/prog/dbus/dbusmapping.c **** #else
+ 924              		.loc 1 661 5 view .LVU221
+ 925 0006 0448     		ldr	r0, .L58
+ 926              	.LVL56:
+ 661:app/prog/dbus/dbusmapping.c **** #else
+ 927              		.loc 1 661 5 view .LVU222
+ 928 0008 6143     		muls	r1, r4
+ 929 000a FFF7FEFF 		bl	MUART_configureBaudrate
+ 930              	.LVL57:
+ 665:app/prog/dbus/dbusmapping.c **** }
+ 931              		.loc 1 665 5 is_stmt 1 view .LVU223
+ 932 000e 2000     		movs	r0, r4
+ 933 0010 FFF7FEFF 		bl	DLL_vSetupTimings
+ 934              	.LVL58:
+ 935              		.loc 1 666 1 is_stmt 0 view .LVU224
+ 936 0014 10BD     		pop	{r4, pc}
+ 937              	.L59:
+ 938 0016 C046     		.align	2
+ 939              	.L58:
+ 940 0018 00000000 		.word	MUART0_RX_PB0_TX_PA15
+ 941              		.cfi_endproc
+ 942              	.LFE128:
+ 944              		.section	.text.DBM_UART_ulGetNoiseCounter,"ax",%progbits
+ 945              		.align	1
+ 946              		.global	DBM_UART_ulGetNoiseCounter
+ 947              		.syntax unified
+ 948              		.code	16
+ 949              		.thumb_func
+ 951              	DBM_UART_ulGetNoiseCounter:
+ 952              	.LFB129:
+ 667:app/prog/dbus/dbusmapping.c **** /************************************************************************/
+ 668:app/prog/dbus/dbusmapping.c **** 
+ 669:app/prog/dbus/dbusmapping.c **** /* Statistics */
+ 670:app/prog/dbus/dbusmapping.c **** #ifndef __DBM_EXCLUDE_ERROR_COUNTERS
+ 671:app/prog/dbus/dbusmapping.c **** uint32_t DBM_UART_ulGetNoiseCounter(void)
+ 672:app/prog/dbus/dbusmapping.c **** {
+ 953              		.loc 1 672 1 is_stmt 1 view -0
+ 954              		.cfi_startproc
+ 955              		@ args = 0, pretend = 0, frame = 0
+ 956              		@ frame_needed = 0, uses_anonymous_args = 0
+ 957              		@ link register save eliminated.
+ 673:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ulNoiseCounter;
+ 958              		.loc 1 673 4 view .LVU226
+ 959              		.loc 1 673 11 is_stmt 0 view .LVU227
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 35
+
+
+ 960 0000 014B     		ldr	r3, .L61
+ 674:app/prog/dbus/dbusmapping.c **** }
+ 961              		.loc 1 674 1 view .LVU228
+ 962              		@ sp needed
+ 673:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ulNoiseCounter;
+ 963              		.loc 1 673 11 view .LVU229
+ 964 0002 1868     		ldr	r0, [r3]
+ 965              		.loc 1 674 1 view .LVU230
+ 966 0004 7047     		bx	lr
+ 967              	.L62:
+ 968 0006 C046     		.align	2
+ 969              	.L61:
+ 970 0008 00000000 		.word	.LANCHOR3
+ 971              		.cfi_endproc
+ 972              	.LFE129:
+ 974              		.section	.text.DBM_UART_ucGetUartOverrunCounter,"ax",%progbits
+ 975              		.align	1
+ 976              		.global	DBM_UART_ucGetUartOverrunCounter
+ 977              		.syntax unified
+ 978              		.code	16
+ 979              		.thumb_func
+ 981              	DBM_UART_ucGetUartOverrunCounter:
+ 982              	.LFB130:
+ 675:app/prog/dbus/dbusmapping.c **** uint8_t DBM_UART_ucGetUartOverrunCounter(void)
+ 676:app/prog/dbus/dbusmapping.c **** {
+ 983              		.loc 1 676 1 is_stmt 1 view -0
+ 984              		.cfi_startproc
+ 985              		@ args = 0, pretend = 0, frame = 0
+ 986              		@ frame_needed = 0, uses_anonymous_args = 0
+ 987              		@ link register save eliminated.
+ 677:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ucOverrunErrorCounter;
+ 988              		.loc 1 677 4 view .LVU232
+ 989              		.loc 1 677 11 is_stmt 0 view .LVU233
+ 990 0000 014B     		ldr	r3, .L64
+ 678:app/prog/dbus/dbusmapping.c **** }
+ 991              		.loc 1 678 1 view .LVU234
+ 992              		@ sp needed
+ 677:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ucOverrunErrorCounter;
+ 993              		.loc 1 677 11 view .LVU235
+ 994 0002 1878     		ldrb	r0, [r3]
+ 995              		.loc 1 678 1 view .LVU236
+ 996 0004 7047     		bx	lr
+ 997              	.L65:
+ 998 0006 C046     		.align	2
+ 999              	.L64:
+ 1000 0008 00000000 		.word	.LANCHOR4
+ 1001              		.cfi_endproc
+ 1002              	.LFE130:
+ 1004              		.section	.text.DBM_UART_ulGetUartFramingErrorCounter,"ax",%progbits
+ 1005              		.align	1
+ 1006              		.global	DBM_UART_ulGetUartFramingErrorCounter
+ 1007              		.syntax unified
+ 1008              		.code	16
+ 1009              		.thumb_func
+ 1011              	DBM_UART_ulGetUartFramingErrorCounter:
+ 1012              	.LFB131:
+ 679:app/prog/dbus/dbusmapping.c **** uint32_t DBM_UART_ulGetUartFramingErrorCounter(void)
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 36
+
+
+ 680:app/prog/dbus/dbusmapping.c **** {
+ 1013              		.loc 1 680 1 is_stmt 1 view -0
+ 1014              		.cfi_startproc
+ 1015              		@ args = 0, pretend = 0, frame = 0
+ 1016              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1017              		@ link register save eliminated.
+ 681:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ulFramingErrorCounter;
+ 1018              		.loc 1 681 4 view .LVU238
+ 1019              		.loc 1 681 11 is_stmt 0 view .LVU239
+ 1020 0000 014B     		ldr	r3, .L67
+ 682:app/prog/dbus/dbusmapping.c **** }
+ 1021              		.loc 1 682 1 view .LVU240
+ 1022              		@ sp needed
+ 681:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ulFramingErrorCounter;
+ 1023              		.loc 1 681 11 view .LVU241
+ 1024 0002 1868     		ldr	r0, [r3]
+ 1025              		.loc 1 682 1 view .LVU242
+ 1026 0004 7047     		bx	lr
+ 1027              	.L68:
+ 1028 0006 C046     		.align	2
+ 1029              	.L67:
+ 1030 0008 00000000 		.word	.LANCHOR5
+ 1031              		.cfi_endproc
+ 1032              	.LFE131:
+ 1034              		.section	.text.DBM_UART_ulGetUartBreakCounter,"ax",%progbits
+ 1035              		.align	1
+ 1036              		.global	DBM_UART_ulGetUartBreakCounter
+ 1037              		.syntax unified
+ 1038              		.code	16
+ 1039              		.thumb_func
+ 1041              	DBM_UART_ulGetUartBreakCounter:
+ 1042              	.LFB132:
+ 683:app/prog/dbus/dbusmapping.c **** uint32_t DBM_UART_ulGetUartBreakCounter(void)
+ 684:app/prog/dbus/dbusmapping.c **** {
+ 1043              		.loc 1 684 1 is_stmt 1 view -0
+ 1044              		.cfi_startproc
+ 1045              		@ args = 0, pretend = 0, frame = 0
+ 1046              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1047              		@ link register save eliminated.
+ 685:app/prog/dbus/dbusmapping.c ****    return DBM_UART_ulBreakCounter;
+ 1048              		.loc 1 685 4 view .LVU244
+ 686:app/prog/dbus/dbusmapping.c **** }
+ 1049              		.loc 1 686 1 is_stmt 0 view .LVU245
+ 1050 0000 0020     		movs	r0, #0
+ 1051              		@ sp needed
+ 1052 0002 7047     		bx	lr
+ 1053              		.cfi_endproc
+ 1054              	.LFE132:
+ 1056              		.section	.text.DBM_ulGetCircleMicroSeconds,"ax",%progbits
+ 1057              		.align	1
+ 1058              		.global	DBM_ulGetCircleMicroSeconds
+ 1059              		.syntax unified
+ 1060              		.code	16
+ 1061              		.thumb_func
+ 1063              	DBM_ulGetCircleMicroSeconds:
+ 1064              	.LFB133:
+ 687:app/prog/dbus/dbusmapping.c **** #endif
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 37
+
+
+ 688:app/prog/dbus/dbusmapping.c **** 
+ 689:app/prog/dbus/dbusmapping.c **** /* Timer functions */
+ 690:app/prog/dbus/dbusmapping.c **** uint32_t DBM_ulGetCircleMicroSeconds(void)
+ 691:app/prog/dbus/dbusmapping.c **** {
+ 1065              		.loc 1 691 1 is_stmt 1 view -0
+ 1066              		.cfi_startproc
+ 1067              		@ args = 0, pretend = 0, frame = 0
+ 1068              		@ frame_needed = 0, uses_anonymous_args = 0
+ 692:app/prog/dbus/dbusmapping.c ****    return TIM_u32GetCircleMicroSeconds();
+ 1069              		.loc 1 692 4 view .LVU247
+ 691:app/prog/dbus/dbusmapping.c ****    return TIM_u32GetCircleMicroSeconds();
+ 1070              		.loc 1 691 1 is_stmt 0 view .LVU248
+ 1071 0000 10B5     		push	{r4, lr}
+ 1072              	.LCFI14:
+ 1073              		.cfi_def_cfa_offset 8
+ 1074              		.cfi_offset 4, -8
+ 1075              		.cfi_offset 14, -4
+ 1076              		.loc 1 692 11 view .LVU249
+ 1077 0002 FFF7FEFF 		bl	TIM_u32GetCircleMicroSeconds
+ 1078              	.LVL59:
+ 693:app/prog/dbus/dbusmapping.c **** }
+ 1079              		.loc 1 693 1 view .LVU250
+ 1080              		@ sp needed
+ 1081 0006 10BD     		pop	{r4, pc}
+ 1082              		.cfi_endproc
+ 1083              	.LFE133:
+ 1085              		.section	.rodata
+ 1086              		.align	2
+ 1087              		.set	.LANCHOR0,. + 0
+ 1088              	.LC0:
+ 1089 0000 01       		.byte	1
+ 1090 0001 00       		.byte	0
+ 1091 0002 01       		.byte	1
+ 1092 0003 00       		.space	1
+ 1093 0004 80250000 		.word	9600
+ 1094              		.section	.bss.DBM_UART_dbusHandle,"aw",%nobits
+ 1095              		.align	2
+ 1096              		.set	.LANCHOR1,. + 0
+ 1099              	DBM_UART_dbusHandle:
+ 1100 0000 00000000 		.space	44
+ 1100      00000000 
+ 1100      00000000 
+ 1100      00000000 
+ 1100      00000000 
+ 1101              		.section	.bss.DBM_UART_handleTxRxCb,"aw",%nobits
+ 1102              		.align	2
+ 1103              		.set	.LANCHOR2,. + 0
+ 1106              	DBM_UART_handleTxRxCb:
+ 1107 0000 00000000 		.space	16
+ 1107      00000000 
+ 1107      00000000 
+ 1107      00000000 
+ 1108              		.section	.bss.DBM_UART_lastRxByte,"aw",%nobits
+ 1109              		.set	.LANCHOR6,. + 0
+ 1112              	DBM_UART_lastRxByte:
+ 1113 0000 00       		.space	1
+ 1114              		.section	.bss.DBM_UART_ucOverrunErrorCounter,"aw",%nobits
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\ccv9udXE.s 			page 38
+
+
+ 1115              		.set	.LANCHOR4,. + 0
+ 1118              	DBM_UART_ucOverrunErrorCounter:
+ 1119 0000 00       		.space	1
+ 1120              		.section	.bss.DBM_UART_ulFramingErrorCounter,"aw",%nobits
+ 1121              		.align	2
+ 1122              		.set	.LANCHOR5,. + 0
+ 1125              	DBM_UART_ulFramingErrorCounter:
+ 1126 0000 00000000 		.space	4
+ 1127              		.section	.bss.DBM_UART_ulNoiseCounter,"aw",%nobits
+ 1128              		.align	2
+ 1129              		.set	.LANCHOR3,. + 0
+ 1132              	DBM_UART_ulNoiseCounter:
+ 1133 0000 00000000 		.space	4
+ 1134              		.text
+ 1135              	.Letext0:
+ 1136              		.file 4 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 1137              		.file 5 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 1138              		.file 6 "common/prog/MSP/sh30f/sh30f9xx_sa0.h"
+ 1139              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"
+ 1140              		.file 8 "common/prog/std_lib/std_callback.h"
+ 1141              		.file 9 "common/prog/MSP/mcal/mcal_types.h"
+ 1142              		.file 10 "common/prog/MSP/mcal/mdio_types.h"
+ 1143              		.file 11 "common/prog/MSP/mcal/sh30f/mdio_mc.h"
+ 1144              		.file 12 "common/prog/MSP/mcal/muart_types.h"
+ 1145              		.file 13 "common/prog/MSP/mcal/msup.h"
+ 1146              		.file 14 "common/prog/MSP/mcal/sh30f/muart_mc.h"
+ 1147              		.file 15 "common/prog/MSP/mcal/mcom.h"
+ 1148              		.file 16 "common/prog/MSP/mcal/muart.h"
+ 1149              		.file 17 "common/prog/dbus/dbusdll.h"
+ 1150              		.file 18 "common/prog/MSP/mcal/muart_priv.h"
+ 1151              		.file 19 "common/prog/ped_fw/timer/timerlib.h"
+ 1152              		.file 20 "common/prog/MSP/hsup.h"
+ 1153              		.file 21 "app/prog/MSP/mcal/sh30f/mcal_channels.h"

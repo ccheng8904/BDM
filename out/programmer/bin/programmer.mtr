@@ -1,0 +1,1289 @@
+# Maksym 3.0.2 - Symbol Extraction from ELF/DWARF Executables (Fri Oct 29 10:41:50 2021)
+# (c) 2021 B/S/H/
+
+
+# Loaded DWARF Library: E:\project\example\MD370R\common\tools\maksym\3.0.2\dwarf_keil_mid0028.dll
+# Origin:               E:\project\example\MD370R\out\programmer\bin\programmer.elf
+# Created at:           Wed Nov 18 17:07:46 2026
+# Encoding little_endian
+
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/Programmer
+            unit name: ModuleHeader.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDHD_ModuleHeader                                                                              0x00001A00          0x28 (40)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x28 (40)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/sh30f
+            unit name: IntTbl.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+ITBL_peripheralVectors                                                                         0x00001C40          0x80 (128)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x80 (128)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/sh30f
+            unit name: int_handle_cfg.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+EXTI15_10_IRQHandler                                                                           0x00001D73          0xA (10)
+EXTI9_4_IRQHandler                                                                             0x00001D69          0xA (10)
+EXTI3_IRQHandler                                                                               0x00001D5F          0xA (10)
+EXTI2_IRQHandler                                                                               0x00001D55          0xA (10)
+EXTI1_IRQHandler                                                                               0x00001D4B          0xA (10)
+EXTI0_IRQHandler                                                                               0x00001D41          0xA (10)
+UART3_IRQHandler                                                                               0x00001D27          0xA (10)
+UART2_IRQHandler                                                                               0x00001D1D          0xA (10)
+UART1_IRQHandler                                                                               0x00001D13          0xA (10)
+UART0_IRQHandler                                                                               0x00001D09          0xA (10)
+DMA_CH0_1_IRQHandler                                                                           0x00001D7D          0x2 (2)
+
+# Size of Functions/Procedures in this CU: 0x66 (102)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/ped_fw/timer/sh30f
+            unit name: timerMcXs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+TIM_uiGetCircleMicroSeconds                                                                    0x00001DC9          0xC (12)
+_TIM_bGetInitConfig                                                                            0x00001D81          0x48 (72)
+
+# Size of Functions/Procedures in this CU: 0x54 (84)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus
+            unit name: dbusdllXs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DLL_ConfigurationItem                                                                          0x20000714          0x8 (8)
+DLL_vMessageTransmitted_UserCallback                                                           0x00001E15          0x2 (2)
+DLL_ucGetStandardUartConfigIndex                                                               0x00001E09          0xC (12)
+DLL_bIsCurrentNode                                                                             0x00001DF5          0x14 (20)
+DLL_vSetupSavedBaudRate                                                                        0x00001DE9          0xC (12)
+DLL_vInitDllConfig                                                                             0x00001DD5          0x14 (20)
+
+# Size of Functions/Procedures in this CU: 0x42 (66)
+# Size of Variables in this CU:            0x8 (8)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus
+            unit name: dbusmapping.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBM_UART_ulNoiseCounter                                                                        0x20000760          0x4 (4)
+DBM_UART_ulFramingErrorCounter                                                                 0x2000075C          0x4 (4)
+DBM_UART_ucOverrunErrorCounter                                                                 0x20000759          0x1 (1)
+DBM_UART_dbusHandle                                                                            0x2000071C          0x2C (44)
+DBM_UART_lastRxByte                                                                            0x20000758          0x1 (1)
+DBM_UART_handleTxRxCb                                                                          0x20000748          0x10 (16)
+DBM_ulGetCircleMicroSeconds                                                                    0x00001FF5          0x8 (8)
+DBM_PERIPH_vSetBaudRate                                                                        0x00001FD9          0x1C (28)
+DBM_UART_vHandleRxEvent                                                                        0x00001FA3          0xC (12)
+DBM_UART_bIsRxOnGoing                                                                          0x00001F79          0x2A (42)
+DBM_UART_vSetTxData                                                                            0x00001F65          0x14 (20)
+DBM_UART_ucGetRxData                                                                           0x00001F59          0xC (12)
+DBM_UART_bIsRxError                                                                            0x00001F05          0x54 (84)
+DBM_UART_vEnableRxEvent                                                                        0x00001ED9          0x2C (44)
+DBM_UART_vDisableRxEvent                                                                       0x00001EB1          0x28 (40)
+DBM_UART_vEnableTxEvent                                                                        0x00001E91          0x20 (32)
+DBM_UART_vDisableTxEvent                                                                       0x00001E75          0x1C (28)
+DBM_UART_vEnable                                                                               0x00001E5D          0x18 (24)
+DBM_UART_vInit                                                                                 0x00001E19          0x44 (68)
+DBM_UART_handleTxRxCbFunc                                                                      0x00001FB1          0x28 (40)
+
+# Size of Functions/Procedures in this CU: 0x1E2 (482)
+# Size of Variables in this CU:            0x46 (70)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus
+            unit name: dbuspresentationXs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBPL_tModuleDict                                                                               0x00005748          0x1C (28)
+DBPL_ucNumberOfElements                                                                        0x00005764          0x1 (1)
+DBPL_vNotifyNonDeliverablePowerMessage                                                         0x00002093          0x2 (2)
+DBPL_ucGetOwnAddressToInformOtherNodes                                                         0x00002061          0x2E (46)
+DBPL_vHSI_DataIndication                                                                       0x00002059          0x8 (8)
+DBPL_vEnterBootloaderMode                                                                      0x00002049          0x10 (16)
+DBPL_ucPossiblyChangeTimerBase                                                                 0x00002045          0x2 (2)
+MOD_bGetId                                                                                     0x00001FFD          0x18 (24)
+aucDummyId32                                                                                   0x00005765          0x40 (64)
+MOD_bWrite                                                                                     0x00002015          0x18 (24)
+MOD_bRead                                                                                      0x0000202D          0x18 (24)
+DBPL_vGoOffline                                                                                0x00002047          0x2 (2)
+
+# Size of Functions/Procedures in this CU: 0x94 (148)
+# Size of Variables in this CU:            0x5D (93)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus
+            unit name: dbuspresentation_updateXS.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBPL_uDefaultBaudRate                                                                          0x000057CA          0x2 (2)
+bit_time_lookup_table                                                                          0x000057CC          0x6 (6)
+DBPL_tGetSwSubmoduleReadResult                                                                 0x000021E1          0x30 (48)
+DBPL_tGetEcuConfigReadResult                                                                   0x00002169          0x78 (120)
+DBPL_uGetUsBitTimeForBaudRate                                                                  0x0000211D          0x4C (76)
+DBPL_vConfigureBaudrate                                                                        0x000020FD          0x1E (30)
+DBPL_ulGetBaudrateTransitionDelay                                                              0x000020F9          0x4 (4)
+DBPL_bIsRequestedBaudValid                                                                     0x000020C5          0x34 (52)
+DBPL_ulGetUpdateTransitionDelay                                                                0x000020BF          0x4 (4)
+DBPL_vLeaveUpdateMode                                                                          0x000020A9          0x16 (22)
+DBPL_vSetUpdateMode                                                                            0x00002099          0x10 (16)
+DBPL_bIsUpdateModePossible                                                                     0x00002095          0x4 (4)
+
+# Size of Functions/Procedures in this CU: 0x178 (376)
+# Size of Variables in this CU:            0x8 (8)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus
+            unit name: dbuspresentation_productionXS.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+DBPL_tGetUniqueIdReadResult                                                                    0x00002287          0x2 (2)
+DBPL_tReadProductionTime                                                                       0x00002251          0x1C (28)
+DBPL_tWriteProductionTime                                                                      0x0000226D          0x1A (26)
+DBPL_tWriteTracingId                                                                           0x0000223F          0x12 (18)
+DBPL_tWriteEcuConfigHw                                                                         0x00002211          0x2E (46)
+
+# Size of Functions/Procedures in this CU: 0x78 (120)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/dbus/sh30f
+            unit name: dbusmappingMc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBM_MextiHandle1                                                                               0x20000774          0x10 (16)
+DBM_MextiCallback1                                                                             0x20000764          0x10 (16)
+DBM_INT_bGetPin                                                                                0x000022E9          0x10 (16)
+DBM_INT_SetIrqModeFalling                                                                      0x000022E5          0x2 (2)
+DBM_INT_IsIrqEvent                                                                             0x000022D5          0x10 (16)
+DBM_INT_Init                                                                                   0x000022B5          0x20 (32)
+mextiCfg                                                                                       0x000057D2          0x1 (1)
+DBM_INT_ClearIrq                                                                               0x000022A5          0x10 (16)
+DBM_INT_DisableIrq                                                                             0x00002289          0x1C (28)
+
+# Size of Functions/Procedures in this CU: 0x6E (110)
+# Size of Variables in this CU:            0x21 (33)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/firmware_update
+            unit name: mem_drv_config.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MEMDRV_driverTable                                                                             0x000057D4          0x18 (24)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x18 (24)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/firmware_update/Programmer
+            unit name: prog_user_task_config.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+PRG_bUserHandleTask                                                                            0x000022F9          0x4 (4)
+
+# Size of Functions/Procedures in this CU: 0x4 (4)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/armCmx
+            unit name: int_exc_cfg.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+INT_StackFrame                                                                                 0x20000784          0x4 (4)
+HardFault_Handler                                                                              0x00002301          0x10 (16)
+SpuriousIsr_Handler                                                                            0x000022FD          0x2 (2)
+
+# Size of Functions/Procedures in this CU: 0x12 (18)
+# Size of Variables in this CU:            0x4 (4)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/mcal/sh30f
+            unit name: mcal_channels.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDIOB0                                                                                         0x000057F4          0x8 (8)
+MDIOA15_MUART0_TX                                                                              0x000057EC          0x8 (8)
+MDIOB0_MUART0_RX                                                                               0x000057FC          0x8 (8)
+MEXTIB0                                                                                        0x00005804          0x4 (4)
+MUART0_RX_PB0_TX_PA15                                                                          0x00005808          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0x28 (40)
+
+Compilation unit path: E:\project\example\MD370R\app/prog/MSP/armCmx
+            unit name: systick_cfg.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+SysTick_Handler                                                                                0x00002317          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0xC (12)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mcal.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MCAL_getEventData_uint8                                                                        0x00002381          0x4 (4)
+MCAL_disableEvent                                                                              0x00002379          0x8 (8)
+MCAL_enableEvent                                                                               0x00002367          0x12 (18)
+MCAL_invokeCallbacks                                                                           0x00002343          0x24 (36)
+MCAL_checkEventData                                                                            0x00002323          0x16 (22)
+MCAL_initCallback                                                                              0x00002339          0xA (10)
+
+# Size of Functions/Procedures in this CU: 0x62 (98)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mdio.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MDIO_read                                                                                      0x000023B9          0x24 (36)
+MDIO_configureOutputState                                                                      0x0000239D          0x1C (28)
+MDIO_init                                                                                      0x00002385          0x18 (24)
+
+# Size of Functions/Procedures in this CU: 0x58 (88)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: mdio_mc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MDIOA                                                                                          0x00005814          0x8 (8)
+MDIOB                                                                                          0x0000581C          0x8 (8)
+MDIO_resetPort                                                                                 0x0000250F          0x8 (8)
+MDIO_setPort                                                                                   0x00002509          0x6 (6)
+MDIO_readPort                                                                                  0x00002501          0x8 (8)
+MDIO_configure                                                                                 0x000024B7          0x4A (74)
+MDIO_configureSpeed                                                                            0x00002459          0x26 (38)
+MDIO_configureMode                                                                             0x00002439          0x20 (32)
+MDIO_configurePullType                                                                         0x00002419          0x20 (32)
+MDIO_configureOutputType                                                                       0x000023E7          0x32 (50)
+MDIO_enablePort                                                                                0x000023DD          0x2 (2)
+MDIO_getPort                                                                                   0x000023DF          0x4 (4)
+MDIO_getPin                                                                                    0x000023E3          0x4 (4)
+MDIO_configureAlternateFunction                                                                0x0000247F          0x38 (56)
+
+# Size of Functions/Procedures in this CU: 0x13A (314)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: muart.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MUART_IRQ_HandleTable                                                                          0x20000788          0x10 (16)
+MUART_IRQ_Handler                                                                              0x00002665          0x104 (260)
+MUART_configurePins                                                                            0x000025E5          0x30 (48)
+MUART_isEvent                                                                                  0x00002599          0x1E (30)
+MUART_enable                                                                                   0x0000251D          0x10 (16)
+MUART_getError                                                                                 0x00002517          0x6 (6)
+MUART_init                                                                                     0x00002615          0x50 (80)
+MUART_enableEvent                                                                              0x0000252D          0x34 (52)
+MUART_disableEvent                                                                             0x00002561          0x38 (56)
+MUART_writeByte                                                                                0x000025B7          0x2C (44)
+
+# Size of Functions/Procedures in this CU: 0x250 (592)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: muart_mc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MUART0                                                                                         0x00005824          0x10 (16)
+MUART_IRQ_disableEvent                                                                         0x00002949          0x20 (32)
+MUART_IRQ_enableEvent                                                                          0x00002929          0x20 (32)
+MUART_IRQ_enable                                                                               0x00002909          0x20 (32)
+MUART_IRQ_getIndex                                                                             0x00002901          0x6 (6)
+MUART_getChannelError                                                                          0x000028DF          0x22 (34)
+MUART_getStatusRegMaskForEvent                                                                 0x000028C5          0x1A (26)
+MUART_clearErrorReg                                                                            0x000028B9          0xC (12)
+MUART_readDataReg                                                                              0x000028A7          0xA (10)
+MUART_writeDataReg                                                                             0x0000289F          0x8 (8)
+MUART_disableChannel                                                                           0x00002871          0x14 (20)
+MUART_enableChannel                                                                            0x00002861          0x10 (16)
+MUART_configureBaudrate                                                                        0x00002885          0x1A (26)
+MUART_configure                                                                                0x00002831          0x30 (48)
+MUART_enableClock                                                                              0x00002811          0x20 (32)
+MUART_configurePeriphBaudrate                                                                  0x000027D5          0x3C (60)
+MUART_configurePeriphParity                                                                    0x000027AD          0x28 (40)
+MUART_configurePeriphStopBits                                                                  0x00002795          0x18 (24)
+MUART_configurePeriphDataBits                                                                  0x00002769          0x2C (44)
+MUART_getStatusReg                                                                             0x000028B1          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x1FE (510)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mexti.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MEXTI_IRQ_HandleTable                                                                          0x20000798          0x18 (24)
+MEXTI_IRQ_Handler                                                                              0x000029DD          0x40 (64)
+MEXTI_isEvent                                                                                  0x000029C3          0x1A (26)
+MEXTI_disableEvent                                                                             0x000029A9          0x1A (26)
+MEXTI_init                                                                                     0x00002969          0x40 (64)
+
+# Size of Functions/Procedures in this CU: 0xB4 (180)
+# Size of Variables in this CU:            0x18 (24)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: mexti_mc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MEXTI_IRQ_enable                                                                               0x00002B15          0x3C (60)
+MEXTI_IRQ_getIndex                                                                             0x00002AF1          0x24 (36)
+MEXTI_getStatusRegMaskForEvent                                                                 0x00002AB5          0x10 (16)
+MEXTI_getStatusReg                                                                             0x00002AA9          0xC (12)
+MEXTI_clearEventReg                                                                            0x00002AD9          0x18 (24)
+MEXTI_disableEventReg                                                                          0x00002AC5          0x14 (20)
+MEXTI_configureChannel                                                                         0x00002A8D          0x1A (26)
+MEXTI_configureTrigger                                                                         0x00002A1D          0x70 (112)
+
+# Size of Functions/Procedures in this CU: 0x132 (306)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mwdt.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MWDT_trigger                                                                                   0x20000601          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x8 (8)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal/sh30f
+            unit name: mwdt_mc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MWDT_LocalMwdtCfg                                                                              0x200007B0          0x4 (4)
+MWDT_triggerWDT                                                                                0x20000609          0x2C (44)
+
+# Size of Functions/Procedures in this CU: 0x2C (44)
+# Size of Variables in this CU:            0x4 (4)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: mcom.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MCOM_popByte                                                                                   0x00002B75          0x26 (38)
+MCOM_pushByte                                                                                  0x00002B51          0x24 (36)
+
+# Size of Functions/Procedures in this CU: 0x4A (74)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/mcal
+            unit name: msup.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MSUP_generateReset                                                                             0x00002B9D          0x1C (28)
+
+# Size of Functions/Procedures in this CU: 0x1C (28)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/armCmx
+            unit name: IntTblArmCM.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+ITBL_fixedVectors                                                                              0x00000000          0x8 (8)
+ITBL_coreVectors                                                                               0x00001C00          0x40 (64)
+ITBL_vResetHandler                                                                             0x00001A35          0x58 (88)
+ITBL_vSpuriousIsr                                                                              0x00001A29          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x64 (100)
+# Size of Variables in this CU:            0x48 (72)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/ped_fw/timer
+            unit name: system_timer.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+STIM_interruptTimerList                                                                        0x200007B4          0x4 (4)
+STIM_schedulerTimerList                                                                        0x200007B8          0x4 (4)
+STIM_tick                                                                                      0x200007BC          0x4 (4)
+STIM_InitTimer                                                                                 0x00002CB1          0x54 (84)
+STIM_SchedulerHandleTask                                                                       0x00002C79          0x38 (56)
+timeStamp                                                                                      0x200007C0          0x2 (2)
+STIM_InterruptHandler                                                                          0x00002C35          0x44 (68)
+timeStamp                                                                                      0x200007C2          0x2 (2)
+STIM_InitModule                                                                                0x00002C25          0x10 (16)
+STIM_ProcessTimers                                                                             0x00002BB8          0x6C (108)
+
+# Size of Functions/Procedures in this CU: 0x14C (332)
+# Size of Variables in this CU:            0x10 (16)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/armCmx
+            unit name: hsupArmCM.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+HSUP_IntCnt                                                                                    0x200007C4          0x4 (4)
+HSUP_uiProcToBigEndian                                                                         0x00002D4B          0x6 (6)
+HSUP_DelayClk                                                                                  0x00002D39          0x12 (18)
+HSUP_vEnableInt                                                                                0x00002D1D          0x1C (28)
+HSUP_vDisableInt                                                                               0x00002D05          0x18 (24)
+
+# Size of Functions/Procedures in this CU: 0x4C (76)
+# Size of Variables in this CU:            0x4 (4)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/armCmx
+            unit name: systick.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+SysTick_period                                                                                 0x200007C8          0x2 (2)
+SysTick_Configure                                                                              0x00002D5D          0x40 (64)
+SysTick_GetPeriod                                                                              0x00002D51          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x4C (76)
+# Size of Variables in this CU:            0x2 (2)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/std_lib
+            unit name: std_callback.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+STDCB_ExecuteCallbacks                                                                         0x00002DDD          0x32 (50)
+STDCB_AttachCallback                                                                           0x00002DAD          0x30 (48)
+STDCB_InitCallback                                                                             0x00002D9D          0x10 (16)
+
+# Size of Functions/Procedures in this CU: 0x72 (114)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/math
+            unit name: mathDiv.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MTDIV_div_mod                                                                                  0x00002E0F          0x30 (48)
+
+# Size of Functions/Procedures in this CU: 0x30 (48)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/lib
+            unit name: sh30f9xx_sa0_exti.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+EXTI_PinConfig                                                                                 0x00002E41          0x3C (60)
+
+# Size of Functions/Procedures in this CU: 0x3C (60)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/lib
+            unit name: sh30f9xx_sa0_rcc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+RCC_APB0PeriphClockOnOff                                                                       0x00002E7D          0x24 (36)
+
+# Size of Functions/Procedures in this CU: 0x24 (36)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/lib
+            unit name: sh30f9xx_sa0_timer.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+TIM_OnOff                                                                                      0x00002EED          0x14 (20)
+TIM_INTConfig                                                                                  0x00002ED9          0x14 (20)
+TIM_Init                                                                                       0x00002EAD          0x2C (44)
+TIM_StructInit                                                                                 0x00002EA1          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x60 (96)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f
+            unit name: weakvectbl.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+HWVT_vSpuriousIsr                                                                              0x00002F01          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x8 (8)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/ped_fw/basic
+            unit name: main.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+main                                                                                           0x00002F09          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0xC (12)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/Programmer
+            unit name: timerXS.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+TIM_uc8Start1                                                                                  0x20000040          0x1 (1)
+TIM_ucStart2                                                                                   0x20000041          0x1 (1)
+TIM_uc8End                                                                                     0x20000042          0x1 (1)
+TIM_uc16Start1                                                                                 0x20000043          0x1 (1)
+TIM_uc16End                                                                                    0x20000044          0x1 (1)
+TIM_uiTimeOld                                                                                  0x200007D0          0x2 (2)
+TIM_tCircleTime                                                                                0x200007CC          0x4 (4)
+TIM_ptTimer8Config                                                                             0x00005844          0x18 (24)
+TIM_ptTimer16Config                                                                            0x00005834          0x10 (16)
+TIM_u32GetCircleMicroSeconds                                                                   0x00002F69          0x20 (32)
+_TIM_bIsBaseTimerDown                                                                          0x00002F15          0x54 (84)
+
+# Size of Functions/Procedures in this CU: 0x74 (116)
+# Size of Variables in this CU:            0x33 (51)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/ped_fw/stdcrc/sh30f
+            unit name: StdCrc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+CRC_Ethernet_Calc                                                                              0x00001B51          0x16 (22)
+CRC_Ethernet_Update                                                                            0x00001ABD          0x90 (144)
+CRC_Ethernet_Init                                                                              0x00001A8D          0x30 (48)
+CRC_Ethernet_Finish                                                                            0x00001B4D          0x4 (4)
+
+# Size of Functions/Procedures in this CU: 0xDA (218)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus
+            unit name: bal.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BAL_ucSubsystemIndex                                                                           0x200007D6          0x1 (1)
+BAL_ucMessageIndex                                                                             0x200007D5          0x1 (1)
+BAL_ucTransmissionAttempts                                                                     0x200007D7          0x1 (1)
+BAL_uiTransmitFlagSubsystemIndex                                                               0x200007D8          0x2 (2)
+BAL_tReceivedMessageId                                                                         0x200007D2          0x2 (2)
+DLL_vMessageTransmitted                                                                        0x00003215          0xC0 (192)
+BAL_ucMaxRetries                                                                               0x200007D4          0x1 (1)
+BAL_bDispatchRcvdDbus2Msg                                                                      0x00003179          0x9C (156)
+BAL_HandleTask                                                                                 0x00002FE9          0x190 (400)
+BAL_ucGetMessageIndex                                                                          0x00002F8D          0x5C (92)
+BAL_ucGetSubsystemIndex                                                                        0x00002F89          0x4 (4)
+BAL_bIsSendingRetry                                                                            0x000032D5          0x10 (16)
+
+# Size of Functions/Procedures in this CU: 0x35C (860)
+# Size of Variables in this CU:            0x8 (8)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus
+            unit name: dbusdll.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DLL_aucMessageInputBuffer                                                                      0x200007DA          0xC9 (201)
+DLL_uiBitTime                                                                                  0x2000004A          0x2 (2)
+DLL_uiIdleStateDetectionTime                                                                   0x2000004C          0x2 (2)
+DLL_uiInterbyteTimeoutRx                                                                       0x2000004E          0x2 (2)
+DLL_uiAckGenerationTimeout                                                                     0x20000048          0x2 (2)
+DLL_tUnionCounter                                                                              0x20000937          0x1 (1)
+DLL_ucTaskState                                                                                0x20000942          0x1 (1)
+DLL_ucStatus                                                                                   0x20000940          0x1 (1)
+DLL_ucCharactersInRxMessageBuffer                                                              0x20000938          0x1 (1)
+DLL_ucDataLengthOfReceivedMessage                                                              0x2000093A          0x1 (1)
+DLL_ucRxNextCharacterToRead                                                                    0x2000093F          0x1 (1)
+DLL_pucNextCharToWrite                                                                         0x200008AC          0x4 (4)
+DLL_pucNextCharToCheck                                                                         0x200008A8          0x4 (4)
+DLL_ucCharactersToCheck                                                                        0x20000939          0x1 (1)
+DLL_bLittleEndianIdAdaptation                                                                  0x200008A3          0x1 (1)
+DLL_ucSucceedingCollisions                                                                     0x20000941          0x1 (1)
+DLL_ucReceivingNodeAddress                                                                     0x2000093C          0x1 (1)
+DLL_ucLastAddressWithWhichWeWereAddressed                                                      0x2000093B          0x1 (1)
+DLL_ulTimeStamp                                                                                0x20000950          0x4 (4)
+DLL_uiCollisionRandomValue                                                                     0x20000944          0x2 (2)
+DLL_uiUserCode                                                                                 0x2000094A          0x2 (2)
+DLL_ulCollisionWaitingTime                                                                     0x2000094C          0x4 (4)
+DLL_bSilent                                                                                    0x200008A4          0x1 (1)
+DLL_uiCrc                                                                                      0x20000946          0x2 (2)
+DLL_vSetSilentMode                                                                             0x00003C79          0xC (12)
+DLL_vGoOffline                                                                                 0x00003C65          0x14 (20)
+DLL_ucGetMainNodeAddress                                                                       0x00003C59          0xC (12)
+DLL_vReleaseDataFromReceivedMessage                                                            0x00003BFD          0x5C (92)
+DLL_ptReceiveMessage                                                                           0x00003B81          0x7C (124)
+DLL_bTransmitMessage                                                                           0x00003AA1          0xE0 (224)
+DLL_tMessageToSend                                                                             0x200008B0          0x87 (135)
+DLL_bIsBusReadyForTransmission                                                                 0x00003A61          0x40 (64)
+DLL_HandleTask                                                                                 0x00003955          0x10C (268)
+DLL_vHandleTxEvent                                                                             0x0000387D          0xD8 (216)
+DLL_vHandleRxEvent                                                                             0x00003455          0x428 (1064)
+DLL_ucRxMessageToWrite                                                                         0x2000093E          0x1 (1)
+DLL_ucRxCharToWrite                                                                            0x2000093D          0x1 (1)
+DLL_uiReceivedCrc                                                                              0x20000948          0x2 (2)
+DLL_vEnterIdleState                                                                            0x00003425          0x30 (48)
+DLL_vAddByteToCrcCalculation                                                                   0x000032E5          0x2C (44)
+DLL_uiCalcCollisionWaitingTime                                                                 0x000033AD          0x78 (120)
+DLL_vSetupTimings                                                                              0x0000335D          0x50 (80)
+DLL_bIsBusIdle                                                                                 0x00003311          0x4C (76)
+DLL_isSilentMode                                                                               0x00003C85          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0x9AC (2476)
+# Size of Variables in this CU:            0x17E (382)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus
+            unit name: dbuspresentation.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBPL_tReceiveAllServiceMessagesUpdateHsi                                                       0x00005874          0x90 (144)
+DBPL_tMessageBuffer                                                                            0x20000984          0x87 (135)
+DBPL_TaskState                                                                                 0x20000954          0x1 (1)
+DBPL_ucNumberOfBytesInMessage                                                                  0x20000A25          0x1 (1)
+DBPL_ucMemoryModule                                                                            0x20000A23          0x1 (1)
+DBPL_bSendMsg                                                                                  0x20000956          0x1 (1)
+DBPL_ucRepetitions                                                                             0x20000A27          0x1 (1)
+DBPL_uiSendPowerMsgUserTrigger                                                                 0x20000A2A          0x2 (2)
+DBPL_ucPowerMgmtMsgTargetAddr                                                                  0x20000A26          0x1 (1)
+DBPL_ucNodeAddrToRespondFrom                                                                   0x20000A24          0x1 (1)
+DBPL_uBaudRate                                                                                 0x20000A20          0x2 (2)
+DBPL_tOfflineDelayTimer                                                                        0x20000A0C          0x14 (20)
+DBPL_baudRateTimer                                                                             0x20000958          0x14 (20)
+DBPL_resetTriggerTimer                                                                         0x20000970          0x14 (20)
+DBPL_ucHsiSenderAddress                                                                        0x20000A22          0x1 (1)
+DBPL_hsiBaudRateTime                                                                           0x2000096C          0x4 (4)
+DBPL_uiPage                                                                                    0x20000A28          0x2 (2)
+DBPL_bInvalidReadProcess                                                                       0x20000955          0x1 (1)
+DBPL_offlineTimerElapsed                                                                       0x00003E51          0xA (10)
+DBPL_resetTriggerTimerElapsed                                                                  0x00003E5B          0xE (14)
+DBPL_baudRateTimerElapsed                                                                      0x00003D11          0x20 (32)
+offlineTimerCallback                                                                           0x20000A3C          0x10 (16)
+baudRateTimerCallback                                                                          0x20000A2C          0x10 (16)
+resetTriggerTimerCallback                                                                      0x20000A4C          0x10 (16)
+DBPL_bIsSendingPowerMgmtMsg                                                                    0x00003CAD          0x30 (48)
+DBPL_vWriteProductionTimeRequest                                                               0x00003D5D          0x64 (100)
+DBPL_vWriteTracingIdRequest                                                                    0x00003DC1          0x48 (72)
+DBPL_vWriteEcuConfigHwRequest                                                                  0x00003E09          0x48 (72)
+DBPL_vSendHsiProtocolResponse                                                                  0x00004685          0x60 (96)
+DBPL_vResetTriggerRequest                                                                      0x00003CDD          0x34 (52)
+DBPL_vBaudrateTriggerRequest                                                                   0x00003F21          0x34 (52)
+DBPL_vBaudrateTransitionRequest                                                                0x00003F55          0x34 (52)
+DBPL_vUpdateModeTransitionRequest                                                              0x00003D31          0x10 (16)
+DBPL_vSilentModeTransitionRequestBroadcast                                                     0x00003D41          0x1C (28)
+DBPL_vSendResponse                                                                             0x00003C91          0x1C (28)
+DBPL_vGoOfflineService                                                                         0x00003E91          0x68 (104)
+DBPL_bGetIdAddress                                                                             0x000045C1          0x34 (52)
+DBPL_bReadMemory                                                                               0x000044D1          0x3C (60)
+DBPL_bIsReceivedMessageIdPowerFail                                                             0x000044C1          0x10 (16)
+DBPL_bIsSendingPowerMsg                                                                        0x000042A5          0x38 (56)
+DBPL_bDoesAppSpecificRepetitionTimeoutApply                                                    0x00004295          0x10 (16)
+DBPL_vStopRepeatServiceMsg                                                                     0x00004461          0x30 (48)
+DBPL_vDecrementRepeatServiceMsg                                                                0x00004491          0x30 (48)
+DBPL_HandleTask                                                                                0x000042DD          0x184 (388)
+DBPL_ucGetModuleIndex                                                                          0x00004265          0x30 (48)
+DBPL_setResetTimer                                                                             0x00003E69          0x28 (40)
+DBPL_setBaudRateTimer                                                                          0x00003EF9          0x28 (40)
+DBPL_vEcuSwSubmoduleReadRequest                                                                0x00003F89          0x8C (140)
+DBPL_vEcuConfigReadRequest                                                                     0x00004015          0x88 (136)
+DBPL_vBaudrateVerifyRequest                                                                    0x0000409D          0x6C (108)
+DBPL_vUpdateModeVerifyRequest                                                                  0x00004109          0x58 (88)
+DBPL_vSilentModeTransitionRequest                                                              0x00004161          0x58 (88)
+DBPL_vEcuUniqueIdReadRequest                                                                   0x000041B9          0x70 (112)
+DBPL_vHsiProtocolRequest                                                                       0x00004229          0x3C (60)
+DBPL_vReadRequest32                                                                            0x0000450D          0xB4 (180)
+DBPL_vIdentityRequest32                                                                        0x000045F5          0x90 (144)
+
+# Size of Functions/Procedures in this CU: 0xA54 (2644)
+# Size of Variables in this CU:            0x196 (406)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus
+            unit name: dbus_lock.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DBLK_isDbusLockActive                                                                          0x20000A5C          0x1 (1)
+DBLK_IsDbusLockActive                                                                          0x000046E5          0xC (12)
+
+# Size of Functions/Procedures in this CU: 0xC (12)
+# Size of Variables in this CU:            0x1 (1)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus
+            unit name: dbus_rtos_interface.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+DBR_RunEventdrivenDbusTask                                                                     0x000046F1          0x4 (4)
+
+# Size of Functions/Procedures in this CU: 0x4 (4)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/dbus/cfg_templates
+            unit name: balXs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BAL_ucEmptyTxTable                                                                             0x20000A5D          0x1 (1)
+BAL_tBusObject                                                                                 0x00005904          0x11 (17)
+BAL_ucNumberOfSubsystems                                                                       0x00005918          0x1 (1)
+BAL_ucMaxCollisionRetries                                                                      0x00005915          0x1 (1)
+BAL_ucMaxMissingAckRetries                                                                     0x00005916          0x1 (1)
+BAL_ucMaxNackRetries                                                                           0x00005917          0x1 (1)
+BAL_bIsIdentifierInRangeOfReceiveTable                                                         0x000046F7          0x4 (4)
+BAL_vNotifyNonDeliverableMessage                                                               0x000046F5          0x2 (2)
+BAL_vEnterCriticalSectionForSending                                                            0x000046FB          0x2 (2)
+
+# Size of Functions/Procedures in this CU: 0x8 (8)
+# Size of Variables in this CU:            0x16 (22)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/MSP/sh30f/mem_drv
+            unit name: intflash_drv.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+DRV_LVRState                                                                                   0x20000A5E          0x1 (1)
+DRVIF_driver                                                                                   0x20000244          0x30 (48)
+DRVIF_cacheReset                                                                               0x200000ED          0x20 (32)
+DRVIF_checkErase                                                                               0x200000D1          0x1A (26)
+DRVIF_isAddrRangeValid                                                                         0x200001D9          0x14 (20)
+DRVIF_resetFlash                                                                               0x20000081          0x18 (24)
+DRVIF_isError                                                                                  0x2000006D          0x14 (20)
+DRVIF_isBusy                                                                                   0x2000005D          0x10 (16)
+DRVIF_deinitFlash                                                                              0x20000099          0x38 (56)
+DRVIF_initFlash                                                                                0x2000010D          0x48 (72)
+DRVIF_write                                                                                    0x20000155          0x84 (132)
+DRVIF_erase                                                                                    0x200001ED          0x58 (88)
+
+# Size of Functions/Procedures in this CU: 0x1E6 (486)
+# Size of Variables in this CU:            0x31 (49)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootManager
+            unit name: BootManagerModule.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+BMMOD_GetMemModuleHeader                                                                       0x000046FF          0x14 (20)
+
+# Size of Functions/Procedures in this CU: 0x14 (20)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootManager
+            unit name: BootManagerSharedData.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+BMDAT_sharedData                                                                               0x20000000          0x1C (28)
+BMDAT_setMagicPattern                                                                          0x0000473D          0xC (12)
+BMDAT_getBaudRate                                                                              0x00004731          0xC (12)
+BMDAT_setBaudRate                                                                              0x00004725          0xC (12)
+BMDAT_setBootModule                                                                            0x00004715          0x10 (16)
+
+# Size of Functions/Procedures in this CU: 0x34 (52)
+# Size of Variables in this CU:            0x1C (28)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/BootManager/sh30f
+            unit name: BootManagerSharedDataUc.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+BMDAT_setDataInitializedFlag                                                                   0x00004749          0x10 (16)
+
+# Size of Functions/Procedures in this CU: 0x10 (16)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/hsi
+            unit name: hsi_basic.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+HSI_DataIndication                                                                             0x00004759          0x80 (128)
+
+# Size of Functions/Procedures in this CU: 0x80 (128)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/otp_mem
+            unit name: fwu_otp_memory.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+OTP_Data                                                                                       0x00006000          0xAC (172)
+OTP_writeFlash                                                                                 0x00004801          0x78 (120)
+OTP_isEmpty                                                                                    0x000047E9          0x18 (24)
+OTP_getHardwareVersion                                                                         0x000047E1          0x8 (8)
+OTP_getProductionTime                                                                          0x000047D9          0x8 (8)
+OTP_writeHardwareVersion                                                                       0x000048A1          0x14 (20)
+OTP_writeTracingID                                                                             0x0000488D          0x14 (20)
+OTP_writeProductionTime                                                                        0x00004879          0x14 (20)
+
+# Size of Functions/Procedures in this CU: 0xDC (220)
+# Size of Variables in this CU:            0xAC (172)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/version
+            unit name: fwu_version.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+FWU_getHardwareVersion                                                                         0x000048B5          0x8 (8)
+
+# Size of Functions/Procedures in this CU: 0x8 (8)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/Programmer
+            unit name: basicXs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+BASIC_vUsrSchedTasks                                                                           0x000048CB          0x38 (56)
+BASIC_vUsrInitAppl                                                                             0x000048BD          0xE (14)
+
+# Size of Functions/Procedures in this CU: 0x46 (70)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/ped_fw/timer
+            unit name: timerlib.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+TIM_tTaskState                                                                                 0x20000A5F          0x1 (1)
+TIM_bHandleTask16                                                                              0x00004905          0xC0 (192)
+
+# Size of Functions/Procedures in this CU: 0xC0 (192)
+# Size of Variables in this CU:            0x1 (1)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/ped_fw/utility
+            unit name: utility.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+UTI_bGetBit                                                                                    0x000049E9          0x18 (24)
+UTI_vSetBit                                                                                    0x000049C5          0x24 (36)
+
+# Size of Functions/Procedures in this CU: 0x3C (60)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mal
+            unit name: moduleAdministration.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MAL_moduleDictionary                                                                           0x20000A62          0x6 (6)
+MAL_ModuleCount                                                                                0x20000A60          0x1 (1)
+MAL_PartitionToHeader                                                                          0x00004AFD          0x44 (68)
+moduleHeaderInRam                                                                              0x20000A6C          0x28 (40)
+actualPartition                                                                                0x20000A68          0x4 (4)
+MAL_getPartitionSize                                                                           0x00004AED          0xE (14)
+MAL_GetMemModuleByIndex                                                                        0x00004AB9          0x34 (52)
+MAL_GetMemModuleCount                                                                          0x00004A99          0x20 (32)
+MAL_GetMemModule                                                                               0x00004A69          0x30 (48)
+MAL_initPartition                                                                              0x00004A5D          0xC (12)
+MAL_copyPatToDictionary                                                                        0x00004A00          0x5C (92)
+
+# Size of Functions/Procedures in this CU: 0x13E (318)
+# Size of Variables in this CU:            0x33 (51)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mal
+            unit name: dataAnchor.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MAL_DataAnchor                                                                                 0x00000010          0x8 (8)
+MAL_FwuOptBytes                                                                                0x00000018          0x4 (4)
+
+# Size of Functions/Procedures in this CU: 0x0 (0)
+# Size of Variables in this CU:            0xC (12)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mal
+            unit name: mal_command.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MAL_OpenPartition                                                                              0x20000A94          0x4 (4)
+MAL_OpenModule                                                                                 0x20000050          0x2 (2)
+MAL_currentAddr                                                                                0x20000A9C          0x4 (4)
+MAL_sizeLeft                                                                                   0x20000AA8          0x4 (4)
+MAL_dataLen                                                                                    0x20000AA0          0x4 (4)
+MAL_crc                                                                                        0x20000A98          0x4 (4)
+MAL_writeStarted                                                                               0x20000AAC          0x1 (1)
+MAL_result                                                                                     0x20000AA4          0x1 (1)
+MAL_finishWriting                                                                              0x00004BC9          0x58 (88)
+MAL_handleWriteBlock                                                                           0x00004B41          0x88 (136)
+MAL_CMD_WritePrematurelyEnd                                                                    0x00004E79          0x4C (76)
+MAL_CMD_WriteAppend                                                                            0x00004E2D          0x4C (76)
+MAL_CMD_WriteStart                                                                             0x00004D99          0x94 (148)
+MAL_CMD_Read                                                                                   0x00004D55          0x44 (68)
+MAL_CMD_Close                                                                                  0x00004D35          0x20 (32)
+MAL_CMD_Open                                                                                   0x00004CE9          0x4C (76)
+MAL_CMD_DevInfo                                                                                0x00004C51          0x98 (152)
+MAL_CMD_init                                                                                   0x00004C49          0x8 (8)
+MAL_checkWriteOperation                                                                        0x00004C21          0x28 (40)
+
+# Size of Functions/Procedures in this CU: 0x384 (900)
+# Size of Variables in this CU:            0x18 (24)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/map/SRC/common
+            unit name: map_entry.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+MAP_ProcessMessage                                                                             0x00004EC5          0x44 (68)
+
+# Size of Functions/Procedures in this CU: 0x44 (68)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/map/SRC/config/ped_framework
+            unit name: map_mem_access_interface_XS.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MAP_MemAccess                                                                                  0x20000AB0          0x1C (28)
+MAP_MemAccess_Init                                                                             0x00004F08          0x40 (64)
+
+# Size of Functions/Procedures in this CU: 0x40 (64)
+# Size of Variables in this CU:            0x1C (28)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mem_drv
+            unit name: mem_drv.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MEMDRV_rb                                                                                      0x20000AD4          0xC (12)
+MEMDRV_writeAddr                                                                               0x20000C70          0x4 (4)
+MEMDRV_lastError                                                                               0x20000AD0          0x1 (1)
+MEMDRV_driver                                                                                  0x20000ACC          0x4 (4)
+MEMDRV_entryCheck                                                                              0x200002AD          0x2C (44)
+MEMDRV_waitForOperationComplete                                                                0x200002D9          0x1C (28)
+MEMDRV_writeBlock                                                                              0x20000311          0xAC (172)
+MEMDRV_flush                                                                                   0x20000589          0x5C (92)
+MEMDRV_write                                                                                   0x2000053D          0x4C (76)
+MEMDRV_eraseRange                                                                              0x200004CD          0x70 (112)
+MEMDRV_schedule                                                                                0x200004A5          0x28 (40)
+MEMDRV_getTimeout                                                                              0x20000499          0xC (12)
+MEMDRV_close                                                                                   0x200005E5          0x1C (28)
+MEMDRV_calcCrc                                                                                 0x20000439          0x60 (96)
+MEMDRV_read                                                                                    0x20000415          0x24 (36)
+MEMDRV_open                                                                                    0x200003BD          0x58 (88)
+MEMDRV_ringData                                                                                0x20000AE0          0x190 (400)
+MEMDRV_readBlock                                                                               0x200002F5          0x1C (28)
+
+# Size of Functions/Procedures in this CU: 0x354 (852)
+# Size of Variables in this CU:            0x1A5 (421)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mem_drv
+            unit name: intflash_abs.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+ABSIF_write                                                                                    0x20000275          0x38 (56)
+
+# Size of Functions/Procedures in this CU: 0x38 (56)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/mem_drv
+            unit name: com_mal.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+COMA_read                                                                                      0x00004F49          0x12 (18)
+
+# Size of Functions/Procedures in this CU: 0x12 (18)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/mem_utility
+            unit name: ring_buffer.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+RBUF_getFreeSpaceIntern                                                                        0x00004F6F          0x1A (26)
+RBUF_addToIndex                                                                                0x00004F5B          0x14 (20)
+RBUF_getBytesToRead                                                                            0x0000504D          0x14 (20)
+RBUF_readBuffN                                                                                 0x00005061          0x36 (54)
+RBUF_writeBuffN                                                                                0x00004F99          0x58 (88)
+RBUF_init                                                                                      0x00004F89          0xA (10)
+RBUF_reset                                                                                     0x00004F93          0x6 (6)
+RBUF_writeBuff                                                                                 0x00004FF1          0x5C (92)
+
+# Size of Functions/Procedures in this CU: 0x13C (316)
+# Size of Variables in this CU:            0x0 (0)
+
+Compilation unit path: E:\project\example\MD370R\common/prog/firmware_update/map/SRC/common
+            unit name: map_cmd.c
+
+Name                                                                                           Address             Size hex (dec)
+----                                                                                           -------             -------------
+List of Functions/Procedures
+
+
+List of Variables
+
+MAP_CMD_seqCntOfLastCorrectWriteMsg                                                            0x20000C74          0x1 (1)
+MAP_CMD_HandleUnknownCmd                                                                       0x000052C1          0x20 (32)
+MAP_CMD_WritePrematurelyEnd                                                                    0x000052F1          0x84 (132)
+status                                                                                         0x20000C76          0x1 (1)
+MAP_CMD_WriteAppend                                                                            0x00005249          0x78 (120)
+status                                                                                         0x20000C75          0x1 (1)
+MAP_CMD_WriteStart                                                                             0x00005375          0x70 (112)
+MAP_CMD_Read                                                                                   0x000053E5          0x90 (144)
+MAP_CMD_SetUpModule                                                                            0x00005191          0xB8 (184)
+MAP_CMD_lastModuleOpened                                                                       0x20000052          0x2 (2)
+MAP_CMD_GetDeviceInfo                                                                          0x00005099          0xF8 (248)
+MAP_CMD_GetCmdExecFunc                                                                         0x00005475          0x1C (28)
+BIGE_ToLong                                                                                    0x000052E0          0xE (14)
+
+# Size of Functions/Procedures in this CU: 0x3F6 (1014)
+# Size of Variables in this CU:            0x5 (5)
+
+Summary of objects:
+
+Code size for all functions listed                0x0 (0) Bytes
+Data size for all variables (RAM and ROM) listed  0x0 (0) Bytes
+
+IntegerSize			4
+LongDoubleSize		8
+FarPointerSize		4
+NearPointerSize		4
+GenericPointerSize	4
+
+# Maksym: out/programmer/bin/programmer.elf processed
+

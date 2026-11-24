@@ -1,0 +1,377 @@
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"timerXS.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._TIM_bIsBaseTimerDown,"ax",%progbits
+  18              		.align	1
+  19              		.global	_TIM_bIsBaseTimerDown
+  20              		.syntax unified
+  21              		.code	16
+  22              		.thumb_func
+  24              	_TIM_bIsBaseTimerDown:
+  25              	.LFB57:
+  26              		.file 1 "common/prog/firmware_update/Programmer/timerXS.c"
+   1:common/prog/firmware_update/Programmer/timerXS.c **** /*******************************************************************************
+   2:common/prog/firmware_update/Programmer/timerXS.c ****  *  Copyright (c) 2017 BSH Hausgeraete GmbH,
+   3:common/prog/firmware_update/Programmer/timerXS.c ****  *  Carl-Wery-Str. 34, 81739 Munich, Germany, www.bsh-group.de
+   4:common/prog/firmware_update/Programmer/timerXS.c ****  *
+   5:common/prog/firmware_update/Programmer/timerXS.c ****  *  All rights reserved. This program and the accompanying materials
+   6:common/prog/firmware_update/Programmer/timerXS.c ****  *  are protected by international copyright laws.
+   7:common/prog/firmware_update/Programmer/timerXS.c ****  *  Please contact copyright holder for licensing information.
+   8:common/prog/firmware_update/Programmer/timerXS.c ****  *
+   9:common/prog/firmware_update/Programmer/timerXS.c ****  *******************************************************************************
+  10:common/prog/firmware_update/Programmer/timerXS.c ****  *  PROJECT          Generic SW
+  11:common/prog/firmware_update/Programmer/timerXS.c ****  *  COMP_ABBREV      TIM
+  12:common/prog/firmware_update/Programmer/timerXS.c ****  ******************************************************************************/
+  13:common/prog/firmware_update/Programmer/timerXS.c **** 
+  14:common/prog/firmware_update/Programmer/timerXS.c **** 
+  15:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  16:common/prog/firmware_update/Programmer/timerXS.c **** /* DOCUMENTATION                                                              */
+  17:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  18:common/prog/firmware_update/Programmer/timerXS.c **** /** \file timerXS.c
+  19:common/prog/firmware_update/Programmer/timerXS.c ****     \brief Configuration template for timer library.
+  20:common/prog/firmware_update/Programmer/timerXS.c **** 
+  21:common/prog/firmware_update/Programmer/timerXS.c ****        This is the common project specific platform independent configuration.
+  22:common/prog/firmware_update/Programmer/timerXS.c **** */
+  23:common/prog/firmware_update/Programmer/timerXS.c **** 
+  24:common/prog/firmware_update/Programmer/timerXS.c **** 
+  25:common/prog/firmware_update/Programmer/timerXS.c **** 
+  26:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  27:common/prog/firmware_update/Programmer/timerXS.c **** /* INCLUDES                                                                   */
+  28:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  29:common/prog/firmware_update/Programmer/timerXS.c **** 
+  30:common/prog/firmware_update/Programmer/timerXS.c **** #include "bsh_stdinc.h"
+  31:common/prog/firmware_update/Programmer/timerXS.c **** #include "LibTypes.h"
+  32:common/prog/firmware_update/Programmer/timerXS.c **** #include "hsup.h"
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 2
+
+
+  33:common/prog/firmware_update/Programmer/timerXS.c **** #include "SegmentDef.h"
+  34:common/prog/firmware_update/Programmer/timerXS.c **** #include "timerlib.h"
+  35:common/prog/firmware_update/Programmer/timerXS.c **** 
+  36:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  37:common/prog/firmware_update/Programmer/timerXS.c **** /* PRIVATE DEFINITIONS                                                        */
+  38:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  39:common/prog/firmware_update/Programmer/timerXS.c **** #define BASE_TICKS_PER_US           (10000U) ///< base time in µs
+  40:common/prog/firmware_update/Programmer/timerXS.c **** 
+  41:common/prog/firmware_update/Programmer/timerXS.c **** 
+  42:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  43:common/prog/firmware_update/Programmer/timerXS.c **** /* PRIVATE TYPE DEFINITIONS                                                   */
+  44:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  45:common/prog/firmware_update/Programmer/timerXS.c **** 
+  46:common/prog/firmware_update/Programmer/timerXS.c **** 
+  47:common/prog/firmware_update/Programmer/timerXS.c **** typedef uint32_t Tclock;  ///< Type for circulating timer is 32 Bit
+  48:common/prog/firmware_update/Programmer/timerXS.c **** 
+  49:common/prog/firmware_update/Programmer/timerXS.c **** 
+  50:common/prog/firmware_update/Programmer/timerXS.c **** 
+  51:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  52:common/prog/firmware_update/Programmer/timerXS.c **** /* PRIVATE DATA DEFINITIONS                                                   */
+  53:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+  54:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW(START8_1)
+  55:common/prog/firmware_update/Programmer/timerXS.c **** /** Prescaler of 8-bit timer segment 1 */
+  56:common/prog/firmware_update/Programmer/timerXS.c **** static Ttimer8 TIM_uc8Start1;
+  57:common/prog/firmware_update/Programmer/timerXS.c **** 
+  58:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW(START8_2)
+  59:common/prog/firmware_update/Programmer/timerXS.c **** /** Prescaler of 8-bit timer segment 2 */
+  60:common/prog/firmware_update/Programmer/timerXS.c **** static Ttimer8 TIM_ucStart2;
+  61:common/prog/firmware_update/Programmer/timerXS.c **** 
+  62:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW(END8)
+  63:common/prog/firmware_update/Programmer/timerXS.c **** /** Status for timer library, end address of last 8 bit timer segment */
+  64:common/prog/firmware_update/Programmer/timerXS.c **** Ttimer8 TIM_uc8End;
+  65:common/prog/firmware_update/Programmer/timerXS.c **** 
+  66:common/prog/firmware_update/Programmer/timerXS.c **** 
+  67:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW(START16_1)
+  68:common/prog/firmware_update/Programmer/timerXS.c **** /** TIM_uc16Start1; Prescaler of 16-bit timer segment 1 */
+  69:common/prog/firmware_update/Programmer/timerXS.c **** static Ttimer8 TIM_uc16Start1;
+  70:common/prog/firmware_update/Programmer/timerXS.c **** 
+  71:common/prog/firmware_update/Programmer/timerXS.c **** 
+  72:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW(END16)
+  73:common/prog/firmware_update/Programmer/timerXS.c **** Ttimer8 TIM_uc16End;
+  74:common/prog/firmware_update/Programmer/timerXS.c **** SDEF_SetSegmentRW_Default() // switch back to default RW segment
+  75:common/prog/firmware_update/Programmer/timerXS.c **** 
+  76:common/prog/firmware_update/Programmer/timerXS.c **** static uint16_t TIM_uiTimeOld = 0;///< used to calculate time difference
+  77:common/prog/firmware_update/Programmer/timerXS.c **** 
+  78:common/prog/firmware_update/Programmer/timerXS.c **** static Tclock TIM_tCircleTime = 0;
+  79:common/prog/firmware_update/Programmer/timerXS.c **** 
+  80:common/prog/firmware_update/Programmer/timerXS.c **** 
+  81:common/prog/firmware_update/Programmer/timerXS.c **** 
+  82:common/prog/firmware_update/Programmer/timerXS.c **** /*****************************************************************/
+  83:common/prog/firmware_update/Programmer/timerXS.c **** /* Note: The prescalers TIM_uc8Startxx must be in the same order */
+  84:common/prog/firmware_update/Programmer/timerXS.c **** /*       the timer segments defined by linker options             */
+  85:common/prog/firmware_update/Programmer/timerXS.c **** /*****************************************************************/
+  86:common/prog/firmware_update/Programmer/timerXS.c **** 
+  87:common/prog/firmware_update/Programmer/timerXS.c **** /* Table of 8 Bit Timer prescalers */
+  88:common/prog/firmware_update/Programmer/timerXS.c **** const TtimerConfig TIM_ptTimer8Config[] =
+  89:common/prog/firmware_update/Programmer/timerXS.c **** {
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 3
+
+
+  90:common/prog/firmware_update/Programmer/timerXS.c ****            {&TIM_uc8Start1,    10},  /* 10ms, change for other base times */
+  91:common/prog/firmware_update/Programmer/timerXS.c ****            {&TIM_ucStart2,    200},  /* 2s  */
+  92:common/prog/firmware_update/Programmer/timerXS.c ****            {&TIM_uc8End,        0}   /* Do not change! Internal use and end mark of last segment */
+  93:common/prog/firmware_update/Programmer/timerXS.c **** };
+  94:common/prog/firmware_update/Programmer/timerXS.c **** 
+  95:common/prog/firmware_update/Programmer/timerXS.c **** /* Table of 16 Bit Timer prescalers */
+  96:common/prog/firmware_update/Programmer/timerXS.c **** const TtimerConfig TIM_ptTimer16Config[] ={
+  97:common/prog/firmware_update/Programmer/timerXS.c **** 
+  98:common/prog/firmware_update/Programmer/timerXS.c ****            {&TIM_uc16Start1,       10}, /* 10ms, change for other base times */
+  99:common/prog/firmware_update/Programmer/timerXS.c ****            {&TIM_uc16End,           0}  /* do not change, internal use and end mark of last segment
+ 100:common/prog/firmware_update/Programmer/timerXS.c **** }; 
+ 101:common/prog/firmware_update/Programmer/timerXS.c **** 
+ 102:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+ 103:common/prog/firmware_update/Programmer/timerXS.c **** /* PUBLIC FUNCTION DEFINITIONS                                                */
+ 104:common/prog/firmware_update/Programmer/timerXS.c **** /******************************************************************************/
+ 105:common/prog/firmware_update/Programmer/timerXS.c **** 
+ 106:common/prog/firmware_update/Programmer/timerXS.c **** BOOL _TIM_bIsBaseTimerDown(void)
+ 107:common/prog/firmware_update/Programmer/timerXS.c **** {
+  27              		.loc 1 107 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 70B5     		push	{r4, r5, r6, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 4, -16
+  35              		.cfi_offset 5, -12
+  36              		.cfi_offset 6, -8
+  37              		.cfi_offset 14, -4
+ 108:common/prog/firmware_update/Programmer/timerXS.c ****    /* Is base time down? */
+ 109:common/prog/firmware_update/Programmer/timerXS.c ****    while ( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) >= BASE_TICKS_PER_US )
+  38              		.loc 1 109 4 view .LVU1
+  39              	.L2:
+  40              		.loc 1 109 72 view .LVU2
+  41              		.loc 1 109 24 is_stmt 0 view .LVU3
+  42 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  43              	.LVL0:
+  44              		.loc 1 109 12 view .LVU4
+  45 0006 0F4C     		ldr	r4, .L6
+  46              		.loc 1 109 72 view .LVU5
+  47 0008 0F4D     		ldr	r5, .L6+4
+  48              		.loc 1 109 12 view .LVU6
+  49 000a 2388     		ldrh	r3, [r4]
+  50 000c C01A     		subs	r0, r0, r3
+  51              		.loc 1 109 72 view .LVU7
+  52 000e 80B2     		uxth	r0, r0
+  53 0010 A842     		cmp	r0, r5
+  54 0012 01D8     		bhi	.L4
+ 110:common/prog/firmware_update/Programmer/timerXS.c ****    {
+ 111:common/prog/firmware_update/Programmer/timerXS.c ****       /* HW-Timer elapsed */
+ 112:common/prog/firmware_update/Programmer/timerXS.c ****       HSUP_vDisableInt();
+ 113:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_uiTimeOld  += BASE_TICKS_PER_US;
+ 114:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_tCircleTime += BASE_TICKS_PER_US;
+ 115:common/prog/firmware_update/Programmer/timerXS.c ****       HSUP_vEnableInt();
+ 116:common/prog/firmware_update/Programmer/timerXS.c ****       if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+ 117:common/prog/firmware_update/Programmer/timerXS.c ****       {
+ 118:common/prog/firmware_update/Programmer/timerXS.c ****           return TRUE;
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 4
+
+
+ 119:common/prog/firmware_update/Programmer/timerXS.c ****       }
+ 120:common/prog/firmware_update/Programmer/timerXS.c ****    }
+ 121:common/prog/firmware_update/Programmer/timerXS.c ****    return FALSE;
+  55              		.loc 1 121 11 view .LVU8
+  56 0014 0020     		movs	r0, #0
+  57              	.L3:
+ 122:common/prog/firmware_update/Programmer/timerXS.c **** }
+  58              		.loc 1 122 1 view .LVU9
+  59              		@ sp needed
+  60 0016 70BD     		pop	{r4, r5, r6, pc}
+  61              	.L4:
+ 112:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_uiTimeOld  += BASE_TICKS_PER_US;
+  62              		.loc 1 112 7 is_stmt 1 view .LVU10
+  63 0018 FFF7FEFF 		bl	HSUP_vDisableInt
+  64              	.LVL1:
+ 113:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_tCircleTime += BASE_TICKS_PER_US;
+  65              		.loc 1 113 7 view .LVU11
+ 113:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_tCircleTime += BASE_TICKS_PER_US;
+  66              		.loc 1 113 22 is_stmt 0 view .LVU12
+  67 001c 0B49     		ldr	r1, .L6+8
+  68 001e 2388     		ldrh	r3, [r4]
+ 114:common/prog/firmware_update/Programmer/timerXS.c ****       HSUP_vEnableInt();
+  69              		.loc 1 114 23 view .LVU13
+  70 0020 0B4A     		ldr	r2, .L6+12
+ 113:common/prog/firmware_update/Programmer/timerXS.c ****       TIM_tCircleTime += BASE_TICKS_PER_US;
+  71              		.loc 1 113 22 view .LVU14
+  72 0022 5B18     		adds	r3, r3, r1
+  73 0024 2380     		strh	r3, [r4]
+ 114:common/prog/firmware_update/Programmer/timerXS.c ****       HSUP_vEnableInt();
+  74              		.loc 1 114 7 is_stmt 1 view .LVU15
+ 114:common/prog/firmware_update/Programmer/timerXS.c ****       HSUP_vEnableInt();
+  75              		.loc 1 114 23 is_stmt 0 view .LVU16
+  76 0026 1368     		ldr	r3, [r2]
+  77 0028 5B18     		adds	r3, r3, r1
+  78 002a 1360     		str	r3, [r2]
+ 115:common/prog/firmware_update/Programmer/timerXS.c ****       if( (uint16_t)( TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld ) < BASE_TICKS_PER_US )
+  79              		.loc 1 115 7 is_stmt 1 view .LVU17
+  80 002c FFF7FEFF 		bl	HSUP_vEnableInt
+  81              	.LVL2:
+ 116:common/prog/firmware_update/Programmer/timerXS.c ****       {
+  82              		.loc 1 116 7 view .LVU18
+ 116:common/prog/firmware_update/Programmer/timerXS.c ****       {
+  83              		.loc 1 116 23 is_stmt 0 view .LVU19
+  84 0030 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+  85              	.LVL3:
+ 116:common/prog/firmware_update/Programmer/timerXS.c ****       {
+  86              		.loc 1 116 11 view .LVU20
+  87 0034 2388     		ldrh	r3, [r4]
+  88 0036 C01A     		subs	r0, r0, r3
+ 116:common/prog/firmware_update/Programmer/timerXS.c ****       {
+  89              		.loc 1 116 9 view .LVU21
+  90 0038 80B2     		uxth	r0, r0
+  91 003a A842     		cmp	r0, r5
+  92 003c E1D8     		bhi	.L2
+ 118:common/prog/firmware_update/Programmer/timerXS.c ****       }
+  93              		.loc 1 118 18 view .LVU22
+  94 003e 0120     		movs	r0, #1
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 5
+
+
+  95 0040 E9E7     		b	.L3
+  96              	.L7:
+  97 0042 C046     		.align	2
+  98              	.L6:
+  99 0044 00000000 		.word	.LANCHOR0
+ 100 0048 0F270000 		.word	9999
+ 101 004c 10270000 		.word	10000
+ 102 0050 00000000 		.word	.LANCHOR1
+ 103              		.cfi_endproc
+ 104              	.LFE57:
+ 106              		.section	.text.TIM_u32GetCircleMicroSeconds,"ax",%progbits
+ 107              		.align	1
+ 108              		.global	TIM_u32GetCircleMicroSeconds
+ 109              		.syntax unified
+ 110              		.code	16
+ 111              		.thumb_func
+ 113              	TIM_u32GetCircleMicroSeconds:
+ 114              	.LFB58:
+ 123:common/prog/firmware_update/Programmer/timerXS.c **** 
+ 124:common/prog/firmware_update/Programmer/timerXS.c **** 
+ 125:common/prog/firmware_update/Programmer/timerXS.c **** uint32 TIM_u32GetCircleMicroSeconds(void)
+ 126:common/prog/firmware_update/Programmer/timerXS.c **** {
+ 115              		.loc 1 126 1 is_stmt 1 view -0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127:common/prog/firmware_update/Programmer/timerXS.c ****    uint16_t elapsedTime = (uint16_t)(TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld);
+ 119              		.loc 1 127 4 view .LVU24
+ 126:common/prog/firmware_update/Programmer/timerXS.c ****    uint16_t elapsedTime = (uint16_t)(TIM_uiGetCircleMicroSeconds() - TIM_uiTimeOld);
+ 120              		.loc 1 126 1 is_stmt 0 view .LVU25
+ 121 0000 10B5     		push	{r4, lr}
+ 122              	.LCFI1:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 4, -8
+ 125              		.cfi_offset 14, -4
+ 126              		.loc 1 127 38 view .LVU26
+ 127 0002 FFF7FEFF 		bl	TIM_uiGetCircleMicroSeconds
+ 128              	.LVL4:
+ 128:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 129              		.loc 1 128 4 is_stmt 1 view .LVU27
+ 129:common/prog/firmware_update/Programmer/timerXS.c **** }
+ 130              		.loc 1 129 1 is_stmt 0 view .LVU28
+ 131              		@ sp needed
+ 127:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 132              		.loc 1 127 27 view .LVU29
+ 133 0006 044B     		ldr	r3, .L9
+ 127:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 134              		.loc 1 127 13 view .LVU30
+ 135 0008 1B88     		ldrh	r3, [r3]
+ 136 000a C01A     		subs	r0, r0, r3
+ 137              	.LVL5:
+ 128:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 138              		.loc 1 128 27 view .LVU31
+ 139 000c 034B     		ldr	r3, .L9+4
+ 128:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 140              		.loc 1 128 29 view .LVU32
+ 141 000e 80B2     		uxth	r0, r0
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 6
+
+
+ 128:common/prog/firmware_update/Programmer/timerXS.c ****    return TIM_tCircleTime + (uint32)elapsedTime;
+ 142              		.loc 1 128 27 view .LVU33
+ 143 0010 1B68     		ldr	r3, [r3]
+ 144 0012 C018     		adds	r0, r0, r3
+ 145              		.loc 1 129 1 view .LVU34
+ 146 0014 10BD     		pop	{r4, pc}
+ 147              	.L10:
+ 148 0016 C046     		.align	2
+ 149              	.L9:
+ 150 0018 00000000 		.word	.LANCHOR0
+ 151 001c 00000000 		.word	.LANCHOR1
+ 152              		.cfi_endproc
+ 153              	.LFE58:
+ 155              		.global	TIM_ptTimer16Config
+ 156              		.global	TIM_ptTimer8Config
+ 157              		.global	TIM_uc16End
+ 158              		.global	TIM_uc8End
+ 159              		.section	.END16,"aw"
+ 162              	TIM_uc16End:
+ 163 0000 00       		.space	1
+ 164              		.section	.END8,"aw"
+ 167              	TIM_uc8End:
+ 168 0000 00       		.space	1
+ 169              		.section	.START16_1,"aw"
+ 172              	TIM_uc16Start1:
+ 173 0000 00       		.space	1
+ 174              		.section	.START8_1,"aw"
+ 177              	TIM_uc8Start1:
+ 178 0000 00       		.space	1
+ 179              		.section	.START8_2,"aw"
+ 182              	TIM_ucStart2:
+ 183 0000 00       		.space	1
+ 184              		.section	.bss.TIM_tCircleTime,"aw",%nobits
+ 185              		.align	2
+ 186              		.set	.LANCHOR1,. + 0
+ 189              	TIM_tCircleTime:
+ 190 0000 00000000 		.space	4
+ 191              		.section	.bss.TIM_uiTimeOld,"aw",%nobits
+ 192              		.align	1
+ 193              		.set	.LANCHOR0,. + 0
+ 196              	TIM_uiTimeOld:
+ 197 0000 0000     		.space	2
+ 198              		.section	.rodata.TIM_ptTimer16Config,"a"
+ 199              		.align	2
+ 202              	TIM_ptTimer16Config:
+ 203 0000 00000000 		.word	TIM_uc16Start1
+ 204 0004 0A       		.byte	10
+ 205 0005 000000   		.space	3
+ 206 0008 00000000 		.word	TIM_uc16End
+ 207 000c 00       		.byte	0
+ 208 000d 000000   		.space	3
+ 209              		.section	.rodata.TIM_ptTimer8Config,"a"
+ 210              		.align	2
+ 213              	TIM_ptTimer8Config:
+ 214 0000 00000000 		.word	TIM_uc8Start1
+ 215 0004 0A       		.byte	10
+ 216 0005 000000   		.space	3
+ARM GAS  C:\Users\SX2605~1.HOD\AppData\Local\Temp\cc23IqHf.s 			page 7
+
+
+ 217 0008 00000000 		.word	TIM_ucStart2
+ 218 000c C8       		.byte	-56
+ 219 000d 000000   		.space	3
+ 220 0010 00000000 		.word	TIM_uc8End
+ 221 0014 00       		.byte	0
+ 222 0015 000000   		.space	3
+ 223              		.text
+ 224              	.Letext0:
+ 225              		.file 2 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\machine\\_
+ 226              		.file 3 "e:\\project\\example\\md370r\\tools\\8_2019-q3-update\\arm-none-eabi\\include\\sys\\_stdi
+ 227              		.file 4 "common/prog/ped_fw/LibTypes.h"
+ 228              		.file 5 "common/prog/ped_fw/timer/timerlib.h"
+ 229              		.file 6 "common/prog/MSP/hsup.h"
+ 230              		.file 7 "common/prog/MSP/sh30f/lib/sh30f9xx_sa0_dma.h"

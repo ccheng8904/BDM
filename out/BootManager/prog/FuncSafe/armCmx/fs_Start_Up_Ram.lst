@@ -1,0 +1,105 @@
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Start_Up_Ram.s 			page 1
+
+
+   1              	    .syntax unified
+   2              	    .text
+   3              	    .thumb
+   4              	    .align 2
+   5              	;
+   6              	.set BCKGRND, 0x00000000
+   7              	;
+   8              	    .extern FSF_vRam_FatalException
+   9              	;
+  10              	    .global FSF_vRamcheck
+  11              	.func FSF_vRamcheck, FSF_vRamcheck
+  12              	.type FSF_vRamcheck, "function"
+  13              	.thumb_func
+  14              	FSF_vRamcheck:
+  15 0000 8346     	    MOV r11, r0
+  16 0002 0F46     	    MOV r7, r1
+  17 0004 0068     	    LDR r0, [r0]
+  18 0006 8018     	    ADDS r0, r0, r2
+  19 0008 8046     	    MOV r8, r0
+  20 000a 5846     	    MOV r0, r11
+  21 000c 0430     	    ADDS r0, r0, #4
+  22 000e 0068     	    LDR r0, [r0]
+  23 0010 0130     	    ADDS r0, r0, #1
+  24 0012 8146     	    MOV r9, r0
+  25 0014 1F4C     	    LDR r4, =BCKGRND
+  26 0016 E543     	    MVNS r5, r4
+  27              	MainLoop:
+  28 0018 4246     	    MOV r2, r8
+  29              	LoopStep1:
+  30 001a 1460     	    STR r4, [r2]
+  31 001c 0432     	    ADDS r2, r2, #4
+  32 001e 4A45     	    CMP r2, r9
+  33 0020 FBD3     	    BCC LoopStep1
+  34 0022 4246     	    MOV r2, r8
+  35              	LoopStep2:
+  36 0024 1068     	    LDR r0, [r2]
+  37 0026 A042     	    CMP r0, r4
+  38 0028 26D1     	    BNE TestFail
+  39 002a 1560     	    STR r5, [r2]
+  40 002c 0432     	    ADDS r2, r2, #4
+  41 002e 4A45     	    CMP r2, r9
+  42 0030 F8D3     	    BCC LoopStep2
+  43 0032 4246     	    MOV r2, r8
+  44              	LoopStep3:
+  45 0034 1068     	    LDR r0, [r2]
+  46 0036 A842     	    CMP r0, r5
+  47 0038 1ED1     	    BNE TestFail
+  48 003a 1460     	    STR r4, [r2]
+  49 003c 0432     	    ADDS r2, r2, #4
+  50 003e 4A45     	    CMP r2, r9
+  51 0040 F8D3     	    BCC LoopStep3
+  52 0042 4A46     	    MOV r2, r9
+  53              	LoopStep4:
+  54 0044 043A     	    SUBS r2, r2, #4
+  55 0046 1068     	    LDR r0, [r2]
+  56 0048 A042     	    CMP r0, r4
+  57 004a 15D1     	    BNE TestFail
+ARM GAS  out/BootManager/prog/FuncSafe/armCmx/fs_Start_Up_Ram.s 			page 2
+
+
+  58 004c 1560     	    STR r5, [r2]
+  59 004e 4245     	    CMP r2, r8
+  60 0050 F8D8     	    BHI LoopStep4
+  61 0052 4A46     	    MOV r2, r9
+  62              	LoopStep5:
+  63 0054 043A     	    SUBS r2, r2, #4
+  64 0056 1068     	    LDR r0, [r2]
+  65 0058 A842     	    CMP r0, r5
+  66 005a 0DD1     	    BNE TestFail
+  67 005c 1460     	    STR r4, [r2]
+  68 005e 4245     	    CMP r2, r8
+  69 0060 F8D8     	    BHI LoopStep5
+  70 0062 4246     	    MOV r2, r8
+  71              	LoopStep6:
+  72 0064 1068     	    LDR r0, [r2]
+  73 0066 A042     	    CMP r0, r4
+  74 0068 06D1     	    BNE TestFail
+  75 006a 0432     	    ADDS r2, r2, #4
+  76 006c 4A45     	    CMP r2, r9
+  77 006e F9D3     	    BCC LoopStep6
+  78 0070 013F     	    SUBS r7, r7, #1
+  79 0072 002F     	    CMP r7, #0
+  80 0074 02D1     	    BNE InitOfNextCheck
+  81 0076 7047     	    BX lr
+  82              	TestFail:
+  83 0078 FFF7FEFF 	    BL FSF_vRam_FatalException
+  84              	InitOfNextCheck:
+  85 007c 5846     	    MOV r0, r11
+  86 007e 0830     	    ADDS r0, r0, #8
+  87 0080 8346     	    MOV r11, r0
+  88 0082 0068     	    LDR r0, [r0]
+  89 0084 8046     	    MOV r8, r0
+  90 0086 5846     	    MOV r0, r11
+  91 0088 0430     	    ADDS r0, r0, #4
+  92 008a 0068     	    LDR r0, [r0]
+  93 008c 0130     	    ADDS r0, r0, #1
+  94 008e 8146     	    MOV r9, r0
+  95 0090 C2E7     	    B MainLoop
+  96              	    .endfunc
+  97              	;
+  98 0092 C046     	    NOP
+  99 0094 00000000 	    .end

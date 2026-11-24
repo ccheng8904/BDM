@@ -1,0 +1,358 @@
+
+out/lromLoader/prog/MSP/mcal/sh30f/mwdt_mc.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MWDT_initWDT:
+
+00000000 <MWDT_initWDT>:
+/* PUBLIC FUNCTION DEFINITIONS                                                */
+/******************************************************************************/
+
+
+enum MCAL_Error MWDT_initWDT(const struct MWDT_Config *config)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+    MWDT_LocalMwdtCfg = config;
+   2:	4b55      	ldr	r3, [pc, #340]	; (158 <MWDT_initWDT+0x158>)
+    if (MWDT_LocalMwdtCfg->mode == MWDT_NORMAL_MODE)
+   4:	7805      	ldrb	r5, [r0, #0]
+{
+   6:	0004      	movs	r4, r0
+   8:	b087      	sub	sp, #28
+    MWDT_LocalMwdtCfg = config;
+   a:	6018      	str	r0, [r3, #0]
+    if (MWDT_LocalMwdtCfg->mode == MWDT_NORMAL_MODE)
+   c:	2d00      	cmp	r5, #0
+   e:	d143      	bne.n	98 <MWDT_initWDT+0x98>
+    max_timeout_ms = (((MWDT_IWDT_MIN_PRESCALER << MWDT_IWDT_PRESCALER_512) * MWDT_IWDT_MAX_TICKS ) / MWDT_IWDT_LSI_IN_KHZ);
+    /* Calculate minimum IWDG tick (step) achievable at current clock */
+    min_timeout_ms = (max_timeout_ms >> MWDT_IWDT_PRESCALER_512) / MWDT_IWDT_MAX_TICKS;
+    min_timeout_ms = (min_timeout_ms < 1u) ? 1u : min_timeout_ms;
+
+    if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+  10:	8843      	ldrh	r3, [r0, #2]
+  12:	4952      	ldr	r1, [pc, #328]	; (15c <MWDT_initWDT+0x15c>)
+  14:	1e5a      	subs	r2, r3, #1
+  16:	b292      	uxth	r2, r2
+    {
+        /* Required watchdog timeout is not achievable with current PCLOCK */
+        return MCAL_ERROR_PARAM;
+  18:	2003      	movs	r0, #3
+    if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+  1a:	428a      	cmp	r2, r1
+  1c:	d81f      	bhi.n	5e <MWDT_initWDT+0x5e>
+    max_timeout_ms = (((MWDT_IWDT_MIN_PRESCALER << MWDT_IWDT_PRESCALER_512) * MWDT_IWDT_MAX_TICKS ) / MWDT_IWDT_LSI_IN_KHZ);
+  1e:	4950      	ldr	r1, [pc, #320]	; (160 <MWDT_initWDT+0x160>)
+    }
+    // Get the most precise (lowest) prescaler settings
+    while ((config->upperTimeLimit <= (max_timeout_ms >> 1)) && (prescalerCorrection < MWDT_IWDT_PRESCALER_512))
+  20:	084a      	lsrs	r2, r1, #1
+  22:	4293      	cmp	r3, r2
+  24:	d801      	bhi.n	2a <MWDT_initWDT+0x2a>
+  26:	2d07      	cmp	r5, #7
+  28:	d11b      	bne.n	62 <MWDT_initWDT+0x62>
+        prescalerCorrection++;                 // decreasing prescaler
+        max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+    }
+
+    /* Calculate IWDG_reload_value according required IWDG timeout */
+    reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_IWDT_MAX_TICKS) / max_timeout_ms);
+  2a:	0318      	lsls	r0, r3, #12
+  2c:	1ac0      	subs	r0, r0, r3
+  2e:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+    /* Calculate IWDG counter prescaler */
+    prescaler   = (uint32_t)MWDT_IWDT_PRESCALER_512 - prescalerCorrection; 
+  32:	2307      	movs	r3, #7
+    reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_IWDT_MAX_TICKS) / max_timeout_ms);
+  34:	0007      	movs	r7, r0
+    uint8_t  iwdgPrescalerReg;
+    uint32_t iwdgPrescaler;
+    uint32_t iwdgTimeMs;
+    // Possible setting for IWDG prescaler: 4, 8, 16, 32, 64, 128, 256 and 512
+    iwdgPrescalerReg = (uint8_t)prescaler;
+    iwdgPrescaler = MWDT_IWDT_MIN_PRESCALER;    // 4u
+  36:	2104      	movs	r1, #4
+    prescaler   = (uint32_t)MWDT_IWDT_PRESCALER_512 - prescalerCorrection; 
+  38:	1b5d      	subs	r5, r3, r5
+    iwdgPrescalerReg = (uint8_t)prescaler;
+  3a:	b2ee      	uxtb	r6, r5
+    while(iwdgPrescalerReg)
+  3c:	2e00      	cmp	r6, #0
+  3e:	d114      	bne.n	6a <MWDT_initWDT+0x6a>
+    {
+        iwdgPrescaler <<= 1u;
+        iwdgPrescalerReg--;
+    }
+    iwdgPrescaler *= reloadValue;
+  40:	4379      	muls	r1, r7
+ *  \return   result of division
+ */
+static inline uint32_t MTDIV_div_32_32(uint32_t dividend, uint32_t divisor)
+{
+  #ifdef NO_CORE_DEVIDER
+    return MTDIV_div_mod(dividend, divisor).quotient;
+  42:	a802      	add	r0, sp, #8
+  44:	2280      	movs	r2, #128	; 0x80
+  46:	f7ff fffe 	bl	0 <MTDIV_div_mod>
+    iwdgTimeMs = MTDIV_div_32_32(iwdgPrescaler, MWDT_IWDT_LSI_IN_KHZ);
+    return iwdgTimeMs * MWDT_MS_TO_US;
+  4a:	20fa      	movs	r0, #250	; 0xfa
+  4c:	9b02      	ldr	r3, [sp, #8]
+  4e:	0080      	lsls	r0, r0, #2
+  50:	4358      	muls	r0, r3
+    percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+  52:	8861      	ldrh	r1, [r4, #2]
+  54:	f7ff fffe 	bl	0 <MWDT_getPrecisionInPercent>
+    if(MWDT_PRECISION_LIMIT_CHECK < percent)
+  58:	2805      	cmp	r0, #5
+  5a:	d90a      	bls.n	72 <MWDT_initWDT+0x72>
+        return MCAL_ERROR_PRECISION;
+  5c:	2005      	movs	r0, #5
+}
+  5e:	b007      	add	sp, #28
+  60:	bdf0      	pop	{r4, r5, r6, r7, pc}
+        prescalerCorrection++;                 // decreasing prescaler
+  62:	3501      	adds	r5, #1
+  64:	0011      	movs	r1, r2
+  66:	b2ed      	uxtb	r5, r5
+        max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+  68:	e7da      	b.n	20 <MWDT_initWDT+0x20>
+        iwdgPrescalerReg--;
+  6a:	3e01      	subs	r6, #1
+        iwdgPrescaler <<= 1u;
+  6c:	0049      	lsls	r1, r1, #1
+        iwdgPrescalerReg--;
+  6e:	b2f6      	uxtb	r6, r6
+  70:	e7e4      	b.n	3c <MWDT_initWDT+0x3c>
+                | (reloadValue << IWDT_CR_IWDTRLR_Pos));
+  72:	4b3c      	ldr	r3, [pc, #240]	; (164 <MWDT_initWDT+0x164>)
+                | (prescaler << IWDT_CR_IWDTPR_Pos) \
+  74:	032d      	lsls	r5, r5, #12
+    IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+  76:	4a3c      	ldr	r2, [pc, #240]	; (168 <MWDT_initWDT+0x168>)
+                | (reloadValue << IWDT_CR_IWDTRLR_Pos));
+  78:	433d      	orrs	r5, r7
+  7a:	432b      	orrs	r3, r5
+    IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+  7c:	6013      	str	r3, [r2, #0]
+    IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+  7e:	4b3b      	ldr	r3, [pc, #236]	; (16c <MWDT_initWDT+0x16c>)
+  80:	6053      	str	r3, [r2, #4]
+    if (config->debugConfig == MWDT_DEBUG_STOPPED)
+  82:	79a3      	ldrb	r3, [r4, #6]
+  84:	2b01      	cmp	r3, #1
+  86:	d001      	beq.n	8c <MWDT_initWDT+0x8c>
+    return MCAL_OK;
+  88:	2000      	movs	r0, #0
+  8a:	e7e8      	b.n	5e <MWDT_initWDT+0x5e>
+        SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_IWDT;
+  8c:	4a38      	ldr	r2, [pc, #224]	; (170 <MWDT_initWDT+0x170>)
+  8e:	4b39      	ldr	r3, [pc, #228]	; (174 <MWDT_initWDT+0x174>)
+  90:	6911      	ldr	r1, [r2, #16]
+  92:	430b      	orrs	r3, r1
+  94:	6113      	str	r3, [r2, #16]
+  96:	e7f7      	b.n	88 <MWDT_initWDT+0x88>
+        return MCAL_ERROR_PARAM;
+  98:	2003      	movs	r0, #3
+    else if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+  9a:	2d01      	cmp	r5, #1
+  9c:	d1df      	bne.n	5e <MWDT_initWDT+0x5e>
+    if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+  9e:	26ae      	movs	r6, #174	; 0xae
+  a0:	8863      	ldrh	r3, [r4, #2]
+    uint8_t prescalerCorrection = 0U;
+  a2:	2700      	movs	r7, #0
+    if ((config->upperTimeLimit > max_timeout_ms) || (config->upperTimeLimit < min_timeout_ms))
+  a4:	1e5a      	subs	r2, r3, #1
+  a6:	b292      	uxth	r2, r2
+  a8:	0076      	lsls	r6, r6, #1
+  aa:	42b2      	cmp	r2, r6
+  ac:	d2d7      	bcs.n	5e <MWDT_initWDT+0x5e>
+    while ((config->upperTimeLimit <= (max_timeout_ms >> 1)) && (prescalerCorrection < MWDT_WWDG_PRESCALER_128))
+  ae:	0872      	lsrs	r2, r6, #1
+  b0:	4293      	cmp	r3, r2
+  b2:	d801      	bhi.n	b8 <MWDT_initWDT+0xb8>
+  b4:	2f07      	cmp	r7, #7
+  b6:	d146      	bne.n	146 <MWDT_initWDT+0x146>
+    reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout_ms);
+  b8:	20ff      	movs	r0, #255	; 0xff
+  ba:	0031      	movs	r1, r6
+  bc:	4358      	muls	r0, r3
+  be:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+    prescaler   = (uint32_t)MWDT_WWDG_PRESCALER_128 - prescalerCorrection; 
+  c2:	2307      	movs	r3, #7
+    reloadValue = (uint32_t)(((uint32_t)config->upperTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout_ms);
+  c4:	0005      	movs	r5, r0
+    windowValue = reloadValue - (((uint32_t)config->lowerTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout_ms);
+  c6:	88a0      	ldrh	r0, [r4, #4]
+    prescaler   = (uint32_t)MWDT_WWDG_PRESCALER_128 - prescalerCorrection; 
+  c8:	1bdf      	subs	r7, r3, r7
+    windowValue = reloadValue - (((uint32_t)config->lowerTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout_ms);
+  ca:	33f8      	adds	r3, #248	; 0xf8
+  cc:	0031      	movs	r1, r6
+  ce:	4358      	muls	r0, r3
+  d0:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+    uint32_t wwdgClockMHz = PCLOCK;
+  #endif
+
+    wwdgTimerBase = (uint8_t)prescaler;
+    // Possible setting for WWDG prescaler: 1, 2, 4, 8, 16, 32, 64 and 128
+    wwdgPrescaler = MWDG_MIN_PRESCALER_WWDG;
+  d4:	2101      	movs	r1, #1
+    windowValue = reloadValue - (((uint32_t)config->lowerTimeLimit * MWDT_WWDG_MAX_TICKS) / max_timeout_ms);
+  d6:	1a2b      	subs	r3, r5, r0
+  d8:	9301      	str	r3, [sp, #4]
+    wwdgTimerBase = (uint8_t)prescaler;
+  da:	b2fe      	uxtb	r6, r7
+    while(wwdgTimerBase)
+  dc:	2e00      	cmp	r6, #0
+  de:	d136      	bne.n	14e <MWDT_initWDT+0x14e>
+    {
+        wwdgPrescaler <<= 1u;
+        wwdgTimerBase--;
+    }
+    wwdgPrescaler <<= 8u;    // wwdgPrescaler * 256
+  e0:	0209      	lsls	r1, r1, #8
+    wwdgPrescaler *= reloadValue;
+  e2:	4369      	muls	r1, r5
+  e4:	a804      	add	r0, sp, #16
+  e6:	2218      	movs	r2, #24
+  e8:	f7ff fffe 	bl	0 <MTDIV_div_mod>
+    percent = MWDT_getPrecisionInPercent(actualTimeUs, config->upperTimeLimit);
+  ec:	8861      	ldrh	r1, [r4, #2]
+  ee:	9804      	ldr	r0, [sp, #16]
+  f0:	f7ff fffe 	bl	0 <MWDT_getPrecisionInPercent>
+    if(MWDT_PRECISION_LIMIT_CHECK < percent)
+  f4:	2805      	cmp	r0, #5
+  f6:	d8b1      	bhi.n	5c <MWDT_initWDT+0x5c>
+    IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+  f8:	4b1b      	ldr	r3, [pc, #108]	; (168 <MWDT_initWDT+0x168>)
+  fa:	4a1f      	ldr	r2, [pc, #124]	; (178 <MWDT_initWDT+0x178>)
+                   | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+  fc:	023f      	lsls	r7, r7, #8
+    IWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << IWDT_CR_LOCK_Pos) \
+  fe:	601a      	str	r2, [r3, #0]
+    IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+ 100:	4a1a      	ldr	r2, [pc, #104]	; (16c <MWDT_initWDT+0x16c>)
+                   | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+ 102:	b2ed      	uxtb	r5, r5
+    IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+ 104:	605a      	str	r2, [r3, #4]
+    RCC_REGS_UNLOCK();
+ 106:	4b1d      	ldr	r3, [pc, #116]	; (17c <MWDT_initWDT+0x17c>)
+ 108:	4a1d      	ldr	r2, [pc, #116]	; (180 <MWDT_initWDT+0x180>)
+                   | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+ 10a:	432f      	orrs	r7, r5
+    RCC_REGS_UNLOCK();
+ 10c:	635a      	str	r2, [r3, #52]	; 0x34
+    RCC->APB0ENR.V32 |= (uint32_t)RCC_APB0_WWDT;
+ 10e:	2280      	movs	r2, #128	; 0x80
+ 110:	6a99      	ldr	r1, [r3, #40]	; 0x28
+ 112:	0192      	lsls	r2, r2, #6
+ 114:	430a      	orrs	r2, r1
+ 116:	629a      	str	r2, [r3, #40]	; 0x28
+    RCC_REGS_LOCK();
+ 118:	635e      	str	r6, [r3, #52]	; 0x34
+                   | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+ 11a:	4b1a      	ldr	r3, [pc, #104]	; (184 <MWDT_initWDT+0x184>)
+    WWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_CR_LOCK_Pos) \
+ 11c:	4a1a      	ldr	r2, [pc, #104]	; (188 <MWDT_initWDT+0x188>)
+                   | (prescaler << WWDT_CR_WWDTPR_Pos) | (reloadValue & 0xFFU));
+ 11e:	433b      	orrs	r3, r7
+    WWDT->CR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_CR_LOCK_Pos) \
+ 120:	6013      	str	r3, [r2, #0]
+    WWDT->WTR.V32 = (((uint32_t)IWDT_WriteAccess_Enable << WWDT_WTR_LOCK_Pos) | windowValue);
+ 122:	9901      	ldr	r1, [sp, #4]
+ 124:	4b0f      	ldr	r3, [pc, #60]	; (164 <MWDT_initWDT+0x164>)
+ 126:	430b      	orrs	r3, r1
+ 128:	60d3      	str	r3, [r2, #12]
+    if (config->debugConfig == MWDT_DEBUG_STOPPED)
+ 12a:	79a3      	ldrb	r3, [r4, #6]
+ 12c:	2b01      	cmp	r3, #1
+ 12e:	d1ab      	bne.n	88 <MWDT_initWDT+0x88>
+        SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_WWDT;
+ 130:	4b0f      	ldr	r3, [pc, #60]	; (170 <MWDT_initWDT+0x170>)
+ 132:	4a16      	ldr	r2, [pc, #88]	; (18c <MWDT_initWDT+0x18c>)
+ 134:	6919      	ldr	r1, [r3, #16]
+    return MCAL_OK;
+ 136:	0030      	movs	r0, r6
+        SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_WWDT;
+ 138:	430a      	orrs	r2, r1
+ 13a:	611a      	str	r2, [r3, #16]
+        SYSCFG->DBGCR.V32 |= ((uint32_t)IWDT_WriteAccess_Enable << 16) | DBG_Periph_IWDT;
+ 13c:	6919      	ldr	r1, [r3, #16]
+ 13e:	4a0d      	ldr	r2, [pc, #52]	; (174 <MWDT_initWDT+0x174>)
+ 140:	430a      	orrs	r2, r1
+ 142:	611a      	str	r2, [r3, #16]
+ 144:	e78b      	b.n	5e <MWDT_initWDT+0x5e>
+        prescalerCorrection++;                 // decreasing prescaler
+ 146:	3701      	adds	r7, #1
+ 148:	0016      	movs	r6, r2
+ 14a:	b2ff      	uxtb	r7, r7
+        max_timeout_ms = max_timeout_ms >> 1;  // timeout divided by 2
+ 14c:	e7af      	b.n	ae <MWDT_initWDT+0xae>
+        wwdgTimerBase--;
+ 14e:	3e01      	subs	r6, #1
+        wwdgPrescaler <<= 1u;
+ 150:	0049      	lsls	r1, r1, #1
+        wwdgTimerBase--;
+ 152:	b2f6      	uxtb	r6, r6
+ 154:	e7c2      	b.n	dc <MWDT_initWDT+0xdc>
+ 156:	46c0      	nop			; (mov r8, r8)
+ 158:	00000000 	.word	0x00000000
+ 15c:	00003ffb 	.word	0x00003ffb
+ 160:	00003ffc 	.word	0x00003ffc
+ 164:	5aa50000 	.word	0x5aa50000
+ 168:	40003800 	.word	0x40003800
+ 16c:	0000aaaa 	.word	0x0000aaaa
+ 170:	40040400 	.word	0x40040400
+ 174:	5aa50040 	.word	0x5aa50040
+ 178:	5aa57fff 	.word	0x5aa57fff
+ 17c:	40040800 	.word	0x40040800
+ 180:	000033cc 	.word	0x000033cc
+ 184:	5aa58000 	.word	0x5aa58000
+ 188:	40003c00 	.word	0x40003c00
+ 18c:	5aa50080 	.word	0x5aa50080
+
+Disassembly of section .text.MWDT_triggerWDT:
+
+00000000 <MWDT_triggerWDT>:
+    IWDT->CLR = MWDT_IWDT_KEY_TO_TRIGGER;
+   0:	4b05      	ldr	r3, [pc, #20]	; (18 <MWDT_triggerWDT+0x18>)
+   2:	4a06      	ldr	r2, [pc, #24]	; (1c <MWDT_triggerWDT+0x1c>)
+   4:	605a      	str	r2, [r3, #4]
+    if (MWDT_LocalMwdtCfg->mode == MWDT_WINDOW_MODE)
+   6:	4b06      	ldr	r3, [pc, #24]	; (20 <MWDT_triggerWDT+0x20>)
+   8:	681b      	ldr	r3, [r3, #0]
+   a:	781b      	ldrb	r3, [r3, #0]
+   c:	2b01      	cmp	r3, #1
+   e:	d102      	bne.n	16 <MWDT_triggerWDT+0x16>
+        WWDT->CLR = MWDT_WWDT_KEY_TO_TRIGGER;
+  10:	4b04      	ldr	r3, [pc, #16]	; (24 <MWDT_triggerWDT+0x24>)
+  12:	4a05      	ldr	r2, [pc, #20]	; (28 <MWDT_triggerWDT+0x28>)
+  14:	609a      	str	r2, [r3, #8]
+}
+  16:	4770      	bx	lr
+  18:	40003800 	.word	0x40003800
+  1c:	0000aaaa 	.word	0x0000aaaa
+  20:	00000000 	.word	0x00000000
+  24:	40003c00 	.word	0x40003c00
+  28:	00005555 	.word	0x00005555
+
+Disassembly of section .text.MWDT_unlock:
+
+00000000 <MWDT_unlock>:
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.MWDT_initConfigStructMWDT:
+
+00000000 <MWDT_initConfigStructMWDT>:
+    MWDT_LocalMwdtCfg = &mwdtCfg;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <MWDT_initConfigStructMWDT+0x8>)
+   2:	4a02      	ldr	r2, [pc, #8]	; (c <MWDT_initConfigStructMWDT+0xc>)
+   4:	601a      	str	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+	...

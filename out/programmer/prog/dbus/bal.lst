@@ -1,0 +1,907 @@
+
+out/programmer/prog/dbus/bal.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.BAL_vEnterNonOperatingMode:
+
+00000000 <BAL_vEnterNonOperatingMode>:
+    return BAL_bIsNonOperatingMode();
+}
+
+void BAL_vEnterNonOperatingMode(void)
+{
+    BAL_bNonOperatingMode = true;
+   0:	2201      	movs	r2, #1
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <BAL_vEnterNonOperatingMode+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_vLeaveNonOperatingMode:
+
+00000000 <BAL_vLeaveNonOperatingMode>:
+
+void BAL_vLeaveNonOperatingMode(void)
+{
+    BAL_bNonOperatingMode = false;
+   0:	2200      	movs	r2, #0
+   2:	4b01      	ldr	r3, [pc, #4]	; (8 <BAL_vLeaveNonOperatingMode+0x8>)
+   4:	701a      	strb	r2, [r3, #0]
+}
+   6:	4770      	bx	lr
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_bIsNonOperatingMode:
+
+00000000 <BAL_bIsNonOperatingMode>:
+
+bool BAL_bIsNonOperatingMode(void)
+{
+    return BAL_bNonOperatingMode;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BAL_bIsNonOperatingMode+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_ucGetSubsystemIndex:
+
+00000000 <BAL_ucGetSubsystemIndex>:
+   /*Subsystem not found - 'cause it isn't defined*/
+#else
+   (void)ucNodeAddress;/*Here, only subsystem zero is present.*/
+#endif
+   return 0U; /*If the requested Subsystem is not found in the table, the first index (0) is returned, as this is always present.*/
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.BAL_ucGetMessageIndex:
+
+00000000 <BAL_ucGetMessageIndex>:
+
+uint8_t BAL_ucGetMessageIndex(TbusMessageIdentifier tMessageIdentifier, uint8_t ucSubsystemIndex)
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+
+   ptBusObject = &BAL_tBusObject[ucSubsystemIndex];
+   /*lint -e{850} Infinite loop must be of form 'for ( ; ; )'	MisraC2012	14.2 */
+   for (ucMessageIndex = 0; ; ucMessageIndex++) /*NB! If a message is sought, and the last entry is not marked with MSB set, this search might never end...*/
+   {
+      receiveObj.ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+   2:	2211      	movs	r2, #17
+{
+   4:	0006      	movs	r6, r0
+   for (ucMessageIndex = 0; ; ucMessageIndex++) /*NB! If a message is sought, and the last entry is not marked with MSB set, this search might never end...*/
+   6:	2400      	movs	r4, #0
+      receiveObj.ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+   8:	434a      	muls	r2, r1
+   a:	4b13      	ldr	r3, [pc, #76]	; (58 <BAL_ucGetMessageIndex+0x58>)
+{
+   c:	000f      	movs	r7, r1
+      receiveObj.ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+   e:	189b      	adds	r3, r3, r2
+  10:	7899      	ldrb	r1, [r3, #2]
+  12:	785a      	ldrb	r2, [r3, #1]
+  14:	0209      	lsls	r1, r1, #8
+  16:	4311      	orrs	r1, r2
+  18:	78da      	ldrb	r2, [r3, #3]
+  1a:	791b      	ldrb	r3, [r3, #4]
+  1c:	0412      	lsls	r2, r2, #16
+  1e:	430a      	orrs	r2, r1
+  20:	061b      	lsls	r3, r3, #24
+  22:	4313      	orrs	r3, r2
+  24:	9301      	str	r3, [sp, #4]
+  26:	9b01      	ldr	r3, [sp, #4]
+  28:	00e5      	lsls	r5, r4, #3
+  2a:	195d      	adds	r5, r3, r5
+      receiveObj.ptBusId = &receiveObj.ptReceiveObject->tBusIdentifier;
+      if ((receiveObj.ptBusId->tMessageIdentifier != tMessageIdentifier) && (BAL_bIsIdentifierInRangeOfReceiveTable(tMessageIdentifier, ucSubsystemIndex) == false))
+  2c:	78eb      	ldrb	r3, [r5, #3]
+  2e:	78aa      	ldrb	r2, [r5, #2]
+  30:	021b      	lsls	r3, r3, #8
+  32:	4313      	orrs	r3, r2
+  34:	42b3      	cmp	r3, r6
+  36:	d00c      	beq.n	52 <BAL_ucGetMessageIndex+0x52>
+  38:	0039      	movs	r1, r7
+  3a:	0030      	movs	r0, r6
+  3c:	f7ff fffe 	bl	0 <BAL_bIsIdentifierInRangeOfReceiveTable>
+  40:	2800      	cmp	r0, #0
+  42:	d106      	bne.n	52 <BAL_ucGetMessageIndex+0x52>
+      {
+         /*Index not found yet, continue searching.*/
+         if ((receiveObj.ptBusId->ucMessageLength & BAL_REC_TAB_END_BIT) != 0U) /*MSB Set: Identifies that this is the last message in the list.*/
+  44:	782b      	ldrb	r3, [r5, #0]
+  46:	2b7f      	cmp	r3, #127	; 0x7f
+  48:	d802      	bhi.n	50 <BAL_ucGetMessageIndex+0x50>
+   for (ucMessageIndex = 0; ; ucMessageIndex++) /*NB! If a message is sought, and the last entry is not marked with MSB set, this search might never end...*/
+  4a:	3401      	adds	r4, #1
+  4c:	b2e4      	uxtb	r4, r4
+      receiveObj.ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+  4e:	e7ea      	b.n	26 <BAL_ucGetMessageIndex+0x26>
+         {
+            /* End of message list.
+               Message not found - 'cause it isn't defined */
+            return BAL_UNKNOWN_MESSAGE;
+  50:	24ff      	movs	r4, #255	; 0xff
+      else
+      {
+         return ucMessageIndex;
+      }
+   }
+}
+  52:	0020      	movs	r0, r4
+  54:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  56:	46c0      	nop			; (mov r8, r8)
+  58:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_ucGetMessageTransmitIndex:
+
+00000000 <BAL_ucGetMessageTransmitIndex>:
+      const TbusIdentifier *ptBusId;
+   } TTransmitObj;
+
+   TTransmitObj transmitObj;/*lint !e9018 union used to prevent suspicious casts */
+   uint8_t ucMessageIndex;             //The index of the message in the list of messages
+   ptBusObject = BAL_tBusObject + ucSubsystemIndex;// Pointer to the bus object referred to by BAL_ucSubsystemIndex. 
+   0:	2311      	movs	r3, #17
+{
+   2:	b5f0      	push	{r4, r5, r6, r7, lr}
+   ptBusObject = BAL_tBusObject + ucSubsystemIndex;// Pointer to the bus object referred to by BAL_ucSubsystemIndex. 
+   4:	4359      	muls	r1, r3
+   6:	4b15      	ldr	r3, [pc, #84]	; (5c <BAL_ucGetMessageTransmitIndex+0x5c>)
+{
+   8:	0004      	movs	r4, r0
+   ptBusObject = BAL_tBusObject + ucSubsystemIndex;// Pointer to the bus object referred to by BAL_ucSubsystemIndex. 
+   a:	18c9      	adds	r1, r1, r3
+   for (ucMessageIndex = 0; ucMessageIndex < *ptBusObject->pucNumberOfElementsInTransmitTable; ucMessageIndex++)
+   c:	7a8b      	ldrb	r3, [r1, #10]
+   e:	7a4a      	ldrb	r2, [r1, #9]
+  10:	021b      	lsls	r3, r3, #8
+  12:	4313      	orrs	r3, r2
+  14:	7aca      	ldrb	r2, [r1, #11]
+   {
+      transmitObj.ptTransmitObject = &(ptBusObject->ptBusTransmitTable[ucMessageIndex]);
+      transmitObj.ptBusId = &transmitObj.ptTransmitObject->tBusIdentifier;
+      if (transmitObj.ptBusId->tMessageIdentifier == tMessageIdentifier)
+  16:	260d      	movs	r6, #13
+   for (ucMessageIndex = 0; ucMessageIndex < *ptBusObject->pucNumberOfElementsInTransmitTable; ucMessageIndex++)
+  18:	0412      	lsls	r2, r2, #16
+  1a:	431a      	orrs	r2, r3
+  1c:	7b0b      	ldrb	r3, [r1, #12]
+  1e:	061b      	lsls	r3, r3, #24
+  20:	4313      	orrs	r3, r2
+  22:	2200      	movs	r2, #0
+  24:	781d      	ldrb	r5, [r3, #0]
+  26:	b2d0      	uxtb	r0, r2
+  28:	4285      	cmp	r5, r0
+  2a:	d801      	bhi.n	30 <BAL_ucGetMessageTransmitIndex+0x30>
+         //Index not found yet, continue searching.
+      }
+   }
+   //End of message list.
+   //Message not found - 'cause it isn't defined
+   return BAL_UNKNOWN_MESSAGE;
+  2c:	20ff      	movs	r0, #255	; 0xff
+  2e:	e013      	b.n	58 <BAL_ucGetMessageTransmitIndex+0x58>
+      transmitObj.ptTransmitObject = &(ptBusObject->ptBusTransmitTable[ucMessageIndex]);
+  30:	798b      	ldrb	r3, [r1, #6]
+  32:	794f      	ldrb	r7, [r1, #5]
+  34:	021b      	lsls	r3, r3, #8
+  36:	433b      	orrs	r3, r7
+  38:	79cf      	ldrb	r7, [r1, #7]
+  3a:	043f      	lsls	r7, r7, #16
+  3c:	431f      	orrs	r7, r3
+  3e:	7a0b      	ldrb	r3, [r1, #8]
+  40:	061b      	lsls	r3, r3, #24
+  42:	433b      	orrs	r3, r7
+      if (transmitObj.ptBusId->tMessageIdentifier == tMessageIdentifier)
+  44:	0037      	movs	r7, r6
+  46:	4357      	muls	r7, r2
+  48:	18fb      	adds	r3, r7, r3
+  4a:	789f      	ldrb	r7, [r3, #2]
+  4c:	78db      	ldrb	r3, [r3, #3]
+  4e:	3201      	adds	r2, #1
+  50:	021b      	lsls	r3, r3, #8
+  52:	433b      	orrs	r3, r7
+  54:	42a3      	cmp	r3, r4
+  56:	d1e6      	bne.n	26 <BAL_ucGetMessageTransmitIndex+0x26>
+}
+  58:	bdf0      	pop	{r4, r5, r6, r7, pc}
+  5a:	46c0      	nop			; (mov r8, r8)
+  5c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_HandleTask:
+
+00000000 <BAL_HandleTask>:
+
+   return HandlingDone;
+}
+#else
+uint8_t BAL_HandleTask(void)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b087      	sub	sp, #28
+   TbusService tServiceFunc;
+   uint8_t ucDataLength;
+   const TbusObjectTable *ptBusObject;
+   const TbusTransmitObject *ptTransmitObject;
+
+   BAL_vEnterCriticalSectionForSending();
+   4:	f7ff fffe 	bl	0 <BAL_vEnterCriticalSectionForSending>
+   DBM_UART_vDisableRxEvent();
+   8:	f7ff fffe 	bl	0 <DBM_UART_vDisableRxEvent>
+   if (BAL_uiTransmitFlagSubsystemIndex != 0U)
+   c:	4d5b      	ldr	r5, [pc, #364]	; (17c <BAL_HandleTask+0x17c>)
+   e:	882b      	ldrh	r3, [r5, #0]
+  10:	2b00      	cmp	r3, #0
+  12:	d100      	bne.n	16 <BAL_HandleTask+0x16>
+  14:	e08c      	b.n	130 <BAL_HandleTask+0x130>
+   {
+      if (DLL_bIsBusReadyForTransmission() != false)
+  16:	f7ff fffe 	bl	0 <DLL_bIsBusReadyForTransmission>
+  1a:	1e07      	subs	r7, r0, #0
+  1c:	9001      	str	r0, [sp, #4]
+  1e:	d100      	bne.n	22 <BAL_HandleTask+0x22>
+  20:	e086      	b.n	130 <BAL_HandleTask+0x130>
+bool BAL_bIsSendingRetry(void)
+{
+#ifdef DBM_DBUSCAN
+    return false;    // the message repetition is handled by chip
+#else
+    return (BAL_ucTransmissionAttempts > 0U) ? true : false;
+  22:	4b57      	ldr	r3, [pc, #348]	; (180 <BAL_HandleTask+0x180>)
+  24:	7819      	ldrb	r1, [r3, #0]
+         if (BAL_bIsSendingRetry() == false)  //lint !e774 the message repetition is handled by DBusCAN chip for DBus with DBusCAN
+  26:	2900      	cmp	r1, #0
+  28:	d12c      	bne.n	84 <BAL_HandleTask+0x84>
+            for (BAL_ucSubsystemIndex = 0; BAL_ucSubsystemIndex < BAL_MAX_SUBSYS_NO; BAL_ucSubsystemIndex++) //Find the bit number...
+  2a:	4b56      	ldr	r3, [pc, #344]	; (184 <BAL_HandleTask+0x184>)
+  2c:	000c      	movs	r4, r1
+  2e:	469c      	mov	ip, r3
+  30:	7019      	strb	r1, [r3, #0]
+               if ((BAL_uiTransmitFlagSubsystemIndex & uiMask) != 0U)
+  32:	882b      	ldrh	r3, [r5, #0]
+            uiMask = 0x0001U;
+  34:	2201      	movs	r2, #1
+               if ((BAL_uiTransmitFlagSubsystemIndex & uiMask) != 0U)
+  36:	0018      	movs	r0, r3
+            for (BAL_ucSubsystemIndex = 0; BAL_ucSubsystemIndex < BAL_MAX_SUBSYS_NO; BAL_ucSubsystemIndex++) //Find the bit number...
+  38:	000b      	movs	r3, r1
+  3a:	b2de      	uxtb	r6, r3
+  3c:	2b10      	cmp	r3, #16
+  3e:	d105      	bne.n	4c <BAL_HandleTask+0x4c>
+  40:	001e      	movs	r6, r3
+  42:	2c00      	cmp	r4, #0
+  44:	d00a      	beq.n	5c <BAL_HandleTask+0x5c>
+  46:	4662      	mov	r2, ip
+  48:	7013      	strb	r3, [r2, #0]
+  4a:	e007      	b.n	5c <BAL_HandleTask+0x5c>
+               if ((BAL_uiTransmitFlagSubsystemIndex & uiMask) != 0U)
+  4c:	3301      	adds	r3, #1
+  4e:	4202      	tst	r2, r0
+  50:	d100      	bne.n	54 <BAL_HandleTask+0x54>
+  52:	e074      	b.n	13e <BAL_HandleTask+0x13e>
+  54:	2c00      	cmp	r4, #0
+  56:	d001      	beq.n	5c <BAL_HandleTask+0x5c>
+  58:	4b4a      	ldr	r3, [pc, #296]	; (184 <BAL_HandleTask+0x184>)
+  5a:	701e      	strb	r6, [r3, #0]
+            ptBusObject = BAL_tBusObject + BAL_ucSubsystemIndex;// Pointer to the bus object referred to by BAL_ucSubsystemIndex.
+  5c:	2411      	movs	r4, #17
+  5e:	4374      	muls	r4, r6
+  60:	4b49      	ldr	r3, [pc, #292]	; (188 <BAL_HandleTask+0x188>)
+  62:	18e4      	adds	r4, r4, r3
+            for (BAL_ucMessageIndex = 0U; BAL_ucMessageIndex < *ptBusObject->pucNumberOfElementsInTransmitTable; BAL_ucMessageIndex++)
+  64:	4e49      	ldr	r6, [pc, #292]	; (18c <BAL_HandleTask+0x18c>)
+  66:	7031      	strb	r1, [r6, #0]
+  68:	7aa3      	ldrb	r3, [r4, #10]
+  6a:	7a62      	ldrb	r2, [r4, #9]
+  6c:	021b      	lsls	r3, r3, #8
+  6e:	4313      	orrs	r3, r2
+  70:	7ae2      	ldrb	r2, [r4, #11]
+  72:	0412      	lsls	r2, r2, #16
+  74:	431a      	orrs	r2, r3
+  76:	7b23      	ldrb	r3, [r4, #12]
+  78:	061b      	lsls	r3, r3, #24
+  7a:	4313      	orrs	r3, r2
+  7c:	781b      	ldrb	r3, [r3, #0]
+  7e:	428b      	cmp	r3, r1
+  80:	d861      	bhi.n	146 <BAL_HandleTask+0x146>
+   bool    bMessageToTransmit = false;
+  82:	2700      	movs	r7, #0
+         if((DBLK_IsDbusLockActive() == false) && (DBPL_bIsSendingPowerMsg() == false))
+  84:	f7ff fffe 	bl	0 <DBLK_IsDbusLockActive>
+  88:	2800      	cmp	r0, #0
+  8a:	d151      	bne.n	130 <BAL_HandleTask+0x130>
+  8c:	f7ff fffe 	bl	0 <DBPL_bIsSendingPowerMsg>
+  90:	9001      	str	r0, [sp, #4]
+  92:	2800      	cmp	r0, #0
+  94:	d14c      	bne.n	130 <BAL_HandleTask+0x130>
+ range      : 0x00000000...0xFFFFFFFF
+*/
+uint32_t DBM_ulGetCircleMicroSeconds(void);
+
+#ifndef DBM_EXTERNAL_INTERRUPT_MAPPING
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+  96:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+            if (bMessageToTransmit != false)
+  9a:	4e3a      	ldr	r6, [pc, #232]	; (184 <BAL_HandleTask+0x184>)
+  9c:	4c3b      	ldr	r4, [pc, #236]	; (18c <BAL_HandleTask+0x18c>)
+               uiUserCode = ((uint16_t)(BAL_ucSubsystemIndex)<<BYTE_SIZE)|BAL_ucMessageIndex;
+  9e:	7833      	ldrb	r3, [r6, #0]
+            if (bMessageToTransmit != false)
+  a0:	2f00      	cmp	r7, #0
+  a2:	d064      	beq.n	16e <BAL_HandleTask+0x16e>
+               ptTransmitObject = &(ptBusObject->ptBusTransmitTable[BAL_ucMessageIndex]); //Pointer to the transmit table referred to by BAL_ucSubsystemIndex.
+  a4:	2711      	movs	r7, #17
+               uiUserCode = ((uint16_t)(BAL_ucSubsystemIndex)<<BYTE_SIZE)|BAL_ucMessageIndex;
+  a6:	7822      	ldrb	r2, [r4, #0]
+  a8:	021b      	lsls	r3, r3, #8
+  aa:	431a      	orrs	r2, r3
+  ac:	9203      	str	r2, [sp, #12]
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  ae:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+               ptBusObject = BAL_tBusObject+BAL_ucSubsystemIndex;  // Pointer to the bus object referred to by BAL_ucSubsystemIndex.
+  b2:	7833      	ldrb	r3, [r6, #0]
+               ptTransmitObject = &(ptBusObject->ptBusTransmitTable[BAL_ucMessageIndex]); //Pointer to the transmit table referred to by BAL_ucSubsystemIndex.
+  b4:	4a34      	ldr	r2, [pc, #208]	; (188 <BAL_HandleTask+0x188>)
+  b6:	437b      	muls	r3, r7
+  b8:	9202      	str	r2, [sp, #8]
+  ba:	189b      	adds	r3, r3, r2
+  bc:	7999      	ldrb	r1, [r3, #6]
+  be:	795a      	ldrb	r2, [r3, #5]
+  c0:	0209      	lsls	r1, r1, #8
+  c2:	7a1d      	ldrb	r5, [r3, #8]
+  c4:	4311      	orrs	r1, r2
+  c6:	79da      	ldrb	r2, [r3, #7]
+  c8:	230d      	movs	r3, #13
+  ca:	0412      	lsls	r2, r2, #16
+  cc:	430a      	orrs	r2, r1
+  ce:	062d      	lsls	r5, r5, #24
+  d0:	4315      	orrs	r5, r2
+  d2:	7822      	ldrb	r2, [r4, #0]
+               tBusId = ptTransmitObject->tBusIdentifier; //Datatype (bus identifier) contains three elements -> assignment could be problematic for old Kernigan-Ritchie compilers
+  d4:	a805      	add	r0, sp, #20
+               ptTransmitObject = &(ptBusObject->ptBusTransmitTable[BAL_ucMessageIndex]); //Pointer to the transmit table referred to by BAL_ucSubsystemIndex.
+  d6:	4353      	muls	r3, r2
+  d8:	18ed      	adds	r5, r5, r3
+               tBusId = ptTransmitObject->tBusIdentifier; //Datatype (bus identifier) contains three elements -> assignment could be problematic for old Kernigan-Ritchie compilers
+  da:	2204      	movs	r2, #4
+  dc:	0029      	movs	r1, r5
+  de:	f7ff fffe 	bl	0 <memcpy>
+               tServiceFunc = ptTransmitObject->tServiceFunction;
+  e2:	79a9      	ldrb	r1, [r5, #6]
+  e4:	796b      	ldrb	r3, [r5, #5]
+  e6:	0209      	lsls	r1, r1, #8
+  e8:	4319      	orrs	r1, r3
+  ea:	79eb      	ldrb	r3, [r5, #7]
+               if (DLL_bTransmitMessage(tBusId, tServiceFunc, ucDataLength, uiUserCode) != false)
+  ec:	792a      	ldrb	r2, [r5, #4]
+               tServiceFunc = ptTransmitObject->tServiceFunction;
+  ee:	041b      	lsls	r3, r3, #16
+  f0:	430b      	orrs	r3, r1
+  f2:	7a29      	ldrb	r1, [r5, #8]
+               if (DLL_bTransmitMessage(tBusId, tServiceFunc, ucDataLength, uiUserCode) != false)
+  f4:	9805      	ldr	r0, [sp, #20]
+               tServiceFunc = ptTransmitObject->tServiceFunction;
+  f6:	0609      	lsls	r1, r1, #24
+  f8:	4319      	orrs	r1, r3
+               if (DLL_bTransmitMessage(tBusId, tServiceFunc, ucDataLength, uiUserCode) != false)
+  fa:	9b03      	ldr	r3, [sp, #12]
+  fc:	f7ff fffe 	bl	0 <DLL_bTransmitMessage>
+ 100:	2800      	cmp	r0, #0
+ 102:	d015      	beq.n	130 <BAL_HandleTask+0x130>
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+ 104:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+   UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageIndex, false); //Remove current message from transmission list.
+ 108:	7833      	ldrb	r3, [r6, #0]
+ 10a:	7821      	ldrb	r1, [r4, #0]
+ 10c:	435f      	muls	r7, r3
+ 10e:	9b02      	ldr	r3, [sp, #8]
+ 110:	19df      	adds	r7, r3, r7
+ 112:	7bba      	ldrb	r2, [r7, #14]
+ 114:	7b7b      	ldrb	r3, [r7, #13]
+ 116:	0212      	lsls	r2, r2, #8
+ 118:	431a      	orrs	r2, r3
+ 11a:	7bfb      	ldrb	r3, [r7, #15]
+ 11c:	7c38      	ldrb	r0, [r7, #16]
+ 11e:	041b      	lsls	r3, r3, #16
+ 120:	4313      	orrs	r3, r2
+ 122:	0600      	lsls	r0, r0, #24
+ 124:	9a01      	ldr	r2, [sp, #4]
+ 126:	4318      	orrs	r0, r3
+ 128:	f7ff fffe 	bl	0 <UTI_vSetBit>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+ 12c:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+   DBM_UART_vEnableRxEvent();
+ 130:	f7ff fffe 	bl	0 <DBM_UART_vEnableRxEvent>
+   BAL_vExitCriticalSectionforSending();
+ 134:	f7ff fffe 	bl	0 <BAL_vExitCriticalSectionforSending>
+}
+ 138:	2001      	movs	r0, #1
+ 13a:	b007      	add	sp, #28
+ 13c:	bdf0      	pop	{r4, r5, r6, r7, pc}
+                  uiMask <<= 1;
+ 13e:	0052      	lsls	r2, r2, #1
+ 140:	9c01      	ldr	r4, [sp, #4]
+ 142:	b292      	uxth	r2, r2
+            for (BAL_ucSubsystemIndex = 0; BAL_ucSubsystemIndex < BAL_MAX_SUBSYS_NO; BAL_ucSubsystemIndex++) //Find the bit number...
+ 144:	e779      	b.n	3a <BAL_HandleTask+0x3a>
+               if (UTI_bGetBit(ptBusObject->pucMessageToTransmitBits, BAL_ucMessageIndex))
+ 146:	7ba2      	ldrb	r2, [r4, #14]
+ 148:	7b63      	ldrb	r3, [r4, #13]
+ 14a:	0212      	lsls	r2, r2, #8
+ 14c:	431a      	orrs	r2, r3
+ 14e:	7be3      	ldrb	r3, [r4, #15]
+ 150:	7c20      	ldrb	r0, [r4, #16]
+ 152:	041b      	lsls	r3, r3, #16
+ 154:	4313      	orrs	r3, r2
+ 156:	0600      	lsls	r0, r0, #24
+ 158:	b289      	uxth	r1, r1
+ 15a:	4318      	orrs	r0, r3
+ 15c:	f7ff fffe 	bl	0 <UTI_bGetBit>
+ 160:	2800      	cmp	r0, #0
+ 162:	d000      	beq.n	166 <BAL_HandleTask+0x166>
+ 164:	e78e      	b.n	84 <BAL_HandleTask+0x84>
+            for (BAL_ucMessageIndex = 0U; BAL_ucMessageIndex < *ptBusObject->pucNumberOfElementsInTransmitTable; BAL_ucMessageIndex++)
+ 166:	7831      	ldrb	r1, [r6, #0]
+ 168:	3101      	adds	r1, #1
+ 16a:	b2c9      	uxtb	r1, r1
+ 16c:	e77a      	b.n	64 <BAL_HandleTask+0x64>
+               BAL_uiTransmitFlagSubsystemIndex &= ~((uint16_t)((uint16_t)1u<<(uint16_t)BAL_ucSubsystemIndex));
+ 16e:	2201      	movs	r2, #1
+ 170:	409a      	lsls	r2, r3
+ 172:	882b      	ldrh	r3, [r5, #0]
+               BAL_ucMessageIndex = 0U; //No message is being handled by the task handler any more...
+ 174:	7027      	strb	r7, [r4, #0]
+               BAL_uiTransmitFlagSubsystemIndex &= ~((uint16_t)((uint16_t)1u<<(uint16_t)BAL_ucSubsystemIndex));
+ 176:	4393      	bics	r3, r2
+ 178:	802b      	strh	r3, [r5, #0]
+               BAL_ucMessageIndex = 0U; //No message is being handled by the task handler any more...
+ 17a:	e7d7      	b.n	12c <BAL_HandleTask+0x12c>
+	...
+
+Disassembly of section .text.BAL_bDispatchRcvdDbus2Msg:
+
+00000000 <BAL_bDispatchRcvdDbus2Msg>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   tBusId = ptReceivedMessage->tBusIdentifier;
+   2:	7843      	ldrb	r3, [r0, #1]
+{
+   4:	0005      	movs	r5, r0
+   tBusId = ptReceivedMessage->tBusIdentifier;
+   6:	9301      	str	r3, [sp, #4]
+   8:	7883      	ldrb	r3, [r0, #2]
+   a:	78c0      	ldrb	r0, [r0, #3]
+   BAL_tReceivedMessageId = tBusId.tMessageIdentifier;
+   c:	4f20      	ldr	r7, [pc, #128]	; (90 <BAL_bDispatchRcvdDbus2Msg+0x90>)
+   tBusId = ptReceivedMessage->tBusIdentifier;
+   e:	0200      	lsls	r0, r0, #8
+  10:	4318      	orrs	r0, r3
+   ucMessageIndex = BAL_ucGetMessageIndex(BAL_tReceivedMessageId, ucSubsystemIndex);
+  12:	2100      	movs	r1, #0
+   BAL_tReceivedMessageId = tBusId.tMessageIdentifier;
+  14:	8038      	strh	r0, [r7, #0]
+   ucMessageIndex = BAL_ucGetMessageIndex(BAL_tReceivedMessageId, ucSubsystemIndex);
+  16:	f7ff fffe 	bl	0 <BAL_bDispatchRcvdDbus2Msg>
+   ucSubsystemIndex = BAL_ucGetSubsystemIndex(ucReceivedTargetAddress);
+  1a:	2400      	movs	r4, #0
+   ucMessageIndex = BAL_ucGetMessageIndex(BAL_tReceivedMessageId, ucSubsystemIndex);
+  1c:	0003      	movs	r3, r0
+   if (ucMessageIndex == BAL_UNKNOWN_MESSAGE)
+  1e:	28ff      	cmp	r0, #255	; 0xff
+  20:	d114      	bne.n	4c <BAL_bDispatchRcvdDbus2Msg+0x4c>
+       if(ucReceivedTargetAddress != 0x00U)/*No broadcast, or only to one subsystem.*/
+  22:	9b01      	ldr	r3, [sp, #4]
+           noOfSubsystemsToBeSearched = 1;/*Only look at subsystem Index zero, service messages.*/
+  24:	2601      	movs	r6, #1
+       if(ucReceivedTargetAddress != 0x00U)/*No broadcast, or only to one subsystem.*/
+  26:	42a3      	cmp	r3, r4
+  28:	d101      	bne.n	2e <BAL_bDispatchRcvdDbus2Msg+0x2e>
+           noOfSubsystemsToBeSearched = BAL_ucNumberOfSubsystems;
+  2a:	4b1a      	ldr	r3, [pc, #104]	; (94 <BAL_bDispatchRcvdDbus2Msg+0x94>)
+  2c:	781e      	ldrb	r6, [r3, #0]
+       for(ucSubsystemIndex = 0; ucSubsystemIndex < noOfSubsystemsToBeSearched; ucSubsystemIndex ++)
+  2e:	2400      	movs	r4, #0
+  30:	42b4      	cmp	r4, r6
+  32:	d101      	bne.n	38 <BAL_bDispatchRcvdDbus2Msg+0x38>
+           return false;
+  34:	2000      	movs	r0, #0
+}
+  36:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+           ucMessageIndex = BAL_ucGetMessageIndex(BAL_tReceivedMessageId, ucSubsystemIndex);
+  38:	0021      	movs	r1, r4
+  3a:	8838      	ldrh	r0, [r7, #0]
+  3c:	f7ff fffe 	bl	0 <BAL_bDispatchRcvdDbus2Msg>
+  40:	0003      	movs	r3, r0
+           if (ucMessageIndex != BAL_UNKNOWN_MESSAGE)
+  42:	28ff      	cmp	r0, #255	; 0xff
+  44:	d102      	bne.n	4c <BAL_bDispatchRcvdDbus2Msg+0x4c>
+       for(ucSubsystemIndex = 0; ucSubsystemIndex < noOfSubsystemsToBeSearched; ucSubsystemIndex ++)
+  46:	3401      	adds	r4, #1
+  48:	b2e4      	uxtb	r4, r4
+  4a:	e7f1      	b.n	30 <BAL_bDispatchRcvdDbus2Msg+0x30>
+   ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+  4c:	2211      	movs	r2, #17
+  4e:	4362      	muls	r2, r4
+  50:	4c11      	ldr	r4, [pc, #68]	; (98 <BAL_bDispatchRcvdDbus2Msg+0x98>)
+   ucDataLength = ptReceivedMessage->tBusIdentifier.ucMessageLength - BAL_D_BUS_2_MESSAGE_LENGTH_OFFSET;
+  52:	7828      	ldrb	r0, [r5, #0]
+   ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+  54:	1912      	adds	r2, r2, r4
+   (tServiceFunc)(ucDataLength, (uint8_t*)ptReceivedMessage->aucData);/*lint !e9005 !e926 "cast form pointer to pointer" , tested to work correctly */
+  56:	1d29      	adds	r1, r5, #4
+   ptReceiveObject = &(ptBusObject->ptReceiveTable[ucMessageIndex]);
+  58:	7895      	ldrb	r5, [r2, #2]
+  5a:	7854      	ldrb	r4, [r2, #1]
+  5c:	022d      	lsls	r5, r5, #8
+  5e:	4325      	orrs	r5, r4
+  60:	78d4      	ldrb	r4, [r2, #3]
+  62:	7912      	ldrb	r2, [r2, #4]
+  64:	0424      	lsls	r4, r4, #16
+  66:	432c      	orrs	r4, r5
+  68:	0612      	lsls	r2, r2, #24
+  6a:	4322      	orrs	r2, r4
+   tServiceFunc = ptReceiveObject->tServiceFunction;
+  6c:	00db      	lsls	r3, r3, #3
+  6e:	189b      	adds	r3, r3, r2
+  70:	795c      	ldrb	r4, [r3, #5]
+  72:	791a      	ldrb	r2, [r3, #4]
+  74:	0224      	lsls	r4, r4, #8
+  76:	4314      	orrs	r4, r2
+  78:	799a      	ldrb	r2, [r3, #6]
+  7a:	79db      	ldrb	r3, [r3, #7]
+  7c:	0412      	lsls	r2, r2, #16
+  7e:	4322      	orrs	r2, r4
+   ucDataLength = ptReceivedMessage->tBusIdentifier.ucMessageLength - BAL_D_BUS_2_MESSAGE_LENGTH_OFFSET;
+  80:	3802      	subs	r0, #2
+   tServiceFunc = ptReceiveObject->tServiceFunction;
+  82:	061b      	lsls	r3, r3, #24
+   (tServiceFunc)(ucDataLength, (uint8_t*)ptReceivedMessage->aucData);/*lint !e9005 !e926 "cast form pointer to pointer" , tested to work correctly */
+  84:	b2c0      	uxtb	r0, r0
+   tServiceFunc = ptReceiveObject->tServiceFunction;
+  86:	4313      	orrs	r3, r2
+   (tServiceFunc)(ucDataLength, (uint8_t*)ptReceivedMessage->aucData);/*lint !e9005 !e926 "cast form pointer to pointer" , tested to work correctly */
+  88:	4798      	blx	r3
+   return true;
+  8a:	2001      	movs	r0, #1
+  8c:	e7d3      	b.n	36 <BAL_bDispatchRcvdDbus2Msg+0x36>
+  8e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.BAL_vTransmitMessage:
+
+00000000 <BAL_vTransmitMessage>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	000d      	movs	r5, r1
+   BAL_vEnterCriticalSectionForSending();
+   4:	f7ff fffe 	bl	0 <BAL_vEnterCriticalSectionForSending>
+   if((DLL_isSilentMode() == false) && (BAL_bDoesOperatingModeBlockApply(ucSubsystem) == false))
+   8:	f7ff fffe 	bl	0 <DLL_isSilentMode>
+   c:	2800      	cmp	r0, #0
+   e:	d127      	bne.n	60 <BAL_vTransmitMessage+0x60>
+    return BAL_bNonOperatingMode;
+  10:	4b18      	ldr	r3, [pc, #96]	; (74 <BAL_vTransmitMessage+0x74>)
+   if((DLL_isSilentMode() == false) && (BAL_bDoesOperatingModeBlockApply(ucSubsystem) == false))
+  12:	781b      	ldrb	r3, [r3, #0]
+  14:	2b00      	cmp	r3, #0
+  16:	d123      	bne.n	60 <BAL_vTransmitMessage+0x60>
+      if (ucMessageNumber < *BAL_tBusObject[ucSubsystemIndex].pucNumberOfElementsInTransmitTable)
+  18:	4c17      	ldr	r4, [pc, #92]	; (78 <BAL_vTransmitMessage+0x78>)
+  1a:	7aa3      	ldrb	r3, [r4, #10]
+  1c:	7a62      	ldrb	r2, [r4, #9]
+  1e:	021b      	lsls	r3, r3, #8
+  20:	4313      	orrs	r3, r2
+  22:	7ae2      	ldrb	r2, [r4, #11]
+  24:	0412      	lsls	r2, r2, #16
+  26:	431a      	orrs	r2, r3
+  28:	7b23      	ldrb	r3, [r4, #12]
+  2a:	061b      	lsls	r3, r3, #24
+  2c:	4313      	orrs	r3, r2
+  2e:	781b      	ldrb	r3, [r3, #0]
+  30:	42ab      	cmp	r3, r5
+  32:	d91b      	bls.n	6c <BAL_vTransmitMessage+0x6c>
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+  34:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+         BAL_uiTransmitFlagSubsystemIndex |= (uint16_t)((uint16_t)1u<<(uint16_t)ucSubsystemIndex); //Mark that there is a message due for transmission in this subsystem.
+  38:	2201      	movs	r2, #1
+  3a:	4910      	ldr	r1, [pc, #64]	; (7c <BAL_vTransmitMessage+0x7c>)
+         UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageNumber, true); //Mark the current message for transmission.
+  3c:	7ba0      	ldrb	r0, [r4, #14]
+         BAL_uiTransmitFlagSubsystemIndex |= (uint16_t)((uint16_t)1u<<(uint16_t)ucSubsystemIndex); //Mark that there is a message due for transmission in this subsystem.
+  3e:	880b      	ldrh	r3, [r1, #0]
+         UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageNumber, true); //Mark the current message for transmission.
+  40:	0200      	lsls	r0, r0, #8
+         BAL_uiTransmitFlagSubsystemIndex |= (uint16_t)((uint16_t)1u<<(uint16_t)ucSubsystemIndex); //Mark that there is a message due for transmission in this subsystem.
+  42:	4313      	orrs	r3, r2
+  44:	800b      	strh	r3, [r1, #0]
+         UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageNumber, true); //Mark the current message for transmission.
+  46:	7b63      	ldrb	r3, [r4, #13]
+  48:	b2a9      	uxth	r1, r5
+  4a:	4318      	orrs	r0, r3
+  4c:	7be3      	ldrb	r3, [r4, #15]
+  4e:	041b      	lsls	r3, r3, #16
+  50:	4303      	orrs	r3, r0
+  52:	7c20      	ldrb	r0, [r4, #16]
+  54:	0600      	lsls	r0, r0, #24
+  56:	4318      	orrs	r0, r3
+  58:	f7ff fffe 	bl	0 <UTI_vSetBit>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  5c:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+   DBR_RunEventdrivenDbusTask( DBR_ED_TASK_BAL );
+  60:	20ff      	movs	r0, #255	; 0xff
+  62:	f7ff fffe 	bl	0 <DBR_RunEventdrivenDbusTask>
+   BAL_vExitCriticalSectionforSending();
+  66:	f7ff fffe 	bl	0 <BAL_vExitCriticalSectionforSending>
+}
+  6a:	bd70      	pop	{r4, r5, r6, pc}
+         BAL_vNotifyError((uint8_t)BAL_ERROR_UNKNOWN_MESSAGE_FOR_TRANSMISSION);
+  6c:	2002      	movs	r0, #2
+  6e:	f7ff fffe 	bl	0 <BAL_vNotifyError>
+  72:	e7f5      	b.n	60 <BAL_vTransmitMessage+0x60>
+	...
+
+Disassembly of section .text.BAL_vCancelTransmitMessage:
+
+00000000 <BAL_vCancelTransmitMessage>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	000c      	movs	r4, r1
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   4:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+   if (BAL_ucTransmissionAttempts != 0U)
+   8:	4b0f      	ldr	r3, [pc, #60]	; (48 <BAL_vCancelTransmitMessage+0x48>)
+   a:	781a      	ldrb	r2, [r3, #0]
+   c:	2a00      	cmp	r2, #0
+   e:	d009      	beq.n	24 <BAL_vCancelTransmitMessage+0x24>
+      if ((ucSubsystemIndex == BAL_ucSubsystemIndex) && (ucMessageIndex == BAL_ucMessageIndex))
+  10:	4a0e      	ldr	r2, [pc, #56]	; (4c <BAL_vCancelTransmitMessage+0x4c>)
+  12:	7812      	ldrb	r2, [r2, #0]
+  14:	2a00      	cmp	r2, #0
+  16:	d105      	bne.n	24 <BAL_vCancelTransmitMessage+0x24>
+  18:	4a0d      	ldr	r2, [pc, #52]	; (50 <BAL_vCancelTransmitMessage+0x50>)
+  1a:	7812      	ldrb	r2, [r2, #0]
+  1c:	42a2      	cmp	r2, r4
+  1e:	d101      	bne.n	24 <BAL_vCancelTransmitMessage+0x24>
+         BAL_ucTransmissionAttempts = MAX_TRANSMISSION_RETRIES; //Make sure the max transmission retries is at least reached, hence use the highest available value.
+  20:	22ff      	movs	r2, #255	; 0xff
+  22:	701a      	strb	r2, [r3, #0]
+   UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageIndex, false); //Remove current message from transmission list.
+  24:	480b      	ldr	r0, [pc, #44]	; (54 <BAL_vCancelTransmitMessage+0x54>)
+  26:	b2a1      	uxth	r1, r4
+  28:	7b82      	ldrb	r2, [r0, #14]
+  2a:	7b43      	ldrb	r3, [r0, #13]
+  2c:	0212      	lsls	r2, r2, #8
+  2e:	431a      	orrs	r2, r3
+  30:	7bc3      	ldrb	r3, [r0, #15]
+  32:	7c00      	ldrb	r0, [r0, #16]
+  34:	041b      	lsls	r3, r3, #16
+  36:	4313      	orrs	r3, r2
+  38:	0600      	lsls	r0, r0, #24
+  3a:	2200      	movs	r2, #0
+  3c:	4318      	orrs	r0, r3
+  3e:	f7ff fffe 	bl	0 <UTI_vSetBit>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  42:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+}
+  46:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DLL_vMessageTransmitted:
+
+00000000 <DLL_vMessageTransmitted>:
+/* PRIVATE MACRO FUNCTION DEFINITIONS                                         */
+/******************************************************************************/
+static inline uint8_t DLL_GET_COMMUNICATION_PARTNER(uint8_t x)           {return ((uint8_t)(((x) & (uint8_t) 0xF0U) >> 4));} //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. DLL_GET_COMMUNICATION_PARTNER shifts the upper nibble down.
+static inline uint8_t DLL_IGNORE_SUBSYSTEM_IN_TARGET_ADDRESS(uint8_t x)  {return ((uint8_t)((x) & (uint8_t)0xF0U));}         //!< Extracts the communication partner from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem. Unlike DLL_GET_COMMUNICATION_PARTNER, the communication partner is not shifted to the lower nibble.
+static inline uint8_t DLL_GET_SUBSYSTEM(uint8_t x)                       {return ((uint8_t)((x) & (uint8_t)0x0FU));}         //!< Extracts the subsystem from a target address. Upper nibble of TA is communication partner, lower nibble is subsystem.
+static inline uint8_t DLL_GET_ACKNOWLEDGE(uint8_t x)                     {return ((uint8_t)((x) & (uint8_t)0x0FU));}         //!< Extracts the acknowledgement from the acknowledgement-byte received from another communication partner. The Acknowledge-byte consists of the communication partner address in the upper nibble, and the acknowledgement in the lower nibble.
+   0:	220f      	movs	r2, #15
+   2:	4010      	ands	r0, r2
+   if (uiUserCode <= (uint16_t)BAL_FIRST_SERVICE_MSGID)/*Sent via BAL*/
+   4:	22f0      	movs	r2, #240	; 0xf0
+{
+   6:	000b      	movs	r3, r1
+   8:	b570      	push	{r4, r5, r6, lr}
+   if (uiUserCode <= (uint16_t)BAL_FIRST_SERVICE_MSGID)/*Sent via BAL*/
+   a:	0212      	lsls	r2, r2, #8
+   c:	4291      	cmp	r1, r2
+   e:	d843      	bhi.n	98 <DLL_vMessageTransmitted+0x98>
+  10:	4c25      	ldr	r4, [pc, #148]	; (a8 <DLL_vMessageTransmitted+0xa8>)
+  12:	4d26      	ldr	r5, [pc, #152]	; (ac <DLL_vMessageTransmitted+0xac>)
+      if (DLL_GET_ACKNOWLEDGE(ucAcknowledge) == DLL_ACK_OK)
+  14:	280a      	cmp	r0, #10
+  16:	d123      	bne.n	60 <DLL_vMessageTransmitted+0x60>
+         if(BAL_tBusObject[(uiUserCode>>BYTE_SIZE)].ptBusTransmitTable != NULL)
+  18:	0a08      	lsrs	r0, r1, #8
+  1a:	2111      	movs	r1, #17
+  1c:	4341      	muls	r1, r0
+  1e:	4a24      	ldr	r2, [pc, #144]	; (b0 <DLL_vMessageTransmitted+0xb0>)
+  20:	1852      	adds	r2, r2, r1
+  22:	7990      	ldrb	r0, [r2, #6]
+  24:	7951      	ldrb	r1, [r2, #5]
+  26:	0200      	lsls	r0, r0, #8
+  28:	4308      	orrs	r0, r1
+  2a:	79d1      	ldrb	r1, [r2, #7]
+  2c:	7a12      	ldrb	r2, [r2, #8]
+  2e:	0409      	lsls	r1, r1, #16
+  30:	4301      	orrs	r1, r0
+  32:	0612      	lsls	r2, r2, #24
+  34:	430a      	orrs	r2, r1
+  36:	d00f      	beq.n	58 <DLL_vMessageTransmitted+0x58>
+             tConfirmationFunction = *BAL_tBusObject[(uiUserCode>>BYTE_SIZE)].ptBusTransmitTable[(uint8_t)uiUserCode].tConfirmationFunction;
+  38:	b2d9      	uxtb	r1, r3
+  3a:	230d      	movs	r3, #13
+  3c:	434b      	muls	r3, r1
+  3e:	18d3      	adds	r3, r2, r3
+  40:	7a99      	ldrb	r1, [r3, #10]
+  42:	7a5a      	ldrb	r2, [r3, #9]
+  44:	0209      	lsls	r1, r1, #8
+  46:	4311      	orrs	r1, r2
+  48:	7ada      	ldrb	r2, [r3, #11]
+  4a:	7b1b      	ldrb	r3, [r3, #12]
+  4c:	0412      	lsls	r2, r2, #16
+  4e:	430a      	orrs	r2, r1
+  50:	061b      	lsls	r3, r3, #24
+  52:	4313      	orrs	r3, r2
+         if (tConfirmationFunction != NULL)//Call confirmation function, if any (i.e. not 0) is defined.
+  54:	d000      	beq.n	58 <DLL_vMessageTransmitted+0x58>
+            tConfirmationFunction();
+  56:	4798      	blx	r3
+      BAL_ucTransmissionAttempts = 0U;  //Reset the counter, which counts the retries of last message transmission.
+  58:	2300      	movs	r3, #0
+  5a:	702b      	strb	r3, [r5, #0]
+      BAL_ucMaxRetries = 0U;
+  5c:	7023      	strb	r3, [r4, #0]
+  5e:	e01a      	b.n	96 <DLL_vMessageTransmitted+0x96>
+            if (BAL_ucMaxRetries < BAL_ucMaxCollisionRetries)
+  60:	7822      	ldrb	r2, [r4, #0]
+  62:	4914      	ldr	r1, [pc, #80]	; (b4 <DLL_vMessageTransmitted+0xb4>)
+         if (DLL_GET_ACKNOWLEDGE(ucAcknowledge) == DLL_ACK_TRANSMISSION_ABORTED)
+  64:	280f      	cmp	r0, #15
+  66:	d003      	beq.n	70 <DLL_vMessageTransmitted+0x70>
+               if (BAL_ucMaxRetries < BAL_ucMaxMissingAckRetries)
+  68:	4913      	ldr	r1, [pc, #76]	; (b8 <DLL_vMessageTransmitted+0xb8>)
+            if (DLL_GET_ACKNOWLEDGE(ucAcknowledge) == DLL_ACK_NOT_RECEIVED)
+  6a:	2800      	cmp	r0, #0
+  6c:	d000      	beq.n	70 <DLL_vMessageTransmitted+0x70>
+               if (BAL_ucMaxRetries < BAL_ucMaxNackRetries)
+  6e:	4913      	ldr	r1, [pc, #76]	; (bc <DLL_vMessageTransmitted+0xbc>)
+  70:	7809      	ldrb	r1, [r1, #0]
+  72:	4291      	cmp	r1, r2
+  74:	d900      	bls.n	78 <DLL_vMessageTransmitted+0x78>
+                  BAL_ucMaxRetries = BAL_ucMaxNackRetries;
+  76:	7021      	strb	r1, [r4, #0]
+         if (BAL_ucTransmissionAttempts >= BAL_ucMaxRetries)
+  78:	782a      	ldrb	r2, [r5, #0]
+  7a:	7821      	ldrb	r1, [r4, #0]
+  7c:	4291      	cmp	r1, r2
+  7e:	d808      	bhi.n	92 <DLL_vMessageTransmitted+0x92>
+            BAL_vNotifyNonDeliverableMessage(BAL_tBusObject[(uiUserCode>>BYTE_SIZE)].ucSubsystem, (uint8_t)uiUserCode);
+  80:	2011      	movs	r0, #17
+  82:	b2d9      	uxtb	r1, r3
+  84:	0a1b      	lsrs	r3, r3, #8
+  86:	4343      	muls	r3, r0
+  88:	4a09      	ldr	r2, [pc, #36]	; (b0 <DLL_vMessageTransmitted+0xb0>)
+  8a:	5c98      	ldrb	r0, [r3, r2]
+  8c:	f7ff fffe 	bl	0 <BAL_vNotifyNonDeliverableMessage>
+  90:	e7e2      	b.n	58 <DLL_vMessageTransmitted+0x58>
+            BAL_ucTransmissionAttempts++;
+  92:	3201      	adds	r2, #1
+  94:	702a      	strb	r2, [r5, #0]
+}
+  96:	bd70      	pop	{r4, r5, r6, pc}
+      if (DLL_GET_ACKNOWLEDGE(ucAcknowledge) == DLL_ACK_OK)
+  98:	280a      	cmp	r0, #10
+  9a:	d102      	bne.n	a2 <DLL_vMessageTransmitted+0xa2>
+         DBPL_vStopRepeatServiceMsg();
+  9c:	f7ff fffe 	bl	0 <DBPL_vStopRepeatServiceMsg>
+  a0:	e7f9      	b.n	96 <DLL_vMessageTransmitted+0x96>
+         DBPL_vDecrementRepeatServiceMsg();
+  a2:	f7ff fffe 	bl	0 <DBPL_vDecrementRepeatServiceMsg>
+  a6:	e7f6      	b.n	96 <DLL_vMessageTransmitted+0x96>
+	...
+
+Disassembly of section .text.BAL_vSetTransmitMsg:
+
+00000000 <BAL_vSetTransmitMsg>:
+    if(BAL_tTransmitObject != NULL)
+   0:	2800      	cmp	r0, #0
+   2:	d004      	beq.n	e <BAL_vSetTransmitMsg+0xe>
+        BAL_tTransmitObject->tBusIdentifier.tMessageIdentifier = uiMsgId;
+   4:	7082      	strb	r2, [r0, #2]
+   6:	0a12      	lsrs	r2, r2, #8
+        BAL_tTransmitObject->tBusIdentifier.ucTargetAddress = ucNode;
+   8:	7041      	strb	r1, [r0, #1]
+        BAL_tTransmitObject->tBusIdentifier.tMessageIdentifier = uiMsgId;
+   a:	70c2      	strb	r2, [r0, #3]
+        BAL_tTransmitObject->ucDataLen = ucDataLength;
+   c:	7103      	strb	r3, [r0, #4]
+}
+   e:	4770      	bx	lr
+
+Disassembly of section .text.BAL_tGetReceivedMessageId:
+
+00000000 <BAL_tGetReceivedMessageId>:
+   return BAL_tReceivedMessageId;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <BAL_tGetReceivedMessageId+0x8>)
+   2:	8818      	ldrh	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_ClearMessagesToSend:
+
+00000000 <BAL_ClearMessagesToSend>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   for (uint8_t ucSubsystemIndex = 0; BAL_tBusObject[ucSubsystemIndex].ucSubsystem != 0xFu; ucSubsystemIndex++)
+   2:	2500      	movs	r5, #0
+   4:	2211      	movs	r2, #17
+   6:	436a      	muls	r2, r5
+   8:	4b14      	ldr	r3, [pc, #80]	; (5c <BAL_ClearMessagesToSend+0x5c>)
+   a:	5cd1      	ldrb	r1, [r2, r3]
+   c:	290f      	cmp	r1, #15
+   e:	d116      	bne.n	3e <BAL_ClearMessagesToSend+0x3e>
+}
+  10:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+         UTI_vSetBit(BAL_tBusObject[ucSubsystemIndex].pucMessageToTransmitBits, ucMessageNumber, false);
+  12:	79ba      	ldrb	r2, [r7, #6]
+  14:	797b      	ldrb	r3, [r7, #5]
+  16:	0212      	lsls	r2, r2, #8
+  18:	431a      	orrs	r2, r3
+  1a:	79fb      	ldrb	r3, [r7, #7]
+  1c:	7a38      	ldrb	r0, [r7, #8]
+  1e:	041b      	lsls	r3, r3, #16
+  20:	4313      	orrs	r3, r2
+  22:	0600      	lsls	r0, r0, #24
+  24:	b2a1      	uxth	r1, r4
+  26:	2200      	movs	r2, #0
+  28:	4318      	orrs	r0, r3
+  2a:	f7ff fffe 	bl	0 <UTI_vSetBit>
+      for (uint8_t ucMessageNumber = 0; ucMessageNumber < *BAL_tBusObject[ucSubsystemIndex].pucNumberOfElementsInTransmitTable; ucMessageNumber++)
+  2e:	3401      	adds	r4, #1
+  30:	b2e4      	uxtb	r4, r4
+  32:	7833      	ldrb	r3, [r6, #0]
+  34:	42a3      	cmp	r3, r4
+  36:	d8ec      	bhi.n	12 <BAL_ClearMessagesToSend+0x12>
+   for (uint8_t ucSubsystemIndex = 0; BAL_tBusObject[ucSubsystemIndex].ucSubsystem != 0xFu; ucSubsystemIndex++)
+  38:	3501      	adds	r5, #1
+  3a:	b2ed      	uxtb	r5, r5
+  3c:	e7e2      	b.n	4 <BAL_ClearMessagesToSend+0x4>
+      for (uint8_t ucMessageNumber = 0; ucMessageNumber < *BAL_tBusObject[ucSubsystemIndex].pucNumberOfElementsInTransmitTable; ucMessageNumber++)
+  3e:	189b      	adds	r3, r3, r2
+  40:	001f      	movs	r7, r3
+  42:	7a99      	ldrb	r1, [r3, #10]
+  44:	7a5a      	ldrb	r2, [r3, #9]
+  46:	0209      	lsls	r1, r1, #8
+  48:	4311      	orrs	r1, r2
+  4a:	7ada      	ldrb	r2, [r3, #11]
+  4c:	7b1e      	ldrb	r6, [r3, #12]
+  4e:	0412      	lsls	r2, r2, #16
+  50:	430a      	orrs	r2, r1
+  52:	0636      	lsls	r6, r6, #24
+  54:	2400      	movs	r4, #0
+  56:	3708      	adds	r7, #8
+  58:	4316      	orrs	r6, r2
+  5a:	e7ea      	b.n	32 <BAL_ClearMessagesToSend+0x32>
+  5c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.BAL_bIsSendingRetry:
+
+00000000 <BAL_bIsSendingRetry>:
+    return (BAL_ucTransmissionAttempts > 0U) ? true : false;
+   0:	4b02      	ldr	r3, [pc, #8]	; (c <BAL_bIsSendingRetry+0xc>)
+   2:	7818      	ldrb	r0, [r3, #0]
+   4:	1e43      	subs	r3, r0, #1
+   6:	4198      	sbcs	r0, r3
+   8:	b2c0      	uxtb	r0, r0
+#endif
+}
+   a:	4770      	bx	lr
+   c:	00000000 	.word	0x00000000

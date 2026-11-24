@@ -1,0 +1,590 @@
+
+out/programmer/prog/dbus/dbusmapping.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.DBM_UART_vInit:
+
+00000000 <DBM_UART_vInit>:
+
+#endif //DBM_MCAL
+
+/************************************************************************/
+void DBM_UART_vInit(uint8_t ucIndex)
+{
+   0:	b513      	push	{r0, r1, r4, lr}
+#ifdef DBM_MCAL
+    (void)ucIndex;
+    struct MUART_Config muartCfg = MUART_CFG_8N1(DBUS_DEFAULT_BAUDRATE*100u);
+   2:	466a      	mov	r2, sp
+   4:	0011      	movs	r1, r2
+   6:	4b0a      	ldr	r3, [pc, #40]	; (30 <DBM_UART_vInit+0x30>)
+   8:	cb11      	ldmia	r3!, {r0, r4}
+   a:	c111      	stmia	r1!, {r0, r4}
+    (void)MUART_init(&DBM_UART_dbusHandle, DBM_UART_dbusChannel, &muartCfg);
+   c:	4c09      	ldr	r4, [pc, #36]	; (34 <DBM_UART_vInit+0x34>)
+   e:	490a      	ldr	r1, [pc, #40]	; (38 <DBM_UART_vInit+0x38>)
+  10:	0020      	movs	r0, r4
+  12:	f7ff fffe 	bl	0 <MUART_init>
+    /* Callback initialization */
+    MCAL_initCallback(&DBM_UART_handleTxRxCb, DBM_UART_handleTxRxCbFunc, &DBM_UART_dbusHandle);
+  16:	0022      	movs	r2, r4
+  18:	4908      	ldr	r1, [pc, #32]	; (3c <DBM_UART_vInit+0x3c>)
+  1a:	4809      	ldr	r0, [pc, #36]	; (40 <DBM_UART_vInit+0x40>)
+  1c:	f7ff fffe 	bl	0 <MCAL_initCallback>
+   DBM_MAP_UART(DBUS_UART_CHANNEL, _vInit)(ucIndex);
+#endif
+
+#ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+   /* Disable interrupt */
+   DBM_INT_DisableIrq();
+  20:	f7ff fffe 	bl	0 <DBM_INT_DisableIrq>
+   DBM_INT_Init(0U);
+  24:	2000      	movs	r0, #0
+  26:	f7ff fffe 	bl	0 <DBM_INT_Init>
+      /* Interrupt pending only on falling edges */
+   DBM_INT_SetIrqModeFalling();
+  2a:	f7ff fffe 	bl	0 <DBM_INT_SetIrqModeFalling>
+#ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+   //The following variable must be reset if the initialisation is performed more than once.
+   DBM_UART_bTxEventAlreadyEnabled = 0U;
+#endif
+#endif
+}
+  2e:	bd13      	pop	{r0, r1, r4, pc}
+	...
+
+Disassembly of section .text.DBM_UART_vEnable:
+
+00000000 <DBM_UART_vEnable>:
+/************************************************************************/
+void DBM_UART_vEnable(void)
+{
+   0:	b510      	push	{r4, lr}
+ range      : 0x00000000...0xFFFFFFFF
+*/
+uint32_t DBM_ulGetCircleMicroSeconds(void);
+
+#ifndef DBM_EXTERNAL_INTERRUPT_MAPPING
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+   /* HUART0_vEnable() when DBUS_UART_CHANNEL is 0 */
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   MUART_enable(&DBM_UART_dbusHandle);
+   6:	4803      	ldr	r0, [pc, #12]	; (14 <DBM_UART_vEnable+0x14>)
+   8:	f7ff fffe 	bl	0 <MUART_enable>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+   c:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+#else
+   DBM_MAP_UART(DBUS_UART_CHANNEL, _vEnable)();
+#endif
+   DBM_ENABLE_INT();
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+  14:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_vDisableTxEvent:
+
+00000000 <DBM_UART_vDisableTxEvent>:
+/************************************************************************/
+void DBM_UART_vDisableTxEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+#ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+   /* HUART0_vDisableTxEvent(); when DBUS_UART_CHANNEL is 0 */
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_WRITE_BYTE);
+   6:	2220      	movs	r2, #32
+   8:	2100      	movs	r1, #0
+   a:	4803      	ldr	r0, [pc, #12]	; (18 <DBM_UART_vDisableTxEvent+0x18>)
+   c:	f7ff fffe 	bl	0 <MUART_disableEvent>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  10:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+#endif
+   DBM_ENABLE_INT();
+#else
+   DBM_UART_ucTxDisabled = DBM_UART_DISABLE_TX_EVENT;
+#endif
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_vEnableTxEvent:
+
+00000000 <DBM_UART_vEnableTxEvent>:
+/************************************************************************/
+void DBM_UART_vEnableTxEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+#ifndef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+   /* HUART0_vEnableTxEvent(); when DBUS_UART_CHANNEL is 0 */
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_WRITE_BYTE);
+   6:	2220      	movs	r2, #32
+   8:	4903      	ldr	r1, [pc, #12]	; (18 <DBM_UART_vEnableTxEvent+0x18>)
+   a:	4804      	ldr	r0, [pc, #16]	; (1c <DBM_UART_vEnableTxEvent+0x1c>)
+   c:	f7ff fffe 	bl	0 <MUART_enableEvent>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  10:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+      DBM_UART_SET_TX_INTERRUPT();
+   }
+#endif
+   DBM_ENABLE_INT();
+#endif
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBM_UART_vDisableRxEvent:
+
+00000000 <DBM_UART_vDisableRxEvent>:
+/************************************************************************/
+void DBM_UART_vDisableRxEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+#ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+   /* HUART0_vDisableRxEvent(); when DBUS_UART_CHANNEL is 0 */
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_ERROR);
+   6:	2280      	movs	r2, #128	; 0x80
+   8:	4c06      	ldr	r4, [pc, #24]	; (24 <DBM_UART_vDisableRxEvent+0x24>)
+   a:	2100      	movs	r1, #0
+   c:	0020      	movs	r0, r4
+   e:	05d2      	lsls	r2, r2, #23
+  10:	f7ff fffe 	bl	0 <MUART_disableEvent>
+   (void)MUART_disableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_READ_BYTE);
+  14:	2210      	movs	r2, #16
+  16:	2100      	movs	r1, #0
+  18:	0020      	movs	r0, r4
+  1a:	f7ff fffe 	bl	0 <MUART_disableEvent>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  1e:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+#ifdef __DBM_TUNNEL_MODE_SUPPORT
+#error Tunnel mode is not supported when the Rx/Tx interrupts cannot be disabled (__DBM_DBUS_MAPPING_LOCK_RX_DISABLE)
+#endif
+   DBM_UART_ucRxDisabled = DBM_UART_DISABLE_RX_EVENT;
+#endif
+}
+  22:	bd10      	pop	{r4, pc}
+  24:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_vEnableRxEvent:
+
+00000000 <DBM_UART_vEnableRxEvent>:
+/************************************************************************/
+void DBM_UART_vEnableRxEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+#ifndef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+   /* HUART0_vEnableRxEvent(); when DBUS_UART_CHANNEL is 0 */
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   (void)MUART_enableEvent(&DBM_UART_dbusHandle, NULL, MCAL_EVENT_ERROR);
+   6:	2280      	movs	r2, #128	; 0x80
+   8:	4c06      	ldr	r4, [pc, #24]	; (24 <DBM_UART_vEnableRxEvent+0x24>)
+   a:	2100      	movs	r1, #0
+   c:	0020      	movs	r0, r4
+   e:	05d2      	lsls	r2, r2, #23
+  10:	f7ff fffe 	bl	0 <MUART_enableEvent>
+   (void)MUART_enableEvent(&DBM_UART_dbusHandle, &DBM_UART_handleTxRxCb, MCAL_EVENT_READ_BYTE);
+  14:	2210      	movs	r2, #16
+  16:	4904      	ldr	r1, [pc, #16]	; (28 <DBM_UART_vEnableRxEvent+0x28>)
+  18:	0020      	movs	r0, r4
+  1a:	f7ff fffe 	bl	0 <MUART_enableEvent>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  1e:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+      DLL_vHandleRxEvent();
+   }
+   DBM_UART_ucRxDisabled = DBM_UART_RX_EVENT_ENABLED;
+   DBM_ENABLE_INT();
+#endif
+}
+  22:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text.DBM_UART_bIsRxError:
+
+00000000 <DBM_UART_bIsRxError>:
+/************************************************************************/
+bool DBM_UART_bIsRxError(void)
+{
+   0:	b510      	push	{r4, lr}
+      Terror tError;
+#ifdef __DBM_DBUS_MAPPING_LOCK_RX_DISABLE
+   DBM_DISABLE_INT();
+#endif
+#ifdef DBM_MCAL
+   tError = (Terror)(MUART_getError(&DBM_UART_dbusHandle));  //lint !e571 suspicious cast, cast from enum MCAL_Error to uint8_t
+   2:	4810      	ldr	r0, [pc, #64]	; (44 <DBM_UART_bIsRxError+0x44>)
+   4:	f7ff fffe 	bl	0 <MUART_getError>
+   8:	b283      	uxth	r3, r0
+   }
+   DBM_ENABLE_INT();
+#endif
+#ifndef __DBM_EXCLUDE_ERROR_COUNTERS
+   /* Error counters */
+   if (tError != 0U)
+   a:	2b00      	cmp	r3, #0
+   c:	d013      	beq.n	36 <DBM_UART_bIsRxError+0x36>
+   {
+      /* NB! Break, Overrun and Framing-error variables are not limited at 255, these counters may overflow, and start at 0 again. */
+      if ((tError & (Terror)DBM_UART_NOISE_ERROR) != 0U)   //lint !e587 !e774 always evaluates to False, but only for derivatives which does not support noise error
+   e:	0702      	lsls	r2, r0, #28
+  10:	d003      	beq.n	1a <DBM_UART_bIsRxError+0x1a>
+      {
+         DBM_UART_ulNoiseCounter++;
+  12:	490d      	ldr	r1, [pc, #52]	; (48 <DBM_UART_bIsRxError+0x48>)
+  14:	680a      	ldr	r2, [r1, #0]
+  16:	3201      	adds	r2, #1
+  18:	600a      	str	r2, [r1, #0]
+      }
+      if ((tError & (Terror)DBM_UART_RX_OVERRUN_ERROR) != 0U)
+  1a:	220d      	movs	r2, #13
+  1c:	4210      	tst	r0, r2
+  1e:	d003      	beq.n	28 <DBM_UART_bIsRxError+0x28>
+      {
+         DBM_UART_ucOverrunErrorCounter++;
+  20:	490a      	ldr	r1, [pc, #40]	; (4c <DBM_UART_bIsRxError+0x4c>)
+  22:	780a      	ldrb	r2, [r1, #0]
+  24:	3201      	adds	r2, #1
+  26:	700a      	strb	r2, [r1, #0]
+      }
+      if ((tError & (Terror)DBM_UART_FRAMING_ERROR) != 0U)
+  28:	220c      	movs	r2, #12
+  2a:	4210      	tst	r0, r2
+  2c:	d003      	beq.n	36 <DBM_UART_bIsRxError+0x36>
+      {
+         DBM_UART_ulFramingErrorCounter++;
+  2e:	4908      	ldr	r1, [pc, #32]	; (50 <DBM_UART_bIsRxError+0x50>)
+  30:	680a      	ldr	r2, [r1, #0]
+  32:	3201      	adds	r2, #1
+  34:	600a      	str	r2, [r1, #0]
+      }
+   }
+#else
+   //No Error counters
+#endif
+   if ((tError & ~(Terror)DBM_UART_NOISE_ERROR) == 0U) //Ignore noise errors
+  36:	220f      	movs	r2, #15
+  38:	4393      	bics	r3, r2
+  3a:	1e5a      	subs	r2, r3, #1
+  3c:	4193      	sbcs	r3, r2
+   }
+   else
+   {
+      return true;    //Relevant error(s) occurred
+   }
+}
+  3e:	b2d8      	uxtb	r0, r3
+  40:	bd10      	pop	{r4, pc}
+  42:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.DBM_UART_ucGetStatus:
+
+00000000 <DBM_UART_ucGetStatus>:
+/************************************************************************/
+uint8_t DBM_UART_ucGetStatus(void)
+{
+   0:	b510      	push	{r4, lr}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+   2:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+   uint8_t ucStatus;
+   DBM_DISABLE_INT();
+#ifdef DBM_MCAL
+   ucStatus = (uint8_t)MUART_getStatusReg(DBM_UART_dbusChannel);
+   6:	4804      	ldr	r0, [pc, #16]	; (18 <DBM_UART_ucGetStatus+0x18>)
+   8:	f7ff fffe 	bl	0 <MUART_getStatusReg>
+   c:	0004      	movs	r4, r0
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+   e:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+#else
+   ucStatus = (uint8_t)DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetStatus)();
+#endif
+   DBM_ENABLE_INT();
+   return ucStatus;
+  12:	b2e0      	uxtb	r0, r4
+   /* return HUART0_ucGetStatus(); when DBUS_UART_CHANNEL is 0  */
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_ucGetRxData:
+
+00000000 <DBM_UART_ucGetRxData>:
+   {
+      ucData = DBM_UART_ucRxData;
+   }
+#else
+#ifdef DBM_MCAL
+   ucData = DBM_UART_lastRxByte;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBM_UART_ucGetRxData+0x8>)
+#else
+   ucData = DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxData)();
+#endif
+#endif
+   return ucData;
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_vSetTxData:
+
+00000000 <DBM_UART_vSetTxData>:
+void DBM_UART_vSetTxData(uint8_t ucData)
+{
+   0:	b510      	push	{r4, lr}
+   /* HUART0_vSetTxData(Data); when DBUS_UART_CHANNEL is 0 */
+#ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+   DBM_DISABLE_INT();
+#endif
+#ifdef DBM_MCAL
+   (void)MUART_writeByte(&DBM_UART_dbusHandle, ucData);
+   2:	4b03      	ldr	r3, [pc, #12]	; (10 <DBM_UART_vSetTxData+0x10>)
+{
+   4:	0001      	movs	r1, r0
+   (void)MUART_writeByte(&DBM_UART_dbusHandle, ucData);
+   6:	0018      	movs	r0, r3
+   8:	f7ff fffe 	bl	0 <MUART_writeByte>
+   DBM_MAP_UART(DBUS_UART_CHANNEL, _vSetTxData)(ucData);
+#endif
+#ifdef __DBM_DBUS_MAPPING_LOCK_TX_DISABLE
+   DBM_ENABLE_INT();
+#endif
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+  10:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_bIsRxOnGoing:
+
+00000000 <DBM_UART_bIsRxOnGoing>:
+/************************************************************************/
+bool DBM_UART_bIsRxOnGoing(void)
+{
+   0:	b510      	push	{r4, lr}
+#ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+   //Check if RX Line is low
+   //If RX Line is low a break is detected on DBus
+   //Return True to avoid start send message during Break
+    if(DBM_INT_bGetPin() == false)
+   2:	f7ff fffe 	bl	0 <DBM_INT_bGetPin>
+   6:	2800      	cmp	r0, #0
+   8:	d104      	bne.n	14 <DBM_UART_bIsRxOnGoing+0x14>
+   {
+       DBM_INT_ClearIrq();        // Clear interrupt to avoid delay time after break
+   a:	f7ff fffe 	bl	0 <DBM_INT_ClearIrq>
+       return true;
+   e:	2401      	movs	r4, #1
+        return MUART_isRxOngoing(DBM_UART_dbusChannel);
+    #else
+        return DBM_MAP_UART(DBUS_UART_CHANNEL, _bIsRxOnGoing)();
+    #endif //DBM_MCAL
+#endif
+}
+  10:	0020      	movs	r0, r4
+  12:	bd10      	pop	{r4, pc}
+static inline void DBM_DISABLE_INT(void){HSUP_vDisableInt();} //!<Disable interrupts
+  14:	f7ff fffe 	bl	0 <HSUP_vDisableInt>
+        if (DBM_INT_IsIrqEvent() != false)
+  18:	f7ff fffe 	bl	0 <DBM_INT_IsIrqEvent>
+  1c:	1e04      	subs	r4, r0, #0
+  1e:	d001      	beq.n	24 <DBM_UART_bIsRxOnGoing+0x24>
+               DBM_INT_ClearIrq();
+  20:	f7ff fffe 	bl	0 <DBM_INT_ClearIrq>
+static inline void DBM_ENABLE_INT(void){HSUP_vEnableInt();} //!<Enable interrupts
+  24:	f7ff fffe 	bl	0 <HSUP_vEnableInt>
+               return false;
+  28:	e7f2      	b.n	10 <DBM_UART_bIsRxOnGoing+0x10>
+
+Disassembly of section .text.DBM_UART_vHandleRxEvent:
+
+00000000 <DBM_UART_vHandleRxEvent>:
+/************************************************************************/
+void DBM_UART_vHandleRxEvent(void)
+{
+   0:	b510      	push	{r4, lr}
+   /* Start time measurement */
+   FSF_vIsrDoEntry(FS_ISR_DBUS2_RX);
+#endif
+#ifdef __DBM_USE_IRQ_FOR_IDLE_DETECTION
+   /* Clear pending interrupt. */
+   DBM_INT_ClearIrq();
+   2:	f7ff fffe 	bl	0 <DBM_INT_ClearIrq>
+   else
+   {
+      DLL_vHandleRxEvent();
+   }
+#else
+   DLL_vHandleRxEvent();
+   6:	f7ff fffe 	bl	0 <DLL_vHandleRxEvent>
+#ifdef DBM_UART_REMOVE_OVERRUN_ERROR
+   //Work-around for Renesas platform in the case a higher priority interrupt interrupts the receive event between reading of DBM_UART_bIsRxError() and DBM_UART_ucGetRxData(). If this interruption lasts long enough to provoke a UART_Overrun error no further receive interrupts would be activated unless this error condition is removed. Unconditional reading of error flags at this point should not have any side effect (i.e. during normal operation the error flags can never be set at this point).
+   ucError = (uint8_t)DBM_MAP_UART(DBUS_UART_CHANNEL, _ucGetRxError)(); // dummy read to make sure Rx Interrupts will be generated even if an overrun error occured between reading of U0RBH and U0RBL (which would cause DBus to stop receiving any data otherwise because of missing Rx interrupts)
+   (void)ucError;
+#endif
+}
+   a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBM_UART_handleTxRxCbFunc:
+
+00000000 <DBM_UART_handleTxRxCbFunc>:
+}
+
+
+static inline enum MCAL_Event MCAL_getEventType(const struct MCAL_EventResponse *eventResponse)
+{
+    return eventResponse->eventType;
+   0:	6853      	ldr	r3, [r2, #4]
+{
+   2:	0010      	movs	r0, r2
+   4:	b510      	push	{r4, lr}
+    if (MCAL_getEventType(eventResponse) == MCAL_EVENT_READ_BYTE)
+   6:	2b10      	cmp	r3, #16
+   8:	d106      	bne.n	18 <DBM_UART_handleTxRxCbFunc+0x18>
+        DBM_UART_lastRxByte = MCAL_getEventData_uint8(eventResponse);
+   a:	f7ff fffe 	bl	0 <MCAL_getEventData_uint8>
+   e:	4b05      	ldr	r3, [pc, #20]	; (24 <DBM_UART_handleTxRxCbFunc+0x24>)
+  10:	7018      	strb	r0, [r3, #0]
+        DBM_UART_vHandleRxEvent();
+  12:	f7ff fffe 	bl	0 <DBM_UART_handleTxRxCbFunc>
+}  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_CallbackFunction_t
+  16:	bd10      	pop	{r4, pc}
+    else if (MCAL_getEventType(eventResponse) == MCAL_EVENT_WRITE_BYTE)
+  18:	2b20      	cmp	r3, #32
+  1a:	d1fc      	bne.n	16 <DBM_UART_handleTxRxCbFunc+0x16>
+   else
+   {
+      DBM_UART_ucTxDisabled = DBM_UART_TX_EVENT_DURING_LOCK_STATE;
+   }
+#else
+   DLL_vHandleTxEvent();
+  1c:	f7ff fffe 	bl	0 <DLL_vHandleTxEvent>
+}  //lint !e818 'obj' cannot be declared as pointing to const, because of generic definition STDCB_CallbackFunction_t
+  20:	e7f9      	b.n	16 <DBM_UART_handleTxRxCbFunc+0x16>
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_vHandleTxEvent:
+
+00000000 <DBM_UART_vHandleTxEvent>:
+{
+   0:	b510      	push	{r4, lr}
+   DLL_vHandleTxEvent();
+   2:	f7ff fffe 	bl	0 <DLL_vHandleTxEvent>
+#endif
+   #ifdef LSW_DBUS_MAPPING_INCLUDE_FUNCSAFE
+   /* Stop time measurement */
+   FSF_vIsrDoExit(FS_ISR_DBUS2_TX);
+#endif
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.DBM_PERIPH_vSetBaudRate:
+
+00000000 <DBM_PERIPH_vSetBaudRate>:
+/************************************************************************/
+void DBM_PERIPH_vSetBaudRate(uint8_t ucIndex, uint16_t uiBaudRate)
+{
+   0:	b510      	push	{r4, lr}
+   2:	000c      	movs	r4, r1
+#ifdef DBM_MCAL
+    (void)ucIndex;
+    MUART_configureBaudrate(DBM_UART_dbusChannel, ((uint32_t)uiBaudRate * 100u));
+   4:	2164      	movs	r1, #100	; 0x64
+   6:	4804      	ldr	r0, [pc, #16]	; (18 <DBM_PERIPH_vSetBaudRate+0x18>)
+   8:	4361      	muls	r1, r4
+   a:	f7ff fffe 	bl	0 <MUART_configureBaudrate>
+#else
+    (void)DBM_MAP_UART(DBUS_UART_CHANNEL, _bConfigure)(ucIndex,uiBaudRate,HUART_PARITY_NONE,HUART_STOP_BITS_1);
+#endif
+    DLL_vSetupTimings(uiBaudRate);
+   e:	0020      	movs	r0, r4
+  10:	f7ff fffe 	bl	0 <DLL_vSetupTimings>
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+  18:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_ulGetNoiseCounter:
+
+00000000 <DBM_UART_ulGetNoiseCounter>:
+
+/* Statistics */
+#ifndef __DBM_EXCLUDE_ERROR_COUNTERS
+uint32_t DBM_UART_ulGetNoiseCounter(void)
+{
+   return DBM_UART_ulNoiseCounter;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBM_UART_ulGetNoiseCounter+0x8>)
+   2:	6818      	ldr	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_ucGetUartOverrunCounter:
+
+00000000 <DBM_UART_ucGetUartOverrunCounter>:
+uint8_t DBM_UART_ucGetUartOverrunCounter(void)
+{
+   return DBM_UART_ucOverrunErrorCounter;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBM_UART_ucGetUartOverrunCounter+0x8>)
+   2:	7818      	ldrb	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_ulGetUartFramingErrorCounter:
+
+00000000 <DBM_UART_ulGetUartFramingErrorCounter>:
+uint32_t DBM_UART_ulGetUartFramingErrorCounter(void)
+{
+   return DBM_UART_ulFramingErrorCounter;
+   0:	4b01      	ldr	r3, [pc, #4]	; (8 <DBM_UART_ulGetUartFramingErrorCounter+0x8>)
+   2:	6818      	ldr	r0, [r3, #0]
+}
+   4:	4770      	bx	lr
+   6:	46c0      	nop			; (mov r8, r8)
+   8:	00000000 	.word	0x00000000
+
+Disassembly of section .text.DBM_UART_ulGetUartBreakCounter:
+
+00000000 <DBM_UART_ulGetUartBreakCounter>:
+uint32_t DBM_UART_ulGetUartBreakCounter(void)
+{
+   return DBM_UART_ulBreakCounter;
+}
+   0:	2000      	movs	r0, #0
+   2:	4770      	bx	lr
+
+Disassembly of section .text.DBM_ulGetCircleMicroSeconds:
+
+00000000 <DBM_ulGetCircleMicroSeconds>:
+#endif
+
+/* Timer functions */
+uint32_t DBM_ulGetCircleMicroSeconds(void)
+{
+   0:	b510      	push	{r4, lr}
+   return TIM_u32GetCircleMicroSeconds();
+   2:	f7ff fffe 	bl	0 <TIM_u32GetCircleMicroSeconds>
+}
+   6:	bd10      	pop	{r4, pc}

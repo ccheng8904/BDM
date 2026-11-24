@@ -1,0 +1,1 @@
+@fc %1 %2 /B >NUL 2>&1 && Echo True || Echo False 

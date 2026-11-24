@@ -1,0 +1,30 @@
+PatchBin 1.60...
+Arguments: -Lout/BootManager/bin/patchbin.log -i!(0x1000000:B4096)out/BootManager/bin/BootManager.s37 -Sout/BootManager/bin/BootManager.sym -silent1 -el -f(0x0,0xeff):0x00 -crc32(0x0,0xEFB)(0xEFC):0x4C11DB7,0xFFFFFFFF -CRC(0x0,0xeff)(v=CRC1):32 -omS0multi(0x0,0xeff)out/BootManager/bin/BootManager.mot#\nCRCstart1=0x0\nCRCend1=0xeff\nCRC1=%%CRC1\nCRCtmo=5\nBootManager -oh(0x0,0xeff)out/BootManager/bin/BootManager.hex
+Start 2026/11/18 17:05:04
+Auto importing from out/BootManager/bin/BootManager.s37...
+Importing Motorola S-Records formatted data...
+... from file E:\project\example\MD370R\out\BootManager\bin\BootManager.s37
+Warning: The data length 64 characters was exceeded (70 characters) at the line #1.
+Warning: The record length 78 characters was exceeded (80 characters) at the line #1.
+... 0.054 seconds
+Filling unused memory...
+... at address range 00000000-00000EFF by value 00, consecutively
+... 0.006 seconds
+Calculating 32-bit right-shift crc with polynom 0x4C11DB7 and start value 0xFFFFFFFF...
+... over 00000000-00000EFB
+... written to 00000EFC
+... is 0x5F306898
+... 0.004 seconds
+Calculating 32-bit CRC with arguments 0x04C11DB7 (poly), 0xFFFFFFFF (init), True (refin), True (refout), 0xFFFFFFFF (xorout)...
+... over 00000000-00000EFF
+... is 0x2144DF1C
+... result is written to variable CRC1
+... 0.001 seconds
+Exporting Motorola S-Records formatted data...
+... to file E:\project\example\MD370R\out\BootManager\bin\BootManager.mot
+... 0.01 seconds
+Exporting Intel Hex Records formatted data...
+... to file E:\project\example\MD370R\out\BootManager\bin\BootManager.hex
+... 0.004 seconds
+End 0.203 seconds
+... has completed the processing.

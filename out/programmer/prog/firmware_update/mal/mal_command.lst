@@ -1,0 +1,614 @@
+
+out/programmer/prog/firmware_update/mal/mal_command.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.MAL_handleWriteBlock:
+
+00000000 <MAL_handleWriteBlock>:
+ *  \param dataLen: length of received data block
+ *  \param data:    pointer to received data
+ *  \return error status: MAL_ST_OK in case of success
+ */
+static enum MAL_Status MAL_handleWriteBlock(uint16_t dataLen, const uint8_t *const data)
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+    if(MAL_sizeLeft < dataLen){return MAL_ST_WRITE_DATA_LEN_MISMATCH;}
+   2:	4f1c      	ldr	r7, [pc, #112]	; (74 <MAL_handleWriteBlock+0x74>)
+{
+   4:	b085      	sub	sp, #20
+    if(MAL_sizeLeft < dataLen){return MAL_ST_WRITE_DATA_LEN_MISMATCH;}
+   6:	683b      	ldr	r3, [r7, #0]
+{
+   8:	0004      	movs	r4, r0
+   a:	9102      	str	r1, [sp, #8]
+    if(MAL_sizeLeft < dataLen){return MAL_ST_WRITE_DATA_LEN_MISMATCH;}
+   c:	200c      	movs	r0, #12
+   e:	429c      	cmp	r4, r3
+  10:	d80b      	bhi.n	2a <MAL_handleWriteBlock+0x2a>
+    if(MAL_IsOk(MAL_checkAddressRange(MAL_currentAddr, dataLen)))
+  12:	4d19      	ldr	r5, [pc, #100]	; (78 <MAL_handleWriteBlock+0x78>)
+  14:	4b19      	ldr	r3, [pc, #100]	; (7c <MAL_handleWriteBlock+0x7c>)
+    address += size;
+  16:	682e      	ldr	r6, [r5, #0]
+  18:	9301      	str	r3, [sp, #4]
+  1a:	19a6      	adds	r6, r4, r6
+    if((address >= size) &&  // check for overflow
+  1c:	42b4      	cmp	r4, r6
+  1e:	d906      	bls.n	2e <MAL_handleWriteBlock+0x2e>
+ *  \param result: The result of an operation
+ *  \return true if result is MAL_ST_OK, otherwise false
+ */
+static bool MAL_IsOk(enum MAL_Status result)
+{
+    MAL_result = result;
+  20:	2308      	movs	r3, #8
+  22:	9a01      	ldr	r2, [sp, #4]
+  24:	7013      	strb	r3, [r2, #0]
+    return MAL_result;
+  26:	4b15      	ldr	r3, [pc, #84]	; (7c <MAL_handleWriteBlock+0x7c>)
+  28:	7818      	ldrb	r0, [r3, #0]
+}
+  2a:	b005      	add	sp, #20
+  2c:	bdf0      	pop	{r4, r5, r6, r7, pc}
+       (MAL_getPartitionSize(MAL_OpenPartition) >= address)) // check range
+  2e:	4b14      	ldr	r3, [pc, #80]	; (80 <MAL_handleWriteBlock+0x80>)
+  30:	6818      	ldr	r0, [r3, #0]
+  32:	9303      	str	r3, [sp, #12]
+  34:	f7ff fffe 	bl	0 <MAL_getPartitionSize>
+    if((address >= size) &&  // check for overflow
+  38:	4286      	cmp	r6, r0
+  3a:	d8f1      	bhi.n	20 <MAL_handleWriteBlock+0x20>
+    MAL_result = result;
+  3c:	2300      	movs	r3, #0
+  3e:	9a01      	ldr	r2, [sp, #4]
+        MAL_crc = CRC_Update(MAL_crc, dataLen, data);
+  40:	4e10      	ldr	r6, [pc, #64]	; (84 <MAL_handleWriteBlock+0x84>)
+    MAL_result = result;
+  42:	7013      	strb	r3, [r2, #0]
+static inline CRC_crc_t CRC_Update( CRC_crc_t crc, uint32_t len, const uint8_t *data )
+{
+#ifdef crc_16bit_width
+    return CRC_Ccitt_Update(crc, len, data );
+#else
+    return CRC_Ethernet_Update(crc, len, data );
+  44:	0021      	movs	r1, r4
+  46:	9a02      	ldr	r2, [sp, #8]
+  48:	6830      	ldr	r0, [r6, #0]
+  4a:	f7ff fffe 	bl	0 <CRC_Ethernet_Update>
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  4e:	9b03      	ldr	r3, [sp, #12]
+        MAL_crc = CRC_Update(MAL_crc, dataLen, data);
+  50:	6030      	str	r0, [r6, #0]
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  52:	681b      	ldr	r3, [r3, #0]
+        MAL_result = MEMDRV_write(MAL_getPhyAddr(MAL_currentAddr), dataLen, data);
+  54:	0021      	movs	r1, r4
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  56:	6818      	ldr	r0, [r3, #0]
+  58:	682b      	ldr	r3, [r5, #0]
+        MAL_result = MEMDRV_write(MAL_getPhyAddr(MAL_currentAddr), dataLen, data);
+  5a:	9a02      	ldr	r2, [sp, #8]
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  5c:	18c0      	adds	r0, r0, r3
+        MAL_result = MEMDRV_write(MAL_getPhyAddr(MAL_currentAddr), dataLen, data);
+  5e:	f7ff fffe 	bl	0 <MEMDRV_write>
+  62:	9b01      	ldr	r3, [sp, #4]
+  64:	7018      	strb	r0, [r3, #0]
+        MAL_currentAddr += dataLen;
+  66:	682b      	ldr	r3, [r5, #0]
+  68:	191b      	adds	r3, r3, r4
+  6a:	602b      	str	r3, [r5, #0]
+        MAL_sizeLeft    -= dataLen;
+  6c:	683b      	ldr	r3, [r7, #0]
+  6e:	1b1b      	subs	r3, r3, r4
+  70:	603b      	str	r3, [r7, #0]
+  72:	e7d8      	b.n	26 <MAL_handleWriteBlock+0x26>
+	...
+
+Disassembly of section .text.MAL_finishWriting:
+
+00000000 <MAL_finishWriting>:
+{
+   0:	b537      	push	{r0, r1, r2, r4, r5, lr}
+    MAL_crc = CRC_Finish(MAL_crc);
+   2:	4d10      	ldr	r5, [pc, #64]	; (44 <MAL_finishWriting+0x44>)
+static inline CRC_crc_t CRC_Finish( CRC_crc_t crc )
+{
+#ifdef crc_16bit_width
+    return CRC_Ccitt_Finish( crc );
+#else
+    return CRC_Ethernet_Finish( crc );
+   4:	6828      	ldr	r0, [r5, #0]
+   6:	f7ff fffe 	bl	0 <CRC_Ethernet_Finish>
+    MAL_writeStarted = false;
+   a:	2200      	movs	r2, #0
+   c:	4b0e      	ldr	r3, [pc, #56]	; (48 <MAL_finishWriting+0x48>)
+    MAL_crc = CRC_Finish(MAL_crc);
+   e:	6028      	str	r0, [r5, #0]
+    MAL_writeStarted = false;
+  10:	701a      	strb	r2, [r3, #0]
+    if (MAL_IsOk(MEMDRV_flush())  &&
+  12:	f7ff fffe 	bl	0 <MEMDRV_flush>
+    MAL_result = result;
+  16:	4c0d      	ldr	r4, [pc, #52]	; (4c <MAL_finishWriting+0x4c>)
+  18:	7020      	strb	r0, [r4, #0]
+    if (MAL_IsOk(MEMDRV_flush())  &&
+  1a:	2800      	cmp	r0, #0
+  1c:	d110      	bne.n	40 <MAL_finishWriting+0x40>
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  1e:	4a0c      	ldr	r2, [pc, #48]	; (50 <MAL_finishWriting+0x50>)
+        MAL_IsOk(MEMDRV_calcCrc(MAL_getPhyAddr(0),MAL_dataLen, &checkCrc)))
+  20:	4b0c      	ldr	r3, [pc, #48]	; (54 <MAL_finishWriting+0x54>)
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  22:	6810      	ldr	r0, [r2, #0]
+        MAL_IsOk(MEMDRV_calcCrc(MAL_getPhyAddr(0),MAL_dataLen, &checkCrc)))
+  24:	6819      	ldr	r1, [r3, #0]
+  26:	6800      	ldr	r0, [r0, #0]
+  28:	aa01      	add	r2, sp, #4
+  2a:	f7ff fffe 	bl	0 <MEMDRV_calcCrc>
+    MAL_result = result;
+  2e:	7020      	strb	r0, [r4, #0]
+    if (MAL_IsOk(MEMDRV_flush())  &&
+  30:	2800      	cmp	r0, #0
+  32:	d105      	bne.n	40 <MAL_finishWriting+0x40>
+        if (checkCrc != MAL_crc)
+  34:	9a01      	ldr	r2, [sp, #4]
+  36:	682b      	ldr	r3, [r5, #0]
+  38:	429a      	cmp	r2, r3
+  3a:	d001      	beq.n	40 <MAL_finishWriting+0x40>
+            MAL_result = MAL_ST_WRITE_ERROR;
+  3c:	230a      	movs	r3, #10
+  3e:	7023      	strb	r3, [r4, #0]
+    return MAL_result;
+  40:	7820      	ldrb	r0, [r4, #0]
+}
+  42:	bd3e      	pop	{r1, r2, r3, r4, r5, pc}
+	...
+
+Disassembly of section .text.MAL_checkWriteOperation:
+
+00000000 <MAL_checkWriteOperation>:
+    return ((uint16_t)MAL_OpenModule == modNum);
+   0:	2106      	movs	r1, #6
+   2:	4b07      	ldr	r3, [pc, #28]	; (20 <MAL_checkWriteOperation+0x20>)
+    if(!MAL_isModuleOpened(modNum))  {return MAL_ST_SETUP_MODULE_ERROR;     }
+   4:	881a      	ldrh	r2, [r3, #0]
+   6:	000b      	movs	r3, r1
+   8:	4282      	cmp	r2, r0
+   a:	d107      	bne.n	1c <MAL_checkWriteOperation+0x1c>
+    return ((MAL_OpenPartition->mod_attributes & MAL_CTX_MF_WE) == MAL_CTX_MF_WE);
+   c:	4b05      	ldr	r3, [pc, #20]	; (24 <MAL_checkWriteOperation+0x24>)
+   e:	681b      	ldr	r3, [r3, #0]
+    if(!MAL_isWriteEraseAllowed())   {return MAL_ST_ACTION_PROHIBITED_ERROR;}
+  10:	7ada      	ldrb	r2, [r3, #11]
+    return MAL_ST_OK;
+  12:	2300      	movs	r3, #0
+    if(!MAL_isWriteEraseAllowed())   {return MAL_ST_ACTION_PROHIBITED_ERROR;}
+  14:	400a      	ands	r2, r1
+  16:	428a      	cmp	r2, r1
+  18:	d000      	beq.n	1c <MAL_checkWriteOperation+0x1c>
+  1a:	3307      	adds	r3, #7
+}
+  1c:	0018      	movs	r0, r3
+  1e:	4770      	bx	lr
+	...
+
+Disassembly of section .text.MAL_CMD_init:
+
+00000000 <MAL_CMD_init>:
+{
+   0:	b510      	push	{r4, lr}
+    MAL_initPartition();
+   2:	f7ff fffe 	bl	0 <MAL_initPartition>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.MAL_CMD_DevInfo:
+
+00000000 <MAL_CMD_DevInfo>:
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b085      	sub	sp, #20
+   4:	9202      	str	r2, [sp, #8]
+    MAL_result = MAL_ST_ERROR;
+   6:	22ff      	movs	r2, #255	; 0xff
+{
+   8:	9303      	str	r3, [sp, #12]
+   a:	ab0a      	add	r3, sp, #40	; 0x28
+   c:	cb40      	ldmia	r3!, {r6}
+    *newIndex  = index;
+   e:	7008      	strb	r0, [r1, #0]
+{
+  10:	781f      	ldrb	r7, [r3, #0]
+    MAL_result = MAL_ST_ERROR;
+  12:	4b20      	ldr	r3, [pc, #128]	; (94 <MAL_CMD_DevInfo+0x94>)
+{
+  14:	0005      	movs	r5, r0
+  16:	000c      	movs	r4, r1
+    MAL_result = MAL_ST_ERROR;
+  18:	9301      	str	r3, [sp, #4]
+  1a:	701a      	strb	r2, [r3, #0]
+    const struct MAL_partition_s *partition = MAL_GetMemModuleByIndex(index);
+  1c:	f7ff fffe 	bl	0 <MAL_GetMemModuleByIndex>
+    if (partition != NULL)
+  20:	2800      	cmp	r0, #0
+  22:	d02c      	beq.n	7e <MAL_CMD_DevInfo+0x7e>
+    return (uint8_t)strlen((const char*)partition->mod_name);//lint !e926 cast from pointer to pointer
+  24:	300c      	adds	r0, #12
+  26:	f7ff fffe 	bl	0 <strlen>
+  2a:	b2c0      	uxtb	r0, r0
+        *nameLen=MAL_getPartitionNameLen(partition);
+  2c:	7030      	strb	r0, [r6, #0]
+        if (*nameLen <= maxNameLen)
+  2e:	4287      	cmp	r7, r0
+  30:	d329      	bcc.n	86 <MAL_CMD_DevInfo+0x86>
+    MAL_initPartition();
+  32:	f7ff fffe 	bl	0 <MAL_initPartition>
+    return MAL_GetMemModuleByIndex(index);
+  36:	0028      	movs	r0, r5
+  38:	f7ff fffe 	bl	0 <MAL_GetMemModuleByIndex>
+    return (uint8_t)strlen((const char*)partition->mod_name);//lint !e926 cast from pointer to pointer
+  3c:	0007      	movs	r7, r0
+    return MAL_GetMemModuleByIndex(index);
+  3e:	0006      	movs	r6, r0
+    return (uint8_t)strlen((const char*)partition->mod_name);//lint !e926 cast from pointer to pointer
+  40:	370c      	adds	r7, #12
+  42:	0038      	movs	r0, r7
+  44:	f7ff fffe 	bl	0 <strlen>
+    *modNum = (uint16_t)partition->mod_number;
+  48:	8933      	ldrh	r3, [r6, #8]
+  4a:	9a02      	ldr	r2, [sp, #8]
+    return (uint8_t)strlen((const char*)partition->mod_name);//lint !e926 cast from pointer to pointer
+  4c:	0005      	movs	r5, r0
+    *modNum = (uint16_t)partition->mod_number;
+  4e:	8013      	strh	r3, [r2, #0]
+    *size   = MAL_getPartitionSize(partition);
+  50:	0030      	movs	r0, r6
+  52:	f7ff fffe 	bl	0 <MAL_getPartitionSize>
+    memcpy(name, partition->mod_name, nameLen);
+  56:	22ff      	movs	r2, #255	; 0xff
+    *size   = MAL_getPartitionSize(partition);
+  58:	9b03      	ldr	r3, [sp, #12]
+    memcpy(name, partition->mod_name, nameLen);
+  5a:	402a      	ands	r2, r5
+    *size   = MAL_getPartitionSize(partition);
+  5c:	6018      	str	r0, [r3, #0]
+    memcpy(name, partition->mod_name, nameLen);
+  5e:	0039      	movs	r1, r7
+  60:	980c      	ldr	r0, [sp, #48]	; 0x30
+  62:	f7ff fffe 	bl	0 <memcpy>
+    (*index)++;
+  66:	7825      	ldrb	r5, [r4, #0]
+  68:	3501      	adds	r5, #1
+  6a:	b2ed      	uxtb	r5, r5
+  6c:	7025      	strb	r5, [r4, #0]
+    if (*index >= MAL_GetMemModuleCount()) {*index = 0u;}
+  6e:	f7ff fffe 	bl	0 <MAL_GetMemModuleCount>
+  72:	2300      	movs	r3, #0
+  74:	4285      	cmp	r5, r0
+  76:	d300      	bcc.n	7a <MAL_CMD_DevInfo+0x7a>
+  78:	7023      	strb	r3, [r4, #0]
+            MAL_result = MAL_ST_OK;
+  7a:	9a01      	ldr	r2, [sp, #4]
+  7c:	7013      	strb	r3, [r2, #0]
+    return (uint8_t)MAL_result;
+  7e:	9b01      	ldr	r3, [sp, #4]
+  80:	7818      	ldrb	r0, [r3, #0]
+}
+  82:	b005      	add	sp, #20
+  84:	bdf0      	pop	{r4, r5, r6, r7, pc}
+            *modNum   = 0u;
+  86:	2300      	movs	r3, #0
+  88:	9a02      	ldr	r2, [sp, #8]
+  8a:	8013      	strh	r3, [r2, #0]
+            *size     = 0u;
+  8c:	9a03      	ldr	r2, [sp, #12]
+  8e:	6013      	str	r3, [r2, #0]
+            *nameLen  = 0u;
+  90:	7033      	strb	r3, [r6, #0]
+  92:	e7f4      	b.n	7e <MAL_CMD_DevInfo+0x7e>
+  94:	00000000 	.word	0x00000000
+
+Disassembly of section .text.MAL_CMD_Open:
+
+00000000 <MAL_CMD_Open>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    MAL_result = MAL_ST_SETUP_MODULE_ERROR;
+   2:	2306      	movs	r3, #6
+   4:	4c0e      	ldr	r4, [pc, #56]	; (40 <MAL_CMD_Open+0x40>)
+    MAL_OpenModule    = (enum MAL_ModuleEnum)modNum;
+   6:	4f0f      	ldr	r7, [pc, #60]	; (44 <MAL_CMD_Open+0x44>)
+{
+   8:	000d      	movs	r5, r1
+    MAL_result = MAL_ST_SETUP_MODULE_ERROR;
+   a:	7023      	strb	r3, [r4, #0]
+    MAL_OpenModule    = (enum MAL_ModuleEnum)modNum;
+   c:	8038      	strh	r0, [r7, #0]
+    MAL_OpenPartition = MAL_GetMemModule(MAL_OpenModule);
+   e:	f7ff fffe 	bl	0 <MAL_GetMemModule>
+  12:	4e0d      	ldr	r6, [pc, #52]	; (48 <MAL_CMD_Open+0x48>)
+  14:	6030      	str	r0, [r6, #0]
+    if(MAL_OpenPartition!=NULL)
+  16:	2800      	cmp	r0, #0
+  18:	d003      	beq.n	22 <MAL_CMD_Open+0x22>
+        MAL_result = MEMDRV_open(MAL_OpenPartition->driver_id);
+  1a:	7a80      	ldrb	r0, [r0, #10]
+  1c:	f7ff fffe 	bl	0 <MEMDRV_open>
+  20:	7020      	strb	r0, [r4, #0]
+    if(MAL_result == MAL_ST_OK)
+  22:	7823      	ldrb	r3, [r4, #0]
+  24:	2b00      	cmp	r3, #0
+  26:	d104      	bne.n	32 <MAL_CMD_Open+0x32>
+        *timeOutPwr2 = (uint8_t)MEMDRV_getTimeout();
+  28:	f7ff fffe 	bl	0 <MEMDRV_getTimeout>
+  2c:	7028      	strb	r0, [r5, #0]
+    return (uint8_t)MAL_result;
+  2e:	7820      	ldrb	r0, [r4, #0]
+}
+  30:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+        MAL_OpenModule = MAL_NO_MODULE;
+  32:	2301      	movs	r3, #1
+  34:	425b      	negs	r3, r3
+  36:	803b      	strh	r3, [r7, #0]
+        MAL_OpenPartition = NULL;
+  38:	2300      	movs	r3, #0
+  3a:	6033      	str	r3, [r6, #0]
+  3c:	e7f7      	b.n	2e <MAL_CMD_Open+0x2e>
+  3e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_CMD_Close:
+
+00000000 <MAL_CMD_Close>:
+    MAL_OpenModule = MAL_NO_MODULE;
+   0:	2201      	movs	r2, #1
+   2:	4b05      	ldr	r3, [pc, #20]	; (18 <MAL_CMD_Close+0x18>)
+   4:	4252      	negs	r2, r2
+{
+   6:	b510      	push	{r4, lr}
+    MAL_OpenModule = MAL_NO_MODULE;
+   8:	801a      	strh	r2, [r3, #0]
+    MAL_OpenPartition = NULL;
+   a:	2200      	movs	r2, #0
+   c:	4b03      	ldr	r3, [pc, #12]	; (1c <MAL_CMD_Close+0x1c>)
+   e:	601a      	str	r2, [r3, #0]
+    return (uint8_t)MEMDRV_close();
+  10:	f7ff fffe 	bl	0 <MEMDRV_close>
+}
+  14:	bd10      	pop	{r4, pc}
+  16:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_CMD_Read:
+
+00000000 <MAL_CMD_Read>:
+{
+   0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   2:	0006      	movs	r6, r0
+   4:	0008      	movs	r0, r1
+   6:	0011      	movs	r1, r2
+   8:	001a      	movs	r2, r3
+    return ((uint16_t)MAL_OpenModule == modNum);
+   a:	4b0b      	ldr	r3, [pc, #44]	; (38 <MAL_CMD_Read+0x38>)
+   c:	2406      	movs	r4, #6
+    if(!MAL_isModuleOpened(modNum))  {return MAL_ST_SETUP_MODULE_ERROR;     }
+   e:	881b      	ldrh	r3, [r3, #0]
+  10:	4d0a      	ldr	r5, [pc, #40]	; (3c <MAL_CMD_Read+0x3c>)
+  12:	42b3      	cmp	r3, r6
+  14:	d10c      	bne.n	30 <MAL_CMD_Read+0x30>
+    return ((MAL_OpenPartition->mod_attributes & MAL_CTX_MF_READ_BLOCK) != 0u);
+  16:	4b0a      	ldr	r3, [pc, #40]	; (40 <MAL_CMD_Read+0x40>)
+  18:	3401      	adds	r4, #1
+  1a:	681e      	ldr	r6, [r3, #0]
+  1c:	7af7      	ldrb	r7, [r6, #11]
+    if(!MAL_isReadingAllowed())      {return MAL_ST_ACTION_PROHIBITED_ERROR;}
+  1e:	07ff      	lsls	r7, r7, #31
+  20:	d506      	bpl.n	30 <MAL_CMD_Read+0x30>
+    MAL_result = result;
+  22:	2300      	movs	r3, #0
+  24:	702b      	strb	r3, [r5, #0]
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  26:	6833      	ldr	r3, [r6, #0]
+  28:	18c0      	adds	r0, r0, r3
+        MAL_result = MEMDRV_read(MAL_getPhyAddr(offset), dataLen, data);
+  2a:	f7ff fffe 	bl	0 <MEMDRV_read>
+  2e:	0004      	movs	r4, r0
+}
+  30:	0020      	movs	r0, r4
+    MAL_result = result;
+  32:	702c      	strb	r4, [r5, #0]
+}
+  34:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+  36:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_CMD_WriteStart:
+
+00000000 <MAL_CMD_WriteStart>:
+{
+   0:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
+   2:	000d      	movs	r5, r1
+   4:	9200      	str	r2, [sp, #0]
+   6:	9301      	str	r3, [sp, #4]
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+   8:	f7ff fffe 	bl	0 <MAL_CMD_WriteStart>
+    MAL_result = result;
+   c:	4c1a      	ldr	r4, [pc, #104]	; (78 <MAL_CMD_WriteStart+0x78>)
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+   e:	1e06      	subs	r6, r0, #0
+    MAL_result = result;
+  10:	7020      	strb	r0, [r4, #0]
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+  12:	d12e      	bne.n	72 <MAL_CMD_WriteStart+0x72>
+       (MAL_getPartitionSize(MAL_OpenPartition) >= address)) // check range
+  14:	4f19      	ldr	r7, [pc, #100]	; (7c <MAL_CMD_WriteStart+0x7c>)
+  16:	6838      	ldr	r0, [r7, #0]
+  18:	f7ff fffe 	bl	0 <MAL_getPartitionSize>
+    if((address >= size) &&  // check for overflow
+  1c:	4285      	cmp	r5, r0
+  1e:	d826      	bhi.n	6e <MAL_CMD_WriteStart+0x6e>
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  20:	6838      	ldr	r0, [r7, #0]
+    MAL_result = result;
+  22:	7026      	strb	r6, [r4, #0]
+    return (uint32_t)(MAL_OpenPartition->physical_start.addr + offset);
+  24:	6806      	ldr	r6, [r0, #0]
+    uint32_t size = MAL_getPartitionSize(MAL_OpenPartition);
+  26:	f7ff fffe 	bl	0 <MAL_getPartitionSize>
+  2a:	0001      	movs	r1, r0
+    return MEMDRV_eraseRange(addr, size);
+  2c:	0030      	movs	r0, r6
+  2e:	f7ff fffe 	bl	0 <MEMDRV_eraseRange>
+  32:	1e06      	subs	r6, r0, #0
+    MAL_result = result;
+  34:	7020      	strb	r0, [r4, #0]
+        MAL_IsOk(MAL_checkAddressRange(0u, overallDataLen)) &&
+  36:	d11c      	bne.n	72 <MAL_CMD_WriteStart+0x72>
+    return CRC_Ethernet_Init();
+  38:	f7ff fffe 	bl	0 <CRC_Ethernet_Init>
+        MAL_writeStarted = true;
+  3c:	2201      	movs	r2, #1
+        MAL_crc = CRC_Init();
+  3e:	4b10      	ldr	r3, [pc, #64]	; (80 <MAL_CMD_WriteStart+0x80>)
+        MAL_result = MAL_handleWriteBlock(dataLen, data); // write data
+  40:	9901      	ldr	r1, [sp, #4]
+        MAL_crc = CRC_Init();
+  42:	6018      	str	r0, [r3, #0]
+        MAL_writeStarted = true;
+  44:	4b0f      	ldr	r3, [pc, #60]	; (84 <MAL_CMD_WriteStart+0x84>)
+        MAL_result = MAL_handleWriteBlock(dataLen, data); // write data
+  46:	9800      	ldr	r0, [sp, #0]
+        MAL_writeStarted = true;
+  48:	701a      	strb	r2, [r3, #0]
+        MAL_currentAddr = 0u;
+  4a:	4b0f      	ldr	r3, [pc, #60]	; (88 <MAL_CMD_WriteStart+0x88>)
+  4c:	601e      	str	r6, [r3, #0]
+        MAL_sizeLeft    = overallDataLen;
+  4e:	4e0f      	ldr	r6, [pc, #60]	; (8c <MAL_CMD_WriteStart+0x8c>)
+        MAL_dataLen     = overallDataLen;
+  50:	4b0f      	ldr	r3, [pc, #60]	; (90 <MAL_CMD_WriteStart+0x90>)
+        MAL_sizeLeft    = overallDataLen;
+  52:	6035      	str	r5, [r6, #0]
+        MAL_dataLen     = overallDataLen;
+  54:	601d      	str	r5, [r3, #0]
+        MAL_result = MAL_handleWriteBlock(dataLen, data); // write data
+  56:	f7ff fffe 	bl	0 <MAL_CMD_WriteStart>
+        if((MAL_sizeLeft == 0u) && (MAL_result == MAL_ST_OK))
+  5a:	6833      	ldr	r3, [r6, #0]
+        MAL_result = MAL_handleWriteBlock(dataLen, data); // write data
+  5c:	7020      	strb	r0, [r4, #0]
+        if((MAL_sizeLeft == 0u) && (MAL_result == MAL_ST_OK))
+  5e:	2b00      	cmp	r3, #0
+  60:	d107      	bne.n	72 <MAL_CMD_WriteStart+0x72>
+  62:	2800      	cmp	r0, #0
+  64:	d105      	bne.n	72 <MAL_CMD_WriteStart+0x72>
+            MAL_result = MAL_finishWriting();
+  66:	f7ff fffe 	bl	0 <MAL_CMD_WriteStart>
+  6a:	7020      	strb	r0, [r4, #0]
+  6c:	e001      	b.n	72 <MAL_CMD_WriteStart+0x72>
+    MAL_result = result;
+  6e:	2308      	movs	r3, #8
+  70:	7023      	strb	r3, [r4, #0]
+    return (uint8_t)MAL_result;
+  72:	7820      	ldrb	r0, [r4, #0]
+}
+  74:	bdfe      	pop	{r1, r2, r3, r4, r5, r6, r7, pc}
+  76:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_CMD_WriteAppend:
+
+00000000 <MAL_CMD_WriteAppend>:
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   0:	4b0f      	ldr	r3, [pc, #60]	; (40 <MAL_CMD_WriteAppend+0x40>)
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+   4:	0016      	movs	r6, r2
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   6:	781a      	ldrb	r2, [r3, #0]
+{
+   8:	000d      	movs	r5, r1
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   a:	230a      	movs	r3, #10
+   c:	2a00      	cmp	r2, #0
+   e:	d014      	beq.n	3a <MAL_CMD_WriteAppend+0x3a>
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+  10:	f7ff fffe 	bl	0 <MAL_CMD_WriteAppend>
+    MAL_result = result;
+  14:	4c0b      	ldr	r4, [pc, #44]	; (44 <MAL_CMD_WriteAppend+0x44>)
+  16:	7020      	strb	r0, [r4, #0]
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+  18:	2800      	cmp	r0, #0
+  1a:	d10d      	bne.n	38 <MAL_CMD_WriteAppend+0x38>
+        MAL_IsOk(MAL_handleWriteBlock(dataLen, data))) // write data
+  1c:	0031      	movs	r1, r6
+  1e:	0028      	movs	r0, r5
+  20:	f7ff fffe 	bl	0 <MAL_CMD_WriteAppend>
+    MAL_result = result;
+  24:	7020      	strb	r0, [r4, #0]
+    if( MAL_IsOk(MAL_checkWriteOperation(modNum)) &&
+  26:	2800      	cmp	r0, #0
+  28:	d106      	bne.n	38 <MAL_CMD_WriteAppend+0x38>
+        if(MAL_sizeLeft == 0u)
+  2a:	4b07      	ldr	r3, [pc, #28]	; (48 <MAL_CMD_WriteAppend+0x48>)
+  2c:	681b      	ldr	r3, [r3, #0]
+  2e:	2b00      	cmp	r3, #0
+  30:	d102      	bne.n	38 <MAL_CMD_WriteAppend+0x38>
+            MAL_result = MAL_finishWriting(); // flush and check crc
+  32:	f7ff fffe 	bl	0 <MAL_CMD_WriteAppend>
+  36:	7020      	strb	r0, [r4, #0]
+    return (uint8_t)MAL_result;
+  38:	7823      	ldrb	r3, [r4, #0]
+}
+  3a:	0018      	movs	r0, r3
+  3c:	bd70      	pop	{r4, r5, r6, pc}
+  3e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.MAL_CMD_WritePrematurelyEnd:
+
+00000000 <MAL_CMD_WritePrematurelyEnd>:
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   0:	4b0e      	ldr	r3, [pc, #56]	; (3c <MAL_CMD_WritePrematurelyEnd+0x3c>)
+{
+   2:	b570      	push	{r4, r5, r6, lr}
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   4:	781a      	ldrb	r2, [r3, #0]
+{
+   6:	000d      	movs	r5, r1
+    if(!MAL_writeStarted) {return (uint8_t)MAL_ST_WRITE_ERROR;} // missing start
+   8:	230a      	movs	r3, #10
+   a:	2a00      	cmp	r2, #0
+   c:	d00f      	beq.n	2e <MAL_CMD_WritePrematurelyEnd+0x2e>
+    if(MAL_IsOk(MAL_checkWriteOperation(modNum)))
+   e:	f7ff fffe 	bl	0 <MAL_CMD_WritePrematurelyEnd>
+    MAL_result = result;
+  12:	4c0b      	ldr	r4, [pc, #44]	; (40 <MAL_CMD_WritePrematurelyEnd+0x40>)
+  14:	7020      	strb	r0, [r4, #0]
+    if(MAL_IsOk(MAL_checkWriteOperation(modNum)))
+  16:	2800      	cmp	r0, #0
+  18:	d108      	bne.n	2c <MAL_CMD_WritePrematurelyEnd+0x2c>
+        if((uint32_t)(MAL_dataLen - MAL_sizeLeft) != overallDataWritten)
+  1a:	490a      	ldr	r1, [pc, #40]	; (44 <MAL_CMD_WritePrematurelyEnd+0x44>)
+  1c:	4a0a      	ldr	r2, [pc, #40]	; (48 <MAL_CMD_WritePrematurelyEnd+0x48>)
+  1e:	680b      	ldr	r3, [r1, #0]
+  20:	6812      	ldr	r2, [r2, #0]
+  22:	1a9b      	subs	r3, r3, r2
+  24:	42ab      	cmp	r3, r5
+  26:	d004      	beq.n	32 <MAL_CMD_WritePrematurelyEnd+0x32>
+            MAL_result = MAL_ST_WRITE_DATA_LEN_MISMATCH;
+  28:	230c      	movs	r3, #12
+  2a:	7023      	strb	r3, [r4, #0]
+    return (uint8_t)MAL_result;
+  2c:	7823      	ldrb	r3, [r4, #0]
+}
+  2e:	0018      	movs	r0, r3
+  30:	bd70      	pop	{r4, r5, r6, pc}
+            MAL_dataLen = overallDataWritten;  // new overall length
+  32:	600b      	str	r3, [r1, #0]
+            MAL_result  = MAL_finishWriting(); // flush and check crc
+  34:	f7ff fffe 	bl	0 <MAL_CMD_WritePrematurelyEnd>
+  38:	7020      	strb	r0, [r4, #0]
+  3a:	e7f7      	b.n	2c <MAL_CMD_WritePrematurelyEnd+0x2c>
+	...

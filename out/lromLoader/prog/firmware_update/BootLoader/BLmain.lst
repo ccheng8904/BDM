@@ -1,0 +1,24 @@
+
+out/lromLoader/prog/firmware_update/BootLoader/BLmain.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.Main:
+
+00000000 <Main>:
+{
+    const uint16_t BLMAIN_TimeOut = 500u;
+  #if defined (VARIANT_GECKO_BL) || (defined (VARIANT_LROMLOADER) && (defined (RA4) || defined (RA2))) 
+    BASIC_vInitPlatform(); // initialise system clock
+  #endif
+    BLMLP_handleMessageLoop(BLMAIN_TimeOut); // never come back
+   0:	20fa      	movs	r0, #250	; 0xfa
+{
+   2:	b510      	push	{r4, lr}
+    BLMLP_handleMessageLoop(BLMAIN_TimeOut); // never come back
+   4:	0040      	lsls	r0, r0, #1
+   6:	f7ff fffe 	bl	0 <BLMLP_handleMessageLoop>
+#if (!defined(NO_RAM_INIT) || defined(IARRX)) && !defined(BTM_FIRMWARE_UPDATE)
+    return 0;
+#endif
+}
+   a:	bd10      	pop	{r4, pc}

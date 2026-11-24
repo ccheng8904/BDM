@@ -1,0 +1,944 @@
+
+out/BootManager/prog/FuncSafe/fsCom.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.vTriggerExtWatchdog:
+
+00000000 <vTriggerExtWatchdog>:
+
+  Note: after notification of the application, there is NO return!
+
+-------------------------------------------------------------------------*/
+STATIC  void    vTriggerExtWatchdog(void)
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+#ifdef TH_FSCOM
+   FSF_ui16Current = TH_FSF_CircleMicroSeconds;
+#else
+   FSF_ui16Current = TIM_uiGetCircleMicroSeconds();
+   2:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   return FSF_ucTaskState;
+   6:	4b1c      	ldr	r3, [pc, #112]	; (78 <vTriggerExtWatchdog+0x78>)
+   FSF_ui16Current = TIM_uiGetCircleMicroSeconds();
+   8:	4d1c      	ldr	r5, [pc, #112]	; (7c <vTriggerExtWatchdog+0x7c>)
+   return FSF_ucTaskState;
+   a:	781b      	ldrb	r3, [r3, #0]
+   c:	4c1c      	ldr	r4, [pc, #112]	; (80 <vTriggerExtWatchdog+0x80>)
+   FSF_ui16Current = TIM_uiGetCircleMicroSeconds();
+   e:	8028      	strh	r0, [r5, #0]
+#endif
+   switch (ucGetFSCOM_State())
+  10:	2b00      	cmp	r3, #0
+  12:	d005      	beq.n	20 <vTriggerExtWatchdog+0x20>
+  14:	2b02      	cmp	r3, #2
+  16:	d010      	beq.n	3a <vTriggerExtWatchdog+0x3a>
+   TH_FSFP_PushOutPar(ucSubCheckId);
+   TH_FSFP_PushOutPar(ucChannelId);
+   TH_FSFP_PushOutPar(ucUserPar);
+   TH_FSF_ApplError++;
+#else
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  18:	2200      	movs	r2, #0
+  1a:	211b      	movs	r1, #27
+  1c:	2007      	movs	r0, #7
+  1e:	e005      	b.n	2c <vTriggerExtWatchdog+0x2c>
+#ifdef TH_FSCOM
+   TH_FSFP_PushOutPar((uint8_t)TP_FSF_bExtReadExtWatchdog);
+   TH_FSFP_PushOutPar((uint8_t)TH_FSF_ExtWatchdogState);
+   return  TH_FSF_ExtWatchdogState;
+#else
+   return _FSF_bReadExtWatchdog();
+  20:	f7ff fffe 	bl	0 <_FSF_bReadExtWatchdog>
+  24:	1e02      	subs	r2, r0, #0
+         if (bExtReadExtWatchdog() == false)
+  26:	d103      	bne.n	30 <vTriggerExtWatchdog+0x30>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  28:	211b      	movs	r1, #27
+  2a:	2001      	movs	r0, #1
+  2c:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   FSF_ui16LastWDTrigger = FSF_ui16Current;
+  30:	882b      	ldrh	r3, [r5, #0]
+  32:	8023      	strh	r3, [r4, #0]
+   _FSF_vTriggerExtWatchdog();
+  34:	f7ff fffe 	bl	0 <_FSF_vTriggerExtWatchdog>
+}
+  38:	bd70      	pop	{r4, r5, r6, pc}
+         FSF_ui16delta_t = (uint16_t)(FSF_ui16Current - FSF_ui16LastWDTrigger);
+  3a:	8823      	ldrh	r3, [r4, #0]
+  3c:	1ac0      	subs	r0, r0, r3
+  3e:	4b11      	ldr	r3, [pc, #68]	; (84 <vTriggerExtWatchdog+0x84>)
+  40:	b280      	uxth	r0, r0
+  42:	8018      	strh	r0, [r3, #0]
+         if ((FSF_ui16delta_t > (uint16_t)(FSF_ui16WDC1_2_3)) ||  (FSF_ui16delta_t < (uint16_t)(FSF_ui16WDC1_3)))
+  44:	4b10      	ldr	r3, [pc, #64]	; (88 <vTriggerExtWatchdog+0x88>)
+  46:	881b      	ldrh	r3, [r3, #0]
+  48:	4283      	cmp	r3, r0
+  4a:	d303      	bcc.n	54 <vTriggerExtWatchdog+0x54>
+  4c:	4b0f      	ldr	r3, [pc, #60]	; (8c <vTriggerExtWatchdog+0x8c>)
+  4e:	881b      	ldrh	r3, [r3, #0]
+  50:	4283      	cmp	r3, r0
+  52:	d908      	bls.n	66 <vTriggerExtWatchdog+0x66>
+            uiWDTimViolation++;
+  54:	4a0e      	ldr	r2, [pc, #56]	; (90 <vTriggerExtWatchdog+0x90>)
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  56:	211b      	movs	r1, #27
+            uiWDTimViolation++;
+  58:	8813      	ldrh	r3, [r2, #0]
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  5a:	2005      	movs	r0, #5
+            uiWDTimViolation++;
+  5c:	3301      	adds	r3, #1
+  5e:	8013      	strh	r3, [r2, #0]
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  60:	2200      	movs	r2, #0
+  62:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   return _FSF_bReadExtWatchdog();
+  66:	f7ff fffe 	bl	0 <_FSF_bReadExtWatchdog>
+         if (bExtReadExtWatchdog() != false)
+  6a:	2800      	cmp	r0, #0
+  6c:	d0e0      	beq.n	30 <vTriggerExtWatchdog+0x30>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  6e:	2200      	movs	r2, #0
+  70:	211b      	movs	r1, #27
+  72:	200a      	movs	r0, #10
+  74:	e7da      	b.n	2c <vTriggerExtWatchdog+0x2c>
+  76:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text.bIsChannelIdValid:
+
+00000000 <bIsChannelIdValid>:
+   if (ucCheckId < FSF_ucNrOfChannels)
+   0:	4b06      	ldr	r3, [pc, #24]	; (1c <bIsChannelIdValid+0x1c>)
+{
+   2:	0001      	movs	r1, r0
+   if (ucCheckId < FSF_ucNrOfChannels)
+   4:	781b      	ldrb	r3, [r3, #0]
+      return true;
+   6:	2001      	movs	r0, #1
+{
+   8:	b510      	push	{r4, lr}
+   if (ucCheckId < FSF_ucNrOfChannels)
+   a:	428b      	cmp	r3, r1
+   c:	d804      	bhi.n	18 <bIsChannelIdValid+0x18>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+   e:	3005      	adds	r0, #5
+  10:	2200      	movs	r2, #0
+  12:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+  16:	2000      	movs	r0, #0
+}
+  18:	bd10      	pop	{r4, pc}
+  1a:	46c0      	nop			; (mov r8, r8)
+  1c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.ucGetChannelState:
+
+00000000 <ucGetChannelState>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	0004      	movs	r4, r0
+   if (bIsChannelIdValid(ucCheckId) != false)
+   4:	f7ff fffe 	bl	0 <ucGetChannelState>
+   return (uint8_t)FSF_CH_STATE_IDLE;
+   8:	2300      	movs	r3, #0
+   if (bIsChannelIdValid(ucCheckId) != false)
+   a:	4298      	cmp	r0, r3
+   c:	d00d      	beq.n	2a <ucGetChannelState+0x2a>
+      bool   bIsSuccess = (bool)UTI_bGetBit(FSF_ucCH_states[FSF_SUCCESS_FIELD],(uint16_t)ucCheckId);
+   e:	b2a4      	uxth	r4, r4
+  10:	0021      	movs	r1, r4
+  12:	4807      	ldr	r0, [pc, #28]	; (30 <ucGetChannelState+0x30>)
+  14:	f7ff fffe 	bl	0 <UTI_bGetBit>
+      bool   bIsOngoing = (bool)UTI_bGetBit(FSF_ucCH_states[FSF_ONGOING_FIELD],(uint16_t)ucCheckId);
+  18:	0021      	movs	r1, r4
+      bool   bIsSuccess = (bool)UTI_bGetBit(FSF_ucCH_states[FSF_SUCCESS_FIELD],(uint16_t)ucCheckId);
+  1a:	0005      	movs	r5, r0
+      bool   bIsOngoing = (bool)UTI_bGetBit(FSF_ucCH_states[FSF_ONGOING_FIELD],(uint16_t)ucCheckId);
+  1c:	4805      	ldr	r0, [pc, #20]	; (34 <ucGetChannelState+0x34>)
+  1e:	f7ff fffe 	bl	0 <UTI_bGetBit>
+         return (uint8_t)FSF_CH_STATE_SUCCESS;
+  22:	2302      	movs	r3, #2
+      if (bIsSuccess != false)
+  24:	2d00      	cmp	r5, #0
+  26:	d100      	bne.n	2a <ucGetChannelState+0x2a>
+   return (uint8_t)FSF_CH_STATE_IDLE;
+  28:	0003      	movs	r3, r0
+}
+  2a:	0018      	movs	r0, r3
+  2c:	bd70      	pop	{r4, r5, r6, pc}
+  2e:	46c0      	nop			; (mov r8, r8)
+  30:	00000004 	.word	0x00000004
+  34:	00000000 	.word	0x00000000
+
+Disassembly of section .text.vSetChannelIdle:
+
+00000000 <vSetChannelIdle>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+   if (bIsChannelIdValid(ucCheckId) != false)
+   4:	f7ff fffe 	bl	0 <vSetChannelIdle>
+   8:	2800      	cmp	r0, #0
+   a:	d00a      	beq.n	22 <vSetChannelIdle+0x22>
+      UTI_vSetBit(FSF_ucCH_states[FSF_ONGOING_FIELD],(uint16_t)ucCheckId,false);
+   c:	b2a4      	uxth	r4, r4
+   e:	2200      	movs	r2, #0
+  10:	0021      	movs	r1, r4
+  12:	4804      	ldr	r0, [pc, #16]	; (24 <vSetChannelIdle+0x24>)
+  14:	f7ff fffe 	bl	0 <UTI_vSetBit>
+      UTI_vSetBit(FSF_ucCH_states[FSF_SUCCESS_FIELD],(uint16_t)ucCheckId,false);
+  18:	2200      	movs	r2, #0
+  1a:	0021      	movs	r1, r4
+  1c:	4802      	ldr	r0, [pc, #8]	; (28 <vSetChannelIdle+0x28>)
+  1e:	f7ff fffe 	bl	0 <UTI_vSetBit>
+}
+  22:	bd10      	pop	{r4, pc}
+  24:	00000000 	.word	0x00000000
+  28:	00000004 	.word	0x00000004
+
+Disassembly of section .text.FSF_vBoot:
+
+00000000 <FSF_vBoot>:
+}
+void    vExtBoot(void)
+#else
+void    FSF_vBoot(void)
+#endif
+{
+   0:	b510      	push	{r4, lr}
+#ifdef VARIANT_BOOTMANAGER
+    /* BootManager is running */
+    FSF_setProgramCounterMonitoringVal(FSF_BM_RAM_TEST_COMPLETED);
+   2:	2000      	movs	r0, #0
+   4:	f7ff fffe 	bl	0 <FSF_setProgramCounterMonitoringVal>
+    FSF_vRegistercheck();
+   8:	f7ff fffe 	bl	0 <FSF_vRegistercheck>
+    FSF_vStartUpRomCrcCheck();
+   c:	f7ff fffe 	bl	0 <FSF_vStartUpRomCrcCheck>
+    FSF_DoProgramCounterMonitoring(FSF_BM_RAM_TEST_COMPLETED,
+  10:	2180      	movs	r1, #128	; 0x80
+  12:	2000      	movs	r0, #0
+  14:	0049      	lsls	r1, r1, #1
+  16:	f7ff fffe 	bl	0 <FSF_DoProgramCounterMonitoring>
+//   FSF_vContinueStartUp();
+   //  NOTE:
+   //  an application shall not return to this point!
+//   vExtReportFatal();
+#endif  // defined(APP_VARIANT)
+}
+  1a:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vContinueStartUp:
+
+00000000 <FSF_vContinueStartUp>:
+  End;
+
+
+-------------------------------------------------------------------------*/
+void    FSF_vContinueStartUp(void)
+{
+   0:	b510      	push	{r4, lr}
+   _FSF_vApplicationStartUp();
+   2:	f7ff fffe 	bl	0 <_FSF_vApplicationStartUp>
+   vExtApplicationStartUp();
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_vBootError:
+
+00000000 <FSF_vBootError>:
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+   0:	2200      	movs	r2, #0
+   2:	211a      	movs	r1, #26
+   4:	2001      	movs	r0, #1
+
+    \pre    None\n
+    \post   No return from this call.\n
+*/
+void    FSF_vBootError(void)
+{
+   6:	b510      	push	{r4, lr}
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+   8:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+void    vExtTriggerInternalWatchdog(void)
+{
+#ifdef TH_FSCOM
+   TH_FSFP_PushOutPar((uint8_t)TP_FSF_vTriggerInternalWatchdog);
+#else
+   _FSF_vTriggerInternalWatchdog();
+   c:	f7ff fffe 	bl	0 <_FSF_vTriggerInternalWatchdog>
+  10:	e7fc      	b.n	c <FSF_vBootError+0xc>
+
+Disassembly of section .text.ucComHandleTask:
+
+00000000 <ucComHandleTask>:
+{
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   return FSF_ucTaskState;
+   2:	4b4e      	ldr	r3, [pc, #312]	; (13c <ucComHandleTask+0x13c>)
+{
+   4:	b085      	sub	sp, #20
+   return FSF_ucTaskState;
+   6:	781c      	ldrb	r4, [r3, #0]
+{
+   8:	0005      	movs	r5, r0
+   return FSF_ucTaskState;
+   a:	9302      	str	r3, [sp, #8]
+   switch (ucGetFSCOM_State())
+   c:	2c01      	cmp	r4, #1
+   e:	d032      	beq.n	76 <ucComHandleTask+0x76>
+  10:	2c02      	cmp	r4, #2
+  12:	d04e      	beq.n	b2 <ucComHandleTask+0xb2>
+  14:	2c00      	cmp	r4, #0
+  16:	d000      	beq.n	1a <ucComHandleTask+0x1a>
+  18:	e089      	b.n	12e <ucComHandleTask+0x12e>
+   if (FSF_ucNrOfChannels > (uint8_t)0)
+  1a:	4b49      	ldr	r3, [pc, #292]	; (140 <ucComHandleTask+0x140>)
+  1c:	781b      	ldrb	r3, [r3, #0]
+  1e:	9303      	str	r3, [sp, #12]
+  20:	2b00      	cmp	r3, #0
+  22:	d026      	beq.n	72 <ucComHandleTask+0x72>
+      for (i = (uint8_t)FSF_REG_TEST;i < FSF_ucNrOfChannels;i++)
+  24:	0025      	movs	r5, r4
+  26:	4e47      	ldr	r6, [pc, #284]	; (144 <ucComHandleTask+0x144>)
+  28:	4f47      	ldr	r7, [pc, #284]	; (148 <ucComHandleTask+0x148>)
+         if (FSF_psChannelTab[i]->bIsRegularCheck != false)
+  2a:	6833      	ldr	r3, [r6, #0]
+  2c:	9301      	str	r3, [sp, #4]
+  2e:	791b      	ldrb	r3, [r3, #4]
+  30:	2b00      	cmp	r3, #0
+  32:	d008      	beq.n	46 <ucComHandleTask+0x46>
+            vSetChannelIdle((uint8_t)i);
+  34:	0028      	movs	r0, r5
+  36:	f7ff fffe 	bl	0 <ucComHandleTask>
+            FSF_sCH_CheckCycleTime[i].ui16CheckCycleTime = FSF_psChannelTab[i]->sCheckCycle.ui16CheckCycleTime;
+  3a:	9b01      	ldr	r3, [sp, #4]
+  3c:	881b      	ldrh	r3, [r3, #0]
+  3e:	803b      	strh	r3, [r7, #0]
+            FSF_sCH_CheckCycleTime[i].ucCycleMultiplier  = FSF_psChannelTab[i]->sCheckCycle.ucCycleMultiplier;
+  40:	9b01      	ldr	r3, [sp, #4]
+  42:	789b      	ldrb	r3, [r3, #2]
+  44:	70bb      	strb	r3, [r7, #2]
+      for (i = (uint8_t)FSF_REG_TEST;i < FSF_ucNrOfChannels;i++)
+  46:	3501      	adds	r5, #1
+  48:	9b03      	ldr	r3, [sp, #12]
+  4a:	b2ed      	uxtb	r5, r5
+  4c:	3604      	adds	r6, #4
+  4e:	3704      	adds	r7, #4
+  50:	42ab      	cmp	r3, r5
+  52:	d1ea      	bne.n	2a <ucComHandleTask+0x2a>
+      vTriggerExtWatchdog();
+  54:	f7ff fffe 	bl	0 <ucComHandleTask>
+      ucPreSchedulingCtr = FSF_ucPreSchedCycles;
+  58:	4a3c      	ldr	r2, [pc, #240]	; (14c <ucComHandleTask+0x14c>)
+  5a:	4b3d      	ldr	r3, [pc, #244]	; (150 <ucComHandleTask+0x150>)
+  5c:	7812      	ldrb	r2, [r2, #0]
+  5e:	701a      	strb	r2, [r3, #0]
+      FSF_ulCheckCycleTimer = (uint32_t)(FSF_CHECK_CYCLE_TIME * 1000u);
+  60:	4b3c      	ldr	r3, [pc, #240]	; (154 <ucComHandleTask+0x154>)
+  62:	4a3d      	ldr	r2, [pc, #244]	; (158 <ucComHandleTask+0x158>)
+  64:	601a      	str	r2, [r3, #0]
+         FSF_ucTaskState = newstate;
+  66:	2301      	movs	r3, #1
+  68:	9a02      	ldr	r2, [sp, #8]
+  6a:	7013      	strb	r3, [r2, #0]
+}
+  6c:	0020      	movs	r0, r4
+  6e:	b005      	add	sp, #20
+  70:	bdf0      	pop	{r4, r5, r6, r7, pc}
+      FSF_vBootError();
+  72:	f7ff fffe 	bl	0 <ucComHandleTask>
+   if (ucPreSchedulingCtr > FSF_ucPreSchedCycles)
+  76:	4b35      	ldr	r3, [pc, #212]	; (14c <ucComHandleTask+0x14c>)
+  78:	4d35      	ldr	r5, [pc, #212]	; (150 <ucComHandleTask+0x150>)
+  7a:	781e      	ldrb	r6, [r3, #0]
+  7c:	782b      	ldrb	r3, [r5, #0]
+  7e:	42b3      	cmp	r3, r6
+  80:	d905      	bls.n	8e <ucComHandleTask+0x8e>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  82:	2200      	movs	r2, #0
+  84:	211a      	movs	r1, #26
+  86:	0020      	movs	r0, r4
+  88:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+      ucPreSchedulingCtr = FSF_ucPreSchedCycles;
+  8c:	702e      	strb	r6, [r5, #0]
+   if ((ucPreSchedulingCtr > (uint8_t)0) && (ucPreSchedulingCtr <= FSF_ucPreSchedCycles))
+  8e:	782b      	ldrb	r3, [r5, #0]
+  90:	2b00      	cmp	r3, #0
+  92:	d008      	beq.n	a6 <ucComHandleTask+0xa6>
+  94:	429e      	cmp	r6, r3
+  96:	d306      	bcc.n	a6 <ucComHandleTask+0xa6>
+      ucPreSchedulingCtr--;
+  98:	3b01      	subs	r3, #1
+  9a:	702b      	strb	r3, [r5, #0]
+         FSF_ucTaskState = newstate;
+  9c:	9b02      	ldr	r3, [sp, #8]
+  9e:	701c      	strb	r4, [r3, #0]
+         if (nextState == (uint8_t)FSF_STATE_STARTED)
+  a0:	3c01      	subs	r4, #1
+  a2:	b2e4      	uxtb	r4, r4
+  a4:	e7e2      	b.n	6c <ucComHandleTask+0x6c>
+      FSF_ui16LastWDTrigger = TIM_uiGetCircleMicroSeconds();
+  a6:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+  aa:	4b2c      	ldr	r3, [pc, #176]	; (15c <ucComHandleTask+0x15c>)
+      retval = (uint8_t)FSF_STATE_STARTED;
+  ac:	2402      	movs	r4, #2
+      FSF_ui16LastWDTrigger = TIM_uiGetCircleMicroSeconds();
+  ae:	8018      	strh	r0, [r3, #0]
+   switch (newstate)
+  b0:	e7f4      	b.n	9c <ucComHandleTask+0x9c>
+   if (FSF_psChannelTab[ucCheckId]->bIsRegularCheck != false)
+  b2:	4b24      	ldr	r3, [pc, #144]	; (144 <ucComHandleTask+0x144>)
+  b4:	0086      	lsls	r6, r0, #2
+  b6:	58f4      	ldr	r4, [r6, r3]
+  b8:	7923      	ldrb	r3, [r4, #4]
+  ba:	2b00      	cmp	r3, #0
+  bc:	d01d      	beq.n	fa <ucComHandleTask+0xfa>
+      if ((uint8_t)FSF_CH_STATE_IDLE == ucGetChannelState(ucCheckId))
+  be:	f7ff fffe 	bl	0 <ucComHandleTask>
+  c2:	1e02      	subs	r2, r0, #0
+  c4:	d103      	bne.n	ce <ucComHandleTask+0xce>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  c6:	0029      	movs	r1, r5
+  c8:	2008      	movs	r0, #8
+  ca:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+      if ((uint8_t)FSF_CH_STATE_ONGOING == ucGetChannelState(ucCheckId))
+  ce:	0028      	movs	r0, r5
+  d0:	f7ff fffe 	bl	0 <ucComHandleTask>
+  d4:	2801      	cmp	r0, #1
+  d6:	d10d      	bne.n	f4 <ucComHandleTask+0xf4>
+         if (FS_COM_RamConBlock.ucCCElapsedCounter > (uint8_t)0)
+  d8:	4b21      	ldr	r3, [pc, #132]	; (160 <ucComHandleTask+0x160>)
+  da:	7919      	ldrb	r1, [r3, #4]
+  dc:	2900      	cmp	r1, #0
+  de:	d009      	beq.n	f4 <ucComHandleTask+0xf4>
+   if (p->ui16CheckCycleTime != (uint16_t)0)
+  e0:	8820      	ldrh	r0, [r4, #0]
+  e2:	2800      	cmp	r0, #0
+  e4:	d006      	beq.n	f4 <ucComHandleTask+0xf4>
+      if(q->ui16CheckCycleTime >= (uint16_t)(FS_COM_RamConBlock.ucCCElapsedCounter))
+  e6:	4b18      	ldr	r3, [pc, #96]	; (148 <ucComHandleTask+0x148>)
+  e8:	b28f      	uxth	r7, r1
+  ea:	5b9a      	ldrh	r2, [r3, r6]
+  ec:	428a      	cmp	r2, r1
+  ee:	d30f      	bcc.n	110 <ucComHandleTask+0x110>
+         q->ui16CheckCycleTime -= (uint16_t)FS_COM_RamConBlock.ucCCElapsedCounter;
+  f0:	1bd2      	subs	r2, r2, r7
+  f2:	539a      	strh	r2, [r3, r6]
+      vSetChannelIdle(ucCheckId);
+  f4:	0028      	movs	r0, r5
+  f6:	f7ff fffe 	bl	0 <ucComHandleTask>
+   if (ucCheckId >= (uint8_t)(FSF_ucNrOfChannels - 1u))
+  fa:	4b11      	ldr	r3, [pc, #68]	; (140 <ucComHandleTask+0x140>)
+         retval = ucNewMonitorCycle(ucChannelId);
+  fc:	2401      	movs	r4, #1
+   if (ucCheckId >= (uint8_t)(FSF_ucNrOfChannels - 1u))
+  fe:	781b      	ldrb	r3, [r3, #0]
+ 100:	3b01      	subs	r3, #1
+ 102:	b2db      	uxtb	r3, r3
+ 104:	429d      	cmp	r5, r3
+ 106:	d3b1      	bcc.n	6c <ucComHandleTask+0x6c>
+      FS_COM_RamConBlock.ucCCElapsedCounter = (uint8_t)0;
+ 108:	2200      	movs	r2, #0
+ 10a:	4b15      	ldr	r3, [pc, #84]	; (160 <ucComHandleTask+0x160>)
+ 10c:	711a      	strb	r2, [r3, #4]
+ 10e:	e7ad      	b.n	6c <ucComHandleTask+0x6c>
+         q->ui16CheckCycleTime = p->ui16CheckCycleTime;
+ 110:	5398      	strh	r0, [r3, r6]
+         if (q->ucCycleMultiplier == (uint8_t)0)
+ 112:	199b      	adds	r3, r3, r6
+ 114:	789a      	ldrb	r2, [r3, #2]
+ 116:	2a00      	cmp	r2, #0
+ 118:	d106      	bne.n	128 <ucComHandleTask+0x128>
+            q->ucCycleMultiplier = p->ucCycleMultiplier;
+ 11a:	78a1      	ldrb	r1, [r4, #2]
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+ 11c:	2004      	movs	r0, #4
+            q->ucCycleMultiplier = p->ucCycleMultiplier;
+ 11e:	7099      	strb	r1, [r3, #2]
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+ 120:	0029      	movs	r1, r5
+ 122:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+}
+ 126:	e7e5      	b.n	f4 <ucComHandleTask+0xf4>
+            q->ucCycleMultiplier--;
+ 128:	3a01      	subs	r2, #1
+ 12a:	709a      	strb	r2, [r3, #2]
+ 12c:	e7e2      	b.n	f4 <ucComHandleTask+0xf4>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+ 12e:	2200      	movs	r2, #0
+ 130:	211a      	movs	r1, #26
+ 132:	2007      	movs	r0, #7
+ 134:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   uint8_t   retval      = (uint8_t)TASK_TERMINATE;
+ 138:	2402      	movs	r4, #2
+}
+ 13a:	e797      	b.n	6c <ucComHandleTask+0x6c>
+	...
+ 158:	000186a0 	.word	0x000186a0
+	...
+
+Disassembly of section .text.FSF_vReportOnGoing:
+
+00000000 <FSF_vReportOnGoing>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+   uint8_t cstate = ucGetChannelState(ucCheckId);
+   4:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+   switch (cstate)
+   8:	2800      	cmp	r0, #0
+   a:	d007      	beq.n	1c <FSF_vReportOnGoing+0x1c>
+   c:	3801      	subs	r0, #1
+   e:	b2c0      	uxtb	r0, r0
+  10:	2801      	cmp	r0, #1
+  12:	d90e      	bls.n	32 <FSF_vReportOnGoing+0x32>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  14:	2200      	movs	r2, #0
+  16:	0021      	movs	r1, r4
+  18:	2007      	movs	r0, #7
+  1a:	e008      	b.n	2e <FSF_vReportOnGoing+0x2e>
+         if ((* FSF_psChannelTab[ucCheckId]).FSF_pbPrecondition() == false)
+  1c:	4b0d      	ldr	r3, [pc, #52]	; (54 <FSF_vReportOnGoing+0x54>)
+  1e:	00a2      	lsls	r2, r4, #2
+  20:	58d3      	ldr	r3, [r2, r3]
+  22:	689b      	ldr	r3, [r3, #8]
+  24:	4798      	blx	r3
+  26:	1e02      	subs	r2, r0, #0
+  28:	d103      	bne.n	32 <FSF_vReportOnGoing+0x32>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  2a:	0021      	movs	r1, r4
+  2c:	2003      	movs	r0, #3
+  2e:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   if (bIsChannelIdValid(ucCheckId) != false)
+  32:	0020      	movs	r0, r4
+  34:	f7ff fffe 	bl	0 <FSF_vReportOnGoing>
+  38:	2800      	cmp	r0, #0
+  3a:	d00a      	beq.n	52 <FSF_vReportOnGoing+0x52>
+      UTI_vSetBit(FSF_ucCH_states[FSF_SUCCESS_FIELD],(uint16_t)ucCheckId,false);
+  3c:	b2a4      	uxth	r4, r4
+  3e:	2200      	movs	r2, #0
+  40:	0021      	movs	r1, r4
+  42:	4805      	ldr	r0, [pc, #20]	; (58 <FSF_vReportOnGoing+0x58>)
+  44:	f7ff fffe 	bl	0 <UTI_vSetBit>
+      UTI_vSetBit(FSF_ucCH_states[FSF_ONGOING_FIELD],(uint16_t)ucCheckId,true);
+  48:	2201      	movs	r2, #1
+  4a:	0021      	movs	r1, r4
+  4c:	4803      	ldr	r0, [pc, #12]	; (5c <FSF_vReportOnGoing+0x5c>)
+  4e:	f7ff fffe 	bl	0 <UTI_vSetBit>
+}
+  52:	bd10      	pop	{r4, pc}
+  54:	00000000 	.word	0x00000000
+  58:	00000004 	.word	0x00000004
+  5c:	00000000 	.word	0x00000000
+
+Disassembly of section .text.FSF_vReportError:
+
+00000000 <FSF_vReportError>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   return FSF_ucTaskState;
+   2:	4b0f      	ldr	r3, [pc, #60]	; (40 <FSF_vReportError+0x40>)
+{
+   4:	0005      	movs	r5, r0
+   if (ucGetFSCOM_State() == (uint8_t)FSF_STATE_STARTED)
+   6:	781b      	ldrb	r3, [r3, #0]
+{
+   8:	000c      	movs	r4, r1
+   a:	0016      	movs	r6, r2
+   if (ucGetFSCOM_State() == (uint8_t)FSF_STATE_STARTED)
+   c:	2b02      	cmp	r3, #2
+   e:	d112      	bne.n	36 <FSF_vReportError+0x36>
+      if (ucCheckId < (uint8_t)FSF_LASTID)
+  10:	281b      	cmp	r0, #27
+  12:	d813      	bhi.n	3c <FSF_vReportError+0x3c>
+         if (ucCheckId < FSF_ucNrOfChannels)
+  14:	4b0b      	ldr	r3, [pc, #44]	; (44 <FSF_vReportError+0x44>)
+  16:	781b      	ldrb	r3, [r3, #0]
+  18:	4283      	cmp	r3, r0
+  1a:	d90d      	bls.n	38 <FSF_vReportError+0x38>
+            switch (ucGetChannelState(ucCheckId))
+  1c:	f7ff fffe 	bl	0 <FSF_vReportError>
+   uint8_t errcode = (uint8_t)FSF_ERR_CHANNEL_ERROR;
+  20:	2409      	movs	r4, #9
+            switch (ucGetChannelState(ucCheckId))
+  22:	2802      	cmp	r0, #2
+  24:	d900      	bls.n	28 <FSF_vReportError+0x28>
+                  errcode = (uint8_t)FSF_ERR_INVALID_STATE;
+  26:	3c02      	subs	r4, #2
+      _FSF_RAM_CON_vSetErrCounter();
+  28:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vSetErrCounter>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  2c:	0032      	movs	r2, r6
+  2e:	0029      	movs	r1, r5
+  30:	0020      	movs	r0, r4
+  32:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+}
+  36:	bd70      	pop	{r4, r5, r6, pc}
+            if (ucCheckId > (uint8_t)FSF_NOCHANNEL)
+  38:	281b      	cmp	r0, #27
+  3a:	d0f5      	beq.n	28 <FSF_vReportError+0x28>
+         errcode = (uint8_t)FSF_ERR_INVALID_RANGE;
+  3c:	2406      	movs	r4, #6
+  3e:	e7f3      	b.n	28 <FSF_vReportError+0x28>
+	...
+
+Disassembly of section .text.FSF_vReportSuccess:
+
+00000000 <FSF_vReportSuccess>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+   switch (ucGetChannelState(ucCheckId))
+   4:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+   8:	2802      	cmp	r0, #2
+   a:	d81e      	bhi.n	4a <FSF_vReportSuccess+0x4a>
+         FSF_sCH_CheckCycleTime[ucCheckId].ui16CheckCycleTime = FSF_psChannelTab[ucCheckId]->sCheckCycle.ui16CheckCycleTime;
+   c:	4b12      	ldr	r3, [pc, #72]	; (58 <FSF_vReportSuccess+0x58>)
+   e:	00a2      	lsls	r2, r4, #2
+  10:	58d1      	ldr	r1, [r2, r3]
+  12:	4b12      	ldr	r3, [pc, #72]	; (5c <FSF_vReportSuccess+0x5c>)
+  14:	8808      	ldrh	r0, [r1, #0]
+  16:	52d0      	strh	r0, [r2, r3]
+         FSF_sCH_CheckCycleTime[ucCheckId].ucCycleMultiplier  = FSF_psChannelTab[ucCheckId]->sCheckCycle.ucCycleMultiplier;
+  18:	7889      	ldrb	r1, [r1, #2]
+  1a:	189b      	adds	r3, r3, r2
+   if (bIsChannelIdValid(ucCheckId) != false)
+  1c:	0020      	movs	r0, r4
+         FSF_sCH_CheckCycleTime[ucCheckId].ucCycleMultiplier  = FSF_psChannelTab[ucCheckId]->sCheckCycle.ucCycleMultiplier;
+  1e:	7099      	strb	r1, [r3, #2]
+   if (bIsChannelIdValid(ucCheckId) != false)
+  20:	f7ff fffe 	bl	0 <FSF_vReportSuccess>
+  24:	2800      	cmp	r0, #0
+  26:	d00f      	beq.n	48 <FSF_vReportSuccess+0x48>
+      UTI_vSetBit(FSF_ucCH_states[FSF_ONGOING_FIELD],(uint16_t)ucCheckId,true);
+  28:	b2a4      	uxth	r4, r4
+  2a:	2201      	movs	r2, #1
+  2c:	0021      	movs	r1, r4
+  2e:	480c      	ldr	r0, [pc, #48]	; (60 <FSF_vReportSuccess+0x60>)
+  30:	f7ff fffe 	bl	0 <UTI_vSetBit>
+      UTI_vSetBit(FSF_ucCH_states[FSF_SUCCESS_FIELD],(uint16_t)ucCheckId,true);
+  34:	2201      	movs	r2, #1
+  36:	0021      	movs	r1, r4
+  38:	480a      	ldr	r0, [pc, #40]	; (64 <FSF_vReportSuccess+0x64>)
+  3a:	f7ff fffe 	bl	0 <UTI_vSetBit>
+      UTI_vSetBit(FSF_ucCH_states[FSF_SUCC_IN_PAST_FIELD],(uint16_t)ucCheckId,true);
+  3e:	2201      	movs	r2, #1
+  40:	0021      	movs	r1, r4
+  42:	4809      	ldr	r0, [pc, #36]	; (68 <FSF_vReportSuccess+0x68>)
+  44:	f7ff fffe 	bl	0 <UTI_vSetBit>
+}
+  48:	bd10      	pop	{r4, pc}
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  4a:	2200      	movs	r2, #0
+  4c:	0021      	movs	r1, r4
+  4e:	2007      	movs	r0, #7
+  50:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+}
+  54:	e7f8      	b.n	48 <FSF_vReportSuccess+0x48>
+  56:	46c0      	nop			; (mov r8, r8)
+	...
+  64:	00000004 	.word	0x00000004
+  68:	00000008 	.word	0x00000008
+
+Disassembly of section .text.FSF_bSuccesInPast:
+
+00000000 <FSF_bSuccesInPast>:
+{
+   0:	b510      	push	{r4, lr}
+   2:	0004      	movs	r4, r0
+   switch (ucGetChannelState(ucCheckId))
+   4:	f7ff fffe 	bl	0 <FSF_bSuccesInPast>
+   8:	2802      	cmp	r0, #2
+   a:	d804      	bhi.n	16 <FSF_bSuccesInPast+0x16>
+         retval = UTI_bGetBit(FSF_ucCH_states[FSF_SUCC_IN_PAST_FIELD],ucCheckId);
+   c:	4805      	ldr	r0, [pc, #20]	; (24 <FSF_bSuccesInPast+0x24>)
+   e:	b2a1      	uxth	r1, r4
+  10:	f7ff fffe 	bl	0 <UTI_bGetBit>
+}
+  14:	bd10      	pop	{r4, pc}
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  16:	2007      	movs	r0, #7
+  18:	2200      	movs	r2, #0
+  1a:	0021      	movs	r1, r4
+  1c:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+   bool retval = false;
+  20:	2000      	movs	r0, #0
+}
+  22:	e7f7      	b.n	14 <FSF_bSuccesInPast+0x14>
+  24:	00000008 	.word	0x00000008
+
+Disassembly of section .text.FSF_vReportFatal:
+
+00000000 <FSF_vReportFatal>:
+{
+   0:	b510      	push	{r4, lr}
+   _FSF_vReportFatal();
+   2:	f7ff fffe 	bl	0 <_FSF_vReportFatal>
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text.FSF_ucComHandleTask:
+
+00000000 <FSF_ucComHandleTask>:
+{
+   0:	b570      	push	{r4, r5, r6, lr}
+   _FSF_RAM_CON_vDoCheckInFsComModule();
+   2:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vDoCheckInFsComModule>
+   switch (ucSchedState)
+   6:	4d20      	ldr	r5, [pc, #128]	; (88 <FSF_ucComHandleTask+0x88>)
+   8:	4c20      	ldr	r4, [pc, #128]	; (8c <FSF_ucComHandleTask+0x8c>)
+   a:	782b      	ldrb	r3, [r5, #0]
+   c:	2b00      	cmp	r3, #0
+   e:	d007      	beq.n	20 <FSF_ucComHandleTask+0x20>
+  10:	2b02      	cmp	r3, #2
+  12:	d013      	beq.n	3c <FSF_ucComHandleTask+0x3c>
+   _FSF_vApplicationErrorNotify(ucSubCheckId,ucChannelId,ucUserPar);
+  14:	2200      	movs	r2, #0
+  16:	211a      	movs	r1, #26
+  18:	2007      	movs	r0, #7
+  1a:	f7ff fffe 	bl	0 <_FSF_vApplicationErrorNotify>
+}
+  1e:	e007      	b.n	30 <FSF_ucComHandleTask+0x30>
+         FSF_ucRetVal = ucComHandleTask((uint8_t)FSF_NOCHANNEL);
+  20:	201a      	movs	r0, #26
+  22:	f7ff fffe 	bl	0 <FSF_ucComHandleTask>
+  26:	7020      	strb	r0, [r4, #0]
+         if (FSF_ucRetVal == (uint8_t)TASK_INITIALISED)
+  28:	2801      	cmp	r0, #1
+  2a:	d101      	bne.n	30 <FSF_ucComHandleTask+0x30>
+            ucSchedState = (uint8_t)FSF_SCH_GENERIC;
+  2c:	2302      	movs	r3, #2
+  2e:	702b      	strb	r3, [r5, #0]
+   _FSF_vTriggerInternalWatchdog();
+  30:	f7ff fffe 	bl	0 <_FSF_vTriggerInternalWatchdog>
+   _FSF_RAM_CON_vDoUpdateCheckInFsComModule();
+  34:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vDoUpdateCheckInFsComModule>
+   return ucHandleTask();
+  38:	7820      	ldrb	r0, [r4, #0]
+}
+  3a:	bd70      	pop	{r4, r5, r6, pc}
+   uint16_t  ui16TimeNow = (uint16_t) TIM_uiGetCircleMicroSeconds();
+  3c:	f7ff fffe 	bl	0 <TIM_uiGetCircleMicroSeconds>
+   uint16_t   ui16Current =(uint16_t)(ui16TimeNow - FSF_ui16CycLastTime);
+  40:	4a13      	ldr	r2, [pc, #76]	; (90 <FSF_ucComHandleTask+0x90>)
+   FSF_ulCheckCycleTimer -= (uint16_t)ui16Current;
+  42:	4914      	ldr	r1, [pc, #80]	; (94 <FSF_ucComHandleTask+0x94>)
+   uint16_t   ui16Current =(uint16_t)(ui16TimeNow - FSF_ui16CycLastTime);
+  44:	8813      	ldrh	r3, [r2, #0]
+   FSF_ui16CycLastTime = ui16TimeNow;
+  46:	8010      	strh	r0, [r2, #0]
+   uint16_t   ui16Current =(uint16_t)(ui16TimeNow - FSF_ui16CycLastTime);
+  48:	1ac3      	subs	r3, r0, r3
+   FSF_ulCheckCycleTimer -= (uint16_t)ui16Current;
+  4a:	680a      	ldr	r2, [r1, #0]
+   uint16_t   ui16Current =(uint16_t)(ui16TimeNow - FSF_ui16CycLastTime);
+  4c:	b29b      	uxth	r3, r3
+   FSF_ulCheckCycleTimer -= (uint16_t)ui16Current;
+  4e:	1ad3      	subs	r3, r2, r3
+   if ((int32_t)FSF_ulCheckCycleTimer < (int32_t)0)
+  50:	d40f      	bmi.n	72 <FSF_ucComHandleTask+0x72>
+   FSF_ulCheckCycleTimer -= (uint16_t)ui16Current;
+  52:	600b      	str	r3, [r1, #0]
+         for (ucCurrentChannel = (uint8_t)FSF_REG_TEST;
+  54:	2000      	movs	r0, #0
+              ucCurrentChannel < (uint8_t)FSF_ucNrOfChannels;
+  56:	4b10      	ldr	r3, [pc, #64]	; (98 <FSF_ucComHandleTask+0x98>)
+  58:	781d      	ldrb	r5, [r3, #0]
+         for (ucCurrentChannel = (uint8_t)FSF_REG_TEST;
+  5a:	4e10      	ldr	r6, [pc, #64]	; (9c <FSF_ucComHandleTask+0x9c>)
+  5c:	7030      	strb	r0, [r6, #0]
+              ucCurrentChannel < (uint8_t)FSF_ucNrOfChannels;
+  5e:	4285      	cmp	r5, r0
+  60:	d904      	bls.n	6c <FSF_ucComHandleTask+0x6c>
+            FSF_ucRetVal = ucComHandleTask(ucCurrentChannel);
+  62:	f7ff fffe 	bl	0 <FSF_ucComHandleTask>
+  66:	7020      	strb	r0, [r4, #0]
+            if (FSF_ucRetVal != (uint8_t)TASK_INITIALISED)
+  68:	2801      	cmp	r0, #1
+  6a:	d009      	beq.n	80 <FSF_ucComHandleTask+0x80>
+         vTriggerExtWatchdog();
+  6c:	f7ff fffe 	bl	0 <FSF_ucComHandleTask>
+         break;
+  70:	e7de      	b.n	30 <FSF_ucComHandleTask+0x30>
+      FSF_ulCheckCycleTimer = (uint32_t)(FSF_CHECK_CYCLE_TIME * 1000u); //wertebereich gesprengt: evt 50000
+  72:	4b0b      	ldr	r3, [pc, #44]	; (a0 <FSF_ucComHandleTask+0xa0>)
+      FS_COM_RamConBlock.ucCCElapsedCounter++;
+  74:	4a0b      	ldr	r2, [pc, #44]	; (a4 <FSF_ucComHandleTask+0xa4>)
+      FSF_ulCheckCycleTimer = (uint32_t)(FSF_CHECK_CYCLE_TIME * 1000u); //wertebereich gesprengt: evt 50000
+  76:	600b      	str	r3, [r1, #0]
+      FS_COM_RamConBlock.ucCCElapsedCounter++;
+  78:	7913      	ldrb	r3, [r2, #4]
+  7a:	3301      	adds	r3, #1
+  7c:	7113      	strb	r3, [r2, #4]
+      retval = true;
+  7e:	e7e9      	b.n	54 <FSF_ucComHandleTask+0x54>
+              ucCurrentChannel++)
+  80:	7830      	ldrb	r0, [r6, #0]
+  82:	3001      	adds	r0, #1
+  84:	b2c0      	uxtb	r0, r0
+  86:	e7e8      	b.n	5a <FSF_ucComHandleTask+0x5a>
+	...
+  a0:	000186a0 	.word	0x000186a0
+  a4:	00000000 	.word	0x00000000
+
+Disassembly of section .text.vExtTriggerInternalWatchdog:
+
+00000000 <vExtTriggerInternalWatchdog>:
+{
+   0:	b510      	push	{r4, lr}
+   _FSF_vTriggerInternalWatchdog();
+   2:	f7ff fffe 	bl	0 <_FSF_vTriggerInternalWatchdog>
+#endif
+}
+   6:	bd10      	pop	{r4, pc}
+
+Disassembly of section .text._FSF_RAM_CON_vFsComModuleCheckBySum:
+
+00000000 <_FSF_RAM_CON_vFsComModuleCheckBySum>:
+/*lint -save -e926 -e928 conversion between pointer to pointer MisraC2012-11.5 : tested to work correctly here */
+/*Axivion Disable MisraC2012-1.1 : Number of significant initial characters for external identifier not a problem with our tools */
+void _FSF_RAM_CON_vFsComModuleCheckBySum(void) {
+   0:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vCheckBySum(FS_COM_ucCheckValueRamConBlock,
+   2:	4b04      	ldr	r3, [pc, #16]	; (14 <_FSF_RAM_CON_vFsComModuleCheckBySum+0x14>)
+   4:	2108      	movs	r1, #8
+   6:	7818      	ldrb	r0, [r3, #0]
+   8:	4a03      	ldr	r2, [pc, #12]	; (18 <_FSF_RAM_CON_vFsComModuleCheckBySum+0x18>)
+   a:	230f      	movs	r3, #15
+   c:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vCheckBySum>
+            (uint8_t) sizeof(FS_COM_RamConBlock),
+            (const uint8_t*)(&FS_COM_RamConBlock),
+            (uint8_t) (FSF_ERR_RAM_CON_IN_FSCOM));
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vFsComModuleCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vFsComModuleCheckByMirror>:
+
+void _FSF_RAM_CON_vFsComModuleCheckByMirror(void) {
+   0:	b510      	push	{r4, lr}
+   return FSF_ucTaskState;
+   2:	4b05      	ldr	r3, [pc, #20]	; (18 <_FSF_RAM_CON_vFsComModuleCheckByMirror+0x18>)
+    if (ucGetFSCOM_State() != (uint8_t) FSF_STATE_BOOTED) {
+   4:	781b      	ldrb	r3, [r3, #0]
+   6:	2b00      	cmp	r3, #0
+   8:	d005      	beq.n	16 <_FSF_RAM_CON_vFsComModuleCheckByMirror+0x16>
+        _FSF_RAM_CON_vCheckByMirror((uint8_t) sizeof(FS_COM_RamConBlock),
+   a:	230f      	movs	r3, #15
+   c:	2008      	movs	r0, #8
+   e:	4a03      	ldr	r2, [pc, #12]	; (1c <_FSF_RAM_CON_vFsComModuleCheckByMirror+0x1c>)
+  10:	4903      	ldr	r1, [pc, #12]	; (20 <_FSF_RAM_CON_vFsComModuleCheckByMirror+0x20>)
+  12:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vCheckByMirror>
+                (const uint8_t*)(&(FS_COM_RamConBlockMirror)),
+                (uint8_t) (FSF_ERR_RAM_CON_IN_FSCOM));
+    } else {
+        //do nothing
+    }
+}
+  16:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vFsComModuleUpdateCheckBySum:
+
+00000000 <_FSF_RAM_CON_vFsComModuleUpdateCheckBySum>:
+
+void _FSF_RAM_CON_vFsComModuleUpdateCheckBySum(void) {
+   0:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vUpdateCheckBySum((uint8_t*)(&FS_COM_ucCheckValueRamConBlock),
+   2:	2108      	movs	r1, #8
+   4:	4a02      	ldr	r2, [pc, #8]	; (10 <_FSF_RAM_CON_vFsComModuleUpdateCheckBySum+0x10>)
+   6:	4803      	ldr	r0, [pc, #12]	; (14 <_FSF_RAM_CON_vFsComModuleUpdateCheckBySum+0x14>)
+   8:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vUpdateCheckBySum>
+            (uint8_t) sizeof(FS_COM_RamConBlock),
+            (const uint8_t*)(&FS_COM_RamConBlock));
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vFsComModuleUpdateCheckByMirror:
+
+00000000 <_FSF_RAM_CON_vFsComModuleUpdateCheckByMirror>:
+
+void _FSF_RAM_CON_vFsComModuleUpdateCheckByMirror(void) {
+   0:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t) sizeof(FS_COM_RamConBlock),
+   2:	2008      	movs	r0, #8
+   4:	4a02      	ldr	r2, [pc, #8]	; (10 <_FSF_RAM_CON_vFsComModuleUpdateCheckByMirror+0x10>)
+   6:	4903      	ldr	r1, [pc, #12]	; (14 <_FSF_RAM_CON_vFsComModuleUpdateCheckByMirror+0x14>)
+   8:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vUpdateCheckByMirror>
+            (const uint8_t*)(&(FS_COM_RamConBlock)),
+            (uint8_t*)(&(FS_COM_RamConBlockMirror)));
+}
+   c:	bd10      	pop	{r4, pc}
+   e:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vSetErrCntBySum:
+
+00000000 <_FSF_RAM_CON_vSetErrCntBySum>:
+
+void _FSF_RAM_CON_vSetErrCntBySum(void) {
+    _FSF_RAM_CON_vSetUintBySum((uint16_t*)(void*)(&(FS_COM_RamConBlock.uiErrorCounter)),
+            (uint8_t*)(&(FS_COM_ucCheckValueRamConBlock)),
+            (FS_COM_RamConBlock.uiErrorCounter + 1u));
+   0:	4804      	ldr	r0, [pc, #16]	; (14 <_FSF_RAM_CON_vSetErrCntBySum+0x14>)
+void _FSF_RAM_CON_vSetErrCntBySum(void) {
+   2:	b510      	push	{r4, lr}
+    _FSF_RAM_CON_vSetUintBySum((uint16_t*)(void*)(&(FS_COM_RamConBlock.uiErrorCounter)),
+   4:	8802      	ldrh	r2, [r0, #0]
+   6:	4904      	ldr	r1, [pc, #16]	; (18 <_FSF_RAM_CON_vSetErrCntBySum+0x18>)
+   8:	3201      	adds	r2, #1
+   a:	b292      	uxth	r2, r2
+   c:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vSetUintBySum>
+}
+  10:	bd10      	pop	{r4, pc}
+  12:	46c0      	nop			; (mov r8, r8)
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vSetErrCntByMirror:
+
+00000000 <_FSF_RAM_CON_vSetErrCntByMirror>:
+
+void _FSF_RAM_CON_vSetErrCntByMirror(void) {
+   0:	b510      	push	{r4, lr}
+    HSUP_vDisableInt();
+    FS_COM_RamConBlock.uiErrorCounter += 1u;
+   2:	4904      	ldr	r1, [pc, #16]	; (14 <_FSF_RAM_CON_vSetErrCntByMirror+0x14>)
+    _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t) sizeof(FS_COM_RamConBlock),
+   4:	2008      	movs	r0, #8
+    FS_COM_RamConBlock.uiErrorCounter += 1u;
+   6:	880b      	ldrh	r3, [r1, #0]
+    _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t) sizeof(FS_COM_RamConBlock),
+   8:	4a03      	ldr	r2, [pc, #12]	; (18 <_FSF_RAM_CON_vSetErrCntByMirror+0x18>)
+    FS_COM_RamConBlock.uiErrorCounter += 1u;
+   a:	3301      	adds	r3, #1
+   c:	800b      	strh	r3, [r1, #0]
+    _FSF_RAM_CON_vUpdateCheckByMirror((uint8_t) sizeof(FS_COM_RamConBlock),
+   e:	f7ff fffe 	bl	0 <_FSF_RAM_CON_vUpdateCheckByMirror>
+            (const uint8_t*)(&(FS_COM_RamConBlock)),
+            (uint8_t*)(&(FS_COM_RamConBlockMirror)));
+    HSUP_vEnableInt();
+}
+  12:	bd10      	pop	{r4, pc}
+	...
+
+Disassembly of section .text._FSF_RAM_CON_vSetErrCntWithoutRamCon:
+
+00000000 <_FSF_RAM_CON_vSetErrCntWithoutRamCon>:
+/*lint -restore -e926 -e928*/
+
+void _FSF_RAM_CON_vSetErrCntWithoutRamCon(void) {
+    FS_COM_RamConBlock.uiErrorCounter += 1u;
+   0:	4a02      	ldr	r2, [pc, #8]	; (c <_FSF_RAM_CON_vSetErrCntWithoutRamCon+0xc>)
+   2:	8813      	ldrh	r3, [r2, #0]
+   4:	3301      	adds	r3, #1
+   6:	8013      	strh	r3, [r2, #0]
+}
+   8:	4770      	bx	lr
+   a:	46c0      	nop			; (mov r8, r8)
+   c:	00000000 	.word	0x00000000
